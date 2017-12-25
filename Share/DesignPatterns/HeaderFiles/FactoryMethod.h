@@ -1,0 +1,72 @@
+// Copyright (c) ButlerZhang 2016
+
+#ifndef __FACTORY_METHOD_H__
+#define __FACTORY_METHOD_H__
+
+
+
+namespace QingTemplate
+{
+    class MethodProduct
+    {
+    public:
+
+        MethodProduct() {}
+        virtual ~MethodProduct() {}
+    };
+
+    class MethodProductA : public MethodProduct
+    {
+    public:
+
+        MethodProductA();
+        virtual ~MethodProductA();
+    };
+
+    class MethodProductB : public MethodProduct
+    {
+    public:
+
+        MethodProductB();
+        virtual ~MethodProductB();
+    };
+
+    //MethodProductC, MethodProductD, ...
+
+
+
+    class FactoryMethod
+    {
+    public:
+
+        FactoryMethod(void) {}
+        virtual ~FactoryMethod(void) {}
+        virtual MethodProduct* GetMethodProduct() = 0;
+    };
+
+    class FactoryMethodA : public FactoryMethod
+    {
+    public:
+
+        FactoryMethodA();
+        virtual ~FactoryMethodA();
+        virtual MethodProduct* GetMethodProduct();
+    };
+
+    class FactoryMethodB : public FactoryMethod
+    {
+    public:
+
+        FactoryMethodB();
+        virtual ~FactoryMethodB();
+        virtual MethodProduct* GetMethodProduct();
+    };
+
+    //FactoryMethodC, FactoryMethodD, ...
+
+
+
+    void FactoryMethodTest();
+}
+
+#endif
