@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{d23129f1-afea-41f1-93f6-eb97f5cfe94e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\EncryptionTool">
+      <UniqueIdentifier>{e1708982-6b2d-4ffd-87b2-e6619bbf3664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\BootStartUp">
+      <UniqueIdentifier>{5a0cd52a-57ec-4652-bc50-f82b3aa89786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Handler">
+      <UniqueIdentifier>{0ff6fd50-2125-46ba-8dd5-a61c4a8a629e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WindowsShare">
+      <UniqueIdentifier>{ff5e2018-5dc3-47b7-a4f3-819a69c873b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,6 +48,18 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="View\EncryptionTool\EncryptionTool.h">
+      <Filter>View\EncryptionTool</Filter>
+    </ClInclude>
+    <ClInclude Include="View\BootStartUp\BootStartUp.h">
+      <Filter>View\BootStartUp</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolEnum.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\WindowsShare\QingComputer.h">
+      <Filter>WindowsShare</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowsTool.cpp">
@@ -43,6 +70,15 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="View\EncryptionTool\EncryptionTool.cpp">
+      <Filter>View\EncryptionTool</Filter>
+    </ClCompile>
+    <ClCompile Include="View\BootStartUp\BootStartUp.cpp">
+      <Filter>View\BootStartUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\WindowsShare\QingComputer.cpp">
+      <Filter>WindowsShare</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

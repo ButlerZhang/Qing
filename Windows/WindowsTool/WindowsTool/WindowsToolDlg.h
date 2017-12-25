@@ -3,6 +3,10 @@
 //
 
 #pragma once
+#include "afxcmn.h"
+#include <vector>
+#include <memory>
+
 
 
 // CWindowsToolDlg dialog
@@ -31,4 +35,15 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+    afx_msg void OnTcnSelchangeTabTool(NMHDR *pNMHDR, LRESULT *pResult);
+
+private:
+
+    void InitTabControl();
+
+private:
+
+    CTabCtrl                                        m_ToolTab;
+    std::vector<std::shared_ptr<CDialogEx>>         m_ToolVector;
 };

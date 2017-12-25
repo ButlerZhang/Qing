@@ -6,6 +6,9 @@
 #include "WindowsTool.h"
 #include "WindowsToolDlg.h"
 #include "afxdialogex.h"
+#include "ToolEnum.h"
+#include "View\BootStartUp\BootStartUp.h"
+#include "View\EncryptionTool\EncryptionTool.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -57,13 +60,15 @@ CWindowsToolDlg::CWindowsToolDlg(CWnd* pParent /*=NULL*/)
 
 void CWindowsToolDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+    CDialogEx::DoDataExchange(pDX);
+    DDX_Control(pDX, IDC_TAB1, m_ToolTab);
 }
 
 BEGIN_MESSAGE_MAP(CWindowsToolDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+    ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CWindowsToolDlg::OnTcnSelchangeTabTool)
 END_MESSAGE_MAP()
 
 
@@ -99,6 +104,7 @@ BOOL CWindowsToolDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+    InitTabControl();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -152,3 +158,42 @@ HCURSOR CWindowsToolDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CWindowsToolDlg::InitTabControl()
+{
+    for (int ItemIndex = WTE_ENCRYPTION; ItemIndex < WTE_COUNT; ItemIndex++)
+    {
+        m_ToolTab.InsertItem(ItemIndex, GetToolName(static_cast<WindowsToolEnum>(ItemIndex)).c_str());
+    }
+
+    m_ToolVector.push_back(std::shared_ptr<EncryptionTool>(new EncryptionTool()));
+    m_ToolVector[WTE_ENCRYPTION]->Create(IDD_DIALOG_ENCRYPTION, &m_ToolTab);
+
+    m_ToolVector.push_back(std::shared_ptr<BootStartUp>(new BootStartUp()));
+    m_ToolVector[WTE_BOOT_START_UP]->Create(IDD_DIALOG_BOOT_START_UP, &m_ToolTab);
+
+    m_ToolTab.SetCurSel(0);
+    OnTcnSelchangeTabTool(NULL, NULL);
+}
+
+void CWindowsToolDlg::OnTcnSelchangeTabTool(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    CRect TabRect;
+    m_ToolTab.GetClientRect(&TabRect);
+    TabRect.left += 1;
+    TabRect.right -= 1;
+    TabRect.top += 21;
+    TabRect.bottom -= 1;
+
+    for (std::vector<std::shared_ptr<CDialogEx>>::iterator it = m_ToolVector.begin(); it != m_ToolVector.end(); it++)
+    {
+        (*it)->SetWindowPos(NULL, TabRect.left, TabRect.top, TabRect.Width(), TabRect.Height(), SWP_HIDEWINDOW);
+    }
+
+    int SelectIndex = m_ToolTab.GetCurSel();
+    if (SelectIndex < 0 || SelectIndex >= static_cast<int>(m_ToolVector.size()))
+    {
+        SelectIndex = 0;
+    }
+
+    m_ToolVector[SelectIndex]->SetWindowPos(NULL, TabRect.left, TabRect.top, TabRect.Width(), TabRect.Height(), SWP_SHOWWINDOW);
+}
