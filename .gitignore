@@ -1,0 +1,8 @@
+*.suo
+*.opendb
+*.db
+*.ipch
+*.user
+
+Windows/WindowsTool/x64/*
+Windows/WindowsTool/WindowsTool/x64/*
