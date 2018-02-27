@@ -5,5 +5,12 @@
 *.user
 
 Windows/WindowsTool/x64/*
-Windows/WindowsTool/WindowsTool/x64/*
 Windows/WindowsTool/PrimerQing/x64/*
+Windows/WindowsTool/WindowsTool/x64/*
+
+Windows/DirectXEngine/Debug/*
+Windows/DirectXEngine/Release/*
+Windows/DirectXEngine/DirectX11/Debug/*
+Windows/DirectXEngine/DirectX12/Debug/*
+Windows/DirectXEngine/DirectX11/Release/*
+Windows/DirectXEngine/DirectX12/Release/*
