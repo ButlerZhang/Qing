@@ -22,9 +22,6 @@
     <Filter Include="View\BootStartUp">
       <UniqueIdentifier>{5a0cd52a-57ec-4652-bc50-f82b3aa89786}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Handler">
-      <UniqueIdentifier>{0ff6fd50-2125-46ba-8dd5-a61c4a8a629e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="WindowsShare">
       <UniqueIdentifier>{ff5e2018-5dc3-47b7-a4f3-819a69c873b1}</UniqueIdentifier>
     </Filter>
@@ -60,6 +57,12 @@
     <ClInclude Include="..\..\WindowsShare\QingComputer.h">
       <Filter>WindowsShare</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\WindowsShare\FileManager.h">
+      <Filter>WindowsShare</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\WindowsShare\QingString.h">
+      <Filter>WindowsShare</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowsTool.cpp">
@@ -78,6 +81,12 @@
       <Filter>View\BootStartUp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\WindowsShare\QingComputer.cpp">
+      <Filter>WindowsShare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\WindowsShare\FileManager.cpp">
+      <Filter>WindowsShare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\WindowsShare\QingString.cpp">
       <Filter>WindowsShare</Filter>
     </ClCompile>
   </ItemGroup>

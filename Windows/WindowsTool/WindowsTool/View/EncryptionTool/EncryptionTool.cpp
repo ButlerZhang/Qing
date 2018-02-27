@@ -1,7 +1,9 @@
 #include "stdafx.h"
-#include "../../WindowsTool.h"
-#include "EncryptionTool.h"
 #include "afxdialogex.h"
+#include "EncryptionTool.h"
+#include "../../WindowsTool.h"
+#include "../../../../WindowsShare/QingString.h"
+#include "../../../../WindowsShare/FileManager.h"
 
 
 
@@ -10,7 +12,6 @@ IMPLEMENT_DYNAMIC(EncryptionTool, CDialogEx)
 EncryptionTool::EncryptionTool(CWnd* pParent /*=NULL*/)
     : CDialogEx(IDD_DIALOG_ENCRYPTION, pParent)
 {
-
 }
 
 EncryptionTool::~EncryptionTool()
@@ -53,11 +54,11 @@ void EncryptionTool::OnBnClickedButtonSelectSourcePath()
     {
         if (SelectPath[SelectPath.size()-1] == L'\\')
         {
-            SelectPath += L"EncryptionTool";
+            SelectPath += L"EncryptionTool\\";
         }
         else
         {
-            SelectPath += L"\\EncryptionTool";
+            SelectPath += L"\\EncryptionTool\\";
         }
     }
     else
@@ -65,7 +66,7 @@ void EncryptionTool::OnBnClickedButtonSelectSourcePath()
         std::wstring::size_type Index = SelectPath.find_last_of(L"\\");
         if (Index != std::wstring::npos)
         {
-            SelectPath.replace(Index, SelectPath.size(), L"\\EncryptionTool");
+            SelectPath.replace(Index, SelectPath.size(), L"\\EncryptionTool\\");
         }
     }
 
@@ -107,6 +108,33 @@ std::wstring EncryptionTool::GetSelectPath() const
 
 void EncryptionTool::OnBnClickedButtonEncrypt()
 {
+    CString SourcePath;
+    m_EditSourcePath.GetWindowTextW(SourcePath);
+    if (SourcePath.GetLength() <= 0)
+    {
+        MessageBox(NULL, _T("Source path is empty!"), MB_OK);
+        return;
+    }
+
+    CString TargetPath;
+    m_EditTargetPath.GetWindowTextW(TargetPath);
+    if (TargetPath.GetLength() <= 0)
+    {
+        MessageBox(NULL, _T("Target path is empty!"), MB_OK);
+        return;
+    }
+
+    QING::FileManager MyFileManager;
+    if (!MyFileManager.IsDirectory((QING::WStringToString(TargetPath.GetString())).c_str()))
+    {
+        MessageBox(NULL, _T("Target path is not directory!"), MB_OK);
+        return;
+    }
+
+    long TotalSize = 0, MaxSize = 0;
+    std::vector<std::string> FileNameVector;
+    const std::string &SourcePathString = QING::WStringToString(SourcePath.GetString());
+    MyFileManager.GetFileNameNonRecursion(SourcePathString, FileNameVector, TotalSize, MaxSize);
 }
 
 void EncryptionTool::OnBnClickedButtonDecrypt()
