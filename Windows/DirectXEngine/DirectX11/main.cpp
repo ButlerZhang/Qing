@@ -1,14 +1,11 @@
-#include <windows.h>
+#include "Direct3DInitializing.h"
 
 LPCTSTR WndClassName = L"DirectX11Window";                  //Define our window class name
-HWND hwnd = NULL;                                           //Sets our windows handle to NULL
-
-const int Width = 800;                                      //window width
-const int Height = 600;                                     //window height
 
 
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+
+LRESULT CALLBACK WndProc(HWND g_hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
     {
@@ -18,7 +15,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             if (MessageBox(0, L"Are you sure you want to exit?", L"Really?", MB_YESNO | MB_ICONQUESTION) == IDYES)
             {
-                DestroyWindow(hwnd);                        //Release the windows allocated memory
+                DestroyWindow(g_hwnd);                        //Release the windows allocated memory
             }
         }
 
@@ -35,7 +32,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
     }
 
-    return DefWindowProc(hwnd, msg, wParam, lParam);        //return the message for windows to handle it
+    return DefWindowProc(g_hwnd, msg, wParam, lParam);        //return the message for windows to handle it
 }
 
 bool InitializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed)
@@ -61,28 +58,28 @@ bool InitializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, b
         return 1;
     }
 
-    hwnd = CreateWindowEx(                                  //Create our Extended Window
+    g_hwnd = CreateWindowEx(                                  //Create our Extended Window
         NULL,                                               //Extended style
         WndClassName,                                       //Name of our windows class
         L"Direct X 11",                                     //Name in the title bar of our window
         WS_OVERLAPPEDWINDOW,                                //style of our window
         CW_USEDEFAULT, CW_USEDEFAULT,                       //Top left corner of window
-        width,                                              //Width of our window
-        height,                                             //Height of our window
+        width,                                              //g_Width of our window
+        height,                                             //g_Height of our window
         NULL,                                               //Handle to parent window
         NULL,                                               //Handle to a Menu
         hInstance,                                          //Specifies instance of current program
         NULL                                                //used for an MDI client window
     );
 
-    if (!hwnd)                                              //Make sure our window has been created
+    if (!g_hwnd)                                              //Make sure our window has been created
     {
         MessageBox(NULL, L"Error creating window", L"Error", MB_OK | MB_ICONERROR);
         return 1;
     }
 
-    ShowWindow(hwnd, ShowWnd);                              //Shows our window
-    UpdateWindow(hwnd);                                     //Its good to update our window
+    ShowWindow(g_hwnd, ShowWnd);                              //Shows our window
+    UpdateWindow(g_hwnd);                                     //Its good to update our window
 
     return true;
 }
@@ -104,7 +101,8 @@ int MessageLoop()
         }
         else                                                //Otherewise, keep the flow going
         {
-            
+            UpdateScene();
+            DrawScene();
         }
     }
 
@@ -113,13 +111,27 @@ int MessageLoop()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
-    if (!InitializeWindow(hInstance, nShowCmd, Width, Height, true))
+    if (!InitializeWindow(hInstance, nShowCmd, g_Width, g_Height, true))
     {
         MessageBox(0, L"Window Initialization - Failed", L"Error", MB_OK);
         return 0;
     }
 
+    if (!InitializeDirect3d11App(hInstance))    //Initialize Direct3D
+    {
+        MessageBox(0, L"Direct3D Initialization - Failed", L"Error", MB_OK);
+        return 0;
+    }
+
+    if (!InitScene())    //Initialize our scene
+    {
+        MessageBox(0, L"Scene Initialization - Failed", L"Error", MB_OK);
+        return 0;
+    }
+
     MessageLoop();
+
+    ReleaseObjects();
 
     return 0;
 }
