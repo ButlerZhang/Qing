@@ -3,15 +3,17 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
+#include <cctype>
+#include <vector>
+#include <iterator>
 
 
 
 int main()
 {
-    std::cout << "/*";
-    std::cout << "*/";
-    std::cout << /* "*/" /* "/*" */;
+    
 
+    system("pause");
     return 0;
 }
-
