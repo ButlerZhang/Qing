@@ -7,6 +7,8 @@
 Windows/WindowsTool/x64/*
 Windows/WindowsTool/PrimerQing/x64/*
 Windows/WindowsTool/WindowsTool/x64/*
+Windows/WindowsTool/ServerLite/x64/*
+Windows/WindowsTool/ClientLite/x64/*
 
 Windows/DirectXEngine/Debug/*
 Windows/DirectXEngine/Release/*
