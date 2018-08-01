@@ -16,6 +16,18 @@
     <Filter Include="Network">
       <UniqueIdentifier>{653dfb3e-1d5c-4c06-bbba-04c43aa2c958}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{18765236-c8a3-4ee7-bd76-c7e5e5b69d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing">
+      <UniqueIdentifier>{bf14c806-68eb-4ba8-a5c8-75d131b813c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Include">
+      <UniqueIdentifier>{41033130-d9d1-4a43-81ff-a415cdc349ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Lib">
+      <UniqueIdentifier>{404e0d31-945e-4c5a-8e15-ec2b63601a0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,6 +39,15 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Network\ServerNetwork.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -35,5 +56,16 @@
     <ClCompile Include="ServerLite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Network\ServerNetwork.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\x64\Debug\QingD.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
+    <Library Include="..\x64\Release\Qing.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

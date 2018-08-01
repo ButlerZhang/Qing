@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{a5b211b7-6ba3-4705-97b1-5faef2991f0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{bdc9bd29-2f0f-4aba-9c73-ffbad16508df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing">
+      <UniqueIdentifier>{63a80908-631b-4a9b-84b1-2fc91c7ebf4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Include">
+      <UniqueIdentifier>{14e14d4b-18ac-47f8-b356-c69632728d94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Lib">
+      <UniqueIdentifier>{5877c4ba-97ab-4dca-a00e-0613d35e2761}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,6 +39,15 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Network\ClientNetwork.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -32,5 +56,16 @@
     <ClCompile Include="ClientLite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Network\ClientNetwork.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\x64\Debug\QingD.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
+    <Library Include="..\x64\Release\Qing.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>
