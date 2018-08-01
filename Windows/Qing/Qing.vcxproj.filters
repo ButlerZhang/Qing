@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Example">
+      <UniqueIdentifier>{afb15584-7155-46a1-8f12-72f9b39bfa26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeaderFiles\Network.h">
@@ -20,6 +23,9 @@
     </ClInclude>
     <ClInclude Include="HeaderFiles\QingBase.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\StringVector.h">
+      <Filter>Example</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
