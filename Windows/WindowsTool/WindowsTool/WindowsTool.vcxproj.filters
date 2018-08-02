@@ -22,8 +22,17 @@
     <Filter Include="View\BootStartUp">
       <UniqueIdentifier>{5a0cd52a-57ec-4652-bc50-f82b3aa89786}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WindowsShare">
-      <UniqueIdentifier>{ff5e2018-5dc3-47b7-a4f3-819a69c873b1}</UniqueIdentifier>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{557225d7-7781-43a8-a15a-54df143ab6be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing">
+      <UniqueIdentifier>{2bf8bc53-bd6b-4e24-8fc0-4f3ef0fee77f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Include">
+      <UniqueIdentifier>{4e4a3783-5a20-45be-97b4-857c7fbc87dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Lib">
+      <UniqueIdentifier>{a1f6ad8a-66cf-4fb2-965a-d42b76a7f395}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,14 +63,20 @@
     <ClInclude Include="ToolEnum.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\WindowsShare\QingComputer.h">
-      <Filter>WindowsShare</Filter>
+    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h">
+      <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\WindowsShare\FileManager.h">
-      <Filter>WindowsShare</Filter>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
+      <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\WindowsShare\QingString.h">
-      <Filter>WindowsShare</Filter>
+    <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h">
+      <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,15 +95,6 @@
     <ClCompile Include="View\BootStartUp\BootStartUp.cpp">
       <Filter>View\BootStartUp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\WindowsShare\QingComputer.cpp">
-      <Filter>WindowsShare</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\WindowsShare\FileManager.cpp">
-      <Filter>WindowsShare</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\WindowsShare\QingString.cpp">
-      <Filter>WindowsShare</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WindowsTool.rc">
@@ -104,5 +110,13 @@
     <Image Include="res\WindowsTool.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\x64\Debug\QingD.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
+    <Library Include="..\x64\Release\Qing.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

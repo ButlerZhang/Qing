@@ -48,6 +48,15 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
       <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

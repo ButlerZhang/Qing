@@ -1,4 +1,4 @@
-#include "QingComputer.h"
+#include "..\HeaderFiles\LocalComputer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <Windows.h>
@@ -9,17 +9,17 @@
 
 #pragma comment(lib, "Iphlpapi.lib")
 
-namespace QING
+namespace Qing
 {
-    QingComputer::QingComputer(void)
+    LocalComputer::LocalComputer(void)
     {
     }
 
-    QingComputer::~QingComputer(void)
+    LocalComputer::~LocalComputer(void)
     {
     }
 
-    void QingComputer::SetTaskAndStartMenuVisible(int VisibleValue) const
+    void LocalComputer::SetTaskAndStartMenuVisible(int VisibleValue) const
     {
         HWND Task = FindWindow(L"Shell_TrayWnd", NULL);
         ShowWindow(Task, VisibleValue);
@@ -31,7 +31,7 @@ namespace QING
         }
     }
 
-    bool QingComputer::GetMacAddress(std::string &MacAddress, const char* ClientIP) const
+    bool LocalComputer::GetMacAddress(std::string &MacAddress, const char* ClientIP) const
     {
         PIP_ADAPTER_INFO PipAdapterInfo = new IP_ADAPTER_INFO();
         unsigned long StSize = sizeof(IP_ADAPTER_INFO);
@@ -85,7 +85,7 @@ namespace QING
         return !MacAddress.empty();
     }
 
-    bool QingComputer::GetLocalIPAddress(std::vector<std::string> &IPVector) const
+    bool LocalComputer::GetLocalIPAddress(std::vector<std::string> &IPVector) const
     {
         PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
         unsigned long stSize = sizeof(IP_ADAPTER_INFO);
@@ -122,7 +122,7 @@ namespace QING
         return !IPVector.empty();
     }
 
-    bool QingComputer::IsExistProcess(const std::wstring &ProgramName) const
+    bool LocalComputer::IsExistProcess(const std::wstring &ProgramName) const
     {
         TCHAR MyTarget[MAX_PATH];
         lstrcpyn(MyTarget, ProgramName.c_str(), sizeof(MyTarget) / 2);
@@ -156,7 +156,7 @@ namespace QING
         return IsExist;
     }
 
-    bool QingComputer::KillProgram(const std::wstring & ProgramName) const
+    bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
     {
         PROCESSENTRY32 pe;
         pe.dwSize = sizeof(PROCESSENTRY32);
@@ -186,7 +186,7 @@ namespace QING
         return true;
     }
 
-    bool QingComputer::StartProgram(const std::wstring & ProgramName) const
+    bool LocalComputer::StartProgram(const std::wstring & ProgramName) const
     {
         ShellExecute(NULL, L"open", ProgramName.c_str(), NULL, NULL, SW_SHOWNORMAL);
         int ErrorValue = GetLastError();
@@ -204,7 +204,7 @@ namespace QING
         return true;
     }
 
-    int QingComputer::StartTouchScreenCalibration(HWND CurrentHWND) const
+    int LocalComputer::StartTouchScreenCalibration(HWND CurrentHWND) const
     {
         PVOID oldValue;
         Wow64DisableWow64FsRedirection(&oldValue);
@@ -218,7 +218,7 @@ namespace QING
         return ShellExecuteError;
     }
 
-    std::string QingComputer::TranslateDateTime(const std::string &SourceTime) const
+    std::string LocalComputer::TranslateDateTime(const std::string &SourceTime) const
     {
         if (!SourceTime.empty())
         {
@@ -238,7 +238,7 @@ namespace QING
         return std::string();
     }
 
-    BOOL QingComputer::SetOSDateTimeFormat() const
+    BOOL LocalComputer::SetOSDateTimeFormat() const
     {
         BOOL ret = TRUE;
 

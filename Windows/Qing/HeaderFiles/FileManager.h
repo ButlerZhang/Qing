@@ -1,13 +1,13 @@
 #pragma once
-
+#include "QingBase.h"
 #include <string>
 #include <vector>
 
 
 
-namespace QING
+namespace Qing
 {
-    class FileManager
+    class QING_DLL FileManager
     {
     public:
 

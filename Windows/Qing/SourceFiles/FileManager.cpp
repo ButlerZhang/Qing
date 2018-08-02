@@ -1,4 +1,4 @@
-#include "FileManager.h"
+#include "..\HeaderFiles\FileManager.h"
 #include <io.h>
 #include <list>
 #include <Windows.h>
@@ -6,7 +6,7 @@
 
 
 
-namespace QING
+namespace Qing
 {
     //***************************************************************************
     // CompareFileName: sort by file name.

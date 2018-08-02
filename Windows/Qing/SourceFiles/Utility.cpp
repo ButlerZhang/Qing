@@ -1,8 +1,8 @@
-#include "QingString.h"
+#include "..\HeaderFiles\Utility.h"
 
 
 
-namespace QING
+namespace Qing
 {
     std::wstring StringToWString(const std::string &str, int codepage)
     {

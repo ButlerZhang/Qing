@@ -20,11 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example\StringVector.h" />
+    <ClInclude Include="HeaderFiles\FileManager.h" />
+    <ClInclude Include="HeaderFiles\LocalComputer.h" />
     <ClInclude Include="HeaderFiles\Network.h" />
     <ClInclude Include="HeaderFiles\QingBase.h" />
+    <ClInclude Include="HeaderFiles\Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SourceFiles\FileManager.cpp" />
+    <ClCompile Include="SourceFiles\LocalComputer.cpp" />
     <ClCompile Include="SourceFiles\Network.cpp" />
+    <ClCompile Include="SourceFiles\Utility.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7B247FD1-7119-4838-9F12-CB855D783DD2}</ProjectGuid>

@@ -2,8 +2,8 @@
 #include "afxdialogex.h"
 #include "EncryptionTool.h"
 #include "../../WindowsTool.h"
-#include "../../../../WindowsShare/QingString.h"
-#include "../../../../WindowsShare/FileManager.h"
+#include "..\..\..\..\Qing\HeaderFiles\Utility.h"
+#include "..\..\..\..\Qing\HeaderFiles\FileManager.h"
 
 
 
@@ -124,8 +124,8 @@ void EncryptionTool::OnBnClickedButtonEncrypt()
         return;
     }
 
-    QING::FileManager MyFileManager;
-    if (!MyFileManager.IsDirectory((QING::WStringToString(TargetPath.GetString())).c_str()))
+    Qing::FileManager MyFileManager;
+    if (!MyFileManager.IsDirectory((Qing::WStringToString(TargetPath.GetString())).c_str()))
     {
         MessageBox(NULL, _T("Target path is not directory!"), MB_OK);
         return;
@@ -133,7 +133,7 @@ void EncryptionTool::OnBnClickedButtonEncrypt()
 
     long TotalSize = 0, MaxSize = 0;
     std::vector<std::string> FileNameVector;
-    const std::string &SourcePathString = QING::WStringToString(SourcePath.GetString());
+    const std::string &SourcePathString = Qing::WStringToString(SourcePath.GetString());
     MyFileManager.GetFileNameNonRecursion(SourcePathString, FileNameVector, TotalSize, MaxSize);
 }
 

@@ -1,19 +1,19 @@
 #pragma once
-
+#include "QingBase.h"
 #include <vector>
 #include <string>
 #include <Windows.h>
 
 
 
-namespace QING
+namespace Qing
 {
-    class QingComputer
+    class QING_DLL LocalComputer
     {
     public:
 
-        QingComputer(void);
-        ~QingComputer(void);
+        LocalComputer(void);
+        ~LocalComputer(void);
 
         bool IsExistProcess(const std::wstring &ProgramName) const;
         void SetTaskAndStartMenuVisible(int VisibleValue) const;
