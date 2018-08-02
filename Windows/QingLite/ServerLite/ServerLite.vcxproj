@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D06C8583-8BC8-42EB-9F26-634198FC1819}</ProjectGuid>
+    <ProjectGuid>{9F9D35DB-846C-4F19-B099-B6EADDCF69FE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ClientLite</RootNamespace>
+    <RootNamespace>ServerLite</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,12 +74,15 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\Deployment\Debug\</OutDir>
+    <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\Deployment\Release\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -93,6 +96,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -156,18 +160,20 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\Network.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h" />
-    <ClInclude Include="Network\ClientNetwork.h" />
+    <ClInclude Include="Network\ServerNetwork.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ClientLite.cpp" />
-    <ClCompile Include="Network\ClientNetwork.cpp" />
+    <ClCompile Include="Network\ServerNetwork.cpp" />
+    <ClCompile Include="ServerLite.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\x64\Debug\QingD.lib" />
-    <Library Include="..\x64\Release\Qing.lib">
+    <Library Include="..\..\Deployment\Debug\QingD.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Library>
+    <Library Include="..\..\Deployment\Release\Qing.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Library>
   </ItemGroup>

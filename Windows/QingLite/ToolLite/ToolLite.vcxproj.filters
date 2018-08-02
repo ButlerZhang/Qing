@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="View\BootStartUp\BootStartUp.cpp">
+      <Filter>View\BootStartUp</Filter>
+    </ClCompile>
+    <ClCompile Include="View\EncryptionTool\EncryptionTool.cpp">
+      <Filter>View\EncryptionTool</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsToolDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="View\BootStartUp\BootStartUp.h">
+      <Filter>View\BootStartUp</Filter>
+    </ClInclude>
+    <ClInclude Include="View\EncryptionTool\EncryptionTool.h">
+      <Filter>View\EncryptionTool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsTool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsToolDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="View">
+      <UniqueIdentifier>{6f13973c-91cd-48aa-be40-9cbe5639d351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\BootStartUp">
+      <UniqueIdentifier>{b660fee0-ece4-4d44-8dba-51d7686d06a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\EncryptionTool">
+      <UniqueIdentifier>{16af9378-5397-4356-bdfe-c5e5ca5663e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{e2081f74-ffbb-4166-8f83-69a1ac3a57e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing">
+      <UniqueIdentifier>{b2552c69-8ab1-40ed-b94f-36b9876722d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Include">
+      <UniqueIdentifier>{cf7e2795-fde8-4739-ada8-ec0ba95d8ba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Lib">
+      <UniqueIdentifier>{d2d2a8f6-d56b-4be2-9ef4-97d8dbff75c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{bd9b0a88-3436-4139-8607-550dae363941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{9ccb87e6-b302-4f45-bedf-990336015833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{f9c0369a-5bf1-4479-868e-5a1470702614}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\Deployment\Debug\QingD.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
+    <Library Include="..\..\Deployment\Release\Qing.lib">
+      <Filter>Reference\Qing\Lib</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\WindowsTool.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WindowsTool.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\WindowsTool.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -5,7 +5,9 @@
 *.user
 
 Windows/Qing/x64/*
-Windows/WindowsTool/x64/*
-Windows/WindowsTool/WindowsTool/x64/*
-Windows/WindowsTool/ServerLite/x64/*
-Windows/WindowsTool/ClientLite/x64/*
+Windows/QingLite/x64/*
+Windows/QingLite/ToolLite/x64/*
+Windows/QingLite/ServerLite/x64/*
+Windows/QingLite/ClientLite/x64/*
+Windows/Deployment/Debug/*
+Windows/Deployment/Release/*
