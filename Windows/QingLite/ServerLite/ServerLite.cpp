@@ -2,10 +2,15 @@
 //
 
 #include "stdafx.h"
+#include "Network\ServerNetwork.h"
+#include <iostream>
+
 
 
 int main()
 {
+    TestServerNetwork();
+    system("pause");
     return 0;
 }
 

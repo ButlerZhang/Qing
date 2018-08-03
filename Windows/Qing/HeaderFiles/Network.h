@@ -1,27 +1,39 @@
 #pragma once
 #include "QingBase.h"
-#include <winsock.h>
+#include <WinSock2.h>
+#include <string>
+
+QING_NAMESPACE_BEGIN
 
 
 
-namespace Qing
+bool QING_DLL StartupNetwork();
+bool QING_DLL ShutdownNetwork();
+
+
+
+class QING_DLL Network
 {
-    class QING_DLL Network
-    {
-    public:
+public:
 
-        Network();
-        virtual ~Network();
+    Network();
+    virtual ~Network();
 
-    protected:
+    SOCKET GetSocket() const { return m_Socket; }
+    bool RecvData(SOCKET Socket, char *Buffer, int BufferSize);
+    bool SendData(SOCKET Socket, const char *Buffer, int BufferSize);
 
-        bool CreateSocket();
+protected:
 
-        bool SendData();
-        bool RecvData();
+    bool CreateSocket();
+    bool BindSocket(const std::string &IP, int Port);
+    bool StartListen(int backlog = SOMAXCONN);
+    bool Connect(const std::string &IP, int Port);
+    SOCKET AcceptConnect();
 
-    protected:
+protected:
 
-        SOCKET m_Socket;
-    };
-}
+    SOCKET  m_Socket;
+};
+
+QING_NAMESPACE_END

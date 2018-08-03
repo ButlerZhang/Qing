@@ -1,6 +1,5 @@
 #pragma once
 #include "..\..\..\Qing\HeaderFiles\Network.h"
-#include <string>
 
 
 
@@ -12,10 +11,7 @@ public:
     ~ServerNetwork();
 
     bool Start(const std::string &IP, int Port);
-
-private:
-
-    bool BindSocket(const std::string &IP, int Port);
-    bool StartListen(int backlog = SOMAXCONN);
-    bool AcceptConnect();
+    SOCKET GetConnectedClient();
 };
+
+void TestServerNetwork();

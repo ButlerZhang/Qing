@@ -2,15 +2,14 @@
 //
 
 #include "stdafx.h"
+#include "Network\ClientNetwork.h"
 #include <iostream>
-#include <string>
-#include <sstream>
 
 
 
 int main()
 {
+    TestClientNetwork();
     system("pause");
     return 0;
 }
-

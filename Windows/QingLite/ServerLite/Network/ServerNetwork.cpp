@@ -1,4 +1,6 @@
 #include "ServerNetwork.h"
+#include <iostream>
+#include "..\..\..\Qing\HeaderFiles\Utility.h"
 
 
 
@@ -30,43 +32,33 @@ bool ServerNetwork::Start(const std::string & IP, int Port)
     return true;
 }
 
-bool ServerNetwork::BindSocket(const std::string &IP, int Port)
+SOCKET ServerNetwork::GetConnectedClient()
 {
-    SOCKADDR_IN addr;
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(IP.c_str());
-    addr.sin_port = htons(Port);
-
-    int error = bind(m_Socket, (LPSOCKADDR)&addr, sizeof(addr));
-    return (error == 0);
+    return Network::AcceptConnect();
 }
 
-bool ServerNetwork::StartListen(int backlog)
+void TestServerNetwork()
 {
-    return (listen(m_Socket, backlog) == 0);
-}
-
-bool ServerNetwork::AcceptConnect()
-{
-    fd_set readset;
-    timeval timeout;
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 0;
-    FD_ZERO(&readset);
-    FD_SET(m_Socket, &readset);
-
-    int ret = select(FD_SETSIZE, &readset, NULL, NULL, &timeout);
-    if (ret > 0 && FD_ISSET(m_Socket, &readset))
+    if (Qing::StartupNetwork())
     {
-        SOCKADDR addr;
-        int len = sizeof(addr);
-        SOCKET tempSocket;
-        tempSocket = accept(m_Socket, (SOCKADDR*)&addr, (int*)&len);
-        if (tempSocket == INVALID_SOCKET)
+        ServerNetwork Server;
+        Server.Start("127.0.0.1", 1989);
+        std::string ResponsedString = "I am Server, GUID = " + Qing::GetGUID();
+
+        while (true)
         {
-            //¡¨Ω” ß∞‹
+            Sleep(1);
+            SOCKET NewSocket = Server.GetConnectedClient();
+            if (NewSocket != INVALID_SOCKET)
+            {
+                char Buffer[1024];
+                memset(Buffer, 0, sizeof(Buffer));
+                Server.RecvData(NewSocket, Buffer, sizeof(Buffer));
+                std::cout << "RECV: " << "Client Socket = " << NewSocket << "\tData = " << Buffer << std::endl;
+
+                Server.SendData(NewSocket, ResponsedString.c_str(), static_cast<int>(ResponsedString.size()));
+                std::cout << "SEND: " << ResponsedString << std::endl << std::endl;
+            }
         }
     }
-
-    return false;
 }

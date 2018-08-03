@@ -1,27 +1,59 @@
 #include "..\HeaderFiles\Utility.h"
 
+QING_NAMESPACE_BEGIN
 
 
-namespace Qing
+
+std::string GetGUID()
 {
-    std::wstring StringToWString(const std::string &str, int codepage)
+    GUID guid;
+    char Data[64];
+    memset(Data, 0, sizeof(Data));
+
+    ::CoInitialize(0);
+    if (::CoCreateGuid(&guid) == S_OK)
     {
-        int Length = MultiByteToWideChar(codepage, 0, (LPCSTR)str.c_str(), static_cast<int>(str.length()), NULL, 0);
-
-        std::wstring ResultWString(Length, L'\0');
-        int ResultLength = MultiByteToWideChar(codepage, 0, (LPCSTR)str.c_str(), static_cast<int>(str.length()), (LPWSTR)ResultWString.c_str(), Length);
-
-        return ResultWString;
+        _snprintf_s(Data,
+            sizeof(Data) - 1,
+            "%08X%04X%04X%02X%02X%02X%02X%02X%02X%02X%02X",
+            guid.Data1,
+            guid.Data2,
+            guid.Data3,
+            guid.Data4[0],
+            guid.Data4[1],
+            guid.Data4[2],
+            guid.Data4[3],
+            guid.Data4[4],
+            guid.Data4[5],
+            guid.Data4[6],
+            guid.Data4[7]);
     }
+    ::CoUninitialize();
 
-    std::string WStringToString(const std::wstring &wstr, int codepage)
-    {
-        int SourceLength = static_cast<int>(wstr.length()) + 1;
-        int TargetLength = WideCharToMultiByte(codepage, 0, (LPCWSTR)wstr.c_str(), SourceLength, NULL, 0, NULL, FALSE) + 1;
-
-        std::string ResultString(TargetLength, '\0');
-        int ResultLength = WideCharToMultiByte(codepage, 0, (LPCWSTR)wstr.c_str(), SourceLength, (LPSTR)ResultString.c_str(), TargetLength, NULL, FALSE);
-
-        return ResultString;
-    }
+    return std::string(Data);
 }
+
+std::wstring StringToWString(const std::string &str, int codepage)
+{
+    int Length = MultiByteToWideChar(codepage, 0, (LPCSTR)str.c_str(), static_cast<int>(str.length()), NULL, 0);
+
+    std::wstring ResultWString(Length, L'\0');
+    int ResultLength = MultiByteToWideChar(codepage, 0, (LPCSTR)str.c_str(), static_cast<int>(str.length()), (LPWSTR)ResultWString.c_str(), Length);
+
+    return ResultWString;
+}
+
+std::string WStringToString(const std::wstring &wstr, int codepage)
+{
+    int SourceLength = static_cast<int>(wstr.length()) + 1;
+    int TargetLength = WideCharToMultiByte(codepage, 0, (LPCWSTR)wstr.c_str(), SourceLength, NULL, 0, NULL, FALSE) + 1;
+
+    std::string ResultString(TargetLength, '\0');
+    int ResultLength = WideCharToMultiByte(codepage, 0, (LPCWSTR)wstr.c_str(), SourceLength, (LPSTR)ResultString.c_str(), TargetLength, NULL, FALSE);
+
+    return ResultString;
+}
+
+
+
+QING_NAMESPACE_END
