@@ -21,13 +21,18 @@
   <ItemGroup>
     <ClInclude Include="Example\StringVector.h" />
     <ClInclude Include="HeaderFiles\FileManager.h" />
+    <ClInclude Include="HeaderFiles\GBKandUTF8.h" />
     <ClInclude Include="HeaderFiles\LocalComputer.h" />
     <ClInclude Include="HeaderFiles\Network.h" />
+    <ClInclude Include="HeaderFiles\PermutationCombination.h" />
+    <ClInclude Include="HeaderFiles\ProgramDump.h" />
     <ClInclude Include="HeaderFiles\QingBase.h" />
+    <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\FileManager.cpp" />
+    <ClCompile Include="SourceFiles\GBKandUTF8.cpp" />
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />
     <ClCompile Include="SourceFiles\Network.cpp" />
     <ClCompile Include="SourceFiles\Utility.cpp" />
