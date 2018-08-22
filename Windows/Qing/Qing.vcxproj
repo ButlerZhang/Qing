@@ -19,6 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Example\DesignPatterns\Header\AbstractFactory.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\Adapter.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\Bridge.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\Builder.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\Decorator.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\FactoryMethod.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\Prototype.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\SimpleFactory.h" />
+    <ClInclude Include="Example\DesignPatterns\Header\Singleton.h" />
     <ClInclude Include="Example\StringVector.h" />
     <ClInclude Include="HeaderFiles\FileManager.h" />
     <ClInclude Include="HeaderFiles\GBKandUTF8.h" />
@@ -33,6 +42,15 @@
     <ClInclude Include="HeaderFiles\Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Example\DesignPatterns\Source\AbstractFactory.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\Adapter.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\Bridge.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\Builder.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\Decorator.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\FactoryMethod.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\Prototype.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\SimpleFactory.cpp" />
+    <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp" />
     <ClCompile Include="SourceFiles\FileManager.cpp" />
     <ClCompile Include="SourceFiles\GBKandUTF8.cpp" />
     <ClCompile Include="SourceFiles\HexString.cpp" />

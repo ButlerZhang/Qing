@@ -16,6 +16,15 @@
     <Filter Include="Example">
       <UniqueIdentifier>{afb15584-7155-46a1-8f12-72f9b39bfa26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\DesignPatterns">
+      <UniqueIdentifier>{384f6222-8226-4934-8516-a191364b8958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example\DesignPatterns\Header">
+      <UniqueIdentifier>{3fceb79d-e707-4e0c-8c93-4fac18949e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example\DesignPatterns\Source">
+      <UniqueIdentifier>{d97444e6-8f08-4957-90e9-64e11ee61d9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeaderFiles\Network.h">
@@ -54,6 +63,33 @@
     <ClInclude Include="HeaderFiles\NumericalConversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\AbstractFactory.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\Adapter.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\Bridge.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\Builder.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\Decorator.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\FactoryMethod.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\Prototype.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\SimpleFactory.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\DesignPatterns\Header\Singleton.h">
+      <Filter>Example\DesignPatterns\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Network.cpp">
@@ -76,6 +112,33 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\NumericalConversion.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\AbstractFactory.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\Adapter.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\Bridge.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\Builder.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\Decorator.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\FactoryMethod.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\Prototype.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\SimpleFactory.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp">
+      <Filter>Example\DesignPatterns\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
