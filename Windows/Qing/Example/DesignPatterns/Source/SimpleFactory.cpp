@@ -1,6 +1,8 @@
 #include "..\..\DesignPatterns\Header\SimpleFactory.h"
 #include <iostream>
 
+QING_TEMPLATE_BEGIN
+
 
 
 SimpleProductA::SimpleProductA()
@@ -45,3 +47,5 @@ void SimpleFactoryTest()
     SimpleProduct *p = MySimpleFactory.GetSimpleProduct(SPT_A);
     delete p;
 }
+
+QING_TEMPLATE_END

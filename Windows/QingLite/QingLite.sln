@@ -17,6 +17,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Qing", "..\Qing\Qing.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToolLite", "ToolLite\ToolLite.vcxproj", "{59D5F46F-5318-4852-BE80-4CC16677F8E2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QingTest", "QingTest\QingTest.vcxproj", "{4B38B057-8194-4743-8217-D344751F58D8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7B247FD1-7119-4838-9F12-CB855D783DD2} = {7B247FD1-7119-4838-9F12-CB855D783DD2}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -57,6 +62,14 @@ Global
 		{59D5F46F-5318-4852-BE80-4CC16677F8E2}.Release|x64.Build.0 = Release|x64
 		{59D5F46F-5318-4852-BE80-4CC16677F8E2}.Release|x86.ActiveCfg = Release|Win32
 		{59D5F46F-5318-4852-BE80-4CC16677F8E2}.Release|x86.Build.0 = Release|Win32
+		{4B38B057-8194-4743-8217-D344751F58D8}.Debug|x64.ActiveCfg = Debug|x64
+		{4B38B057-8194-4743-8217-D344751F58D8}.Debug|x64.Build.0 = Debug|x64
+		{4B38B057-8194-4743-8217-D344751F58D8}.Debug|x86.ActiveCfg = Debug|Win32
+		{4B38B057-8194-4743-8217-D344751F58D8}.Debug|x86.Build.0 = Debug|Win32
+		{4B38B057-8194-4743-8217-D344751F58D8}.Release|x64.ActiveCfg = Release|x64
+		{4B38B057-8194-4743-8217-D344751F58D8}.Release|x64.Build.0 = Release|x64
+		{4B38B057-8194-4743-8217-D344751F58D8}.Release|x86.ActiveCfg = Release|Win32
+		{4B38B057-8194-4743-8217-D344751F58D8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,8 @@
 #include "..\..\DesignPatterns\Header\FactoryMethod.h"
 #include <iostream>
 
+QING_TEMPLATE_BEGIN
+
 
 
 MethodProductA::MethodProductA()
@@ -65,3 +67,5 @@ void FactoryMethodTest()
     delete p;
     delete f;
 }
+
+QING_TEMPLATE_END

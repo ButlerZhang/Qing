@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __PROTOTYPE_H__
-#define __PROTOTYPE_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -39,6 +39,6 @@ public:
 
 
 
-void ProtoTypeTest();
+void QING_DLL ProtoTypeTest();
 
-#endif
+QING_TEMPLATE_END

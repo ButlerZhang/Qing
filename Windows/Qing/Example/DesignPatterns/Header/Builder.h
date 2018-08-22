@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __BUILDER_H__
-#define __BUILDER_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -56,6 +56,6 @@ private:
 
 
 
-void BuilderTest();
+void QING_DLL BuilderTest();
 
-#endif
+QING_TEMPLATE_END

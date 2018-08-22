@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __ADAPTER_H__
-#define __ADAPTER_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -57,6 +57,6 @@ private:
 
 
 
-void TestAdapter();
+void QING_DLL TestAdapter();
 
-#endif
+QING_TEMPLATE_END

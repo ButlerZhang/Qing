@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __BRIDGE_H__
-#define __BRIDGE_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -77,6 +77,6 @@ private:
 
 
 
-void TestBridge();
+void QING_DLL TestBridge();
 
-#endif
+QING_TEMPLATE_END

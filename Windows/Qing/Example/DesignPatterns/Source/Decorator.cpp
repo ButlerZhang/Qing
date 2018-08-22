@@ -1,6 +1,8 @@
 #include "..\..\DesignPatterns\Header\Decorator.h"
 #include <iostream>
 
+QING_TEMPLATE_BEGIN
+
 
 
 Component::~Component()
@@ -145,3 +147,5 @@ void TestDecorator()
     pDecorator->Operation();
     delete pDecorator;
 }
+
+QING_TEMPLATE_END

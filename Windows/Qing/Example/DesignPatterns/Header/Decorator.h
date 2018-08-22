@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __DECORATOR_H__
-#define __DECORATOR_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -97,7 +97,6 @@ private:
 
 
 
-void TestDecorator();
+void QING_DLL TestDecorator();
 
-
-#endif
+QING_TEMPLATE_END

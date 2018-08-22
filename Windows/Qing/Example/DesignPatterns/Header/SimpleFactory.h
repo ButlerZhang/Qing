@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __SIMPLE_FACTORY_H__
-#define __SIMPLE_FACTORY_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -54,6 +54,6 @@ public:
 
 
 
-void SimpleFactoryTest();
+void QING_DLL SimpleFactoryTest();
 
-#endif
+QING_TEMPLATE_END

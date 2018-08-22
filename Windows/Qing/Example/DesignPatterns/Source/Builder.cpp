@@ -1,6 +1,8 @@
 #include "..\..\DesignPatterns\Header\Builder.h"
 #include <iostream>
 
+QING_TEMPLATE_BEGIN
+
 
 
 void BuilderA::BuilderPartOne()
@@ -59,3 +61,5 @@ void BuilderTest()
     delete pDirector1;
     delete pDirector2;
 }
+
+QING_TEMPLATE_END

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <mutex>
 
+QING_TEMPLATE_BEGIN
+
 
 
 SimpleSingleton* SimpleSingleton::m_Instance = NULL;
@@ -122,3 +124,5 @@ template<typename T> TemplateSingleton<T>::~TemplateSingleton(void)
 {
     std::cout << "TemplateSingleton destruction." << std::endl;
 }
+
+QING_TEMPLATE_END

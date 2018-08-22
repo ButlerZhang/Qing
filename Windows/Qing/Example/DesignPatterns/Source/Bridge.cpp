@@ -1,6 +1,8 @@
 #include "..\..\DesignPatterns\Header\Bridge.h"
 #include <iostream>
 
+QING_TEMPLATE_BEGIN
+
 
 
 void ConcreteImplementorA::OperatorImpl()
@@ -61,3 +63,5 @@ void TestBridge()
     Abstraction *pAbstraction2 = new RefineAbstractionB(pImplB);
     pAbstraction2->Operator();
 }
+
+QING_TEMPLATE_END

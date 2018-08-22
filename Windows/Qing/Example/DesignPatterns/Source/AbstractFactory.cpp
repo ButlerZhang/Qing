@@ -1,6 +1,8 @@
 #include "..\..\DesignPatterns\Header\AbstractFactory.h"
 #include <iostream>
 
+QING_TEMPLATE_BEGIN
+
 
 
 AbstractProductA1::AbstractProductA1()
@@ -105,3 +107,5 @@ void AbstractFactoryTest()
     delete pProductA;
     delete pFactory1;
 }
+
+QING_TEMPLATE_END

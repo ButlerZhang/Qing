@@ -18,3 +18,14 @@
 #ifndef QING_NAMESPACE_END
 #define QING_NAMESPACE_END   }
 #endif
+
+
+
+//namespace indication
+#ifndef QING_TEMPLATE_BEGIN
+#define QING_TEMPLATE_BEGIN namespace QingTemplate {
+#endif
+
+#ifndef QING_TEMPLATE_END
+#define QING_TEMPLATE_END   }
+#endif

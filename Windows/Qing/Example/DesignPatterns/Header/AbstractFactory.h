@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __ABSTRACT_FACTORY_H__
-#define __ABSTRACT_FACTORY_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -92,7 +92,6 @@ public:
 
 
 
-void AbstractFactoryTest();
+void QING_DLL AbstractFactoryTest();
 
-
-#endif
+QING_TEMPLATE_END

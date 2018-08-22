@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __FACTORY_METHOD_H__
-#define __FACTORY_METHOD_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -64,6 +64,6 @@ public:
 
 
 
-void FactoryMethodTest();
+void QING_DLL FactoryMethodTest();
 
-#endif
+QING_TEMPLATE_END

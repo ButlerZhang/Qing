@@ -1,7 +1,7 @@
-// Copyright (c) ButlerZhang 2016
+#pragma once
+#include "..\..\..\HeaderFiles\QingBase.h"
 
-#ifndef __SINGLETON_H__
-#define __SINGLETON_H__
+QING_TEMPLATE_BEGIN
 
 
 
@@ -92,4 +92,4 @@ private:
     ~TemplateSingleton(void);
 };
 
-#endif
+QING_TEMPLATE_END
