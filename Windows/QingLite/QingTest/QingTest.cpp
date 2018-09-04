@@ -2,18 +2,23 @@
 //
 
 #include "stdafx.h"
-#include "..\..\Qing\Example\DesignPatterns\Header\AbstractFactory.h"
-#include "..\..\Qing\Example\DesignPatterns\Header\Adapter.h"
+#include "..\..\Qing\HeaderFiles\RandomAdapter.h"
 #include <Windows.h>
 #include <iostream>
+#include <string>
+
 
 
 
 int main()
 {
-    QingTemplate::AbstractFactoryTest();
-    std::cout << std::endl;
-    QingTemplate::TestAdapter();
+    Qing::RandomAdapter ra;
+
+    for (int i = 0; i < 10; i++)
+    {
+        std::cout << ra.GetRandom() << std::endl;
+        std::cout << ra.GetGetRandom(0, 9) << std::endl;
+    }
 
     std::cout << std::endl;
     system("pause");

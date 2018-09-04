@@ -25,6 +25,9 @@
     <Filter Include="Reference\Qing\Lib">
       <UniqueIdentifier>{ce6b3640-f5ca-4569-8e8d-de9201766095}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference\Qing\Include\DesignPatterns">
+      <UniqueIdentifier>{2b630ea3-b558-48e3-b5d4-5ee7a091f851}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -35,6 +38,33 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\AbstractFactory.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Adapter.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Bridge.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Builder.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Decorator.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\FactoryMethod.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Prototype.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\SimpleFactory.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Singleton.h">
+      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h">
       <Filter>Reference\Qing\Include</Filter>
@@ -63,37 +93,13 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
       <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\RandomAdapter.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h">
       <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\AbstractFactory.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Adapter.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Bridge.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Builder.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Decorator.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\FactoryMethod.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Prototype.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\SimpleFactory.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Singleton.h">
       <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
   </ItemGroup>

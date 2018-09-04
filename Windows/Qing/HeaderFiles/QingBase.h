@@ -1,5 +1,10 @@
 #pragma once
 
+//warning C4251: STL template class needs to have dll-interface to be used by clients of class User-define class
+#pragma warning(disable:4251)
+
+
+
 #ifndef QING_DLL
 #ifdef  QING_EXPORTS
 #define QING_DLL        __declspec(dllexport)

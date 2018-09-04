@@ -169,6 +169,7 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\RandomAdapter.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h" />
     <ClInclude Include="stdafx.h" />
