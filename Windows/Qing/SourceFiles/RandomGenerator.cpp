@@ -33,8 +33,7 @@ unsigned int RandomGenerator::GetRandomUIntInRange(int min, int max)
 
 double RandomGenerator::GetRandomDouble()
 {
-    static std::uniform_real_distribution<double> u(0, 1);
-    return u(m_engine);
+    return GetRandomDoubleInRange(0.0, 1.0);
 }
 
 double RandomGenerator::GetRandomDoubleInRange(double min, double max)

@@ -93,6 +93,9 @@
     <ClInclude Include="HeaderFiles\RandomGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Example\IOExample.h">
+      <Filter>Example</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Network.cpp">
@@ -145,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\RandomGenerator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Example\IOExample.cpp">
+      <Filter>Example</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

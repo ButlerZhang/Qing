@@ -160,6 +160,7 @@
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Prototype.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\SimpleFactory.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Singleton.h" />
+    <ClInclude Include="..\..\Qing\Example\IOExample.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\GBKandUTF8.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h" />

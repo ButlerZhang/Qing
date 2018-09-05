@@ -2,38 +2,54 @@
 //
 
 #include "stdafx.h"
-#include "..\..\Qing\HeaderFiles\RandomGenerator.h"
 #include <Windows.h>
 #include <iostream>
 #include <string>
 
+#include "..\..\Qing\Example\IOExample.h"
 
-
-void NormalDistribution()
-{
-    std::default_random_engine e;           //生成随机整数
-    std::normal_distribution<> n(4, 1.5);   //均值4，标准差1.5
-    std::vector<unsigned> vals(9);          //9个元素均为0
-
-    for (size_t i = 0; i != 200; i++)
-    {
-        unsigned v = lround(n(e));          //舍入到最接近的整数
-        if (v < vals.size())
-        {
-            ++vals[v];
-        }
-    }
-
-    for (size_t j = 0; j != vals.size(); j++)
-    {
-        std::cout << j << ": " << std::string(vals[j], '*') << std::endl;
-    }
-}
 
 
 int main()
 {
-    NormalDistribution();
+    QingTemplate::IOExample myIO;
+
+    myIO.TestBoolapha();
+    std::cout << std::endl;
+
+    myIO.TestIntDecimal();
+    std::cout << std::endl;
+
+    myIO.TestShowbase();
+    std::cout << std::endl;
+
+    myIO.TestUppercase();
+    std::cout << std::endl;
+
+    myIO.TestPrecision();
+    std::cout << std::endl;
+
+    myIO.TestDoubleCounting();
+    std::cout << std::endl;
+
+    myIO.TestShowpoint();
+    std::cout << std::endl;
+
+    myIO.TestSpace();
+    std::cout << std::endl;
+
+    //myIO.TestNoSkipws();
+    //std::cout << std::endl;
+
+    //myIO.TestGetPut();
+    //std::cout << std::endl;
+
+    //myIO.TestEOF();
+    //std::cout << std::endl;
+
+    myIO.TestSeekTell();
+    std::cout << std::endl;
+
     std::cout << std::endl;
     system("pause");
     return 0;
