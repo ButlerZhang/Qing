@@ -38,7 +38,7 @@
     <ClInclude Include="HeaderFiles\PermutationCombination.h" />
     <ClInclude Include="HeaderFiles\ProgramDump.h" />
     <ClInclude Include="HeaderFiles\QingBase.h" />
-    <ClInclude Include="HeaderFiles\RandomAdapter.h" />
+    <ClInclude Include="HeaderFiles\RandomGenerator.h" />
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\Utility.h" />
   </ItemGroup>
@@ -58,7 +58,7 @@
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />
     <ClCompile Include="SourceFiles\Network.cpp" />
     <ClCompile Include="SourceFiles\NumericalConversion.cpp" />
-    <ClCompile Include="SourceFiles\RandomAdapter.cpp" />
+    <ClCompile Include="SourceFiles\RandomGenerator.cpp" />
     <ClCompile Include="SourceFiles\Utility.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
