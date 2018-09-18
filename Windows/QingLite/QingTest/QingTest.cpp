@@ -12,8 +12,7 @@
 
 int main()
 {
-    Qing::QingLog mylog;
-    mylog.TestBoostLog();
+    Qing::QingLog::GetInstance().UnitTest();
 
     std::cout << std::endl;
     system("pause");
