@@ -1,5 +1,6 @@
 #include "..\HeaderFiles\QingLog.h"
 
+#include <Windows.h>
 #include <boost/log/sinks.hpp>
 #include <boost/log/common.hpp>
 #include <boost/log/trivial.hpp>
@@ -26,8 +27,8 @@ std::string QingLog::m_LogDirectory;
 
 void QingLog::DefaultInit()
 {
-    m_IsOkToWrite = true;
-    m_LogDirectory = "C:\\QingLog\\";
+    SetIsOkToWrite(true);
+    SetLogDirectory("C:\\QingLog\\");
 
     InitBaseSink();
     InitAdditionalSink();
@@ -92,6 +93,22 @@ void QingLog::InitAdditionalSink(const std::string & LogFileName)
 
     logging::core::get()->add_sink(additional_sink);
     logging::add_common_attributes();
+}
+
+bool QingLog::SetLogDirectory(const std::string &Directory)
+{
+    if ((GetFileAttributesA(Directory.c_str()) & FILE_ATTRIBUTE_DIRECTORY) > 0)
+    {
+        m_LogDirectory = Directory;
+        if (m_LogDirectory[m_LogDirectory.size() - 1] != '\\')
+        {
+            m_LogDirectory.append("\\");
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 QING_NAMESPACE_END

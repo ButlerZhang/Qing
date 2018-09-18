@@ -12,15 +12,22 @@
 
 int main()
 {
-    Qing::QingLog::DefaultInit();
-    Qing::QingLog::SetFilter(Qing::QingLog::LL_DEBUG);
-    
-    for (int i = 0; i < 10000; i++)
+    //Qing::QingLog::DefaultInit();
+    //Qing::QingLog::SetFilter(Qing::QingLog::LL_DEBUG);
+
+    Qing::QingLog::SetIsOkToWrite(true);
+    if (Qing::QingLog::SetLogDirectory("C:\\LTGameAppData\\"))
     {
-        Qing::QingLog::WriteUI("A ui severity message");
-        Qing::QingLog::Write("A debug severity message", Qing::QingLog::LL_DEBUG);
-        Qing::QingLog::Write("An informational severity message", Qing::QingLog::LL_INFO);
-        Qing::QingLog::Write("An error severity message", Qing::QingLog::LL_ERROR);
+        Qing::QingLog::InitBaseSink("Active");
+        Qing::QingLog::InitAdditionalSink("UI");
+
+        for (int i = 0; i < 10000; i++)
+        {
+            Qing::QingLog::WriteUI("A ui severity message");
+            Qing::QingLog::Write("A debug severity message", Qing::QingLog::LL_DEBUG);
+            Qing::QingLog::Write("An informational severity message", Qing::QingLog::LL_INFO);
+            Qing::QingLog::Write("An error severity message", Qing::QingLog::LL_ERROR);
+        }
     }
 
     Qing::QingLog::DefaultShutdown();
