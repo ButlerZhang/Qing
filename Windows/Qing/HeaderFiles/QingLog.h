@@ -12,35 +12,37 @@ public:
 
     enum LogLevel
     {
+        LL_UI,
         LL_DEBUG,
         LL_INFO,
         LL_ERROR,
-        LL_FATAL,
-        LL_REPORT,
     };
 
 public:
 
-    static void UnitTest();
-    static QingLog& GetInstance();
+    static void DefaultInit();
+    static void DefaultShutdown();
+    static void SetFilter(LogLevel level = QingLog::LL_DEBUG);
 
-    void SetIsOkToWrite(bool IsOkToLog) { m_IsOkToWrite = IsOkToLog; }
-    void SetLogDirectory(const std::string Directory) { m_LogDirectory = Directory; }
-    void Write(const std::string &LogString, LogLevel level = QingLog::LL_DEBUG) const;
+    static void WriteUI(const std::string &LogString) { Write(LogString, LL_UI); }
+    static void Write(const std::string &LogString, LogLevel level = QingLog::LL_INFO);
 
-private:
-
-    QingLog();
-    ~QingLog();
-
-    auto GetSinkBackend(const std::string &FileName) const;
-    void InitBaseSink(const std::string &LogFileName = "Qing") const;
-    void InitAdditionalSink(const std::string &LogFileName = "QingReport") const;
+    static void SetIsOkToWrite(bool IsOkToLog) { m_IsOkToWrite = IsOkToLog; }
+    static void SetLogDirectory(const std::string Directory) { m_LogDirectory = Directory; }
 
 private:
 
-    bool                m_IsOkToWrite;
-    std::string         m_LogDirectory;
+    QingLog() {}
+    ~QingLog() {}
+
+    static auto CreateSink(const std::string &FileName);
+    static void InitBaseSink(const std::string &LogFileName = "Qing");
+    static void InitAdditionalSink(const std::string &LogFileName = "UI");
+
+private:
+
+    static bool                m_IsOkToWrite;
+    static std::string         m_LogDirectory;
 };
 
 QING_NAMESPACE_END
