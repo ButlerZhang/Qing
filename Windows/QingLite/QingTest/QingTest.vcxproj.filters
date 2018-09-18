@@ -108,6 +108,9 @@
     <ClInclude Include="..\..\Qing\Example\IOExample.h">
       <Filter>Reference\Qing\Include\Example</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

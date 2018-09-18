@@ -96,6 +96,9 @@
     <ClInclude Include="Example\IOExample.h">
       <Filter>Example</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\QingLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Network.cpp">
@@ -151,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="Example\IOExample.cpp">
       <Filter>Example</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\QingLog.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

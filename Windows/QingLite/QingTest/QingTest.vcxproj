@@ -75,6 +75,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\Deployment\Debug\</OutDir>
+    <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -170,6 +171,7 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\RandomAdapter.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h" />

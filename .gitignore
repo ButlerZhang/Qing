@@ -243,7 +243,11 @@ ModelManifest.xml
 .fake/
 
 # user define
+
 Windows/Qing/x64/*
+Windows/Qing/Reference/boost_1_68_0/bin.v2/*
+Windows/Qing/Reference/boost_1_68_0/stage/*
+Windows/Qing/Reference/boost_1_68_0/boost/chrono/stopwatches
 Windows/QingLite/x64/*
 Windows/QingLite/QingTest/x64/*
 Windows/QingLite/ToolLite/x64/*
@@ -251,3 +255,9 @@ Windows/QingLite/ServerLite/x64/*
 Windows/QingLite/ClientLite/x64/*
 Windows/Deployment/Debug/*
 Windows/Deployment/Release/*
+
+Windows/Qing/Reference/boost_1_68_0/b2.exe
+Windows/Qing/Reference/boost_1_68_0/bjam.exe
+Windows/Qing/Reference/boost_1_68_0/project-config.jam
+
+
