@@ -31,6 +31,7 @@ public:
     static void Write(const std::string &LogString, LogLevel Level = QingLog::LL_INFO);
 
     static bool SetLogDirectory(const std::string &Directory);
+    static bool SetLogDirectoryAutoAppendProgramName(const std::string &Directory);
     static void SetIsOkToWrite(bool IsOkToLog) { m_IsOkToWrite = IsOkToLog; }
 
 private:

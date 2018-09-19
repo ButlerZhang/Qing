@@ -1,4 +1,5 @@
 #include "..\HeaderFiles\QingLog.h"
+#include "..\HeaderFiles\Utility.h"
 
 #include <Windows.h>
 #include <boost/log/sinks.hpp>
@@ -127,6 +128,18 @@ bool QingLog::SetLogDirectory(const std::string &Directory)
             m_LogDirectory.append("\\");
         }
 
+        return true;
+    }
+
+    return false;
+}
+
+bool QingLog::SetLogDirectoryAutoAppendProgramName(const std::string &Directory)
+{
+    if (SetLogDirectory(Directory))
+    {
+        m_LogDirectory.append(GetProgramName());
+        m_LogDirectory.append("\\");
         return true;
     }
 

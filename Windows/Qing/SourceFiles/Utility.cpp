@@ -33,6 +33,27 @@ std::string GetGUID()
     return std::string(Data);
 }
 
+std::string GetProgramName()
+{
+    char FullPathCharArray[MAX_PATH];
+    memset(FullPathCharArray, 0, sizeof(FullPathCharArray));
+    ::GetModuleFileNameA(NULL, FullPathCharArray, MAX_PATH);
+
+    std::string FullPathString(FullPathCharArray);
+    if (!FullPathString.empty())
+    {
+        std::size_t StartIndex = FullPathString.find_last_of('\\') + 1;
+        if (StartIndex != std::string::npos)
+        {
+            std::size_t CharCount = FullPathString.size() - StartIndex - 4; //sizeof(.exe) == 4
+            std::string ProgramName = FullPathString.substr(StartIndex, CharCount);
+            return ProgramName;
+        }
+    }
+
+    return "Qing";
+}
+
 std::wstring StringToWString(const std::string &str, int codepage)
 {
     int Length = MultiByteToWideChar(codepage, 0, (LPCSTR)str.c_str(), static_cast<int>(str.length()), NULL, 0);

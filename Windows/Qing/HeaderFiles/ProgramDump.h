@@ -1,5 +1,6 @@
 #pragma once
 #include "QingBase.h"
+#include "Utility.h"
 #include <windows.h>
 #include <tchar.h>
 #include <dbghelp.h>
@@ -13,32 +14,9 @@ QING_NAMESPACE_BEGIN
 
 
 
-const std::string GetProgramName()
-{
-    char FullPathCharArray[MAX_PATH];
-    memset(FullPathCharArray, 0, sizeof(FullPathCharArray));
-    ::GetModuleFileNameA(NULL, FullPathCharArray, MAX_PATH);
-
-    std::string FullPathString(FullPathCharArray);
-    if (!FullPathString.empty())
-    {
-        std::size_t StartIndex = FullPathString.find_last_of('\\') + 1;
-        if (StartIndex != std::string::npos)
-        {
-            std::size_t CharCount = FullPathString.size() - StartIndex - 4; //sizeof(.exe) == 4
-            std::string ProgramName = (FullPathString.substr(StartIndex, CharCount) + ".dmp");
-            return ProgramName;
-        }
-    }
-
-    return "LTI.dmp";
-}
-
-
-
 static LONG WINAPI ProgramUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* ExceptionPointers)
 {
-    HANDLE hFile = CreateFileA( GetProgramName().c_str(),
+    HANDLE hFile = CreateFileA((GetProgramName()+".dmp").c_str(),
         GENERIC_READ | GENERIC_WRITE,
         0,
         NULL,
