@@ -6,68 +6,50 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <numeric>
 
 #include "..\..\Qing\HeaderFiles\QingLog.h"
 #include "..\..\Qing\HeaderFiles\Utility.h"
 #include "..\..\Qing\HeaderFiles\RandomGenerator.h"
 
-Qing::RandomGenerator g_random;
 
-
-
-void HandlerThread()
-{
-    for (int i = 0; i < 10000; i++)
-    {
-        Qing::QingLog::Write("A temp severity message", Qing::QingLog::LL_TEMP);
-        Qing::QingLog::Write("A debug severity message", Qing::QingLog::LL_DEBUG);
-        Qing::QingLog::Write("An informational severity message", Qing::QingLog::LL_INFO);
-        Qing::QingLog::Write("An error severity message", Qing::QingLog::LL_ERROR);
-
-        Sleep(g_random.GetRandomUIntInRange(1, 10));
-    }
-}
-
-void UIThread()
-{
-    static long long Counter = 0;
-    for (int i = 0; i < 10000; i++)
-    {
-        Qing::QingLog::Write("A temp severity message", Qing::QingLog::LL_TEMP);
-        Qing::QingLog::Write("A debug severity message", Qing::QingLog::LL_DEBUG);
-        Qing::QingLog::Write(Qing::QingLog::LL_TEMP, "My ID = %d, GUID = %s.", Counter++, Qing::GetGUID().c_str());
-        Sleep(g_random.GetRandomUIntInRange(1, 5));
-    }
-}
 
 
 int main()
 {
-    //Qing::QingLog::DefaultInit();
-    //Qing::QingLog::SetFilter(Qing::QingLog::LL_DEBUG);
+    typedef unsigned long long NewType;
+    //typedef __int128 NewType;
 
-    Qing::QingLog::SetIsOkToWrite(true);
-    if (Qing::QingLog::SetLogDirectoryAutoAppendProgramName("C:\\QingLog"))
+    std::vector<NewType> ProbWinVector = {
+        4591841168814906923,
+        4594145047714251128,
+        4593416554697928511,
+        4590549355288985654,
+        4594504687346238412,
+        4596811805810895374,
+        4586650350148589186,
+        4584763574794864878,
+        4588074880792361392,
+        4589490066574993195
+    };
+
+    for (auto Index = 0; Index < ProbWinVector.size(); Index++)
     {
-        Qing::QingLog::InitBaseSink("Active");
-        Qing::QingLog::InitTemporarySink("UI");
-
-        std::thread handlerThread(HandlerThread);
-        std::thread uiThread(UIThread);
-
-        std::string quitString;
-        while (std::cin >> quitString)
-        {
-            if (quitString == "q")
-            {
-                break;
-            }
-
-            Sleep(1000);
-        }
+        //std::cout << ProbWinVector[Index] << std::endl;
+        std::cout << ProbWinVector[Index] << "\t" << static_cast<double>(ProbWinVector[Index]) << std::endl;
     }
 
-    Qing::QingLog::DefaultShutdown();
+    NewType InitValue = 0;
+    NewType TotalProbWin = std::accumulate(ProbWinVector.begin(), ProbWinVector.end(), InitValue);
+    std::cout << std::endl << TotalProbWin << "\t" << static_cast<double>(TotalProbWin)  << std::endl << std::endl;
+
+
+    for (auto Index = 0; Index < ProbWinVector.size(); Index++)
+    {
+        double probwin = static_cast<double>(ProbWinVector[Index]) / static_cast<double>(TotalProbWin);
+        std::cout << probwin << std::endl;
+    }
+
 
     std::cout << std::endl;
     system("pause");
