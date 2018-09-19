@@ -1,14 +1,8 @@
 #pragma once
 #include "QingBase.h"
 #include "Utility.h"
-#include <windows.h>
 #include <tchar.h>
-#include <dbghelp.h>
-#include <stdio.h>
-#include <crtdbg.h>
-#include <string>
-
-#pragma comment ( lib, "dbghelp.lib" )
+#include <DbgHelp.h>
 
 QING_NAMESPACE_BEGIN
 
@@ -16,7 +10,9 @@ QING_NAMESPACE_BEGIN
 
 static LONG WINAPI ProgramUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* ExceptionPointers)
 {
-    HANDLE hFile = CreateFileA((GetProgramName()+".dmp").c_str(),
+    const std::string &DMPFileName = GetProgramName() + ".dmp";
+
+    HANDLE hFile = CreateFileA(DMPFileName.c_str(),
         GENERIC_READ | GENERIC_WRITE,
         0,
         NULL,
@@ -42,21 +38,20 @@ static LONG WINAPI ProgramUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* E
         CloseHandle(hFile);
     }
 
-    MessageBox(NULL, _T("Program is encountering a fatal error and going to shutdown"), _T("LTI"), MB_OK | MB_ICONERROR);
+    MessageBox(NULL, _T("Program is encountering a fatal error and going to shutdown"), _T("Crash Tip"), MB_OK | MB_ICONERROR);
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
 
 
-void QING_DLL SetProgramDMP()
+void QING_DLL SetProgramDMPEnable(bool EnableProgramDMP)
 {
-    //EnableProgramDMP is false in the release version.
-    bool EnableProgramDMP = false;
-
     if (EnableProgramDMP)
     {
         SetUnhandledExceptionFilter(ProgramUnhandledExceptionFilter);
     }
 }
+
+
 
 QING_NAMESPACE_END

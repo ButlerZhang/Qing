@@ -54,23 +54,23 @@ std::string GetProgramName()
     return "Qing";
 }
 
-std::wstring StringToWString(const std::string &str, int codepage)
+std::wstring StringToWString(const std::string &String, int Codepage)
 {
-    int Length = MultiByteToWideChar(codepage, 0, (LPCSTR)str.c_str(), static_cast<int>(str.length()), NULL, 0);
+    int Length = MultiByteToWideChar(Codepage, 0, (LPCSTR)String.c_str(), static_cast<int>(String.length()), NULL, 0);
 
     std::wstring ResultWString(Length, L'\0');
-    int ResultLength = MultiByteToWideChar(codepage, 0, (LPCSTR)str.c_str(), static_cast<int>(str.length()), (LPWSTR)ResultWString.c_str(), Length);
+    int ResultLength = MultiByteToWideChar(Codepage, 0, (LPCSTR)String.c_str(), static_cast<int>(String.length()), (LPWSTR)ResultWString.c_str(), Length);
 
     return ResultWString;
 }
 
-std::string WStringToString(const std::wstring &wstr, int codepage)
+std::string WStringToString(const std::wstring &WString, int Codepage)
 {
-    int SourceLength = static_cast<int>(wstr.length()) + 1;
-    int TargetLength = WideCharToMultiByte(codepage, 0, (LPCWSTR)wstr.c_str(), SourceLength, NULL, 0, NULL, FALSE) + 1;
+    int SourceLength = static_cast<int>(WString.length()) + 1;
+    int TargetLength = WideCharToMultiByte(Codepage, 0, (LPCWSTR)WString.c_str(), SourceLength, NULL, 0, NULL, FALSE) + 1;
 
     std::string ResultString(TargetLength, '\0');
-    int ResultLength = WideCharToMultiByte(codepage, 0, (LPCWSTR)wstr.c_str(), SourceLength, (LPSTR)ResultString.c_str(), TargetLength, NULL, FALSE);
+    int ResultLength = WideCharToMultiByte(Codepage, 0, (LPCWSTR)WString.c_str(), SourceLength, (LPSTR)ResultString.c_str(), TargetLength, NULL, FALSE);
 
     return ResultString;
 }
