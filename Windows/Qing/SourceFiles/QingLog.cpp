@@ -31,7 +31,7 @@ void QingLog::DefaultInit()
     SetLogDirectory("C:\\QingLog\\");
 
     InitBaseSink();
-    InitAdditionalSink();
+    InitTemporarySink();
 }
 
 void QingLog::DefaultShutdown()
@@ -39,34 +39,25 @@ void QingLog::DefaultShutdown()
     logging::core::get()->remove_all_sinks();
 }
 
-void QingLog::SetFilter(LogLevel level)
+void QingLog::SetFilter(LogLevel Level)
 {
-    logging::core::get()->set_filter(expr::attr<QingLog::LogLevel>("Severity") >= level);
-}
-
-void QingLog::Write(const std::string & LogString, LogLevel level)
-{
-    if (m_IsOkToWrite)
-    {
-        //src::severity_logger_mt<QingLog::LogLevel>& lg = QingLogger::get();
-        BOOST_LOG_SEV(QingLogger::get(), level) << LogString;
-    }
+    logging::core::get()->set_filter(expr::attr<QingLog::LogLevel>("Severity") >= Level);
 }
 
 auto QingLog::CreateSink(const std::string & FileName)
 {
     const size_t ONE_MB = 1024 * 1024;
 
-    boost::shared_ptr<sinks::text_file_backend> backend = boost::make_shared<sinks::text_file_backend>(
+    boost::shared_ptr<sinks::text_file_backend> Backend = boost::make_shared<sinks::text_file_backend>(
         keywords::file_name = m_LogDirectory + FileName + "_%Y-%m-%d_%H-%M-%S.log",
         keywords::rotation_size = 100 * ONE_MB,
         keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
         keywords::min_free_space = 500 * ONE_MB);
 
-    backend->auto_flush(true);
-    boost::shared_ptr<TextSink> base_sink(new TextSink(backend));
+    Backend->auto_flush(true);
+    boost::shared_ptr<TextSink> NewSink(new TextSink(Backend));
 
-    base_sink->set_formatter(
+    NewSink->set_formatter(
         expr::format("[%1%][%2%][%3%]: %4%")
         % expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")
         % expr::attr<QingLog::LogLevel>("Severity")
@@ -74,25 +65,56 @@ auto QingLog::CreateSink(const std::string & FileName)
         % expr::smessage
     );
 
-    return base_sink;
+    return NewSink;
 }
 
 void QingLog::InitBaseSink(const std::string &LogFileName)
 {
-    boost::shared_ptr<TextSink> base_sink = CreateSink(LogFileName);
-    base_sink->set_filter(expr::attr<QingLog::LogLevel>("Severity") >= QingLog::LL_DEBUG);
+    boost::shared_ptr<TextSink> BaseSink = CreateSink(LogFileName);
+    BaseSink->set_filter(expr::attr<QingLog::LogLevel>("Severity") >= QingLog::LL_DEBUG);
 
-    logging::core::get()->add_sink(base_sink);
+    logging::core::get()->add_sink(BaseSink);
     logging::add_common_attributes();
 }
 
-void QingLog::InitAdditionalSink(const std::string & LogFileName)
+void QingLog::InitTemporarySink(const std::string & LogFileName)
 {
-    boost::shared_ptr<TextSink> additional_sink = CreateSink(LogFileName);
-    additional_sink->set_filter(expr::attr<QingLog::LogLevel>("Severity") == QingLog::LL_UI);
+    boost::shared_ptr<TextSink> TempSink = CreateSink(LogFileName);
+    TempSink->set_filter(expr::attr<QingLog::LogLevel>("Severity") == QingLog::LL_TEMP);
 
-    logging::core::get()->add_sink(additional_sink);
+    logging::core::get()->add_sink(TempSink);
     logging::add_common_attributes();
+}
+
+void QingLog::Write(LogLevel Level, const char * Format, ...)
+{
+    if (Format != NULL)
+    {
+        const size_t LOGBUFFERSIZE = 2048;
+
+        va_list VaList = NULL;
+        va_start(VaList, Format);
+
+        size_t FormatSize = _vscprintf(Format, VaList) + 1;
+        size_t CopySize = max(FormatSize, LOGBUFFERSIZE);
+
+        char LogString[LOGBUFFERSIZE + 1];
+        memset(LogString, 0, sizeof(LogString));
+
+        _vsnprintf_s(LogString, LOGBUFFERSIZE, CopySize, Format, VaList);
+        va_end(VaList);
+
+        Write(LogString, Level);
+    }
+}
+
+void QingLog::Write(const std::string & LogString, LogLevel Level)
+{
+    if (m_IsOkToWrite)
+    {
+        //src::severity_logger_mt<QingLog::LogLevel>& lg = QingLogger::get();
+        BOOST_LOG_SEV(QingLogger::get(), Level) << LogString;
+    }
 }
 
 bool QingLog::SetLogDirectory(const std::string &Directory)

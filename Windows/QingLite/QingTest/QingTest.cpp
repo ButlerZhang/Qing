@@ -7,6 +7,7 @@
 #include <string>
 
 #include "..\..\Qing\HeaderFiles\QingLog.h"
+#include "..\..\Qing\HeaderFiles\Utility.h"
 
 
 
@@ -19,14 +20,15 @@ int main()
     if (Qing::QingLog::SetLogDirectory("C:\\LTGameAppData\\"))
     {
         Qing::QingLog::InitBaseSink("Active");
-        Qing::QingLog::InitAdditionalSink("UI");
+        Qing::QingLog::InitTemporarySink("UI");
 
         for (int i = 0; i < 10000; i++)
         {
-            Qing::QingLog::WriteUI("A ui severity message");
+            Qing::QingLog::Write("A temp severity message", Qing::QingLog::LL_TEMP);
             Qing::QingLog::Write("A debug severity message", Qing::QingLog::LL_DEBUG);
             Qing::QingLog::Write("An informational severity message", Qing::QingLog::LL_INFO);
             Qing::QingLog::Write("An error severity message", Qing::QingLog::LL_ERROR);
+            Qing::QingLog::Write(Qing::QingLog::LL_TEMP, "My ID = %d, GUID = %s.", i, Qing::GetGUID().c_str());
         }
     }
 
