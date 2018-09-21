@@ -8,9 +8,6 @@ QING_NAMESPACE_BEGIN
 
 
 
-//***************************************************************************
-// CompareFileName: sort by file name.
-//***************************************************************************
 bool CompareFileName(const std::string &Left, const std::string &Right)
 {
     std::string LeftName(Left);
@@ -24,28 +21,21 @@ bool CompareFileName(const std::string &Left, const std::string &Right)
 
 
 
-//***************************************************************************
-// Constructor
-//***************************************************************************
 FileManager::FileManager(void)
 {
+    m_TotalFileSize = 0;
+    m_FileMaxSize = 0;
 }
 
-//***************************************************************************
-// Destructor
-//***************************************************************************
 FileManager::~FileManager(void)
 {
 }
 
-bool FileManager::IsDirectory(const std::string & FileName) const
+bool FileManager::IsDirectory(const std::string &Path) const
 {
-    return ((GetFileAttributesA(FileName.c_str()) & FILE_ATTRIBUTE_DIRECTORY) > 0);
+    return ((GetFileAttributesA(Path.c_str()) & FILE_ATTRIBUTE_DIRECTORY) > 0);
 }
 
-//***************************************************************************
-// GetFileSize: return file size
-//***************************************************************************
 unsigned long long FileManager::GetFileSize(const std::string &FileName) const
 {
     HANDLE FileHandle = ::CreateFileA(FileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -63,10 +53,7 @@ unsigned long long FileManager::GetFileSize(const std::string &FileName) const
     return 0;
 }
 
-//***************************************************************************
-// ReadFile: Read file's contents at once
-//***************************************************************************
-int FileManager::ReadFile(const std::string &FileName, char *FileBuffer, int BufferSize, char *Mode) const
+unsigned int FileManager::ReadFile(const std::string &FileName, char *FileBuffer, int BufferSize, char *Mode) const
 {
     if (FileBuffer == NULL || BufferSize <= 0)
     {
@@ -74,13 +61,13 @@ int FileManager::ReadFile(const std::string &FileName, char *FileBuffer, int Buf
     }
 
     FILE *File = NULL;
-    fopen_s(&File, FileName.c_str(), "rb");
+    fopen_s(&File, FileName.c_str(), Mode);
     if (File == NULL)
     {
         return 0;
     }
 
-    int FileSize = _filelength(_fileno(File));
+    long FileSize = _filelength(_fileno(File));
     if (FileSize <= 0 || FileSize > BufferSize)
     {
         fclose(File);
@@ -98,10 +85,7 @@ int FileManager::ReadFile(const std::string &FileName, char *FileBuffer, int Buf
     return FileSize;
 }
 
-//***************************************************************************
-// GetFileNameRecursion: Recursively read the file name
-//***************************************************************************
-bool FileManager::GetFileNameRecursion(const std::string &Directory, std::vector<std::string> &FileNameVector, long &TotalSize, long &MaxSize) const
+bool FileManager::GetFileNameRecursion(const std::string &Directory, std::vector<std::string> &FileNameVector)
 {
     struct _finddata_t FileInfo;
     std::string TempDirectory;
@@ -115,16 +99,16 @@ bool FileManager::GetFileNameRecursion(const std::string &Directory, std::vector
             {
                 if (strcmp(FileInfo.name, ".") != 0 && strcmp(FileInfo.name, "..") != 0)
                 {
-                    GetFileNameRecursion(TempDirectory.assign(Directory).append("\\").append(FileInfo.name), FileNameVector, TotalSize, MaxSize);
+                    GetFileNameRecursion(TempDirectory.assign(Directory).append("\\").append(FileInfo.name), FileNameVector);
                 }
             }
             else
             {
-                if (static_cast<long>(FileInfo.size) > MaxSize)
+                if (static_cast<long>(FileInfo.size) > m_FileMaxSize)
                 {
-                    MaxSize = FileInfo.size;
+                    m_FileMaxSize = FileInfo.size;
                 }
-                TotalSize += FileInfo.size;
+                m_TotalFileSize += FileInfo.size;
 
                 FileNameVector.push_back(TempDirectory.assign(Directory).append("\\").append(FileInfo.name));
             }
@@ -137,10 +121,7 @@ bool FileManager::GetFileNameRecursion(const std::string &Directory, std::vector
     return false;
 }
 
-//***************************************************************************
-// GetFileNameNonRecursion: Non-recursive read the file name
-//***************************************************************************
-bool FileManager::GetFileNameNonRecursion(const std::string &Directory, std::vector<std::string> &FileNameVector, long &TotalSize, long &MaxSize) const
+bool FileManager::GetFileNameNonRecursion(const std::string &Directory, std::vector<std::string> &FileNameVector)
 {
     std::list<std::string> DirectoryList;
     DirectoryList.push_back(Directory);
@@ -168,11 +149,11 @@ bool FileManager::GetFileNameNonRecursion(const std::string &Directory, std::vec
                 }
                 else
                 {
-                    if (static_cast<long>(FileInfo.size) > MaxSize)
+                    if (static_cast<long>(FileInfo.size) > m_FileMaxSize)
                     {
-                        MaxSize = FileInfo.size;
+                        m_FileMaxSize = FileInfo.size;
                     }
-                    TotalSize += FileInfo.size;
+                    m_TotalFileSize += FileInfo.size;
 
                     NameVector.push_back(FileInfo.name);
                 }

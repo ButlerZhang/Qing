@@ -17,7 +17,7 @@
 
 //namespace indication
 #ifndef QING_NAMESPACE_BEGIN
-#define QING_NAMESPACE_BEGIN namespace Qing {
+#define QING_NAMESPACE_BEGIN namespace Qing {           //Tool Class
 #endif
 
 #ifndef QING_NAMESPACE_END
@@ -28,7 +28,7 @@
 
 //namespace indication
 #ifndef QING_TEMPLATE_BEGIN
-#define QING_TEMPLATE_BEGIN namespace QingTemplate {
+#define QING_TEMPLATE_BEGIN namespace QingTemplate {    //Example
 #endif
 
 #ifndef QING_TEMPLATE_END

@@ -1,8 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 Reconstruct:
-1.FileManager
-2.LocalComputer
-3.Network
+1.Network
 
 /////////////////////////////////////////////////////////////////////////////
 Available:
@@ -15,3 +13,5 @@ Available:
 7.NumericalConversion
 8.PermutationCombination
 9.ProgramDump
+10.FileManager
+11.LocalComputer

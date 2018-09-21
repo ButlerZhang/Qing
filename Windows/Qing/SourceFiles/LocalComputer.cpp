@@ -1,4 +1,6 @@
 #include "..\HeaderFiles\LocalComputer.h"
+#include "..\HeaderFiles\Utility.h"
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 #include <Windows.h>
@@ -19,6 +21,86 @@ LocalComputer::~LocalComputer(void)
 {
 }
 
+bool LocalComputer::IsProgramExisted(const std::string &ProgramName) const
+{
+    const std::wstring &TempProgramName = StringToWString(ProgramName);
+    return IsProgramExisted(TempProgramName);
+}
+
+bool LocalComputer::IsProgramExisted(const std::wstring & ProgramName) const
+{
+    bool IsExisted = false;
+
+    HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (SnapshotHandler == INVALID_HANDLE_VALUE)
+    {
+        return IsExisted;
+    }
+
+    PROCESSENTRY32 ProcessInfo;
+    ProcessInfo.dwSize = sizeof(ProcessInfo);
+    if (!Process32First(SnapshotHandler, &ProcessInfo))
+    {
+        CloseHandle(SnapshotHandler);
+        return IsExisted;
+    }
+
+    std::wstring UpperProgramName(ProgramName);
+    std::transform(ProgramName.begin(), ProgramName.end(), UpperProgramName.begin(), ::tolower);
+
+    do
+    {
+        CharLowerBuff(ProcessInfo.szExeFile, MAX_PATH);
+        if (lstrcmp(UpperProgramName.c_str(), ProcessInfo.szExeFile) == 0)
+        {
+            IsExisted = true;
+            break;
+        }
+    } while (Process32Next(SnapshotHandler, &ProcessInfo));
+
+    CloseHandle(SnapshotHandler);
+    return IsExisted;
+}
+
+bool LocalComputer::SetOSDateTimeFormat(/*YYYY-MM-DD HH:mm:ss*/) const
+{
+    BOOL result = TRUE;
+
+    //short date
+    TCHAR shortDate[64] = { 0 };
+    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, shortDate, sizeof(shortDate));
+    if (_tcscmp(shortDate, _T("yyyy-MM-dd")) != 0)
+    {
+        result = result && SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, _T("yyyy-MM-dd"));
+    }
+
+    //long date
+    TCHAR longDate[64] = { 0 };
+    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLONGDATE, longDate, sizeof(longDate));
+    if (_tcscmp(longDate, _T("MMMM d,yyyy")) != 0)
+    {
+        result = result && SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLONGDATE, _T("MMMM d,yyyy"));
+    }
+
+    //short time  LOCALE_SSHORTTIME
+    TCHAR shortTime[64] = { 0 };
+    GetLocaleInfo(LOCALE_USER_DEFAULT, 0x00000079, shortTime, sizeof(shortTime));
+    if (_tcscmp(shortTime, _T("HH:mm")) != 0)
+    {
+        result = result && SetLocaleInfo(LOCALE_USER_DEFAULT, 0x00000079, _T("HH:mm"));
+    }
+
+    //long time
+    TCHAR longTime[64] = { 0 };
+    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STIMEFORMAT, longTime, sizeof(longTime));
+    if (_tcscmp(longTime, _T("HH:mm:ss")) != 0)
+    {
+        result = result && SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STIMEFORMAT, _T("HH:mm:ss"));
+    }
+
+    return (result == TRUE);
+}
+
 void LocalComputer::SetTaskAndStartMenuVisible(int VisibleValue) const
 {
     HWND Task = FindWindow(L"Shell_TrayWnd", NULL);
@@ -31,162 +113,13 @@ void LocalComputer::SetTaskAndStartMenuVisible(int VisibleValue) const
     }
 }
 
-bool LocalComputer::GetMacAddress(std::string &MacAddress, const char* ClientIP) const
+bool LocalComputer::StartProgram(const std::string &ProgramName) const
 {
-    PIP_ADAPTER_INFO PipAdapterInfo = new IP_ADAPTER_INFO();
-    unsigned long StSize = sizeof(IP_ADAPTER_INFO);
-    int Rel = GetAdaptersInfo(PipAdapterInfo, &StSize);
-
-    if (ERROR_BUFFER_OVERFLOW == Rel)
-    {
-        delete PipAdapterInfo;
-        PipAdapterInfo = (PIP_ADAPTER_INFO)new BYTE[StSize];
-        Rel = GetAdaptersInfo(PipAdapterInfo, &StSize);
-    }
-
-    if (ERROR_SUCCESS == Rel)
-    {
-        char Adress[512];
-        memset(Adress, 0, sizeof(Adress));
-
-        std::string TempMacAddress;
-        PIP_ADAPTER_INFO TempIPAdapterInfo = PipAdapterInfo;
-        while (TempIPAdapterInfo)
-        {
-            IP_ADDR_STRING *pIpAddrString = &(TempIPAdapterInfo->IpAddressList);
-            while (pIpAddrString != NULL)
-            {
-                if (strcmp(pIpAddrString->IpAddress.String, ClientIP) == 0)
-                {
-                    for (UINT i = 0; i < PipAdapterInfo->AddressLength; i++)
-                    {
-                        sprintf_s(Adress, (i == PipAdapterInfo->AddressLength - 1) ? "%02x\n" : "%02x-", PipAdapterInfo->Address[i]);
-                        TempMacAddress += Adress;
-                    }
-
-                    std::transform(TempMacAddress.begin(), TempMacAddress.end(), TempMacAddress.begin(), ::toupper);
-                    MacAddress = TempMacAddress;
-
-                    break;
-                }
-
-                pIpAddrString = pIpAddrString->Next;
-            }
-
-            TempIPAdapterInfo = TempIPAdapterInfo->Next;
-        }
-    }
-
-    if (PipAdapterInfo)
-    {
-        delete PipAdapterInfo;
-    }
-
-    return !MacAddress.empty();
+    const std::wstring &TempProgramName = StringToWString(ProgramName);
+    return StartProgram(TempProgramName);
 }
 
-bool LocalComputer::GetLocalIPAddress(std::vector<std::string> &IPVector) const
-{
-    PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
-    unsigned long stSize = sizeof(IP_ADAPTER_INFO);
-
-    int RealSize = GetAdaptersInfo(pIpAdapterInfo, &stSize);
-    if (ERROR_BUFFER_OVERFLOW == RealSize)
-    {
-        delete pIpAdapterInfo;
-        pIpAdapterInfo = (PIP_ADAPTER_INFO)new BYTE[stSize];
-        RealSize = GetAdaptersInfo(pIpAdapterInfo, &stSize);
-    }
-
-    if (ERROR_SUCCESS == RealSize)
-    {
-        PIP_ADAPTER_INFO TempIPAdapterInfo = pIpAdapterInfo;
-        while (TempIPAdapterInfo)
-        {
-            IP_ADDR_STRING *pIpAddrString = &(TempIPAdapterInfo->IpAddressList);
-            while (pIpAddrString != NULL)
-            {
-                IPVector.push_back(pIpAddrString->IpAddress.String);
-                pIpAddrString = pIpAddrString->Next;
-            }
-
-            TempIPAdapterInfo = TempIPAdapterInfo->Next;
-        }
-    }
-
-    if (pIpAdapterInfo)
-    {
-        delete pIpAdapterInfo;
-    }
-
-    return !IPVector.empty();
-}
-
-bool LocalComputer::IsExistProcess(const std::wstring &ProgramName) const
-{
-    TCHAR MyTarget[MAX_PATH];
-    lstrcpyn(MyTarget, ProgramName.c_str(), sizeof(MyTarget) / 2);
-    CharLowerBuff(MyTarget, MAX_PATH);
-
-    bool IsExist = false;
-
-    PROCESSENTRY32 MyProcess;
-    HANDLE MyHandle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-
-    if (MyHandle != INVALID_HANDLE_VALUE)
-    {
-        MyProcess.dwSize = sizeof(MyProcess);
-
-        if (Process32First(MyHandle, &MyProcess))
-        {
-            do
-            {
-                CharLowerBuff(MyProcess.szExeFile, MAX_PATH);
-                if (lstrcmp(MyTarget, MyProcess.szExeFile) == 0)
-                {
-                    IsExist = true;
-                    break;
-                }
-            } while (Process32Next(MyHandle, &MyProcess));
-        }
-
-        CloseHandle(MyHandle);
-    }
-
-    return IsExist;
-}
-
-bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
-{
-    PROCESSENTRY32 pe;
-    pe.dwSize = sizeof(PROCESSENTRY32);
-
-    HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (!Process32First(hSnapShot, &pe))
-    {
-        return false;
-    }
-
-    std::wstring LowerProgramName;
-    LowerProgramName.resize(ProgramName.size());
-    std::transform(ProgramName.begin(), ProgramName.end(), LowerProgramName.begin(), ::tolower);
-
-    while (Process32Next(hSnapShot, &pe))
-    {
-        CString scTmp(pe.szExeFile);
-        if (!(scTmp.MakeLower()).Compare(LowerProgramName.c_str()))
-        {
-            DWORD dwProcessID = pe.th32ProcessID;
-            HANDLE hProcess = ::OpenProcess(PROCESS_TERMINATE, FALSE, dwProcessID);
-            ::TerminateProcess(hProcess, 0);
-            CloseHandle(hProcess);
-        }
-    }
-
-    return true;
-}
-
-bool LocalComputer::StartProgram(const std::wstring & ProgramName) const
+bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
 {
     ShellExecute(NULL, L"open", ProgramName.c_str(), NULL, NULL, SW_SHOWNORMAL);
     int ErrorValue = GetLastError();
@@ -196,7 +129,7 @@ bool LocalComputer::StartProgram(const std::wstring & ProgramName) const
         DWORD dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
         if (FormatMessage(dwFlags, NULL, ErrorValue, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL))
         {
-            CString Info = (LPCTSTR)lpMsgBuf;
+            std::wstring Info = (LPCTSTR)lpMsgBuf;
             return false;
         }
     }
@@ -204,77 +137,137 @@ bool LocalComputer::StartProgram(const std::wstring & ProgramName) const
     return true;
 }
 
-int LocalComputer::StartTouchScreenCalibration(HWND CurrentHWND) const
+bool LocalComputer::StartTouchScreenCalibration(HWND CurrentHWND) const
 {
     PVOID oldValue;
     Wow64DisableWow64FsRedirection(&oldValue);
 
-    ShellExecuteA(CurrentHWND, "open", "C:\\Windows\\System32\\tabcal.exe", NULL, NULL, SW_SHOWNORMAL);
-    int ShellExecuteError = GetLastError();
+    bool result = StartProgram(L"C:\\Windows\\System32\\tabcal.exe");
 
     BOOLEAN tmpBoolean = TRUE;
     Wow64EnableWow64FsRedirection(tmpBoolean);
 
-    return ShellExecuteError;
+    return result;
 }
 
-std::string LocalComputer::TranslateDateTime(const std::string &SourceTime) const
+bool LocalComputer::KillProgram(const std::string & ProgramName) const
 {
-    if (!SourceTime.empty())
-    {
-        COleDateTime dateTime;
-        dateTime.ParseDateTime(CString(SourceTime.c_str()));
-
-#ifdef  UNICODE
-        std::wstring wStrTime = dateTime.Format(_T("%Y-%m-%d %H:%M:%S")).GetBuffer(0);
-        return std::string();//TODO
-                             //return WStringToString(wStrTime);
-#else
-        std::string StrTime = dateTime.Format(_T("%Y-%m-%d %H:%M:%S")).GetBuffer(0);
-        return StrTime;
-#endif
-    }
-
-    return std::string();
+    const std::wstring &TempProgramName = StringToWString(ProgramName);
+    return KillProgram(TempProgramName);
 }
 
-BOOL LocalComputer::SetOSDateTimeFormat() const
+bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
 {
-    BOOL ret = TRUE;
-
-    //short date
-    TCHAR shortDate[64] = { 0 };
-    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, shortDate, sizeof(shortDate));
-    if (_tcscmp(shortDate, _T("yyyy-MM-dd")) != 0)
+    HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (SnapshotHandler == INVALID_HANDLE_VALUE)
     {
-        ret = ret && SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, _T("yyyy-MM-dd"));
+        return false;
     }
 
-    //long date
-    TCHAR longDate[64] = { 0 };
-    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLONGDATE, longDate, sizeof(longDate));
-    if (_tcscmp(longDate, _T("MMMM d,yyyy")) != 0)
+    PROCESSENTRY32 ProcessInfo;
+    ProcessInfo.dwSize = sizeof(PROCESSENTRY32);
+    if (!Process32First(SnapshotHandler, &ProcessInfo))
     {
-        ret = ret && SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLONGDATE, _T("MMMM d,yyyy"));
+        return false;
     }
 
-    //short time  LOCALE_SSHORTTIME
-    TCHAR shortTime[64] = { 0 };
-    GetLocaleInfo(LOCALE_USER_DEFAULT, 0x00000079, shortTime, sizeof(shortTime));
-    if (_tcscmp(shortTime, _T("HH:mm")) != 0)
+    std::wstring LowerProgramName(ProgramName);
+    std::transform(ProgramName.begin(), ProgramName.end(), LowerProgramName.begin(), ::tolower);
+
+    while (Process32Next(SnapshotHandler, &ProcessInfo))
     {
-        ret = ret && SetLocaleInfo(LOCALE_USER_DEFAULT, 0x00000079, _T("HH:mm"));
+        CString ExeFileName(ProcessInfo.szExeFile);
+        if (!(ExeFileName.MakeLower()).Compare(LowerProgramName.c_str()))
+        {
+            DWORD dwProcessID = ProcessInfo.th32ProcessID;
+            HANDLE hProcess = ::OpenProcess(PROCESS_TERMINATE, FALSE, dwProcessID);
+            ::TerminateProcess(hProcess, 0);
+            CloseHandle(hProcess);
+        }
     }
 
-    //long time
-    TCHAR longTime[64] = { 0 };
-    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STIMEFORMAT, longTime, sizeof(longTime));
-    if (_tcscmp(longTime, _T("HH:mm:ss")) != 0)
+    return true;
+}
+
+bool LocalComputer::GetIPAddress(std::vector<std::string> &IPVector) const
+{
+    PIP_ADAPTER_INFO pIPAdapterInfo = new IP_ADAPTER_INFO();
+    unsigned long IPAdapterInfoSize = sizeof(IP_ADAPTER_INFO);
+
+    int IPAdapterInfoRealSize = GetAdaptersInfo(pIPAdapterInfo, &IPAdapterInfoSize);
+    if (ERROR_BUFFER_OVERFLOW == IPAdapterInfoRealSize)
     {
-        ret = ret && SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STIMEFORMAT, _T("HH:mm:ss"));
+        delete pIPAdapterInfo;
+        pIPAdapterInfo = (PIP_ADAPTER_INFO)new BYTE[IPAdapterInfoSize];
+        IPAdapterInfoRealSize = GetAdaptersInfo(pIPAdapterInfo, &IPAdapterInfoSize);
     }
 
-    return  ret;
+    if (ERROR_SUCCESS == IPAdapterInfoRealSize)
+    {
+        while (pIPAdapterInfo != NULL)
+        {
+            IP_ADDR_STRING *pIpAddrString = &(pIPAdapterInfo->IpAddressList);
+            while (pIpAddrString != NULL)
+            {
+                IPVector.push_back(pIpAddrString->IpAddress.String);
+                pIpAddrString = pIpAddrString->Next;
+            }
+
+            pIPAdapterInfo = pIPAdapterInfo->Next;
+        }
+    }
+
+    delete pIPAdapterInfo;
+    return !IPVector.empty();
+}
+
+bool LocalComputer::GetMacAddress(std::string &MacAddress, const std::string &BaseIP) const
+{
+    PIP_ADAPTER_INFO pIPAdapterInfo = new IP_ADAPTER_INFO();
+    unsigned long IPAdapterInfoSize = sizeof(IP_ADAPTER_INFO);
+
+    int IPAdapterInfoRealSize = GetAdaptersInfo(pIPAdapterInfo, &IPAdapterInfoSize);
+    if (ERROR_BUFFER_OVERFLOW == IPAdapterInfoRealSize)
+    {
+        delete pIPAdapterInfo;
+        pIPAdapterInfo = (PIP_ADAPTER_INFO)new BYTE[IPAdapterInfoSize];
+        IPAdapterInfoRealSize = GetAdaptersInfo(pIPAdapterInfo, &IPAdapterInfoSize);
+    }
+
+    if (ERROR_SUCCESS == IPAdapterInfoRealSize)
+    {
+        while (pIPAdapterInfo != NULL && MacAddress.empty())
+        {
+            IP_ADDR_STRING *pIpAddrString = &(pIPAdapterInfo->IpAddressList);
+            while (pIpAddrString != NULL)
+            {
+                if (strcmp(pIpAddrString->IpAddress.String, BaseIP.c_str()) != 0)
+                {
+                    pIpAddrString = pIpAddrString->Next;
+                    continue;
+                }
+
+                std::string TempMacAddress;
+                char MacAddressCharArray[512];
+                memset(MacAddressCharArray, 0, sizeof(MacAddressCharArray));
+
+                for (UINT i = 0; i < pIPAdapterInfo->AddressLength; i++)
+                {
+                    sprintf_s(MacAddressCharArray, (i == pIPAdapterInfo->AddressLength - 1) ? "%02x\n" : "%02x-", pIPAdapterInfo->Address[i]);
+                    TempMacAddress += MacAddressCharArray;
+                }
+
+                std::transform(TempMacAddress.begin(), TempMacAddress.end(), TempMacAddress.begin(), ::toupper);
+                MacAddress = TempMacAddress;
+                break;
+            }
+
+            pIPAdapterInfo = pIPAdapterInfo->Next;
+        }
+    }
+
+    delete pIPAdapterInfo;
+    return !MacAddress.empty();
 }
 
 QING_NAMESPACE_END
