@@ -1,4 +1,5 @@
 #include "..\HeaderFiles\Utility.h"
+#include "..\HeaderFiles\QingLog.h"
 
 QING_NAMESPACE_BEGIN
 
@@ -51,6 +52,7 @@ std::string GetProgramName()
         }
     }
 
+    QingLog::Write("Return wrong program name.");
     return "Qing";
 }
 

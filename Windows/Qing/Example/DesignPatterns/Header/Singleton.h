@@ -1,7 +1,7 @@
 #pragma once
 #include "..\..\..\HeaderFiles\QingBase.h"
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -92,4 +92,4 @@ private:
     ~TemplateSingleton(void);
 };
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END

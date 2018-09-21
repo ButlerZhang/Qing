@@ -1,7 +1,7 @@
 #include "..\..\DesignPatterns\Header\Prototype.h"
 #include <iostream>
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -64,4 +64,4 @@ void ProtoTypeTest()
     delete pProtoTypeA;
 }
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END

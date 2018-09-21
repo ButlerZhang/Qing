@@ -1,7 +1,7 @@
 #include "..\..\DesignPatterns\Header\Bridge.h"
 #include <iostream>
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -64,4 +64,4 @@ void TestBridge()
     pAbstraction2->Operator();
 }
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END

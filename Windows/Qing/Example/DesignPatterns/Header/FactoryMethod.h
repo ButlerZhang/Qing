@@ -1,7 +1,7 @@
 #pragma once
 #include "..\..\..\HeaderFiles\QingBase.h"
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -66,4 +66,4 @@ public:
 
 void QING_DLL FactoryMethodTest();
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END

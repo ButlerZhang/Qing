@@ -1,5 +1,6 @@
 #include "..\HeaderFiles\LocalComputer.h"
 #include "..\HeaderFiles\Utility.h"
+#include "..\HeaderFiles\QingLog.h"
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,7 @@ bool LocalComputer::IsProgramExisted(const std::wstring & ProgramName) const
     HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (SnapshotHandler == INVALID_HANDLE_VALUE)
     {
+        QingLog::Write("IsProgramExisted, SnapshotHandler == INVALID_HANDLE_VALUE");
         return IsExisted;
     }
 
@@ -41,6 +43,7 @@ bool LocalComputer::IsProgramExisted(const std::wstring & ProgramName) const
     ProcessInfo.dwSize = sizeof(ProcessInfo);
     if (!Process32First(SnapshotHandler, &ProcessInfo))
     {
+        QingLog::Write("IsProgramExisted, Process32First failed.");
         CloseHandle(SnapshotHandler);
         return IsExisted;
     }
@@ -129,7 +132,9 @@ bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
         DWORD dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
         if (FormatMessage(dwFlags, NULL, ErrorValue, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL))
         {
-            std::wstring Info = (LPCTSTR)lpMsgBuf;
+            std::wstring ErrorInfo = (LPCTSTR)lpMsgBuf;
+            const std::string &LogString = WStringToString(ErrorInfo);
+            QingLog::Write(LL_DEBUG, "Start program fail, program name = %s, error = %s.", ProgramName.c_str(), LogString.c_str());
             return false;
         }
     }
@@ -161,6 +166,7 @@ bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
     HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (SnapshotHandler == INVALID_HANDLE_VALUE)
     {
+        QingLog::Write("KillProgram, SnapshotHandler == INVALID_HANDLE_VALUE");
         return false;
     }
 
@@ -168,6 +174,7 @@ bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
     ProcessInfo.dwSize = sizeof(PROCESSENTRY32);
     if (!Process32First(SnapshotHandler, &ProcessInfo))
     {
+        QingLog::Write("KillProgram, Process32First failed.");
         return false;
     }
 

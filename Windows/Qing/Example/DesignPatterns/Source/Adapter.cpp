@@ -1,7 +1,7 @@
 #include "..\..\DesignPatterns\Header\Adapter.h"
 #include <iostream>
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -51,4 +51,4 @@ void TestAdapter()
     MyObjectAdapter.Request();
 }
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END

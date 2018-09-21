@@ -18,7 +18,7 @@ namespace sinks = boost::log::sinks;
 namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(QingLogger, src::severity_logger_mt<QingLog::LogLevel>)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(QingLogger, src::severity_logger_mt<LogLevel>)
 typedef sinks::synchronous_sink<sinks::text_file_backend> TextSink;
 
 bool QingLog::m_IsOkToWrite = true;
@@ -42,7 +42,7 @@ void QingLog::DefaultShutdown()
 
 void QingLog::SetFilter(LogLevel Level)
 {
-    logging::core::get()->set_filter(expr::attr<QingLog::LogLevel>("Severity") >= Level);
+    logging::core::get()->set_filter(expr::attr<LogLevel>("Severity") >= Level);
 }
 
 auto QingLog::CreateSink(const std::string & FileName)
@@ -61,7 +61,7 @@ auto QingLog::CreateSink(const std::string & FileName)
     NewSink->set_formatter(
         expr::format("[%1%][%2%][%3%]: %4%")
         % expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")
-        % expr::attr<QingLog::LogLevel>("Severity")
+        % expr::attr<LogLevel>("Severity")
         % expr::attr<attrs::current_thread_id::value_type>("ThreadID")
         % expr::smessage
     );
@@ -72,7 +72,7 @@ auto QingLog::CreateSink(const std::string & FileName)
 void QingLog::InitBaseSink(const std::string &LogFileName)
 {
     boost::shared_ptr<TextSink> BaseSink = CreateSink(LogFileName);
-    BaseSink->set_filter(expr::attr<QingLog::LogLevel>("Severity") >= QingLog::LL_DEBUG);
+    BaseSink->set_filter(expr::attr<LogLevel>("Severity") >= LL_DEBUG);
 
     logging::core::get()->add_sink(BaseSink);
     logging::add_common_attributes();
@@ -81,7 +81,7 @@ void QingLog::InitBaseSink(const std::string &LogFileName)
 void QingLog::InitTemporarySink(const std::string & LogFileName)
 {
     boost::shared_ptr<TextSink> TempSink = CreateSink(LogFileName);
-    TempSink->set_filter(expr::attr<QingLog::LogLevel>("Severity") == QingLog::LL_TEMP);
+    TempSink->set_filter(expr::attr<LogLevel>("Severity") == LL_TEMP);
 
     logging::core::get()->add_sink(TempSink);
     logging::add_common_attributes();

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <mutex>
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -125,4 +125,4 @@ template<typename T> TemplateSingleton<T>::~TemplateSingleton(void)
     std::cout << "TemplateSingleton destruction." << std::endl;
 }
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END

@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -171,4 +171,4 @@ int IOExample::TestSeekTell()
     return 0;
 }
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END

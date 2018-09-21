@@ -27,10 +27,10 @@
 
 
 //namespace indication
-#ifndef QING_TEMPLATE_BEGIN
-#define QING_TEMPLATE_BEGIN namespace QingTemplate {    //Example
+#ifndef QING_EXAMPLE_BEGIN
+#define QING_EXAMPLE_BEGIN namespace QingExample {    //Example
 #endif
 
-#ifndef QING_TEMPLATE_END
-#define QING_TEMPLATE_END   }
+#ifndef QING_EXAMPLE_END
+#define QING_EXAMPLE_END   }
 #endif

@@ -6,29 +6,27 @@ QING_NAMESPACE_BEGIN
 
 
 
+enum QING_DLL LogLevel
+{
+    LL_TEMP,
+    LL_DEBUG,
+    LL_INFO,
+    LL_ERROR,
+};
+
 class QING_DLL QingLog
 {
-public:
-
-    enum LogLevel
-    {
-        LL_TEMP,
-        LL_DEBUG,
-        LL_INFO,
-        LL_ERROR,
-    };
-
 public:
 
     static void DefaultInit();
     static void DefaultShutdown();
 
-    static void SetFilter(LogLevel Level = QingLog::LL_DEBUG);
+    static void SetFilter(LogLevel Level = LL_DEBUG);
     static void InitBaseSink(const std::string &LogFileName = "Qing");
     static void InitTemporarySink(const std::string &LogFileName = "Temp");
 
     static void Write(LogLevel Level, const char *Format, ...);
-    static void Write(const std::string &LogString, LogLevel Level = QingLog::LL_INFO);
+    static void Write(const std::string &LogString, LogLevel Level = LL_DEBUG);
 
     static bool SetLogDirectory(const std::string &Directory);
     static bool SetLogDirectoryAutoAppendProgramName(const std::string &Directory);

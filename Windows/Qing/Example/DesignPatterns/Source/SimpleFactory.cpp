@@ -1,7 +1,7 @@
 #include "..\..\DesignPatterns\Header\SimpleFactory.h"
 #include <iostream>
 
-QING_TEMPLATE_BEGIN
+QING_EXAMPLE_BEGIN
 
 
 
@@ -48,4 +48,4 @@ void SimpleFactoryTest()
     delete p;
 }
 
-QING_TEMPLATE_END
+QING_EXAMPLE_END
