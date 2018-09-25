@@ -96,6 +96,9 @@
     <ClInclude Include="HeaderFiles\QingLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SimpleServer.h">
+      <Filter>Example</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Network.cpp">

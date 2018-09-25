@@ -42,6 +42,7 @@
     <ClInclude Include="HeaderFiles\RandomGenerator.h" />
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\Utility.h" />
+    <ClInclude Include="SimpleServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Example\DesignPatterns\Source\AbstractFactory.cpp" />
