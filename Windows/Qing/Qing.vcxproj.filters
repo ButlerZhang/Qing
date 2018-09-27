@@ -25,6 +25,12 @@
     <Filter Include="Example\DesignPatterns\Source">
       <UniqueIdentifier>{d97444e6-8f08-4957-90e9-64e11ee61d9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{9e9c58ac-70e7-407c-b2fd-a99d82c987ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Network">
+      <UniqueIdentifier>{f29aff3d-82e0-49ed-8f19-6e3a8f99d9bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeaderFiles\Network.h">
@@ -96,8 +102,14 @@
     <ClInclude Include="HeaderFiles\QingLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleServer.h">
-      <Filter>Example</Filter>
+    <ClInclude Include="Model\Network\IOCPModel.h">
+      <Filter>Model\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Example\SimpleServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Network\QingIOCP.h">
+      <Filter>Model\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\QingLog.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Network\QingIOCP.cpp">
+      <Filter>Model\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -29,6 +29,7 @@
     <ClInclude Include="Example\DesignPatterns\Header\SimpleFactory.h" />
     <ClInclude Include="Example\DesignPatterns\Header\Singleton.h" />
     <ClInclude Include="Example\IOExample.h" />
+    <ClInclude Include="Example\SimpleServer.h" />
     <ClInclude Include="Example\StringVector.h" />
     <ClInclude Include="HeaderFiles\FileManager.h" />
     <ClInclude Include="HeaderFiles\HexString.h" />
@@ -42,7 +43,8 @@
     <ClInclude Include="HeaderFiles\RandomGenerator.h" />
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\Utility.h" />
-    <ClInclude Include="SimpleServer.h" />
+    <ClInclude Include="Model\Network\IOCPModel.h" />
+    <ClInclude Include="Model\Network\QingIOCP.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Example\DesignPatterns\Source\AbstractFactory.cpp" />
@@ -55,6 +57,7 @@
     <ClCompile Include="Example\DesignPatterns\Source\SimpleFactory.cpp" />
     <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp" />
     <ClCompile Include="Example\IOExample.cpp" />
+    <ClCompile Include="Model\Network\QingIOCP.cpp" />
     <ClCompile Include="SourceFiles\FileManager.cpp" />
     <ClCompile Include="SourceFiles\HexString.cpp" />
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />
