@@ -1,5 +1,6 @@
 // QingTest.cpp : Defines the entry point for the console application.
 //
+#define _CRT_SECURE_NO_WARNINGS
 
 #include "stdafx.h"
 #include <Windows.h>
@@ -14,42 +15,36 @@
 
 
 
+double StorageStringAsDouble(const std::wstring &csInput, double dDefault)
+{
+    double dOutput = 0.0f;
+    long long llTemp = 0;
+    if (_stscanf(csInput.c_str(), L"%lld", &llTemp) > 0)
+        dOutput = *(double*)&llTemp;
+    else
+        dOutput = dDefault;
+    return dOutput;
+}
 
 int main()
 {
-    typedef unsigned long long NewType;
-    //typedef __int128 NewType;
-
-    std::vector<NewType> ProbWinVector = {
-        4591841168814906923,
-        4594145047714251128,
-        4593416554697928511,
-        4590549355288985654,
-        4594504687346238412,
-        4596811805810895374,
-        4586650350148589186,
-        4584763574794864878,
-        4588074880792361392,
-        4589490066574993195
+    std::vector<std::wstring> ProbWinVector = {
+        L"4591841168814906923",
+        L"4594145047714251128",
+        L"4593416554697928511",
+        L"4590549355288985654",
+        L"4594504687346238412",
+        L"4596811805810895374",
+        L"4586650350148589186",
+        L"4584763574794864878",
+        L"4588074880792361392",
+        L"4589490066574993195"
     };
 
     for (auto Index = 0; Index < ProbWinVector.size(); Index++)
     {
-        //std::cout << ProbWinVector[Index] << std::endl;
-        std::cout << ProbWinVector[Index] << "\t" << static_cast<double>(ProbWinVector[Index]) << std::endl;
+        std::wcout << ProbWinVector[Index] << "\t" << StorageStringAsDouble(ProbWinVector[Index], 0.0) << std::endl;
     }
-
-    NewType InitValue = 0;
-    NewType TotalProbWin = std::accumulate(ProbWinVector.begin(), ProbWinVector.end(), InitValue);
-    std::cout << std::endl << TotalProbWin << "\t" << static_cast<double>(TotalProbWin)  << std::endl << std::endl;
-
-
-    for (auto Index = 0; Index < ProbWinVector.size(); Index++)
-    {
-        double probwin = static_cast<double>(ProbWinVector[Index]) / static_cast<double>(TotalProbWin);
-        std::cout << probwin << std::endl;
-    }
-
 
     std::cout << std::endl;
     system("pause");
