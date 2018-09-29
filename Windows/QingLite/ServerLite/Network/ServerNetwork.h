@@ -9,9 +9,4 @@ public:
 
     ServerNetwork();
     ~ServerNetwork();
-
-    bool Start(const std::string &IP, int Port);
-    SOCKET GetConnectedClient();
 };
-
-void TestServerNetwork();

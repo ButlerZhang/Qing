@@ -15,6 +15,7 @@ public:
 
     std::string GetLocalIP();
     void SetListenPort(int ListenPort) { m_ServerPort = ListenPort; }
+    void SetServerIP(const std::string &IP) { m_ServerIP = IP; }
 
 protected:
 
@@ -34,12 +35,13 @@ protected:
     void RemoveContextList(IOCPSocketContext *pSocketContext);
     void ClearContextList();
 
+    int  GetProcessorsCount();
+    bool IsSocketAlive(SOCKET socket);
+    void ReleaseHandle(HANDLE Handle);
     bool AssociateWithIOCP(IOCPSocketContext *pSocketContext);
     bool HandleError(IOCPSocketContext *pSocketContext, const DWORD& dwErr);
 
-    int  GetProcessorsCount();
-    bool IsSocketAlive(SOCKET socket);
-
+    static std::string ClientIP(SOCKADDR_IN *ClientAddr);
     static DWORD WINAPI WorkerThread(LPVOID lpParam);
 
 private:

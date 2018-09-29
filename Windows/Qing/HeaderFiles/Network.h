@@ -1,5 +1,6 @@
 #pragma once
 #include "QingBase.h"
+#include "..\Model\Network\QingIOCP.h"
 #include <WinSock2.h>
 #include <string>
 
@@ -19,21 +20,12 @@ public:
     Network();
     virtual ~Network();
 
-    SOCKET GetSocket() const { return m_Socket; }
-    bool RecvData(SOCKET Socket, char *Buffer, int BufferSize);
-    bool SendData(SOCKET Socket, const char *Buffer, int BufferSize);
+    bool Start();
+    void Stop();
 
-protected:
+private:
 
-    bool CreateSocket();
-    bool BindSocket(const std::string &IP, int Port);
-    bool StartListen(int backlog = SOMAXCONN);
-    bool Connect(const std::string &IP, int Port);
-    SOCKET AcceptConnect();
-
-protected:
-
-    SOCKET  m_Socket;
+    QingIOCP    m_IOCP;
 };
 
 QING_NAMESPACE_END
