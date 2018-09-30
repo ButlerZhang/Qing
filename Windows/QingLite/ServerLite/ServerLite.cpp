@@ -3,12 +3,14 @@
 
 #include "stdafx.h"
 #include "Network\ServerNetwork.h"
+#include "..\..\Qing\HeaderFiles\QingLog.h"
 #include <iostream>
 
 
 
 int main()
 {
+    //Qing::QingLog::DefaultInit();
     Qing::StartupNetwork();
 
     ServerNetwork MyServer;

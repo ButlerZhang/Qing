@@ -51,10 +51,10 @@ private:
     HANDLE                              m_hIOCompletionPort;            //完成端口的句柄
     HANDLE*                             m_phWorkerThreads;              //工作线程
 
-    int                                 m_WorkerThreadCount;            //工作线程数量
     int                                 m_ListenPort;                   //侦听端口
     std::string                         m_ServerBindIP;                 //服务端的IP
     ClientManager                       m_ClientManager;                //客户端管理者
+    std::vector<WorkerThreadParam>      m_ThreadParamVector;            //工作线程参数
     std::shared_ptr<IOCPSocketContext>  m_ListenSocketContext;          //监听Socket的Context信息
 
     LPFN_ACCEPTEX                       m_CallBackAcceptEx;             //AcceptEx的函数指针

@@ -6,18 +6,10 @@
 QING_NAMESPACE_BEGIN
 
 
-struct WorkerThreadParam
-{
-    QingServer    *m_pQingServer;       //用于调用类中的函数
-    int            m_nThreadNo;         //线程编号
-};
-
-
 
 QingServer::QingServer() : m_hWorkerThreadExitEvent(NULL),
                            m_hIOCompletionPort(NULL),
                            m_phWorkerThreads(NULL),
-                           m_WorkerThreadCount(0),
                            m_ListenPort(8888),
                            m_ListenSocketContext(NULL),
                            m_CallBackAcceptEx(NULL),
@@ -58,13 +50,13 @@ void QingServer::Stop()
         SetEvent(m_hWorkerThreadExitEvent);
 
         //通知所有的完成端口操作退出
-        for (int i = 0; i < m_WorkerThreadCount; i++)
+        for (auto Index = 0; Index < m_ThreadParamVector.size(); Index++)
         {
             PostQueuedCompletionStatus(m_hIOCompletionPort, 0, NULL, NULL);
         }
 
         //等待所有工作线程资源退出
-        WaitForMultipleObjects(m_WorkerThreadCount, m_phWorkerThreads, TRUE, INFINITE);
+        WaitForMultipleObjects(static_cast<DWORD>(m_ThreadParamVector.size()), m_phWorkerThreads, TRUE, INFINITE);
 
         //释放其它资源
         DeleteInitializeResources();
@@ -113,19 +105,23 @@ bool QingServer::CreateIOCP()
 bool QingServer::CreateWorkerThread()
 {
     Qing::LocalComputer MyComputer;
-    m_WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * MyComputer.GetProcessorsCount();
-    m_phWorkerThreads = new HANDLE[m_WorkerThreadCount];
-
-    DWORD nThreadID;
-    for (int i = 0; i < m_WorkerThreadCount; i++)
+    int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * MyComputer.GetProcessorsCount();
+    for (int Count = 0; Count < WorkerThreadCount; Count++)
     {
-        WorkerThreadParam *pWorkerThreadParam = new WorkerThreadParam();
-        pWorkerThreadParam->m_pQingServer = this;
-        pWorkerThreadParam->m_nThreadNo = i + 1;
-        m_phWorkerThreads[i] = ::CreateThread(0, 0, WorkerThread, (void*)pWorkerThreadParam, 0, &nThreadID);
+        WorkerThreadParam NewParam;
+        NewParam.m_ThreadID = Count;
+        NewParam.m_QingServer = this;
+        m_ThreadParamVector.push_back(NewParam);
     }
 
-    QingLog::Write(Qing::LL_INFO, "Created %d worker threads.", m_WorkerThreadCount);
+    DWORD nThreadID;
+    m_phWorkerThreads = new HANDLE[WorkerThreadCount];
+    for (int Count = 0; Count < WorkerThreadCount; Count++)
+    {
+        m_phWorkerThreads[Count] = ::CreateThread(0, 0, WorkerThread, (void*)(&m_ThreadParamVector[Count]), 0, &nThreadID);
+    }
+
+    QingLog::Write(Qing::LL_INFO, "Created %d worker threads.", WorkerThreadCount);
     return true;
 }
 
@@ -252,7 +248,7 @@ void QingServer::DeleteInitializeResources()
 
     if (m_phWorkerThreads != NULL)
     {
-        for (int i = 0; i < m_WorkerThreadCount; i++)
+        for (int i = 0; i < static_cast<int>(m_ThreadParamVector.size()); i++)
         {
             ReleaseHandle(m_phWorkerThreads[i]);
         }
@@ -324,29 +320,27 @@ std::string QingServer::ConvertToIPString(SOCKADDR_IN *ClientAddr)
 
 bool QingServer::PostAccept(IOCPContext *pIOCPContext)
 {
-    DWORD dwBytes = 0;
-    pIOCPContext->m_ActionType = IOCP_AT_ACCEPT;
-    WSABUF *pWSABUF = &pIOCPContext->m_WSABuffer;
-    OVERLAPPED *pOverlapped = &pIOCPContext->m_Overlapped;
-
     //为新连入的客户端先准备好socket(这是与传统accept最大的区别)
     pIOCPContext->m_AcceptSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (pIOCPContext->m_AcceptSocket == INVALID_SOCKET)
     {
-        QingLog::Write(Qing::LL_ERROR, "Create accept socket failed, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Create new accept socket failed, error = %d.", WSAGetLastError());
         return false;
     }
+
+    DWORD dwBytes = 0;
+    pIOCPContext->m_ActionType = IOCP_AT_ACCEPT;
 
     //投递AcceptEx
     if (!m_CallBackAcceptEx(
         m_ListenSocketContext->m_Socket,
         pIOCPContext->m_AcceptSocket,
-        pWSABUF->buf,
-        pWSABUF->len - ((sizeof(SOCKADDR_IN) + 16) * 2),
-        sizeof(SOCKADDR_IN) + 16,
-        sizeof(SOCKADDR_IN) + 16,
+        pIOCPContext->m_WSABuffer.buf,
+        pIOCPContext->m_WSABuffer.len - (ACCEPTEX_ADDRESS_LENGTH * 2),
+        ACCEPTEX_ADDRESS_LENGTH,
+        ACCEPTEX_ADDRESS_LENGTH,
         &dwBytes,
-        pOverlapped))
+        &pIOCPContext->m_Overlapped))
     {
         if (WSAGetLastError() != WSA_IO_PENDING)
         {
@@ -360,16 +354,12 @@ bool QingServer::PostAccept(IOCPContext *pIOCPContext)
 
 bool QingServer::PostRecv(IOCPContext *pIOCPContext)
 {
-    DWORD dwFlags = 0;
-    DWORD dwBytes = 0;
-    WSABUF *pWSABUF = &pIOCPContext->m_WSABuffer;
-    OVERLAPPED *pOverlapped = &pIOCPContext->m_Overlapped;
-
     pIOCPContext->ResetBuffer();
     pIOCPContext->m_ActionType = IOCP_AT_RECV;
 
     //投递WSARecv请求
-    int nBytesRecv = WSARecv(pIOCPContext->m_AcceptSocket, pWSABUF, 1, &dwBytes, &dwFlags, pOverlapped, NULL);
+    DWORD dwFlags = 0, dwBytes = 0;
+    int nBytesRecv = WSARecv(pIOCPContext->m_AcceptSocket, &pIOCPContext->m_WSABuffer, 1, &dwBytes, &dwFlags, &pIOCPContext->m_Overlapped, NULL);
 
     //如果返回错误，并且错误的代码不是Pending，说明请求失败
     if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
@@ -397,9 +387,9 @@ bool QingServer::DoAccept(IOCPSocketContext * pSocketContext, IOCPContext *pIOCP
     //1.获取连入客户端的地址信息
     m_CallBackGetAcceptExSockAddrs(
         pIOCPContext->m_WSABuffer.buf,
-        pIOCPContext->m_WSABuffer.len - ((sizeof(SOCKADDR_IN) + 16) * 2),
-        sizeof(SOCKADDR_IN) + 16,
-        sizeof(SOCKADDR_IN) + 16,
+        pIOCPContext->m_WSABuffer.len - (ACCEPTEX_ADDRESS_LENGTH * 2),
+        ACCEPTEX_ADDRESS_LENGTH,
+        ACCEPTEX_ADDRESS_LENGTH,
         (LPSOCKADDR*)&LocalAddr,
         &LocalLen,
         (LPSOCKADDR*)&ClientAddr,
@@ -465,12 +455,10 @@ bool QingServer::DoSend(IOCPSocketContext * pSocketContext, IOCPContext *pIOCPCo
 DWORD QingServer::WorkerThread(LPVOID lpParam)
 {
     WorkerThreadParam *pParam = (WorkerThreadParam*)lpParam;
-    QingServer *pQingIOCP = (QingServer*)pParam->m_pQingServer;
-    int nThreadNo = (int)pParam->m_nThreadNo;
-    QingLog::Write(Qing::LL_INFO, "Worker thread ID = %d start.", nThreadNo);
+    QingServer *pQingIOCP = (QingServer*)pParam->m_QingServer;
+    QingLog::Write(Qing::LL_INFO, "Worker Thread ID = %d start.", (int)pParam->m_ThreadID);
 
     OVERLAPPED *pOverlapped = NULL;
-    //IOCPSocketContext *pSocketContext = NULL;
     DWORD dwBytesTransfered = 0;
 
     //循环处理，直到收到Shutdown消息为止
@@ -520,19 +508,16 @@ DWORD QingServer::WorkerThread(LPVOID lpParam)
             {
                 switch (pIOCPContext->m_ActionType)
                 {
-                case IOCP_AT_ACCEPT:    pQingIOCP->DoAccept(pSocketContext.get(), pIOCPContext);              break;
-                case IOCP_AT_RECV:      pQingIOCP->DoRecv(pSocketContext.get(), pIOCPContext);                break;
-                case IOCP_AT_SEND:      pQingIOCP->DoSend(pSocketContext.get(), pIOCPContext);                break;
+                case IOCP_AT_ACCEPT:    pQingIOCP->DoAccept(pSocketContext.get(), pIOCPContext);        break;
+                case IOCP_AT_RECV:      pQingIOCP->DoRecv(pSocketContext.get(), pIOCPContext);          break;
+                case IOCP_AT_SEND:      pQingIOCP->DoSend(pSocketContext.get(), pIOCPContext);          break;
                 default:                QingLog::Write("Worker thread action type error");              break;
                 }
             }
         }
     }
 
-    QingLog::Write(Qing::LL_INFO, "Worker thread ID = %d exit.", nThreadNo);
-    delete lpParam;
-    lpParam = NULL;
-
+    QingLog::Write(Qing::LL_INFO, "Worker Thread ID = %d exit.", (int)pParam->m_ThreadID);
     return 0;
 }
 
