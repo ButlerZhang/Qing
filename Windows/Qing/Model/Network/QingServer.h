@@ -21,10 +21,6 @@ public:
 
 protected:
 
-    bool InitializeIOCP();
-    bool InitializeListenSocket();
-    void DeleteInitializeResources();
-
     bool PostAccept(IOCPContext *pIOCPContext);
     bool PostRecv(IOCPContext *pIOCPContext);
     bool PostSend(IOCPContext *pIOCPContext);
@@ -33,16 +29,25 @@ protected:
     bool DoRecv(IOCPSocketContext *pSocketContext, IOCPContext *pIOCPContext);
     bool DoSend(IOCPSocketContext *pSocketContext, IOCPContext *pIOCPContext);
 
+private:
+
+    bool CreateIOCP();
+    bool CreateWorkerThread();
+    bool CreateAndStartListen();
+    bool InitializeAcceptExCallBack();
+    bool StartPostAcceptExIORequest();
+    void DeleteInitializeResources();
+
     bool IsSocketAlive(SOCKET socket);
     void ReleaseHandle(HANDLE Handle);
-    bool HandleError(IOCPSocketContext *pSocketContext, const DWORD& dwErr);
-
+    bool HandleError(std::shared_ptr<IOCPSocketContext> pSocketContext, DWORD ErrorCode);
     std::string ConvertToIPString(SOCKADDR_IN *ClientAddr);
+
     static DWORD WINAPI WorkerThread(LPVOID lpParam);
 
 private:
 
-    HANDLE                              m_hShutdownEvent;               //通知工作线程退出的事件
+    HANDLE                              m_hWorkerThreadExitEvent;       //通知工作线程退出的事件
     HANDLE                              m_hIOCompletionPort;            //完成端口的句柄
     HANDLE*                             m_phWorkerThreads;              //工作线程
 
