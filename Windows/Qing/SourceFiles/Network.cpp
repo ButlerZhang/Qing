@@ -58,9 +58,7 @@ Network::~Network()
 
 bool Network::Start()
 {
-    m_IOCP.SetListenPort(12347);
-    //m_IOCP.SetServerIP("192.168.3.168");
-    m_IOCP.Start();
+    m_IOCP.Start(12345);
     return true;
 }
 

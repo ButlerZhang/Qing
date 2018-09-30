@@ -1,59 +1,63 @@
 #pragma once
+#include "..\..\HeaderFiles\QingBase.h"
 #include <winsock2.h>
 #include <MSWSock.h>
+#include <memory>
 #include <vector>
+
+QING_NAMESPACE_BEGIN
 
 
 
 enum IOCPEnum
 {
-    MAX_BUFFER_LEN = 8192,                               //经验值
-    WORKER_THREADS_PER_PROCESSOR = 2,                    //工作线程数是CPU核心数的两倍
     MAX_POST_ACCEPT = 10,                                //同时投递的Accept请求的数量
+    MAX_IO_CONTEXT_BUFFER_LEN = 1024,                    //通常情况下MTU是1500,所以设为1k
+    WORKER_THREADS_PER_PROCESSOR = 2,                    //工作线程数是CPU核心数的两倍
 };
 
 
 
 enum IOCPActionType
 {
+    IOCP_AT_NULL,
     IOCP_AT_ACCEPT,
     IOCP_AT_SEND,
     IOCP_AT_RECV,
-    IOCP_AT_SHUTDOWN,
 };
 
 
 
 struct IOCPContext
 {
-    OVERLAPPED          m_Overlapped;                    //每个IO操作的重叠结构
-    SOCKET              m_sockAccept;                    //当前网络操作所使用的socket
-    WSABUF              m_wsaBuf;                        //缓冲区，用于给重叠操作传参数的
-    char                m_szBuffer[MAX_BUFFER_LEN];      //具体字符的缓冲区
-    IOCPActionType      m_ActionType;                    //要执行的网络操作
+    OVERLAPPED          m_Overlapped;                               //每个IO操作的重叠结构
+    SOCKET              m_AcceptSocket;                             //当前网络操作所使用的socket
+    WSABUF              m_WSABuffer;                                //缓冲区，用于给重叠操作传参数的
+    IOCPActionType      m_ActionType;                               //要执行的网络操作
+    char                m_Buffer[MAX_IO_CONTEXT_BUFFER_LEN];        //具体数据的缓冲区
 
     IOCPContext()
     {
         ZeroMemory(&m_Overlapped, sizeof(m_Overlapped));
-        ZeroMemory(&m_szBuffer, sizeof(m_szBuffer));
-        m_sockAccept = INVALID_SOCKET;
-        m_wsaBuf.buf = m_szBuffer;
-        m_wsaBuf.len = MAX_BUFFER_LEN;
-        m_ActionType = IOCP_AT_ACCEPT;
+        ZeroMemory(&m_Buffer, sizeof(m_Buffer));
+        m_AcceptSocket = INVALID_SOCKET;
+        m_WSABuffer.buf = m_Buffer;
+        m_WSABuffer.len = MAX_IO_CONTEXT_BUFFER_LEN;
+        m_ActionType = IOCP_AT_NULL;
     }
 
     ~IOCPContext()
     {
-        if (m_sockAccept != INVALID_SOCKET)
+        if (m_AcceptSocket != INVALID_SOCKET)
         {
-            closesocket(m_sockAccept);
-            m_sockAccept = INVALID_SOCKET;
+            closesocket(m_AcceptSocket);
+            m_AcceptSocket = INVALID_SOCKET;
         }
     }
 
     void ResetBuffer()
     {
-        ZeroMemory(&m_szBuffer, sizeof(m_szBuffer));
+        ZeroMemory(&m_Buffer, sizeof(m_Buffer));
     }
 };
 
@@ -61,14 +65,14 @@ struct IOCPContext
 
 struct IOCPSocketContext
 {
-    SOCKET              m_Socket;                        //每个客户端连接的socket
-    SOCKADDR_IN         m_ClientAddr;                    //客户端的地址
-    std::vector<IOCPContext*>   m_IOContextVector;       //客户端IO操作的上下文数据
+    SOCKET                                      m_Socket;           //每个客户端连接的socket
+    SOCKADDR_IN                                 m_ClientAddr;       //客户端的地址
+    std::vector<std::shared_ptr<IOCPContext>>   m_IOContextVector;  //客户端IO操作的上下文数据
 
     IOCPSocketContext()
     {
         m_Socket = INVALID_SOCKET;
-        memset(&m_ClientAddr, 0, sizeof(m_ClientAddr));
+        ZeroMemory(&m_ClientAddr, sizeof(m_ClientAddr));
     }
 
     ~IOCPSocketContext()
@@ -79,39 +83,29 @@ struct IOCPSocketContext
             m_Socket = INVALID_SOCKET;
         }
 
-        for (auto Index = 0; Index < m_IOContextVector.size(); Index++)
-        {
-            delete m_IOContextVector[Index];
-        }
-
         m_IOContextVector.clear();
     }
 
-    IOCPContext* GetNewIOContext()
+    std::shared_ptr<IOCPContext> GetNewIOContext()
     {
-        IOCPContext *pIOCP = new IOCPContext;
-        m_IOContextVector.push_back(pIOCP);
-        return pIOCP;
+        std::shared_ptr<IOCPContext> NewIOContext = std::make_shared<IOCPContext>();
+        m_IOContextVector.push_back(NewIOContext);
+        return NewIOContext;
     }
 
-    bool RemoveContext(IOCPContext *pContext)
+    bool RemoveContext(std::shared_ptr<IOCPContext> RemoveIOContext)
     {
-        if (pContext == NULL)
-        {
-            return false;
-        }
-
         for (auto Index = 0; Index < m_IOContextVector.size(); Index++)
         {
-            if (pContext == m_IOContextVector[Index])
+            if (RemoveIOContext == m_IOContextVector[Index])
             {
                 m_IOContextVector.erase(m_IOContextVector.begin() + Index);
-                delete pContext;
-                pContext = NULL;
-                return true;
+                break;
             }
         }
 
         return false;
     }
 };
+
+QING_NAMESPACE_END

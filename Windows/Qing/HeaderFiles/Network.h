@@ -1,6 +1,6 @@
 #pragma once
 #include "QingBase.h"
-#include "..\Model\Network\QingIOCP.h"
+#include "..\Model\Network\QingServer.h"
 #include <WinSock2.h>
 #include <string>
 
@@ -25,7 +25,7 @@ public:
 
 private:
 
-    QingIOCP    m_IOCP;
+    QingServer    m_IOCP;
 };
 
 QING_NAMESPACE_END

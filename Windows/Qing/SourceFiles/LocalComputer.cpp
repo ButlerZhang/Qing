@@ -277,4 +277,11 @@ bool LocalComputer::GetMacAddress(std::string &MacAddress, const std::string &Ba
     return !MacAddress.empty();
 }
 
+int LocalComputer::GetProcessorsCount()
+{
+    SYSTEM_INFO si;
+    GetSystemInfo(&si);
+    return si.dwNumberOfProcessors;
+}
+
 QING_NAMESPACE_END

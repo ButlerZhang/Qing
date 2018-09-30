@@ -43,8 +43,9 @@
     <ClInclude Include="HeaderFiles\RandomGenerator.h" />
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\Utility.h" />
+    <ClInclude Include="Model\Network\ClientManager.h" />
     <ClInclude Include="Model\Network\IOCPModel.h" />
-    <ClInclude Include="Model\Network\QingIOCP.h" />
+    <ClInclude Include="Model\Network\QingServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Example\DesignPatterns\Source\AbstractFactory.cpp" />
@@ -57,7 +58,8 @@
     <ClCompile Include="Example\DesignPatterns\Source\SimpleFactory.cpp" />
     <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp" />
     <ClCompile Include="Example\IOExample.cpp" />
-    <ClCompile Include="Model\Network\QingIOCP.cpp" />
+    <ClCompile Include="Model\Network\ClientManager.cpp" />
+    <ClCompile Include="Model\Network\QingServer.cpp" />
     <ClCompile Include="SourceFiles\FileManager.cpp" />
     <ClCompile Include="SourceFiles\HexString.cpp" />
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />

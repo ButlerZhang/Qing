@@ -108,7 +108,10 @@
     <ClInclude Include="Example\SimpleServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\QingIOCP.h">
+    <ClInclude Include="Model\Network\QingServer.h">
+      <Filter>Model\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Network\ClientManager.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
   </ItemGroup>
@@ -167,7 +170,10 @@
     <ClCompile Include="SourceFiles\QingLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\QingIOCP.cpp">
+    <ClCompile Include="Model\Network\QingServer.cpp">
+      <Filter>Model\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Network\ClientManager.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
   </ItemGroup>
