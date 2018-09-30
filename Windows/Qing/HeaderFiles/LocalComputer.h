@@ -2,7 +2,7 @@
 #include "QingBase.h"
 #include <vector>
 #include <string>
-#include <Windows.h>
+#include <WinSock2.h>
 
 QING_NAMESPACE_BEGIN
 
@@ -32,6 +32,7 @@ public:
     bool GetMacAddress(std::string &MacAddress, const std::string &BaseIP) const;
 
     int  GetProcessorsCount() const;
+    std::string ConvertToIPString(SOCKADDR_IN *ClientAddr) const;
 };
 
 QING_NAMESPACE_END

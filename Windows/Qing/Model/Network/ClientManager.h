@@ -1,5 +1,4 @@
 #pragma once
-#include "..\..\HeaderFiles\QingBase.h"
 #include "IOCPModel.h"
 #include <map>
 

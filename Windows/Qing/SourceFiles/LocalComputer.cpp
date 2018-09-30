@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <tlhelp32.h>
 #include <ATLComTime.h>
+#include <WS2tcpip.h>
+
 
 QING_NAMESPACE_BEGIN
 
@@ -281,6 +283,15 @@ int LocalComputer::GetProcessorsCount() const
     SYSTEM_INFO si;
     GetSystemInfo(&si);
     return si.dwNumberOfProcessors;
+}
+
+std::string LocalComputer::ConvertToIPString(SOCKADDR_IN * ClientAddr) const
+{
+    char TempIPArray[INET_ADDRSTRLEN];
+    memset(TempIPArray, 0, sizeof(TempIPArray));
+
+    inet_ntop(AF_INET, &(ClientAddr->sin_addr), TempIPArray, sizeof(TempIPArray));
+    return std::string(TempIPArray);
 }
 
 QING_NAMESPACE_END

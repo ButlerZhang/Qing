@@ -1,6 +1,5 @@
 #include "QingServer.h"
 #include "..\..\HeaderFiles\QingLog.h"
-#include "..\..\HeaderFiles\LocalComputer.h"
 #include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
@@ -115,8 +114,7 @@ bool QingServer::CreateIOCP()
 
 bool QingServer::CreateWorkerThread()
 {
-    Qing::LocalComputer MyComputer;
-    int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * MyComputer.GetProcessorsCount();
+    int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * m_LocalComputer.GetProcessorsCount();
     if (WorkerThreadCount > MAX_WORKER_THREAD_COUNT)
     {
         WorkerThreadCount = MAX_WORKER_THREAD_COUNT;
@@ -305,15 +303,6 @@ bool QingServer::HandleError(std::shared_ptr<IOCPSocketContext> pSocketContext, 
     }
 }
 
-std::string QingServer::ConvertToIPString(SOCKADDR_IN *ClientAddr)
-{
-    char TempIPArray[INET_ADDRSTRLEN];
-    memset(TempIPArray, 0, sizeof(TempIPArray));
-
-    inet_ntop(AF_INET, &(ClientAddr->sin_addr), TempIPArray, sizeof(TempIPArray));
-    return std::string(TempIPArray);
-}
-
 bool QingServer::PostAccept(IOCPContext *pIOCPContext)
 {
     //为新连入的客户端先准备好socket(这是与传统accept最大的区别)
@@ -392,7 +381,7 @@ bool QingServer::DoAccept(IOCPSocketContext * pSocketContext, IOCPContext *pIOCP
         &RemoteLen);
 
     QingLog::Write(Qing::LL_INFO, "Client %s:%d connected, message = %s.",
-        ConvertToIPString(ClientAddr).c_str(),
+        m_LocalComputer.ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         pIOCPContext->m_WSABuffer.buf);
 
@@ -435,7 +424,7 @@ bool QingServer::DoRecv(IOCPSocketContext * pSocketContext, IOCPContext *pIOCPCo
     //处理消息
     SOCKADDR_IN *ClientAddr = &pSocketContext->m_ClientAddr;
     QingLog::Write(Qing::LL_INFO, "Recv %s:%d message = %s",
-        ConvertToIPString(ClientAddr).c_str(),
+        m_LocalComputer.ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         pIOCPContext->m_WSABuffer.buf);
 
@@ -493,7 +482,7 @@ DWORD QingServer::WorkerThread(LPVOID lpParam)
             if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
             {
                 QingLog::Write(Qing::LL_ERROR, "Client %s:%d disconnected.",
-                    pQingIOCP->ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
+                    pQingIOCP->m_LocalComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
                     ntohs(pSocketContext->m_ClientAddr.sin_port));
 
                 //释放资源

@@ -1,5 +1,4 @@
 #pragma once
-#include "QingBase.h"
 #include "..\Model\Network\QingServer.h"
 #include <WinSock2.h>
 #include <string>

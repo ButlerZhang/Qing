@@ -1,5 +1,5 @@
 #pragma once
-#include "..\..\HeaderFiles\QingBase.h"
+#include "..\..\HeaderFiles\LocalComputer.h"
 #include "ClientManager.h"
 
 QING_NAMESPACE_BEGIN
@@ -40,7 +40,6 @@ private:
     bool IsSocketAlive(SOCKET socket);
     void ReleaseHandle(HANDLE &Handle);
     bool HandleError(std::shared_ptr<IOCPSocketContext> pSocketContext, DWORD ErrorCode);
-    std::string ConvertToIPString(SOCKADDR_IN *ClientAddr);
 
     static DWORD WINAPI WorkerThread(LPVOID lpParam);
 
@@ -53,6 +52,7 @@ private:
     int                                 m_ListenPort;                               //侦听端口
     std::string                         m_ServerBindIP;                             //服务端的IP
     ClientManager                       m_ClientManager;                            //客户端管理者
+    LocalComputer                       m_LocalComputer;                            //本地机器信息
     std::vector<WorkerThreadParam>      m_ThreadParamVector;                        //工作线程参数
     std::shared_ptr<IOCPSocketContext>  m_ListenSocketContext;                      //监听Socket的Context信息
 
