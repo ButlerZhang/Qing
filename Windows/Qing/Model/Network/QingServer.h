@@ -35,10 +35,9 @@ protected:
 
     bool IsSocketAlive(SOCKET socket);
     void ReleaseHandle(HANDLE Handle);
-    bool AssociateWithIOCP(IOCPSocketContext *pSocketContext);
     bool HandleError(IOCPSocketContext *pSocketContext, const DWORD& dwErr);
 
-    static std::string ClientIP(SOCKADDR_IN *ClientAddr);
+    std::string ConvertToIPString(SOCKADDR_IN *ClientAddr);
     static DWORD WINAPI WorkerThread(LPVOID lpParam);
 
 private:

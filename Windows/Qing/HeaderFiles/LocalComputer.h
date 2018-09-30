@@ -31,7 +31,7 @@ public:
     bool GetIPAddress(std::vector<std::string> &IPVector) const;
     bool GetMacAddress(std::string &MacAddress, const std::string &BaseIP) const;
 
-    int  GetProcessorsCount();
+    int  GetProcessorsCount() const;
 };
 
 QING_NAMESPACE_END

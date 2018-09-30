@@ -41,22 +41,22 @@ bool QingServer::Start(int ListenPort, const std::string &ServerIP)
     //初始化IOCP
     if (!InitializeIOCP())
     {
-        Qing::QingLog::Write("Initialize IOCP failed.", Qing::LL_ERROR);
+        QingLog::Write("Initialize IOCP failed.", Qing::LL_ERROR);
         return false;
     }
 
-    Qing::QingLog::Write("Initialize IOCP succeed.", Qing::LL_INFO);
+    QingLog::Write("Initialize IOCP succeed.", Qing::LL_INFO);
 
     //初始化Socket
     if (!InitializeListenSocket())
     {
-        Qing::QingLog::Write("Initialize listen socket failed.", Qing::LL_ERROR);
+        QingLog::Write("Initialize listen socket failed.", Qing::LL_ERROR);
         DeleteInitializeResources();
         return false;
     }
 
-    Qing::QingLog::Write("Initialize listen socket succeed.", Qing::LL_INFO);
-    Qing::QingLog::Write("QingServer ready.", Qing::LL_INFO);
+    QingLog::Write("Initialize listen socket succeed.", Qing::LL_INFO);
+    QingLog::Write("QingServer ready.", Qing::LL_INFO);
     return true;
 }
 
@@ -79,7 +79,7 @@ void QingServer::Stop()
         //释放其它资源
         DeleteInitializeResources();
 
-        Qing::QingLog::Write("Stop listen.", Qing::LL_INFO);
+        QingLog::Write("Stop listen.", Qing::LL_INFO);
     }
 }
 
@@ -113,7 +113,7 @@ bool QingServer::InitializeIOCP()
     m_hIOCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
     if (NULL == m_hIOCompletionPort)
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Create IO completion port error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Create IO completion port error = %d.", WSAGetLastError());
         return false;
     }
 
@@ -132,7 +132,7 @@ bool QingServer::InitializeIOCP()
         m_phWorkerThreads[i] = ::CreateThread(0, 0, WorkerThread, (void*)pWorkerThreadParam, 0, &nThreadID);
     }
 
-    Qing::QingLog::Write(Qing::LL_INFO, "Created %d worker threads.", m_WorkerThreadCount);
+    QingLog::Write(Qing::LL_INFO, "Created %d worker threads.", m_WorkerThreadCount);
     return true;
 }
 
@@ -145,20 +145,20 @@ bool QingServer::InitializeListenSocket()
     m_ListenSocketContext->m_Socket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_ListenSocketContext->m_Socket == INVALID_SOCKET)
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Initialize listen socket failed, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Initialize listen socket failed, error = %d.", WSAGetLastError());
         return false;
     }
 
-    Qing::QingLog::Write("Initialize listen socket succeed.", Qing::LL_INFO);
+    QingLog::Write("Initialize listen socket succeed.", Qing::LL_INFO);
 
     //将listen socket绑定到完成端口
     if (CreateIoCompletionPort((HANDLE)m_ListenSocketContext->m_Socket, m_hIOCompletionPort, (ULONG_PTR)(m_ListenSocketContext.get()), 0) == NULL)
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Bind listen socket to IOCP failed, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Bind listen socket to IOCP failed, error = %d.", WSAGetLastError());
         return false;
     }
 
-    Qing::QingLog::Write("Bind listen socket to IOCP succeed.", Qing::LL_INFO);
+    QingLog::Write("Bind listen socket to IOCP succeed.", Qing::LL_INFO);
 
     //填充地址信息
     struct sockaddr_in ServerAddress;
@@ -180,20 +180,20 @@ bool QingServer::InitializeListenSocket()
     //绑定地址和端口
     if (bind(m_ListenSocketContext->m_Socket, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress)) == SOCKET_ERROR)
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Listen socket bind failed, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Listen socket bind failed, error = %d.", WSAGetLastError());
         return false;
     }
 
-    Qing::QingLog::Write("Listen socket bind succeed.", Qing::LL_INFO);
+    QingLog::Write("Listen socket bind succeed.", Qing::LL_INFO);
 
     //开始进行监听
     if (listen(m_ListenSocketContext->m_Socket, SOMAXCONN) == SOCKET_ERROR)
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Listen error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Listen error = %d.", WSAGetLastError());
         return false;
     }
 
-    Qing::QingLog::Write("Listening...", Qing::LL_INFO);
+    QingLog::Write("Listening...", Qing::LL_INFO);
 
     //用于导出函数指针
     GUID GuidAcceptEx = WSAID_ACCEPTEX;
@@ -213,7 +213,7 @@ bool QingServer::InitializeListenSocket()
         NULL,
         NULL))
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "WSAIoctl can not get AcceptEx pointer, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "WSAIoctl can not get AcceptEx pointer, error = %d.", WSAGetLastError());
         DeleteInitializeResources();
         return false;
     }
@@ -230,7 +230,7 @@ bool QingServer::InitializeListenSocket()
         NULL,
         NULL))
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "WSAIoctl can not get GetAcceptExSockAddrs pointer, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "WSAIoctl can not get GetAcceptExSockAddrs pointer, error = %d.", WSAGetLastError());
         DeleteInitializeResources();
         return false;
     }
@@ -246,7 +246,7 @@ bool QingServer::InitializeListenSocket()
         }
     }
 
-    Qing::QingLog::Write(Qing::LL_INFO, "Post %d AcceptEx request.", MAX_POST_ACCEPT);
+    QingLog::Write(Qing::LL_INFO, "Post %d AcceptEx request.", MAX_POST_ACCEPT);
     return true;
 }
 
@@ -264,7 +264,7 @@ void QingServer::DeleteInitializeResources()
 
     ReleaseHandle(m_hIOCompletionPort);
 
-    Qing::QingLog::Write("Delete resources succeed.", Qing::LL_INFO);
+    QingLog::Write("Delete resources succeed.", Qing::LL_INFO);
 }
 
 bool QingServer::PostAccept(IOCPContext *pIOCPContext)
@@ -278,7 +278,7 @@ bool QingServer::PostAccept(IOCPContext *pIOCPContext)
     pIOCPContext->m_AcceptSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (pIOCPContext->m_AcceptSocket == INVALID_SOCKET)
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Create accept socket failed, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Create accept socket failed, error = %d.", WSAGetLastError());
         return false;
     }
 
@@ -295,7 +295,7 @@ bool QingServer::PostAccept(IOCPContext *pIOCPContext)
     {
         if (WSAGetLastError() != WSA_IO_PENDING)
         {
-            Qing::QingLog::Write(Qing::LL_ERROR, "Post accept failed, error = %d.", WSAGetLastError());
+            QingLog::Write(Qing::LL_ERROR, "Post accept failed, error = %d.", WSAGetLastError());
             return false;
         }
     }
@@ -319,7 +319,7 @@ bool QingServer::PostRecv(IOCPContext *pIOCPContext)
     //如果返回错误，并且错误的代码不是Pending，说明请求失败
     if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Post recv failed, error = %d.", WSAGetLastError());
+        QingLog::Write(Qing::LL_ERROR, "Post recv failed, error = %d.", WSAGetLastError());
         return false;
     }
 
@@ -328,7 +328,7 @@ bool QingServer::PostRecv(IOCPContext *pIOCPContext)
 
 bool QingServer::PostSend(IOCPContext *pIOCPContext)
 {
-    Qing::QingLog::Write("Post send succeed.");
+    QingLog::Write("Post send succeed.");
     return true;
 }
 
@@ -350,8 +350,8 @@ bool QingServer::DoAccept(IOCPSocketContext * pSocketContext, IOCPContext *pIOCP
         (LPSOCKADDR*)&ClientAddr,
         &RemoteLen);
 
-    Qing::QingLog::Write(Qing::LL_INFO, "Client %s:%d connected, message = %s.",
-        ClientIP(ClientAddr).c_str(),
+    QingLog::Write(Qing::LL_INFO, "Client %s:%d connected, message = %s.",
+        ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         pIOCPContext->m_WSABuffer.buf);
 
@@ -361,8 +361,9 @@ bool QingServer::DoAccept(IOCPSocketContext * pSocketContext, IOCPContext *pIOCP
     memcpy(&(pNewIOCPSocketContext->m_ClientAddr), ClientAddr, sizeof(SOCKADDR_IN));
 
     //将这个新的Socket和完成端口绑定
-    if (!AssociateWithIOCP(pNewIOCPSocketContext.get()))
+    if (CreateIoCompletionPort((HANDLE)pNewIOCPSocketContext->m_Socket, m_hIOCompletionPort, (ULONG_PTR)(pNewIOCPSocketContext.get()), 0) == NULL)
     {
+        QingLog::Write(Qing::LL_ERROR, "Associate with IOCP error = %d.", GetLastError());
         return false;
     }
 
@@ -392,8 +393,8 @@ bool QingServer::DoRecv(IOCPSocketContext * pSocketContext, IOCPContext *pIOCPCo
 {
     //处理消息
     SOCKADDR_IN *ClientAddr = &pSocketContext->m_ClientAddr;
-    Qing::QingLog::Write(Qing::LL_INFO, "Recv %s:%d message = %s",
-        ClientIP(ClientAddr).c_str(),
+    QingLog::Write(Qing::LL_INFO, "Recv %s:%d message = %s",
+        ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         pIOCPContext->m_WSABuffer.buf);
 
@@ -425,48 +426,36 @@ void QingServer::ReleaseHandle(HANDLE Handle)
     }
 }
 
-bool QingServer::AssociateWithIOCP(IOCPSocketContext * pSocketContext)
-{
-    HANDLE Handle = CreateIoCompletionPort((HANDLE)pSocketContext->m_Socket, m_hIOCompletionPort, (ULONG_PTR)pSocketContext, 0);
-    if (Handle == NULL)
-    {
-        Qing::QingLog::Write(Qing::LL_ERROR, "Associate with IOCP error = %d.", GetLastError());
-        return false;
-    }
-
-    return true;
-}
-
 bool QingServer::HandleError(IOCPSocketContext * pSocketContext, const DWORD & dwErr)
 {
     if (WAIT_TIMEOUT == dwErr)                          //超时
     {
         if (IsSocketAlive(pSocketContext->m_Socket))
         {
-            Qing::QingLog::Write("Network time out, reconnecting....", Qing::LL_INFO);
+            QingLog::Write("Network time out, reconnecting....", Qing::LL_INFO);
             return true;
         }
         else
         {
-            Qing::QingLog::Write("Client disconnected.", Qing::LL_INFO);
+            QingLog::Write("Client disconnected.", Qing::LL_INFO);
             //RemoveContextList(pSocketContext);
             return true;
         }
     }
     else if (ERROR_NETNAME_DELETED == dwErr)            //异常
     {
-        Qing::QingLog::Write("Client disconnected.", Qing::LL_INFO);
+        QingLog::Write("Client disconnected.", Qing::LL_INFO);
         //RemoveContextList(pSocketContext);
         return true;
     }
     else
     {
-        Qing::QingLog::Write(Qing::LL_ERROR, "IOCP error = %d, exit thread.", dwErr);
+        QingLog::Write(Qing::LL_ERROR, "IOCP error = %d, exit thread.", dwErr);
         return false;
     }
 }
 
-std::string QingServer::ClientIP(SOCKADDR_IN *ClientAddr)
+std::string QingServer::ConvertToIPString(SOCKADDR_IN *ClientAddr)
 {
     char TempIPArray[INET_ADDRSTRLEN];
     memset(TempIPArray, 0, sizeof(TempIPArray));
@@ -480,7 +469,7 @@ DWORD QingServer::WorkerThread(LPVOID lpParam)
     WorkerThreadParam *pParam = (WorkerThreadParam*)lpParam;
     QingServer *pQingIOCP = (QingServer*)pParam->m_pQingIOCP;
     int nThreadNo = (int)pParam->m_nThreadNo;
-    Qing::QingLog::Write(Qing::LL_INFO, "Worker thread ID = %d start.", nThreadNo);
+    QingLog::Write(Qing::LL_INFO, "Worker thread ID = %d start.", nThreadNo);
 
     OVERLAPPED *pOverlapped = NULL;
     //IOCPSocketContext *pSocketContext = NULL;
@@ -522,8 +511,8 @@ DWORD QingServer::WorkerThread(LPVOID lpParam)
             //判断是否有客户端断开了
             if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
             {
-                Qing::QingLog::Write(Qing::LL_ERROR, "Client %s:%d disconnected.",
-                    ClientIP(&(pSocketContext->m_ClientAddr)).c_str(),
+                QingLog::Write(Qing::LL_ERROR, "Client %s:%d disconnected.",
+                    pQingIOCP->ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
                     ntohs(pSocketContext->m_ClientAddr.sin_port));
 
                 //释放资源
@@ -537,13 +526,13 @@ DWORD QingServer::WorkerThread(LPVOID lpParam)
                 case IOCP_AT_ACCEPT:    pQingIOCP->DoAccept(pSocketContext.get(), pIOCPContext);              break;
                 case IOCP_AT_RECV:      pQingIOCP->DoRecv(pSocketContext.get(), pIOCPContext);                break;
                 case IOCP_AT_SEND:      pQingIOCP->DoSend(pSocketContext.get(), pIOCPContext);                break;
-                default:                Qing::QingLog::Write("Worker thread action type error");              break;
+                default:                QingLog::Write("Worker thread action type error");              break;
                 }
             }
         }
     }
 
-    Qing::QingLog::Write(Qing::LL_INFO, "Worker thread ID = %d exit.", nThreadNo);
+    QingLog::Write(Qing::LL_INFO, "Worker thread ID = %d exit.", nThreadNo);
     delete lpParam;
     lpParam = NULL;
 

@@ -4,7 +4,6 @@
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
-#include <Windows.h>
 #include <IPHlpApi.h>
 #include <algorithm>
 #include <tlhelp32.h>
@@ -277,7 +276,7 @@ bool LocalComputer::GetMacAddress(std::string &MacAddress, const std::string &Ba
     return !MacAddress.empty();
 }
 
-int LocalComputer::GetProcessorsCount()
+int LocalComputer::GetProcessorsCount() const
 {
     SYSTEM_INFO si;
     GetSystemInfo(&si);
