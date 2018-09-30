@@ -9,12 +9,12 @@ QING_NAMESPACE_BEGIN
 
 QingServer::QingServer() : m_hWorkerThreadExitEvent(NULL),
                            m_hIOCompletionPort(NULL),
-                           m_phWorkerThreads(NULL),
                            m_ListenPort(8888),
                            m_ListenSocketContext(NULL),
                            m_CallBackAcceptEx(NULL),
                            m_CallBackGetAcceptExSockAddrs(NULL)
 {
+    memset(m_WorkerThreads, NULL, sizeof(m_WorkerThreads));
 }
 
 QingServer::~QingServer()
@@ -34,7 +34,6 @@ bool QingServer::Start(int ListenPort, const std::string &ServerIP)
         !InitializeAcceptExCallBack() ||
         !StartPostAcceptExIORequest())
     {
-        DeleteInitializeResources();
         return false;
     }
 
@@ -46,20 +45,32 @@ void QingServer::Stop()
 {
     if (m_ListenSocketContext != NULL && m_ListenSocketContext->m_Socket != INVALID_SOCKET)
     {
-        //激活关闭消息通知
-        SetEvent(m_hWorkerThreadExitEvent);
-
-        //通知所有的完成端口操作退出
-        for (auto Index = 0; Index < m_ThreadParamVector.size(); Index++)
+        if (m_WorkerThreads[0] != NULL)
         {
-            PostQueuedCompletionStatus(m_hIOCompletionPort, 0, NULL, NULL);
+            //激活关闭消息通知
+            SetEvent(m_hWorkerThreadExitEvent);
+
+            //通知所有的完成端口操作退出
+            for (auto Index = 0; Index < m_ThreadParamVector.size(); Index++)
+            {
+                PostQueuedCompletionStatus(m_hIOCompletionPort, 0, NULL, NULL);
+            }
+
+            //等待所有工作线程资源退出
+            WaitForMultipleObjects(static_cast<DWORD>(m_ThreadParamVector.size()), m_WorkerThreads, TRUE, INFINITE);
         }
 
-        //等待所有工作线程资源退出
-        WaitForMultipleObjects(static_cast<DWORD>(m_ThreadParamVector.size()), m_phWorkerThreads, TRUE, INFINITE);
-
         //释放其它资源
-        DeleteInitializeResources();
+        ReleaseHandle(m_hIOCompletionPort);
+        ReleaseHandle(m_hWorkerThreadExitEvent);
+
+        for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
+        {
+            if (m_WorkerThreads[Index] != NULL)
+            {
+                ReleaseHandle(m_WorkerThreads[Index]);
+            }
+        }
 
         QingLog::Write("Stop server.", Qing::LL_INFO);
     }
@@ -106,6 +117,11 @@ bool QingServer::CreateWorkerThread()
 {
     Qing::LocalComputer MyComputer;
     int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * MyComputer.GetProcessorsCount();
+    if (WorkerThreadCount > MAX_WORKER_THREAD_COUNT)
+    {
+        WorkerThreadCount = MAX_WORKER_THREAD_COUNT;
+    }
+
     for (int Count = 0; Count < WorkerThreadCount; Count++)
     {
         WorkerThreadParam NewParam;
@@ -115,10 +131,9 @@ bool QingServer::CreateWorkerThread()
     }
 
     DWORD nThreadID;
-    m_phWorkerThreads = new HANDLE[WorkerThreadCount];
     for (int Count = 0; Count < WorkerThreadCount; Count++)
     {
-        m_phWorkerThreads[Count] = ::CreateThread(0, 0, WorkerThread, (void*)(&m_ThreadParamVector[Count]), 0, &nThreadID);
+        m_WorkerThreads[Count] = ::CreateThread(0, 0, WorkerThread, (void*)(&m_ThreadParamVector[Count]), 0, &nThreadID);
     }
 
     QingLog::Write(Qing::LL_INFO, "Created %d worker threads.", WorkerThreadCount);
@@ -242,25 +257,6 @@ bool QingServer::StartPostAcceptExIORequest()
     return true;
 }
 
-void QingServer::DeleteInitializeResources()
-{
-    ReleaseHandle(m_hWorkerThreadExitEvent);
-
-    if (m_phWorkerThreads != NULL)
-    {
-        for (int i = 0; i < static_cast<int>(m_ThreadParamVector.size()); i++)
-        {
-            ReleaseHandle(m_phWorkerThreads[i]);
-        }
-
-        delete m_phWorkerThreads;
-        m_phWorkerThreads = NULL;
-    }
-
-    ReleaseHandle(m_hIOCompletionPort);
-    QingLog::Write("Delete resources succeed.", Qing::LL_INFO);
-}
-
 bool QingServer::IsSocketAlive(SOCKET socket)
 {
     //判断客户端socket是否已经断开，否则在一个无效socket上投递WSARecv操作会抛出异常
@@ -271,7 +267,7 @@ bool QingServer::IsSocketAlive(SOCKET socket)
     return (nByteSend != -1);
 }
 
-void QingServer::ReleaseHandle(HANDLE Handle)
+void QingServer::ReleaseHandle(HANDLE &Handle)
 {
     if (Handle != NULL && Handle != INVALID_HANDLE_VALUE)
     {

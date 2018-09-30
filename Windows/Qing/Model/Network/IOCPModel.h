@@ -12,6 +12,7 @@ QING_NAMESPACE_BEGIN
 enum IOCPEnum
 {
     MAX_POST_ACCEPT = 10,                                //同时投递的Accept请求的数量
+    MAX_WORKER_THREAD_COUNT = 100,                       //最多可以有100条工作线程
     MAX_IO_CONTEXT_BUFFER_LEN = 1024,                    //通常情况下MTU是1500,所以设为1k
     WORKER_THREADS_PER_PROCESSOR = 2,                    //工作线程数是CPU核心数的两倍
     ACCEPTEX_ADDRESS_LENGTH = sizeof(SOCKADDR_IN) + 16,  //AcceptEx参数地址长度

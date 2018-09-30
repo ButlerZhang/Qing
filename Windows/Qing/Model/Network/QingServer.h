@@ -36,10 +36,9 @@ private:
     bool CreateAndStartListen();
     bool InitializeAcceptExCallBack();
     bool StartPostAcceptExIORequest();
-    void DeleteInitializeResources();
 
     bool IsSocketAlive(SOCKET socket);
-    void ReleaseHandle(HANDLE Handle);
+    void ReleaseHandle(HANDLE &Handle);
     bool HandleError(std::shared_ptr<IOCPSocketContext> pSocketContext, DWORD ErrorCode);
     std::string ConvertToIPString(SOCKADDR_IN *ClientAddr);
 
@@ -47,18 +46,18 @@ private:
 
 private:
 
-    HANDLE                              m_hWorkerThreadExitEvent;       //通知工作线程退出的事件
-    HANDLE                              m_hIOCompletionPort;            //完成端口的句柄
-    HANDLE*                             m_phWorkerThreads;              //工作线程
+    HANDLE                              m_hWorkerThreadExitEvent;                   //通知工作线程退出的事件
+    HANDLE                              m_hIOCompletionPort;                        //完成端口的句柄
+    HANDLE                              m_WorkerThreads[MAX_WORKER_THREAD_COUNT];   //工作线程
 
-    int                                 m_ListenPort;                   //侦听端口
-    std::string                         m_ServerBindIP;                 //服务端的IP
-    ClientManager                       m_ClientManager;                //客户端管理者
-    std::vector<WorkerThreadParam>      m_ThreadParamVector;            //工作线程参数
-    std::shared_ptr<IOCPSocketContext>  m_ListenSocketContext;          //监听Socket的Context信息
+    int                                 m_ListenPort;                               //侦听端口
+    std::string                         m_ServerBindIP;                             //服务端的IP
+    ClientManager                       m_ClientManager;                            //客户端管理者
+    std::vector<WorkerThreadParam>      m_ThreadParamVector;                        //工作线程参数
+    std::shared_ptr<IOCPSocketContext>  m_ListenSocketContext;                      //监听Socket的Context信息
 
-    LPFN_ACCEPTEX                       m_CallBackAcceptEx;             //AcceptEx的函数指针
-    LPFN_GETACCEPTEXSOCKADDRS           m_CallBackGetAcceptExSockAddrs; //GetAcceptExSockaddrs的函数指针
+    LPFN_ACCEPTEX                       m_CallBackAcceptEx;                         //AcceptEx的函数指针
+    LPFN_GETACCEPTEXSOCKADDRS           m_CallBackGetAcceptExSockAddrs;             //GetAcceptExSockaddrs的函数指针
 };
 
 QING_NAMESPACE_END

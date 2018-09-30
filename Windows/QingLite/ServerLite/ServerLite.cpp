@@ -21,6 +21,8 @@ int main()
     {
         if (quitstring == "q" || quitstring == "quit")
         {
+            MyServer.Stop();
+            Sleep(1000);
             break;
         }
 
