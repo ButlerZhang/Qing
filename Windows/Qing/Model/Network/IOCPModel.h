@@ -11,11 +11,10 @@ QING_NAMESPACE_BEGIN
 
 enum IOCPEnum
 {
-    MAX_POST_ACCEPT = 10,                                //同时投递的Accept请求的数量
     MAX_WORKER_THREAD_COUNT = 100,                       //最多可以有100条工作线程
     MAX_IO_CONTEXT_BUFFER_LEN = 1024,                    //通常情况下MTU是1500,所以设为1k
-    WORKER_THREADS_PER_PROCESSOR = 2,                    //工作线程数是CPU核心数的两倍
-    ACCEPTEX_ADDRESS_LENGTH = sizeof(SOCKADDR_IN) + 16,  //AcceptEx参数地址长度
+    WORKER_THREADS_PER_PROCESSOR = 2,                    //工作线程数是CPU核心数的两倍(MSDN建议两倍)
+    ACCEPTEX_ADDRESS_LENGTH = sizeof(SOCKADDR_IN) + 16,  //AcceptEx参数地址长度,16是微软规定的
 };
 
 
@@ -36,7 +35,7 @@ struct IOCPContext
     SOCKET              m_AcceptSocket;                             //当前网络操作所使用的socket
     WSABUF              m_WSABuffer;                                //缓冲区，用于给重叠操作传参数的
     IOCPActionType      m_ActionType;                               //要执行的网络操作
-    char                m_Buffer[MAX_IO_CONTEXT_BUFFER_LEN];        //具体数据的缓冲区
+    char                m_Buffer[MAX_IO_CONTEXT_BUFFER_LEN];        //具体数据的缓冲区,对应WSABUF里的缓冲区
 
     IOCPContext()
     {
@@ -114,7 +113,8 @@ struct IOCPSocketContext
 
 struct WorkerThreadParam
 {
-    int             m_ThreadID;
+    unsigned long   m_ThreadID;
+    int             m_ThreadIndex;
     void*           m_QingServer;
 };
 

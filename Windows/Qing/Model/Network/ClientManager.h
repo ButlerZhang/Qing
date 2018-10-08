@@ -19,7 +19,7 @@ public:
 
 private:
 
-    CRITICAL_SECTION                                        m_csClientMapSection;
+    CRITICAL_SECTION                                        m_MapSection;
     std::map<SOCKET, std::shared_ptr<IOCPSocketContext>>    m_ClientMap;
 };
 

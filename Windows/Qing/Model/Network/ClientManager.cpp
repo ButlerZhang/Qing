@@ -6,32 +6,32 @@ QING_NAMESPACE_BEGIN
 
 ClientManager::ClientManager()
 {
-    InitializeCriticalSection(&m_csClientMapSection);
+    InitializeCriticalSection(&m_MapSection);
 }
 
 ClientManager::~ClientManager()
 {
     ClearAllClient();
-    DeleteCriticalSection(&m_csClientMapSection);
+    DeleteCriticalSection(&m_MapSection);
 }
 
 void ClientManager::ClearAllClient()
 {
-    EnterCriticalSection(&m_csClientMapSection);
+    EnterCriticalSection(&m_MapSection);
     m_ClientMap.clear();
-    LeaveCriticalSection(&m_csClientMapSection);
+    LeaveCriticalSection(&m_MapSection);
 }
 
 void ClientManager::AddClient(const std::shared_ptr<IOCPSocketContext>& pSocketContext)
 {
-    EnterCriticalSection(&m_csClientMapSection);
+    EnterCriticalSection(&m_MapSection);
     m_ClientMap.insert(std::pair<SOCKET, std::shared_ptr<IOCPSocketContext>>(pSocketContext->m_Socket, pSocketContext));
-    LeaveCriticalSection(&m_csClientMapSection);
+    LeaveCriticalSection(&m_MapSection);
 }
 
 void ClientManager::RemoveClient(const std::shared_ptr<IOCPSocketContext>& pSocketContext)
 {
-    EnterCriticalSection(&m_csClientMapSection);
+    EnterCriticalSection(&m_MapSection);
     for (auto iter = m_ClientMap.cbegin(); iter != m_ClientMap.cend(); iter++)
     {
         if (pSocketContext->m_Socket == iter->second->m_Socket)
@@ -40,7 +40,7 @@ void ClientManager::RemoveClient(const std::shared_ptr<IOCPSocketContext>& pSock
             break;
         }
     }
-    LeaveCriticalSection(&m_csClientMapSection);
+    LeaveCriticalSection(&m_MapSection);
 }
 
 QING_NAMESPACE_END
