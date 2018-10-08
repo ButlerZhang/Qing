@@ -297,7 +297,7 @@ void QingServer::ReleaseHandle(HANDLE &Handle)
     }
 }
 
-bool QingServer::HandleError(std::shared_ptr<IOCPSocketContext> pSocketContext, DWORD ErrorCode)
+bool QingServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode)
 {
     if (WAIT_TIMEOUT == ErrorCode)                          //超时
     {
@@ -392,7 +392,7 @@ bool QingServer::PostSend(IOCPContext *pIOCPContext)
     return true;
 }
 
-bool QingServer::DoAccept(IOCPSocketContext * pSocketContext, IOCPContext *pIOCPContext)
+bool QingServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     SOCKADDR_IN *ClientAddr = NULL;
     SOCKADDR_IN *LocalAddr = NULL;
@@ -450,7 +450,7 @@ bool QingServer::DoAccept(IOCPSocketContext * pSocketContext, IOCPContext *pIOCP
     return PostAccept(pIOCPContext);
 }
 
-bool QingServer::DoRecv(IOCPSocketContext * pSocketContext, IOCPContext *pIOCPContext)
+bool QingServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     //处理消息
     SOCKADDR_IN *ClientAddr = &pSocketContext->m_ClientAddr;
@@ -463,7 +463,7 @@ bool QingServer::DoRecv(IOCPSocketContext * pSocketContext, IOCPContext *pIOCPCo
     return PostRecv(pIOCPContext);
 }
 
-bool QingServer::DoSend(IOCPSocketContext * pSocketContext, IOCPContext *pIOCPContext)
+bool QingServer::ProcessSend(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     return false;
 }
@@ -525,10 +525,10 @@ DWORD QingServer::WorkerThread(LPVOID lpParam)
             {
                 switch (pIOCPContext->m_ActionType)
                 {
-                case IOCP_AT_ACCEPT:    pQingIOCP->DoAccept(pSocketContext.get(), pIOCPContext);        break;
-                case IOCP_AT_RECV:      pQingIOCP->DoRecv(pSocketContext.get(), pIOCPContext);          break;
-                case IOCP_AT_SEND:      pQingIOCP->DoSend(pSocketContext.get(), pIOCPContext);          break;
-                default:                QingLog::Write("Worker thread action type error");              break;
+                case IOCP_AT_ACCEPT:    pQingIOCP->ProcessAccept(pSocketContext, pIOCPContext);        break;
+                case IOCP_AT_RECV:      pQingIOCP->ProcessRecv(pSocketContext, pIOCPContext);          break;
+                case IOCP_AT_SEND:      pQingIOCP->ProcessSend(pSocketContext, pIOCPContext);          break;
+                default:                QingLog::Write("Worker thread action type error");             break;
                 }
             }
         }

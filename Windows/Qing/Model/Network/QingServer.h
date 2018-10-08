@@ -25,9 +25,9 @@ protected:
     bool PostRecv(IOCPContext *pIOCPContext);
     bool PostSend(IOCPContext *pIOCPContext);
 
-    bool DoAccept(IOCPSocketContext *pSocketContext, IOCPContext *pIOCPContext);
-    bool DoRecv(IOCPSocketContext *pSocketContext, IOCPContext *pIOCPContext);
-    bool DoSend(IOCPSocketContext *pSocketContext, IOCPContext *pIOCPContext);
+    bool ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
+    bool ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
+    bool ProcessSend(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
 
 private:
 
@@ -39,7 +39,7 @@ private:
 
     bool IsSocketAlive(SOCKET socket);
     void ReleaseHandle(HANDLE &Handle);
-    bool HandleError(std::shared_ptr<IOCPSocketContext> pSocketContext, DWORD ErrorCode);
+    bool HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode);
 
     static DWORD WINAPI WorkerThread(LPVOID lpParam);
 

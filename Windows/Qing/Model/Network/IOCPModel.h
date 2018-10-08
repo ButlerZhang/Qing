@@ -94,7 +94,7 @@ struct IOCPSocketContext
         return NewIOContext;
     }
 
-    bool RemoveContext(std::shared_ptr<IOCPContext> RemoveIOContext)
+    bool RemoveContext(const std::shared_ptr<IOCPContext> &RemoveIOContext)
     {
         for (auto Index = 0; Index < m_IOContextVector.size(); Index++)
         {
