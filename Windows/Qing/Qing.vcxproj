@@ -45,6 +45,7 @@
     <ClInclude Include="HeaderFiles\Utility.h" />
     <ClInclude Include="Model\Network\ClientManager.h" />
     <ClInclude Include="Model\Network\IOCPModel.h" />
+    <ClInclude Include="Model\Network\NetworkBase.h" />
     <ClInclude Include="Model\Network\QingClient.h" />
     <ClInclude Include="Model\Network\QingServer.h" />
   </ItemGroup>
@@ -60,6 +61,7 @@
     <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp" />
     <ClCompile Include="Example\IOExample.cpp" />
     <ClCompile Include="Model\Network\ClientManager.cpp" />
+    <ClCompile Include="Model\Network\NetworkBase.cpp" />
     <ClCompile Include="Model\Network\QingClient.cpp" />
     <ClCompile Include="Model\Network\QingServer.cpp" />
     <ClCompile Include="SourceFiles\FileManager.cpp" />

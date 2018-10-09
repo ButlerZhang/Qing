@@ -1,5 +1,6 @@
 #include "QingServer.h"
 #include "..\..\HeaderFiles\QingLog.h"
+#include "..\..\HeaderFiles\LocalComputer.h"
 #include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
@@ -8,7 +9,6 @@ QING_NAMESPACE_BEGIN
 
 QingServer::QingServer() : m_hWorkerThreadExitEvent(NULL),
                            m_hIOCompletionPort(NULL),
-                           m_ListenPort(8888),
                            m_ListenSocketContext(NULL),
                            m_CallBackAcceptEx(NULL),
                            m_CallBackGetAcceptExSockAddrs(NULL)
@@ -21,7 +21,7 @@ QingServer::~QingServer()
     Stop();
 }
 
-bool QingServer::Start(int ListenPort, const std::string &ServerIP)
+bool QingServer::Start(const std::string &ServerIP, int Port)
 {
     if (m_hWorkerThreadExitEvent != NULL)
     {
@@ -29,8 +29,7 @@ bool QingServer::Start(int ListenPort, const std::string &ServerIP)
         return true;
     }
 
-    m_ServerIP = ServerIP;
-    m_ListenPort = ListenPort;
+    NetworkBase::Start(ServerIP, Port);
     m_hWorkerThreadExitEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
 
     if (!CreateIOCP() ||
@@ -81,20 +80,6 @@ void QingServer::Stop()
     }
 }
 
-const std::string& QingServer::GetLocalIP()
-{
-    if (m_ServerIP.empty())
-    {
-        std::vector<std::string> IPVector;
-        if (m_LocalComputer.GetIPAddress(IPVector))
-        {
-            m_ServerIP = IPVector[0];
-        }
-    }
-
-    return m_ServerIP;
-}
-
 bool QingServer::CreateIOCP()
 {
     m_hIOCompletionPort = CreateIoCompletionPort(
@@ -117,7 +102,8 @@ bool QingServer::CreateIOCP()
 
 bool QingServer::CreateWorkerThread()
 {
-    int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * m_LocalComputer.GetProcessorsCount();
+    LocalComputer MyComputer;
+    int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * MyComputer.GetProcessorsCount();
     if (WorkerThreadCount > MAX_WORKER_THREAD_COUNT)
     {
         WorkerThreadCount = MAX_WORKER_THREAD_COUNT;
@@ -176,19 +162,19 @@ bool QingServer::CreateAndStartListen()
     struct sockaddr_in ServerAddress;
     ZeroMemory((char*)&ServerAddress, sizeof(ServerAddress));
     ServerAddress.sin_family = AF_INET;
-    ServerAddress.sin_port = htons(m_ListenPort);
+    ServerAddress.sin_port = htons(m_ServerListenPort);
 
     if (m_ServerIP.empty())
     {
         //绑定任何一个地址
         ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", "INADDR_ANY", m_ListenPort);
+        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", "INADDR_ANY", m_ServerListenPort);
     }
     else
     {
         //绑定某个IP地址
         inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
-        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ListenPort);
+        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerListenPort);
     }
 
     //绑定地址和端口
@@ -198,7 +184,7 @@ bool QingServer::CreateAndStartListen()
         return false;
     }
 
-    QingLog::Write(LL_INFO, "Listen socket bind succeed, IP = %s, Port = %d.", GetLocalIP().c_str(), m_ListenPort);
+    QingLog::Write(LL_INFO, "Listen socket bind succeed, IP = %s, Port = %d.", GetLocalIP().c_str(), m_ServerListenPort);
 
     //开始进行监听
     //SOMAXCONN:Maximum queue length specifiable by listen
@@ -261,7 +247,8 @@ bool QingServer::StartPostAcceptExIORequest()
     int InitAcceptPostCount = static_cast<int>(m_ThreadParamVector.size()) / 2;
     if (InitAcceptPostCount <= 0)
     {
-        InitAcceptPostCount = m_LocalComputer.GetProcessorsCount();
+        LocalComputer MyComputer;
+        InitAcceptPostCount = MyComputer.GetProcessorsCount();
     }
 
     for (int i = 0; i < InitAcceptPostCount; i++)
@@ -286,15 +273,6 @@ bool QingServer::IsSocketAlive(SOCKET socket)
 
     int nByteSend = send(socket, "", 0, 0);
     return (nByteSend != -1);
-}
-
-void QingServer::ReleaseHandle(HANDLE &Handle)
-{
-    if (Handle != NULL && Handle != INVALID_HANDLE_VALUE)
-    {
-        CloseHandle(Handle);
-        Handle = NULL;
-    }
 }
 
 bool QingServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode)
@@ -410,10 +388,11 @@ bool QingServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocket
         (LPSOCKADDR*)&ClientAddr,
         &RemoteLen);
 
+    LocalComputer MyComputer;
     QingLog::Write(LL_INFO, "(Server %s:%d, Client %s:%d) connected, message = %s.",
-        m_LocalComputer.ConvertToIPString(LocalAddr).c_str(),
+        MyComputer.ConvertToIPString(LocalAddr).c_str(),
         ntohs(LocalAddr->sin_port),
-        m_LocalComputer.ConvertToIPString(ClientAddr).c_str(),
+        MyComputer.ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         pIOCPContext->m_WSABuffer.buf);
 
@@ -453,9 +432,10 @@ bool QingServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocket
 bool QingServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     //处理消息
+    LocalComputer MyComputer;
     SOCKADDR_IN *ClientAddr = &pSocketContext->m_ClientAddr;
     QingLog::Write(LL_INFO, "Recv %s:%d message = %s",
-        m_LocalComputer.ConvertToIPString(ClientAddr).c_str(),
+        MyComputer.ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         pIOCPContext->m_WSABuffer.buf);
 
@@ -513,8 +493,9 @@ DWORD QingServer::CallBack_WorkerThread(LPVOID lpParam)
             //判断是否有客户端断开了
             if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
             {
+                LocalComputer MyComputer;
                 QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
-                    pQingIOCP->m_LocalComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
+                    MyComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
                     ntohs(pSocketContext->m_ClientAddr.sin_port));
 
                 //释放资源

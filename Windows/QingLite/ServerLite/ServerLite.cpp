@@ -14,7 +14,7 @@ int main()
     Qing::StartupNetwork();
 
     ServerNetwork MyServer;
-    MyServer.Start(true);
+    MyServer.Start(std::string(), 12345, true);
 
     std::string quitstring;
     while (std::cin >> quitstring)

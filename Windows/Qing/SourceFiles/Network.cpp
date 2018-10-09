@@ -1,5 +1,7 @@
 #include "..\HeaderFiles\Network.h"
 #include "..\HeaderFiles\QingLog.h"
+#include "..\Model\Network\QingClient.h"
+#include "..\Model\Network\QingServer.h"
 #include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
@@ -56,30 +58,25 @@ Network::~Network()
 {
 }
 
-bool Network::Start(bool IsServer)
+bool Network::Start(const std::string &ServerIP, int Port, bool IsServer)
 {
     if (IsServer)
     {
-        m_Server = std::make_shared<QingServer>();
-        return m_Server->Start(12345);
+        m_Network = std::make_shared<QingServer>();
     }
     else
     {
-        m_Client = std::make_shared<QingClient>();
-        return m_Client->Start("192.168.3.168", 12345);
+        m_Network = std::make_shared<QingClient>();
     }
+
+    return m_Network->Start(ServerIP, Port);
 }
 
 void Network::Stop()
 {
-    if (m_Server != NULL)
+    if (m_Network != NULL)
     {
-        m_Server->Stop();
-    }
-
-    if (m_Client != NULL)
-    {
-        m_Client->Stop();
+        m_Network->Stop();
     }
 }
 

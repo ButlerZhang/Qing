@@ -1,13 +1,13 @@
 #include "QingClient.h"
 #include "..\..\HeaderFiles\QingLog.h"
+#include "..\..\HeaderFiles\LocalComputer.h"
 #include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
 
 
 
-QingClient::QingClient() : m_ListenPort(0),
-                           m_hConnectThread(NULL),
+QingClient::QingClient() : m_hConnectThread(NULL),
                            m_hShutdownEvent(NULL),
                            m_phWorkerThreads(NULL)
 {
@@ -18,15 +18,14 @@ QingClient::~QingClient()
     Stop();
 }
 
-bool QingClient::Start(const std::string &ServerIP, int ServerPort)
+bool QingClient::Start(const std::string &ServerIP, int Port)
 {
     if (m_hShutdownEvent != NULL)
     {
         return true;
     }
 
-    m_ServerIP = ServerIP;
-    m_ListenPort = ServerPort;
+    NetworkBase::Start(ServerIP, Port);
     m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
     DWORD nThreadID;
@@ -54,20 +53,6 @@ void QingClient::Stop()
     }
 }
 
-const std::string & QingClient::GetLocalIP()
-{
-    if (m_ServerIP.empty())
-    {
-        std::vector<std::string> IPVector;
-        if (m_LocalComputer.GetIPAddress(IPVector))
-        {
-            m_ServerIP = IPVector[0];
-        }
-    }
-
-    return m_ServerIP;
-}
-
 void QingClient::CleanUp()
 {
     ReleaseHandle(m_hShutdownEvent);
@@ -76,15 +61,6 @@ void QingClient::CleanUp()
     for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
     {
         ReleaseHandle(m_phWorkerThreads[Index]);
-    }
-}
-
-void QingClient::ReleaseHandle(HANDLE & Handle)
-{
-    if (Handle != NULL && Handle != INVALID_HANDLE_VALUE)
-    {
-        CloseHandle(Handle);
-        Handle = NULL;
     }
 }
 
@@ -112,7 +88,7 @@ bool QingClient::EstablishConnections(int ThreadCount)
             return true;
         }
 
-        if (!ConnectServer(&m_ThreadParamVector[Count].m_Socket, m_ServerIP, m_ListenPort))
+        if (!ConnectServer(&m_ThreadParamVector[Count].m_Socket, m_ServerIP, m_ServerListenPort))
         {
             QingLog::Write("Connect server failed.", LL_ERROR);
             CleanUp();
@@ -148,7 +124,7 @@ bool QingClient::ConnectServer(SOCKET * pSocket, std::string ServerIP, int nPort
     struct sockaddr_in ServerAddress;
     ZeroMemory((char*)&ServerAddress, sizeof(ServerAddress));
     ServerAddress.sin_family = AF_INET;
-    ServerAddress.sin_port = htons(m_ListenPort);
+    ServerAddress.sin_port = htons(m_ServerListenPort);
     inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
 
     if (connect(*pSocket, reinterpret_cast<const struct sockaddr*>(&ServerAddress), sizeof(ServerAddress)) == SOCKET_ERROR)

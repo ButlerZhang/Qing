@@ -1,23 +1,20 @@
 #pragma once
-#include "..\..\HeaderFiles\LocalComputer.h"
+#include "NetworkBase.h"
 #include "ClientManager.h"
 
 QING_NAMESPACE_BEGIN
 
 
 
-class QingServer
+class QingServer : public NetworkBase
 {
 public:
 
     QingServer();
-    ~QingServer();
+    virtual ~QingServer();
 
-    bool Start(int ListenPort, const std::string &ServerIP = std::string());
-    void Stop();
-
-    const std::string& GetLocalIP();
-    int GetServerPort() const { return m_ListenPort; }
+    virtual bool Start(const std::string &ServerIP, int Port);
+    virtual void Stop();
 
 protected:
 
@@ -38,7 +35,6 @@ private:
     bool StartPostAcceptExIORequest();
 
     bool IsSocketAlive(SOCKET socket);
-    void ReleaseHandle(HANDLE &Handle);
     bool HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode);
 
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
@@ -49,10 +45,7 @@ private:
     HANDLE                                  m_hIOCompletionPort;                        //完成端口的句柄
     HANDLE                                  m_WorkerThreads[MAX_WORKER_THREAD_COUNT];   //工作线程
 
-    int                                     m_ListenPort;                               //侦听端口
-    std::string                             m_ServerIP;                                 //服务端的IP
     ClientManager                           m_ClientManager;                            //客户端管理者
-    LocalComputer                           m_LocalComputer;                            //本地机器信息
     std::vector<ServerWorkerThreadParam>    m_ThreadParamVector;                        //工作线程参数
     std::shared_ptr<IOCPSocketContext>      m_ListenSocketContext;                      //监听Socket的Context信息
 

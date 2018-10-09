@@ -13,7 +13,7 @@ int main()
     Qing::StartupNetwork();
 
     ClientNetwork MyClient;
-    MyClient.Start(false);
+    MyClient.Start("127.0.0.1", 12345, false);
 
     std::string quitstring;
     while (std::cin >> quitstring)

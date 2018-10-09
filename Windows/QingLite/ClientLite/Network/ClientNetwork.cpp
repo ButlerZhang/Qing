@@ -6,10 +6,8 @@
 
 ClientNetwork::ClientNetwork() : Network()
 {
-
 }
 
 ClientNetwork::~ClientNetwork()
 {
-
 }
