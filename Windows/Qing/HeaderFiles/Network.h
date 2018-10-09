@@ -1,5 +1,6 @@
 #pragma once
 #include "..\Model\Network\QingServer.h"
+#include "..\Model\Network\QingClient.h"
 #include <WinSock2.h>
 #include <string>
 
@@ -19,12 +20,14 @@ public:
     Network();
     virtual ~Network();
 
-    bool Start();
+    bool Start(bool IsServer);
     void Stop();
 
 private:
 
-    QingServer    m_IOCP;
+    std::shared_ptr<QingClient> m_Client;
+    std::shared_ptr<QingServer> m_Server;
+
 };
 
 QING_NAMESPACE_END

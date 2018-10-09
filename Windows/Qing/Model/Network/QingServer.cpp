@@ -29,7 +29,7 @@ bool QingServer::Start(int ListenPort, const std::string &ServerIP)
         return true;
     }
 
-    m_ServerBindIP = ServerIP;
+    m_ServerIP = ServerIP;
     m_ListenPort = ListenPort;
     m_hWorkerThreadExitEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -83,16 +83,16 @@ void QingServer::Stop()
 
 const std::string& QingServer::GetLocalIP()
 {
-    if (m_ServerBindIP.empty())
+    if (m_ServerIP.empty())
     {
         std::vector<std::string> IPVector;
         if (m_LocalComputer.GetIPAddress(IPVector))
         {
-            m_ServerBindIP = IPVector[0];
+            m_ServerIP = IPVector[0];
         }
     }
 
-    return m_ServerBindIP;
+    return m_ServerIP;
 }
 
 bool QingServer::CreateIOCP()
@@ -125,7 +125,7 @@ bool QingServer::CreateWorkerThread()
 
     for (int Count = 0; Count < WorkerThreadCount; Count++)
     {
-        WorkerThreadParam NewParam;
+        ServerWorkerThreadParam NewParam;
         NewParam.m_ThreadID = 0;
         NewParam.m_ThreadIndex = Count;
         NewParam.m_QingServer = this;
@@ -135,7 +135,7 @@ bool QingServer::CreateWorkerThread()
     DWORD nThreadID;
     for (int Count = 0; Count < WorkerThreadCount; Count++)
     {
-        m_WorkerThreads[Count] = ::CreateThread(0, 0, WorkerThread, (void*)(&m_ThreadParamVector[Count]), 0, &nThreadID);
+        m_WorkerThreads[Count] = ::CreateThread(0, 0, CallBack_WorkerThread, (void*)(&m_ThreadParamVector[Count]), 0, &nThreadID);
 
         m_ThreadParamVector[Count].m_ThreadID = nThreadID;
         QingLog::Write(LL_INFO, "Created worker thread, Index = %d, DEC_ID = %d, HEX_ID = %x.",
@@ -178,7 +178,7 @@ bool QingServer::CreateAndStartListen()
     ServerAddress.sin_family = AF_INET;
     ServerAddress.sin_port = htons(m_ListenPort);
 
-    if (m_ServerBindIP.empty())
+    if (m_ServerIP.empty())
     {
         //绑定任何一个地址
         ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -187,8 +187,8 @@ bool QingServer::CreateAndStartListen()
     else
     {
         //绑定某个IP地址
-        inet_pton(AF_INET, m_ServerBindIP.c_str(), &(ServerAddress.sin_addr.s_addr));
-        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", m_ServerBindIP.c_str(), m_ListenPort);
+        inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
+        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ListenPort);
     }
 
     //绑定地址和端口
@@ -468,9 +468,9 @@ bool QingServer::ProcessSend(const std::shared_ptr<IOCPSocketContext> &pSocketCo
     return false;
 }
 
-DWORD QingServer::WorkerThread(LPVOID lpParam)
+DWORD QingServer::CallBack_WorkerThread(LPVOID lpParam)
 {
-    WorkerThreadParam *pParam = (WorkerThreadParam*)lpParam;
+    ServerWorkerThreadParam *pParam = (ServerWorkerThreadParam*)lpParam;
     QingServer *pQingIOCP = (QingServer*)pParam->m_QingServer;
     unsigned long ThreadID = (unsigned long)pParam->m_ThreadID;
     QingLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x start.", ThreadID, ThreadID);

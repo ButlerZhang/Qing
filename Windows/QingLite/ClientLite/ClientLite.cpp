@@ -9,7 +9,27 @@
 
 int main()
 {
-    TestClientNetwork();
+    //Qing::QingLog::DefaultInit();
+    Qing::StartupNetwork();
+
+    ClientNetwork MyClient;
+    MyClient.Start(false);
+
+    std::string quitstring;
+    while (std::cin >> quitstring)
+    {
+        if (quitstring == "q" || quitstring == "quit")
+        {
+            MyClient.Stop();
+            Sleep(1000);
+            break;
+        }
+
+        Sleep(1000);
+    }
+
+    Qing::ShutdownNetwork();
+
     system("pause");
     return 0;
 }

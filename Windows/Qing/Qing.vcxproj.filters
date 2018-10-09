@@ -114,6 +114,9 @@
     <ClInclude Include="Model\Network\ClientManager.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Model\Network\QingClient.h">
+      <Filter>Model\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Network.cpp">
@@ -174,6 +177,9 @@
       <Filter>Model\Network</Filter>
     </ClCompile>
     <ClCompile Include="Model\Network\ClientManager.cpp">
+      <Filter>Model\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Network\QingClient.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
   </ItemGroup>

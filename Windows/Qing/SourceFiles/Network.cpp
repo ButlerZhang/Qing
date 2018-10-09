@@ -56,15 +56,31 @@ Network::~Network()
 {
 }
 
-bool Network::Start()
+bool Network::Start(bool IsServer)
 {
-    m_IOCP.Start(12345);
-    return true;
+    if (IsServer)
+    {
+        m_Server = std::make_shared<QingServer>();
+        return m_Server->Start(12345);
+    }
+    else
+    {
+        m_Client = std::make_shared<QingClient>();
+        return m_Client->Start("192.168.3.168", 12345);
+    }
 }
 
 void Network::Stop()
 {
-    m_IOCP.Stop();
+    if (m_Server != NULL)
+    {
+        m_Server->Stop();
+    }
+
+    if (m_Client != NULL)
+    {
+        m_Client->Stop();
+    }
 }
 
 QING_NAMESPACE_END
