@@ -23,10 +23,17 @@ public:
 
 protected:
 
+    void ReleaseSocket(SOCKET Socket);
     void ReleaseHandle(HANDLE &Handle);
+
+    void SetSocketLinger(SOCKET Socket);
     void FillAddress(sockaddr_in &ServerAddress);
 
+    bool CreateIOCP();
+
 protected:
+
+    HANDLE                                  m_hIOCompletionPort;                        //完成端口的句柄
 
     int                                     m_ServerListenPort;
     std::string                             m_ServerIP;

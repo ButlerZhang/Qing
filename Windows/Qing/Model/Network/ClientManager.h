@@ -17,6 +17,8 @@ public:
     void AddClient(const std::shared_ptr<IOCPSocketContext> &pSocketContext);
     void RemoveClient(const std::shared_ptr<IOCPSocketContext> &pSocketContext);
 
+    int  GetClientCount() const { return static_cast<int>(m_ClientMap.size()); }
+
 private:
 
     CRITICAL_SECTION                                        m_MapSection;

@@ -16,6 +16,8 @@ public:
     virtual bool Start(const std::string &ServerIP, int Port);
     virtual void Stop();
 
+    int GetClientCount() const { return m_ClientManager.GetClientCount(); }
+
 protected:
 
     bool PostAccept(IOCPContext *pIOCPContext);
@@ -28,7 +30,6 @@ protected:
 
 private:
 
-    bool CreateIOCP();
     bool CreateWorkerThread();
     bool CreateAndStartListen();
     bool InitializeAcceptExCallBack();
@@ -42,7 +43,6 @@ private:
 private:
 
     HANDLE                                  m_hWorkerThreadExitEvent;                   //通知工作线程退出的事件
-    HANDLE                                  m_hIOCompletionPort;                        //完成端口的句柄
     HANDLE                                  m_WorkerThreads[MAX_WORKER_THREAD_COUNT];   //工作线程
 
     ClientManager                           m_ClientManager;                            //客户端管理者

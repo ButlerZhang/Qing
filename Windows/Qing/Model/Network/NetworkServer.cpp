@@ -7,7 +7,7 @@ QING_NAMESPACE_BEGIN
 
 
 NetworkServer::NetworkServer() : m_hWorkerThreadExitEvent(NULL),
-                           m_hIOCompletionPort(NULL),
+                           
                            m_ListenSocketContext(NULL),
                            m_CallBackAcceptEx(NULL),
                            m_CallBackGetAcceptExSockAddrs(NULL)
@@ -77,26 +77,6 @@ void NetworkServer::Stop()
 
         QingLog::Write("Stop server.", LL_INFO);
     }
-}
-
-bool NetworkServer::CreateIOCP()
-{
-    m_hIOCompletionPort = CreateIoCompletionPort(
-        INVALID_HANDLE_VALUE,   //FileHandle是有效的文件句柄或INVALID_HANDLE_VALUE
-        NULL,                   //ExistingCompletionPort已经存在的完成端口，如果为NULL则新建一个
-        0,                      //CompletionKey是传送给处理函数的参数
-        0);                     //NumberOfConcurrentThreads有多少个线程在访问这个消息队列
-                                //如果设置为0表示有多少个处理器就允许同时运行多少个线程
-                                //如果ExistingCompletionPort不为0，系统忽略NumberOfConcurrentThreads
-
-    if (m_hIOCompletionPort == NULL)
-    {
-        QingLog::Write(LL_ERROR, "Create IO completion port error = %d.", WSAGetLastError());
-        return false;
-    }
-
-    QingLog::Write("Created IO completion port succeed.", LL_INFO);
-    return true;
 }
 
 bool NetworkServer::CreateWorkerThread()
@@ -348,7 +328,27 @@ bool NetworkServer::PostRecv(IOCPContext *pIOCPContext)
 
 bool NetworkServer::PostSend(IOCPContext *pIOCPContext)
 {
-    QingLog::Write("Post send succeed.");
+    pIOCPContext->ResetBuffer();
+    pIOCPContext->m_ActionType = IOCP_AT_SEND;
+
+    //投递WSASend请求
+    DWORD dwFlags = 0, dwBytes = 0;
+    int nBytesRecv = WSASend(
+        pIOCPContext->m_AcceptSocket,   //投递这个操作的socket
+        &pIOCPContext->m_WSABuffer,     //接收缓冲区，WSABUF结构构成的数组
+        1,                              //数组中WSABUF结构的数量，设为1
+        &dwBytes,                       //接收到的字节数
+        dwFlags,                        //设置为0
+        &pIOCPContext->m_Overlapped,    //这个socket对应的重叠结构
+        NULL);                          //这个参数只有在完成例程模式中才会用到
+
+    //如果返回错误，并且错误的代码不是Pending，说明请求失败
+    if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
+    {
+        QingLog::Write(LL_ERROR, "Post send failed, error = %d.", WSAGetLastError());
+        return false;
+    }
+
     return true;
 }
 
@@ -381,6 +381,7 @@ bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSoc
     //2.拷贝Listen socket上的Context，为新连入的socket创建一个新的SocketContext
     std::shared_ptr<IOCPSocketContext> pNewIOCPSocketContext = std::make_shared<IOCPSocketContext>();
     pNewIOCPSocketContext->m_Socket = pIOCPContext->m_AcceptSocket;
+    SetSocketLinger(pNewIOCPSocketContext->m_Socket);
     memcpy(&(pNewIOCPSocketContext->m_ClientAddr), ClientAddr, sizeof(SOCKADDR_IN));
 
     //将这个新的Socket和完成端口绑定
@@ -471,6 +472,8 @@ DWORD NetworkServer::CallBack_WorkerThread(LPVOID lpParam)
         {
             //读取传入的参数
             IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
+            //std::shared_ptr<IOCPContext> pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
+
 
             //判断是否有客户端断开了
             if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
