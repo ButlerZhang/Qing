@@ -1,5 +1,7 @@
 #include "NetworkBase.h"
+#include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
+#include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
 
@@ -41,6 +43,25 @@ void NetworkBase::ReleaseHandle(HANDLE & Handle)
     {
         CloseHandle(Handle);
         Handle = NULL;
+    }
+}
+
+void NetworkBase::FillAddress(sockaddr_in &ServerAddress)
+{
+    ZeroMemory((char*)&ServerAddress, sizeof(ServerAddress));
+
+    ServerAddress.sin_family = AF_INET;
+    ServerAddress.sin_port = htons(m_ServerListenPort);
+
+    if (m_ServerIP.empty())
+    {
+        ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", "INADDR_ANY", m_ServerListenPort);
+    }
+    else
+    {
+        inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
+        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerListenPort);
     }
 }
 

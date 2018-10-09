@@ -1,7 +1,6 @@
 #include "QingServer.h"
 #include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
-#include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
 
@@ -158,26 +157,9 @@ bool QingServer::CreateAndStartListen()
 
     QingLog::Write("Bind listen socket to IOCP succeed.", LL_INFO);
 
-    //填充地址信息
-    struct sockaddr_in ServerAddress;
-    ZeroMemory((char*)&ServerAddress, sizeof(ServerAddress));
-    ServerAddress.sin_family = AF_INET;
-    ServerAddress.sin_port = htons(m_ServerListenPort);
-
-    if (m_ServerIP.empty())
-    {
-        //绑定任何一个地址
-        ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", "INADDR_ANY", m_ServerListenPort);
-    }
-    else
-    {
-        //绑定某个IP地址
-        inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
-        QingLog::Write(LL_INFO, "Bind operation set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerListenPort);
-    }
-
     //绑定地址和端口
+    struct sockaddr_in ServerAddress;
+    FillAddress(ServerAddress);
     if (bind(m_ListenSocketContext->m_Socket, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress)) == SOCKET_ERROR)
     {
         QingLog::Write(LL_ERROR, "Listen socket bind failed, error = %d.", WSAGetLastError());

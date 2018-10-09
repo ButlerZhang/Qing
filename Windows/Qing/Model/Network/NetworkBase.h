@@ -24,6 +24,7 @@ public:
 protected:
 
     void ReleaseHandle(HANDLE &Handle);
+    void FillAddress(sockaddr_in &ServerAddress);
 
 protected:
 

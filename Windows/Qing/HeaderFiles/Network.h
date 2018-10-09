@@ -4,8 +4,6 @@
 
 QING_NAMESPACE_BEGIN
 
-
-
 bool QING_DLL StartupNetwork();
 bool QING_DLL ShutdownNetwork();
 
@@ -24,7 +22,6 @@ public:
 private:
 
     std::shared_ptr<NetworkBase> m_Network;
-
 };
 
 QING_NAMESPACE_END

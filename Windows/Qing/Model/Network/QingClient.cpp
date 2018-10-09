@@ -1,7 +1,6 @@
 #include "QingClient.h"
 #include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
-#include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
 
@@ -49,67 +48,14 @@ void QingClient::Stop()
 
         WaitForMultipleObjects((DWORD)m_ThreadParamVector.size(), m_phWorkerThreads, TRUE, INFINITE);
 
-        CleanUp();
-    }
-}
+        ReleaseHandle(m_hShutdownEvent);
+        ReleaseHandle(m_hConnectThread);
 
-void QingClient::CleanUp()
-{
-    ReleaseHandle(m_hShutdownEvent);
-    ReleaseHandle(m_hConnectThread);
-
-    for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
-    {
-        ReleaseHandle(m_phWorkerThreads[Index]);
-    }
-}
-
-bool QingClient::EstablishConnections(int ThreadCount)
-{
-    DWORD nThreadID;
-    m_phWorkerThreads = new HANDLE[ThreadCount];
-
-    for (int Count = 0; Count < ThreadCount; Count++)
-    {
-        ClientWorkerThreadParam NewParam;
-        NewParam.m_ThreadID = 0;
-        NewParam.m_ThreadIndex = 0;
-        NewParam.m_QingClient = this;
-        NewParam.m_Socket = INVALID_SOCKET;
-        memset(NewParam.m_Buffer, 0, sizeof(NewParam.m_Buffer));
-        m_ThreadParamVector.push_back(NewParam);
-    }
-
-    for (int Count = 0; Count < ThreadCount; Count++)
-    {
-        if (WaitForSingleObject(m_hShutdownEvent, 0) == WAIT_OBJECT_0)
+        for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
         {
-            QingLog::Write("Stop connecte.", LL_INFO);
-            return true;
+            ReleaseHandle(m_phWorkerThreads[Index]);
         }
-
-        if (!ConnectServer(&m_ThreadParamVector[Count].m_Socket, m_ServerIP, m_ServerListenPort))
-        {
-            QingLog::Write("Connect server failed.", LL_ERROR);
-            CleanUp();
-            return false;
-        }
-
-        m_ThreadParamVector[Count].m_ThreadIndex = Count;
-        sprintf_s(m_ThreadParamVector[Count].m_Buffer, "Thread index = %d send message = %s", Count, "Hello World");
-
-        Sleep(10);
-
-        m_phWorkerThreads[Count] = CreateThread(0, 0, CallBack_WorkerThread, (void*)(&m_ThreadParamVector[Count]), 0, &nThreadID);
-        m_ThreadParamVector[Count].m_ThreadID = nThreadID;
-
-        QingLog::Write(LL_INFO, "Created worker thread, Index = %d, DEC_ID = %d, HEX_ID = %x.",
-            m_ThreadParamVector[Count].m_ThreadIndex,
-            m_ThreadParamVector[Count].m_ThreadID,
-            m_ThreadParamVector[Count].m_ThreadID);
     }
-
-    return true;
 }
 
 bool QingClient::ConnectServer(SOCKET * pSocket, std::string ServerIP, int nPort)
@@ -122,10 +68,7 @@ bool QingClient::ConnectServer(SOCKET * pSocket, std::string ServerIP, int nPort
     }
 
     struct sockaddr_in ServerAddress;
-    ZeroMemory((char*)&ServerAddress, sizeof(ServerAddress));
-    ServerAddress.sin_family = AF_INET;
-    ServerAddress.sin_port = htons(m_ServerListenPort);
-    inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
+    FillAddress(ServerAddress);
 
     if (connect(*pSocket, reinterpret_cast<const struct sockaddr*>(&ServerAddress), sizeof(ServerAddress)) == SOCKET_ERROR)
     {
@@ -140,11 +83,52 @@ bool QingClient::ConnectServer(SOCKET * pSocket, std::string ServerIP, int nPort
 DWORD QingClient::CallBack_ConnectThread(LPVOID lpParam)
 {
     QingClient *pQingClient = (QingClient*)lpParam;
-
     QingLog::Write("Connet thread start...");
-    pQingClient->EstablishConnections(100);
-    QingLog::Write("Connet thread stop...");
 
+    DWORD nThreadID;
+    const int ThreadCount = 100;
+    pQingClient->m_phWorkerThreads = new HANDLE[ThreadCount];
+
+    for (int Count = 0; Count < ThreadCount; Count++)
+    {
+        ClientWorkerThreadParam NewParam;
+        NewParam.m_ThreadID = 0;
+        NewParam.m_ThreadIndex = 0;
+        NewParam.m_QingClient = pQingClient;
+        NewParam.m_Socket = INVALID_SOCKET;
+        memset(NewParam.m_Buffer, 0, sizeof(NewParam.m_Buffer));
+        pQingClient->m_ThreadParamVector.push_back(NewParam);
+    }
+
+    for (int Count = 0; Count < ThreadCount; Count++)
+    {
+        if (WaitForSingleObject(pQingClient->m_hShutdownEvent, 0) == WAIT_OBJECT_0)
+        {
+            QingLog::Write("Stop connecte.", LL_INFO);
+            return true;
+        }
+
+        if (!pQingClient->ConnectServer(&pQingClient->m_ThreadParamVector[Count].m_Socket, pQingClient->m_ServerIP, pQingClient->m_ServerListenPort))
+        {
+            QingLog::Write("Connect server failed.", LL_ERROR);
+            return false;
+        }
+
+        pQingClient->m_ThreadParamVector[Count].m_ThreadIndex = Count;
+        sprintf_s(pQingClient->m_ThreadParamVector[Count].m_Buffer, "Thread index = %d send message = %s", Count, "Hello World");
+
+        Sleep(10);
+
+        pQingClient->m_phWorkerThreads[Count] = CreateThread(0, 0, CallBack_WorkerThread, (void*)(&pQingClient->m_ThreadParamVector[Count]), 0, &nThreadID);
+        pQingClient->m_ThreadParamVector[Count].m_ThreadID = nThreadID;
+
+        QingLog::Write(LL_INFO, "Created worker thread, Index = %d, DEC_ID = %d, HEX_ID = %x.",
+            pQingClient->m_ThreadParamVector[Count].m_ThreadIndex,
+            pQingClient->m_ThreadParamVector[Count].m_ThreadID,
+            pQingClient->m_ThreadParamVector[Count].m_ThreadID);
+    }
+
+    QingLog::Write("Connet thread stop...");
     return 0;
 }
 

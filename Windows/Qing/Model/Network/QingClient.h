@@ -18,8 +18,6 @@ public:
 
 protected:
 
-    void CleanUp();
-    bool EstablishConnections(int ThreadCount);
     bool ConnectServer(SOCKET *pSocket, std::string ServerIP, int nPort);
 
     static DWORD WINAPI CallBack_ConnectThread(LPVOID lpParam);
