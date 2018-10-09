@@ -1,4 +1,4 @@
-#include "QingClient.h"
+#include "NetworkClient.h"
 #include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 
@@ -6,18 +6,18 @@ QING_NAMESPACE_BEGIN
 
 
 
-QingClient::QingClient() : m_hConnectThread(NULL),
+NetworkClient::NetworkClient() : m_hConnectThread(NULL),
                            m_hShutdownEvent(NULL),
                            m_phWorkerThreads(NULL)
 {
 }
 
-QingClient::~QingClient()
+NetworkClient::~NetworkClient()
 {
     Stop();
 }
 
-bool QingClient::Start(const std::string &ServerIP, int Port)
+bool NetworkClient::Start(const std::string &ServerIP, int Port)
 {
     if (m_hShutdownEvent != NULL)
     {
@@ -34,7 +34,7 @@ bool QingClient::Start(const std::string &ServerIP, int Port)
     return true;
 }
 
-void QingClient::Stop()
+void NetworkClient::Stop()
 {
     if (m_hShutdownEvent != NULL)
     {
@@ -58,7 +58,7 @@ void QingClient::Stop()
     }
 }
 
-bool QingClient::ConnectServer(SOCKET * pSocket, std::string ServerIP, int nPort)
+bool NetworkClient::ConnectServer(SOCKET * pSocket, std::string ServerIP, int nPort)
 {
     *pSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (*pSocket == INVALID_SOCKET)
@@ -80,9 +80,9 @@ bool QingClient::ConnectServer(SOCKET * pSocket, std::string ServerIP, int nPort
     return true;
 }
 
-DWORD QingClient::CallBack_ConnectThread(LPVOID lpParam)
+DWORD NetworkClient::CallBack_ConnectThread(LPVOID lpParam)
 {
-    QingClient *pQingClient = (QingClient*)lpParam;
+    NetworkClient *pQingClient = (NetworkClient*)lpParam;
     QingLog::Write("Connet thread start...");
 
     DWORD nThreadID;
@@ -132,10 +132,10 @@ DWORD QingClient::CallBack_ConnectThread(LPVOID lpParam)
     return 0;
 }
 
-DWORD QingClient::CallBack_WorkerThread(LPVOID lpParam)
+DWORD NetworkClient::CallBack_WorkerThread(LPVOID lpParam)
 {
     ClientWorkerThreadParam *pParams = (ClientWorkerThreadParam*)lpParam;
-    QingClient *pQingClient = (QingClient*)pParams->m_QingClient;
+    NetworkClient *pQingClient = (NetworkClient*)pParams->m_QingClient;
 
     char szTemp[MAX_IO_CONTEXT_BUFFER_LEN];
     memset(szTemp, 0, sizeof(szTemp));

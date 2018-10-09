@@ -6,12 +6,12 @@ QING_NAMESPACE_BEGIN
 
 
 
-class QingClient : public NetworkBase
+class NetworkClient : public NetworkBase
 {
 public:
 
-    QingClient();
-    virtual ~QingClient();
+    NetworkClient();
+    virtual ~NetworkClient();
 
     virtual bool Start(const std::string &ServerIP, int Port);
     virtual void Stop();

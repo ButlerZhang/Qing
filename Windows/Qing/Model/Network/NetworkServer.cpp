@@ -1,4 +1,4 @@
-#include "QingServer.h"
+#include "NetworkServer.h"
 #include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 
@@ -6,7 +6,7 @@ QING_NAMESPACE_BEGIN
 
 
 
-QingServer::QingServer() : m_hWorkerThreadExitEvent(NULL),
+NetworkServer::NetworkServer() : m_hWorkerThreadExitEvent(NULL),
                            m_hIOCompletionPort(NULL),
                            m_ListenSocketContext(NULL),
                            m_CallBackAcceptEx(NULL),
@@ -15,12 +15,12 @@ QingServer::QingServer() : m_hWorkerThreadExitEvent(NULL),
     memset(m_WorkerThreads, NULL, sizeof(m_WorkerThreads));
 }
 
-QingServer::~QingServer()
+NetworkServer::~NetworkServer()
 {
     Stop();
 }
 
-bool QingServer::Start(const std::string &ServerIP, int Port)
+bool NetworkServer::Start(const std::string &ServerIP, int Port)
 {
     if (m_hWorkerThreadExitEvent != NULL)
     {
@@ -40,11 +40,11 @@ bool QingServer::Start(const std::string &ServerIP, int Port)
         return false;
     }
 
-    QingLog::Write("Start succeed, QingServer ready.", LL_INFO);
+    QingLog::Write("Start succeed, NetworkServer ready.", LL_INFO);
     return true;
 }
 
-void QingServer::Stop()
+void NetworkServer::Stop()
 {
     if (m_ListenSocketContext != NULL && m_ListenSocketContext->m_Socket != INVALID_SOCKET)
     {
@@ -79,7 +79,7 @@ void QingServer::Stop()
     }
 }
 
-bool QingServer::CreateIOCP()
+bool NetworkServer::CreateIOCP()
 {
     m_hIOCompletionPort = CreateIoCompletionPort(
         INVALID_HANDLE_VALUE,   //FileHandle是有效的文件句柄或INVALID_HANDLE_VALUE
@@ -99,7 +99,7 @@ bool QingServer::CreateIOCP()
     return true;
 }
 
-bool QingServer::CreateWorkerThread()
+bool NetworkServer::CreateWorkerThread()
 {
     LocalComputer MyComputer;
     int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * MyComputer.GetProcessorsCount();
@@ -133,7 +133,7 @@ bool QingServer::CreateWorkerThread()
     return true;
 }
 
-bool QingServer::CreateAndStartListen()
+bool NetworkServer::CreateAndStartListen()
 {
     m_ListenSocketContext = std::make_shared<IOCPSocketContext>();
 
@@ -180,7 +180,7 @@ bool QingServer::CreateAndStartListen()
     return true;
 }
 
-bool QingServer::InitializeAcceptExCallBack()
+bool NetworkServer::InitializeAcceptExCallBack()
 {
     //AcceptEx不属于Winsock2体系，如果每次都直接调用它，Service Provider每次
     //都要通过WSAIoctl()获取该函数的指针，倒不如直接在代码中先获取一次它的指针。
@@ -224,7 +224,7 @@ bool QingServer::InitializeAcceptExCallBack()
     return true;
 }
 
-bool QingServer::StartPostAcceptExIORequest()
+bool NetworkServer::StartPostAcceptExIORequest()
 {
     int InitAcceptPostCount = static_cast<int>(m_ThreadParamVector.size()) / 2;
     if (InitAcceptPostCount <= 0)
@@ -247,7 +247,7 @@ bool QingServer::StartPostAcceptExIORequest()
     return true;
 }
 
-bool QingServer::IsSocketAlive(SOCKET socket)
+bool NetworkServer::IsSocketAlive(SOCKET socket)
 {
     //判断客户端socket是否已经断开，否则在一个无效socket上投递WSARecv操作会抛出异常
     //判断方法是尝试向这个socket发送数据，判断这个socket调用的返回值
@@ -257,7 +257,7 @@ bool QingServer::IsSocketAlive(SOCKET socket)
     return (nByteSend != -1);
 }
 
-bool QingServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode)
+bool NetworkServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode)
 {
     if (WAIT_TIMEOUT == ErrorCode)                          //超时
     {
@@ -286,7 +286,7 @@ bool QingServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketCo
     }
 }
 
-bool QingServer::PostAccept(IOCPContext *pIOCPContext)
+bool NetworkServer::PostAccept(IOCPContext *pIOCPContext)
 {
     //为新连入的客户端先准备好socket(这是与传统accept最大的区别)
     pIOCPContext->m_AcceptSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -320,7 +320,7 @@ bool QingServer::PostAccept(IOCPContext *pIOCPContext)
     return true;
 }
 
-bool QingServer::PostRecv(IOCPContext *pIOCPContext)
+bool NetworkServer::PostRecv(IOCPContext *pIOCPContext)
 {
     pIOCPContext->ResetBuffer();
     pIOCPContext->m_ActionType = IOCP_AT_RECV;
@@ -346,13 +346,13 @@ bool QingServer::PostRecv(IOCPContext *pIOCPContext)
     return true;
 }
 
-bool QingServer::PostSend(IOCPContext *pIOCPContext)
+bool NetworkServer::PostSend(IOCPContext *pIOCPContext)
 {
     QingLog::Write("Post send succeed.");
     return true;
 }
 
-bool QingServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
+bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     SOCKADDR_IN *ClientAddr = NULL;
     SOCKADDR_IN *LocalAddr = NULL;
@@ -411,7 +411,7 @@ bool QingServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocket
     return PostAccept(pIOCPContext);
 }
 
-bool QingServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
+bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     //处理消息
     LocalComputer MyComputer;
@@ -425,15 +425,15 @@ bool QingServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketCo
     return PostRecv(pIOCPContext);
 }
 
-bool QingServer::ProcessSend(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
+bool NetworkServer::ProcessSend(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     return false;
 }
 
-DWORD QingServer::CallBack_WorkerThread(LPVOID lpParam)
+DWORD NetworkServer::CallBack_WorkerThread(LPVOID lpParam)
 {
     ServerWorkerThreadParam *pParam = (ServerWorkerThreadParam*)lpParam;
-    QingServer *pQingIOCP = (QingServer*)pParam->m_QingServer;
+    NetworkServer *pQingIOCP = (NetworkServer*)pParam->m_QingServer;
     unsigned long ThreadID = (unsigned long)pParam->m_ThreadID;
     QingLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x start.", ThreadID, ThreadID);
 

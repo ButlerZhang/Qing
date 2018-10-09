@@ -108,16 +108,16 @@
     <ClInclude Include="Example\SimpleServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\QingServer.h">
-      <Filter>Model\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Model\Network\ClientManager.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\QingClient.h">
+    <ClInclude Include="Model\Network\NetworkBase.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\NetworkBase.h">
+    <ClInclude Include="Model\Network\NetworkServer.h">
+      <Filter>Model\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Network\NetworkClient.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
   </ItemGroup>
@@ -176,16 +176,16 @@
     <ClCompile Include="SourceFiles\QingLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\QingServer.cpp">
-      <Filter>Model\Network</Filter>
-    </ClCompile>
     <ClCompile Include="Model\Network\ClientManager.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\QingClient.cpp">
+    <ClCompile Include="Model\Network\NetworkBase.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\NetworkBase.cpp">
+    <ClCompile Include="Model\Network\NetworkServer.cpp">
+      <Filter>Model\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Network\NetworkClient.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
   </ItemGroup>
