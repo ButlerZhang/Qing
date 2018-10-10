@@ -24,6 +24,11 @@ int main()
             Sleep(1000);
             break;
         }
+        else
+        {
+            MyClient.Send((const void*)quitstring.c_str(), quitstring.size());
+            quitstring.clear();
+        }
 
         Sleep(1000);
     }

@@ -6,13 +6,10 @@ QING_NAMESPACE_BEGIN
 
 
 
-NetworkServer::NetworkServer() : m_hWorkerThreadExitEvent(NULL),
-                           
-                           m_ListenSocketContext(NULL),
-                           m_CallBackAcceptEx(NULL),
-                           m_CallBackGetAcceptExSockAddrs(NULL)
+NetworkServer::NetworkServer() : NetworkBase(),
+                                 m_CallBackAcceptEx(NULL),
+                                 m_CallBackGetAcceptExSockAddrs(NULL)
 {
-    memset(m_WorkerThreads, NULL, sizeof(m_WorkerThreads));
 }
 
 NetworkServer::~NetworkServer()
@@ -22,95 +19,99 @@ NetworkServer::~NetworkServer()
 
 bool NetworkServer::Start(const std::string &ServerIP, int Port)
 {
-    if (m_hWorkerThreadExitEvent != NULL)
+    if (NetworkBase::Start(ServerIP, Port))
     {
-        QingLog::Write("Start succeed, repeat start.", LL_INFO);
-        return true;
+        if (CreateIOCP() &&
+            CreateWorkerThread() &&
+            CreateAndStartListen() &&
+            InitializeAcceptExCallBack() &&
+            StartPostAcceptExIORequest())
+        {
+            QingLog::Write("Start succeed, NetworkServer ready.", LL_INFO);
+            return true;
+        }
     }
 
-    NetworkBase::Start(ServerIP, Port);
-    m_hWorkerThreadExitEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
-
-    if (!CreateIOCP() ||
-        !CreateWorkerThread() ||
-        !CreateAndStartListen() ||
-        !InitializeAcceptExCallBack() ||
-        !StartPostAcceptExIORequest())
-    {
-        return false;
-    }
-
-    QingLog::Write("Start succeed, NetworkServer ready.", LL_INFO);
-    return true;
+    return false;
 }
 
 void NetworkServer::Stop()
 {
     if (m_ListenSocketContext != NULL && m_ListenSocketContext->m_Socket != INVALID_SOCKET)
     {
-        if (m_WorkerThreads[0] != NULL)
-        {
-            //激活关闭消息通知
-            SetEvent(m_hWorkerThreadExitEvent);
-
-            //通知所有的完成端口操作退出
-            for (auto Index = 0; Index < m_ThreadParamVector.size(); Index++)
-            {
-                PostQueuedCompletionStatus(m_hIOCompletionPort, 0, NULL, NULL);
-            }
-
-            //等待所有工作线程资源退出
-            WaitForMultipleObjects(static_cast<DWORD>(m_ThreadParamVector.size()), m_WorkerThreads, TRUE, INFINITE);
-        }
-
-        //释放其它资源
-        ReleaseHandle(m_hIOCompletionPort);
-        ReleaseHandle(m_hWorkerThreadExitEvent);
-
-        for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
-        {
-            if (m_WorkerThreads[Index] != NULL)
-            {
-                ReleaseHandle(m_WorkerThreads[Index]);
-            }
-        }
-
+        NetworkBase::Stop();
         QingLog::Write("Stop server.", LL_INFO);
     }
 }
 
-bool NetworkServer::CreateWorkerThread()
+int NetworkServer::Send(int NaturalIndex, const void * MessageData, int MessageSize, __int64 Timeout)
 {
-    LocalComputer MyComputer;
-    int WorkerThreadCount = WORKER_THREADS_PER_PROCESSOR * MyComputer.GetProcessorsCount();
-    if (WorkerThreadCount > MAX_WORKER_THREAD_COUNT)
+    return 0;
+}
+
+void NetworkServer::WorkerThread()
+{
+    OVERLAPPED *pOverlapped = NULL;
+    DWORD dwBytesTransfered = 0;
+
+    //循环处理，直到收到Shutdown消息为止
+    while (WaitForSingleObject(m_hWorkerThreadExitEvent, 0) != WAIT_OBJECT_0)
     {
-        WorkerThreadCount = MAX_WORKER_THREAD_COUNT;
+        std::shared_ptr<IOCPSocketContext> pSocketContext;
+
+        BOOL bReturn = GetQueuedCompletionStatus(
+            m_hIOCompletionPort,     //完成端口
+            &dwBytesTransfered,                 //操作完成后返回的字节数
+            (PULONG_PTR)&pSocketContext,        //建立完成端口时绑定的自定义结构体参数
+            &pOverlapped,                       //连入socket时一起建立的重叠结构
+            INFINITE);                          //等待完成端口的超时时间，如果线程不需要做其它事情则设置为INFINITE
+
+                                                //如果收到的是退出消息则直接退出
+        if (pSocketContext == NULL)
+        {
+            break;
+        }
+
+        if (!bReturn)
+        {
+            if (!HandleError(pSocketContext, GetLastError()))
+            {
+                break;
+            }
+
+            continue;
+        }
+        else
+        {
+            //读取传入的参数
+            IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
+            //std::shared_ptr<IOCPContext> pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
+
+
+            //判断是否有客户端断开了
+            if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
+            {
+                LocalComputer MyComputer;
+                QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
+                    MyComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
+                    ntohs(pSocketContext->m_ClientAddr.sin_port));
+
+                //释放资源
+                m_ClientManager.RemoveClient(pSocketContext);
+                continue;
+            }
+            else
+            {
+                switch (pIOCPContext->m_ActionType)
+                {
+                case IOCP_AT_ACCEPT:    ProcessAccept(pSocketContext, pIOCPContext);        break;
+                case IOCP_AT_RECV:      ProcessRecv(pSocketContext, pIOCPContext);          break;
+                case IOCP_AT_SEND:      ProcessSend(pSocketContext, pIOCPContext);          break;
+                default:                QingLog::Write("Worker thread action type error");  break;
+                }
+            }
+        }
     }
-
-    for (int Count = 0; Count < WorkerThreadCount; Count++)
-    {
-        ServerWorkerThreadParam NewParam;
-        NewParam.m_ThreadID = 0;
-        NewParam.m_ThreadIndex = Count;
-        NewParam.m_QingServer = this;
-        m_ThreadParamVector.push_back(NewParam);
-    }
-
-    DWORD nThreadID;
-    for (int Count = 0; Count < WorkerThreadCount; Count++)
-    {
-        m_WorkerThreads[Count] = ::CreateThread(0, 0, CallBack_WorkerThread, (void*)(&m_ThreadParamVector[Count]), 0, &nThreadID);
-
-        m_ThreadParamVector[Count].m_ThreadID = nThreadID;
-        QingLog::Write(LL_INFO, "Created worker thread, Index = %d, DEC_ID = %d, HEX_ID = %x.",
-            m_ThreadParamVector[Count].m_ThreadIndex,
-            m_ThreadParamVector[Count].m_ThreadID,
-            m_ThreadParamVector[Count].m_ThreadID);
-    }
-
-    QingLog::Write(LL_INFO, "Created total = %d worker threads.", WorkerThreadCount);
-    return true;
 }
 
 bool NetworkServer::CreateAndStartListen()
@@ -429,79 +430,6 @@ bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocke
 bool NetworkServer::ProcessSend(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext)
 {
     return false;
-}
-
-DWORD NetworkServer::CallBack_WorkerThread(LPVOID lpParam)
-{
-    ServerWorkerThreadParam *pParam = (ServerWorkerThreadParam*)lpParam;
-    NetworkServer *pQingIOCP = (NetworkServer*)pParam->m_QingServer;
-    unsigned long ThreadID = (unsigned long)pParam->m_ThreadID;
-    QingLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x start.", ThreadID, ThreadID);
-
-    OVERLAPPED *pOverlapped = NULL;
-    DWORD dwBytesTransfered = 0;
-
-    //循环处理，直到收到Shutdown消息为止
-    while (WaitForSingleObject(pQingIOCP->m_hWorkerThreadExitEvent, 0) != WAIT_OBJECT_0)
-    {
-        std::shared_ptr<IOCPSocketContext> pSocketContext;
-
-        BOOL bReturn = GetQueuedCompletionStatus(
-            pQingIOCP->m_hIOCompletionPort,     //完成端口
-            &dwBytesTransfered,                 //操作完成后返回的字节数
-            (PULONG_PTR)&pSocketContext,        //建立完成端口时绑定的自定义结构体参数
-            &pOverlapped,                       //连入socket时一起建立的重叠结构
-            INFINITE);                          //等待完成端口的超时时间，如果线程不需要做其它事情则设置为INFINITE
-
-        //如果收到的是退出消息则直接退出
-        if (pSocketContext == NULL)
-        {
-            break;
-        }
-
-        if (!bReturn)
-        {
-            if (!pQingIOCP->HandleError(pSocketContext, GetLastError()))
-            {
-                break;
-            }
-
-            continue;
-        }
-        else
-        {
-            //读取传入的参数
-            IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
-            //std::shared_ptr<IOCPContext> pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
-
-
-            //判断是否有客户端断开了
-            if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
-            {
-                LocalComputer MyComputer;
-                QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
-                    MyComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
-                    ntohs(pSocketContext->m_ClientAddr.sin_port));
-
-                //释放资源
-                pQingIOCP->m_ClientManager.RemoveClient(pSocketContext);
-                continue;
-            }
-            else
-            {
-                switch (pIOCPContext->m_ActionType)
-                {
-                case IOCP_AT_ACCEPT:    pQingIOCP->ProcessAccept(pSocketContext, pIOCPContext);        break;
-                case IOCP_AT_RECV:      pQingIOCP->ProcessRecv(pSocketContext, pIOCPContext);          break;
-                case IOCP_AT_SEND:      pQingIOCP->ProcessSend(pSocketContext, pIOCPContext);          break;
-                default:                QingLog::Write("Worker thread action type error");             break;
-                }
-            }
-        }
-    }
-
-    QingLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x exit.", ThreadID, ThreadID);
-    return 0;
 }
 
 QING_NAMESPACE_END

@@ -1,4 +1,6 @@
 #include "..\HeaderFiles\Network.h"
+#include "..\HeaderFiles\Network.h"
+#include "..\HeaderFiles\Network.h"
 #include "..\HeaderFiles\QingLog.h"
 #include "..\Model\Network\NetworkClient.h"
 #include "..\Model\Network\NetworkServer.h"
@@ -78,6 +80,16 @@ void Network::Stop()
     {
         m_Network->Stop();
     }
+}
+
+int Network::Send(const void * MessageData, int MessageSize)
+{
+    return m_Network->Send(MessageData, MessageSize);
+}
+
+int Network::Send(int NaturalIndex, const void * MessageData, int MessageSize, __int64 Timeout)
+{
+    return m_Network->Send(NaturalIndex, MessageData, MessageSize, Timeout);
 }
 
 QING_NAMESPACE_END

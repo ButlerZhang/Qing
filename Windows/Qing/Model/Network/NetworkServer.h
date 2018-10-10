@@ -16,6 +16,8 @@ public:
     virtual bool Start(const std::string &ServerIP, int Port);
     virtual void Stop();
 
+    virtual int Send(int NaturalIndex, const void *MessageData, int MessageSize, __int64 Timeout = 0);
+
     int GetClientCount() const { return m_ClientManager.GetClientCount(); }
 
 protected:
@@ -30,7 +32,8 @@ protected:
 
 private:
 
-    bool CreateWorkerThread();
+    virtual void WorkerThread();
+
     bool CreateAndStartListen();
     bool InitializeAcceptExCallBack();
     bool StartPostAcceptExIORequest();
@@ -38,17 +41,10 @@ private:
     bool IsSocketAlive(SOCKET socket);
     bool HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode);
 
-    static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
-
 private:
 
-    HANDLE                                  m_hWorkerThreadExitEvent;                   //通知工作线程退出的事件
-    HANDLE                                  m_WorkerThreads[MAX_WORKER_THREAD_COUNT];   //工作线程
-
     ClientManager                           m_ClientManager;                            //客户端管理者
-    std::vector<ServerWorkerThreadParam>    m_ThreadParamVector;                        //工作线程参数
     std::shared_ptr<IOCPSocketContext>      m_ListenSocketContext;                      //监听Socket的Context信息
-
     LPFN_ACCEPTEX                           m_CallBackAcceptEx;                         //AcceptEx的函数指针
     LPFN_GETACCEPTEXSOCKADDRS               m_CallBackGetAcceptExSockAddrs;             //GetAcceptExSockaddrs的函数指针
 };

@@ -16,29 +16,28 @@ public:
     virtual bool Start(const std::string &ServerIP, int Port);
     virtual void Stop();
 
+    virtual int Send(const void *MessageData, int MessageSize);
+
+protected:
+
+    virtual void WorkerThread();
+
 protected:
 
     bool CreateSocket();
     bool ConnectServer(const std::string &ServerIP, int Port);
 
-    bool PostRecv(std::shared_ptr<IOCPContext> &pIOCPContext);
-    bool PostSend(std::shared_ptr<IOCPContext> &pIOCPContext);
+    bool PostRecv(IOCPContext *pIOCPContext);
+    bool PostSend(IOCPContext *pIOCPContext);
 
-    bool ConnectServer(SOCKET *pSocket, std::string ServerIP, int nPort);
-    static DWORD WINAPI CallBack_ConnectThread(LPVOID lpParam);
-    static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
+    bool ProcessRecv(IOCPContext *pIOCPContext);
+    bool ProcessSend(IOCPContext *pIOCPContext);
 
 private:
 
-    bool                                        m_IsConnected;
-    SOCKET                                      m_ClientSocket;
-    std::vector<std::shared_ptr<IOCPContext>>   m_IOContextVector;
-
-
-    HANDLE                                  m_hConnectThread;                           //接受连接的线程句柄
-    HANDLE                                  m_hShutdownEvent;                           //线程退出事件
-    HANDLE                                 *m_phWorkerThreads;                          //工作线程
-    std::vector<ClientWorkerThreadParam>    m_ThreadParamVector;                        //工作线程参数
+    bool                                        m_IsConnected;                              //是否连接
+    SOCKET                                      m_ClientSocket;                             //socket
+    std::vector<std::shared_ptr<IOCPContext>>   m_IOContextVector;                          //发送或接受的消息
 };
 
 QING_NAMESPACE_END

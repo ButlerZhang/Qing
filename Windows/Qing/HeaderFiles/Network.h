@@ -19,6 +19,9 @@ public:
     bool Start(const std::string &ServerIP, int Port, bool IsServer);
     void Stop();
 
+    int Send(const void *MessageData, int MessageSize);
+    int Send(int NaturalIndex, const void *MessageData, int MessageSize, __int64 Timeout = 0);
+
 private:
 
     std::shared_ptr<NetworkBase> m_Network;
