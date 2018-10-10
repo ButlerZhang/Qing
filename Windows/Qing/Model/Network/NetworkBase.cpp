@@ -7,7 +7,7 @@ QING_NAMESPACE_BEGIN
 
 
 
-NetworkBase::NetworkBase() : m_ServerListenPort(0),
+NetworkBase::NetworkBase() : m_ServerPort(0),
                              m_hIOCompletionPort(NULL),
                              m_hWorkerThreadExitEvent(NULL)
 {
@@ -28,7 +28,7 @@ bool NetworkBase::Start(const std::string & ServerIP, int Port)
     }
 
     m_ServerIP = ServerIP;
-    m_ServerListenPort = Port;
+    m_ServerPort = Port;
     m_hWorkerThreadExitEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
     return true;
 }
@@ -48,17 +48,17 @@ void NetworkBase::Stop()
 
         //等待所有工作线程资源退出
         WaitForMultipleObjects(static_cast<DWORD>(m_ThreadParamVector.size()), m_WorkerThreads, TRUE, INFINITE);
-    }
 
-    //释放其它资源
-    ReleaseHandle(m_hIOCompletionPort);
-    ReleaseHandle(m_hWorkerThreadExitEvent);
+        //释放其它资源
+        ReleaseHandle(m_hIOCompletionPort);
+        ReleaseHandle(m_hWorkerThreadExitEvent);
 
-    for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
-    {
-        if (m_WorkerThreads[Index] != NULL)
+        for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
         {
-            ReleaseHandle(m_WorkerThreads[Index]);
+            if (m_WorkerThreads[Index] != NULL)
+            {
+                ReleaseHandle(m_WorkerThreads[Index]);
+            }
         }
     }
 }
@@ -84,6 +84,7 @@ void NetworkBase::ReleaseSocket(SOCKET Socket)
     {
         ::shutdown(Socket, SD_BOTH);
         ::closesocket(Socket);
+        QingLog::Write(LL_INFO, "Release socket = %d.", Socket);
     }
 }
 
@@ -113,17 +114,17 @@ void NetworkBase::FillAddress(sockaddr_in &ServerAddress)
     ZeroMemory((char*)&ServerAddress, sizeof(ServerAddress));
 
     ServerAddress.sin_family = AF_INET;
-    ServerAddress.sin_port = htons(m_ServerListenPort);
+    ServerAddress.sin_port = htons(m_ServerPort);
 
     if (m_ServerIP.empty())
     {
         ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", "INADDR_ANY", m_ServerListenPort);
+        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", "INADDR_ANY", m_ServerPort);
     }
     else
     {
         inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
-        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerListenPort);
+        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerPort);
     }
 }
 
@@ -162,10 +163,10 @@ bool NetworkBase::CreateWorkerThread(int WorkerThreadCount)
 
     for (int Count = 0; Count < WorkerThreadCount; Count++)
     {
-        ServerWorkerThreadParam NewParam;
+        WorkerThreadParam NewParam;
         NewParam.m_ThreadID = 0;
         NewParam.m_ThreadIndex = Count;
-        NewParam.m_QingServer = this;
+        NewParam.m_Network = this;
         m_ThreadParamVector.push_back(NewParam);
     }
 
@@ -187,8 +188,8 @@ bool NetworkBase::CreateWorkerThread(int WorkerThreadCount)
 
 DWORD NetworkBase::CallBack_WorkerThread(LPVOID lpParam)
 {
-    ServerWorkerThreadParam *pParam = (ServerWorkerThreadParam*)lpParam;
-    NetworkBase *pNetwork = (NetworkBase*)pParam->m_QingServer;
+    WorkerThreadParam *pParam = (WorkerThreadParam*)lpParam;
+    NetworkBase *pNetwork = (NetworkBase*)pParam->m_Network;
     unsigned long ThreadID = (unsigned long)pParam->m_ThreadID;
 
     QingLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x start.", ThreadID, ThreadID);

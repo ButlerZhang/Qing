@@ -26,6 +26,7 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
             CreateSocket() &&
             ConnectServer(ServerIP, Port))
         {
+            m_IOCPContext = std::make_shared<IOCPContext>();
             QingLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
             return true;
         }
@@ -42,16 +43,17 @@ void NetworkClient::Stop()
 
 int NetworkClient::Send(const void * MessageData, int MessageSize)
 {
-    std::shared_ptr<IOCPContext> NewContext = std::make_shared<IOCPContext>();
-    m_IOContextVector.push_back(NewContext);
+    //std::shared_ptr<IOCPContext> NewContext = std::make_shared<IOCPContext>();
+    //m_IOContextVector.push_back(NewContext);
 
-    NewContext->m_AcceptSocket = m_ClientSocket;
-    NewContext->m_ActionType = IOCP_AT_SEND;
-    NewContext->m_WSABuffer.len = MessageSize;
-    memcpy(NewContext->m_Buffer, MessageData, MessageSize);
-    memcpy(NewContext->m_WSABuffer.buf, MessageData, MessageSize);
+    m_IOCPContext->ResetBuffer();
+    m_IOCPContext->m_AcceptSocket = m_ClientSocket;
+    m_IOCPContext->m_ActionType = IOCP_AT_SEND;
+    m_IOCPContext->m_WSABuffer.len = MessageSize;
+    memcpy(m_IOCPContext->m_Buffer, MessageData, MessageSize);
+    memcpy(m_IOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
 
-    PostSend(NewContext.get());
+    PostSend(m_IOCPContext.get());
     return MessageSize;
 }
 
@@ -64,13 +66,11 @@ void NetworkClient::WorkerThread()
     while (WaitForSingleObject(m_hWorkerThreadExitEvent, 0) != WAIT_OBJECT_0)
     {
         BOOL bReturn = GetQueuedCompletionStatus(
-            m_hIOCompletionPort,     //完成端口
+            m_hIOCompletionPort,                //完成端口
             &dwBytesTransfered,                 //操作完成后返回的字节数
             (PULONG_PTR)&m_ClientSocket,        //建立完成端口时绑定的自定义结构体参数
             &pOverlapped,                       //连入socket时一起建立的重叠结构
             INFINITE);                          //等待完成端口的超时时间，如果线程不需要做其它事情则设置为INFINITE
-
-                                                //如果收到的是退出消息则直接退
 
         if (!bReturn)
         {
@@ -86,7 +86,6 @@ void NetworkClient::WorkerThread()
             //读取传入的参数
             IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
             //std::shared_ptr<IOCPContext> pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
-
 
             //判断是否有客户端断开了
             if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
@@ -122,6 +121,8 @@ bool NetworkClient::CreateSocket()
         return false;
     }
 
+    QingLog::Write(LL_INFO, "Create client socket = %d succeed.", m_ClientSocket);
+
     if (CreateIoCompletionPort((HANDLE)m_ClientSocket, m_hIOCompletionPort, m_ClientSocket, 0) == NULL)
     {
         QingLog::Write(LL_ERROR, "Client socket associate with IOCP error = %d.", GetLastError());
@@ -155,8 +156,8 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
     m_IsConnected = true;
     SetSocketLinger(m_ClientSocket);
 
-    m_IOContextVector.push_back(std::make_shared<IOCPContext>());
-    PostRecv(m_IOContextVector[0].get());
+    //m_IOContextVector.push_back(std::make_shared<IOCPContext>());
+    //PostRecv(m_IOContextVector[0].get());
 
     return true;
 }
@@ -189,7 +190,7 @@ bool NetworkClient::PostRecv(IOCPContext *pIOCPContext)
 
 bool NetworkClient::PostSend(IOCPContext *pIOCPContext)
 {
-    pIOCPContext->ResetBuffer();
+    //pIOCPContext->ResetBuffer();
     pIOCPContext->m_ActionType = IOCP_AT_SEND;
 
     //投递WSASend请求
@@ -203,7 +204,7 @@ bool NetworkClient::PostSend(IOCPContext *pIOCPContext)
         &pIOCPContext->m_Overlapped,    //这个socket对应的重叠结构
         NULL);                          //这个参数只有在完成例程模式中才会用到
 
-                                        //如果返回错误，并且错误的代码不是Pending，说明请求失败
+    //如果返回错误，并且错误的代码不是Pending，说明请求失败
     if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
     {
         QingLog::Write(LL_ERROR, "Post send failed, error = %d.", WSAGetLastError());

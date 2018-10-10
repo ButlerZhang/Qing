@@ -44,7 +44,7 @@ void NetworkServer::Stop()
     }
 }
 
-int NetworkServer::Send(int NaturalIndex, const void * MessageData, int MessageSize, __int64 Timeout)
+int NetworkServer::Send(int ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
 {
     return 0;
 }
@@ -60,14 +60,13 @@ void NetworkServer::WorkerThread()
         std::shared_ptr<IOCPSocketContext> pSocketContext;
 
         BOOL bReturn = GetQueuedCompletionStatus(
-            m_hIOCompletionPort,     //完成端口
+            m_hIOCompletionPort,                //完成端口
             &dwBytesTransfered,                 //操作完成后返回的字节数
             (PULONG_PTR)&pSocketContext,        //建立完成端口时绑定的自定义结构体参数
             &pOverlapped,                       //连入socket时一起建立的重叠结构
-            INFINITE);                          //等待完成端口的超时时间，如果线程不需要做其它事情则设置为INFINITE
+            INFINITE);                          //等待完成端口的超时时间，如果线程不需要做其它事情则设置为INFINITE(永远不会超时)
 
-                                                //如果收到的是退出消息则直接退出
-        if (pSocketContext == NULL)
+        if (pSocketContext == NULL)             //如果收到的是退出消息则直接退出
         {
             break;
         }
@@ -85,8 +84,6 @@ void NetworkServer::WorkerThread()
         {
             //读取传入的参数
             IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
-            //std::shared_ptr<IOCPContext> pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
-
 
             //判断是否有客户端断开了
             if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
@@ -126,7 +123,7 @@ bool NetworkServer::CreateAndStartListen()
         return false;
     }
 
-    QingLog::Write("Initialize listen socket succeed.", LL_INFO);
+    QingLog::Write(LL_INFO, "Initialize listen socket = %d succeed.", m_ListenSocketContext->m_Socket);
 
     //将listen socket绑定到完成端口
     //第三个参数CompletionKey类似于线程参数，在worker线程中就可以使用这个参数了
@@ -147,7 +144,7 @@ bool NetworkServer::CreateAndStartListen()
         return false;
     }
 
-    QingLog::Write(LL_INFO, "Listen socket bind succeed, IP = %s, Port = %d.", GetLocalIP().c_str(), m_ServerListenPort);
+    QingLog::Write(LL_INFO, "Listen socket bind succeed, IP = %s, Port = %d.", GetLocalIP().c_str(), m_ServerPort);
 
     //开始进行监听
     //SOMAXCONN:Maximum queue length specifiable by listen
@@ -298,6 +295,7 @@ bool NetworkServer::PostAccept(IOCPContext *pIOCPContext)
         }
     }
 
+    QingLog::Write(LL_INFO, "Post accept socket = %d succeed.", pIOCPContext->m_AcceptSocket);
     return true;
 }
 
@@ -372,7 +370,8 @@ bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSoc
         &RemoteLen);
 
     LocalComputer MyComputer;
-    QingLog::Write(LL_INFO, "(Server %s:%d, Client %s:%d) connected, message = %s.",
+    QingLog::Write(LL_INFO, "socket(%d) = (Server %s:%d, Client %s:%d) connected, message = %s.",
+        pIOCPContext->m_AcceptSocket,
         MyComputer.ConvertToIPString(LocalAddr).c_str(),
         ntohs(LocalAddr->sin_port),
         MyComputer.ConvertToIPString(ClientAddr).c_str(),
@@ -418,7 +417,8 @@ bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocke
     //处理消息
     LocalComputer MyComputer;
     SOCKADDR_IN *ClientAddr = &pSocketContext->m_ClientAddr;
-    QingLog::Write(LL_INFO, "Recv %s:%d message = %s",
+    QingLog::Write(LL_INFO, "socket(%d) Recv %s:%d message = %s",
+        pIOCPContext->m_AcceptSocket,
         MyComputer.ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         pIOCPContext->m_WSABuffer.buf);

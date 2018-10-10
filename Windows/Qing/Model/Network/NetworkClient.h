@@ -1,6 +1,5 @@
 #pragma once
 #include "NetworkBase.h"
-#include "IOCPModel.h"
 
 QING_NAMESPACE_BEGIN
 
@@ -37,7 +36,8 @@ private:
 
     bool                                        m_IsConnected;                              //是否连接
     SOCKET                                      m_ClientSocket;                             //socket
-    std::vector<std::shared_ptr<IOCPContext>>   m_IOContextVector;                          //发送或接受的消息
+    std::shared_ptr<IOCPContext>                m_IOCPContext;
+    //std::vector<std::shared_ptr<IOCPContext>>   m_IOContextVector;                          //发送或接受的消息
 };
 
 QING_NAMESPACE_END

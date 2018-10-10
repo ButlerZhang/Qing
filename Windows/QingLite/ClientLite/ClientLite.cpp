@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Network\ClientNetwork.h"
 #include <iostream>
+#include <string>
 
 
 

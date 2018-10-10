@@ -111,22 +111,13 @@ struct IOCPSocketContext
 
 
 
-struct ServerWorkerThreadParam
+struct WorkerThreadParam
 {
     unsigned long   m_ThreadID;
     int             m_ThreadIndex;
-    void*           m_QingServer;
+    void*           m_Network;
 };
 
 
-
-struct ClientWorkerThreadParam
-{
-    unsigned long   m_ThreadID;
-    int             m_ThreadIndex;
-    SOCKET          m_Socket;
-    void*           m_QingClient;
-    char            m_Buffer[MAX_IO_CONTEXT_BUFFER_LEN];
-};
 
 QING_NAMESPACE_END
