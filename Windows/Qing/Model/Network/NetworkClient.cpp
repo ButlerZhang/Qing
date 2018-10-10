@@ -43,9 +43,6 @@ void NetworkClient::Stop()
 
 int NetworkClient::Send(const void * MessageData, int MessageSize)
 {
-    //std::shared_ptr<IOCPContext> NewContext = std::make_shared<IOCPContext>();
-    //m_IOContextVector.push_back(NewContext);
-
     m_IOCPContext->ResetBuffer();
     m_IOCPContext->m_AcceptSocket = m_ClientSocket;
     m_IOCPContext->m_ActionType = IOCP_AT_SEND;
@@ -53,7 +50,7 @@ int NetworkClient::Send(const void * MessageData, int MessageSize)
     memcpy(m_IOCPContext->m_Buffer, MessageData, MessageSize);
     memcpy(m_IOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
 
-    PostSend(m_IOCPContext.get());
+    PostSend(*m_IOCPContext);
     return MessageSize;
 }
 
@@ -156,76 +153,20 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
     m_IsConnected = true;
     SetSocketLinger(m_ClientSocket);
 
-    //m_IOContextVector.push_back(std::make_shared<IOCPContext>());
-    //PostRecv(m_IOContextVector[0].get());
-
-    return true;
-}
-
-bool NetworkClient::PostRecv(IOCPContext *pIOCPContext)
-{
-    pIOCPContext->ResetBuffer();
-    pIOCPContext->m_ActionType = IOCP_AT_RECV;
-
-    //投递WSARecv请求
-    DWORD dwFlags = 0, dwBytes = 0;
-    int nBytesRecv = WSARecv(
-        pIOCPContext->m_AcceptSocket,   //投递这个操作的socket
-        &pIOCPContext->m_WSABuffer,     //接收缓冲区，WSABUF结构构成的数组
-        1,                              //数组中WSABUF结构的数量，设为1
-        &dwBytes,                       //接收到的字节数
-        &dwFlags,                       //设置为0
-        &pIOCPContext->m_Overlapped,    //这个socket对应的重叠结构
-        NULL);                          //这个参数只有在完成例程模式中才会用到
-
-                                        //如果返回错误，并且错误的代码不是Pending，说明请求失败
-    if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
-    {
-        QingLog::Write(LL_ERROR, "Post recv failed, error = %d.", WSAGetLastError());
-        return false;
-    }
-
-    return true;
-}
-
-bool NetworkClient::PostSend(IOCPContext *pIOCPContext)
-{
-    //pIOCPContext->ResetBuffer();
-    pIOCPContext->m_ActionType = IOCP_AT_SEND;
-
-    //投递WSASend请求
-    DWORD dwFlags = 0, dwBytes = 0;
-    int nBytesRecv = WSASend(
-        pIOCPContext->m_AcceptSocket,   //投递这个操作的socket
-        &pIOCPContext->m_WSABuffer,     //接收缓冲区，WSABUF结构构成的数组
-        1,                              //数组中WSABUF结构的数量，设为1
-        &dwBytes,                       //接收到的字节数
-        dwFlags,                        //设置为0
-        &pIOCPContext->m_Overlapped,    //这个socket对应的重叠结构
-        NULL);                          //这个参数只有在完成例程模式中才会用到
-
-    //如果返回错误，并且错误的代码不是Pending，说明请求失败
-    if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
-    {
-        QingLog::Write(LL_ERROR, "Post send failed, error = %d.", WSAGetLastError());
-        return false;
-    }
-
     return true;
 }
 
 bool NetworkClient::ProcessRecv(IOCPContext * pIOCPContext)
 {
     QingLog::Write(LL_INFO, "Recv message = %s", pIOCPContext->m_WSABuffer.buf);
-    QingLog::Write(LL_INFO, "Recv message = %s", pIOCPContext->m_Buffer);
-    return PostRecv(pIOCPContext);
+    return true;
 }
 
 bool NetworkClient::ProcessSend(IOCPContext * pIOCPContext)
 {
     QingLog::Write(LL_INFO, "Send message = %s", pIOCPContext->m_WSABuffer.buf);
-    QingLog::Write(LL_INFO, "Send message = %s", pIOCPContext->m_Buffer);
-    return true;
+    pIOCPContext->ResetBuffer();
+    return PostRecv(*pIOCPContext);
 }
 
 QING_NAMESPACE_END

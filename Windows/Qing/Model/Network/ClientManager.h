@@ -18,6 +18,7 @@ public:
     void RemoveClient(const std::shared_ptr<IOCPSocketContext> &pSocketContext);
 
     int  GetClientCount() const { return static_cast<int>(m_ClientMap.size()); }
+    std::shared_ptr<IOCPSocketContext> GetClientContext(SOCKET ClientID) { return m_ClientMap[ClientID]; }
 
 private:
 

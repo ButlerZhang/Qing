@@ -27,15 +27,21 @@ bool NetworkBase::Start(const std::string & ServerIP, int Port)
         return false;
     }
 
+    m_hWorkerThreadExitEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
+    if (m_hWorkerThreadExitEvent == NULL)
+    {
+        QingLog::Write(LL_ERROR, "Create WorkerThreadExitEvent error = %d.", GetLastError());
+        return false;
+    }
+
     m_ServerIP = ServerIP;
     m_ServerPort = Port;
-    m_hWorkerThreadExitEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
     return true;
 }
 
 void NetworkBase::Stop()
 {
-    if (m_WorkerThreads[0] != NULL)
+    if (m_hWorkerThreadExitEvent != NULL)
     {
         //激活关闭消息通知
         SetEvent(m_hWorkerThreadExitEvent);
@@ -183,6 +189,57 @@ bool NetworkBase::CreateWorkerThread(int WorkerThreadCount)
     }
 
     QingLog::Write(LL_INFO, "Created total = %d worker threads.", m_ThreadParamVector.size());
+    return true;
+}
+
+bool NetworkBase::PostRecv(IOCPContext &RecvIOCPContext)
+{
+    RecvIOCPContext.ResetBuffer();
+    RecvIOCPContext.m_ActionType = IOCP_AT_RECV;
+
+    //投递WSARecv请求
+    DWORD dwFlags = 0, dwBytes = 0;
+    int nBytesRecv = WSARecv(
+        RecvIOCPContext.m_AcceptSocket,   //投递这个操作的socket
+        &RecvIOCPContext.m_WSABuffer,     //接收缓冲区，WSABUF结构构成的数组
+        1,                                //数组中WSABUF结构的数量，设为1
+        &dwBytes,                         //接收到的字节数
+        &dwFlags,                         //设置为0
+        &RecvIOCPContext.m_Overlapped,    //这个socket对应的重叠结构
+        NULL);                            //这个参数只有在完成例程模式中才会用到
+
+    //如果返回错误，并且错误的代码不是Pending，说明请求失败
+    if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
+    {
+        QingLog::Write(LL_ERROR, "Post recv failed, error = %d.", WSAGetLastError());
+        return false;
+    }
+
+    return true;
+}
+
+bool NetworkBase::PostSend(IOCPContext &SendIOCPContext)
+{
+    SendIOCPContext.m_ActionType = IOCP_AT_SEND;
+
+    //投递WSASend请求
+    DWORD dwFlags = 0, dwBytes = 0;
+    int nBytesRecv = WSASend(
+        SendIOCPContext.m_AcceptSocket,   //投递这个操作的socket
+        &SendIOCPContext.m_WSABuffer,     //接收缓冲区，WSABUF结构构成的数组
+        1,                                //数组中WSABUF结构的数量，设为1
+        &dwBytes,                         //接收到的字节数
+        dwFlags,                          //设置为0
+        &SendIOCPContext.m_Overlapped,    //这个socket对应的重叠结构
+        NULL);                            //这个参数只有在完成例程模式中才会用到
+
+    //如果返回错误，并且错误的代码不是Pending，说明请求失败
+    if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
+    {
+        QingLog::Write(LL_ERROR, "Post send failed, error = %d.", WSAGetLastError());
+        return false;
+    }
+
     return true;
 }
 

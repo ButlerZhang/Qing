@@ -27,6 +27,9 @@ protected:
     virtual bool CreateWorkerThread(int WorkerThreadCount = 0);
     virtual void WorkerThread() = 0;
 
+    virtual bool PostRecv(IOCPContext &RecvIOCPContext);
+    virtual bool PostSend(IOCPContext &SendIOCPContext);
+
 protected:
 
     void ReleaseSocket(SOCKET Socket);

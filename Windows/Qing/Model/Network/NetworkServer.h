@@ -23,8 +23,6 @@ public:
 protected:
 
     bool PostAccept(IOCPContext *pIOCPContext);
-    bool PostRecv(IOCPContext *pIOCPContext);
-    bool PostSend(IOCPContext *pIOCPContext);
 
     bool ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
     bool ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
