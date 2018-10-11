@@ -29,37 +29,22 @@ enum IOCPActionType
 
 
 
+void ReleaseSocket(SOCKET &Socket);
+
+
+
 struct IOCPContext
 {
     OVERLAPPED          m_Overlapped;                               //每个IO操作的重叠结构
     SOCKET              m_AcceptSocket;                             //当前网络操作所使用的socket
     WSABUF              m_WSABuffer;                                //缓冲区，用于给重叠操作传参数的
     IOCPActionType      m_ActionType;                               //要执行的网络操作
+    unsigned __int64    m_ContextID;                                //ID
     char                m_Buffer[MAX_IO_CONTEXT_BUFFER_LEN];        //具体数据的缓冲区,对应WSABUF里的缓冲区
 
-    IOCPContext()
-    {
-        ZeroMemory(&m_Overlapped, sizeof(m_Overlapped));
-        ZeroMemory(&m_Buffer, sizeof(m_Buffer));
-        m_AcceptSocket = INVALID_SOCKET;
-        m_WSABuffer.buf = m_Buffer;
-        m_WSABuffer.len = MAX_IO_CONTEXT_BUFFER_LEN;
-        m_ActionType = IOCP_AT_NULL;
-    }
-
-    ~IOCPContext()
-    {
-        if (m_AcceptSocket != INVALID_SOCKET)
-        {
-            closesocket(m_AcceptSocket);
-            m_AcceptSocket = INVALID_SOCKET;
-        }
-    }
-
-    void ResetBuffer()
-    {
-        ZeroMemory(&m_Buffer, sizeof(m_Buffer));
-    }
+    IOCPContext(unsigned __int64 ID);
+    ~IOCPContext();
+    void ResetBuffer();
 };
 
 
@@ -70,43 +55,11 @@ struct IOCPSocketContext
     SOCKADDR_IN                                 m_ClientAddr;       //客户端的地址
     std::vector<std::shared_ptr<IOCPContext>>   m_IOContextVector;  //客户端IO操作的上下文数据
 
-    IOCPSocketContext()
-    {
-        m_Socket = INVALID_SOCKET;
-        ZeroMemory(&m_ClientAddr, sizeof(m_ClientAddr));
-    }
+    IOCPSocketContext();
+    ~IOCPSocketContext();
 
-    ~IOCPSocketContext()
-    {
-        if (m_Socket != INVALID_SOCKET)
-        {
-            closesocket(m_Socket);
-            m_Socket = INVALID_SOCKET;
-        }
-
-        m_IOContextVector.clear();
-    }
-
-    std::shared_ptr<IOCPContext> GetNewIOContext()
-    {
-        std::shared_ptr<IOCPContext> NewIOContext = std::make_shared<IOCPContext>();
-        m_IOContextVector.push_back(NewIOContext);
-        return NewIOContext;
-    }
-
-    bool RemoveContext(const std::shared_ptr<IOCPContext> &RemoveIOContext)
-    {
-        for (auto Index = 0; Index < m_IOContextVector.size(); Index++)
-        {
-            if (RemoveIOContext == m_IOContextVector[Index])
-            {
-                m_IOContextVector.erase(m_IOContextVector.begin() + Index);
-                break;
-            }
-        }
-
-        return false;
-    }
+    std::shared_ptr<IOCPContext> GetNewIOContext(unsigned __int64 ID);
+    bool RemoveContext(const std::shared_ptr<IOCPContext> &RemoveIOContext);
 };
 
 
@@ -117,7 +70,5 @@ struct WorkerThreadParam
     int             m_ThreadIndex;
     void*           m_Network;
 };
-
-
 
 QING_NAMESPACE_END

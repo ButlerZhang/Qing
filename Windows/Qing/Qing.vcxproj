@@ -61,6 +61,7 @@
     <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp" />
     <ClCompile Include="Example\IOExample.cpp" />
     <ClCompile Include="Model\Network\ClientManager.cpp" />
+    <ClCompile Include="Model\Network\IOCPModel.cpp" />
     <ClCompile Include="Model\Network\NetworkBase.cpp" />
     <ClCompile Include="Model\Network\NetworkClient.cpp" />
     <ClCompile Include="Model\Network\NetworkServer.cpp" />

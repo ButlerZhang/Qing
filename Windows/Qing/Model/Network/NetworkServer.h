@@ -22,11 +22,11 @@ public:
 
 protected:
 
-    bool PostAccept(IOCPContext *pIOCPContext);
+    bool PostAccept(IOCPContext &AcceptIOCPContext);
 
-    bool ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
-    bool ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
-    bool ProcessSend(const std::shared_ptr<IOCPSocketContext> &pSocketContext, IOCPContext *pIOCPContext);
+    bool ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pClientSocketContext, IOCPContext &AcceptIOCPContext);
+    bool ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pClientSocketContext, IOCPContext &RecvIOCPContext);
+    bool ProcessSend(const std::shared_ptr<IOCPSocketContext> &pClientSocketContext, IOCPContext &SendIOCPContext);
 
 private:
 
@@ -37,6 +37,7 @@ private:
     bool StartPostAcceptExIORequest();
 
     bool IsSocketAlive(SOCKET socket);
+    void GetClientAddress(SOCKADDR_IN  &ClientAddress, IOCPContext &AcceptIOCPContext);
     bool HandleError(const std::shared_ptr<IOCPSocketContext> &pSocketContext, DWORD ErrorCode);
 
 private:

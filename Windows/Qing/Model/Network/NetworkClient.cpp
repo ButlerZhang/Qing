@@ -26,7 +26,7 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
             CreateSocket() &&
             ConnectServer(ServerIP, Port))
         {
-            m_IOCPContext = std::make_shared<IOCPContext>();
+            m_IOCPContext = std::make_shared<IOCPContext>(GetNextID());
             QingLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
             return true;
         }
@@ -37,8 +37,13 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
 
 void NetworkClient::Stop()
 {
-    NetworkBase::Stop();
-    QingLog::Write("Stop client.", LL_INFO);
+    if (m_ClientSocket != INVALID_SOCKET)
+    {
+        NetworkBase::Stop();
+        ReleaseSocket(m_ClientSocket);
+        m_ClientSocket = INVALID_SOCKET;
+        QingLog::Write("Stop client.", LL_INFO);
+    }
 }
 
 int NetworkClient::Send(const void * MessageData, int MessageSize)
@@ -100,8 +105,8 @@ void NetworkClient::WorkerThread()
             {
                 switch (pIOCPContext->m_ActionType)
                 {
-                case IOCP_AT_RECV:      ProcessRecv(pIOCPContext);                   break;
-                case IOCP_AT_SEND:      ProcessSend(pIOCPContext);                   break;
+                case IOCP_AT_RECV:      ProcessRecv(pIOCPContext);                              break;
+                case IOCP_AT_SEND:      ProcessSend(pIOCPContext);                              break;
                 default:                QingLog::Write("Worker thread action type error");      break;
                 }
             }

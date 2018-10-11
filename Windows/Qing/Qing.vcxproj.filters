@@ -188,6 +188,9 @@
     <ClCompile Include="Model\Network\NetworkClient.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
+    <ClCompile Include="Model\Network\IOCPModel.cpp">
+      <Filter>Model\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

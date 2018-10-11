@@ -32,12 +32,11 @@ protected:
 
 protected:
 
-    void ReleaseSocket(SOCKET Socket);
     void ReleaseHandle(HANDLE &Handle);
-
     void SetSocketLinger(SOCKET Socket);
     void FillAddress(sockaddr_in &ServerAddress);
 
+    static unsigned __int64 GetNextID() { InterlockedIncrement(&g_IOCPContextID); return g_IOCPContextID; }
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
 protected:
@@ -48,6 +47,8 @@ protected:
     HANDLE                                  m_hWorkerThreadExitEvent;
     HANDLE                                  m_WorkerThreads[MAX_WORKER_THREAD_COUNT];
     std::vector<WorkerThreadParam>          m_ThreadParamVector;
+
+    static unsigned __int64                 g_IOCPContextID;
 };
 
 QING_NAMESPACE_END
