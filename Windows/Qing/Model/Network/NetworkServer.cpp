@@ -46,21 +46,25 @@ void NetworkServer::Stop()
     }
 }
 
-int NetworkServer::Send(int ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
+int NetworkServer::Send(unsigned __int64 ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
 {
-    std::string Response("I_receive_your_message:");
-    Response += (const char*)MessageData;
+    std::string ReceMessage((const char*)MessageData);
+    std::string ResponseMessage = ReceMessage + "_ACK";
 
     std::shared_ptr<IOCPSocketContext> ClientContext = m_ClientManager.GetClientContext(ClientID);
-    std::shared_ptr<IOCPContext> NewIOCPContext = ClientContext->GetNewIOContext(GetNextID());
+    if (ClientContext->m_SendIOCPContext == NULL)
+    {
+        ClientContext->m_SendIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
+    }
 
-    NewIOCPContext->ResetBuffer();
-    NewIOCPContext->m_AcceptSocket = ClientID;
-    NewIOCPContext->m_WSABuffer.len = static_cast<ULONG>(Response.size());
-    memcpy(NewIOCPContext->m_Buffer, Response.c_str(), Response.size());
-    memcpy(NewIOCPContext->m_WSABuffer.buf, Response.c_str(), Response.size());
+    std::shared_ptr<IOCPContext> RecvContext = ClientContext->m_SendIOCPContext;
+    RecvContext->ResetBuffer();
+    RecvContext->m_AcceptSocket = ClientID;
+    RecvContext->m_WSABuffer.len = static_cast<ULONG>(ResponseMessage.size());
+    memcpy(RecvContext->m_Buffer, ResponseMessage.c_str(), ResponseMessage.size());
+    memcpy(RecvContext->m_WSABuffer.buf, ResponseMessage.c_str(), ResponseMessage.size());
 
-    PostSend(*NewIOCPContext);
+    PostSend(*RecvContext);
 
     return MessageSize;
 }
@@ -167,7 +171,7 @@ bool NetworkServer::StartPostAcceptExIORequest()
 
     for (int i = 0; i < InitAcceptPostCount; i++)
     {
-        std::shared_ptr<IOCPContext> pAcceptIOCPContext = m_ListenSocketContext->GetNewIOContext(GetNextID());
+        std::shared_ptr<IOCPContext> pAcceptIOCPContext = m_ListenSocketContext->GetNewIOContext(GetNextIOCPContextID());
         if (!PostAccept(*pAcceptIOCPContext))
         {
             m_ListenSocketContext->RemoveContext(pAcceptIOCPContext);
@@ -304,12 +308,12 @@ bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pCli
     }
 
     //3.建立新Socket下的IOContext，用于在这个socket上投递第一个Recv数据请求
-    std::shared_ptr<IOCPContext> pNewIOCPContext = pNewIOCPSocketContext->GetNewIOContext(GetNextID());
+    std::shared_ptr<IOCPContext> pNewIOCPContext = pNewIOCPSocketContext->GetNewIOContext(GetNextIOCPContextID());
     memcpy(pNewIOCPContext->m_Buffer, AcceptIOCPContext.m_Buffer, MAX_IO_CONTEXT_BUFFER_LEN);
     pNewIOCPContext->m_AcceptSocket = pNewIOCPSocketContext->m_Socket;
     AcceptIOCPContext.m_AcceptSocket = INVALID_SOCKET;
 
-    QingLog::Write(LL_INFO, "Create new client, socket = %d, IOCPContextID =%I64d",
+    QingLog::Write(LL_INFO, "Create new client, socket = %d, IOCPContextID = %I64d",
         pNewIOCPContext->m_AcceptSocket, pNewIOCPContext->m_ContextID);
 
     //绑定完成之后，就可以开始在这个socket上投递完成请求了
@@ -339,7 +343,7 @@ bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pClien
         ntohs(ClientAddr->sin_port),
         RecvIOCPContext.m_WSABuffer.buf);
 
-    //Send(static_cast<int>(RecvIOCPContext.m_AcceptSocket), RecvIOCPContext.m_WSABuffer.buf, RecvIOCPContext.m_WSABuffer.len);
+    Send(RecvIOCPContext.m_AcceptSocket, RecvIOCPContext.m_WSABuffer.buf, RecvIOCPContext.m_WSABuffer.len);
 
     //开始投递下一个WSARecv请求
     return PostRecv(RecvIOCPContext);

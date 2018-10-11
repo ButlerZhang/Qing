@@ -26,8 +26,11 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
             CreateSocket() &&
             ConnectServer(ServerIP, Port))
         {
-            m_IOCPContext = std::make_shared<IOCPContext>(GetNextID());
             QingLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
+
+            m_RecvIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
+            m_RecvIOCPContext->m_AcceptSocket = m_ClientSocket;
+            PostRecv(*m_RecvIOCPContext);
             return true;
         }
     }
@@ -48,14 +51,19 @@ void NetworkClient::Stop()
 
 int NetworkClient::Send(const void * MessageData, int MessageSize)
 {
-    m_IOCPContext->ResetBuffer();
-    m_IOCPContext->m_AcceptSocket = m_ClientSocket;
-    m_IOCPContext->m_ActionType = IOCP_AT_SEND;
-    m_IOCPContext->m_WSABuffer.len = MessageSize;
-    memcpy(m_IOCPContext->m_Buffer, MessageData, MessageSize);
-    memcpy(m_IOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
+    if (m_SendIOCPContext == NULL)
+    {
+        m_SendIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
+    }
 
-    PostSend(*m_IOCPContext);
+    m_SendIOCPContext->ResetBuffer();
+    m_SendIOCPContext->m_AcceptSocket = m_ClientSocket;
+    m_SendIOCPContext->m_ActionType = IOCP_AT_SEND;
+    m_SendIOCPContext->m_WSABuffer.len = MessageSize;
+    memcpy(m_SendIOCPContext->m_Buffer, MessageData, MessageSize);
+    memcpy(m_SendIOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
+
+    PostSend(*m_SendIOCPContext);
     return MessageSize;
 }
 
@@ -76,40 +84,30 @@ void NetworkClient::WorkerThread()
 
         if (!bReturn)
         {
-            //if (!pQingIOCP->HandleError(pSocketContext, GetLastError()))
-            {
-                break;
-            }
-
             continue;
         }
-        else
+
+        //读取传入的参数
+        IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
+
+        //判断是否有客户端断开了
+        if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
         {
-            //读取传入的参数
-            IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
-            //std::shared_ptr<IOCPContext> pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
+            //LocalComputer MyComputer;
+            //QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
+            //    MyComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
+            //    ntohs(pSocketContext->m_ClientAddr.sin_port));
 
-            //判断是否有客户端断开了
-            if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
-            {
-                //LocalComputer MyComputer;
-                //QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
-                //    MyComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
-                //    ntohs(pSocketContext->m_ClientAddr.sin_port));
+            //释放资源
+            //pQingIOCP->m_ClientManager.RemoveClient(pSocketContext);
+            continue;
+        }
 
-                //释放资源
-                //pQingIOCP->m_ClientManager.RemoveClient(pSocketContext);
-                continue;
-            }
-            else
-            {
-                switch (pIOCPContext->m_ActionType)
-                {
-                case IOCP_AT_RECV:      ProcessRecv(pIOCPContext);                              break;
-                case IOCP_AT_SEND:      ProcessSend(pIOCPContext);                              break;
-                default:                QingLog::Write("Worker thread action type error");      break;
-                }
-            }
+        switch (pIOCPContext->m_ActionType)
+        {
+        case IOCP_AT_RECV:      ProcessRecv(pIOCPContext);                              break;
+        case IOCP_AT_SEND:      ProcessSend(pIOCPContext);                              break;
+        default:                QingLog::Write("Worker thread action type error");      break;
         }
     }
 }
@@ -164,14 +162,13 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
 bool NetworkClient::ProcessRecv(IOCPContext * pIOCPContext)
 {
     QingLog::Write(LL_INFO, "Recv message = %s", pIOCPContext->m_WSABuffer.buf);
-    return true;
+    return PostRecv(*pIOCPContext);
 }
 
 bool NetworkClient::ProcessSend(IOCPContext * pIOCPContext)
 {
     QingLog::Write(LL_INFO, "Send message = %s", pIOCPContext->m_WSABuffer.buf);
-    pIOCPContext->ResetBuffer();
-    return PostRecv(*pIOCPContext);
+    return true;
 }
 
 QING_NAMESPACE_END

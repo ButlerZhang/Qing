@@ -31,9 +31,10 @@ protected:
 
 private:
 
-    bool                                        m_IsConnected;                              // «∑Ò¡¨Ω”
-    SOCKET                                      m_ClientSocket;                             //socket
-    std::shared_ptr<IOCPContext>                m_IOCPContext;
+    bool                                        m_IsConnected;
+    SOCKET                                      m_ClientSocket;
+    std::shared_ptr<IOCPContext>                m_SendIOCPContext;  //add queue
+    std::shared_ptr<IOCPContext>                m_RecvIOCPContext;
 };
 
 QING_NAMESPACE_END

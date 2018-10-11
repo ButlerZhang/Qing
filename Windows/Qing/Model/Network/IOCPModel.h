@@ -53,6 +53,7 @@ struct IOCPSocketContext
 {
     SOCKET                                      m_Socket;           //每个客户端连接的socket
     SOCKADDR_IN                                 m_ClientAddr;       //客户端的地址
+    std::shared_ptr<IOCPContext>                m_SendIOCPContext;  //
     std::vector<std::shared_ptr<IOCPContext>>   m_IOContextVector;  //客户端IO操作的上下文数据
 
     IOCPSocketContext();

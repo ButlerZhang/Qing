@@ -16,7 +16,7 @@ public:
     virtual void Stop();
 
     virtual int Send(const void *MessageData, int MessageSize) { return 0; }
-    virtual int Send(int ClientID, const void *MessageData, int MessageSize, __int64 Timeout = 0) { return 0; }
+    virtual int Send(unsigned __int64 ClientID, const void *MessageData, int MessageSize, __int64 Timeout = 0) { return 0; }
 
     const std::string& GetLocalIP();
     int GetServerPort() const { return m_ServerPort; }
@@ -36,8 +36,8 @@ protected:
     void SetSocketLinger(SOCKET Socket);
     void FillAddress(sockaddr_in &ServerAddress);
 
-    static unsigned __int64 GetNextID() { InterlockedIncrement(&g_IOCPContextID); return g_IOCPContextID; }
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
+    static unsigned __int64 GetNextIOCPContextID() { InterlockedIncrement(&g_IOCPContextID); return g_IOCPContextID; }
 
 protected:
 
