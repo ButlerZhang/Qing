@@ -42,10 +42,10 @@ private:
 
 private:
 
-    ClientManager                           m_ClientManager;                            //客户端管理者
-    std::shared_ptr<IOCPSocketContext>      m_ListenSocketContext;                      //监听Socket的Context信息
-    LPFN_ACCEPTEX                           m_CallBackAcceptEx;                         //AcceptEx的函数指针
-    LPFN_GETACCEPTEXSOCKADDRS               m_CallBackGetAcceptExSockAddrs;             //GetAcceptExSockaddrs的函数指针
+    ClientManager                           m_ClientManager;
+    std::shared_ptr<IOCPSocketContext>      m_ListenSocketContext;
+    LPFN_ACCEPTEX                           m_CallBackAcceptEx;
+    LPFN_GETACCEPTEXSOCKADDRS               m_CallBackGetAcceptExSockAddrs;
 };
 
 QING_NAMESPACE_END

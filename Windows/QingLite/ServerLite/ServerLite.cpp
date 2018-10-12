@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Network\ServerNetwork.h"
 #include "..\..\Qing\HeaderFiles\QingLog.h"
+#include "..\..\Qing\HeaderFiles\Utility.h"
 #include <iostream>
 
 
@@ -25,6 +26,7 @@ int main()
             Sleep(1000);
             break;
         }
+
 
         Sleep(1000);
     }

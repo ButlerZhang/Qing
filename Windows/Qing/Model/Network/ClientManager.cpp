@@ -36,11 +36,20 @@ void ClientManager::RemoveClient(const std::shared_ptr<IOCPSocketContext>& pSock
     {
         if (pSocketContext->m_Socket == iter->second->m_Socket)
         {
+            ReleaseSocket(pSocketContext->m_Socket);
             m_ClientMap.erase(iter);
             break;
         }
     }
     LeaveCriticalSection(&m_MapSection);
+}
+
+std::shared_ptr<IOCPSocketContext> ClientManager::GetClientContext(SOCKET ClientID)
+{
+    EnterCriticalSection(&m_MapSection);
+    const std::shared_ptr<IOCPSocketContext> &TargetClient = m_ClientMap[ClientID];
+    LeaveCriticalSection(&m_MapSection);
+    return TargetClient;
 }
 
 QING_NAMESPACE_END

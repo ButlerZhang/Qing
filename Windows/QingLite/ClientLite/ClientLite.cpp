@@ -27,7 +27,7 @@ int main()
         }
         else
         {
-            MyClient.Send((const void*)quitstring.c_str(), quitstring.size());
+            MyClient.Send((const void*)quitstring.c_str(), static_cast<int>(quitstring.size()));
             quitstring.clear();
         }
 

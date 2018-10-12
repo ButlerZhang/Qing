@@ -13,7 +13,7 @@ void ReleaseSocket(SOCKET &Socket)
         ::shutdown(Socket, SD_BOTH);
         ::closesocket(Socket);
 
-        //QingLog::Write(LL_INFO, "Release socket = %d.", Socket);
+        QingLog::Write(LL_INFO, "Release Socket = %I64d.", Socket);
         Socket = INVALID_SOCKET;
     }
 }
@@ -33,7 +33,6 @@ IOCPContext::IOCPContext(unsigned __int64 ID)
 
 IOCPContext::~IOCPContext()
 {
-    ReleaseSocket(m_AcceptSocket);
 }
 
 void IOCPContext::ResetBuffer()
@@ -46,33 +45,48 @@ void IOCPContext::ResetBuffer()
 IOCPSocketContext::IOCPSocketContext()
 {
     m_Socket = INVALID_SOCKET;
-    ZeroMemory(&m_ClientAddr, sizeof(m_ClientAddr));
+    ZeroMemory(&m_RemoteAddr, sizeof(m_RemoteAddr));
 }
 
 IOCPSocketContext::~IOCPSocketContext()
 {
-    ReleaseSocket(m_Socket);
 }
 
 std::shared_ptr<IOCPContext> IOCPSocketContext::GetNewIOContext(unsigned __int64 ID)
 {
-    std::shared_ptr<IOCPContext> NewIOContext = std::make_shared<IOCPContext>(ID);
-    m_IOContextVector.push_back(NewIOContext);
-    return NewIOContext;
+    std::shared_ptr<IOCPContext> NewIOCPContext = std::make_shared<IOCPContext>(ID);
+
+    EnterCriticalSection(&m_QueueSection);
+    m_SendIOCPContextQueue.push(NewIOCPContext);
+    LeaveCriticalSection(&m_QueueSection);
+
+    QingLog::Write(LL_INFO, "Push new IOCPContext, Socket = %I64d, IOCPContextID = %I64d.",
+        NewIOCPContext->m_AcceptSocket, NewIOCPContext->m_ContextID);
+
+    return NewIOCPContext;
 }
 
-bool IOCPSocketContext::RemoveContext(const std::shared_ptr<IOCPContext> &RemoveIOContext)
+bool IOCPSocketContext::DeleteContext(const IOCPContext &RemoveIOContext)
 {
-    for (auto Index = 0; Index < m_IOContextVector.size(); Index++)
-    {
-        if (RemoveIOContext == m_IOContextVector[Index])
-        {
-            m_IOContextVector.erase(m_IOContextVector.begin() + Index);
-            break;
-        }
-    }
+    bool IsRemove = false;
+    SOCKET RemoveSocket = RemoveIOContext.m_AcceptSocket;
+    unsigned __int64 RemoveTrackID = RemoveIOContext.m_ContextID;
 
-    return false;
+    EnterCriticalSection(&m_QueueSection);
+    std::shared_ptr<IOCPContext> OldContext = m_SendIOCPContextQueue.front();
+    if (RemoveSocket == OldContext->m_AcceptSocket && RemoveTrackID == OldContext->m_ContextID)
+    {
+        m_SendIOCPContextQueue.pop();
+        IsRemove = true;
+    }
+    LeaveCriticalSection(&m_QueueSection);
+
+    QingLog::Write(LL_INFO, "Delete IOCPContext %s, Socket = %I64d, IOCPContextID = %I64d.",
+        IsRemove ? "succeed" : "failed",
+        RemoveSocket,
+        RemoveTrackID);
+
+    return true;
 }
 
 QING_NAMESPACE_END

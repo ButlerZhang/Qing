@@ -203,12 +203,12 @@ bool NetworkBase::PostRecv(IOCPContext &RecvIOCPContext)
     //如果返回错误，并且错误的代码不是Pending，说明请求失败
     if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
     {
-        QingLog::Write(LL_ERROR, "Post recv failed, socket = %d, IOCPContextID = %I64d, error = %d.",
+        QingLog::Write(LL_ERROR, "Post recv failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
             RecvIOCPContext.m_AcceptSocket, RecvIOCPContext.m_ContextID, WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_ERROR, "Post recv succeed, socket = %d, IOCPContextID = %I64d.",
+    QingLog::Write(LL_ERROR, "Post recv succeed, Socket = %I64d, IOCPContextID = %I64d.",
         RecvIOCPContext.m_AcceptSocket, RecvIOCPContext.m_ContextID);
     return true;
 }
@@ -231,12 +231,12 @@ bool NetworkBase::PostSend(IOCPContext &SendIOCPContext)
     //如果返回错误，并且错误的代码不是Pending，说明请求失败
     if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
     {
-        QingLog::Write(LL_ERROR, "Post send failed, socket = %d, IOCPContextID = %I64d, error = %d.",
+        QingLog::Write(LL_ERROR, "Post send failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
             SendIOCPContext.m_AcceptSocket, SendIOCPContext.m_ContextID, WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_ERROR, "Post send succeed, socket = %d, IOCPContextID = %I64d.",
+    QingLog::Write(LL_ERROR, "Post send succeed, Socket = %I64d, IOCPContextID = %I64d.",
         SendIOCPContext.m_AcceptSocket, SendIOCPContext.m_ContextID);
     return true;
 }

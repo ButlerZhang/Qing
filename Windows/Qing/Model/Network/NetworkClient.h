@@ -25,16 +25,15 @@ protected:
 
     bool CreateSocket();
     bool ConnectServer(const std::string &ServerIP, int Port);
+    void ReadyToRecvData();
 
-    bool ProcessRecv(IOCPContext *pIOCPContext);
-    bool ProcessSend(IOCPContext *pIOCPContext);
+    bool ProcessRecv(IOCPContext &RecvIOCPContext);
+    bool ProcessSend(IOCPContext &SendIOCPContext);
 
 private:
 
     bool                                        m_IsConnected;
-    SOCKET                                      m_ClientSocket;
-    std::shared_ptr<IOCPContext>                m_SendIOCPContext;  //add queue
-    std::shared_ptr<IOCPContext>                m_RecvIOCPContext;
+    std::shared_ptr<IOCPSocketContext>          m_SocketContext;
 };
 
 QING_NAMESPACE_END

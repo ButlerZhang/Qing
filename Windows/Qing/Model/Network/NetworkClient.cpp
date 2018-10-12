@@ -7,9 +7,9 @@ QING_NAMESPACE_BEGIN
 
 
 NetworkClient::NetworkClient() : NetworkBase(),
-                                 m_IsConnected(false),
-                                 m_ClientSocket(INVALID_SOCKET)
+                                 m_IsConnected(false)
 {
+    m_SocketContext = std::make_shared<IOCPSocketContext>();
 }
 
 NetworkClient::~NetworkClient()
@@ -26,11 +26,8 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
             CreateSocket() &&
             ConnectServer(ServerIP, Port))
         {
+            ReadyToRecvData();
             QingLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
-
-            m_RecvIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
-            m_RecvIOCPContext->m_AcceptSocket = m_ClientSocket;
-            PostRecv(*m_RecvIOCPContext);
             return true;
         }
     }
@@ -40,31 +37,26 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
 
 void NetworkClient::Stop()
 {
-    if (m_ClientSocket != INVALID_SOCKET)
+    if (m_SocketContext->m_Socket != INVALID_SOCKET)
     {
         NetworkBase::Stop();
-        ReleaseSocket(m_ClientSocket);
-        m_ClientSocket = INVALID_SOCKET;
+        ReleaseSocket(m_SocketContext->m_Socket);
+        m_SocketContext->m_Socket = INVALID_SOCKET;
         QingLog::Write("Stop client.", LL_INFO);
     }
 }
 
 int NetworkClient::Send(const void * MessageData, int MessageSize)
 {
-    if (m_SendIOCPContext == NULL)
-    {
-        m_SendIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
-    }
+    std::shared_ptr<IOCPContext> SendIOCPContext = m_SocketContext->GetNewIOContext(GetNextIOCPContextID());
 
-    m_SendIOCPContext->ResetBuffer();
-    m_SendIOCPContext->m_AcceptSocket = m_ClientSocket;
-    m_SendIOCPContext->m_ActionType = IOCP_AT_SEND;
-    m_SendIOCPContext->m_WSABuffer.len = MessageSize;
-    memcpy(m_SendIOCPContext->m_Buffer, MessageData, MessageSize);
-    memcpy(m_SendIOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
+    SendIOCPContext->m_AcceptSocket = m_SocketContext->m_Socket;
+    SendIOCPContext->m_WSABuffer.len = MessageSize;
 
-    PostSend(*m_SendIOCPContext);
-    return MessageSize;
+    memcpy(SendIOCPContext->m_Buffer, MessageData, MessageSize);
+    memcpy(SendIOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
+
+    return PostSend(*SendIOCPContext) ? MessageSize : 0;
 }
 
 void NetworkClient::WorkerThread()
@@ -76,54 +68,53 @@ void NetworkClient::WorkerThread()
     while (WaitForSingleObject(m_hWorkerThreadExitEvent, 0) != WAIT_OBJECT_0)
     {
         BOOL bReturn = GetQueuedCompletionStatus(
-            m_hIOCompletionPort,                //完成端口
-            &dwBytesTransfered,                 //操作完成后返回的字节数
-            (PULONG_PTR)&m_ClientSocket,        //建立完成端口时绑定的自定义结构体参数
-            &pOverlapped,                       //连入socket时一起建立的重叠结构
-            INFINITE);                          //等待完成端口的超时时间，如果线程不需要做其它事情则设置为INFINITE
+            m_hIOCompletionPort,                            //完成端口
+            &dwBytesTransfered,                             //操作完成后返回的字节数
+            (PULONG_PTR)&(m_SocketContext->m_Socket),        //建立完成端口时绑定的自定义结构体参数
+            &pOverlapped,                                   //连入socket时一起建立的重叠结构
+            INFINITE);                                      //等待完成端口的超时时间，如果线程不需要做其它事情则设置为INFINITE
 
         if (!bReturn)
         {
             continue;
         }
 
+        if (pOverlapped == NULL)
+        {
+            break;
+        }
+
         //读取传入的参数
         IOCPContext *pIOCPContext(CONTAINING_RECORD(pOverlapped, IOCPContext, m_Overlapped));
 
-        //判断是否有客户端断开了
+        //是否断连
         if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
         {
-            //LocalComputer MyComputer;
-            //QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
-            //    MyComputer.ConvertToIPString(&(pSocketContext->m_ClientAddr)).c_str(),
-            //    ntohs(pSocketContext->m_ClientAddr.sin_port));
-
-            //释放资源
-            //pQingIOCP->m_ClientManager.RemoveClient(pSocketContext);
+            //TODO
             continue;
         }
 
         switch (pIOCPContext->m_ActionType)
         {
-        case IOCP_AT_RECV:      ProcessRecv(pIOCPContext);                              break;
-        case IOCP_AT_SEND:      ProcessSend(pIOCPContext);                              break;
-        default:                QingLog::Write("Worker thread action type error");      break;
+        case IOCP_AT_RECV:      ProcessRecv(*pIOCPContext);                              break;
+        case IOCP_AT_SEND:      ProcessSend(*pIOCPContext);                              break;
+        default:                QingLog::Write("Worker thread action type error");       break;
         }
     }
 }
 
 bool NetworkClient::CreateSocket()
 {
-    m_ClientSocket = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-    if (m_ClientSocket == INVALID_SOCKET)
+    m_SocketContext->m_Socket = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+    if (m_SocketContext->m_Socket == INVALID_SOCKET)
     {
         QingLog::Write(LL_ERROR, "Create client socket fail, error = %d.", WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_INFO, "Create client socket = %d succeed.", m_ClientSocket);
+    QingLog::Write(LL_INFO, "Create client Socket = %I64d succeed.", m_SocketContext->m_Socket);
 
-    if (CreateIoCompletionPort((HANDLE)m_ClientSocket, m_hIOCompletionPort, m_ClientSocket, 0) == NULL)
+    if (CreateIoCompletionPort((HANDLE)(m_SocketContext->m_Socket), m_hIOCompletionPort, m_SocketContext->m_Socket, 0) == NULL)
     {
         QingLog::Write(LL_ERROR, "Client socket associate with IOCP error = %d.", GetLastError());
         return false;
@@ -134,8 +125,9 @@ bool NetworkClient::CreateSocket()
 
 bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
 {
-    if (m_ClientSocket == INVALID_SOCKET)
+    if (m_SocketContext->m_Socket == INVALID_SOCKET)
     {
+        QingLog::Write("Invalid Socket.", LL_ERROR);
         return false;
     }
 
@@ -147,27 +139,38 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
     struct sockaddr_in ServerAddress;
     FillAddress(ServerAddress);
 
-    if (::WSAConnect(m_ClientSocket, reinterpret_cast<const struct sockaddr*>(&ServerAddress), sizeof(ServerAddress),0,0,0,0) == SOCKET_ERROR)
+    if (::WSAConnect(m_SocketContext->m_Socket, reinterpret_cast<const struct sockaddr*>(&ServerAddress), sizeof(ServerAddress),0,0,0,0) == SOCKET_ERROR)
     {
         QingLog::Write(LL_ERROR, "Connect server failed, error = %d.", WSAGetLastError());
         return false;
     }
 
     m_IsConnected = true;
-    SetSocketLinger(m_ClientSocket);
+    SetSocketLinger(m_SocketContext->m_Socket);
 
     return true;
 }
 
-bool NetworkClient::ProcessRecv(IOCPContext * pIOCPContext)
+void NetworkClient::ReadyToRecvData()
 {
-    QingLog::Write(LL_INFO, "Recv message = %s", pIOCPContext->m_WSABuffer.buf);
-    return PostRecv(*pIOCPContext);
+    std::string LoginMessage("Login Message");
+    Send(LoginMessage.c_str(), static_cast<int>(LoginMessage.size()));
+
+    m_SocketContext->m_RecvIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
+    m_SocketContext->m_RecvIOCPContext->m_AcceptSocket = m_SocketContext->m_Socket;
+    PostRecv(*(m_SocketContext->m_RecvIOCPContext));
 }
 
-bool NetworkClient::ProcessSend(IOCPContext * pIOCPContext)
+bool NetworkClient::ProcessRecv(IOCPContext &RecvIOCPContext)
 {
-    QingLog::Write(LL_INFO, "Send message = %s", pIOCPContext->m_WSABuffer.buf);
+    QingLog::Write(LL_INFO, "Recv message = %s", RecvIOCPContext.m_WSABuffer.buf);
+    return PostRecv(RecvIOCPContext);
+}
+
+bool NetworkClient::ProcessSend(IOCPContext &SendIOCPContext)
+{
+    QingLog::Write(LL_INFO, "Send message = %s", SendIOCPContext.m_WSABuffer.buf);
+    m_SocketContext->DeleteContext(SendIOCPContext);
     return true;
 }
 

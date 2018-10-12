@@ -48,25 +48,15 @@ void NetworkServer::Stop()
 
 int NetworkServer::Send(unsigned __int64 ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
 {
-    std::string ReceMessage((const char*)MessageData);
-    std::string ResponseMessage = ReceMessage + "_ACK";
-
     std::shared_ptr<IOCPSocketContext> ClientContext = m_ClientManager.GetClientContext(ClientID);
-    if (ClientContext->m_SendIOCPContext == NULL)
-    {
-        ClientContext->m_SendIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
-    }
+    std::shared_ptr<IOCPContext> &SendIOCPContext = ClientContext->GetNewIOContext(GetNextIOCPContextID());
 
-    std::shared_ptr<IOCPContext> RecvContext = ClientContext->m_SendIOCPContext;
-    RecvContext->ResetBuffer();
-    RecvContext->m_AcceptSocket = ClientID;
-    RecvContext->m_WSABuffer.len = static_cast<ULONG>(ResponseMessage.size());
-    memcpy(RecvContext->m_Buffer, ResponseMessage.c_str(), ResponseMessage.size());
-    memcpy(RecvContext->m_WSABuffer.buf, ResponseMessage.c_str(), ResponseMessage.size());
+    SendIOCPContext->m_AcceptSocket = ClientID;
+    SendIOCPContext->m_WSABuffer.len = MessageSize;
+    memcpy(SendIOCPContext->m_Buffer, MessageData, MessageSize);
+    memcpy(SendIOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
 
-    PostSend(*RecvContext);
-
-    return MessageSize;
+    return PostSend(*SendIOCPContext) ? MessageSize : 0;
 }
 
 bool NetworkServer::CreateAndStartListen()
@@ -81,7 +71,7 @@ bool NetworkServer::CreateAndStartListen()
         return false;
     }
 
-    QingLog::Write(LL_INFO, "Create listen socket = %d succeed.", m_ListenSocketContext->m_Socket);
+    QingLog::Write(LL_INFO, "Create listen Socket = %I64d succeed.", m_ListenSocketContext->m_Socket);
 
     //将listen socket绑定到完成端口
     //第三个参数CompletionKey类似于线程参数，在worker线程中就可以使用这个参数了
@@ -174,7 +164,7 @@ bool NetworkServer::StartPostAcceptExIORequest()
         std::shared_ptr<IOCPContext> pAcceptIOCPContext = m_ListenSocketContext->GetNewIOContext(GetNextIOCPContextID());
         if (!PostAccept(*pAcceptIOCPContext))
         {
-            m_ListenSocketContext->RemoveContext(pAcceptIOCPContext);
+            m_ListenSocketContext->DeleteContext(*pAcceptIOCPContext);
             return false;
         }
     }
@@ -201,7 +191,7 @@ void NetworkServer::GetClientAddress(SOCKADDR_IN &ClientAddress, IOCPContext &Ac
         &ClientLen);
 
     LocalComputer MyComputer;
-    QingLog::Write(LL_INFO, "Connected, socket(%d) = (Server[%s:%d], Client[%s:%d]), message = %s.",
+    QingLog::Write(LL_INFO, "Connected, Socket(%I64d) = (Server[%s:%d], Client[%s:%d]), message = %s.",
         AcceptIOCPContext.m_AcceptSocket,
         MyComputer.ConvertToIPString(TempServerAddr).c_str(),
         ntohs(TempServerAddr->sin_port),
@@ -267,24 +257,24 @@ bool NetworkServer::PostAccept(IOCPContext &AcceptIOCPContext)
 
     //投递AcceptEx
     if (!m_CallBackAcceptEx(
-        m_ListenSocketContext->m_Socket,    //用来监听的socket
+        m_ListenSocketContext->m_Socket,        //用来监听的socket
         AcceptIOCPContext.m_AcceptSocket,       //用于接受连接的socket
         AcceptIOCPContext.m_WSABuffer.buf,      //接收缓冲区：客户端发来的第一组数据；server的地址；client的地址
         AcceptIOCPContext.m_WSABuffer.len - (ACCEPTEX_ADDRESS_LENGTH * 2),
-        ACCEPTEX_ADDRESS_LENGTH,            //存放本地地址信息的空间大小
-        ACCEPTEX_ADDRESS_LENGTH,            //存放远端地址信息的空间大小
-        &dwBytes,                           //忽略
+        ACCEPTEX_ADDRESS_LENGTH,                //存放本地地址信息的空间大小
+        ACCEPTEX_ADDRESS_LENGTH,                //存放远端地址信息的空间大小
+        &dwBytes,                               //忽略
         &AcceptIOCPContext.m_Overlapped))       //本次重叠IO所要用到的重叠结构
     {
         if (WSAGetLastError() != WSA_IO_PENDING)
         {
-            QingLog::Write(LL_ERROR, "Post accept failed, socket = %d, IOCPContextID = %d, error = %d.",
+            QingLog::Write(LL_ERROR, "Post accept failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
                 AcceptIOCPContext.m_AcceptSocket, AcceptIOCPContext.m_ContextID, WSAGetLastError());
             return false;
         }
     }
 
-    QingLog::Write(LL_ERROR, "Post accept succeed, socket = %d, IOCPContextID = %d.",
+    QingLog::Write(LL_ERROR, "Post accept succeed, Socket = %I64d, IOCPContextID = %I64d.",
         AcceptIOCPContext.m_AcceptSocket, AcceptIOCPContext.m_ContextID);
     return true;
 }
@@ -297,7 +287,7 @@ bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pCli
 
     //2.拷贝Listen socket上的Context，为新连入的socket创建一个新的SocketContext
     std::shared_ptr<IOCPSocketContext> pNewIOCPSocketContext = std::make_shared<IOCPSocketContext>();
-    memcpy(&(pNewIOCPSocketContext->m_ClientAddr), &ClientAddress, sizeof(SOCKADDR_IN));
+    memcpy(&(pNewIOCPSocketContext->m_RemoteAddr), &ClientAddress, sizeof(SOCKADDR_IN));
     pNewIOCPSocketContext->m_Socket = AcceptIOCPContext.m_AcceptSocket;
 
     //将这个新的Socket和完成端口绑定
@@ -308,18 +298,13 @@ bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pCli
     }
 
     //3.建立新Socket下的IOContext，用于在这个socket上投递第一个Recv数据请求
-    std::shared_ptr<IOCPContext> pNewIOCPContext = pNewIOCPSocketContext->GetNewIOContext(GetNextIOCPContextID());
-    memcpy(pNewIOCPContext->m_Buffer, AcceptIOCPContext.m_Buffer, MAX_IO_CONTEXT_BUFFER_LEN);
-    pNewIOCPContext->m_AcceptSocket = pNewIOCPSocketContext->m_Socket;
-    AcceptIOCPContext.m_AcceptSocket = INVALID_SOCKET;
-
-    QingLog::Write(LL_INFO, "Create new client, socket = %d, IOCPContextID = %I64d",
-        pNewIOCPContext->m_AcceptSocket, pNewIOCPContext->m_ContextID);
+    pNewIOCPSocketContext->m_RecvIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
+    memcpy(pNewIOCPSocketContext->m_RecvIOCPContext->m_Buffer, AcceptIOCPContext.m_Buffer, MAX_IO_CONTEXT_BUFFER_LEN);
+    pNewIOCPSocketContext->m_RecvIOCPContext->m_AcceptSocket = pNewIOCPSocketContext->m_Socket;
 
     //绑定完成之后，就可以开始在这个socket上投递完成请求了
-    if (!PostRecv(*pNewIOCPContext))
+    if (!PostRecv(*(pNewIOCPSocketContext->m_RecvIOCPContext)))
     {
-        pNewIOCPSocketContext->RemoveContext(pNewIOCPContext);
         return false;
     }
 
@@ -335,15 +320,18 @@ bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pClien
 {
     //处理消息
     LocalComputer MyComputer;
-    SOCKADDR_IN *ClientAddr = &pClientSocketContext->m_ClientAddr;
-    QingLog::Write(LL_INFO, "Recv, socket = %d, IOCPContextID =%I64d, Client = %s:%d, message = %s",
+    SOCKADDR_IN *ClientAddr = &pClientSocketContext->m_RemoteAddr;
+    QingLog::Write(LL_INFO, "Recv, Socket = %I64d, IOCPContextID =%I64d, Client = %s:%d, message = %s",
         RecvIOCPContext.m_AcceptSocket,
         RecvIOCPContext.m_ContextID,
         MyComputer.ConvertToIPString(ClientAddr).c_str(),
         ntohs(ClientAddr->sin_port),
         RecvIOCPContext.m_WSABuffer.buf);
 
-    Send(RecvIOCPContext.m_AcceptSocket, RecvIOCPContext.m_WSABuffer.buf, RecvIOCPContext.m_WSABuffer.len);
+    //ACK
+    std::string ResponseMessage("ACK_");
+    ResponseMessage += RecvIOCPContext.m_WSABuffer.buf;
+    Send(RecvIOCPContext.m_AcceptSocket, ResponseMessage.c_str(), static_cast<int>(ResponseMessage.size()));
 
     //开始投递下一个WSARecv请求
     return PostRecv(RecvIOCPContext);
@@ -352,7 +340,8 @@ bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pClien
 bool NetworkServer::ProcessSend(const std::shared_ptr<IOCPSocketContext> &pClientSocketContext, IOCPContext &SendIOCPContext)
 {
     QingLog::Write(LL_INFO, "Send message = %s", SendIOCPContext.m_WSABuffer.buf);
-    return false;
+    pClientSocketContext->DeleteContext(SendIOCPContext);
+    return true;
 }
 
 void NetworkServer::WorkerThread()
@@ -394,8 +383,8 @@ void NetworkServer::WorkerThread()
         {
             LocalComputer MyComputer;
             QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
-                MyComputer.ConvertToIPString(&(pClientSocketContext->m_ClientAddr)).c_str(),
-                ntohs(pClientSocketContext->m_ClientAddr.sin_port));
+                MyComputer.ConvertToIPString(&(pClientSocketContext->m_RemoteAddr)).c_str(),
+                ntohs(pClientSocketContext->m_RemoteAddr.sin_port));
 
             //释放资源
             m_ClientManager.RemoveClient(pClientSocketContext);
