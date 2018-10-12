@@ -48,15 +48,22 @@ void NetworkServer::Stop()
 
 int NetworkServer::Send(unsigned __int64 ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
 {
-    std::shared_ptr<IOCPSocketContext> ClientContext = m_ClientManager.GetClientContext(ClientID);
-    std::shared_ptr<IOCPContext> &SendIOCPContext = ClientContext->GetNewIOContext(GetNextIOCPContextID());
+    std::vector<SOCKET> ClientVector;
+    ClientID == 0 ? m_ClientManager.GetAllClientID(ClientVector): ClientVector.push_back(ClientID);
 
-    SendIOCPContext->m_AcceptSocket = ClientID;
-    SendIOCPContext->m_WSABuffer.len = MessageSize;
-    memcpy(SendIOCPContext->m_Buffer, MessageData, MessageSize);
-    memcpy(SendIOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
+    for (auto Index = 0; Index < ClientVector.size(); Index++)
+    {
+        std::shared_ptr<IOCPSocketContext> ClientContext = m_ClientManager.GetClientContext(ClientVector[Index]);
+        std::shared_ptr<IOCPContext> &SendIOCPContext = ClientContext->GetNewIOContext(GetNextIOCPContextID());
 
-    return PostSend(*SendIOCPContext) ? MessageSize : 0;
+        SendIOCPContext->m_AcceptSocket = ClientVector[Index];
+        SendIOCPContext->m_WSABuffer.len = MessageSize;
+        memcpy(SendIOCPContext->m_Buffer, MessageData, MessageSize);
+        memcpy(SendIOCPContext->m_WSABuffer.buf, MessageData, MessageSize);
+        PostSend(*SendIOCPContext);
+    }
+
+    return ClientVector.empty() ? 0 : MessageSize;
 }
 
 bool NetworkServer::CreateAndStartListen()

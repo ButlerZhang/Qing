@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "Network\ServerNetwork.h"
 #include "..\..\Qing\HeaderFiles\QingLog.h"
-#include "..\..\Qing\HeaderFiles\Utility.h"
 #include <iostream>
 
 
@@ -16,6 +15,7 @@ int main()
 
     ServerNetwork MyServer;
     MyServer.Start(std::string(), 12345, true);
+    MyServer.TestServer();
 
     std::string quitstring;
     while (std::cin >> quitstring)
@@ -26,7 +26,6 @@ int main()
             Sleep(1000);
             break;
         }
-
 
         Sleep(1000);
     }

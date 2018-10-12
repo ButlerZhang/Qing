@@ -19,8 +19,14 @@ public:
     bool Start(const std::string &ServerIP, int Port, bool IsServer);
     void Stop();
 
-    int Send(const void *MessageData, int MessageSize);
-    int Send(int NaturalIndex, const void *MessageData, int MessageSize, __int64 Timeout = 0);
+    bool IsRunning() const { return m_Network->IsRunning(); }
+    int  Send(const void *MessageData, int MessageSize);
+    int  Send(unsigned __int64 NaturalIndex, const void *MessageData, int MessageSize, __int64 Timeout = 0);
+
+public: //test code
+
+    void TestServer();
+    static DWORD WINAPI CallBack_RandomMessageThread(LPVOID lpParam);
 
 private:
 

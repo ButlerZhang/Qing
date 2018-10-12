@@ -1,9 +1,11 @@
 #include "..\HeaderFiles\Network.h"
-#include "..\HeaderFiles\Network.h"
-#include "..\HeaderFiles\Network.h"
 #include "..\HeaderFiles\QingLog.h"
 #include "..\Model\Network\NetworkClient.h"
 #include "..\Model\Network\NetworkServer.h"
+
+#include "..\HeaderFiles\Utility.h"
+#include "..\HeaderFiles\RandomGenerator.h"
+
 #include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
@@ -87,9 +89,31 @@ int Network::Send(const void * MessageData, int MessageSize)
     return m_Network->Send(MessageData, MessageSize);
 }
 
-int Network::Send(int NaturalIndex, const void * MessageData, int MessageSize, __int64 Timeout)
+int Network::Send(unsigned __int64 NaturalIndex, const void * MessageData, int MessageSize, __int64 Timeout)
 {
     return m_Network->Send(NaturalIndex, MessageData, MessageSize, Timeout);
+}
+
+void Network::TestServer()
+{
+    DWORD nThreadID;
+    ::CreateThread(0, 0, CallBack_RandomMessageThread, (void*)this, 0, &nThreadID);
+}
+
+DWORD Network::CallBack_RandomMessageThread(LPVOID lpParam)
+{
+    Qing::RandomGenerator MyRandom;
+    Network *MyServer = (Network*)lpParam;
+
+    while (MyServer->IsRunning())
+    {
+        Sleep(MyRandom.GetRandomUIntInRange(1000, 10000));
+
+        std::string RandomMessage(Qing::GetGUID());
+        MyServer->Send(0, RandomMessage.c_str(), static_cast<int>(RandomMessage.size()));
+    }
+
+    return 0;
 }
 
 QING_NAMESPACE_END

@@ -71,6 +71,11 @@ void NetworkBase::Stop()
     }
 }
 
+bool NetworkBase::IsRunning() const
+{
+    return m_hWorkerThreadExitEvent != NULL && m_hIOCompletionPort != NULL && !m_ThreadParamVector.empty();
+}
+
 const std::string & NetworkBase::GetLocalIP()
 {
     if (m_ServerIP.empty())

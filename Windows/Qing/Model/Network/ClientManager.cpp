@@ -44,6 +44,19 @@ void ClientManager::RemoveClient(const std::shared_ptr<IOCPSocketContext>& pSock
     LeaveCriticalSection(&m_MapSection);
 }
 
+int ClientManager::GetAllClientID(std::vector<SOCKET>& ClientVector)
+{
+    ClientVector.clear();
+    EnterCriticalSection(&m_MapSection);
+    for (auto iter = m_ClientMap.cbegin(); iter != m_ClientMap.cend(); iter++)
+    {
+        ClientVector.push_back(iter->first);
+    }
+    LeaveCriticalSection(&m_MapSection);
+
+    return static_cast<int>(ClientVector.size());
+}
+
 std::shared_ptr<IOCPSocketContext> ClientManager::GetClientContext(SOCKET ClientID)
 {
     EnterCriticalSection(&m_MapSection);
