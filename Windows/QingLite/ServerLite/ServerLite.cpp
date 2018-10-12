@@ -6,16 +6,13 @@
 #include "..\..\Qing\HeaderFiles\QingLog.h"
 #include <iostream>
 
-
-
 int main()
 {
-    //Qing::QingLog::DefaultInit();
-    Qing::StartupNetwork();
+    Qing::QingLog::DefaultInit();
 
     ServerNetwork MyServer;
     MyServer.Start(std::string(), 12345, true);
-    MyServer.TestServer();
+    //MyServer.TestServer();
 
     std::string quitstring;
     while (std::cin >> quitstring)
@@ -30,7 +27,6 @@ int main()
         Sleep(1000);
     }
 
-    Qing::ShutdownNetwork();
     system("pause");
     return 0;
 }

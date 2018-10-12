@@ -29,7 +29,7 @@ std::string QingLog::m_LogDirectory;
 void QingLog::DefaultInit()
 {
     SetIsOkToWrite(true);
-    SetLogDirectory("C:\\QingLog\\");
+    SetLogDirectoryAutoAppendProgramName("C:\\QingLog\\");
 
     InitBaseSink();
     InitTemporarySink();

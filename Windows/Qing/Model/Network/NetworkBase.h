@@ -24,7 +24,6 @@ public:
 
 protected:
 
-    virtual bool CreateIOCP();
     virtual bool CreateWorkerThread(int WorkerThreadCount = 0);
     virtual void WorkerThread() = 0;
 
@@ -36,20 +35,15 @@ protected:
     void ReleaseHandle(HANDLE &Handle);
     void SetSocketLinger(SOCKET Socket);
     void FillAddress(sockaddr_in &ServerAddress);
-
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
-    static unsigned __int64 GetNextIOCPContextID() { InterlockedIncrement(&g_IOCPContextID); return g_IOCPContextID; }
 
 protected:
 
     int                                     m_ServerPort;
     std::string                             m_ServerIP;
-    HANDLE                                  m_hIOCompletionPort;
     HANDLE                                  m_hWorkerThreadExitEvent;
     HANDLE                                  m_WorkerThreads[MAX_WORKER_THREAD_COUNT];
     std::vector<WorkerThreadParam>          m_ThreadParamVector;
-
-    static unsigned __int64                 g_IOCPContextID;
 };
 
 QING_NAMESPACE_END

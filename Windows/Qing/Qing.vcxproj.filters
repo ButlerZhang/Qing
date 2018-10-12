@@ -31,11 +31,11 @@
     <Filter Include="Model\Network">
       <UniqueIdentifier>{f29aff3d-82e0-49ed-8f19-6e3a8f99d9bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model\Database">
+      <UniqueIdentifier>{d965d7a5-33c7-4e86-a0cd-c26e23ce64e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderFiles\Network.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\QingBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -120,11 +120,14 @@
     <ClInclude Include="Model\Network\NetworkClient.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Model\Network\NetworkEnvironment.h">
+      <Filter>Model\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\QingNetwork.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceFiles\Network.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -190,6 +193,12 @@
     </ClCompile>
     <ClCompile Include="Model\Network\IOCPModel.cpp">
       <Filter>Model\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Network\NetworkEnvironment.cpp">
+      <Filter>Model\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\QingNetwork.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

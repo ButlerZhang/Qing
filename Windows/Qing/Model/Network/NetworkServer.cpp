@@ -1,4 +1,5 @@
 #include "NetworkServer.h"
+#include "NetworkEnvironment.h"
 #include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 
@@ -21,8 +22,7 @@ bool NetworkServer::Start(const std::string &ServerIP, int Port)
 {
     if (NetworkBase::Start(ServerIP, Port))
     {
-        if (CreateIOCP() &&
-            CreateWorkerThread() &&
+        if (CreateWorkerThread() &&
             CreateAndStartListen() &&
             InitializeAcceptExCallBack() &&
             StartPostAcceptExIORequest())
@@ -54,7 +54,7 @@ int NetworkServer::Send(unsigned __int64 ClientID, const void * MessageData, int
     for (auto Index = 0; Index < ClientVector.size(); Index++)
     {
         std::shared_ptr<IOCPSocketContext> ClientContext = m_ClientManager.GetClientContext(ClientVector[Index]);
-        std::shared_ptr<IOCPContext> &SendIOCPContext = ClientContext->GetNewIOContext(GetNextIOCPContextID());
+        std::shared_ptr<IOCPContext> &SendIOCPContext = ClientContext->GetNewIOContext(GlobalNetwork.GetNextTrackID());
 
         SendIOCPContext->m_AcceptSocket = ClientVector[Index];
         SendIOCPContext->m_WSABuffer.len = MessageSize;
@@ -82,7 +82,7 @@ bool NetworkServer::CreateAndStartListen()
 
     //将listen socket绑定到完成端口
     //第三个参数CompletionKey类似于线程参数，在worker线程中就可以使用这个参数了
-    if (CreateIoCompletionPort((HANDLE)m_ListenSocketContext->m_Socket, m_hIOCompletionPort, (ULONG_PTR)(m_ListenSocketContext.get()), 0) == NULL)
+    if (CreateIoCompletionPort((HANDLE)m_ListenSocketContext->m_Socket, GlobalNetwork.GetIOCP(), (ULONG_PTR)(m_ListenSocketContext.get()), 0) == NULL)
     {
         QingLog::Write(LL_ERROR, "Bind listen socket to IOCP failed, error = %d.", WSAGetLastError());
         return false;
@@ -168,7 +168,7 @@ bool NetworkServer::StartPostAcceptExIORequest()
 
     for (int i = 0; i < InitAcceptPostCount; i++)
     {
-        std::shared_ptr<IOCPContext> pAcceptIOCPContext = m_ListenSocketContext->GetNewIOContext(GetNextIOCPContextID());
+        std::shared_ptr<IOCPContext> pAcceptIOCPContext = m_ListenSocketContext->GetNewIOContext(GlobalNetwork.GetNextTrackID());
         if (!PostAccept(*pAcceptIOCPContext))
         {
             m_ListenSocketContext->DeleteContext(*pAcceptIOCPContext);
@@ -225,7 +225,7 @@ bool NetworkServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocke
     {
         if (IsSocketAlive(pSocketContext->m_Socket))
         {
-            QingLog::Write("Network time out, reconnecting....", LL_INFO);
+            QingLog::Write("QingNetwork time out, reconnecting....", LL_INFO);
             return true;
         }
         else
@@ -298,14 +298,14 @@ bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pCli
     pNewIOCPSocketContext->m_Socket = AcceptIOCPContext.m_AcceptSocket;
 
     //将这个新的Socket和完成端口绑定
-    if (CreateIoCompletionPort((HANDLE)pNewIOCPSocketContext->m_Socket, m_hIOCompletionPort, (ULONG_PTR)(pNewIOCPSocketContext.get()), 0) == NULL)
+    if (CreateIoCompletionPort((HANDLE)pNewIOCPSocketContext->m_Socket, GlobalNetwork.GetIOCP(), (ULONG_PTR)(pNewIOCPSocketContext.get()), 0) == NULL)
     {
         QingLog::Write(LL_ERROR, "Process accept, associate with IOCP error = %d.", GetLastError());
         return false;
     }
 
     //3.建立新Socket下的IOContext，用于在这个socket上投递第一个Recv数据请求
-    pNewIOCPSocketContext->m_RecvIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
+    pNewIOCPSocketContext->m_RecvIOCPContext = std::make_shared<IOCPContext>(GlobalNetwork.GetNextTrackID());
     memcpy(pNewIOCPSocketContext->m_RecvIOCPContext->m_Buffer, AcceptIOCPContext.m_Buffer, MAX_IO_CONTEXT_BUFFER_LEN);
     pNewIOCPSocketContext->m_RecvIOCPContext->m_AcceptSocket = pNewIOCPSocketContext->m_Socket;
 
@@ -361,7 +361,7 @@ void NetworkServer::WorkerThread()
     {
         std::shared_ptr<IOCPSocketContext> pClientSocketContext;
         BOOL bReturn = GetQueuedCompletionStatus(
-            m_hIOCompletionPort,                    //完成端口
+            GlobalNetwork.GetIOCP(),                //完成端口
             &dwBytesTransfered,                     //操作完成后返回的字节数
             (PULONG_PTR)&pClientSocketContext,      //建立完成端口时绑定的自定义结构体参数
             &pOverlapped,                           //连入socket时一起建立的重叠结构

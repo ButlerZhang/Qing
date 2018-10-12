@@ -1,18 +1,17 @@
 #include "NetworkBase.h"
+#include "NetworkEnvironment.h"
 #include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 #include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
 
-unsigned __int64 NetworkBase::g_IOCPContextID = 0;
-
 
 
 NetworkBase::NetworkBase() : m_ServerPort(0),
-                             m_hIOCompletionPort(NULL),
                              m_hWorkerThreadExitEvent(NULL)
 {
+    HANDLE IOCPHandle = GlobalNetwork.GetIOCP();
     memset(m_WorkerThreads, NULL, sizeof(m_WorkerThreads));
 }
 
@@ -51,14 +50,13 @@ void NetworkBase::Stop()
         //通知所有的完成端口操作退出
         for (auto Index = 0; Index < m_ThreadParamVector.size(); Index++)
         {
-            PostQueuedCompletionStatus(m_hIOCompletionPort, 0, NULL, NULL);
+            PostQueuedCompletionStatus(GlobalNetwork.GetIOCP(), 0, NULL, NULL);
         }
 
         //等待所有工作线程资源退出
         WaitForMultipleObjects(static_cast<DWORD>(m_ThreadParamVector.size()), m_WorkerThreads, TRUE, INFINITE);
 
         //释放其它资源
-        ReleaseHandle(m_hIOCompletionPort);
         ReleaseHandle(m_hWorkerThreadExitEvent);
 
         for (int Index = 0; Index < static_cast<int>(m_ThreadParamVector.size()); Index++)
@@ -73,7 +71,7 @@ void NetworkBase::Stop()
 
 bool NetworkBase::IsRunning() const
 {
-    return m_hWorkerThreadExitEvent != NULL && m_hIOCompletionPort != NULL && !m_ThreadParamVector.empty();
+    return m_hWorkerThreadExitEvent != NULL && !m_ThreadParamVector.empty();
 }
 
 const std::string & NetworkBase::GetLocalIP()
@@ -129,26 +127,6 @@ void NetworkBase::FillAddress(sockaddr_in &ServerAddress)
         inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
         QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerPort);
     }
-}
-
-bool NetworkBase::CreateIOCP()
-{
-    m_hIOCompletionPort = CreateIoCompletionPort(
-        INVALID_HANDLE_VALUE,   //FileHandle是有效的文件句柄或INVALID_HANDLE_VALUE
-        NULL,                   //ExistingCompletionPort已经存在的完成端口，如果为NULL则新建一个
-        0,                      //CompletionKey是传送给处理函数的参数
-        0);                     //NumberOfConcurrentThreads有多少个线程在访问这个消息队列
-                                //如果设置为0表示有多少个处理器就允许同时运行多少个线程
-                                //如果ExistingCompletionPort不为0，系统忽略NumberOfConcurrentThreads
-
-    if (m_hIOCompletionPort == NULL)
-    {
-        QingLog::Write(LL_ERROR, "Create IO completion port error = %d.", WSAGetLastError());
-        return false;
-    }
-
-    QingLog::Write("Created IO completion port succeed.", LL_INFO);
-    return true;
 }
 
 bool NetworkBase::CreateWorkerThread(int WorkerThreadCount)

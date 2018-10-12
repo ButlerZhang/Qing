@@ -1,4 +1,5 @@
 #include "NetworkClient.h"
+#include "NetworkEnvironment.h"
 #include "..\..\HeaderFiles\QingLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 
@@ -21,12 +22,9 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
 {
     if (NetworkBase::Start(ServerIP, Port))
     {
-        if (CreateIOCP() &&
-            CreateWorkerThread(1) &&
-            CreateSocket() &&
-            ConnectServer(ServerIP, Port))
+        if (CreateWorkerThread(1) && CreateSocket())
         {
-            ReadyToRecvData();
+            ConnectServer(ServerIP, Port);
             QingLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
             return true;
         }
@@ -48,7 +46,7 @@ void NetworkClient::Stop()
 
 int NetworkClient::Send(const void * MessageData, int MessageSize)
 {
-    std::shared_ptr<IOCPContext> SendIOCPContext = m_SocketContext->GetNewIOContext(GetNextIOCPContextID());
+    std::shared_ptr<IOCPContext> SendIOCPContext = m_SocketContext->GetNewIOContext(GlobalNetwork.GetNextTrackID());
 
     SendIOCPContext->m_AcceptSocket = m_SocketContext->m_Socket;
     SendIOCPContext->m_WSABuffer.len = MessageSize;
@@ -68,7 +66,7 @@ void NetworkClient::WorkerThread()
     while (WaitForSingleObject(m_hWorkerThreadExitEvent, 0) != WAIT_OBJECT_0)
     {
         BOOL bReturn = GetQueuedCompletionStatus(
-            m_hIOCompletionPort,                            //完成端口
+            GlobalNetwork.GetIOCP(),                        //完成端口
             &dwBytesTransfered,                             //操作完成后返回的字节数
             (PULONG_PTR)&(m_SocketContext->m_Socket),        //建立完成端口时绑定的自定义结构体参数
             &pOverlapped,                                   //连入socket时一起建立的重叠结构
@@ -114,13 +112,23 @@ bool NetworkClient::CreateSocket()
 
     QingLog::Write(LL_INFO, "Create client Socket = %I64d succeed.", m_SocketContext->m_Socket);
 
-    if (CreateIoCompletionPort((HANDLE)(m_SocketContext->m_Socket), m_hIOCompletionPort, m_SocketContext->m_Socket, 0) == NULL)
+    if (CreateIoCompletionPort((HANDLE)(m_SocketContext->m_Socket), GlobalNetwork.GetIOCP(), m_SocketContext->m_Socket, 0) == NULL)
     {
         QingLog::Write(LL_ERROR, "Client socket associate with IOCP error = %d.", GetLastError());
         return false;
     }
 
     return true;
+}
+
+unsigned __int64 NetworkClient::GetClientID() const
+{
+    if (m_SocketContext != NULL)
+    {
+        return m_SocketContext->m_Socket;
+    }
+
+    return 0;
 }
 
 bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
@@ -148,6 +156,7 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
     m_IsConnected = true;
     SetSocketLinger(m_SocketContext->m_Socket);
 
+    ReadyToRecvData();
     return true;
 }
 
@@ -156,7 +165,7 @@ void NetworkClient::ReadyToRecvData()
     std::string LoginMessage("Login Message");
     Send(LoginMessage.c_str(), static_cast<int>(LoginMessage.size()));
 
-    m_SocketContext->m_RecvIOCPContext = std::make_shared<IOCPContext>(GetNextIOCPContextID());
+    m_SocketContext->m_RecvIOCPContext = std::make_shared<IOCPContext>(GlobalNetwork.GetNextTrackID());
     m_SocketContext->m_RecvIOCPContext->m_AcceptSocket = m_SocketContext->m_Socket;
     PostRecv(*(m_SocketContext->m_RecvIOCPContext));
 }

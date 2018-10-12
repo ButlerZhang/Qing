@@ -34,7 +34,7 @@
     <ClInclude Include="HeaderFiles\FileManager.h" />
     <ClInclude Include="HeaderFiles\HexString.h" />
     <ClInclude Include="HeaderFiles\LocalComputer.h" />
-    <ClInclude Include="HeaderFiles\Network.h" />
+    <ClInclude Include="HeaderFiles\QingNetwork.h" />
     <ClInclude Include="HeaderFiles\NumericalConversion.h" />
     <ClInclude Include="HeaderFiles\PermutationCombination.h" />
     <ClInclude Include="HeaderFiles\ProgramDump.h" />
@@ -47,6 +47,7 @@
     <ClInclude Include="Model\Network\IOCPModel.h" />
     <ClInclude Include="Model\Network\NetworkBase.h" />
     <ClInclude Include="Model\Network\NetworkClient.h" />
+    <ClInclude Include="Model\Network\NetworkEnvironment.h" />
     <ClInclude Include="Model\Network\NetworkServer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -64,11 +65,12 @@
     <ClCompile Include="Model\Network\IOCPModel.cpp" />
     <ClCompile Include="Model\Network\NetworkBase.cpp" />
     <ClCompile Include="Model\Network\NetworkClient.cpp" />
+    <ClCompile Include="Model\Network\NetworkEnvironment.cpp" />
     <ClCompile Include="Model\Network\NetworkServer.cpp" />
     <ClCompile Include="SourceFiles\FileManager.cpp" />
     <ClCompile Include="SourceFiles\HexString.cpp" />
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />
-    <ClCompile Include="SourceFiles\Network.cpp" />
+    <ClCompile Include="SourceFiles\QingNetwork.cpp" />
     <ClCompile Include="SourceFiles\NumericalConversion.cpp" />
     <ClCompile Include="SourceFiles\QingLog.cpp" />
     <ClCompile Include="SourceFiles\RandomGenerator.cpp" />

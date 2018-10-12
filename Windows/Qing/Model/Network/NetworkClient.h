@@ -12,19 +12,18 @@ public:
     NetworkClient();
     virtual ~NetworkClient();
 
-    virtual bool Start(const std::string &ServerIP, int Port);
     virtual void Stop();
+    virtual bool Start(const std::string &ServerIP, int Port);
+    virtual int  Send(const void *MessageData, int MessageSize);
 
-    virtual int Send(const void *MessageData, int MessageSize);
-
-protected:
-
-    virtual void WorkerThread();
+    unsigned __int64 GetClientID() const;
+    bool IsConnected() const { return m_IsConnected; }
+    bool ConnectServer(const std::string &ServerIP, int Port);
 
 protected:
 
     bool CreateSocket();
-    bool ConnectServer(const std::string &ServerIP, int Port);
+    void WorkerThread();
     void ReadyToRecvData();
 
     bool ProcessRecv(IOCPContext &RecvIOCPContext);

@@ -73,11 +73,14 @@ bool IOCPSocketContext::DeleteContext(const IOCPContext &RemoveIOContext)
     unsigned __int64 RemoveTrackID = RemoveIOContext.m_ContextID;
 
     EnterCriticalSection(&m_QueueSection);
-    std::shared_ptr<IOCPContext> OldContext = m_SendIOCPContextQueue.front();
-    if (RemoveSocket == OldContext->m_AcceptSocket && RemoveTrackID == OldContext->m_ContextID)
+    if (!m_SendIOCPContextQueue.empty())
     {
-        m_SendIOCPContextQueue.pop();
-        IsRemove = true;
+        std::shared_ptr<IOCPContext> OldContext = m_SendIOCPContextQueue.front();
+        if (RemoveSocket == OldContext->m_AcceptSocket && RemoveTrackID == OldContext->m_ContextID)
+        {
+            m_SendIOCPContextQueue.pop();
+            IsRemove = true;
+        }
     }
     LeaveCriticalSection(&m_QueueSection);
 
