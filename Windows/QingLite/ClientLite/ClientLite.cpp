@@ -9,6 +9,7 @@
 
 
 
+
 int main()
 {
     Qing::QingLog::DefaultInit();

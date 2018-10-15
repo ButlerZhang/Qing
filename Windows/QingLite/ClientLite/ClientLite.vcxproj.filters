@@ -25,9 +25,6 @@
     <Filter Include="Reference\Qing\Include">
       <UniqueIdentifier>{14e14d4b-18ac-47f8-b356-c69632728d94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Qing\Lib">
-      <UniqueIdentifier>{5877c4ba-97ab-4dca-a00e-0613d35e2761}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -57,6 +54,30 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h">
       <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingNetwork.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -68,13 +89,5 @@
     <ClCompile Include="Network\ClientNetwork.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\Deployment\Debug\QingD.lib">
-      <Filter>Reference\Qing\Lib</Filter>
-    </Library>
-    <Library Include="..\..\Deployment\Release\Qing.lib">
-      <Filter>Reference\Qing\Lib</Filter>
-    </Library>
   </ItemGroup>
 </Project>

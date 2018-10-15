@@ -71,18 +71,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\Deployment\Debug\x86\$(ProjectName)D\</OutDir>
+    <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\Deployment\Debug\</OutDir>
+    <OutDir>..\..\Deployment\Debug\x64\$(ProjectName)D\</OutDir>
     <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\Deployment\Release\x86\$(ProjectName)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\Deployment\Release\</OutDir>
+    <OutDir>..\..\Deployment\Release\x64\$(ProjectName)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,7 +99,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Qing32D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\Deployment\Debug\x86\QingD\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,7 +115,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Qing64D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\Deployment\Debug\x64\QingD\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,6 +135,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\Deployment\Release\x86\Qing\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;Qing32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,7 +155,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Qing64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\Deployment\Release\x64\Qing\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,9 +164,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\Network.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingNetwork.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h" />
     <ClInclude Include="Network\ServerNetwork.h" />
     <ClInclude Include="stdafx.h" />
@@ -168,14 +184,6 @@
     <ClCompile Include="Network\ServerNetwork.cpp" />
     <ClCompile Include="ServerLite.cpp" />
     <ClCompile Include="stdafx.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\Deployment\Debug\QingD.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="..\..\Deployment\Release\Qing.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Library>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

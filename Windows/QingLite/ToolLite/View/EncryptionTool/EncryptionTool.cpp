@@ -134,7 +134,7 @@ void EncryptionTool::OnBnClickedButtonEncrypt()
     long TotalSize = 0, MaxSize = 0;
     std::vector<std::string> FileNameVector;
     const std::string &SourcePathString = Qing::WStringToString(SourcePath.GetString());
-    MyFileManager.GetFileNameNonRecursion(SourcePathString, FileNameVector, TotalSize, MaxSize);
+    //MyFileManager.GetFileNameNonRecursion(SourcePathString, FileNameVector, TotalSize, MaxSize);
 }
 
 void EncryptionTool::OnBnClickedButtonDecrypt()

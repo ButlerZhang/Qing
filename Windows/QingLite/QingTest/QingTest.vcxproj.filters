@@ -22,9 +22,6 @@
     <Filter Include="Reference\Qing\Include">
       <UniqueIdentifier>{31f61ca0-7986-470e-9516-383315b3c331}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Qing\Lib">
-      <UniqueIdentifier>{ce6b3640-f5ca-4569-8e8d-de9201766095}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Reference\Qing\Include\DesignPatterns">
       <UniqueIdentifier>{2b630ea3-b558-48e3-b5d4-5ee7a091f851}</UniqueIdentifier>
     </Filter>
@@ -111,6 +108,12 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h">
       <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingNetwork.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -119,13 +122,5 @@
     <ClCompile Include="QingTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\Deployment\Debug\QingD.lib">
-      <Filter>Reference\Qing\Lib</Filter>
-    </Library>
-    <Library Include="..\..\Deployment\Release\Qing.lib">
-      <Filter>Reference\Qing\Lib</Filter>
-    </Library>
   </ItemGroup>
 </Project>

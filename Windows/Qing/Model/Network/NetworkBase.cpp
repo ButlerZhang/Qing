@@ -48,7 +48,7 @@ void NetworkBase::Stop()
         SetEvent(m_hWorkerThreadExitEvent);
 
         //通知所有的完成端口操作退出
-        for (auto Index = 0; Index < m_ThreadParamVector.size(); Index++)
+        for (std::vector<WorkerThreadParam>::size_type Index = 0; Index < m_ThreadParamVector.size(); Index++)
         {
             PostQueuedCompletionStatus(GlobalNetwork.GetIOCP(), 0, NULL, NULL);
         }
@@ -152,7 +152,7 @@ bool NetworkBase::CreateWorkerThread(int WorkerThreadCount)
     }
 
     DWORD nThreadID;
-    for (auto ThreadIndex = 0; ThreadIndex < m_ThreadParamVector.size(); ThreadIndex++)
+    for (std::vector<WorkerThreadParam>::size_type ThreadIndex = 0; ThreadIndex < m_ThreadParamVector.size(); ThreadIndex++)
     {
         m_WorkerThreads[ThreadIndex] = ::CreateThread(0, 0, CallBack_WorkerThread, (void*)(&m_ThreadParamVector[ThreadIndex]), 0, &nThreadID);
 

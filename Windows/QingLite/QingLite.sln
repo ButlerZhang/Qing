@@ -4,14 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerLite", "ServerLite\ServerLite.vcxproj", "{9F9D35DB-846C-4F19-B099-B6EADDCF69FE}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7B247FD1-7119-4838-9F12-CB855D783DD2} = {7B247FD1-7119-4838-9F12-CB855D783DD2}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientLite", "ClientLite\ClientLite.vcxproj", "{D06C8583-8BC8-42EB-9F26-634198FC1819}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7B247FD1-7119-4838-9F12-CB855D783DD2} = {7B247FD1-7119-4838-9F12-CB855D783DD2}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Qing", "..\Qing\Qing.vcxproj", "{7B247FD1-7119-4838-9F12-CB855D783DD2}"
 EndProject

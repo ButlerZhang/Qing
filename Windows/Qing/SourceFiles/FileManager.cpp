@@ -95,7 +95,7 @@ bool FileManager::GetFileNameRecursion(const std::string &Directory, std::vector
 {
     struct _finddata_t FileInfo;
     std::string TempDirectory;
-    long long hFile = 0;
+    intptr_t hFile = 0;
 
     if ((hFile = _findfirst(TempDirectory.assign(Directory).append("\\*").c_str(), &FileInfo)) != -1L)
     {
@@ -137,7 +137,7 @@ bool FileManager::GetFileNameNonRecursion(const std::string &Directory, std::vec
 
     struct _finddata_t FileInfo;
     std::string TempDirectory;
-    long long hFile = 0;
+    intptr_t hFile = 0;
 
     while (!DirectoryList.empty())
     {

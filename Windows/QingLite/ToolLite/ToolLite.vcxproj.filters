@@ -57,6 +57,30 @@
     <ClInclude Include="WindowsToolDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\QingNetwork.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -80,9 +104,6 @@
     <Filter Include="Reference\Qing\Include">
       <UniqueIdentifier>{cf7e2795-fde8-4739-ada8-ec0ba95d8ba9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Qing\Lib">
-      <UniqueIdentifier>{d2d2a8f6-d56b-4be2-9ef4-97d8dbff75c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{bd9b0a88-3436-4139-8607-550dae363941}</UniqueIdentifier>
     </Filter>
@@ -92,14 +113,6 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{f9c0369a-5bf1-4479-868e-5a1470702614}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\Deployment\Debug\QingD.lib">
-      <Filter>Reference\Qing\Lib</Filter>
-    </Library>
-    <Library Include="..\..\Deployment\Release\Qing.lib">
-      <Filter>Reference\Qing\Lib</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\WindowsTool.ico">

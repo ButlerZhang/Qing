@@ -46,12 +46,12 @@ void NetworkServer::Stop()
     }
 }
 
-int NetworkServer::Send(unsigned __int64 ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
+int NetworkServer::Send(SOCKET ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
 {
     std::vector<SOCKET> ClientVector;
-    ClientID == 0 ? m_ClientManager.GetAllClientID(ClientVector): ClientVector.push_back(ClientID);
+    ClientID <= 0 ? m_ClientManager.GetAllClientID(ClientVector): ClientVector.push_back(ClientID);
 
-    for (auto Index = 0; Index < ClientVector.size(); Index++)
+    for (std::vector<SOCKET>::size_type Index = 0; Index < ClientVector.size(); Index++)
     {
         std::shared_ptr<IOCPSocketContext> ClientContext = m_ClientManager.GetClientContext(ClientVector[Index]);
         std::shared_ptr<IOCPContext> &SendIOCPContext = ClientContext->GetNewIOContext(GlobalNetwork.GetNextTrackID());

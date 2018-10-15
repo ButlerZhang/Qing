@@ -18,7 +18,7 @@ public:
 
     bool IsRunning() const { return m_Network->IsRunning(); }
     int  Send(const void *MessageData, int MessageSize);
-    int  Send(unsigned __int64 NaturalIndex, const void *MessageData, int MessageSize, __int64 Timeout = 0);
+    int  Send(SOCKET ClientID, const void *MessageData, int MessageSize, __int64 Timeout = 0);
 
 private:
 

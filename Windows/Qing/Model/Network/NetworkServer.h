@@ -16,7 +16,7 @@ public:
     virtual bool Start(const std::string &ServerIP, int Port);
     virtual void Stop();
 
-    virtual int Send(unsigned __int64 ClientID, const void *MessageData, int MessageSize, __int64 Timeout = 0);
+    virtual int Send(SOCKET ClientID, const void *MessageData, int MessageSize, __int64 Timeout = 0);
 
     int GetClientCount() const { return m_ClientManager.GetClientCount(); }
 

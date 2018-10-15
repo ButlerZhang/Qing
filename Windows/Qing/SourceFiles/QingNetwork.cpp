@@ -43,9 +43,9 @@ int QingNetwork::Send(const void * MessageData, int MessageSize)
     return m_Network->Send(MessageData, MessageSize);
 }
 
-int QingNetwork::Send(unsigned __int64 NaturalIndex, const void * MessageData, int MessageSize, __int64 Timeout)
+int QingNetwork::Send(SOCKET ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
 {
-    return m_Network->Send(NaturalIndex, MessageData, MessageSize, Timeout);
+    return m_Network->Send(ClientID, MessageData, MessageSize, Timeout);
 }
 
 QING_NAMESPACE_END
