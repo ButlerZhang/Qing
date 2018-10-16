@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "afxdialogex.h"
 #include "EncryptionTool.h"
-#include "../../WindowsTool.h"
+#include "..\..\WindowsTool.h"
 #include "..\..\..\..\Qing\HeaderFiles\Utility.h"
 #include "..\..\..\..\Qing\HeaderFiles\FileManager.h"
+
+#include <shlobj.h>
 
 
 

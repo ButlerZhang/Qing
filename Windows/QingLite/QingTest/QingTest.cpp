@@ -41,7 +41,7 @@ int main()
         L"4589490066574993195"
     };
 
-    for (auto Index = 0; Index < ProbWinVector.size(); Index++)
+    for (std::vector<std::wstring>::size_type Index = 0; Index < ProbWinVector.size(); Index++)
     {
         std::wcout << ProbWinVector[Index] << "\t" << StorageStringAsDouble(ProbWinVector[Index], 0.0) << std::endl;
     }
