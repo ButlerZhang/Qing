@@ -126,6 +126,9 @@
     <ClInclude Include="HeaderFiles\QingNetwork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\IniFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Utility.cpp">
@@ -198,6 +201,9 @@
       <Filter>Model\Network</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\QingNetwork.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\IniFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

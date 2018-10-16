@@ -33,6 +33,7 @@
     <ClInclude Include="Example\StringVector.h" />
     <ClInclude Include="HeaderFiles\FileManager.h" />
     <ClInclude Include="HeaderFiles\HexString.h" />
+    <ClInclude Include="HeaderFiles\IniFile.h" />
     <ClInclude Include="HeaderFiles\LocalComputer.h" />
     <ClInclude Include="HeaderFiles\QingNetwork.h" />
     <ClInclude Include="HeaderFiles\NumericalConversion.h" />
@@ -69,6 +70,7 @@
     <ClCompile Include="Model\Network\NetworkServer.cpp" />
     <ClCompile Include="SourceFiles\FileManager.cpp" />
     <ClCompile Include="SourceFiles\HexString.cpp" />
+    <ClCompile Include="SourceFiles\IniFile.cpp" />
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />
     <ClCompile Include="SourceFiles\QingNetwork.cpp" />
     <ClCompile Include="SourceFiles\NumericalConversion.cpp" />

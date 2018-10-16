@@ -28,6 +28,9 @@
     <Filter Include="Reference\Qing\Include\Example">
       <UniqueIdentifier>{6dd51d53-f288-4a73-8f09-cd1ad346f902}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UnitTest">
+      <UniqueIdentifier>{5f763ee5-6762-4a5f-b237-b8a9c5144e17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -113,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h">
       <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\IniFile.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\TestIniFile.h">
+      <Filter>UnitTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
