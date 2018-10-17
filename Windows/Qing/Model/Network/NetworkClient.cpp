@@ -1,6 +1,6 @@
 #include "NetworkClient.h"
 #include "NetworkEnvironment.h"
-#include "..\..\HeaderFiles\QingLog.h"
+#include "..\..\HeaderFiles\BoostLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 
 QING_NAMESPACE_BEGIN
@@ -25,7 +25,7 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
         if (CreateWorkerThread(1) && CreateSocket())
         {
             ConnectServer(ServerIP, Port);
-            QingLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
+            BoostLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
             return true;
         }
     }
@@ -40,7 +40,7 @@ void NetworkClient::Stop()
         NetworkBase::Stop();
         ReleaseSocket(m_SocketContext->m_Socket);
         m_SocketContext->m_Socket = INVALID_SOCKET;
-        QingLog::Write("Stop client.", LL_INFO);
+        BoostLog::Write("Stop client.", LL_INFO);
     }
 }
 
@@ -96,7 +96,7 @@ void NetworkClient::WorkerThread()
         {
         case IOCP_AT_RECV:      ProcessRecv(*pIOCPContext);                              break;
         case IOCP_AT_SEND:      ProcessSend(*pIOCPContext);                              break;
-        default:                QingLog::Write("Worker thread action type error");       break;
+        default:                BoostLog::Write("Worker thread action type error");       break;
         }
     }
 }
@@ -106,15 +106,15 @@ bool NetworkClient::CreateSocket()
     m_SocketContext->m_Socket = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
     if (m_SocketContext->m_Socket == INVALID_SOCKET)
     {
-        QingLog::Write(LL_ERROR, "Create client socket fail, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "Create client socket fail, error = %d.", WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_INFO, "Create client Socket = %I64d succeed.", m_SocketContext->m_Socket);
+    BoostLog::Write(LL_INFO, "Create client Socket = %I64d succeed.", m_SocketContext->m_Socket);
 
     if (CreateIoCompletionPort((HANDLE)(m_SocketContext->m_Socket), GlobalNetwork.GetIOCP(), m_SocketContext->m_Socket, 0) == NULL)
     {
-        QingLog::Write(LL_ERROR, "Client socket associate with IOCP error = %d.", GetLastError());
+        BoostLog::Write(LL_ERROR, "Client socket associate with IOCP error = %d.", GetLastError());
         return false;
     }
 
@@ -135,7 +135,7 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
 {
     if (m_SocketContext->m_Socket == INVALID_SOCKET)
     {
-        QingLog::Write("Invalid Socket.", LL_ERROR);
+        BoostLog::Write("Invalid Socket.", LL_ERROR);
         return false;
     }
 
@@ -149,7 +149,7 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
 
     if (::WSAConnect(m_SocketContext->m_Socket, reinterpret_cast<const struct sockaddr*>(&ServerAddress), sizeof(ServerAddress),0,0,0,0) == SOCKET_ERROR)
     {
-        QingLog::Write(LL_ERROR, "Connect server failed, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "Connect server failed, error = %d.", WSAGetLastError());
         return false;
     }
 
@@ -172,13 +172,13 @@ void NetworkClient::ReadyToRecvData()
 
 bool NetworkClient::ProcessRecv(IOCPContext &RecvIOCPContext)
 {
-    QingLog::Write(LL_INFO, "Recv message = %s", RecvIOCPContext.m_WSABuffer.buf);
+    BoostLog::Write(LL_INFO, "Recv message = %s", RecvIOCPContext.m_WSABuffer.buf);
     return PostRecv(RecvIOCPContext);
 }
 
 bool NetworkClient::ProcessSend(IOCPContext &SendIOCPContext)
 {
-    QingLog::Write(LL_INFO, "Send message = %s", SendIOCPContext.m_WSABuffer.buf);
+    BoostLog::Write(LL_INFO, "Send message = %s", SendIOCPContext.m_WSABuffer.buf);
     m_SocketContext->DeleteContext(SendIOCPContext);
     return true;
 }

@@ -1,22 +1,20 @@
-#include "..\HeaderFiles\QingNetwork.h"
+#include "..\HeaderFiles\Network.h"
 #include "..\Model\Network\NetworkClient.h"
 #include "..\Model\Network\NetworkServer.h"
-
-//#include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN
 
 
 
-QingNetwork::QingNetwork()
+Network::Network()
 {
 }
 
-QingNetwork::~QingNetwork()
+Network::~Network()
 {
 }
 
-bool QingNetwork::Start(const std::string &ServerIP, int Port, bool IsServer)
+bool Network::Start(const std::string &ServerIP, int Port, bool IsServer)
 {
     if (IsServer)
     {
@@ -30,7 +28,7 @@ bool QingNetwork::Start(const std::string &ServerIP, int Port, bool IsServer)
     return m_Network->Start(ServerIP, Port);
 }
 
-void QingNetwork::Stop()
+void Network::Stop()
 {
     if (m_Network != NULL)
     {
@@ -38,12 +36,12 @@ void QingNetwork::Stop()
     }
 }
 
-int QingNetwork::Send(const void * MessageData, int MessageSize)
+int Network::Send(const void * MessageData, int MessageSize)
 {
     return m_Network->Send(MessageData, MessageSize);
 }
 
-int QingNetwork::Send(SOCKET ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
+int Network::Send(SOCKET ClientID, const void * MessageData, int MessageSize, __int64 Timeout)
 {
     return m_Network->Send(ClientID, MessageData, MessageSize, Timeout);
 }

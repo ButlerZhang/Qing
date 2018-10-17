@@ -1,12 +1,12 @@
 #include "ServerNetwork.h"
-#include "..\..\..\Qing\HeaderFiles\Utility.h"
+#include "..\..\..\Qing\HeaderFiles\CommonFunction.h"
 #include "..\..\..\Qing\HeaderFiles\RandomGenerator.h"
 
 #include <iostream>
 
 
 
-ServerNetwork::ServerNetwork() : QingNetwork()
+ServerNetwork::ServerNetwork() : Network()
 {
 }
 

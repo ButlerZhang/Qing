@@ -1,6 +1,6 @@
 #include "NetworkBase.h"
 #include "NetworkEnvironment.h"
-#include "..\..\HeaderFiles\QingLog.h"
+#include "..\..\HeaderFiles\BoostLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 #include <WS2tcpip.h>
 
@@ -24,14 +24,14 @@ bool NetworkBase::Start(const std::string & ServerIP, int Port)
 {
     if (m_hWorkerThreadExitEvent != NULL)
     {
-        QingLog::Write("Start succeed, repeat start.", LL_INFO);
+        BoostLog::Write("Start succeed, repeat start.", LL_INFO);
         return false;
     }
 
     m_hWorkerThreadExitEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
     if (m_hWorkerThreadExitEvent == NULL)
     {
-        QingLog::Write(LL_ERROR, "Create WorkerThreadExitEvent error = %d.", GetLastError());
+        BoostLog::Write(LL_ERROR, "Create WorkerThreadExitEvent error = %d.", GetLastError());
         return false;
     }
 
@@ -120,12 +120,12 @@ void NetworkBase::FillAddress(sockaddr_in &ServerAddress)
     if (m_ServerIP.empty())
     {
         ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", "INADDR_ANY", m_ServerPort);
+        BoostLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", "INADDR_ANY", m_ServerPort);
     }
     else
     {
         inet_pton(AF_INET, m_ServerIP.c_str(), &(ServerAddress.sin_addr.s_addr));
-        QingLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerPort);
+        BoostLog::Write(LL_INFO, "Fill address set IP = %s, Port = %d.", m_ServerIP.c_str(), m_ServerPort);
     }
 }
 
@@ -157,13 +157,13 @@ bool NetworkBase::CreateWorkerThread(int WorkerThreadCount)
         m_WorkerThreads[ThreadIndex] = ::CreateThread(0, 0, CallBack_WorkerThread, (void*)(&m_ThreadParamVector[ThreadIndex]), 0, &nThreadID);
 
         m_ThreadParamVector[ThreadIndex].m_ThreadID = nThreadID;
-        QingLog::Write(LL_INFO, "Created worker thread, Index = %d, DEC_ID = %d, HEX_ID = %x.",
+        BoostLog::Write(LL_INFO, "Created worker thread, Index = %d, DEC_ID = %d, HEX_ID = %x.",
             m_ThreadParamVector[ThreadIndex].m_ThreadIndex,
             m_ThreadParamVector[ThreadIndex].m_ThreadID,
             m_ThreadParamVector[ThreadIndex].m_ThreadID);
     }
 
-    QingLog::Write(LL_INFO, "Created total = %d worker threads.", m_ThreadParamVector.size());
+    BoostLog::Write(LL_INFO, "Created total = %d worker threads.", m_ThreadParamVector.size());
     return true;
 }
 
@@ -186,12 +186,12 @@ bool NetworkBase::PostRecv(IOCPContext &RecvIOCPContext)
     //如果返回错误，并且错误的代码不是Pending，说明请求失败
     if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
     {
-        QingLog::Write(LL_ERROR, "Post recv failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
+        BoostLog::Write(LL_ERROR, "Post recv failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
             RecvIOCPContext.m_AcceptSocket, RecvIOCPContext.m_ContextID, WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_ERROR, "Post recv succeed, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_ERROR, "Post recv succeed, Socket = %I64d, IOCPContextID = %I64d.",
         RecvIOCPContext.m_AcceptSocket, RecvIOCPContext.m_ContextID);
     return true;
 }
@@ -214,12 +214,12 @@ bool NetworkBase::PostSend(IOCPContext &SendIOCPContext)
     //如果返回错误，并且错误的代码不是Pending，说明请求失败
     if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError()))
     {
-        QingLog::Write(LL_ERROR, "Post send failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
+        BoostLog::Write(LL_ERROR, "Post send failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
             SendIOCPContext.m_AcceptSocket, SendIOCPContext.m_ContextID, WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_ERROR, "Post send succeed, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_ERROR, "Post send succeed, Socket = %I64d, IOCPContextID = %I64d.",
         SendIOCPContext.m_AcceptSocket, SendIOCPContext.m_ContextID);
     return true;
 }
@@ -230,9 +230,9 @@ DWORD NetworkBase::CallBack_WorkerThread(LPVOID lpParam)
     NetworkBase *pNetwork = (NetworkBase*)pParam->m_Network;
     unsigned long ThreadID = (unsigned long)pParam->m_ThreadID;
 
-    QingLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x start.", ThreadID, ThreadID);
+    BoostLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x start.", ThreadID, ThreadID);
     pNetwork->WorkerThread();
-    QingLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x exit.", ThreadID, ThreadID);
+    BoostLog::Write(LL_INFO, "Worker Thread DEC_ID = %d, HEX_ID = %x exit.", ThreadID, ThreadID);
 
     return 0;
 }

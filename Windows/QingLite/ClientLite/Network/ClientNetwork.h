@@ -1,5 +1,5 @@
 #pragma once
-#include "..\..\..\Qing\HeaderFiles\QingNetwork.h"
+#include "..\..\..\Qing\HeaderFiles\Network.h"
 
 
 
@@ -18,5 +18,5 @@ public:
 
 private:
 
-    std::vector<std::shared_ptr<Qing::QingNetwork>> m_ClientVector;
+    std::vector<std::shared_ptr<Qing::Network>> m_ClientVector;
 };

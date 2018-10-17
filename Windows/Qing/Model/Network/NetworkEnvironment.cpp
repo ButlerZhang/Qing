@@ -1,5 +1,5 @@
 #include "NetworkEnvironment.h"
-#include "..\..\HeaderFiles\QingLog.h"
+#include "..\..\HeaderFiles\BoostLog.h"
 
 QING_NAMESPACE_BEGIN
 
@@ -44,11 +44,11 @@ HANDLE NetworkEnvironment::GetIOCP()
 
         if (g_hIOCompletionPort == NULL)
         {
-            QingLog::Write(LL_ERROR, "Create IO completion port error = %d.", WSAGetLastError());
+            BoostLog::Write(LL_ERROR, "Create IO completion port error = %d.", WSAGetLastError());
         }
         else
         {
-            QingLog::Write("Created IO completion port succeed.", LL_INFO);
+            BoostLog::Write("Created IO completion port succeed.", LL_INFO);
         }
     }
 
@@ -69,7 +69,7 @@ bool NetworkEnvironment::StartupNetwork()
             return true;
         }
 
-        QingLog::Write(LL_ERROR, "WSAStartup error = %d.", Result);
+        BoostLog::Write(LL_ERROR, "WSAStartup error = %d.", Result);
     }
 
     return false;
@@ -87,7 +87,7 @@ bool NetworkEnvironment::ShutdownNetwork()
             return true;
         }
 
-        QingLog::Write(LL_ERROR, "WSACleanup error = %d.", Result);
+        BoostLog::Write(LL_ERROR, "WSACleanup error = %d.", Result);
     }
 
     return false;

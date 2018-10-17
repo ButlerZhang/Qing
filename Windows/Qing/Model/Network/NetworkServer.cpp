@@ -1,6 +1,6 @@
 #include "NetworkServer.h"
 #include "NetworkEnvironment.h"
-#include "..\..\HeaderFiles\QingLog.h"
+#include "..\..\HeaderFiles\BoostLog.h"
 #include "..\..\HeaderFiles\LocalComputer.h"
 
 QING_NAMESPACE_BEGIN
@@ -27,7 +27,7 @@ bool NetworkServer::Start(const std::string &ServerIP, int Port)
             InitializeAcceptExCallBack() &&
             StartPostAcceptExIORequest())
         {
-            QingLog::Write("Start succeed, NetworkServer ready.", LL_INFO);
+            BoostLog::Write("Start succeed, NetworkServer ready.", LL_INFO);
             return true;
         }
     }
@@ -42,7 +42,7 @@ void NetworkServer::Stop()
         NetworkBase::Stop();
         ReleaseSocket(m_ListenSocketContext->m_Socket);
 
-        QingLog::Write("Stop server.", LL_INFO);
+        BoostLog::Write("Stop server.", LL_INFO);
     }
 }
 
@@ -74,42 +74,42 @@ bool NetworkServer::CreateAndStartListen()
     m_ListenSocketContext->m_Socket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (m_ListenSocketContext->m_Socket == INVALID_SOCKET)
     {
-        QingLog::Write(LL_ERROR, "Create listen socket failed, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "Create listen socket failed, error = %d.", WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_INFO, "Create listen Socket = %I64d succeed.", m_ListenSocketContext->m_Socket);
+    BoostLog::Write(LL_INFO, "Create listen Socket = %I64d succeed.", m_ListenSocketContext->m_Socket);
 
     //将listen socket绑定到完成端口
     //第三个参数CompletionKey类似于线程参数，在worker线程中就可以使用这个参数了
     if (CreateIoCompletionPort((HANDLE)m_ListenSocketContext->m_Socket, GlobalNetwork.GetIOCP(), (ULONG_PTR)(m_ListenSocketContext.get()), 0) == NULL)
     {
-        QingLog::Write(LL_ERROR, "Bind listen socket to IOCP failed, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "Bind listen socket to IOCP failed, error = %d.", WSAGetLastError());
         return false;
     }
 
-    QingLog::Write("Bind listen socket to IOCP succeed.", LL_INFO);
+    BoostLog::Write("Bind listen socket to IOCP succeed.", LL_INFO);
 
     //绑定地址和端口
     struct sockaddr_in ServerAddress;
     FillAddress(ServerAddress);
     if (bind(m_ListenSocketContext->m_Socket, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress)) == SOCKET_ERROR)
     {
-        QingLog::Write(LL_ERROR, "Listen socket bind failed, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "Listen socket bind failed, error = %d.", WSAGetLastError());
         return false;
     }
 
-    QingLog::Write(LL_INFO, "Listen socket bind succeed, IP = %s, Port = %d.", GetLocalIP().c_str(), m_ServerPort);
+    BoostLog::Write(LL_INFO, "Listen socket bind succeed, IP = %s, Port = %d.", GetLocalIP().c_str(), m_ServerPort);
 
     //开始进行监听
     //SOMAXCONN:Maximum queue length specifiable by listen
     if (listen(m_ListenSocketContext->m_Socket, SOMAXCONN) == SOCKET_ERROR)
     {
-        QingLog::Write(LL_ERROR, "Listen error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "Listen error = %d.", WSAGetLastError());
         return false;
     }
 
-    QingLog::Write("Listening...", LL_INFO);
+    BoostLog::Write("Listening...", LL_INFO);
     return true;
 }
 
@@ -133,7 +133,7 @@ bool NetworkServer::InitializeAcceptExCallBack()
         NULL,
         NULL))
     {
-        QingLog::Write(LL_ERROR, "WSAIoctl can not get AcceptEx pointer, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "WSAIoctl can not get AcceptEx pointer, error = %d.", WSAGetLastError());
         return false;
     }
 
@@ -150,7 +150,7 @@ bool NetworkServer::InitializeAcceptExCallBack()
         NULL,
         NULL))
     {
-        QingLog::Write(LL_ERROR, "WSAIoctl can not get GetAcceptExSockAddrs pointer, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "WSAIoctl can not get GetAcceptExSockAddrs pointer, error = %d.", WSAGetLastError());
         return false;
     }
 
@@ -176,7 +176,7 @@ bool NetworkServer::StartPostAcceptExIORequest()
         }
     }
 
-    QingLog::Write(LL_INFO, "Post %d AcceptEx request.", InitAcceptPostCount);
+    BoostLog::Write(LL_INFO, "Post %d AcceptEx request.", InitAcceptPostCount);
     return true;
 }
 
@@ -198,7 +198,7 @@ void NetworkServer::GetClientAddress(SOCKADDR_IN &ClientAddress, IOCPContext &Ac
         &ClientLen);
 
     LocalComputer MyComputer;
-    QingLog::Write(LL_INFO, "Connected, Socket(%I64d) = (Server[%s:%d], Client[%s:%d]), message = %s.",
+    BoostLog::Write(LL_INFO, "Connected, Socket(%I64d) = (Server[%s:%d], Client[%s:%d]), message = %s.",
         AcceptIOCPContext.m_AcceptSocket,
         MyComputer.ConvertToIPString(TempServerAddr).c_str(),
         ntohs(TempServerAddr->sin_port),
@@ -225,25 +225,25 @@ bool NetworkServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocke
     {
         if (IsSocketAlive(pSocketContext->m_Socket))
         {
-            QingLog::Write("QingNetwork time out, reconnecting....", LL_INFO);
+            BoostLog::Write("QingNetwork time out, reconnecting....", LL_INFO);
             return true;
         }
         else
         {
-            QingLog::Write("Client disconnected.", LL_INFO);
+            BoostLog::Write("Client disconnected.", LL_INFO);
             m_ClientManager.RemoveClient(pSocketContext);
             return true;
         }
     }
     else if (ERROR_NETNAME_DELETED == ErrorCode)            //异常
     {
-        QingLog::Write("Client disconnected.", LL_INFO);
+        BoostLog::Write("Client disconnected.", LL_INFO);
         m_ClientManager.RemoveClient(pSocketContext);
         return true;
     }
     else
     {
-        QingLog::Write(LL_ERROR, "IOCP error = %d, exit thread.", ErrorCode);
+        BoostLog::Write(LL_ERROR, "IOCP error = %d, exit thread.", ErrorCode);
         return false;
     }
 }
@@ -254,7 +254,7 @@ bool NetworkServer::PostAccept(IOCPContext &AcceptIOCPContext)
     AcceptIOCPContext.m_AcceptSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (AcceptIOCPContext.m_AcceptSocket == INVALID_SOCKET)
     {
-        QingLog::Write(LL_ERROR, "Create new accept socket failed, error = %d.", WSAGetLastError());
+        BoostLog::Write(LL_ERROR, "Create new accept socket failed, error = %d.", WSAGetLastError());
         return false;
     }
 
@@ -275,13 +275,13 @@ bool NetworkServer::PostAccept(IOCPContext &AcceptIOCPContext)
     {
         if (WSAGetLastError() != WSA_IO_PENDING)
         {
-            QingLog::Write(LL_ERROR, "Post accept failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
+            BoostLog::Write(LL_ERROR, "Post accept failed, Socket = %I64d, IOCPContextID = %I64d, error = %d.",
                 AcceptIOCPContext.m_AcceptSocket, AcceptIOCPContext.m_ContextID, WSAGetLastError());
             return false;
         }
     }
 
-    QingLog::Write(LL_ERROR, "Post accept succeed, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_ERROR, "Post accept succeed, Socket = %I64d, IOCPContextID = %I64d.",
         AcceptIOCPContext.m_AcceptSocket, AcceptIOCPContext.m_ContextID);
     return true;
 }
@@ -300,7 +300,7 @@ bool NetworkServer::ProcessAccept(const std::shared_ptr<IOCPSocketContext> &pCli
     //将这个新的Socket和完成端口绑定
     if (CreateIoCompletionPort((HANDLE)pNewIOCPSocketContext->m_Socket, GlobalNetwork.GetIOCP(), (ULONG_PTR)(pNewIOCPSocketContext.get()), 0) == NULL)
     {
-        QingLog::Write(LL_ERROR, "Process accept, associate with IOCP error = %d.", GetLastError());
+        BoostLog::Write(LL_ERROR, "Process accept, associate with IOCP error = %d.", GetLastError());
         return false;
     }
 
@@ -328,7 +328,7 @@ bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pClien
     //处理消息
     LocalComputer MyComputer;
     SOCKADDR_IN *ClientAddr = &pClientSocketContext->m_RemoteAddr;
-    QingLog::Write(LL_INFO, "Recv, Socket = %I64d, IOCPContextID =%I64d, Client = %s:%d, message = %s",
+    BoostLog::Write(LL_INFO, "Recv, Socket = %I64d, IOCPContextID =%I64d, Client = %s:%d, message = %s",
         RecvIOCPContext.m_AcceptSocket,
         RecvIOCPContext.m_ContextID,
         MyComputer.ConvertToIPString(ClientAddr).c_str(),
@@ -346,7 +346,7 @@ bool NetworkServer::ProcessRecv(const std::shared_ptr<IOCPSocketContext> &pClien
 
 bool NetworkServer::ProcessSend(const std::shared_ptr<IOCPSocketContext> &pClientSocketContext, IOCPContext &SendIOCPContext)
 {
-    QingLog::Write(LL_INFO, "Send message = %s", SendIOCPContext.m_WSABuffer.buf);
+    BoostLog::Write(LL_INFO, "Send message = %s", SendIOCPContext.m_WSABuffer.buf);
     pClientSocketContext->DeleteContext(SendIOCPContext);
     return true;
 }
@@ -389,7 +389,7 @@ void NetworkServer::WorkerThread()
         if ((0 == dwBytesTransfered) && (IOCP_AT_RECV == pIOCPContext->m_ActionType || IOCP_AT_SEND == pIOCPContext->m_ActionType))
         {
             LocalComputer MyComputer;
-            QingLog::Write(LL_ERROR, "Client %s:%d disconnected.",
+            BoostLog::Write(LL_ERROR, "Client %s:%d disconnected.",
                 MyComputer.ConvertToIPString(&(pClientSocketContext->m_RemoteAddr)).c_str(),
                 ntohs(pClientSocketContext->m_RemoteAddr.sin_port));
 
@@ -404,7 +404,7 @@ void NetworkServer::WorkerThread()
         case IOCP_AT_ACCEPT:    ProcessAccept(pClientSocketContext, *pIOCPContext);        break;
         case IOCP_AT_RECV:      ProcessRecv(pClientSocketContext, *pIOCPContext);          break;
         case IOCP_AT_SEND:      ProcessSend(pClientSocketContext, *pIOCPContext);          break;
-        default:                QingLog::Write("Worker thread action type error.");        break;
+        default:                BoostLog::Write("Worker thread action type error.");        break;
         }
     }
 }

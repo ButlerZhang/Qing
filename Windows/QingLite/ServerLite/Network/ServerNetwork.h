@@ -1,9 +1,9 @@
 #pragma once
-#include "..\..\..\Qing\HeaderFiles\QingNetwork.h"
+#include "..\..\..\Qing\HeaderFiles\Network.h"
 
 
 
-class ServerNetwork : public Qing::QingNetwork
+class ServerNetwork : public Qing::Network
 {
 public:
 

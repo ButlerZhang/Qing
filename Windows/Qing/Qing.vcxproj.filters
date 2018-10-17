@@ -42,9 +42,6 @@
     <ClInclude Include="Example\StringVector.h">
       <Filter>Example</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\FileManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -99,9 +96,6 @@
     <ClInclude Include="Example\IOExample.h">
       <Filter>Example</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\QingLog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Model\Network\IOCPModel.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
@@ -120,9 +114,6 @@
     <ClInclude Include="Model\Network\NetworkEnvironment.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\QingNetwork.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\IniFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -132,11 +123,17 @@
     <ClInclude Include="HeaderFiles\MySQLDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\BoostLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\CommonFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceFiles\Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\FileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -182,9 +179,6 @@
     <ClCompile Include="Example\IOExample.cpp">
       <Filter>Example</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\QingLog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Model\Network\ClientManager.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
@@ -203,9 +197,6 @@
     <ClCompile Include="Model\Network\NetworkEnvironment.cpp">
       <Filter>Model\Network</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\QingNetwork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\IniFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -213,6 +204,15 @@
       <Filter>Model\Database</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\MySQLDatabase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\BoostLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\CommonFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -14,7 +14,7 @@ enum QING_DLL LogLevel
     LL_ERROR,
 };
 
-class QING_DLL QingLog
+class QING_DLL BoostLog
 {
 public:
 
@@ -34,8 +34,8 @@ public:
 
 private:
 
-    QingLog() {}
-    ~QingLog() {}
+    BoostLog() {}
+    ~BoostLog() {}
 
     static auto CreateSink(const std::string &FileName);
 

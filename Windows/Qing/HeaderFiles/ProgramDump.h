@@ -1,6 +1,6 @@
 #pragma once
 #include "QingBase.h"
-#include "Utility.h"
+#include "CommonFunction.h"
 #include <tchar.h>
 #include <DbgHelp.h>
 

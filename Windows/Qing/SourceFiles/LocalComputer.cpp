@@ -1,6 +1,6 @@
 #include "..\HeaderFiles\LocalComputer.h"
-#include "..\HeaderFiles\Utility.h"
-#include "..\HeaderFiles\QingLog.h"
+#include "..\HeaderFiles\CommonFunction.h"
+#include "..\HeaderFiles\BoostLog.h"
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +36,7 @@ bool LocalComputer::IsProgramExisted(const std::wstring & ProgramName) const
     HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (SnapshotHandler == INVALID_HANDLE_VALUE)
     {
-        QingLog::Write("IsProgramExisted, SnapshotHandler == INVALID_HANDLE_VALUE");
+        BoostLog::Write("IsProgramExisted, SnapshotHandler == INVALID_HANDLE_VALUE");
         return IsExisted;
     }
 
@@ -44,7 +44,7 @@ bool LocalComputer::IsProgramExisted(const std::wstring & ProgramName) const
     ProcessInfo.dwSize = sizeof(ProcessInfo);
     if (!Process32First(SnapshotHandler, &ProcessInfo))
     {
-        QingLog::Write("IsProgramExisted, Process32First failed.");
+        BoostLog::Write("IsProgramExisted, Process32First failed.");
         CloseHandle(SnapshotHandler);
         return IsExisted;
     }
@@ -135,7 +135,7 @@ bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
         {
             std::wstring ErrorInfo = (LPCTSTR)lpMsgBuf;
             const std::string &LogString = WStringToString(ErrorInfo);
-            QingLog::Write(LL_DEBUG, "Start program fail, program name = %s, error = %s.", ProgramName.c_str(), LogString.c_str());
+            BoostLog::Write(LL_DEBUG, "Start program fail, program name = %s, error = %s.", ProgramName.c_str(), LogString.c_str());
             return false;
         }
     }
@@ -167,7 +167,7 @@ bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
     HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (SnapshotHandler == INVALID_HANDLE_VALUE)
     {
-        QingLog::Write("KillProgram, SnapshotHandler == INVALID_HANDLE_VALUE");
+        BoostLog::Write("KillProgram, SnapshotHandler == INVALID_HANDLE_VALUE");
         return false;
     }
 
@@ -175,7 +175,7 @@ bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
     ProcessInfo.dwSize = sizeof(PROCESSENTRY32);
     if (!Process32First(SnapshotHandler, &ProcessInfo))
     {
-        QingLog::Write("KillProgram, Process32First failed.");
+        BoostLog::Write("KillProgram, Process32First failed.");
         return false;
     }
 

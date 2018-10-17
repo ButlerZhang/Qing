@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "..\..\..\Qing\HeaderFiles\QingLog.h"
-#include "..\..\..\Qing\HeaderFiles\Utility.h"
+#include "..\..\..\Qing\HeaderFiles\BoostLog.h"
+#include "..\..\..\Qing\HeaderFiles\CommonFunction.h"
 #include "..\..\..\Qing\HeaderFiles\MySQLDatabase.h"
 
 
@@ -29,7 +29,7 @@ void TestMySQLDatabase()
                     std::string LogString = std::to_string(RacerID) + ":" + EnglishName + "," + ChineseName;
                     const std::wstring &TempLogString = Qing::StringToWString(LogString);
 
-                    //Qing::QingLog::Write(LogString, Qing::LL_ERROR);
+                    //Qing::BoostLog::Write(LogString, Qing::LL_ERROR);
                     std::wcout << TempLogString << std::endl;
                 }
 

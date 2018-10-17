@@ -3,12 +3,12 @@
 
 #include "stdafx.h"
 #include "Network\ServerNetwork.h"
-#include "..\..\Qing\HeaderFiles\QingLog.h"
+#include "..\..\Qing\HeaderFiles\BoostLog.h"
 #include <iostream>
 
 int main()
 {
-    Qing::QingLog::DefaultInit();
+    Qing::BoostLog::DefaultInit();
 
     ServerNetwork MyServer;
     MyServer.Start(std::string(), 12345, true);

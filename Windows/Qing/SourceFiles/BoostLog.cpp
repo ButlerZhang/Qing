@@ -1,5 +1,5 @@
-#include "..\HeaderFiles\QingLog.h"
-#include "..\HeaderFiles\Utility.h"
+#include "..\HeaderFiles\BoostLog.h"
+#include "..\HeaderFiles\CommonFunction.h"
 
 #include <Windows.h>
 #include <boost/log/sinks.hpp>
@@ -21,12 +21,12 @@ namespace keywords = boost::log::keywords;
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(QingLogger, src::severity_logger_mt<LogLevel>)
 typedef sinks::synchronous_sink<sinks::text_file_backend> TextSink;
 
-bool QingLog::m_IsOkToWrite = true;
-std::string QingLog::m_LogDirectory;
+bool BoostLog::m_IsOkToWrite = true;
+std::string BoostLog::m_LogDirectory;
 
 
 
-void QingLog::DefaultInit()
+void BoostLog::DefaultInit()
 {
     SetIsOkToWrite(true);
     SetLogDirectoryAutoAppendProgramName("C:\\QingLog\\");
@@ -35,17 +35,17 @@ void QingLog::DefaultInit()
     InitTemporarySink();
 }
 
-void QingLog::DefaultShutdown()
+void BoostLog::DefaultShutdown()
 {
     logging::core::get()->remove_all_sinks();
 }
 
-void QingLog::SetFilter(LogLevel Level)
+void BoostLog::SetFilter(LogLevel Level)
 {
     logging::core::get()->set_filter(expr::attr<LogLevel>("Severity") >= Level);
 }
 
-auto QingLog::CreateSink(const std::string & FileName)
+auto BoostLog::CreateSink(const std::string & FileName)
 {
     const size_t ONE_MB = 1024 * 1024;
 
@@ -69,7 +69,7 @@ auto QingLog::CreateSink(const std::string & FileName)
     return NewSink;
 }
 
-void QingLog::InitBaseSink(const std::string &LogFileName)
+void BoostLog::InitBaseSink(const std::string &LogFileName)
 {
     boost::shared_ptr<TextSink> BaseSink = CreateSink(LogFileName);
     BaseSink->set_filter(expr::attr<LogLevel>("Severity") >= LL_DEBUG);
@@ -78,7 +78,7 @@ void QingLog::InitBaseSink(const std::string &LogFileName)
     logging::add_common_attributes();
 }
 
-void QingLog::InitTemporarySink(const std::string & LogFileName)
+void BoostLog::InitTemporarySink(const std::string & LogFileName)
 {
     boost::shared_ptr<TextSink> TempSink = CreateSink(LogFileName);
     TempSink->set_filter(expr::attr<LogLevel>("Severity") == LL_TEMP);
@@ -87,7 +87,7 @@ void QingLog::InitTemporarySink(const std::string & LogFileName)
     logging::add_common_attributes();
 }
 
-void QingLog::Write(LogLevel Level, const char * Format, ...)
+void BoostLog::Write(LogLevel Level, const char * Format, ...)
 {
     if (Format != NULL)
     {
@@ -109,16 +109,16 @@ void QingLog::Write(LogLevel Level, const char * Format, ...)
     }
 }
 
-void QingLog::Write(const std::string & LogString, LogLevel Level)
+void BoostLog::Write(const std::string & LogString, LogLevel Level)
 {
     if (m_IsOkToWrite)
     {
-        //src::severity_logger_mt<QingLog::LogLevel>& lg = QingLogger::get();
+        //src::severity_logger_mt<BoostLog::LogLevel>& lg = QingLogger::get();
         BOOST_LOG_SEV(QingLogger::get(), Level) << LogString;
     }
 }
 
-bool QingLog::SetLogDirectory(const std::string &Directory)
+bool BoostLog::SetLogDirectory(const std::string &Directory)
 {
     if ((GetFileAttributesA(Directory.c_str()) & FILE_ATTRIBUTE_DIRECTORY) > 0)
     {
@@ -134,7 +134,7 @@ bool QingLog::SetLogDirectory(const std::string &Directory)
     return false;
 }
 
-bool QingLog::SetLogDirectoryAutoAppendProgramName(const std::string &Directory)
+bool BoostLog::SetLogDirectoryAutoAppendProgramName(const std::string &Directory)
 {
     if (SetLogDirectory(Directory))
     {

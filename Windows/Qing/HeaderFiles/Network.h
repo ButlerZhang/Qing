@@ -6,12 +6,12 @@ QING_NAMESPACE_BEGIN
 
 
 
-class QING_DLL QingNetwork
+class QING_DLL Network
 {
 public:
 
-    QingNetwork();
-    virtual ~QingNetwork();
+    Network();
+    virtual ~Network();
 
     bool Start(const std::string &ServerIP, int Port, bool IsServer);
     void Stop();

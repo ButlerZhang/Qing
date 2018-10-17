@@ -1,5 +1,5 @@
 #include "ClientNetwork.h"
-#include "..\..\..\Qing\HeaderFiles\Utility.h"
+#include "..\..\..\Qing\HeaderFiles\CommonFunction.h"
 #include "..\..\..\Qing\HeaderFiles\RandomGenerator.h"
 
 
@@ -8,7 +8,7 @@ ClientNetwork::ClientNetwork(int ClientCount)
 {
     for (int Index = 0; Index < ClientCount; Index++)
     {
-        m_ClientVector.push_back(std::make_shared<Qing::QingNetwork>());
+        m_ClientVector.push_back(std::make_shared<Qing::Network>());
     }
 }
 

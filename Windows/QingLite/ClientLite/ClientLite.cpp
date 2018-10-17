@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "Network\ClientNetwork.h"
-#include "..\..\Qing\HeaderFiles\QingLog.h"
+#include "..\..\Qing\HeaderFiles\BoostLog.h"
 #include <iostream>
 #include <string>
 
@@ -12,7 +12,7 @@
 
 int main()
 {
-    Qing::QingLog::DefaultInit();
+    Qing::BoostLog::DefaultInit();
 
     ClientNetwork MyClient(1000);
     MyClient.Start("127.0.0.1", 12345, false);

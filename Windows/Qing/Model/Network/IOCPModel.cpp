@@ -1,6 +1,6 @@
 #pragma once
 #include "IOCPModel.h"
-#include "..\..\HeaderFiles\QingLog.h"
+#include "..\..\HeaderFiles\BoostLog.h"
 
 QING_NAMESPACE_BEGIN
 
@@ -13,7 +13,7 @@ void ReleaseSocket(SOCKET &Socket)
         ::shutdown(Socket, SD_BOTH);
         ::closesocket(Socket);
 
-        QingLog::Write(LL_INFO, "Release Socket = %I64d.", Socket);
+        BoostLog::Write(LL_INFO, "Release Socket = %I64d.", Socket);
         Socket = INVALID_SOCKET;
     }
 }
@@ -60,7 +60,7 @@ std::shared_ptr<IOCPContext> IOCPSocketContext::GetNewIOContext(unsigned __int64
     m_SendIOCPContextQueue.push(NewIOCPContext);
     LeaveCriticalSection(&m_QueueSection);
 
-    QingLog::Write(LL_INFO, "Push new IOCPContext, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_INFO, "Push new IOCPContext, Socket = %I64d, IOCPContextID = %I64d.",
         NewIOCPContext->m_AcceptSocket, NewIOCPContext->m_ContextID);
 
     return NewIOCPContext;
@@ -84,7 +84,7 @@ bool IOCPSocketContext::DeleteContext(const IOCPContext &RemoveIOContext)
     }
     LeaveCriticalSection(&m_QueueSection);
 
-    QingLog::Write(LL_INFO, "Delete IOCPContext %s, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_INFO, "Delete IOCPContext %s, Socket = %I64d, IOCPContextID = %I64d.",
         IsRemove ? "succeed" : "failed",
         RemoveSocket,
         RemoveTrackID);
