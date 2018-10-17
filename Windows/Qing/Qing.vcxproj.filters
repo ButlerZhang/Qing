@@ -105,9 +105,6 @@
     <ClInclude Include="Model\Network\IOCPModel.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Example\SimpleServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Model\Network\ClientManager.h">
       <Filter>Model\Network</Filter>
     </ClInclude>
@@ -127,6 +124,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\IniFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Database\Database.h">
+      <Filter>Model\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\MySQLDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -204,6 +207,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\IniFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Database\Database.cpp">
+      <Filter>Model\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\MySQLDatabase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

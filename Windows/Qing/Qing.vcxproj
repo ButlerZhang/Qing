@@ -29,12 +29,12 @@
     <ClInclude Include="Example\DesignPatterns\Header\SimpleFactory.h" />
     <ClInclude Include="Example\DesignPatterns\Header\Singleton.h" />
     <ClInclude Include="Example\IOExample.h" />
-    <ClInclude Include="Example\SimpleServer.h" />
     <ClInclude Include="Example\StringVector.h" />
     <ClInclude Include="HeaderFiles\FileManager.h" />
     <ClInclude Include="HeaderFiles\HexString.h" />
     <ClInclude Include="HeaderFiles\IniFile.h" />
     <ClInclude Include="HeaderFiles\LocalComputer.h" />
+    <ClInclude Include="HeaderFiles\MySQLDatabase.h" />
     <ClInclude Include="HeaderFiles\QingNetwork.h" />
     <ClInclude Include="HeaderFiles\NumericalConversion.h" />
     <ClInclude Include="HeaderFiles\PermutationCombination.h" />
@@ -44,6 +44,7 @@
     <ClInclude Include="HeaderFiles\RandomGenerator.h" />
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\Utility.h" />
+    <ClInclude Include="Model\Database\Database.h" />
     <ClInclude Include="Model\Network\ClientManager.h" />
     <ClInclude Include="Model\Network\IOCPModel.h" />
     <ClInclude Include="Model\Network\NetworkBase.h" />
@@ -62,6 +63,7 @@
     <ClCompile Include="Example\DesignPatterns\Source\SimpleFactory.cpp" />
     <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp" />
     <ClCompile Include="Example\IOExample.cpp" />
+    <ClCompile Include="Model\Database\Database.cpp" />
     <ClCompile Include="Model\Network\ClientManager.cpp" />
     <ClCompile Include="Model\Network\IOCPModel.cpp" />
     <ClCompile Include="Model\Network\NetworkBase.cpp" />
@@ -72,6 +74,7 @@
     <ClCompile Include="SourceFiles\HexString.cpp" />
     <ClCompile Include="SourceFiles\IniFile.cpp" />
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />
+    <ClCompile Include="SourceFiles\MySQLDatabase.cpp" />
     <ClCompile Include="SourceFiles\QingNetwork.cpp" />
     <ClCompile Include="SourceFiles\NumericalConversion.cpp" />
     <ClCompile Include="SourceFiles\QingLog.cpp" />
@@ -180,14 +183,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;QING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)Reference\boost_1_68_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Reference\boost_1_68_0;D:\Program Files\MySQL\MySQL Server 5.6\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;libmysql.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)Reference\boost_1_68_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Reference\boost_1_68_0\stage\lib;D:\Program Files\MySQL\MySQL Server 5.6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>BuildEvents\CopyToDebugX64.bat</Command>

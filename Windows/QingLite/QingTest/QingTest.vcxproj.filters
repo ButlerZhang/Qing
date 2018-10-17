@@ -123,6 +123,9 @@
     <ClInclude Include="UnitTest\TestIniFile.h">
       <Filter>UnitTest</Filter>
     </ClInclude>
+    <ClInclude Include="UnitTest\TestDatabase.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

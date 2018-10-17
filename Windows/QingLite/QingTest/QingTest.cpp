@@ -8,13 +8,13 @@
 #include <string>
 #include <thread>
 #include <numeric>
-#include "UnitTest\TestIniFile.h"
+#include "UnitTest\TestDatabase.h"
 
 
 
 int main()
 {
-    TestIniFile();
+    TestMySQLDatabase();
     system("pause");
     return 0;
 }
