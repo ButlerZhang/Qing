@@ -26,7 +26,10 @@ public:
     static void InitTemporarySink(const std::string &LogFileName = "Temp");
 
     static void Write(LogLevel Level, const char *Format, ...);
-    static void Write(const std::string &LogString, LogLevel Level = LL_DEBUG);
+    static void WriteTemp(const std::string &LogString) { WriteLog(LL_TEMP, LogString); }
+    static void WriteInfo(const std::string &LogString) { WriteLog(LL_INFO, LogString); }
+    static void WriteDebug(const std::string &LogString) { WriteLog(LL_DEBUG, LogString); }
+    static void WriteError(const std::string &LogString) { WriteLog(LL_ERROR, LogString); }
 
     static bool SetLogDirectory(const std::string &Directory);
     static bool SetLogDirectoryAutoAppendProgramName(const std::string &Directory);
@@ -38,6 +41,7 @@ private:
     ~BoostLog() {}
 
     static auto CreateSink(const std::string &FileName);
+    static void WriteLog(LogLevel Level, const std::string &LogString);
 
 private:
 

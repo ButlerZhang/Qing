@@ -18,7 +18,7 @@ namespace sinks = boost::log::sinks;
 namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(QingLogger, src::severity_logger_mt<LogLevel>)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(BoostLogger, src::severity_logger_mt<LogLevel>)
 typedef sinks::synchronous_sink<sinks::text_file_backend> TextSink;
 
 bool BoostLog::m_IsOkToWrite = true;
@@ -105,16 +105,16 @@ void BoostLog::Write(LogLevel Level, const char * Format, ...)
         _vsnprintf_s(LogString, LOGBUFFERSIZE, CopySize, Format, VaList);
         va_end(VaList);
 
-        Write(LogString, Level);
+        WriteLog(Level, LogString);
     }
 }
 
-void BoostLog::Write(const std::string & LogString, LogLevel Level)
+void BoostLog::WriteLog(LogLevel Level, const std::string &LogString)
 {
     if (m_IsOkToWrite)
     {
-        //src::severity_logger_mt<BoostLog::LogLevel>& lg = QingLogger::get();
-        BOOST_LOG_SEV(QingLogger::get(), Level) << LogString;
+        //src::severity_logger_mt<BoostLog::LogLevel>& lg = BoostLogger::get();
+        BOOST_LOG_SEV(BoostLogger::get(), Level) << LogString;
     }
 }
 

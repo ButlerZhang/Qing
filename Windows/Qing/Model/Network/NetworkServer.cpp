@@ -27,7 +27,7 @@ bool NetworkServer::Start(const std::string &ServerIP, int Port)
             InitializeAcceptExCallBack() &&
             StartPostAcceptExIORequest())
         {
-            BoostLog::Write("Start succeed, NetworkServer ready.", LL_INFO);
+            BoostLog::WriteInfo("Start succeed, NetworkServer ready.");
             return true;
         }
     }
@@ -42,7 +42,7 @@ void NetworkServer::Stop()
         NetworkBase::Stop();
         ReleaseSocket(m_ListenSocketContext->m_Socket);
 
-        BoostLog::Write("Stop server.", LL_INFO);
+        BoostLog::WriteInfo("Stop server.");
     }
 }
 
@@ -88,7 +88,7 @@ bool NetworkServer::CreateAndStartListen()
         return false;
     }
 
-    BoostLog::Write("Bind listen socket to IOCP succeed.", LL_INFO);
+    BoostLog::WriteInfo("Bind listen socket to IOCP succeed.");
 
     //绑定地址和端口
     struct sockaddr_in ServerAddress;
@@ -109,7 +109,7 @@ bool NetworkServer::CreateAndStartListen()
         return false;
     }
 
-    BoostLog::Write("Listening...", LL_INFO);
+    BoostLog::WriteInfo("Listening...");
     return true;
 }
 
@@ -225,19 +225,19 @@ bool NetworkServer::HandleError(const std::shared_ptr<IOCPSocketContext> &pSocke
     {
         if (IsSocketAlive(pSocketContext->m_Socket))
         {
-            BoostLog::Write("QingNetwork time out, reconnecting....", LL_INFO);
+            BoostLog::WriteInfo("QingNetwork time out, reconnecting....");
             return true;
         }
         else
         {
-            BoostLog::Write("Client disconnected.", LL_INFO);
+            BoostLog::WriteInfo("Client disconnected.");
             m_ClientManager.RemoveClient(pSocketContext);
             return true;
         }
     }
     else if (ERROR_NETNAME_DELETED == ErrorCode)            //异常
     {
-        BoostLog::Write("Client disconnected.", LL_INFO);
+        BoostLog::WriteInfo("Client disconnected.");
         m_ClientManager.RemoveClient(pSocketContext);
         return true;
     }
@@ -404,7 +404,7 @@ void NetworkServer::WorkerThread()
         case IOCP_AT_ACCEPT:    ProcessAccept(pClientSocketContext, *pIOCPContext);        break;
         case IOCP_AT_RECV:      ProcessRecv(pClientSocketContext, *pIOCPContext);          break;
         case IOCP_AT_SEND:      ProcessSend(pClientSocketContext, *pIOCPContext);          break;
-        default:                BoostLog::Write("Worker thread action type error.");        break;
+        default:                BoostLog::WriteError("Worker thread action type error.");  break;
         }
     }
 }

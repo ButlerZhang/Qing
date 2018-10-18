@@ -52,7 +52,7 @@ std::string GetProgramName()
         }
     }
 
-    BoostLog::Write("Return wrong program name.");
+    BoostLog::WriteInfo("Return wrong program name.");
     return "Qing";
 }
 

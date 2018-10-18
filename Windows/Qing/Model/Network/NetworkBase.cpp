@@ -24,7 +24,7 @@ bool NetworkBase::Start(const std::string & ServerIP, int Port)
 {
     if (m_hWorkerThreadExitEvent != NULL)
     {
-        BoostLog::Write("Start succeed, repeat start.", LL_INFO);
+        BoostLog::WriteInfo("Start succeed, repeat start.");
         return false;
     }
 

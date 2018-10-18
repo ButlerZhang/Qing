@@ -48,7 +48,7 @@ HANDLE NetworkEnvironment::GetIOCP()
         }
         else
         {
-            BoostLog::Write("Created IO completion port succeed.", LL_INFO);
+            BoostLog::WriteInfo("Created IO completion port succeed.");
         }
     }
 

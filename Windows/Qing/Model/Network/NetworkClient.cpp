@@ -25,7 +25,7 @@ bool NetworkClient::Start(const std::string &ServerIP, int Port)
         if (CreateWorkerThread(1) && CreateSocket())
         {
             ConnectServer(ServerIP, Port);
-            BoostLog::Write("Start succeed, NetworkClient ready.", LL_INFO);
+            BoostLog::WriteInfo("Start succeed, NetworkClient ready.");
             return true;
         }
     }
@@ -40,7 +40,7 @@ void NetworkClient::Stop()
         NetworkBase::Stop();
         ReleaseSocket(m_SocketContext->m_Socket);
         m_SocketContext->m_Socket = INVALID_SOCKET;
-        BoostLog::Write("Stop client.", LL_INFO);
+        BoostLog::WriteInfo("Stop client.");
     }
 }
 
@@ -94,9 +94,9 @@ void NetworkClient::WorkerThread()
 
         switch (pIOCPContext->m_ActionType)
         {
-        case IOCP_AT_RECV:      ProcessRecv(*pIOCPContext);                              break;
-        case IOCP_AT_SEND:      ProcessSend(*pIOCPContext);                              break;
-        default:                BoostLog::Write("Worker thread action type error");       break;
+        case IOCP_AT_RECV:      ProcessRecv(*pIOCPContext);                                 break;
+        case IOCP_AT_SEND:      ProcessSend(*pIOCPContext);                                 break;
+        default:                BoostLog::WriteError("Worker thread action type error");    break;
         }
     }
 }
@@ -135,7 +135,7 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
 {
     if (m_SocketContext->m_Socket == INVALID_SOCKET)
     {
-        BoostLog::Write("Invalid Socket.", LL_ERROR);
+        BoostLog::WriteError("Invalid Socket.");
         return false;
     }
 

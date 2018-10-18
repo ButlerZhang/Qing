@@ -36,7 +36,7 @@ bool LocalComputer::IsProgramExisted(const std::wstring & ProgramName) const
     HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (SnapshotHandler == INVALID_HANDLE_VALUE)
     {
-        BoostLog::Write("IsProgramExisted, SnapshotHandler == INVALID_HANDLE_VALUE");
+        BoostLog::WriteError("IsProgramExisted, SnapshotHandler == INVALID_HANDLE_VALUE");
         return IsExisted;
     }
 
@@ -44,7 +44,7 @@ bool LocalComputer::IsProgramExisted(const std::wstring & ProgramName) const
     ProcessInfo.dwSize = sizeof(ProcessInfo);
     if (!Process32First(SnapshotHandler, &ProcessInfo))
     {
-        BoostLog::Write("IsProgramExisted, Process32First failed.");
+        BoostLog::WriteError("IsProgramExisted, Process32First failed.");
         CloseHandle(SnapshotHandler);
         return IsExisted;
     }
@@ -167,7 +167,7 @@ bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
     HANDLE SnapshotHandler = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (SnapshotHandler == INVALID_HANDLE_VALUE)
     {
-        BoostLog::Write("KillProgram, SnapshotHandler == INVALID_HANDLE_VALUE");
+        BoostLog::WriteError("KillProgram, SnapshotHandler == INVALID_HANDLE_VALUE");
         return false;
     }
 
@@ -175,7 +175,7 @@ bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
     ProcessInfo.dwSize = sizeof(PROCESSENTRY32);
     if (!Process32First(SnapshotHandler, &ProcessInfo))
     {
-        BoostLog::Write("KillProgram, Process32First failed.");
+        BoostLog::WriteError("KillProgram, Process32First failed.");
         return false;
     }
 
