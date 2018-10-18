@@ -107,7 +107,7 @@ void BoostLog::InitTemporarySink(const std::string & LogFileName)
 
 void BoostLog::Write(LogLevel Level, const char * Format, ...)
 {
-    if (Format != NULL)
+    if (m_IsOkToWrite && Format != NULL)
     {
         const size_t LOGBUFFERSIZE = 2048;
 

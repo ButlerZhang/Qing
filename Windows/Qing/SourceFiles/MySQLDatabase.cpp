@@ -1,6 +1,7 @@
 #include "..\HeaderFiles\MySQLDatabase.h"
 #include <Windows.h>
 #include <mysql.h>
+
 QING_NAMESPACE_BEGIN
 
 
@@ -92,9 +93,8 @@ bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
 
 
 
-MySQLDatabase::MySQLDatabase()
+MySQLDatabase::MySQLDatabase() : Database()
 {
-    m_Isconnected = false;
     m_MySQL = new MYSQL();
 }
 

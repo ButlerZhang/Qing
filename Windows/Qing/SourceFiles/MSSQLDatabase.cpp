@@ -81,10 +81,9 @@ bool MSSQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
 
 
 
-MSSQLDatabase::MSSQLDatabase()
+MSSQLDatabase::MSSQLDatabase() : Database()
 {
     ::CoInitialize(0);
-    m_Isconnected = false;
     m_ConnectionObject = 0;
 }
 

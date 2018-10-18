@@ -54,6 +54,11 @@ public:
     bool Reconnect();
 
     bool ExecuteQuery(const char* QueryStr, DatabaseDataSet *DataSet = NULL);
+
+protected:
+
+    bool                                m_Isconnected;
+    DatabaseInfo                        m_ConnectionInfo;
 };
 
 QING_NAMESPACE_END

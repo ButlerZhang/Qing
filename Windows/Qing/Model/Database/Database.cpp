@@ -70,6 +70,7 @@ bool DatabaseDataSet::GetValue(const std::string & FieldName, double & Data) con
 
 Database::Database()
 {
+    m_Isconnected = false;
 }
 
 Database::~Database(void)
@@ -87,7 +88,7 @@ void Database::Disconnect()
 
 bool Database::Isconnected()
 {
-    return false;
+    return m_Isconnected;
 }
 
 bool Database::Reconnect()

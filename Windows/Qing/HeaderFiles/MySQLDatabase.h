@@ -54,8 +54,6 @@ public:
 
 private:
 
-    bool                                m_Isconnected;
-    DatabaseInfo                        m_ConnectionInfo;
     MYSQL                              *m_MySQL;
 };
 

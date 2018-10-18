@@ -44,14 +44,11 @@ public:
     void Disconnect();
     bool Isconnected();
     bool Reconnect();
-
     bool ExecuteQuery(const char* QueryStr, DatabaseDataSet *DataSet = NULL);
 
 private:
 
-    bool                                m_Isconnected;
     sqlite3                            *m_sqlite;
-    DatabaseInfo                        m_ConnectionInfo;
 };
 
 

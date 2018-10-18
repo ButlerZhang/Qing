@@ -50,9 +50,7 @@ public:
 
 private:
 
-    bool                        m_Isconnected;
     _ConnectionPtr              m_ConnectionObject;
-    DatabaseInfo                m_ConnectionInfo;
 };
 
 QING_NAMESPACE_END

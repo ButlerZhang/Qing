@@ -6,17 +6,19 @@ QING_NAMESPACE_BEGIN
 
 
 
-
 SQLiteDataSet::SQLiteDataSet()
 {
 }
 
 SQLiteDataSet::~SQLiteDataSet()
 {
+    Close();
 }
 
 void SQLiteDataSet::Close()
 {
+    m_Fields.clear();
+    m_Value.clear();
 }
 
 bool SQLiteDataSet::MoveNext()
@@ -69,10 +71,9 @@ int SQLiteDataSet::sqlite3_exec_callback(void * LiteDataSet, int argc, char ** a
 }
 
 
-SQLiteDatabase::SQLiteDatabase()
+SQLiteDatabase::SQLiteDatabase() : Database()
 {
     m_sqlite = NULL;
-    m_Isconnected = false;
 }
 
 SQLiteDatabase::~SQLiteDatabase(void)
@@ -147,5 +148,3 @@ bool SQLiteDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet *DataSe
 }
 
 QING_NAMESPACE_END
-
-
