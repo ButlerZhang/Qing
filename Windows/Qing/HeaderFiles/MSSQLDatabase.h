@@ -1,27 +1,28 @@
 #pragma once
 #include "..\Model\Database\Database.h"
-#include <vector>
 
-typedef struct st_mysql MYSQL;
-typedef struct st_mysql_field MYSQL_FIELD;
-typedef struct st_mysql_res MYSQL_RES;
-typedef char** MYSQL_ROW;
+#import "C:\Program Files\Common Files\System\ado\msado15.dll" no_namespace \
+    rename ("EOF", "adoEOF") \
+    rename ("Connection", "adoConnection") \
+    rename ("Command", "adoCommand")
+
 
 QING_NAMESPACE_BEGIN
 
 
 
-class QING_DLL MySQLDataSet : public DatabaseDataSet
+class QING_DLL MSSQLDataSet : public DatabaseDataSet
 {
 public:
 
-    MySQLDataSet();
-    virtual ~MySQLDataSet();
-    bool Open(MYSQL_RES* ResultSet);
+    MSSQLDataSet();
+    virtual ~MSSQLDataSet();
+    bool Open(_ConnectionPtr ConnectionPtr, const char *QueryStr);
 
     virtual void Close();
     virtual bool MoveNext();
-    virtual unsigned long GetRecordCount() const { return m_RecordCount; }
+    virtual unsigned long GetRecordCount() const { return m_RecordsetPtr->GetRecordCount(); }
+
     virtual bool GetValue(const std::string &FieldName, std::string &Data) const;
     virtual bool GetValue(const std::string &FieldName, __int64 &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
     virtual bool GetValue(const std::string &FieldName, int &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
@@ -29,35 +30,29 @@ public:
 
 private:
 
-    unsigned long                    m_RecordCount;
-    MYSQL_RES                       *m_ResultSet;
-    MYSQL_ROW                        m_Row;
-    std::vector<std::string>         m_Fields;
+    _RecordsetPtr        m_RecordsetPtr;
 };
 
 
 
-class QING_DLL MySQLDatabase : public Database
+class QING_DLL MSSQLDatabase : public Database
 {
 public:
 
-    MySQLDatabase();
-    ~MySQLDatabase();
+    MSSQLDatabase();
+    ~MSSQLDatabase();
 
     bool    Connect(const char *Host, const char *User, const char *Passwd, const char *DB, unsigned int Port, const char* CharSet = 0, int TimeoutDays = 30);
     void    Disconnect();
     bool    Isconnected();
     bool    Reconnect();
-
-    bool    SetCharSet(const char* CharSet);
     bool    ExecuteQuery(const char* QueryStr, DatabaseDataSet *DataSet = NULL);
 
 private:
 
-    bool                                m_Isconnected;
-    DatabaseInfo                        m_ConnectionInfo;
-    MYSQL                              *m_MySQL;
+    bool                        m_Isconnected;
+    _ConnectionPtr              m_ConnectionObject;
+    DatabaseInfo                m_ConnectionInfo;
 };
-
 
 QING_NAMESPACE_END

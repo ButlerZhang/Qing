@@ -31,18 +31,12 @@ public:
 
     virtual void Close() { }
     virtual bool MoveNext() { return false; }
-    virtual bool Open(void *ResultSet) { return false; }
+    virtual unsigned long GetRecordCount() const { return 0; }
 
     virtual bool GetValue(const std::string &FieldName, std::string &Data) const;
     virtual bool GetValue(const std::string &FieldName, __int64 &Data) const;
     virtual bool GetValue(const std::string &FieldName, int &Data) const;
     virtual bool GetValue(const std::string &FieldName, double &Data) const;
-
-    unsigned long GetRecordCount() const { return m_RecordCount; }
-
-protected:
-
-    unsigned long                m_RecordCount;
 };
 
 

@@ -34,6 +34,7 @@
     <ClInclude Include="HeaderFiles\HexString.h" />
     <ClInclude Include="HeaderFiles\IniFile.h" />
     <ClInclude Include="HeaderFiles\LocalComputer.h" />
+    <ClInclude Include="HeaderFiles\MSSQLDatabase.h" />
     <ClInclude Include="HeaderFiles\MySQLDatabase.h" />
     <ClInclude Include="HeaderFiles\Network.h" />
     <ClInclude Include="HeaderFiles\NumericalConversion.h" />
@@ -74,6 +75,7 @@
     <ClCompile Include="SourceFiles\HexString.cpp" />
     <ClCompile Include="SourceFiles\IniFile.cpp" />
     <ClCompile Include="SourceFiles\LocalComputer.cpp" />
+    <ClCompile Include="SourceFiles\MSSQLDatabase.cpp" />
     <ClCompile Include="SourceFiles\MySQLDatabase.cpp" />
     <ClCompile Include="SourceFiles\Network.cpp" />
     <ClCompile Include="SourceFiles\NumericalConversion.cpp" />

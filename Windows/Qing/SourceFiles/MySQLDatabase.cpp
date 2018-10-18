@@ -7,6 +7,7 @@ QING_NAMESPACE_BEGIN
 
 MySQLDataSet::MySQLDataSet()
 {
+    m_RecordCount = 0;
     m_ResultSet = NULL;
     m_Row = NULL;
 }
@@ -16,14 +17,14 @@ MySQLDataSet::~MySQLDataSet()
     Close();
 }
 
-bool MySQLDataSet::Open(void* ResultSet)
+bool MySQLDataSet::Open(MYSQL_RES* ResultSet)
 {
     bool OpenResult = true;
     if (ResultSet != 0)
     {
         Close();
 
-        m_ResultSet = (MYSQL_RES*)ResultSet;
+        m_ResultSet = ResultSet;
         try
         {
             m_RecordCount = (unsigned long)mysql_num_rows(m_ResultSet);
@@ -206,7 +207,7 @@ bool MySQLDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet * MyData
     if (MyDataSet != 0)
     {
         MYSQL_RES *TempResult = mysql_store_result(m_MySQL);
-        return MyDataSet->Open(TempResult);
+        return ((MySQLDataSet*)MyDataSet)->Open(TempResult);
     }
 
     return true;

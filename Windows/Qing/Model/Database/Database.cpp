@@ -19,7 +19,6 @@ bool DatabaseInfo::IsValid()
 
 DatabaseDataSet::DatabaseDataSet()
 {
-    m_RecordCount = 0;
 }
 
 DatabaseDataSet::~DatabaseDataSet()
