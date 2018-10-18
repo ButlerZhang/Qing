@@ -281,7 +281,7 @@ bool NetworkServer::PostAccept(IOCPContext &AcceptIOCPContext)
         }
     }
 
-    BoostLog::Write(LL_ERROR, "Post accept succeed, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_INFO, "Post accept succeed, Socket = %I64d, IOCPContextID = %I64d.",
         AcceptIOCPContext.m_AcceptSocket, AcceptIOCPContext.m_ContextID);
     return true;
 }

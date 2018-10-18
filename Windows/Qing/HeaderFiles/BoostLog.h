@@ -14,6 +14,8 @@ enum QING_DLL LogLevel
     LL_ERROR,
 };
 
+
+
 class QING_DLL BoostLog
 {
 public:
@@ -21,7 +23,6 @@ public:
     static void DefaultInit();
     static void DefaultShutdown();
 
-    static void SetFilter(LogLevel Level = LL_DEBUG);
     static void InitBaseSink(const std::string &LogFileName = "Qing");
     static void InitTemporarySink(const std::string &LogFileName = "Temp");
 
@@ -33,6 +34,8 @@ public:
 
     static bool SetLogDirectory(const std::string &Directory);
     static bool SetLogDirectoryAutoAppendProgramName(const std::string &Directory);
+
+    static void SetFilter(LogLevel Level = LL_DEBUG);
     static void SetIsOkToWrite(bool IsOkToLog) { m_IsOkToWrite = IsOkToLog; }
 
 private:

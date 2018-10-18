@@ -25,6 +25,24 @@ bool BoostLog::m_IsOkToWrite = true;
 std::string BoostLog::m_LogDirectory;
 
 
+// The formatting logic for the severity level
+template< typename CharT, typename TraitsT >
+inline std::basic_ostream< CharT, TraitsT >& operator<< (
+    std::basic_ostream< CharT, TraitsT >& strm, LogLevel lvl)
+{
+    switch (lvl)
+    {
+    case Qing::LL_TEMP:         strm << "TEMP ";                break;
+    case Qing::LL_DEBUG:        strm << "DEBUG";                break;
+    case Qing::LL_INFO:         strm << "INFO ";                break;
+    case Qing::LL_ERROR:        strm << "ERROR";                break;
+    default:                    strm << std::to_string(lvl);    break;
+    }
+
+    return strm;
+}
+
+
 
 void BoostLog::DefaultInit()
 {

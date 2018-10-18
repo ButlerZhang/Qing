@@ -191,7 +191,7 @@ bool NetworkBase::PostRecv(IOCPContext &RecvIOCPContext)
         return false;
     }
 
-    BoostLog::Write(LL_ERROR, "Post recv succeed, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_INFO, "Post recv succeed, Socket = %I64d, IOCPContextID = %I64d.",
         RecvIOCPContext.m_AcceptSocket, RecvIOCPContext.m_ContextID);
     return true;
 }
@@ -219,7 +219,7 @@ bool NetworkBase::PostSend(IOCPContext &SendIOCPContext)
         return false;
     }
 
-    BoostLog::Write(LL_ERROR, "Post send succeed, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::Write(LL_INFO, "Post send succeed, Socket = %I64d, IOCPContextID = %I64d.",
         SendIOCPContext.m_AcceptSocket, SendIOCPContext.m_ContextID);
     return true;
 }
