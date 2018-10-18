@@ -45,6 +45,7 @@
     <ClInclude Include="HeaderFiles\RandomGenerator.h" />
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\CommonFunction.h" />
+    <ClInclude Include="HeaderFiles\SQLiteDatabase.h" />
     <ClInclude Include="Model\Database\Database.h" />
     <ClInclude Include="Model\Network\ClientManager.h" />
     <ClInclude Include="Model\Network\IOCPModel.h" />
@@ -52,6 +53,8 @@
     <ClInclude Include="Model\Network\NetworkClient.h" />
     <ClInclude Include="Model\Network\NetworkEnvironment.h" />
     <ClInclude Include="Model\Network\NetworkServer.h" />
+    <ClInclude Include="Reference\sqlite_3250200\sqlite3.h" />
+    <ClInclude Include="Reference\sqlite_3250200\sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Example\DesignPatterns\Source\AbstractFactory.cpp" />
@@ -71,6 +74,8 @@
     <ClCompile Include="Model\Network\NetworkClient.cpp" />
     <ClCompile Include="Model\Network\NetworkEnvironment.cpp" />
     <ClCompile Include="Model\Network\NetworkServer.cpp" />
+    <ClCompile Include="Reference\sqlite_3250200\shell.c" />
+    <ClCompile Include="Reference\sqlite_3250200\sqlite3.c" />
     <ClCompile Include="SourceFiles\FileManager.cpp" />
     <ClCompile Include="SourceFiles\HexString.cpp" />
     <ClCompile Include="SourceFiles\IniFile.cpp" />
@@ -82,6 +87,7 @@
     <ClCompile Include="SourceFiles\BoostLog.cpp" />
     <ClCompile Include="SourceFiles\RandomGenerator.cpp" />
     <ClCompile Include="SourceFiles\CommonFunction.cpp" />
+    <ClCompile Include="SourceFiles\SQLiteDatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

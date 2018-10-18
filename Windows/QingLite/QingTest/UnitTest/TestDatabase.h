@@ -5,6 +5,7 @@
 #include "..\..\..\Qing\HeaderFiles\CommonFunction.h"
 #include "..\..\..\Qing\HeaderFiles\MySQLDatabase.h"
 #include "..\..\..\Qing\HeaderFiles\MSSQLDatabase.h"
+#include "..\..\..\Qing\HeaderFiles\SQLiteDatabase.h"
 
 
 
@@ -43,11 +44,44 @@ void TestMySQLDatabase()
 
 void TestMSSQLDatabase()
 {
-    Qing::MSSQLDatabase MySQL;
-    if (MySQL.Connect("192.168.3.19", "sa", "root", "butler_virtualsports", 1433, "utf8"))
+    Qing::MSSQLDatabase MSSQL;
+    if (MSSQL.Connect("192.168.3.19", "sa", "root", "butler_virtualsports", 1433, "utf8"))
     {
         Qing::MSSQLDataSet DataSet;
-        if (MySQL.ExecuteQuery("SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
+        if (MSSQL.ExecuteQuery("SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
+        {
+            int RacerID;
+            std::string RacerIDString;
+            std::string EnglishName;
+            std::string ChineseName;
+
+            do
+            {
+                if (DataSet.GetValue("racer_name_id", RacerID) &&
+                    DataSet.GetValue("english_name", EnglishName) &&
+                    DataSet.GetValue("chinese_name", ChineseName))
+                {
+                    std::string LogString = std::to_string(RacerID) + ":" + EnglishName + "," + ChineseName;
+                    const std::wstring &TempLogString = Qing::StringToWString(LogString);
+
+                    Qing::BoostLog::WriteInfo(LogString);
+                    std::wcout << TempLogString << std::endl;
+                }
+
+            } while (DataSet.MoveNext());
+        }
+    }
+}
+
+
+
+void TestSQLiteDatabase()
+{
+    Qing::SQLiteDatabase SQLite;
+    if (SQLite.Connect(NULL , NULL, NULL, "TestData\\virtualsports.sqlite", 0))
+    {
+        Qing::SQLiteDataSet DataSet;
+        if (SQLite.ExecuteQuery("SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
         {
             int RacerID;
             std::string RacerIDString;

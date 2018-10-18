@@ -1,6 +1,5 @@
 #include "..\HeaderFiles\MSSQLDatabase.h"
-#include <Windows.h>
-#include <mysql.h>
+
 QING_NAMESPACE_BEGIN
 
 

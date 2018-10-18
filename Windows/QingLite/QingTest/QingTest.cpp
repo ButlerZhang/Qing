@@ -14,7 +14,7 @@
 
 int main()
 {
-    TestMSSQLDatabase();
+    TestSQLiteDatabase();
     system("pause");
     return 0;
 }

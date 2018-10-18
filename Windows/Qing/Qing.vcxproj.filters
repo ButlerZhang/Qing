@@ -34,6 +34,9 @@
     <Filter Include="Model\Database">
       <UniqueIdentifier>{d965d7a5-33c7-4e86-a0cd-c26e23ce64e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model\Database\sqlite">
+      <UniqueIdentifier>{dc866d9a-b99a-46e1-9dde-fe62861a7107}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeaderFiles\QingBase.h">
@@ -135,6 +138,15 @@
     <ClInclude Include="HeaderFiles\MSSQLDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\SQLiteDatabase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Reference\sqlite_3250200\sqlite3.h">
+      <Filter>Model\Database\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="Reference\sqlite_3250200\sqlite3ext.h">
+      <Filter>Model\Database\sqlite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\FileManager.cpp">
@@ -220,6 +232,15 @@
     </ClCompile>
     <ClCompile Include="SourceFiles\MSSQLDatabase.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\SQLiteDatabase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Reference\sqlite_3250200\shell.c">
+      <Filter>Model\Database\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="Reference\sqlite_3250200\sqlite3.c">
+      <Filter>Model\Database\sqlite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

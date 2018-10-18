@@ -259,5 +259,6 @@ Windows/Deployment/Release/*
 Windows/Qing/Reference/boost_1_68_0/b2.exe
 Windows/Qing/Reference/boost_1_68_0/bjam.exe
 Windows/Qing/Reference/boost_1_68_0/project-config.jam
+Windows/QingLite/QingTest/TestData/virtualsports.sqlite
 
 
