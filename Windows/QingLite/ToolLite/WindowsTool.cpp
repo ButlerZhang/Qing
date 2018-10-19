@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "WindowsTool.h"
 #include "WindowsToolDlg.h"
+#include "ToolLiteProfile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -69,6 +70,8 @@ BOOL CWindowsToolApp::InitInstance()
 	// TODO: You should modify this string to be something appropriate
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+
+    m_ToolLiteProfile = std::make_shared<ToolLiteProfile>();
 
 	CWindowsToolDlg dlg;
 	m_pMainWnd = &dlg;

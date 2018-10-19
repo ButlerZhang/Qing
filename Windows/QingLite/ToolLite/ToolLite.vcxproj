@@ -199,9 +199,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Qing\HeaderFiles\BoostLog.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\CommonFunction.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\IniFile.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\MSSQLDatabase.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\MySQLDatabase.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\Network.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h" />
@@ -211,11 +216,13 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\QingNetwork.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ToolEnum.h" />
+    <ClInclude Include="ToolLiteProfile.h" />
     <ClInclude Include="View\BootStartUp\BootStartUp.h" />
     <ClInclude Include="View\EncryptionTool\EncryptionTool.h" />
     <ClInclude Include="WindowsTool.h" />
@@ -228,6 +235,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ToolEnum.cpp" />
+    <ClCompile Include="ToolLiteProfile.cpp" />
     <ClCompile Include="View\BootStartUp\BootStartUp.cpp" />
     <ClCompile Include="View\EncryptionTool\EncryptionTool.cpp" />
     <ClCompile Include="WindowsTool.cpp" />

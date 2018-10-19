@@ -9,11 +9,14 @@
 #endif
 
 #include "resource.h"		// main symbols
+#include <memory>
 
 
 // CWindowsToolApp:
 // See WindowsTool.cpp for the implementation of this class
 //
+
+class ToolLiteProfile;
 
 class CWindowsToolApp : public CWinApp
 {
@@ -24,9 +27,15 @@ public:
 public:
 	virtual BOOL InitInstance();
 
+    std::shared_ptr<ToolLiteProfile> GetProfile() const { return m_ToolLiteProfile; }
+
 // Implementation
 
 	DECLARE_MESSAGE_MAP()
+
+private:
+
+    std::shared_ptr<ToolLiteProfile>                 m_ToolLiteProfile;
 };
 
 extern CWindowsToolApp theApp;

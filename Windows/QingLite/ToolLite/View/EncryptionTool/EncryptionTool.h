@@ -18,14 +18,15 @@ public:
 
     EncryptionTool(CWnd* pParent = NULL);
     virtual ~EncryptionTool();
+    virtual BOOL OnInitDialog();
 
 protected:
 
     virtual void DoDataExchange(CDataExchange* pDX);
     afx_msg void OnBnClickedButtonSelectSourcePath();
     afx_msg void OnBnClickedButtonSelectTargetPath();
-    afx_msg void OnBnClickedButtonEncrypt();
-    afx_msg void OnBnClickedButtonDecrypt();
+    afx_msg void OnBnClickedEncrypt();
+    afx_msg void OnBnClickedDecrypt();
     DECLARE_MESSAGE_MAP()
 
 private:

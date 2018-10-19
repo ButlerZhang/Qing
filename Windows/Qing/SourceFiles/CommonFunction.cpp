@@ -56,6 +56,26 @@ std::string GetProgramName()
     return "Qing";
 }
 
+std::string GetRunningPath()
+{
+    char FullPathCharArray[MAX_PATH];
+    memset(FullPathCharArray, 0, sizeof(FullPathCharArray));
+    ::GetModuleFileNameA(NULL, FullPathCharArray, MAX_PATH);
+
+    std::string FullPathString(FullPathCharArray);
+    if (!FullPathString.empty())
+    {
+        std::size_t StopIndex = FullPathString.find_last_of('\\') + 1;
+        if (StopIndex != std::string::npos)
+        {
+            return FullPathString.substr(0, StopIndex);
+        }
+    }
+
+    BoostLog::WriteError("Return wrong running path.");
+    return "Qing";
+}
+
 std::wstring StringToWString(const std::string &String, int Codepage)
 {
     int Length = MultiByteToWideChar(Codepage, 0, (LPCSTR)String.c_str(), static_cast<int>(String.length()), NULL, 0);

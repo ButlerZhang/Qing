@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 
 
 enum WindowsToolEnum
@@ -10,14 +12,5 @@ enum WindowsToolEnum
     WTE_COUNT,
 };
 
-
-
-const std::wstring GetToolName(WindowsToolEnum ToolEnum)
-{
-    switch (ToolEnum)
-    {
-    case WTE_ENCRYPTION:            return L"Encryption";
-    case WTE_BOOT_START_UP:         return L"Boot Start Up";
-    default:                        return L"Unknow";
-    }
-}
+const std::wstring GetToolName(WindowsToolEnum ToolEnum);
+const std::wstring GetSectionName(WindowsToolEnum ToolEnum);

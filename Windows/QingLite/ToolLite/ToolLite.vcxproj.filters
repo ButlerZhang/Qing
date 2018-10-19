@@ -16,6 +16,12 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ToolLiteProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolEnum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="View\BootStartUp\BootStartUp.h">
@@ -80,6 +86,27 @@
     </ClInclude>
     <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h">
       <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\BoostLog.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\CommonFunction.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\IniFile.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\MSSQLDatabase.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\MySQLDatabase.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h">
+      <Filter>Reference\Qing\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolLiteProfile.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

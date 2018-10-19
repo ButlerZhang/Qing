@@ -2,6 +2,7 @@
 #include "afxdialogex.h"
 #include "EncryptionTool.h"
 #include "..\..\WindowsTool.h"
+#include "..\..\ToolLiteProfile.h"
 #include "..\..\..\..\Qing\HeaderFiles\CommonFunction.h"
 #include "..\..\..\..\Qing\HeaderFiles\FileManager.h"
 
@@ -20,6 +21,15 @@ EncryptionTool::~EncryptionTool()
 {
 }
 
+BOOL EncryptionTool::OnInitDialog()
+{
+    CDialogEx::OnInitDialog();
+    m_EditSourcePath.SetWindowTextW(theApp.GetProfile()->m_EncryptSelectPath.c_str());
+    m_EditTargetPath.SetWindowTextW(theApp.GetProfile()->m_EncryptTargetPath.c_str());
+
+    return 0;
+}
+
 void EncryptionTool::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
@@ -30,8 +40,8 @@ void EncryptionTool::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(EncryptionTool, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON3, &EncryptionTool::OnBnClickedButtonSelectSourcePath)
     ON_BN_CLICKED(IDC_BUTTON4, &EncryptionTool::OnBnClickedButtonSelectTargetPath)
-    ON_BN_CLICKED(IDC_BUTTON1, &EncryptionTool::OnBnClickedButtonEncrypt)
-    ON_BN_CLICKED(IDC_BUTTON2, &EncryptionTool::OnBnClickedButtonDecrypt)
+    ON_BN_CLICKED(IDC_ENCRYPT, &EncryptionTool::OnBnClickedEncrypt)
+    ON_BN_CLICKED(IDC_DECRYPT, &EncryptionTool::OnBnClickedDecrypt)
 END_MESSAGE_MAP()
 
 void EncryptionTool::OnBnClickedButtonSelectSourcePath()
@@ -108,7 +118,7 @@ std::wstring EncryptionTool::GetSelectPath() const
     return std::wstring();
 }
 
-void EncryptionTool::OnBnClickedButtonEncrypt()
+void EncryptionTool::OnBnClickedEncrypt()
 {
     CString SourcePath;
     m_EditSourcePath.GetWindowTextW(SourcePath);
@@ -133,12 +143,21 @@ void EncryptionTool::OnBnClickedButtonEncrypt()
         return;
     }
 
-    long TotalSize = 0, MaxSize = 0;
     std::vector<std::string> FileNameVector;
     const std::string &SourcePathString = Qing::WStringToString(SourcePath.GetString());
-    //MyFileManager.GetFileNameNonRecursion(SourcePathString, FileNameVector, TotalSize, MaxSize);
+    MyFileManager.GetFileNameNonRecursion(SourcePathString, FileNameVector);
+
+    for (std::vector<std::string>::size_type Index = 0; Index < FileNameVector.size(); Index++)
+    {
+
+    }
+
+    theApp.GetProfile()->m_EncryptSelectPath = SourcePath.GetString();
+    theApp.GetProfile()->m_EncryptTargetPath = TargetPath.GetString();
+    theApp.GetProfile()->SaveConfig();
 }
 
-void EncryptionTool::OnBnClickedButtonDecrypt()
+void EncryptionTool::OnBnClickedDecrypt()
 {
+    // TODO: Add your control notification handler code here
 }
