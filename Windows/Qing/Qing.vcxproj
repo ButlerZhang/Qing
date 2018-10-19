@@ -46,6 +46,7 @@
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\CommonFunction.h" />
     <ClInclude Include="HeaderFiles\SQLiteDatabase.h" />
+    <ClInclude Include="Model\BoostFormat.h" />
     <ClInclude Include="Model\Database\Database.h" />
     <ClInclude Include="Model\Network\ClientManager.h" />
     <ClInclude Include="Model\Network\IOCPModel.h" />

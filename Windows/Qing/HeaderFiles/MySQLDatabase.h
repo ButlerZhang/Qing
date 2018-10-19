@@ -32,7 +32,7 @@ private:
     unsigned long                    m_RecordCount;
     MYSQL_RES                       *m_ResultSet;
     MYSQL_ROW                        m_Row;
-    std::vector<std::string>         m_Fields;
+    std::vector<std::string>         m_FieldsVector;
 };
 
 
@@ -56,6 +56,5 @@ private:
 
     MYSQL                              *m_MySQL;
 };
-
 
 QING_NAMESPACE_END

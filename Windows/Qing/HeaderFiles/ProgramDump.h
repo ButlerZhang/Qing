@@ -52,6 +52,4 @@ void QING_DLL SetProgramDMPEnable(bool EnableProgramDMP)
     }
 }
 
-
-
 QING_NAMESPACE_END

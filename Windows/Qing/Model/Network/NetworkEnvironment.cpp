@@ -1,5 +1,6 @@
 #include "NetworkEnvironment.h"
 #include "..\..\HeaderFiles\BoostLog.h"
+#include "..\..\Model\BoostFormat.h"
 
 QING_NAMESPACE_BEGIN
 
@@ -44,7 +45,7 @@ HANDLE NetworkEnvironment::GetIOCP()
 
         if (g_hIOCompletionPort == NULL)
         {
-            BoostLog::Write(LL_ERROR, "Create IO completion port error = %d.", WSAGetLastError());
+            BoostLog::WriteError(StringFormat("Create IO completion port error = %d.", WSAGetLastError()));
         }
         else
         {
@@ -69,7 +70,7 @@ bool NetworkEnvironment::StartupNetwork()
             return true;
         }
 
-        BoostLog::Write(LL_ERROR, "WSAStartup error = %d.", Result);
+        BoostLog::WriteError(StringFormat("WSAStartup error = %d.", Result));
     }
 
     return false;
@@ -87,7 +88,7 @@ bool NetworkEnvironment::ShutdownNetwork()
             return true;
         }
 
-        BoostLog::Write(LL_ERROR, "WSACleanup error = %d.", Result);
+        BoostLog::WriteError(StringFormat("WSACleanup error = %d.", Result));
     }
 
     return false;

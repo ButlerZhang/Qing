@@ -105,27 +105,27 @@ void BoostLog::InitTemporarySink(const std::string & LogFileName)
     logging::add_common_attributes();
 }
 
-void BoostLog::Write(LogLevel Level, const char * Format, ...)
-{
-    if (m_IsOkToWrite && Format != NULL)
-    {
-        const size_t LOGBUFFERSIZE = 2048;
-
-        va_list VaList = NULL;
-        va_start(VaList, Format);
-
-        size_t FormatSize = _vscprintf(Format, VaList) + 1;
-        size_t CopySize = max(FormatSize, LOGBUFFERSIZE);
-
-        char LogString[LOGBUFFERSIZE + 1];
-        memset(LogString, 0, sizeof(LogString));
-
-        _vsnprintf_s(LogString, LOGBUFFERSIZE, CopySize, Format, VaList);
-        va_end(VaList);
-
-        WriteLog(Level, LogString);
-    }
-}
+//void BoostLog::Write(LogLevel Level, const char * Format, ...)
+//{
+//    if (m_IsOkToWrite && Format != NULL)
+//    {
+//        const size_t LOGBUFFERSIZE = 2048;
+//
+//        va_list VaList = NULL;
+//        va_start(VaList, Format);
+//
+//        size_t FormatSize = _vscprintf(Format, VaList) + 1;
+//        size_t CopySize = max(FormatSize, LOGBUFFERSIZE);
+//
+//        char LogString[LOGBUFFERSIZE + 1];
+//        memset(LogString, 0, sizeof(LogString));
+//
+//        _vsnprintf_s(LogString, LOGBUFFERSIZE, CopySize, Format, VaList);
+//        va_end(VaList);
+//
+//        WriteLog(Level, LogString);
+//    }
+//}
 
 void BoostLog::WriteLog(LogLevel Level, const std::string &LogString)
 {

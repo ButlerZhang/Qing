@@ -26,7 +26,6 @@ public:
     static void InitBaseSink(const std::string &LogFileName = "Qing");
     static void InitTemporarySink(const std::string &LogFileName = "Temp");
 
-    static void Write(LogLevel Level, const char *Format, ...);
     static void WriteTemp(const std::string &LogString) { WriteLog(LL_TEMP, LogString); }
     static void WriteInfo(const std::string &LogString) { WriteLog(LL_INFO, LogString); }
     static void WriteDebug(const std::string &LogString) { WriteLog(LL_DEBUG, LogString); }

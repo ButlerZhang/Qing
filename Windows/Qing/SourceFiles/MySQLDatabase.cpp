@@ -33,7 +33,7 @@ bool MySQLDataSet::Open(MYSQL_RES* ResultSet)
             MYSQL_FIELD *Field = 0;
             while ((Field = mysql_fetch_field(m_ResultSet)) != 0)
             {
-                m_Fields.push_back(Field->name);
+                m_FieldsVector.push_back(Field->name);
             }
 
             m_Row = mysql_fetch_row(m_ResultSet);
@@ -55,7 +55,7 @@ void MySQLDataSet::Close()
         m_ResultSet = 0;
     }
 
-    m_Fields.clear();
+    m_FieldsVector.clear();
     m_RecordCount = 0;
     m_Row = 0;
 }
@@ -79,9 +79,9 @@ bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
         return false;
     }
 
-    for (std::vector<std::string>::size_type Index = 0; Index < m_Fields.size(); ++Index)
+    for (std::vector<std::string>::size_type Index = 0; Index < m_FieldsVector.size(); ++Index)
     {
-        if (m_Fields[Index] == FieldName)
+        if (m_FieldsVector[Index] == FieldName)
         {
             Data = m_Row[Index] ? m_Row[Index] : std::string();
             return true;

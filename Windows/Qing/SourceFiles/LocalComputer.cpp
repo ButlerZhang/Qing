@@ -1,6 +1,7 @@
 #include "..\HeaderFiles\LocalComputer.h"
-#include "..\HeaderFiles\CommonFunction.h"
 #include "..\HeaderFiles\BoostLog.h"
+#include "..\Model\BoostFormat.h"
+#include "..\HeaderFiles\CommonFunction.h"
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +10,6 @@
 #include <tlhelp32.h>
 #include <ATLComTime.h>
 #include <WS2tcpip.h>
-
 
 QING_NAMESPACE_BEGIN
 
@@ -135,7 +135,7 @@ bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
         {
             std::wstring ErrorInfo = (LPCTSTR)lpMsgBuf;
             const std::string &LogString = WStringToString(ErrorInfo);
-            BoostLog::Write(LL_DEBUG, "Start program fail, program name = %s, error = %s.", ProgramName.c_str(), LogString.c_str());
+            BoostLog::WriteError(StringFormat("Start program fail, program name = %s, error = %s.", ProgramName.c_str(), LogString.c_str()));
             return false;
         }
     }

@@ -147,6 +147,9 @@
     <ClInclude Include="Reference\sqlite_3250200\sqlite3ext.h">
       <Filter>Model\Database\sqlite</Filter>
     </ClInclude>
+    <ClInclude Include="Model\BoostFormat.h">
+      <Filter>Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\FileManager.cpp">

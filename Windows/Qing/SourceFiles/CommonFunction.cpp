@@ -52,7 +52,7 @@ std::string GetProgramName()
         }
     }
 
-    BoostLog::WriteInfo("Return wrong program name.");
+    BoostLog::WriteError("Return wrong program name.");
     return "Qing";
 }
 
@@ -76,7 +76,5 @@ std::string WStringToString(const std::wstring &WString, int Codepage)
 
     return ResultString;
 }
-
-
 
 QING_NAMESPACE_END

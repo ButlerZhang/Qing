@@ -1,6 +1,7 @@
 #include "..\HeaderFiles\IniFile.h"
-#include "..\HeaderFiles\CommonFunction.h"
 #include "..\HeaderFiles\BoostLog.h"
+#include "..\Model\BoostFormat.h"
+#include "..\HeaderFiles\CommonFunction.h"
 
 QING_NAMESPACE_BEGIN
 
@@ -35,7 +36,7 @@ bool IniFile::LoadData()
 
     if (FileHandle == INVALID_HANDLE_VALUE)
     {
-        BoostLog::Write(LL_ERROR, "Load data create file failed, error = %d.", GetLastError());
+        BoostLog::WriteError(StringFormat("Load data create file failed, error = %d.", GetLastError()));
         return false;
     }
 
@@ -46,7 +47,7 @@ bool IniFile::LoadData()
 
     if (!::ReadFile(FileHandle, m_FileData, m_FileSize, &FileSizeHigh, 0) || m_FileSize != FileSizeHigh)
     {
-        BoostLog::Write(LL_ERROR, "Load data read file failed, error = %d.", GetLastError());
+        BoostLog::WriteError(StringFormat("Load data read file failed, error = %d.", GetLastError()));
         return false;
     }
 
@@ -57,14 +58,14 @@ bool IniFile::LoadData(void *DataBuffer, int BufferSize, const std::wstring &Def
 {
     if (DataBuffer == NULL || BufferSize <= 0)
     {
-        BoostLog::Write(LL_ERROR, "Load data buffer is empty and/or buffersize = %d.", BufferSize);
+        BoostLog::WriteError(StringFormat("Load data buffer is empty and/or buffersize = %d.", BufferSize));
         return false;
     }
 
     wchar_t FilePath[_MAX_PATH + 1];
     if (::GetTempPathW(_MAX_PATH, FilePath) == 0)
     {
-        BoostLog::Write(LL_ERROR, "Load data get temp path failed, error = %d.", GetLastError());
+        BoostLog::WriteError(StringFormat("Load data get temp path failed, error = %d.", GetLastError()));
         return false;
     }
 
@@ -81,7 +82,7 @@ bool IniFile::LoadData(void *DataBuffer, int BufferSize, const std::wstring &Def
 
     if (FileHandle == INVALID_HANDLE_VALUE)
     {
-        BoostLog::Write(LL_ERROR, "Load data create file failed, error = %d.", GetLastError());
+        BoostLog::WriteError(StringFormat("Load data create file failed, error = %d.", GetLastError()));
         return false;
     }
 

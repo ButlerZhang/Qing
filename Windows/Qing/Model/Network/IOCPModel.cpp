@@ -1,6 +1,7 @@
 #pragma once
 #include "IOCPModel.h"
 #include "..\..\HeaderFiles\BoostLog.h"
+#include "..\..\Model\BoostFormat.h"
 
 QING_NAMESPACE_BEGIN
 
@@ -13,7 +14,7 @@ void ReleaseSocket(SOCKET &Socket)
         ::shutdown(Socket, SD_BOTH);
         ::closesocket(Socket);
 
-        BoostLog::Write(LL_INFO, "Release Socket = %I64d.", Socket);
+        BoostLog::WriteInfo(StringFormat("Release Socket = %I64d.", Socket));
         Socket = INVALID_SOCKET;
     }
 }
@@ -45,11 +46,13 @@ void IOCPContext::ResetBuffer()
 IOCPSocketContext::IOCPSocketContext()
 {
     m_Socket = INVALID_SOCKET;
+    InitializeCriticalSection(&m_QueueSection);
     ZeroMemory(&m_RemoteAddr, sizeof(m_RemoteAddr));
 }
 
 IOCPSocketContext::~IOCPSocketContext()
 {
+    DeleteCriticalSection(&m_QueueSection);
 }
 
 std::shared_ptr<IOCPContext> IOCPSocketContext::GetNewIOContext(unsigned __int64 ID)
@@ -60,8 +63,8 @@ std::shared_ptr<IOCPContext> IOCPSocketContext::GetNewIOContext(unsigned __int64
     m_SendIOCPContextQueue.push(NewIOCPContext);
     LeaveCriticalSection(&m_QueueSection);
 
-    BoostLog::Write(LL_INFO, "Push new IOCPContext, Socket = %I64d, IOCPContextID = %I64d.",
-        NewIOCPContext->m_AcceptSocket, NewIOCPContext->m_ContextID);
+    BoostLog::WriteInfo(StringFormat("Push new IOCPContext, Socket = %I64d, IOCPContextID = %I64d.",
+        NewIOCPContext->m_AcceptSocket, NewIOCPContext->m_ContextID));
 
     return NewIOCPContext;
 }
@@ -84,10 +87,10 @@ bool IOCPSocketContext::DeleteContext(const IOCPContext &RemoveIOContext)
     }
     LeaveCriticalSection(&m_QueueSection);
 
-    BoostLog::Write(LL_INFO, "Delete IOCPContext %s, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::WriteInfo(StringFormat("Delete IOCPContext %s, Socket = %I64d, IOCPContextID = %I64d.",
         IsRemove ? "succeed" : "failed",
         RemoveSocket,
-        RemoveTrackID);
+        RemoveTrackID));
 
     return true;
 }

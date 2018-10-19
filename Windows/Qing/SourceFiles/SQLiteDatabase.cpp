@@ -1,5 +1,6 @@
 #include "..\HeaderFiles\SQLiteDatabase.h"
 #include "..\HeaderFiles\BoostLog.h"
+#include "..\Model\BoostFormat.h"
 #include "..\Reference\sqlite_3250200\sqlite3.h"
 
 QING_NAMESPACE_BEGIN
@@ -17,28 +18,28 @@ SQLiteDataSet::~SQLiteDataSet()
 
 void SQLiteDataSet::Close()
 {
-    m_Fields.clear();
-    m_Value.clear();
+    m_FieldsVector.clear();
+    m_ValueVector.clear();
 }
 
 bool SQLiteDataSet::MoveNext()
 {
-    m_CurrentIndex += m_Fields.size();
-    return (m_CurrentIndex < m_Value.size());
+    m_CurrentIndex += m_FieldsVector.size();
+    return (m_CurrentIndex < m_ValueVector.size());
 }
 
 bool SQLiteDataSet::GetValue(const std::string & FieldName, std::string & Data) const
 {
-    if (m_Fields.empty() || m_Value.empty() || m_CurrentIndex >= m_Value.size())
+    if (m_FieldsVector.empty() || m_ValueVector.empty() || m_CurrentIndex >= m_ValueVector.size())
     {
         return false;
     }
 
-    for (std::vector<std::string>::size_type Index = 0; Index < m_Fields.size(); ++Index)
+    for (std::vector<std::string>::size_type Index = 0; Index < m_FieldsVector.size(); ++Index)
     {
-        if (m_Fields[Index] == FieldName)
+        if (m_FieldsVector[Index] == FieldName)
         {
-            Data = m_Value[m_CurrentIndex + Index];
+            Data = m_ValueVector[m_CurrentIndex + Index];
             return true;
         }
     }
@@ -51,19 +52,19 @@ int SQLiteDataSet::sqlite3_exec_callback(void * LiteDataSet, int argc, char ** a
     SQLiteDataSet *DataSet = (SQLiteDataSet*)LiteDataSet;
     DataSet->m_CurrentIndex = 0;
 
-    if (static_cast<int>(DataSet->m_Fields.size()) < argc)
+    if (static_cast<int>(DataSet->m_FieldsVector.size()) < argc)
     {
         for (int Index = 0; Index < argc; Index++)
         {
-            DataSet->m_Fields.push_back(ColName[Index]);
-            DataSet->m_Value.push_back(argv[Index]);
+            DataSet->m_FieldsVector.push_back(ColName[Index]);
+            DataSet->m_ValueVector.push_back(argv[Index]);
         }
     }
     else
     {
         for (int Index = 0; Index < argc; Index++)
         {
-            DataSet->m_Value.push_back(argv[Index]);
+            DataSet->m_ValueVector.push_back(argv[Index]);
         }
     }
 
@@ -89,7 +90,7 @@ bool SQLiteDatabase::Connect(const char * Host, const char * User, const char * 
 {
     if (sqlite3_open(DBName, &m_sqlite) != SQLITE_OK)
     {
-        BoostLog::Write(LL_ERROR, "Can not open sqlite = %s, error = %s.",DBName, sqlite3_errmsg(m_sqlite));
+        BoostLog::WriteError(StringFormat("Can not open sqlite = %s, error = %s.",DBName, sqlite3_errmsg(m_sqlite)));
         return false;
     }
 
@@ -131,7 +132,7 @@ bool SQLiteDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet *DataSe
     {
         if (sqlite3_exec(m_sqlite, QueryStr, NULL, NULL, &err_msg) != SQLITE_OK)
         {
-            BoostLog::Write(LL_ERROR, "SQLite exec error = %s, querystring = %s", err_msg, QueryStr);
+            BoostLog::WriteError(StringFormat("SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
             return false;
         }
     }
@@ -139,7 +140,7 @@ bool SQLiteDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet *DataSe
     {
         if (sqlite3_exec(m_sqlite, QueryStr, &SQLiteDataSet::sqlite3_exec_callback, DataSet, &err_msg) != SQLITE_OK)
         {
-            BoostLog::Write(LL_ERROR, "SQLite exec error = %s, querystring = %s", err_msg, QueryStr);
+            BoostLog::WriteError(StringFormat("SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
             return false;
         }
     }

@@ -16,7 +16,7 @@ public:
 
     virtual void Close();
     virtual bool MoveNext();
-    virtual unsigned long GetRecordCount() const { return static_cast<unsigned long>(m_Value.size()); }
+    virtual unsigned long GetRecordCount() const { return static_cast<unsigned long>(m_ValueVector.size()); }
 
     virtual bool GetValue(const std::string &FieldName, std::string &Data) const;
     virtual bool GetValue(const std::string &FieldName, __int64 &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
@@ -28,8 +28,8 @@ public:
 private:
 
     std::vector<std::string>::size_type     m_CurrentIndex;
-    std::vector<std::string>                m_Fields;
-    std::vector<std::string>                m_Value;
+    std::vector<std::string>                m_FieldsVector;
+    std::vector<std::string>                m_ValueVector;
 };
 
 
@@ -50,6 +50,5 @@ private:
 
     sqlite3                            *m_sqlite;
 };
-
 
 QING_NAMESPACE_END

@@ -33,5 +33,4 @@ private:
     void Add(std::string &BasicString, std::string &AddString) const;
 };
 
-
 QING_NAMESPACE_END
