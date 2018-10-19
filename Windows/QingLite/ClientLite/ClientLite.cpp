@@ -12,7 +12,7 @@
 
 int main()
 {
-    Qing::BoostLog::DefaultInit();
+    //Qing::BoostLog::DefaultInit();
 
     ClientNetwork MyClient(1000);
     MyClient.Start("127.0.0.1", 12345, false);

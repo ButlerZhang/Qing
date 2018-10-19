@@ -34,26 +34,26 @@ std::string GetGUID()
     return std::string(Data);
 }
 
-std::string GetProgramName()
+std::wstring GetProgramName()
 {
-    char FullPathCharArray[MAX_PATH];
+    wchar_t FullPathCharArray[MAX_PATH];
     memset(FullPathCharArray, 0, sizeof(FullPathCharArray));
-    ::GetModuleFileNameA(NULL, FullPathCharArray, MAX_PATH);
+    ::GetModuleFileName(NULL, FullPathCharArray, MAX_PATH);
 
-    std::string FullPathString(FullPathCharArray);
+    std::wstring FullPathString(FullPathCharArray);
     if (!FullPathString.empty())
     {
         std::size_t StartIndex = FullPathString.find_last_of('\\') + 1;
-        if (StartIndex != std::string::npos)
+        if (StartIndex != std::wstring::npos)
         {
             std::size_t CharCount = FullPathString.size() - StartIndex - 4; //sizeof(.exe) == 4
-            std::string ProgramName = FullPathString.substr(StartIndex, CharCount);
+            std::wstring ProgramName = FullPathString.substr(StartIndex, CharCount);
             return ProgramName;
         }
     }
 
-    BoostLog::WriteError("Return wrong program name.");
-    return "Qing";
+    BoostLog::WriteError(L"Return wrong program name.");
+    return L"Qing";
 }
 
 std::string GetRunningPath()
@@ -72,7 +72,7 @@ std::string GetRunningPath()
         }
     }
 
-    BoostLog::WriteError("Return wrong running path.");
+    BoostLog::WriteError(L"Return wrong running path.");
     return "Qing";
 }
 

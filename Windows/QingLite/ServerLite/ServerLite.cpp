@@ -8,7 +8,7 @@
 
 int main()
 {
-    Qing::BoostLog::DefaultInit();
+    //Qing::BoostLog::DefaultInit();
 
     ServerNetwork MyServer;
     MyServer.Start(std::string(), 12345, true);

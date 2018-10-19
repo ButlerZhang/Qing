@@ -45,11 +45,11 @@ HANDLE NetworkEnvironment::GetIOCP()
 
         if (g_hIOCompletionPort == NULL)
         {
-            BoostLog::WriteError(BoostFormat("Create IO completion port error = %d.", WSAGetLastError()));
+            BoostLog::WriteError(BoostFormat(L"Create IO completion port error = %d.", WSAGetLastError()));
         }
         else
         {
-            BoostLog::WriteInfo("Created IO completion port succeed.");
+            BoostLog::WriteInfo(L"Created IO completion port succeed.");
         }
     }
 
@@ -70,7 +70,7 @@ bool NetworkEnvironment::StartupNetwork()
             return true;
         }
 
-        BoostLog::WriteError(BoostFormat("WSAStartup error = %d.", Result));
+        BoostLog::WriteError(BoostFormat(L"WSAStartup error = %d.", Result));
     }
 
     return false;
@@ -88,7 +88,7 @@ bool NetworkEnvironment::ShutdownNetwork()
             return true;
         }
 
-        BoostLog::WriteError(BoostFormat("WSACleanup error = %d.", Result));
+        BoostLog::WriteError(BoostFormat(L"WSACleanup error = %d.", Result));
     }
 
     return false;

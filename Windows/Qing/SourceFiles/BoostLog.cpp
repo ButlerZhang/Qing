@@ -22,7 +22,7 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(BoostLogger, src::severity_logger_mt<LogL
 typedef sinks::synchronous_sink<sinks::text_file_backend> TextSink;
 
 bool BoostLog::m_IsOkToWrite = true;
-std::string BoostLog::m_LogDirectory;
+std::wstring BoostLog::m_LogDirectory;
 
 
 // The formatting logic for the severity level
@@ -47,7 +47,7 @@ inline std::basic_ostream< CharT, TraitsT >& operator<< (
 void BoostLog::DefaultInit()
 {
     SetIsOkToWrite(true);
-    SetLogDirectoryAutoAppendProgramName("C:\\QingLog\\");
+    SetLogDirectoryAutoAppendProgramName(L"C:\\QingLog\\");
 
     InitBaseSink();
     InitTemporarySink();
@@ -63,12 +63,12 @@ void BoostLog::SetFilter(LogLevel Level)
     logging::core::get()->set_filter(expr::attr<LogLevel>("Severity") >= Level);
 }
 
-auto BoostLog::CreateSink(const std::string & FileName)
+auto BoostLog::CreateSink(const std::wstring & FileName)
 {
     const size_t ONE_MB = 1024 * 1024;
 
     boost::shared_ptr<sinks::text_file_backend> Backend = boost::make_shared<sinks::text_file_backend>(
-        keywords::file_name = m_LogDirectory + FileName + "_%Y-%m-%d_%H-%M-%S.log",
+        keywords::file_name = m_LogDirectory + FileName + L"_%Y-%m-%d_%H-%M-%S.log",
         keywords::rotation_size = 100 * ONE_MB,
         keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
         keywords::min_free_space = 500 * ONE_MB);
@@ -87,7 +87,7 @@ auto BoostLog::CreateSink(const std::string & FileName)
     return NewSink;
 }
 
-void BoostLog::InitBaseSink(const std::string &LogFileName)
+void BoostLog::InitBaseSink(const std::wstring &LogFileName)
 {
     boost::shared_ptr<TextSink> BaseSink = CreateSink(LogFileName);
     BaseSink->set_filter(expr::attr<LogLevel>("Severity") >= LL_DEBUG);
@@ -96,7 +96,7 @@ void BoostLog::InitBaseSink(const std::string &LogFileName)
     logging::add_common_attributes();
 }
 
-void BoostLog::InitTemporarySink(const std::string & LogFileName)
+void BoostLog::InitTemporarySink(const std::wstring & LogFileName)
 {
     boost::shared_ptr<TextSink> TempSink = CreateSink(LogFileName);
     TempSink->set_filter(expr::attr<LogLevel>("Severity") == LL_TEMP);
@@ -127,7 +127,7 @@ void BoostLog::InitTemporarySink(const std::string & LogFileName)
 //    }
 //}
 
-void BoostLog::WriteLog(LogLevel Level, const std::string &LogString)
+void BoostLog::WriteLog(LogLevel Level, const std::wstring &LogString)
 {
     if (m_IsOkToWrite)
     {
@@ -136,14 +136,14 @@ void BoostLog::WriteLog(LogLevel Level, const std::string &LogString)
     }
 }
 
-bool BoostLog::SetLogDirectory(const std::string &Directory)
+bool BoostLog::SetLogDirectory(const std::wstring &Directory)
 {
-    if ((GetFileAttributesA(Directory.c_str()) & FILE_ATTRIBUTE_DIRECTORY) > 0)
+    if ((GetFileAttributes(Directory.c_str()) & FILE_ATTRIBUTE_DIRECTORY) > 0)
     {
         m_LogDirectory = Directory;
-        if (m_LogDirectory[m_LogDirectory.size() - 1] != '\\')
+        if (m_LogDirectory[m_LogDirectory.size() - 1] != L'\\')
         {
-            m_LogDirectory.append("\\");
+            m_LogDirectory.append(L"\\");
         }
 
         return true;
@@ -152,12 +152,12 @@ bool BoostLog::SetLogDirectory(const std::string &Directory)
     return false;
 }
 
-bool BoostLog::SetLogDirectoryAutoAppendProgramName(const std::string &Directory)
+bool BoostLog::SetLogDirectoryAutoAppendProgramName(const std::wstring &Directory)
 {
     if (SetLogDirectory(Directory))
     {
         m_LogDirectory.append(GetProgramName());
-        m_LogDirectory.append("\\");
+        m_LogDirectory.append(L"\\");
         return true;
     }
 

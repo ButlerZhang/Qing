@@ -64,7 +64,7 @@ void TestMSSQLDatabase()
                     std::string LogString = std::to_string(RacerID) + ":" + EnglishName + "," + ChineseName;
                     const std::wstring &TempLogString = Qing::StringToWString(LogString);
 
-                    Qing::BoostLog::WriteInfo(LogString);
+                    Qing::BoostLog::WriteInfo(TempLogString);
                     std::wcout << TempLogString << std::endl;
                 }
 
@@ -97,7 +97,7 @@ void TestSQLiteDatabase()
                     std::string LogString = std::to_string(RacerID) + ":" + EnglishName + "," + ChineseName;
                     const std::wstring &TempLogString = Qing::StringToWString(LogString);
 
-                    Qing::BoostLog::WriteInfo(LogString);
+                    Qing::BoostLog::WriteInfo(TempLogString);
                     std::wcout << TempLogString << std::endl;
                 }
 
