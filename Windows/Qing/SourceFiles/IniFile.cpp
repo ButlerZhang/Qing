@@ -70,7 +70,7 @@ bool IniFile::LoadData(void *DataBuffer, int BufferSize, const std::wstring &Def
     }
 
     m_FileName = FilePath;
-    m_FileName += DefaultFileName.empty() ? StringToWString(GetGUID()) : DefaultFileName;
+    m_FileName += DefaultFileName.empty() ? GetGUID() : DefaultFileName;
 
     HANDLE FileHandle = ::CreateFileW(m_FileName.c_str(),
         GENERIC_READ | GENERIC_WRITE,

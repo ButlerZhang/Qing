@@ -12,10 +12,7 @@ static const std::wstring EncryptTargetPathKey(L"EncryptTargetPathKey");
 
 ToolLiteProfile::ToolLiteProfile()
 {
-    const std::string &RunningPath = Qing::GetRunningPath();
-    const std::string &ConfigPath = RunningPath + "ToolLiteConfig.ini";
-
-    LoadConfig(Qing::StringToWString(ConfigPath));
+    LoadConfig(Qing::GetRunningPath() + L"ToolLiteConfig.ini");
 }
 
 ToolLiteProfile::~ToolLiteProfile()

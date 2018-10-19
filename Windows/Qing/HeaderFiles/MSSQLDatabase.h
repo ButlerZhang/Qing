@@ -17,16 +17,16 @@ public:
 
     MSSQLDataSet();
     virtual ~MSSQLDataSet();
-    bool Open(_ConnectionPtr ConnectionPtr, const char *QueryStr);
+    bool Open(_ConnectionPtr ConnectionPtr, const wchar_t *QueryStr);
 
     virtual void Close();
     virtual bool MoveNext();
     virtual unsigned long GetRecordCount() const { return m_RecordsetPtr->GetRecordCount(); }
 
-    virtual bool GetValue(const std::string &FieldName, std::string &Data) const;
-    virtual bool GetValue(const std::string &FieldName, __int64 &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
-    virtual bool GetValue(const std::string &FieldName, int &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
-    virtual bool GetValue(const std::string &FieldName, double &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
+    virtual bool GetValue(const std::wstring &FieldName, std::wstring &Data) const;
+    virtual bool GetValue(const std::wstring &FieldName, __int64 &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
+    virtual bool GetValue(const std::wstring &FieldName, int &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
+    virtual bool GetValue(const std::wstring &FieldName, double &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
 
 private:
 
@@ -42,11 +42,11 @@ public:
     MSSQLDatabase();
     ~MSSQLDatabase();
 
-    bool    Connect(const char *Host, const char *User, const char *Passwd, const char *DB, unsigned int Port, const char* CharSet = 0, int TimeoutDays = 30);
+    bool    Connect(const wchar_t *Host, const wchar_t *User, const wchar_t *Passwd, const wchar_t *DB, unsigned int Port, const wchar_t* CharSet = 0, int TimeoutDays = 30);
     void    Disconnect();
     bool    Isconnected();
     bool    Reconnect();
-    bool    ExecuteQuery(const char* QueryStr, DatabaseDataSet *DataSet = NULL);
+    bool    ExecuteQuery(const wchar_t* QueryStr, DatabaseDataSet *DataSet = NULL);
 
 private:
 

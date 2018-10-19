@@ -25,41 +25,41 @@ DatabaseDataSet::~DatabaseDataSet()
 {
 }
 
-bool DatabaseDataSet::GetValue(const std::string & FieldName, std::string & Data) const
+bool DatabaseDataSet::GetValue(const std::wstring & FieldName, std::wstring & Data) const
 {
     return false;
 }
 
-bool DatabaseDataSet::GetValue(const std::string & FieldName, __int64 & Data) const
+bool DatabaseDataSet::GetValue(const std::wstring & FieldName, __int64 & Data) const
 {
-    std::string DataString;
+    std::wstring DataString;
     if (GetValue(FieldName, DataString) && !DataString.empty())
     {
-        Data = _atoi64(DataString.c_str());
+        Data = _wtoi64(DataString.c_str());
         return true;
     }
 
     return false;
 }
 
-bool DatabaseDataSet::GetValue(const std::string & FieldName, int & Data) const
+bool DatabaseDataSet::GetValue(const std::wstring & FieldName, int & Data) const
 {
-    std::string DataString;
+    std::wstring DataString;
     if (GetValue(FieldName, DataString) && !DataString.empty())
     {
-        Data = atoi(DataString.c_str());
+        Data = _wtoi(DataString.c_str());
         return true;
     }
 
     return false;
 }
 
-bool DatabaseDataSet::GetValue(const std::string & FieldName, double & Data) const
+bool DatabaseDataSet::GetValue(const std::wstring & FieldName, double & Data) const
 {
-    std::string DataString;
+    std::wstring DataString;
     if (GetValue(FieldName, DataString) && !DataString.empty())
     {
-        Data = atof(DataString.c_str());
+        Data = _wtof(DataString.c_str());
         return true;
     }
 
@@ -77,7 +77,7 @@ Database::~Database(void)
 {
 }
 
-bool Database::Connect(const char * Host, const char * User, const char * Password, const char * DBName, unsigned int Port, const char * CharSet, int TimeoutDays)
+bool Database::Connect(const wchar_t * Host, const wchar_t * User, const wchar_t * Password, const wchar_t * DBName, unsigned int Port, const wchar_t * CharSet, int TimeoutDays)
 {
     return false;
 }
@@ -96,7 +96,7 @@ bool Database::Reconnect()
     return false;
 }
 
-bool Database::ExecuteQuery(const char * QueryStr, DatabaseDataSet * DataSet)
+bool Database::ExecuteQuery(const wchar_t * QueryStr, DatabaseDataSet * DataSet)
 {
     return false;
 }

@@ -137,17 +137,16 @@ void EncryptionTool::OnBnClickedEncrypt()
     }
 
     Qing::FileManager MyFileManager;
-    if (!MyFileManager.IsDirectory((Qing::WStringToString(TargetPath.GetString())).c_str()))
+    if (!MyFileManager.IsDirectory(TargetPath.GetString()))
     {
         MessageBox(NULL, _T("Target path is not directory!"), MB_OK);
         return;
     }
 
-    std::vector<std::string> FileNameVector;
-    const std::string &SourcePathString = Qing::WStringToString(SourcePath.GetString());
-    MyFileManager.GetFileNameNonRecursion(SourcePathString, FileNameVector);
+    std::vector<std::wstring> FileNameVector;
+    MyFileManager.GetFileNameNonRecursion(SourcePath.GetString(), FileNameVector);
 
-    for (std::vector<std::string>::size_type Index = 0; Index < FileNameVector.size(); Index++)
+    for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
 
     }

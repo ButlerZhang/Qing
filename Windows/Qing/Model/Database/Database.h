@@ -8,13 +8,13 @@ QING_NAMESPACE_BEGIN
 
 struct DatabaseInfo
 {
-    std::string     m_DBHost;
-    std::string     m_DBUser;
-    std::string     m_DBPassword;
-    std::string     m_DBName;
-    std::string     m_DBCharset;
-    int             m_DBPort;
-    int             m_TimeoutDays;
+    std::wstring     m_DBHost;
+    std::wstring     m_DBUser;
+    std::wstring     m_DBPassword;
+    std::wstring     m_DBName;
+    std::wstring     m_DBCharset;
+    int              m_DBPort;
+    int              m_TimeoutDays;
 
     DatabaseInfo();
     bool IsValid();
@@ -33,10 +33,10 @@ public:
     virtual bool MoveNext() { return false; }
     virtual unsigned long GetRecordCount() const { return 0; }
 
-    virtual bool GetValue(const std::string &FieldName, std::string &Data) const;
-    virtual bool GetValue(const std::string &FieldName, __int64 &Data) const;
-    virtual bool GetValue(const std::string &FieldName, int &Data) const;
-    virtual bool GetValue(const std::string &FieldName, double &Data) const;
+    virtual bool GetValue(const std::wstring &FieldName, std::wstring &Data) const;
+    virtual bool GetValue(const std::wstring &FieldName, __int64 &Data) const;
+    virtual bool GetValue(const std::wstring &FieldName, int &Data) const;
+    virtual bool GetValue(const std::wstring &FieldName, double &Data) const;
 };
 
 
@@ -48,12 +48,12 @@ public:
     Database();
     ~Database(void);
 
-    bool Connect(const char *Host, const char *User, const char *Password, const char *DBName, unsigned int Port, const char* CharSet = 0, int TimeoutDays = 30);
+    bool Connect(const wchar_t *Host, const wchar_t *User, const wchar_t *Password, const wchar_t *DBName, unsigned int Port, const wchar_t* CharSet = 0, int TimeoutDays = 30);
     void Disconnect();
     bool Isconnected();
     bool Reconnect();
 
-    bool ExecuteQuery(const char* QueryStr, DatabaseDataSet *DataSet = NULL);
+    bool ExecuteQuery(const wchar_t* QueryStr, DatabaseDataSet *DataSet = NULL);
 
 protected:
 

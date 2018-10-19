@@ -22,17 +22,17 @@ public:
     virtual void Close();
     virtual bool MoveNext();
     virtual unsigned long GetRecordCount() const { return m_RecordCount; }
-    virtual bool GetValue(const std::string &FieldName, std::string &Data) const;
-    virtual bool GetValue(const std::string &FieldName, __int64 &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
-    virtual bool GetValue(const std::string &FieldName, int &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
-    virtual bool GetValue(const std::string &FieldName, double &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
+    virtual bool GetValue(const std::wstring &FieldName, std::wstring &Data) const;
+    virtual bool GetValue(const std::wstring &FieldName, __int64 &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
+    virtual bool GetValue(const std::wstring &FieldName, int &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
+    virtual bool GetValue(const std::wstring &FieldName, double &Data) const { return DatabaseDataSet::GetValue(FieldName, Data); }
 
 private:
 
     unsigned long                    m_RecordCount;
     MYSQL_RES                       *m_ResultSet;
     MYSQL_ROW                        m_Row;
-    std::vector<std::string>         m_FieldsVector;
+    std::vector<std::wstring>        m_FieldsVector;
 };
 
 
@@ -44,13 +44,13 @@ public:
     MySQLDatabase();
     ~MySQLDatabase();
 
-    bool    Connect(const char *Host, const char *User, const char *Passwd, const char *DB, unsigned int Port, const char* CharSet = 0, int TimeoutDays = 30);
+    bool    Connect(const wchar_t *Host, const wchar_t *User, const wchar_t *Passwd, const wchar_t *DB, unsigned int Port, const wchar_t* CharSet = 0, int TimeoutDays = 30);
     void    Disconnect();
     bool    Isconnected();
     bool    Reconnect();
 
-    bool    SetCharSet(const char* CharSet);
-    bool    ExecuteQuery(const char* QueryStr, DatabaseDataSet *DataSet = NULL);
+    bool    SetCharSet(const wchar_t* CharSet);
+    bool    ExecuteQuery(const wchar_t* QueryStr, DatabaseDataSet *DataSet = NULL);
 
 private:
 

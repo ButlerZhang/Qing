@@ -1,4 +1,5 @@
 #include "..\HeaderFiles\SQLiteDatabase.h"
+#include "..\HeaderFiles\CommonFunction.h"
 #include "..\HeaderFiles\BoostLog.h"
 #include "..\Model\BoostFormat.h"
 #include "..\Reference\sqlite_3250200\sqlite3.h"
@@ -28,7 +29,7 @@ bool SQLiteDataSet::MoveNext()
     return (m_CurrentIndex < m_ValueVector.size());
 }
 
-bool SQLiteDataSet::GetValue(const std::string & FieldName, std::string & Data) const
+bool SQLiteDataSet::GetValue(const std::wstring & FieldName, std::wstring & Data) const
 {
     if (m_FieldsVector.empty() || m_ValueVector.empty() || m_CurrentIndex >= m_ValueVector.size())
     {
@@ -56,15 +57,15 @@ int SQLiteDataSet::sqlite3_exec_callback(void * LiteDataSet, int argc, char ** a
     {
         for (int Index = 0; Index < argc; Index++)
         {
-            DataSet->m_FieldsVector.push_back(ColName[Index]);
-            DataSet->m_ValueVector.push_back(argv[Index]);
+            DataSet->m_FieldsVector.push_back(StringToWString(ColName[Index]));
+            DataSet->m_ValueVector.push_back(StringToWString(argv[Index]));
         }
     }
     else
     {
         for (int Index = 0; Index < argc; Index++)
         {
-            DataSet->m_ValueVector.push_back(argv[Index]);
+            DataSet->m_ValueVector.push_back(StringToWString(argv[Index]));
         }
     }
 
@@ -86,11 +87,11 @@ SQLiteDatabase::~SQLiteDatabase(void)
     }
 }
 
-bool SQLiteDatabase::Connect(const char * Host, const char * User, const char * Password, const char * DBName, unsigned int Port, const char * CharSet, int TimeoutDays)
+bool SQLiteDatabase::Connect(const wchar_t * Host, const wchar_t * User, const wchar_t * Password, const wchar_t * DBName, unsigned int Port, const wchar_t * CharSet, int TimeoutDays)
 {
-    if (sqlite3_open(DBName, &m_sqlite) != SQLITE_OK)
+    if (sqlite3_open(WStringToString(DBName).c_str(), &m_sqlite) != SQLITE_OK)
     {
-        //BoostLog::WriteError(BoostFormat(L"Can not open sqlite = %s, error = %s.",DBName, sqlite3_errmsg(m_sqlite)));
+        BoostLog::WriteError(BoostFormat(L"Can not open sqlite = %s, error = %s.",DBName, sqlite3_errmsg(m_sqlite)));
         return false;
     }
 
@@ -120,7 +121,7 @@ bool SQLiteDatabase::Reconnect()
     return Connect(NULL, NULL, NULL, m_ConnectionInfo.m_DBName.c_str(), 0);
 }
 
-bool SQLiteDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet *DataSet)
+bool SQLiteDatabase::ExecuteQuery(const wchar_t * QueryStr, DatabaseDataSet *DataSet)
 {
     if (m_sqlite == NULL)
     {
@@ -130,17 +131,17 @@ bool SQLiteDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet *DataSe
     char * err_msg = NULL;
     if (DataSet == NULL)
     {
-        if (sqlite3_exec(m_sqlite, QueryStr, NULL, NULL, &err_msg) != SQLITE_OK)
+        if (sqlite3_exec(m_sqlite, WStringToString(QueryStr).c_str(), NULL, NULL, &err_msg) != SQLITE_OK)
         {
-            //BoostLog::WriteError(BoostFormat(L"SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
+            BoostLog::WriteError(BoostFormat(L"SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
             return false;
         }
     }
     else
     {
-        if (sqlite3_exec(m_sqlite, QueryStr, &SQLiteDataSet::sqlite3_exec_callback, DataSet, &err_msg) != SQLITE_OK)
+        if (sqlite3_exec(m_sqlite, WStringToString(QueryStr).c_str(), &SQLiteDataSet::sqlite3_exec_callback, DataSet, &err_msg) != SQLITE_OK)
         {
-            //BoostLog::WriteError(BoostFormat(L"SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
+            BoostLog::WriteError(BoostFormat(L"SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
             return false;
         }
     }

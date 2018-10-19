@@ -14,7 +14,7 @@ MSSQLDataSet::~MSSQLDataSet()
     Close();
 }
 
-bool MSSQLDataSet::Open(_ConnectionPtr ConnectionPtr, const char * QueryStr)
+bool MSSQLDataSet::Open(_ConnectionPtr ConnectionPtr, const wchar_t * QueryStr)
 {
     if (m_RecordsetPtr != NULL)
     {
@@ -67,7 +67,7 @@ bool MSSQLDataSet::MoveNext()
     return false;
 }
 
-bool MSSQLDataSet::GetValue(const std::string & FieldName, std::string &Data) const
+bool MSSQLDataSet::GetValue(const std::wstring & FieldName, std::wstring &Data) const
 {
     if (m_RecordsetPtr == NULL)
     {
@@ -75,7 +75,7 @@ bool MSSQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
     }
 
     _variant_t Value = m_RecordsetPtr->Fields->GetItem(_variant_t(FieldName.c_str()))->Value;
-    Data = (char *)((_bstr_t)Value);
+    Data = (wchar_t *)((_bstr_t)Value);
     return true;
 }
 
@@ -93,7 +93,7 @@ MSSQLDatabase::~MSSQLDatabase()
     ::CoUninitialize();
 }
 
-bool MSSQLDatabase::Connect(const char * Host, const char * User, const char * Passwd, const char * DB, unsigned int Port, const char * CharSet, int TimeoutDays)
+bool MSSQLDatabase::Connect(const wchar_t * Host, const wchar_t * User, const wchar_t * Passwd, const wchar_t * DB, unsigned int Port, const wchar_t * CharSet, int TimeoutDays)
 {
     Disconnect();
 
@@ -104,8 +104,8 @@ bool MSSQLDatabase::Connect(const char * Host, const char * User, const char * P
         return false;
     }
 
-    char ConnectionStr[_MAX_DIR];
-    _snprintf_s(ConnectionStr, _MAX_DIR - 1, "Provider=SQLOLEDB.1;Persist Security Info=True;User ID=%s;Password=%s;Initial Catalog=%s;Data Source=%s", User, Passwd, DB, Host);
+    wchar_t ConnectionStr[_MAX_DIR];
+    _snwprintf_s(ConnectionStr, _MAX_DIR - 1, L"Provider=SQLOLEDB.1;Persist Security Info=True;User ID=%s;Password=%s;Initial Catalog=%s;Data Source=%s", User, Passwd, DB, Host);
     HrValue = m_ConnectionObject->Open(ConnectionStr, "", "", adModeUnknown);
     if (FAILED(HrValue))
     {
@@ -161,7 +161,7 @@ bool MSSQLDatabase::Reconnect()
     return false;
 }
 
-bool MSSQLDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet * MyDataSet)
+bool MSSQLDatabase::ExecuteQuery(const wchar_t * QueryStr, DatabaseDataSet * MyDataSet)
 {
     if (!m_Isconnected || QueryStr == 0)
     {

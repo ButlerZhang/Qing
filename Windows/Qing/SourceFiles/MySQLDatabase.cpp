@@ -1,4 +1,5 @@
 #include "..\HeaderFiles\MySQLDatabase.h"
+#include "..\HeaderFiles\CommonFunction.h"
 #include <Windows.h>
 #include <mysql.h>
 
@@ -33,7 +34,7 @@ bool MySQLDataSet::Open(MYSQL_RES* ResultSet)
             MYSQL_FIELD *Field = 0;
             while ((Field = mysql_fetch_field(m_ResultSet)) != 0)
             {
-                m_FieldsVector.push_back(Field->name);
+                m_FieldsVector.push_back(StringToWString(Field->name));
             }
 
             m_Row = mysql_fetch_row(m_ResultSet);
@@ -72,7 +73,7 @@ bool MySQLDataSet::MoveNext()
     return MoveResult;
 }
 
-bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) const
+bool MySQLDataSet::GetValue(const std::wstring & FieldName, std::wstring &Data) const
 {
     if (m_ResultSet == NULL || m_Row == NULL)
     {
@@ -83,7 +84,7 @@ bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
     {
         if (m_FieldsVector[Index] == FieldName)
         {
-            Data = m_Row[Index] ? m_Row[Index] : std::string();
+            Data = m_Row[Index] ? StringToWString(m_Row[Index]) : std::wstring();
             return true;
         }
     }
@@ -104,7 +105,7 @@ MySQLDatabase::~MySQLDatabase()
     m_MySQL = NULL;
 }
 
-bool MySQLDatabase::Connect(const char * Host, const char * User, const char * Passwd, const char * DB, unsigned int Port, const char * CharSet, int TimeoutDays)
+bool MySQLDatabase::Connect(const wchar_t * Host, const wchar_t * User, const wchar_t * Passwd, const wchar_t * DB, unsigned int Port, const wchar_t * CharSet, int TimeoutDays)
 {
     Disconnect();
 
@@ -113,14 +114,18 @@ bool MySQLDatabase::Connect(const char * Host, const char * User, const char * P
         return false;
     }
 
-    if (mysql_real_connect(m_MySQL, Host, User, Passwd, DB, Port, 0, 0) == 0)
+    if (mysql_real_connect(m_MySQL,
+        WStringToString(Host).c_str(),
+        WStringToString(User).c_str(),
+        WStringToString(Passwd).c_str(),
+        WStringToString(DB).c_str(), Port, 0, 0) == 0)
     {
         return false;
     }
 
     if (CharSet != 0)
     {
-        mysql_set_character_set(m_MySQL, CharSet);
+        mysql_set_character_set(m_MySQL, WStringToString(CharSet).c_str());
     }
 
     m_Isconnected = true;
@@ -137,13 +142,13 @@ bool MySQLDatabase::Connect(const char * Host, const char * User, const char * P
 
     m_ConnectionInfo.m_DBPort = Port;
 
-    std::string SQLString;
-    const std::string &TimeString = std::to_string(TimeoutDays * 24 * 3600);
+    std::wstring SQLString;
+    const std::wstring &TimeString = std::to_wstring(TimeoutDays * 24 * 3600);
 
-    SQLString = "SET interactive_timeout = " + TimeString;
+    SQLString = L"SET interactive_timeout = " + TimeString;
     ExecuteQuery(SQLString.c_str());
 
-    SQLString = "SET wait_timeout = " + TimeString;
+    SQLString = L"SET wait_timeout = " + TimeString;
     ExecuteQuery(SQLString.c_str());
     return true;
 }
@@ -180,26 +185,26 @@ bool MySQLDatabase::Reconnect()
     return false;
 }
 
-bool MySQLDatabase::SetCharSet(const char * CharSet)
+bool MySQLDatabase::SetCharSet(const wchar_t * CharSet)
 {
     if (m_Isconnected && CharSet != 0)
     {
         m_ConnectionInfo.m_DBCharset = CharSet;
 
-        return mysql_set_character_set(m_MySQL, CharSet) == 0;
+        return mysql_set_character_set(m_MySQL, WStringToString(CharSet).c_str()) == 0;
     }
 
     return false;
 }
 
-bool MySQLDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet * MyDataSet)
+bool MySQLDatabase::ExecuteQuery(const wchar_t * QueryStr, DatabaseDataSet * MyDataSet)
 {
     if (!m_Isconnected || QueryStr == 0)
     {
         return false;
     }
 
-    if (mysql_query(m_MySQL, QueryStr) != 0)
+    if (mysql_query(m_MySQL, WStringToString(QueryStr).c_str()) != 0)
     {
         return false;
     }

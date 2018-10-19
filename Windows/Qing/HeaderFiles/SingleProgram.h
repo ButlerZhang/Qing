@@ -20,9 +20,9 @@ public:
         MandatoryDestroyInstance();
     }
 
-    bool CreateSingleInstance(const std::string& ProgramName)
+    bool CreateSingleInstance(const std::wstring& ProgramName)
     {
-        m_Mutex = ::CreateMutexA(NULL,TRUE,ProgramName.c_str());
+        m_Mutex = ::CreateMutex(NULL,TRUE,ProgramName.c_str());
         DWORD LastError = GetLastError();
 
         if(m_Mutex != NULL)

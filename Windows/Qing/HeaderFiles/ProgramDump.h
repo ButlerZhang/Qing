@@ -10,9 +10,9 @@ QING_NAMESPACE_BEGIN
 
 static LONG WINAPI ProgramUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* ExceptionPointers)
 {
-    const std::string &DMPFileName = GetProgramName() + ".dmp";
+    const std::wstring &DMPFileName = GetProgramName() + L".dmp";
 
-    HANDLE hFile = CreateFileA(DMPFileName.c_str(),
+    HANDLE hFile = CreateFile(DMPFileName.c_str(),
         GENERIC_READ | GENERIC_WRITE,
         0,
         NULL,

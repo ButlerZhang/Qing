@@ -12,27 +12,25 @@
 void TestMySQLDatabase()
 {
     Qing::MySQLDatabase MySQL;
-    if (MySQL.Connect("127.0.0.1", "root", "cjgame", "virtualsports", 3306, "utf8"))
+    if (MySQL.Connect(L"127.0.0.1", L"root", L"cjgame", L"virtualsports", 3306, L"utf8"))
     {
         Qing::MySQLDataSet DataSet;
-        if (MySQL.ExecuteQuery("SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
+        if (MySQL.ExecuteQuery(L"SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
         {
             int RacerID;
-            std::string RacerIDString;
-            std::string EnglishName;
-            std::string ChineseName;
+            std::wstring RacerIDString;
+            std::wstring EnglishName;
+            std::wstring ChineseName;
 
             do
             {
-                if (DataSet.GetValue("racer_name_id", RacerID) && 
-                    DataSet.GetValue("english_name", EnglishName) && 
-                    DataSet.GetValue("chinese_name", ChineseName))
+                if (DataSet.GetValue(L"racer_name_id", RacerID) && 
+                    DataSet.GetValue(L"english_name", EnglishName) && 
+                    DataSet.GetValue(L"chinese_name", ChineseName))
                 {
-                    std::string LogString = std::to_string(RacerID) + ":" + EnglishName + "," + ChineseName;
-                    const std::wstring &TempLogString = Qing::StringToWString(LogString);
-
-                    //Qing::BoostLog::Write(LogString, Qing::LL_ERROR);
-                    std::wcout << TempLogString << std::endl;
+                    std::wstring LogString = std::to_wstring(RacerID) + L":" + EnglishName + L"," + ChineseName;
+                    Qing::BoostLog::WriteInfo(LogString);
+                    std::wcout << LogString << std::endl;
                 }
 
             } while (DataSet.MoveNext());
@@ -45,27 +43,25 @@ void TestMySQLDatabase()
 void TestMSSQLDatabase()
 {
     Qing::MSSQLDatabase MSSQL;
-    if (MSSQL.Connect("192.168.3.19", "sa", "root", "butler_virtualsports", 1433, "utf8"))
+    if (MSSQL.Connect(L"192.168.3.19", L"sa", L"root", L"butler_virtualsports", 1433, L"utf8"))
     {
         Qing::MSSQLDataSet DataSet;
-        if (MSSQL.ExecuteQuery("SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
+        if (MSSQL.ExecuteQuery(L"SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
         {
             int RacerID;
-            std::string RacerIDString;
-            std::string EnglishName;
-            std::string ChineseName;
+            std::wstring RacerIDString;
+            std::wstring EnglishName;
+            std::wstring ChineseName;
 
             do
             {
-                if (DataSet.GetValue("racer_name_id", RacerID) &&
-                    DataSet.GetValue("english_name", EnglishName) &&
-                    DataSet.GetValue("chinese_name", ChineseName))
+                if (DataSet.GetValue(L"racer_name_id", RacerID) &&
+                    DataSet.GetValue(L"english_name", EnglishName) &&
+                    DataSet.GetValue(L"chinese_name", ChineseName))
                 {
-                    std::string LogString = std::to_string(RacerID) + ":" + EnglishName + "," + ChineseName;
-                    const std::wstring &TempLogString = Qing::StringToWString(LogString);
-
-                    Qing::BoostLog::WriteInfo(TempLogString);
-                    std::wcout << TempLogString << std::endl;
+                    std::wstring LogString = std::to_wstring(RacerID) + L":" + EnglishName + L"," + ChineseName;
+                    Qing::BoostLog::WriteInfo(LogString);
+                    std::wcout << LogString << std::endl;
                 }
 
             } while (DataSet.MoveNext());
@@ -78,27 +74,25 @@ void TestMSSQLDatabase()
 void TestSQLiteDatabase()
 {
     Qing::SQLiteDatabase SQLite;
-    if (SQLite.Connect(NULL , NULL, NULL, "TestData\\virtualsports.sqlite", 0))
+    if (SQLite.Connect(NULL , NULL, NULL, L"TestData\\virtualsports.sqlite", 0))
     {
         Qing::SQLiteDataSet DataSet;
-        if (SQLite.ExecuteQuery("SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
+        if (SQLite.ExecuteQuery(L"SELECT * FROM vs_horse_racing_horse_names", &DataSet) && DataSet.GetRecordCount() > 0)
         {
             int RacerID;
-            std::string RacerIDString;
-            std::string EnglishName;
-            std::string ChineseName;
+            std::wstring RacerIDString;
+            std::wstring EnglishName;
+            std::wstring ChineseName;
 
             do
             {
-                if (DataSet.GetValue("racer_name_id", RacerID) &&
-                    DataSet.GetValue("english_name", EnglishName) &&
-                    DataSet.GetValue("chinese_name", ChineseName))
+                if (DataSet.GetValue(L"racer_name_id", RacerID) &&
+                    DataSet.GetValue(L"english_name", EnglishName) &&
+                    DataSet.GetValue(L"chinese_name", ChineseName))
                 {
-                    std::string LogString = std::to_string(RacerID) + ":" + EnglishName + "," + ChineseName;
-                    const std::wstring &TempLogString = Qing::StringToWString(LogString);
-
-                    Qing::BoostLog::WriteInfo(TempLogString);
-                    std::wcout << TempLogString << std::endl;
+                    std::wstring LogString = std::to_wstring(RacerID) + L":" + EnglishName + L"," + ChineseName;
+                    Qing::BoostLog::WriteInfo(LogString);
+                    std::wcout << LogString << std::endl;
                 }
 
             } while (DataSet.MoveNext());

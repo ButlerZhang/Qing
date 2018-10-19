@@ -29,7 +29,7 @@ DWORD ServerNetwork::CallBack_ServerSendRandomMessageThread(LPVOID lpParam)
     {
         Sleep(MyRandom.GetRandomUIntInRange(1000, 10000));
 
-        std::string RandomMessage(Qing::GetGUID());
+        std::wstring RandomMessage(Qing::GetGUID());
         MyServer->Send(0, RandomMessage.c_str(), static_cast<int>(RandomMessage.size()));
     }
 

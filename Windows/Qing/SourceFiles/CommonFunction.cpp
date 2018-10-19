@@ -5,7 +5,7 @@ QING_NAMESPACE_BEGIN
 
 
 
-std::string GetGUID()
+std::wstring GetGUID()
 {
     GUID guid;
     char Data[64];
@@ -31,7 +31,7 @@ std::string GetGUID()
     }
     ::CoUninitialize();
 
-    return std::string(Data);
+    return StringToWString(std::string(Data));
 }
 
 std::wstring GetProgramName()
@@ -56,24 +56,24 @@ std::wstring GetProgramName()
     return L"Qing";
 }
 
-std::string GetRunningPath()
+std::wstring GetRunningPath()
 {
-    char FullPathCharArray[MAX_PATH];
+    wchar_t FullPathCharArray[MAX_PATH];
     memset(FullPathCharArray, 0, sizeof(FullPathCharArray));
-    ::GetModuleFileNameA(NULL, FullPathCharArray, MAX_PATH);
+    ::GetModuleFileName(NULL, FullPathCharArray, MAX_PATH);
 
-    std::string FullPathString(FullPathCharArray);
+    std::wstring FullPathString(FullPathCharArray);
     if (!FullPathString.empty())
     {
         std::size_t StopIndex = FullPathString.find_last_of('\\') + 1;
-        if (StopIndex != std::string::npos)
+        if (StopIndex != std::wstring::npos)
         {
             return FullPathString.substr(0, StopIndex);
         }
     }
 
     BoostLog::WriteError(L"Return wrong running path.");
-    return "Qing";
+    return L"Qing";
 }
 
 std::wstring StringToWString(const std::string &String, int Codepage)

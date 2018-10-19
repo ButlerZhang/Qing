@@ -63,7 +63,7 @@ DWORD ClientNetwork::CallBack_ClientSendRandomMessageThread(LPVOID lpParam)
                 continue;
             }
 
-            std::string RandomMessage(Qing::GetGUID());
+            std::wstring RandomMessage(Qing::GetGUID());
             MyServer->m_ClientVector[Index]->Send(RandomMessage.c_str(), static_cast<int>(RandomMessage.size()));
         }
     }
