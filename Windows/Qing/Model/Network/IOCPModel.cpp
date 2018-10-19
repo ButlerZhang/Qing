@@ -14,7 +14,7 @@ void ReleaseSocket(SOCKET &Socket)
         ::shutdown(Socket, SD_BOTH);
         ::closesocket(Socket);
 
-        BoostLog::WriteInfo(StringFormat("Release Socket = %I64d.", Socket));
+        BoostLog::WriteInfo(BoostFormat("Release Socket = %I64d.", Socket));
         Socket = INVALID_SOCKET;
     }
 }
@@ -63,7 +63,7 @@ std::shared_ptr<IOCPContext> IOCPSocketContext::GetNewIOContext(unsigned __int64
     m_SendIOCPContextQueue.push(NewIOCPContext);
     LeaveCriticalSection(&m_QueueSection);
 
-    BoostLog::WriteInfo(StringFormat("Push new IOCPContext, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::WriteInfo(BoostFormat("Push new IOCPContext, Socket = %I64d, IOCPContextID = %I64d.",
         NewIOCPContext->m_AcceptSocket, NewIOCPContext->m_ContextID));
 
     return NewIOCPContext;
@@ -87,7 +87,7 @@ bool IOCPSocketContext::DeleteContext(const IOCPContext &RemoveIOContext)
     }
     LeaveCriticalSection(&m_QueueSection);
 
-    BoostLog::WriteInfo(StringFormat("Delete IOCPContext %s, Socket = %I64d, IOCPContextID = %I64d.",
+    BoostLog::WriteInfo(BoostFormat("Delete IOCPContext %s, Socket = %I64d, IOCPContextID = %I64d.",
         IsRemove ? "succeed" : "failed",
         RemoveSocket,
         RemoveTrackID));

@@ -135,7 +135,7 @@ bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
         {
             std::wstring ErrorInfo = (LPCTSTR)lpMsgBuf;
             const std::string &LogString = WStringToString(ErrorInfo);
-            BoostLog::WriteError(StringFormat("Start program fail, program name = %s, error = %s.", ProgramName.c_str(), LogString.c_str()));
+            BoostLog::WriteError(BoostFormat("Start program fail, program name = %s, error = %s.", ProgramName.c_str(), LogString.c_str()));
             return false;
         }
     }

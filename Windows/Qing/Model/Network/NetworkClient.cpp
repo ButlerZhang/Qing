@@ -107,15 +107,15 @@ bool NetworkClient::CreateSocket()
     m_SocketContext->m_Socket = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
     if (m_SocketContext->m_Socket == INVALID_SOCKET)
     {
-        BoostLog::WriteError(StringFormat("Create client socket fail, error = %d.", WSAGetLastError()));
+        BoostLog::WriteError(BoostFormat("Create client socket fail, error = %d.", WSAGetLastError()));
         return false;
     }
 
-    BoostLog::WriteInfo(StringFormat("Create client Socket = %I64d succeed.", m_SocketContext->m_Socket));
+    BoostLog::WriteInfo(BoostFormat("Create client Socket = %I64d succeed.", m_SocketContext->m_Socket));
 
     if (CreateIoCompletionPort((HANDLE)(m_SocketContext->m_Socket), GlobalNetwork.GetIOCP(), m_SocketContext->m_Socket, 0) == NULL)
     {
-        BoostLog::WriteError(StringFormat("Client socket associate with IOCP error = %d.", GetLastError()));
+        BoostLog::WriteError(BoostFormat("Client socket associate with IOCP error = %d.", GetLastError()));
         return false;
     }
 
@@ -150,7 +150,7 @@ bool NetworkClient::ConnectServer(const std::string & ServerIP, int Port)
 
     if (::WSAConnect(m_SocketContext->m_Socket, reinterpret_cast<const struct sockaddr*>(&ServerAddress), sizeof(ServerAddress),0,0,0,0) == SOCKET_ERROR)
     {
-        BoostLog::WriteError(StringFormat("Connect server failed, error = %d.", WSAGetLastError()));
+        BoostLog::WriteError(BoostFormat("Connect server failed, error = %d.", WSAGetLastError()));
         return false;
     }
 
@@ -173,13 +173,13 @@ void NetworkClient::ReadyToRecvData()
 
 bool NetworkClient::ProcessRecv(IOCPContext &RecvIOCPContext)
 {
-    BoostLog::WriteInfo(StringFormat("Recv message = %s", RecvIOCPContext.m_WSABuffer.buf));
+    BoostLog::WriteInfo(BoostFormat("Recv message = %s", RecvIOCPContext.m_WSABuffer.buf));
     return PostRecv(RecvIOCPContext);
 }
 
 bool NetworkClient::ProcessSend(IOCPContext &SendIOCPContext)
 {
-    BoostLog::WriteInfo(StringFormat("Send message = %s", SendIOCPContext.m_WSABuffer.buf));
+    BoostLog::WriteInfo(BoostFormat("Send message = %s", SendIOCPContext.m_WSABuffer.buf));
     m_SocketContext->DeleteContext(SendIOCPContext);
     return true;
 }

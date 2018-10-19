@@ -43,7 +43,7 @@ unsigned long long FileManager::GetFileSize(const std::string &FileName) const
     HANDLE FileHandle = ::CreateFileA(FileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (FileHandle == INVALID_HANDLE_VALUE)
     {
-        BoostLog::WriteDebug(StringFormat("GetFileSize create file handler is invalid handler, file name is %s.", FileName.c_str()));
+        BoostLog::WriteDebug(BoostFormat("GetFileSize create file handler is invalid handler, file name is %s.", FileName.c_str()));
         return 0;
     }
 
@@ -68,14 +68,14 @@ unsigned int FileManager::ReadFile(const std::string &FileName, char *FileBuffer
     fopen_s(&File, FileName.c_str(), Mode);
     if (File == NULL)
     {
-        BoostLog::WriteError(StringFormat("ReadFile, can not open file = %s.", FileName.c_str()));
+        BoostLog::WriteError(BoostFormat("ReadFile, can not open file = %s.", FileName.c_str()));
         return 0;
     }
 
     long FileSize = _filelength(_fileno(File));
     if (FileSize <= 0 || FileSize > BufferSize)
     {
-        BoostLog::WriteError(StringFormat("ReadFile, FileSize = %I64d, BufferSize = %d.", FileSize, BufferSize));
+        BoostLog::WriteError(BoostFormat("ReadFile, FileSize = %I64d, BufferSize = %d.", FileSize, BufferSize));
         fclose(File);
         return 0;
     }
@@ -85,7 +85,7 @@ unsigned int FileManager::ReadFile(const std::string &FileName, char *FileBuffer
 
     if (ReadByte != FileSize)
     {
-        BoostLog::WriteError(StringFormat("ReadFile, FileSize = %I64d, ReadByte = %d.", FileSize, ReadByte));
+        BoostLog::WriteError(BoostFormat("ReadFile, FileSize = %I64d, ReadByte = %d.", FileSize, ReadByte));
         return 0;
     }
 

@@ -90,7 +90,7 @@ bool SQLiteDatabase::Connect(const char * Host, const char * User, const char * 
 {
     if (sqlite3_open(DBName, &m_sqlite) != SQLITE_OK)
     {
-        BoostLog::WriteError(StringFormat("Can not open sqlite = %s, error = %s.",DBName, sqlite3_errmsg(m_sqlite)));
+        BoostLog::WriteError(BoostFormat("Can not open sqlite = %s, error = %s.",DBName, sqlite3_errmsg(m_sqlite)));
         return false;
     }
 
@@ -132,7 +132,7 @@ bool SQLiteDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet *DataSe
     {
         if (sqlite3_exec(m_sqlite, QueryStr, NULL, NULL, &err_msg) != SQLITE_OK)
         {
-            BoostLog::WriteError(StringFormat("SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
+            BoostLog::WriteError(BoostFormat("SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
             return false;
         }
     }
@@ -140,7 +140,7 @@ bool SQLiteDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet *DataSe
     {
         if (sqlite3_exec(m_sqlite, QueryStr, &SQLiteDataSet::sqlite3_exec_callback, DataSet, &err_msg) != SQLITE_OK)
         {
-            BoostLog::WriteError(StringFormat("SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
+            BoostLog::WriteError(BoostFormat("SQLite exec error = %s, querystring = %s", err_msg, QueryStr));
             return false;
         }
     }
