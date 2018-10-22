@@ -90,9 +90,6 @@
     <ClCompile Include="SourceFiles\CommonFunction.cpp" />
     <ClCompile Include="SourceFiles\SQLiteDatabase.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7B247FD1-7119-4838-9F12-CB855D783DD2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

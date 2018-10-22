@@ -3,11 +3,11 @@
 #include "EncryptionTool.h"
 #include "..\..\WindowsTool.h"
 #include "..\..\ToolLiteProfile.h"
-#include "..\..\..\..\Qing\HeaderFiles\CommonFunction.h"
 #include "..\..\..\..\Qing\HeaderFiles\FileManager.h"
+#include "..\..\..\..\Qing\HeaderFiles\CommonFunction.h"
 
+#include "..\..\Handler\SimpleCrypt.h"
 #include <shlobj.h>
-
 
 
 IMPLEMENT_DYNAMIC(EncryptionTool, CDialogEx)
@@ -148,7 +148,8 @@ void EncryptionTool::OnBnClickedEncrypt()
 
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
-
+        SimpleCrypt MyCrypt;
+        MyCrypt.Encrypt(FileNameVector[Index], FileNameVector[Index] + std::wstring(L".qing"));
     }
 
     theApp.GetProfile()->m_EncryptSelectPath = SourcePath.GetString();

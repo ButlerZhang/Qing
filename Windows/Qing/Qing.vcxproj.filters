@@ -246,7 +246,4 @@
       <Filter>Model\Database\sqlite</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
 </Project>
