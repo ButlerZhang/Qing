@@ -3,18 +3,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "stdafx.h"
-#include <Windows.h>
+#include "..\..\Qing\HeaderFiles\CommonFunction.h"
 #include <iostream>
-#include <string>
-#include <thread>
-#include <numeric>
-#include "UnitTest\TestDatabase.h"
 
 
 
 int main()
 {
-    TestSQLiteDatabase();
+    std::cout << Qing::GetSHA1("Qing") << std::endl;
+    std::wcout << Qing::GetSHA1(L"Qing") << std::endl;
     system("pause");
     return 0;
 }

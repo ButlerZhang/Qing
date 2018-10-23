@@ -1,6 +1,10 @@
 #include "..\HeaderFiles\CommonFunction.h"
 #include "..\HeaderFiles\BoostLog.h"
 
+#include <boost\uuid\name_generator_sha1.hpp>
+#include <sstream>
+#include <iomanip>
+
 QING_NAMESPACE_BEGIN
 
 
@@ -74,6 +78,42 @@ std::wstring GetRunningPath()
 
     BoostLog::WriteError(L"Return wrong running path.");
     return L"Qing";
+}
+
+std::string QING_DLL GetSHA1(const std::string & DataString)
+{
+    boost::uuids::detail::sha1 sha;
+    sha.process_bytes(DataString.c_str(), DataString.size());
+
+    const int DigestArraySize = 5;
+    unsigned int DigestArray[DigestArraySize];
+    sha.get_digest(DigestArray);
+
+    std::ostringstream ConvertBuffer;
+    for (int Index = 0; Index < DigestArraySize; ++Index)
+    {
+        ConvertBuffer << std::hex << std::setfill('0') << std::setw(8) << DigestArray[Index];
+    }
+
+    return std::string(ConvertBuffer.str());
+}
+
+std::wstring QING_DLL GetSHA1(const std::wstring & DataString)
+{
+    boost::uuids::detail::sha1 sha;
+    sha.process_bytes(DataString.c_str(), DataString.size());
+
+    const int DigestArraySize = 5;
+    unsigned int DigestArray[DigestArraySize];
+    sha.get_digest(DigestArray);
+
+    std::wostringstream ConvertBuffer;
+    for (int Index = 0; Index < DigestArraySize; ++Index)
+    {
+        ConvertBuffer << std::hex << std::setfill(L'0') << std::setw(8) << DigestArray[Index];
+    }
+
+    return std::wstring(ConvertBuffer.str());
 }
 
 std::wstring StringToWString(const std::string &String, int Codepage)
