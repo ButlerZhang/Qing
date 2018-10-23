@@ -159,5 +159,45 @@ void EncryptionTool::OnBnClickedEncrypt()
 
 void EncryptionTool::OnBnClickedDecrypt()
 {
-    // TODO: Add your control notification handler code here
+    CString SourcePath;
+    m_EditSourcePath.GetWindowTextW(SourcePath);
+    if (SourcePath.GetLength() <= 0)
+    {
+        MessageBox(NULL, _T("Source path is empty!"), MB_OK);
+        return;
+    }
+
+    CString TargetPath;
+    m_EditTargetPath.GetWindowTextW(TargetPath);
+    if (TargetPath.GetLength() <= 0)
+    {
+        MessageBox(NULL, _T("Target path is empty!"), MB_OK);
+        return;
+    }
+
+    Qing::FileManager MyFileManager;
+    if (!MyFileManager.IsDirectory(TargetPath.GetString()))
+    {
+        MessageBox(NULL, _T("Target path is not directory!"), MB_OK);
+        return;
+    }
+
+    std::vector<std::wstring> FileNameVector;
+    MyFileManager.GetFileNameNonRecursion(SourcePath.GetString(), FileNameVector);
+
+    std::wstring QingTemp(L".qing");
+    for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
+    {
+        std::wstring::size_type EarseIndex = FileNameVector[Index].find(QingTemp);
+        if (EarseIndex != std::wstring::npos)
+        {
+            SimpleCrypt MyCrypt;
+            std::wstring TargetName(FileNameVector[Index]);
+            MyCrypt.DeCrypt(FileNameVector[Index], TargetName.erase(EarseIndex, QingTemp.size()));
+        }
+    }
+
+    theApp.GetProfile()->m_EncryptSelectPath = SourcePath.GetString();
+    theApp.GetProfile()->m_EncryptTargetPath = TargetPath.GetString();
+    theApp.GetProfile()->SaveConfig();
 }

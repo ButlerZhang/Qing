@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <memory>
+#include <Windows.h>
 
 
 
@@ -10,8 +12,7 @@ public:
     SimpleCrypt();
     ~SimpleCrypt();
 
-    void Reset();
-    void SetPassword(const std::wstring &Password);
+    void SetPassword(const std::wstring &Password) { m_Password = Password; }
 
     bool Encrypt(const std::wstring &SourceFileName, const std::wstring &TargetFileName);
     bool DeCrypt(const std::wstring &SourceFileName, const std::wstring &TargetFileName);
@@ -19,12 +20,15 @@ public:
 private:
 
     bool IsEncrypt(const std::wstring &SourceFileName) const;
+    void EncryptData(wchar_t *DataBuffer, int DataSize) const;
+    void DecryptData(wchar_t *DataBuffer, int DataSize) const;
 
 private:
 
-    std::wstring            m_Password;
-    wchar_t                *m_FileBuffer;
-    HANDLE                  m_SourceFileHandle;
-    HANDLE                  m_TargetFileHandle;
+    const int                           m_BufferUnit;
+    const int                           m_BufferSize;
+    std::wstring                        m_Password;
+    wchar_t                            *m_FileBuffer;
+    HANDLE                              m_SourceFileHandle;
+    HANDLE                              m_TargetFileHandle;
 };
-
