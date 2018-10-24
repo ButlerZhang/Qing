@@ -2,7 +2,7 @@
 del ..\Deployment\Release\x64\ClientLite\Qing64.dll
 del ..\Deployment\Release\x64\QingTest\Qing64.dll
 del ..\Deployment\Release\x64\ServerLite\Qing64.dll
-del ..\Deployment\Release\x64\ToolLite\Qing64.dll
+del ..\Deployment\Release\x64\EncryptDecrypt\Qing64.dll
 
 
 
@@ -10,4 +10,4 @@ del ..\Deployment\Release\x64\ToolLite\Qing64.dll
 copy ..\Deployment\Release\x64\Qing\Qing64.dll ..\Deployment\Release\x64\ClientLite\
 copy ..\Deployment\Release\x64\Qing\Qing64.dll ..\Deployment\Release\x64\QingTest\
 copy ..\Deployment\Release\x64\Qing\Qing64.dll ..\Deployment\Release\x64\ServerLite\
-copy ..\Deployment\Release\x64\Qing\Qing64.dll ..\Deployment\Release\x64\ToolLite\
+copy ..\Deployment\Release\x64\Qing\Qing64.dll ..\Deployment\Release\x64\EncryptDecrypt\
