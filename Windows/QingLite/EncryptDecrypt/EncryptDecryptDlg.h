@@ -30,6 +30,8 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
+private:
+
     afx_msg void OnBnClickedEncrypt();
     afx_msg void OnBnClickedDecrypt();
     afx_msg void OnBnClickedButtonSelectSourcePath();

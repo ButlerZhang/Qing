@@ -116,6 +116,8 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
 
 	// TODO: Add extra initialization here
     CreateResultList();
+    m_EditSourcePath.SetWindowTextW(L"D:\\EncryptDecryptTest");
+    m_EditTargetPath.SetWindowTextW(L"D:\\EncryptDecryptTest\\EncryptionTool");
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -281,8 +283,8 @@ void CEncryptDecryptDlg::OnBnClickedEncrypt()
     m_EditTargetPath.GetWindowTextW(TargetPath);
     if (TargetPath.GetLength() <= 0)
     {
-        MessageBox(NULL, _T("Target path is empty!"), MB_OK);
-        return;
+        //MessageBox(NULL, _T("Target path is empty!"), MB_OK);
+        //return;
     }
 
     Qing::FileManager MyFileManager;
@@ -298,10 +300,11 @@ void CEncryptDecryptDlg::OnBnClickedEncrypt()
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
         SimpleCrypt MyCrypt;
-        MyCrypt.Encrypt(FileNameVector[Index], FileNameVector[Index] + std::wstring(L".qing"));
+        //MyCrypt.SetIsEncryptFileName(true);
+        MyCrypt.SetIsDeleteOriginalFile(false);
+        MyCrypt.Encrypt(FileNameVector[Index], TargetPath.GetString());
     }
 }
-
 
 void CEncryptDecryptDlg::OnBnClickedDecrypt()
 {
