@@ -10,8 +10,8 @@
 
 int main()
 {
-    std::cout << Qing::GetSHA1("Qing") << std::endl;
-    std::wcout << Qing::GetSHA1(L"Qing") << std::endl;
+    std::cout << Qing::GetSHA1("Qing", true) << std::endl;
+    std::wcout << Qing::GetSHA1(L"Qing", true) << std::endl;
     system("pause");
     return 0;
 }

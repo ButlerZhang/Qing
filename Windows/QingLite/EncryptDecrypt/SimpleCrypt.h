@@ -12,7 +12,7 @@ public:
     SimpleCrypt();
     ~SimpleCrypt();
 
-    void SetPassword(const std::wstring &Password) { m_Password = Password; }
+    void SetPassword(const std::wstring &Password);
     void SetFileExtension(const std::wstring &FileExtension) { m_FileExtension = FileExtension; }
     void SetIsEncryptFileName(bool IsEncryptFileName) { m_IsEncryptFileName = IsEncryptFileName; }
     void SetIsDeleteOriginalFile(bool IsDeleteOriginalFile) { m_IsDeleteOriginalFile = IsDeleteOriginalFile; }
@@ -22,6 +22,7 @@ public:
 
 private:
 
+    bool Delete(const std::wstring &SourceFileName) const;
     bool IsEncrypt(const std::wstring &SourceFileName) const;
     void EncryptDecryptBuffer(wchar_t *DataBuffer, int DataSize) const;
     bool EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset);

@@ -26,6 +26,14 @@ SimpleCrypt::~SimpleCrypt()
     m_FileDataBuffer = NULL;
 }
 
+void SimpleCrypt::SetPassword(const std::wstring &Password)
+{
+    if (!Password.empty())
+    {
+        m_Password = Qing::GetSHA1(Password, true);
+    }
+}
+
 bool SimpleCrypt::Encrypt(const std::wstring &SourceFileName, const std::wstring &TargetPath)
 {
     if (IsEncrypt(SourceFileName))
@@ -81,6 +89,8 @@ bool SimpleCrypt::Encrypt(const std::wstring &SourceFileName, const std::wstring
 
     CloseHandle(SourceFileHandle);
     CloseHandle(TargetFileHandle);
+
+    Delete(SourceFileName);
     return true;
 }
 
@@ -124,10 +134,27 @@ bool SimpleCrypt::DeCrypt(const std::wstring & SourceFileName, const std::wstrin
     }
 
     bool DecryptResult = EncryptDecryptFileData(SourceFileHandle, TargetFileHandle, BUFFER_UNIT);
-
     CloseHandle(SourceFileHandle);
     CloseHandle(TargetFileHandle);
+
+    Delete(SourceFileName);
     return DecryptResult;
+}
+
+bool SimpleCrypt::Delete(const std::wstring &SourceFileName) const
+{
+    if (!m_IsDeleteOriginalFile)
+    {
+        return true;
+    }
+
+    if (DeleteFile(SourceFileName.c_str()))
+    {
+        return true;
+    }
+
+    int Error = GetLastError();
+    return false;
 }
 
 bool SimpleCrypt::IsEncrypt(const std::wstring & SourceFileName) const
