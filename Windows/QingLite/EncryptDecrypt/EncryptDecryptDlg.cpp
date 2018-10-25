@@ -117,7 +117,7 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
 	// TODO: Add extra initialization here
     CreateResultList();
     m_EditSourcePath.SetWindowTextW(L"D:\\EncryptDecryptTest");
-    m_EditTargetPath.SetWindowTextW(L"D:\\EncryptDecryptTest\\EncryptionTool");
+    //m_EditTargetPath.SetWindowTextW(L"D:\\EncryptDecryptTest\\EncryptionTool");
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -320,8 +320,8 @@ void CEncryptDecryptDlg::OnBnClickedDecrypt()
     m_EditTargetPath.GetWindowTextW(TargetPath);
     if (TargetPath.GetLength() <= 0)
     {
-        MessageBox(NULL, _T("Target path is empty!"), MB_OK);
-        return;
+        //MessageBox(NULL, _T("Target path is empty!"), MB_OK);
+        //return;
     }
 
     Qing::FileManager MyFileManager;
@@ -334,15 +334,9 @@ void CEncryptDecryptDlg::OnBnClickedDecrypt()
     std::vector<std::wstring> FileNameVector;
     MyFileManager.GetFileNameNonRecursion(SourcePath.GetString(), FileNameVector);
 
-    std::wstring QingTemp(L".qing");
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
-        std::wstring::size_type EarseIndex = FileNameVector[Index].find(QingTemp);
-        if (EarseIndex != std::wstring::npos)
-        {
-            SimpleCrypt MyCrypt;
-            std::wstring TargetName(FileNameVector[Index]);
-            MyCrypt.DeCrypt(FileNameVector[Index], TargetName.erase(EarseIndex, QingTemp.size()));
-        }
+        SimpleCrypt MyCrypt;
+        MyCrypt.DeCrypt(FileNameVector[Index], TargetPath.GetString());
     }
 }

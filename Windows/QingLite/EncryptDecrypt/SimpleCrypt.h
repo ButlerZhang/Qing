@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <memory>
+#include <vector>
 #include <Windows.h>
 
 
@@ -13,6 +13,7 @@ public:
     ~SimpleCrypt();
 
     void SetPassword(const std::wstring &Password) { m_Password = Password; }
+    void SetFileExtension(const std::wstring &FileExtension) { m_FileExtension = FileExtension; }
     void SetIsEncryptFileName(bool IsEncryptFileName) { m_IsEncryptFileName = IsEncryptFileName; }
     void SetIsDeleteOriginalFile(bool IsDeleteOriginalFile) { m_IsDeleteOriginalFile = IsDeleteOriginalFile; }
 
@@ -22,15 +23,32 @@ public:
 private:
 
     bool IsEncrypt(const std::wstring &SourceFileName) const;
-    void EncryptDecryptData(wchar_t *DataBuffer, int DataSize) const;
+    void EncryptDecryptBuffer(wchar_t *DataBuffer, int DataSize) const;
+    bool EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset);
+
+    bool EncryptHeader(const std::wstring &SourceFileName, HANDLE SourceFileHandle, HANDLE TargetFileHandle);
+    bool DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalFileName);
+
     std::wstring GetEncryptFileName(const std::wstring &SourceFileName, const std::wstring &TargetPath);
+    std::wstring GetDecryptFileName(HANDLE SourceFileHandle, const std::wstring &SourceFileName, const std::wstring &TargetPath);
 
 private:
 
-    const int                           m_BufferUnit;
-    const int                           m_BufferSize;
+    enum
+    {
+        FILE_NAME = 0,
+        FILE_SIZE = 1,
+        SEPERATOR = 2,
+        BUFFER_UNIT = 1024,                                 //1kB
+        BUFFER_SIZE = BUFFER_UNIT * BUFFER_UNIT * 100,      //100MB
+    };
+
+private:
+
     bool                                m_IsEncryptFileName;
     bool                                m_IsDeleteOriginalFile;
     std::wstring                        m_Password;
-    wchar_t                            *m_FileBuffer;
+    std::wstring                        m_FileExtension;
+    std::vector<std::wstring>           m_HeaderVector;
+    wchar_t                            *m_FileDataBuffer;
 };
