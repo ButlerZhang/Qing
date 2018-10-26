@@ -35,21 +35,10 @@ private:
 
 private:
 
-    enum
-    {
-        FILE_NAME = 0,
-        FILE_SIZE = 1,
-        SEPERATOR = 2,
-        BUFFER_UNIT = 1024,                                 //1kB
-        BUFFER_SIZE = BUFFER_UNIT * BUFFER_UNIT * 100,      //100MB
-    };
-
-private:
-
-    bool                                m_IsEncryptFileName;
-    bool                                m_IsDeleteOriginalFile;
-    std::wstring                        m_Password;
-    std::wstring                        m_FileExtension;
-    std::vector<std::wstring>           m_HeaderVector;
-    wchar_t                            *m_FileDataBuffer;
+    bool                                     m_IsEncryptFileName;
+    bool                                     m_IsDeleteOriginalFile;
+    std::wstring                             m_Password;
+    std::wstring                             m_FileExtension;
+    std::vector<std::wstring>                m_HeaderVector;
+    wchar_t                                 *m_FileDataBuffer;
 };

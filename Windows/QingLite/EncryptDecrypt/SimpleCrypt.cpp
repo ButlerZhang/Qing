@@ -5,6 +5,18 @@
 
 
 
+enum
+{
+    FILE_NAME = 0,
+    FILE_SIZE = 1,
+    PASSWORD = 2,
+    SEPERATOR = 3,
+    BUFFER_UNIT = 1024,                                 //1kB
+    BUFFER_SIZE = BUFFER_UNIT * BUFFER_UNIT * 100,      //100MB
+};
+
+
+
 SimpleCrypt::SimpleCrypt()
 {
     m_IsEncryptFileName = true;
@@ -15,6 +27,7 @@ SimpleCrypt::SimpleCrypt()
 
     m_HeaderVector.push_back(L"FileName=");
     m_HeaderVector.push_back(L"FileSize=");
+    m_HeaderVector.push_back(L"Password=");
     m_HeaderVector.push_back(L"|");
 
     m_FileDataBuffer = new wchar_t[BUFFER_SIZE];
@@ -183,8 +196,9 @@ bool SimpleCrypt::EncryptHeader(const std::wstring & SourceFileName, HANDLE Sour
         return false;
     }
 
-    std::wstring HeaderContext = m_HeaderVector[FILE_NAME] +
-        SourceFileName + m_HeaderVector[SEPERATOR] + m_HeaderVector[FILE_SIZE] + std::to_wstring(FileSize);
+    std::wstring HeaderContext = m_HeaderVector[FILE_NAME] + SourceFileName + m_HeaderVector[SEPERATOR] +
+        m_HeaderVector[FILE_SIZE] + std::to_wstring(FileSize) + m_HeaderVector[SEPERATOR] +
+        m_HeaderVector[PASSWORD] + m_Password;
     if (HeaderContext.size() > BUFFER_UNIT)
     {
         return false;
@@ -228,8 +242,15 @@ bool SimpleCrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalF
         return false;
     }
 
-    std::wstring::size_type StartIndex = SplitVector[0].find(m_HeaderVector[FILE_NAME]) + m_HeaderVector[FILE_NAME].size();
-    OriginalFileName = SplitVector[0].substr(StartIndex, SplitVector[0].size() - StartIndex);
+    std::wstring::size_type StartIndex = SplitVector[PASSWORD].find(m_HeaderVector[PASSWORD]) + m_HeaderVector[PASSWORD].size();
+    const std::wstring &Password = SplitVector[PASSWORD].substr(StartIndex, SplitVector[PASSWORD].size() - StartIndex);
+    if (Password != m_Password)
+    {
+        return false;
+    }
+
+    StartIndex = SplitVector[FILE_NAME].find(m_HeaderVector[FILE_NAME]) + m_HeaderVector[FILE_NAME].size();
+    OriginalFileName = SplitVector[FILE_NAME].substr(StartIndex, SplitVector[FILE_NAME].size() - StartIndex);
     return true;
 }
 
@@ -275,10 +296,17 @@ std::wstring SimpleCrypt::GetEncryptFileName(const std::wstring & SourceFileName
         const std::wstring &FileName = PathFindFileName(SourceFileName.c_str());
         const std::wstring &FileNameSHA1 = Qing::GetSHA1(FileName, true) + m_FileExtension;
 
-        std::wstring NewFilePath(SourceFileName);
-        NewFilePath.replace(SourceFileName.find(FileName.c_str()), FileName.size(), FileNameSHA1.c_str());
+        if (TargetPath.empty())
+        {
+            std::wstring NewFilePath(SourceFileName);
+            NewFilePath.replace(SourceFileName.find(FileName.c_str()), FileName.size(), FileNameSHA1.c_str());
 
-        TargetName = NewFilePath;
+            TargetName = NewFilePath;
+        }
+        else
+        {
+            TargetName = TargetPath + FileNameSHA1;
+        }
     }
     else
     {

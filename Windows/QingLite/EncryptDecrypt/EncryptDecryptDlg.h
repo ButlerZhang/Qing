@@ -60,19 +60,19 @@ private:
 
 private:
 
-    void CreateResultList();
+    void UpdateTargetPath();
+    void UpdateControlEnableStatus(bool Enable);
     void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
 
+    bool Validate();
+    void CreateResultList();
     std::wstring GetSelectPath() const;
-    void SetControlEnable(bool Enable);
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
 private:
 
     CEdit                               m_EditSourcePath;
     CEdit                               m_EditTargetPath;
-    CEdit                               m_EditPassword;
-    CEdit                               m_EditConfirmPassword;
     CButton                             m_CheckTargetPath;
     CButton                             m_CheckEncryptFileName;
     CButton                             m_CheckDeleteOriginalFile;
