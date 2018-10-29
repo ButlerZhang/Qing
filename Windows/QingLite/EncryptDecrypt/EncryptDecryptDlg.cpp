@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
 #include "EncryptDecryptDlg.h"
+#include "EncryptDecryptPassword.h"
 #include "afxdialogex.h"
 
 #include "..\..\Qing\HeaderFiles\FileManager.h"
@@ -59,7 +60,9 @@ CEncryptDecryptDlg::CEncryptDecryptDlg(CWnd* pParent /*=NULL*/)
     m_ProcessInfoVector.push_back(L"Processing...");
     m_ProcessInfoVector.push_back(L"Succeeded");
     m_ProcessInfoVector.push_back(L"Failed");
+
     m_OperationType = OT_UNKNOW;
+    m_LastOperationType = OT_UNKNOW;
 }
 
 void CEncryptDecryptDlg::DoDataExchange(CDataExchange* pDX)
@@ -126,6 +129,9 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
     CreateResultList();
     m_CheckEncryptFileName.SetCheck(BST_CHECKED);
     m_CheckDeleteOriginalFile.SetCheck(BST_CHECKED);
+
+    m_PasswordDlg = new EncryptDecryptPassword(this->GetParent());
+    m_PasswordDlg->Create(IDD_DIALOG_PASSWORD, this->GetParent());
 
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -195,16 +201,8 @@ void CEncryptDecryptDlg::OnBnClickedEncrypt()
 {
     if (Validate())
     {
-        if (m_OperationType == OT_DECRYPT)
-        {
-            m_ResultList.DeleteAllItems();
-        }
-
         m_OperationType = OT_ENCRYPT;
-        UpdateControlEnableStatus(false);
-
-        DWORD nThreadID;
-        HANDLE WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
+        m_PasswordDlg->UserDefinedShow();
     }
 }
 
@@ -212,16 +210,8 @@ void CEncryptDecryptDlg::OnBnClickedDecrypt()
 {
     if (Validate())
     {
-        if (m_OperationType == OT_ENCRYPT)
-        {
-            m_ResultList.DeleteAllItems();
-        }
-
         m_OperationType = OT_DECRYPT;
-        UpdateControlEnableStatus(false);
-
-        DWORD nThreadID;
-        HANDLE WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
+        m_PasswordDlg->UserDefinedShow();
     }
 }
 
@@ -306,8 +296,20 @@ void CEncryptDecryptDlg::CreateResultList()
 
     m_ResultList.InsertColumn(0, _T("Index"),       LVCFMT_CENTER,  50);
     m_ResultList.InsertColumn(1, _T("Option"),      LVCFMT_CENTER,  80);
-    m_ResultList.InsertColumn(2, _T("File Path"),   LVCFMT_LEFT,    450);
+    m_ResultList.InsertColumn(2, _T("File Path"),   LVCFMT_LEFT,    420);
     m_ResultList.InsertColumn(3, _T("Status"),      LVCFMT_CENTER,  120);
+}
+
+void CEncryptDecryptDlg::CreateWorkThread()
+{
+    UpdateControlEnableStatus(false);
+    if (m_LastOperationType != m_OperationType)
+    {
+        m_ResultList.DeleteAllItems();
+    }
+
+    DWORD nThreadID;
+    HANDLE WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
 }
 
 std::wstring CEncryptDecryptDlg::GetSelectPath() const
@@ -400,10 +402,15 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
 {
     CEncryptDecryptDlg *EDDlg = (CEncryptDecryptDlg*)lpParam;
 
+    //get path
     CString SourcePath, TargetPath, Password;
     EDDlg->m_EditSourcePath.GetWindowTextW(SourcePath);
-    EDDlg->m_EditTargetPath.GetWindowTextW(TargetPath);
+    if (EDDlg->m_CheckTargetPath.GetState() == BST_CHECKED)
+    {
+        EDDlg->m_EditTargetPath.GetWindowTextW(TargetPath);
+    }
 
+    //get files
     std::vector<std::wstring> FileNameVector;
     if (PathIsDirectory(SourcePath.GetString()))
     {
@@ -415,10 +422,18 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
         FileNameVector.push_back(SourcePath.GetString());
     }
 
+    //set option
     SimpleCrypt MyCrypt;
     //MyCrypt.SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
     MyCrypt.SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
 
+    const CString &PasswordCString = EDDlg->m_PasswordDlg->GetPassword();
+    if (!PasswordCString.IsEmpty())
+    {
+        MyCrypt.SetPassword(PasswordCString.GetString());
+    }
+
+    //encrypt or decrypt
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
         bool ProcessResult = false;
@@ -438,6 +453,8 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
         EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], Type);
     }
 
+    //reset
     EDDlg->UpdateControlEnableStatus(true);
+    EDDlg->m_LastOperationType = EDDlg->m_OperationType;
     return 0;
 }

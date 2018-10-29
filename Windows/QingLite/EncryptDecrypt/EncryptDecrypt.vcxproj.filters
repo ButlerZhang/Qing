@@ -90,6 +90,9 @@
     <ClInclude Include="SimpleCrypt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EncryptDecryptPassword.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EncryptDecrypt.cpp">
@@ -102,6 +105,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SimpleCrypt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EncryptDecryptPassword.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

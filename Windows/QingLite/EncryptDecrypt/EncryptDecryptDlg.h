@@ -4,10 +4,13 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 
+class EncryptDecryptPassword;
+
 
 
 class CEncryptDecryptDlg : public CDialogEx
 {
+    friend EncryptDecryptPassword;
 private:
 
     enum OperationType
@@ -28,6 +31,8 @@ private:
 public:
 	CEncryptDecryptDlg(CWnd* pParent = NULL);	// standard constructor
 
+    
+
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ENCRYPTDECRYPT_DIALOG };
@@ -35,6 +40,7 @@ public:
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    
 
 
 // Implementation
@@ -66,6 +72,7 @@ private:
 
     bool Validate();
     void CreateResultList();
+    void CreateWorkThread();
     std::wstring GetSelectPath() const;
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
@@ -82,5 +89,7 @@ private:
     CButton                                 m_ButtonExit;
     CListCtrl                               m_ResultList;
     OperationType                           m_OperationType;
+    OperationType                           m_LastOperationType;
     std::vector<std::wstring>               m_ProcessInfoVector;
+    EncryptDecryptPassword                 *m_PasswordDlg;
 };

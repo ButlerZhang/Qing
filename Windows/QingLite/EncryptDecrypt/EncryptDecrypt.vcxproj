@@ -217,6 +217,7 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h" />
     <ClInclude Include="EncryptDecrypt.h" />
     <ClInclude Include="EncryptDecryptDlg.h" />
+    <ClInclude Include="EncryptDecryptPassword.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SimpleCrypt.h" />
     <ClInclude Include="stdafx.h" />
@@ -225,6 +226,7 @@
   <ItemGroup>
     <ClCompile Include="EncryptDecrypt.cpp" />
     <ClCompile Include="EncryptDecryptDlg.cpp" />
+    <ClCompile Include="EncryptDecryptPassword.cpp" />
     <ClCompile Include="SimpleCrypt.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
