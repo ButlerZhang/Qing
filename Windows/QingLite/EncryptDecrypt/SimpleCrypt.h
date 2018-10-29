@@ -13,10 +13,12 @@ public:
     ~SimpleCrypt();
 
     void SetPassword(const std::wstring &Password);
+    void SetIsForceStop(bool IsForceStop) { m_IsForceStop = IsForceStop; }
     void SetFileExtension(const std::wstring &FileExtension) { m_FileExtension = FileExtension; }
     void SetIsEncryptFileName(bool IsEncryptFileName) { m_IsEncryptFileName = IsEncryptFileName; }
     void SetIsDeleteOriginalFile(bool IsDeleteOriginalFile) { m_IsDeleteOriginalFile = IsDeleteOriginalFile; }
 
+    bool IsForceStop() const { return m_IsForceStop; }
     bool Encrypt(const std::wstring &SourceFileName, const std::wstring &TargetPath);
     bool DeCrypt(const std::wstring &SourceFileName, const std::wstring &TargetPath);
 
@@ -35,6 +37,7 @@ private:
 
 private:
 
+    bool                                     m_IsForceStop;
     bool                                     m_IsEncryptFileName;
     bool                                     m_IsDeleteOriginalFile;
     std::wstring                             m_Password;

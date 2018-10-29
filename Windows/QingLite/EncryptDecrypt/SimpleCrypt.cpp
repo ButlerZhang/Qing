@@ -18,6 +18,7 @@ enum
 
 SimpleCrypt::SimpleCrypt()
 {
+    m_IsForceStop = false;
     m_IsEncryptFileName = true;
     m_IsDeleteOriginalFile = false;
 
@@ -194,8 +195,9 @@ bool SimpleCrypt::EncryptHeader(const std::wstring & SourceFileName, HANDLE Sour
         return false;
     }
 
-    std::wstring HeaderContext = m_HeaderVector[FILE_NAME] + SourceFileName + m_HeaderVector[SEPERATOR] +
-        m_HeaderVector[FILE_SIZE] + std::to_wstring(FileSize);
+    const std::wstring &FileName = PathFindFileName(SourceFileName.c_str());
+    std::wstring HeaderContext = m_HeaderVector[FILE_NAME] + FileName + m_HeaderVector[SEPERATOR] +
+        m_HeaderVector[FILE_SIZE] + std::to_wstring(FileSize) + m_HeaderVector[SEPERATOR];
     if (HeaderContext.size() > BUFFER_UNIT)
     {
         return false;
@@ -226,7 +228,9 @@ bool SimpleCrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalF
     }
 
     EncryptDecryptBuffer(m_FileDataBuffer, BUFFER_UNIT);
-    std::wstring HeaderContext(m_FileDataBuffer);
+
+    std::wstring HeaderContext;
+    HeaderContext.assign(m_FileDataBuffer, BUFFER_UNIT);
     if (HeaderContext.find(m_HeaderVector[FILE_NAME]) == std::wstring::npos)
     {
         return false;
@@ -265,7 +269,18 @@ bool SimpleCrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetF
             return false;
         }
 
+        if (m_IsForceStop)
+        {
+            return false;
+        }
+
         EncryptDecryptBuffer(m_FileDataBuffer, RealReadLength);
+
+        if (m_IsForceStop)
+        {
+            return false;
+        }
+
         if (::WriteFile(TargetFileHandle, m_FileDataBuffer, RealReadLength, &RealWriteLength, NULL) <= 0)
         {
             int Error = GetLastError();
@@ -273,6 +288,11 @@ bool SimpleCrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetF
         }
 
         FileOffset += BUFFER_SIZE;
+
+        if (m_IsForceStop)
+        {
+            return false;
+        }
     }
 
     return true;
@@ -325,23 +345,15 @@ std::wstring SimpleCrypt::GetDecryptFileName(HANDLE SourceFileHandle, const std:
     {
         if (TargetPath.empty())
         {
-            TargetName = OriginalFileName;
+            std::wstring::size_type FileNameStartIndex = SourceFileName.find_last_of(L"\\");
+            if (FileNameStartIndex != std::wstring::npos)
+            {
+                TargetName = SourceFileName.substr(0, FileNameStartIndex) + L"\\" + OriginalFileName;
+            }
         }
         else
         {
             const std::wstring &FileName = PathFindFileName(OriginalFileName.c_str());
-            TargetName = TargetPath + FileName;
-        }
-    }
-    else
-    {
-        if (TargetPath.empty())
-        {
-            TargetName = SourceFileName;//error
-        }
-        else
-        {
-            const std::wstring &FileName = PathFindFileName(SourceFileName.c_str());
             TargetName = TargetPath + FileName;
         }
     }

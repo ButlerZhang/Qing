@@ -63,6 +63,7 @@ CEncryptDecryptDlg::CEncryptDecryptDlg(CWnd* pParent /*=NULL*/)
 
     m_OperationType = OT_UNKNOW;
     m_LastOperationType = OT_UNKNOW;
+    m_SimpleCrypt = std::make_shared<SimpleCrypt>();
 }
 
 void CEncryptDecryptDlg::DoDataExchange(CDataExchange* pDX)
@@ -189,7 +190,7 @@ HCURSOR CEncryptDecryptDlg::OnQueryDragIcon()
 
 void CEncryptDecryptDlg::OnBnClickedStop()
 {
-    // TODO: Add your control notification handler code here
+    m_SimpleCrypt->SetIsForceStop(true);
 }
 
 void CEncryptDecryptDlg::OnBnClickedExit()
@@ -270,14 +271,17 @@ bool CEncryptDecryptDlg::Validate()
         return false;
     }
 
-    CString TargetPath;
-    m_EditTargetPath.GetWindowTextW(TargetPath);
-    if (!TargetPath.IsEmpty())
+    if (m_CheckTargetPath.GetState() == BST_CHECKED)
     {
-        if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
+        CString TargetPath;
+        m_EditTargetPath.GetWindowTextW(TargetPath);
+        if (!TargetPath.IsEmpty())
         {
-            MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
-            return false;
+            if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
+            {
+                MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
+                return false;
+            }
         }
     }
 
@@ -303,6 +307,8 @@ void CEncryptDecryptDlg::CreateResultList()
 void CEncryptDecryptDlg::CreateWorkThread()
 {
     UpdateControlEnableStatus(false);
+    m_SimpleCrypt->SetIsForceStop(false);
+
     if (m_LastOperationType != m_OperationType)
     {
         m_ResultList.DeleteAllItems();
@@ -403,7 +409,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     CEncryptDecryptDlg *EDDlg = (CEncryptDecryptDlg*)lpParam;
 
     //get path
-    CString SourcePath, TargetPath, Password;
+    CString SourcePath, TargetPath;
     EDDlg->m_EditSourcePath.GetWindowTextW(SourcePath);
     if (EDDlg->m_CheckTargetPath.GetState() == BST_CHECKED)
     {
@@ -423,30 +429,34 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     }
 
     //set option
-    SimpleCrypt MyCrypt;
     //MyCrypt.SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
-    MyCrypt.SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
+    EDDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
 
     const CString &PasswordCString = EDDlg->m_PasswordDlg->GetPassword();
     if (!PasswordCString.IsEmpty())
     {
-        MyCrypt.SetPassword(PasswordCString.GetString());
+        EDDlg->m_SimpleCrypt->SetPassword(PasswordCString.GetString());
     }
 
     //encrypt or decrypt
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
+        if (EDDlg->m_SimpleCrypt->IsForceStop())
+        {
+            break;
+        }
+
         bool ProcessResult = false;
         size_t ResultIndex = Index + 1;
         EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], PT_PROCEING);
 
         if (EDDlg->m_OperationType == OT_ENCRYPT)
         {
-            ProcessResult = MyCrypt.Encrypt(FileNameVector[Index], TargetPath.GetString());
+            ProcessResult = EDDlg->m_SimpleCrypt->Encrypt(FileNameVector[Index], TargetPath.GetString());
         }
         else
         {
-            ProcessResult = MyCrypt.DeCrypt(FileNameVector[Index], TargetPath.GetString());
+            ProcessResult = EDDlg->m_SimpleCrypt->DeCrypt(FileNameVector[Index], TargetPath.GetString());
         }
 
         ProcessType Type = ProcessResult ? PT_SUCCEEDED : PT_FAILED;

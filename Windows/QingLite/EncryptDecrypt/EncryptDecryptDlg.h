@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 #include "afxwin.h"
 #include "afxcmn.h"
 
+class SimpleCrypt;
 class EncryptDecryptPassword;
 
 
@@ -30,8 +32,6 @@ private:
 // Construction
 public:
 	CEncryptDecryptDlg(CWnd* pParent = NULL);	// standard constructor
-
-    
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -92,4 +92,5 @@ private:
     OperationType                           m_LastOperationType;
     std::vector<std::wstring>               m_ProcessInfoVector;
     EncryptDecryptPassword                 *m_PasswordDlg;
+    std::shared_ptr<SimpleCrypt>            m_SimpleCrypt;
 };
