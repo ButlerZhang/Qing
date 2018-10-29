@@ -71,16 +71,16 @@ private:
 
 private:
 
-    CEdit                               m_EditSourcePath;
-    CEdit                               m_EditTargetPath;
-    CButton                             m_CheckTargetPath;
-    CButton                             m_CheckEncryptFileName;
-    CButton                             m_CheckDeleteOriginalFile;
-    CButton                             m_ButtonEncrypt;
-    CButton                             m_ButtonDecrypt;
-    CButton                             m_ButtonStop;
-    CButton                             m_ButtonExit;
-    CListCtrl                           m_ResultList;
-    OperationType                       m_OperationType;
-    std::vector<std::wstring>           m_ProcessInfoVector;
+    CEdit                                   m_EditSourcePath;
+    CEdit                                   m_EditTargetPath;
+    CButton                                 m_CheckTargetPath;
+    CButton                                 m_CheckEncryptFileName;
+    CButton                                 m_CheckDeleteOriginalFile;
+    CButton                                 m_ButtonEncrypt;
+    CButton                                 m_ButtonDecrypt;
+    CButton                                 m_ButtonStop;
+    CButton                                 m_ButtonExit;
+    CListCtrl                               m_ResultList;
+    OperationType                           m_OperationType;
+    std::vector<std::wstring>               m_ProcessInfoVector;
 };

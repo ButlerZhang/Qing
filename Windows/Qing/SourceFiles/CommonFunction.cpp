@@ -82,6 +82,17 @@ std::wstring GetRunningPath()
     return L"Qing";
 }
 
+std::wstring QING_DLL ConvertDoubleToString(double Value, int precision)
+{
+    std::wostringstream ConvertString;
+
+    ConvertString.precision(precision);
+    ConvertString.setf(std::ios::fixed);
+    ConvertString << Value;
+
+    return ConvertString.str();
+}
+
 std::string QING_DLL GetSHA1(const std::string & DataString, bool IsUpper)
 {
     boost::uuids::detail::sha1 sha;

@@ -124,7 +124,8 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
 
     // TODO: Add extra initialization here
     CreateResultList();
-    //CRichEditCtrl().SetEventMask(ENM_CHANGE);
+    m_CheckEncryptFileName.SetCheck(BST_CHECKED);
+    m_CheckDeleteOriginalFile.SetCheck(BST_CHECKED);
 
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -194,6 +195,11 @@ void CEncryptDecryptDlg::OnBnClickedEncrypt()
 {
     if (Validate())
     {
+        if (m_OperationType == OT_DECRYPT)
+        {
+            m_ResultList.DeleteAllItems();
+        }
+
         m_OperationType = OT_ENCRYPT;
         UpdateControlEnableStatus(false);
 
@@ -206,6 +212,11 @@ void CEncryptDecryptDlg::OnBnClickedDecrypt()
 {
     if (Validate())
     {
+        if (m_OperationType == OT_ENCRYPT)
+        {
+            m_ResultList.DeleteAllItems();
+        }
+
         m_OperationType = OT_DECRYPT;
         UpdateControlEnableStatus(false);
 
@@ -216,7 +227,12 @@ void CEncryptDecryptDlg::OnBnClickedDecrypt()
 
 void CEncryptDecryptDlg::OnBnClickedCheckTargetPath()
 {
-    UpdateTargetPath();
+    CString TargetPath;
+    m_EditTargetPath.GetWindowTextW(TargetPath);
+    if (TargetPath.IsEmpty())
+    {
+        UpdateTargetPath();
+    }
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonSelectSourcePath()
@@ -289,9 +305,9 @@ void CEncryptDecryptDlg::CreateResultList()
     m_ResultList.SetExtendedStyle(StylesEx);
 
     m_ResultList.InsertColumn(0, _T("Index"),       LVCFMT_CENTER,  50);
-    m_ResultList.InsertColumn(1, _T("Option"),      LVCFMT_CENTER,  50);
-    m_ResultList.InsertColumn(2, _T("File Path"),   LVCFMT_LEFT,    470);
-    m_ResultList.InsertColumn(3, _T("Status"),      LVCFMT_CENTER,  130);
+    m_ResultList.InsertColumn(1, _T("Option"),      LVCFMT_CENTER,  80);
+    m_ResultList.InsertColumn(2, _T("File Path"),   LVCFMT_LEFT,    450);
+    m_ResultList.InsertColumn(3, _T("Status"),      LVCFMT_CENTER,  120);
 }
 
 std::wstring CEncryptDecryptDlg::GetSelectPath() const

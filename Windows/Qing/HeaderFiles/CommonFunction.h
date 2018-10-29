@@ -10,6 +10,7 @@ QING_NAMESPACE_BEGIN
 std::wstring QING_DLL GetGUID();
 std::wstring QING_DLL GetProgramName();
 std::wstring QING_DLL GetRunningPath();
+std::wstring QING_DLL ConvertDoubleToString(double Value, int precision);
 
 std::string  QING_DLL GetSHA1(const std::string &DataString, bool IsUpper);
 std::wstring QING_DLL GetSHA1(const std::wstring &DataString, bool IsUpper);

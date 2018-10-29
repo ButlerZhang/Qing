@@ -9,8 +9,7 @@ enum
 {
     FILE_NAME = 0,
     FILE_SIZE = 1,
-    PASSWORD = 2,
-    SEPERATOR = 3,
+    SEPERATOR = 2,
     BUFFER_UNIT = 1024,                                 //1kB
     BUFFER_SIZE = BUFFER_UNIT * BUFFER_UNIT * 100,      //100MB
 };
@@ -27,7 +26,6 @@ SimpleCrypt::SimpleCrypt()
 
     m_HeaderVector.push_back(L"FileName=");
     m_HeaderVector.push_back(L"FileSize=");
-    m_HeaderVector.push_back(L"Password=");
     m_HeaderVector.push_back(L"|");
 
     m_FileDataBuffer = new wchar_t[BUFFER_SIZE];
@@ -197,8 +195,7 @@ bool SimpleCrypt::EncryptHeader(const std::wstring & SourceFileName, HANDLE Sour
     }
 
     std::wstring HeaderContext = m_HeaderVector[FILE_NAME] + SourceFileName + m_HeaderVector[SEPERATOR] +
-        m_HeaderVector[FILE_SIZE] + std::to_wstring(FileSize) + m_HeaderVector[SEPERATOR] +
-        m_HeaderVector[PASSWORD] + m_Password;
+        m_HeaderVector[FILE_SIZE] + std::to_wstring(FileSize);
     if (HeaderContext.size() > BUFFER_UNIT)
     {
         return false;
@@ -206,7 +203,7 @@ bool SimpleCrypt::EncryptHeader(const std::wstring & SourceFileName, HANDLE Sour
 
     wmemset(m_FileDataBuffer, 0, BUFFER_UNIT);
     wmemcpy(m_FileDataBuffer, HeaderContext.c_str(), HeaderContext.size());
-    EncryptDecryptBuffer(m_FileDataBuffer, static_cast<int>(HeaderContext.size()));
+    EncryptDecryptBuffer(m_FileDataBuffer, HeaderContext.size());
 
     DWORD RealWriteLength = 0;
     if (::WriteFile(TargetFileHandle, m_FileDataBuffer, BUFFER_UNIT, &RealWriteLength, NULL) <= 0)
@@ -242,14 +239,7 @@ bool SimpleCrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalF
         return false;
     }
 
-    std::wstring::size_type StartIndex = SplitVector[PASSWORD].find(m_HeaderVector[PASSWORD]) + m_HeaderVector[PASSWORD].size();
-    const std::wstring &Password = SplitVector[PASSWORD].substr(StartIndex, SplitVector[PASSWORD].size() - StartIndex);
-    if (Password != m_Password)
-    {
-        return false;
-    }
-
-    StartIndex = SplitVector[FILE_NAME].find(m_HeaderVector[FILE_NAME]) + m_HeaderVector[FILE_NAME].size();
+    std::wstring::size_type StartIndex = SplitVector[FILE_NAME].find(m_HeaderVector[FILE_NAME]) + m_HeaderVector[FILE_NAME].size();
     OriginalFileName = SplitVector[FILE_NAME].substr(StartIndex, SplitVector[FILE_NAME].size() - StartIndex);
     return true;
 }
