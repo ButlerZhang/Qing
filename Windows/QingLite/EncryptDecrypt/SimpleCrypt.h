@@ -18,22 +18,24 @@ public:
     void SetIsEncryptFileName(bool IsEncryptFileName) { m_IsEncryptFileName = IsEncryptFileName; }
     void SetIsDeleteOriginalFile(bool IsDeleteOriginalFile) { m_IsDeleteOriginalFile = IsDeleteOriginalFile; }
 
+    bool Encrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
+    bool DeCrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
+
     bool IsForceStop() const { return m_IsForceStop; }
-    bool Encrypt(const std::wstring &SourceFileName, const std::wstring &TargetPath);
-    bool DeCrypt(const std::wstring &SourceFileName, const std::wstring &TargetPath);
+    std::wstring GetErrorMessage() const { return m_ErrorMessage; }
 
 private:
 
-    bool Delete(const std::wstring &SourceFileName) const;
-    bool IsEncrypt(const std::wstring &SourceFileName) const;
+    bool Delete(const std::wstring &SourceFile);
+    bool IsEncrypt(const std::wstring &SourceFile);
     void EncryptDecryptBuffer(wchar_t *DataBuffer, int DataSize) const;
     bool EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset);
 
-    bool EncryptHeader(const std::wstring &SourceFileName, HANDLE SourceFileHandle, HANDLE TargetFileHandle);
-    bool DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalFileName);
+    bool DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalFile);
+    bool EncryptHeader(const std::wstring &SourceFile, HANDLE SourceFileHandle, HANDLE TargetFileHandle);
 
-    std::wstring GetEncryptFileName(const std::wstring &SourceFileName, const std::wstring &TargetPath);
-    std::wstring GetDecryptFileName(HANDLE SourceFileHandle, const std::wstring &SourceFileName, const std::wstring &TargetPath);
+    std::wstring GetEncryptFileName(const std::wstring &SourceFile, const std::wstring &TargetPath);
+    std::wstring GetDecryptFileName(HANDLE SourceFileHandle, const std::wstring &SourceFile, const std::wstring &TargetPath);
 
 private:
 
@@ -42,6 +44,7 @@ private:
     bool                                     m_IsDeleteOriginalFile;
     std::wstring                             m_Password;
     std::wstring                             m_FileExtension;
+    std::wstring                             m_ErrorMessage;
     std::vector<std::wstring>                m_HeaderVector;
     wchar_t                                 *m_FileDataBuffer;
 };

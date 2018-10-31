@@ -126,17 +126,12 @@ bool LocalComputer::StartProgram(const std::string &ProgramName) const
 bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
 {
     ShellExecute(NULL, L"open", ProgramName.c_str(), NULL, NULL, SW_SHOWNORMAL);
-    int ErrorValue = GetLastError();
+    DWORD ErrorValue = GetLastError();
     if (ErrorValue != 0)
     {
-        LPVOID lpMsgBuf;
-        DWORD dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
-        if (FormatMessage(dwFlags, NULL, ErrorValue, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL))
-        {
-            std::wstring ErrorInfo = (LPCTSTR)lpMsgBuf;
-            BoostLog::WriteError(BoostFormat(L"Start program fail, program name = %s, error = %s.", ProgramName.c_str(), ErrorInfo.c_str()));
-            return false;
-        }
+        const std::wstring &ErrorMessage = ConvertErrorCodeToString(ErrorValue);
+        BoostLog::WriteError(BoostFormat(L"Start program fail, program name = %s, error = %s.", ProgramName.c_str(), ErrorMessage.c_str()));
+        return false;
     }
 
     return true;

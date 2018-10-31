@@ -4,8 +4,10 @@
 #include "EncryptDecryptPassword.h"
 #include "afxdialogex.h"
 
+#include "..\..\Qing\HeaderFiles\BoostLog.h"
 #include "..\..\Qing\HeaderFiles\FileManager.h"
 #include "..\..\Qing\HeaderFiles\CommonFunction.h"
+
 #include "SimpleCrypt.h"
 
 #include <shlobj.h>
@@ -56,6 +58,8 @@ CEncryptDecryptDlg::CEncryptDecryptDlg(CWnd* pParent /*=NULL*/)
     : CDialogEx(IDD_ENCRYPTDECRYPT_DIALOG, pParent)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+    Qing::BoostLog::DefaultInit();
 
     m_ProcessInfoVector.push_back(L"Processing...");
     m_ProcessInfoVector.push_back(L"Succeeded");
@@ -190,6 +194,7 @@ HCURSOR CEncryptDecryptDlg::OnQueryDragIcon()
 
 void CEncryptDecryptDlg::OnBnClickedStop()
 {
+    m_ButtonStop.EnableWindow(FALSE);
     m_SimpleCrypt->SetIsForceStop(true);
 }
 
@@ -298,10 +303,10 @@ void CEncryptDecryptDlg::CreateResultList()
     StylesEx |= LVS_EX_GRIDLINES;
     m_ResultList.SetExtendedStyle(StylesEx);
 
-    m_ResultList.InsertColumn(0, _T("Index"),       LVCFMT_CENTER,  50);
-    m_ResultList.InsertColumn(1, _T("Option"),      LVCFMT_CENTER,  80);
-    m_ResultList.InsertColumn(2, _T("File Path"),   LVCFMT_LEFT,    420);
-    m_ResultList.InsertColumn(3, _T("Status"),      LVCFMT_CENTER,  120);
+    m_ResultList.InsertColumn(0, _T("Index"), LVCFMT_LEFT,  50);
+    m_ResultList.InsertColumn(1, _T("Option"), LVCFMT_LEFT,  60);
+    m_ResultList.InsertColumn(2, _T("File Path"), LVCFMT_LEFT, 400);
+    m_ResultList.InsertColumn(3, _T("Status"), LVCFMT_LEFT,  200);
 }
 
 void CEncryptDecryptDlg::CreateWorkThread()
@@ -389,7 +394,13 @@ void CEncryptDecryptDlg::UpdateResultList(size_t Index, std::wstring &FilePath, 
     {
         if (m_ResultList.GetItemText(Index, 0).CompareNoCase(IDString.c_str()) == 0)
         {
-            m_ResultList.SetItemText(Index, 3, m_ProcessInfoVector[Type].c_str());
+            std::wstring StatusString = m_ProcessInfoVector[Type];
+            if (Type == PT_FAILED && !m_SimpleCrypt->GetErrorMessage().empty())
+            {
+                StatusString = m_SimpleCrypt->GetErrorMessage();
+            }
+
+            m_ResultList.SetItemText(Index, 3, StatusString.c_str());
             Found = true;
             break;
         }
@@ -429,7 +440,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     }
 
     //set option
-    //MyCrypt.SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
+    EDDlg->m_SimpleCrypt->SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
     EDDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
 
     const CString &PasswordCString = EDDlg->m_PasswordDlg->GetPassword();
@@ -464,6 +475,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     }
 
     //reset
+    EDDlg->m_ButtonStop.EnableWindow(FALSE);
     EDDlg->UpdateControlEnableStatus(true);
     EDDlg->m_LastOperationType = EDDlg->m_OperationType;
     return 0;

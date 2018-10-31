@@ -82,6 +82,18 @@ std::wstring GetRunningPath()
     return L"Qing";
 }
 
+std::wstring QING_DLL ConvertErrorCodeToString(DWORD LastErrorCode)
+{
+    LPVOID lpMsgBuf;
+    DWORD dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+    if (FormatMessage(dwFlags, NULL, LastErrorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL))
+    {
+        return std::wstring((LPCTSTR)lpMsgBuf);
+    }
+
+    return std::wstring();
+}
+
 std::wstring QING_DLL ConvertDoubleToString(double Value, int precision)
 {
     std::wostringstream ConvertString;

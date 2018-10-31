@@ -131,8 +131,11 @@ void BoostLog::WriteLog(LogLevel Level, const std::wstring &LogString)
 {
     if (m_IsOkToWrite)
     {
+        const std::string &Log = WStringToString(LogString);
+        BOOST_LOG_SEV(BoostLogger::get(), Level) << Log;
+
         //src::severity_logger_mt<BoostLog::LogLevel>& lg = BoostLogger::get();
-        BOOST_LOG_SEV(BoostLogger::get(), Level) << LogString;
+        //BOOST_LOG_SEV(BoostLogger::get(), Level) << LogString;
     }
 }
 
