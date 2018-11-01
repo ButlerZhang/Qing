@@ -199,6 +199,11 @@ bool SimpleCrypt::Reset(HANDLE SourceFileHandle, const std::wstring &SourceFile)
 
     unsigned long OldBufferSize = m_DataBufferSize;
     m_DataBufferSize = min(m_FileSize, BUFFER_SIZE);
+    if (m_DataBufferSize % BUFFER_UNIT != 0)
+    {
+        int Counter = m_DataBufferSize / BUFFER_UNIT + 1;
+        m_DataBufferSize = BUFFER_UNIT * Counter;
+    }
 
     delete m_FileDataBuffer;
     m_FileDataBuffer = new wchar_t[m_DataBufferSize];

@@ -1,11 +1,14 @@
 #include "..\HeaderFiles\CommonFunction.h"
 #include "..\HeaderFiles\BoostLog.h"
 
-#include <boost\uuid\name_generator_sha1.hpp>
+#include <cctype>
 #include <sstream>
 #include <iomanip>
 #include <Shlwapi.h>
 #include <algorithm>
+#include <functional>
+
+#include <boost\uuid\name_generator_sha1.hpp>
 
 QING_NAMESPACE_BEGIN
 
@@ -84,14 +87,19 @@ std::wstring GetRunningPath()
 
 std::wstring QING_DLL ConvertErrorCodeToString(DWORD LastErrorCode)
 {
+    std::wstring ErrorCodeString;
+
     LPVOID lpMsgBuf;
     DWORD dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
     if (FormatMessage(dwFlags, NULL, LastErrorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL))
     {
-        return std::wstring((LPCTSTR)lpMsgBuf);
+        ErrorCodeString.append((LPCTSTR)lpMsgBuf);
+        std::wstring::size_type DeleteCharCount = 2;    //delete "\r\n"
+        std::wstring::size_type StartIndex = ErrorCodeString.size() - DeleteCharCount;
+        ErrorCodeString.erase(StartIndex, DeleteCharCount);
     }
 
-    return std::wstring();
+    return ErrorCodeString;
 }
 
 std::wstring QING_DLL ConvertDoubleToString(double Value, int precision)

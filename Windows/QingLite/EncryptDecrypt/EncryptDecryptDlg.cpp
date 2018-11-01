@@ -66,7 +66,14 @@ CEncryptDecryptDlg::CEncryptDecryptDlg(CWnd* pParent /*=NULL*/)
 
     m_OperationType = OT_UNKNOW;
     m_LastOperationType = OT_UNKNOW;
+    m_WorkerThread = INVALID_HANDLE_VALUE;
     m_SimpleCrypt = std::make_shared<SimpleCrypt>();
+}
+
+CEncryptDecryptDlg::~CEncryptDecryptDlg()
+{
+    ReleaseThreadHandle();
+    m_ProcessInfoVector.clear();
 }
 
 void CEncryptDecryptDlg::DoDataExchange(CDataExchange* pDX)
@@ -193,8 +200,11 @@ HCURSOR CEncryptDecryptDlg::OnQueryDragIcon()
 
 void CEncryptDecryptDlg::OnBnClickedStop()
 {
-    m_ButtonStop.EnableWindow(FALSE);
-    m_SimpleCrypt->SetIsForceStop(true);
+    if (m_WorkerThread != INVALID_HANDLE_VALUE)
+    {
+        m_ButtonStop.EnableWindow(FALSE);
+        m_SimpleCrypt->SetIsForceStop(true);
+    }
 }
 
 void CEncryptDecryptDlg::OnBnClickedExit()
@@ -292,6 +302,12 @@ bool CEncryptDecryptDlg::Validate()
     return true;
 }
 
+void CEncryptDecryptDlg::ReleaseThreadHandle()
+{
+    CloseHandle(m_WorkerThread);
+    m_WorkerThread = INVALID_HANDLE_VALUE;
+}
+
 void CEncryptDecryptDlg::CreateResultList()
 {
     LONG Styles = GetWindowLong(m_ResultList.m_hWnd, GWL_STYLE);
@@ -310,6 +326,7 @@ void CEncryptDecryptDlg::CreateResultList()
 
 void CEncryptDecryptDlg::CreateWorkThread()
 {
+    ReleaseThreadHandle();
     UpdateControlEnableStatus(false);
     m_SimpleCrypt->SetIsForceStop(false);
 
@@ -319,7 +336,7 @@ void CEncryptDecryptDlg::CreateWorkThread()
     }
 
     DWORD nThreadID;
-    HANDLE WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
+    m_WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
 }
 
 std::wstring CEncryptDecryptDlg::GetSelectPath() const
@@ -418,64 +435,73 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
 {
     CEncryptDecryptDlg *EDDlg = (CEncryptDecryptDlg*)lpParam;
 
-    //get path
-    CString SourcePath, TargetPath;
-    EDDlg->m_EditSourcePath.GetWindowTextW(SourcePath);
-    if (EDDlg->m_CheckTargetPath.GetState() == BST_CHECKED)
+    try
     {
-        EDDlg->m_EditTargetPath.GetWindowTextW(TargetPath);
-    }
-
-    //get files
-    std::vector<std::wstring> FileNameVector;
-    if (PathIsDirectory(SourcePath.GetString()))
-    {
-        Qing::FileManager MyFileManager;
-        MyFileManager.GetFileNameNonRecursion(SourcePath.GetString(), FileNameVector);
-    }
-    else
-    {
-        FileNameVector.push_back(SourcePath.GetString());
-    }
-
-    //set option
-    EDDlg->m_SimpleCrypt->SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
-    EDDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
-
-    const CString &PasswordCString = EDDlg->m_PasswordDlg->GetPassword();
-    if (!PasswordCString.IsEmpty())
-    {
-        EDDlg->m_SimpleCrypt->SetPassword(PasswordCString.GetString());
-    }
-
-    //encrypt or decrypt
-    for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
-    {
-        if (EDDlg->m_SimpleCrypt->IsForceStop())
+        //get path
+        CString SourcePath, TargetPath;
+        EDDlg->m_EditSourcePath.GetWindowTextW(SourcePath);
+        if (EDDlg->m_CheckTargetPath.GetState() == BST_CHECKED)
         {
-            break;
+            EDDlg->m_EditTargetPath.GetWindowTextW(TargetPath);
         }
 
-        bool ProcessResult = false;
-        size_t ResultIndex = Index + 1;
-        EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], PT_PROCEING);
-
-        if (EDDlg->m_OperationType == OT_ENCRYPT)
+        //get files
+        std::vector<std::wstring> FileNameVector;
+        if (PathIsDirectory(SourcePath.GetString()))
         {
-            ProcessResult = EDDlg->m_SimpleCrypt->Encrypt(FileNameVector[Index], TargetPath.GetString());
+            Qing::FileManager MyFileManager;
+            MyFileManager.GetFileNameNonRecursion(SourcePath.GetString(), FileNameVector);
         }
         else
         {
-            ProcessResult = EDDlg->m_SimpleCrypt->DeCrypt(FileNameVector[Index], TargetPath.GetString());
+            FileNameVector.push_back(SourcePath.GetString());
         }
 
-        ProcessType Type = ProcessResult ? PT_SUCCEEDED : PT_FAILED;
-        EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], Type);
+        //set option
+        EDDlg->m_SimpleCrypt->SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
+        EDDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
+
+        const CString &PasswordCString = EDDlg->m_PasswordDlg->GetPassword();
+        if (!PasswordCString.IsEmpty())
+        {
+            EDDlg->m_SimpleCrypt->SetPassword(PasswordCString.GetString());
+        }
+
+        //encrypt or decrypt
+        for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
+        {
+            if (EDDlg->m_SimpleCrypt->IsForceStop())
+            {
+                break;
+            }
+
+            bool ProcessResult = false;
+            size_t ResultIndex = Index + 1;
+            EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], PT_PROCEING);
+
+            if (EDDlg->m_OperationType == OT_ENCRYPT)
+            {
+                ProcessResult = EDDlg->m_SimpleCrypt->Encrypt(FileNameVector[Index], TargetPath.GetString());
+            }
+            else
+            {
+                ProcessResult = EDDlg->m_SimpleCrypt->DeCrypt(FileNameVector[Index], TargetPath.GetString());
+            }
+
+            ProcessType Type = ProcessResult ? PT_SUCCEEDED : PT_FAILED;
+            EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], Type);
+        }
+    }
+    catch (std::exception e)
+    {
+        const std::wstring &ErrorMessage = Qing::StringToWString(e.what());
+        Qing::BoostLog::WriteError(ErrorMessage);
     }
 
     //reset
     EDDlg->m_ButtonStop.EnableWindow(TRUE);
     EDDlg->UpdateControlEnableStatus(true);
     EDDlg->m_LastOperationType = EDDlg->m_OperationType;
+    EDDlg->ReleaseThreadHandle();
     return 0;
 }

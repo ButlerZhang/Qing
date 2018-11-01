@@ -32,6 +32,7 @@ private:
 // Construction
 public:
 	CEncryptDecryptDlg(CWnd* pParent = NULL);	// standard constructor
+    ~CEncryptDecryptDlg();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -73,6 +74,7 @@ private:
     bool Validate();
     void CreateResultList();
     void CreateWorkThread();
+    void ReleaseThreadHandle();
     std::wstring GetSelectPath() const;
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
@@ -90,6 +92,7 @@ private:
     CListCtrl                               m_ResultList;
     OperationType                           m_OperationType;
     OperationType                           m_LastOperationType;
+    HANDLE                                  m_WorkerThread;
     std::vector<std::wstring>               m_ProcessInfoVector;
     EncryptDecryptPassword                 *m_PasswordDlg;
     std::shared_ptr<SimpleCrypt>            m_SimpleCrypt;
