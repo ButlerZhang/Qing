@@ -11,7 +11,7 @@ enum
     FILE_SIZE = 1,
     SEPERATOR = 2,
     BUFFER_UNIT = 1024,                                 //1kB
-    BUFFER_SIZE = BUFFER_UNIT * BUFFER_UNIT * 100,      //100MB
+    BUFFER_SIZE = BUFFER_UNIT * BUFFER_UNIT * 10,       //10MB
 };
 
 
@@ -22,14 +22,16 @@ SimpleCrypt::SimpleCrypt()
     m_IsEncryptFileName = false;
     m_IsDeleteOriginalFile = false;
 
+    m_FileSize = 0;
+    m_DataBufferSize = 0;
+    m_FileDataBuffer = NULL;
+
     m_FileExtension = L".qing";
     m_Password = L"89ec5b3a9bc86ec1005c8d230e29db98d7a4a240";
 
     m_HeaderVector.push_back(L"FileName=");
     m_HeaderVector.push_back(L"FileSize=");
     m_HeaderVector.push_back(L"|");
-
-    m_FileDataBuffer = new wchar_t[BUFFER_SIZE];
 }
 
 SimpleCrypt::~SimpleCrypt()
@@ -62,6 +64,11 @@ bool SimpleCrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &Ta
         return false;
     }
 
+    if (!Reset(SourceFileHandle))
+    {
+        return false;
+    }
+
     const std::wstring &TargetFile = GetEncryptFileName(SourceFile, TargetPath);
     HANDLE TargetFileHandle = ::CreateFile(TargetFile.c_str(),
         GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -73,14 +80,11 @@ bool SimpleCrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &Ta
         return false;
     }
 
-    if (m_IsEncryptFileName)
+    if (!EncryptHeader(SourceFile, SourceFileHandle, TargetFileHandle))
     {
-        if (!EncryptHeader(SourceFile, SourceFileHandle, TargetFileHandle))
-        {
-            CloseHandle(SourceFileHandle);
-            CloseHandle(TargetFileHandle);
-            return false;
-        }
+        CloseHandle(SourceFileHandle);
+        CloseHandle(TargetFileHandle);
+        return false;
     }
 
     if (!EncryptDecryptFileData(SourceFileHandle, TargetFileHandle, 0))
@@ -93,7 +97,17 @@ bool SimpleCrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &Ta
     CloseHandle(SourceFileHandle);
     CloseHandle(TargetFileHandle);
 
-    Delete(SourceFile);
+    if (m_IsForceStop)
+    {
+        Delete(TargetFile);
+        return false;
+    }
+
+    if (m_IsDeleteOriginalFile)
+    {
+        Delete(SourceFile);
+    }
+
     return true;
 }
 
@@ -113,6 +127,11 @@ bool SimpleCrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring & 
         return false;
     }
 
+    if (!Reset(SourceFileHandle))
+    {
+        return false;
+    }
+
     const std::wstring &TargetFile = GetDecryptFileName(SourceFileHandle, SourceFile, TargetPath);
     HANDLE TargetFileHandle = ::CreateFile(TargetFile.c_str(),
         GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -128,25 +147,61 @@ bool SimpleCrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring & 
     CloseHandle(SourceFileHandle);
     CloseHandle(TargetFileHandle);
 
-    Delete(SourceFile);
+    if (m_IsForceStop)
+    {
+        Delete(TargetFile);
+        return false;
+    }
+
+    if (m_IsDeleteOriginalFile)
+    {
+        Delete(SourceFile);
+    }
+
     return DecryptResult;
+}
+
+bool SimpleCrypt::Reset(HANDLE SourceFileHandle)
+{
+    m_FileSize = 0;
+    m_ErrorMessage.clear();
+
+    DWORD FileSizeHigh = 0;
+    m_FileSize = GetFileSize(SourceFileHandle, &FileSizeHigh);
+    if (m_FileSize == INVALID_FILE_SIZE)
+    {
+        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        Qing::BoostLog::WriteError(L"Prepare init file size error = " + m_ErrorMessage);
+        return false;
+    }
+
+    if (m_DataBufferSize >= m_FileSize || m_DataBufferSize == BUFFER_SIZE)
+    {
+        return true;
+    }
+
+    unsigned long OldBufferSize = m_DataBufferSize;
+    m_DataBufferSize = min(m_FileSize, BUFFER_SIZE);
+
+    delete m_FileDataBuffer;
+    m_FileDataBuffer = new wchar_t[m_DataBufferSize];
+
+    std::wstring LogString(L"Recreate buffer, old size = " + std::to_wstring(OldBufferSize));
+    LogString.append(L", new size = " + std::to_wstring(m_DataBufferSize));
+    Qing::BoostLog::WriteInfo(LogString);
+    return true;
 }
 
 bool SimpleCrypt::Delete(const std::wstring &SourceFile)
 {
-    if (!m_IsDeleteOriginalFile)
+    if (!DeleteFile(SourceFile.c_str()))
     {
-        return true;
+        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        Qing::BoostLog::WriteError(L"Delete failed, file = " + SourceFile + L", error = " + m_ErrorMessage);
+        return false;
     }
 
-    if (DeleteFile(SourceFile.c_str()))
-    {
-        return true;
-    }
-
-    m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
-    Qing::BoostLog::WriteError(L"Delete failed, file = " + SourceFile + L", error = " + m_ErrorMessage);
-    return false;
+    return true;
 }
 
 bool SimpleCrypt::IsEncrypt(const std::wstring &SourceFile)
@@ -167,18 +222,9 @@ void SimpleCrypt::EncryptDecryptBuffer(wchar_t * DataBuffer, int DataSize) const
 
 bool SimpleCrypt::EncryptHeader(const std::wstring &SourceFile, HANDLE SourceFileHandle, HANDLE TargetFileHandle)
 {
-    DWORD FileSizeHigh = 0;
-    DWORD FileSize = GetFileSize(SourceFileHandle, &FileSizeHigh);
-    if (FileSize == INVALID_FILE_SIZE)
-    {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
-        Qing::BoostLog::WriteError(L"Encrypt header, get file = " + SourceFile + L" size failed, error = " + m_ErrorMessage);
-        return false;
-    }
-
     const std::wstring &FileName = PathFindFileName(SourceFile.c_str());
     std::wstring HeaderContext = m_HeaderVector[FILE_NAME] + FileName + m_HeaderVector[SEPERATOR] +
-        m_HeaderVector[FILE_SIZE] + std::to_wstring(FileSize) + m_HeaderVector[SEPERATOR];
+        m_HeaderVector[FILE_SIZE] + std::to_wstring(m_FileSize) + m_HeaderVector[SEPERATOR];
     if (HeaderContext.size() > BUFFER_UNIT)
     {
         m_ErrorMessage = L"Header context size is more than BUFFER_UNIT.";
@@ -240,9 +286,9 @@ bool SimpleCrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalF
 bool SimpleCrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset)
 {
     DWORD RealWriteLength = 0;
-    DWORD RealReadLength = BUFFER_SIZE;
+    DWORD RealReadLength = m_DataBufferSize;
 
-    while (RealReadLength == BUFFER_SIZE)
+    while (RealReadLength == m_DataBufferSize)
     {
         if (::SetFilePointer(SourceFileHandle, FileOffset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
         {
@@ -257,14 +303,14 @@ bool SimpleCrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetF
         }
 
         wmemset(m_FileDataBuffer, 0, sizeof(m_FileDataBuffer));
-        if (::ReadFile(SourceFileHandle, m_FileDataBuffer, BUFFER_SIZE, &RealReadLength, NULL) <= 0)
+        if (::ReadFile(SourceFileHandle, m_FileDataBuffer, m_DataBufferSize, &RealReadLength, NULL) <= 0)
         {
             m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
             Qing::BoostLog::WriteError(L"EncryptDecryptFileData::ReadFile, error = " + m_ErrorMessage);
             return false;
         }
 
-        if (m_IsForceStop)
+        if (m_IsForceStop || RealReadLength <= 0)
         {
             break;
         }
@@ -283,20 +329,19 @@ bool SimpleCrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetF
             return false;
         }
 
-        FileOffset += BUFFER_SIZE;
+        FileOffset += m_DataBufferSize;
     }
 
     if (m_IsForceStop)
     {
         m_ErrorMessage = L"Force stop.";
         Qing::BoostLog::WriteError(m_ErrorMessage);
-        return false;
     }
 
     return true;
 }
 
-std::wstring SimpleCrypt::GetEncryptFileName(const std::wstring & SourceFile, const std::wstring & TargetPath)
+std::wstring SimpleCrypt::GetEncryptFileName(const std::wstring &SourceFile, const std::wstring &TargetPath)
 {
     std::wstring TargetName;
     if (m_IsEncryptFileName)
@@ -327,7 +372,7 @@ std::wstring SimpleCrypt::GetEncryptFileName(const std::wstring & SourceFile, co
         {
             std::wstring FileName = PathFindFileName(SourceFile.c_str());
             PathRemoveExtension((LPWSTR)FileName.c_str());
-            TargetName = TargetPath + L"\\" + FileName;
+            TargetName = TargetPath + FileName;
         }
 
         PathAddExtension((LPWSTR)TargetName.c_str(), (LPCWSTR)m_FileExtension.c_str());

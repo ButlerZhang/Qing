@@ -26,6 +26,7 @@ public:
 
 private:
 
+    bool Reset(HANDLE SourceFileHandle);
     bool Delete(const std::wstring &SourceFile);
     bool IsEncrypt(const std::wstring &SourceFile);
     void EncryptDecryptBuffer(wchar_t *DataBuffer, int DataSize) const;
@@ -46,5 +47,7 @@ private:
     std::wstring                             m_FileExtension;
     std::wstring                             m_ErrorMessage;
     std::vector<std::wstring>                m_HeaderVector;
+    unsigned long                            m_FileSize;
+    unsigned long                            m_DataBufferSize;
     wchar_t                                 *m_FileDataBuffer;
 };

@@ -475,7 +475,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     }
 
     //reset
-    EDDlg->m_ButtonStop.EnableWindow(FALSE);
+    EDDlg->m_ButtonStop.EnableWindow(TRUE);
     EDDlg->UpdateControlEnableStatus(true);
     EDDlg->m_LastOperationType = EDDlg->m_OperationType;
     return 0;
