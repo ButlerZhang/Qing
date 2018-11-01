@@ -9,7 +9,6 @@
 #include "..\..\Qing\HeaderFiles\CommonFunction.h"
 
 #include "SimpleCrypt.h"
-
 #include <shlobj.h>
 
 #ifdef _DEBUG
@@ -303,10 +302,10 @@ void CEncryptDecryptDlg::CreateResultList()
     StylesEx |= LVS_EX_GRIDLINES;
     m_ResultList.SetExtendedStyle(StylesEx);
 
-    m_ResultList.InsertColumn(0, _T("Index"), LVCFMT_LEFT,  50);
-    m_ResultList.InsertColumn(1, _T("Option"), LVCFMT_LEFT,  60);
+    m_ResultList.InsertColumn(0, _T("Number"), LVCFMT_LEFT,  80);
+    m_ResultList.InsertColumn(1, _T("Option"), LVCFMT_LEFT,  80);
     m_ResultList.InsertColumn(2, _T("File Path"), LVCFMT_LEFT, 400);
-    m_ResultList.InsertColumn(3, _T("Status"), LVCFMT_LEFT,  200);
+    m_ResultList.InsertColumn(3, _T("Status"), LVCFMT_LEFT,  300);
 }
 
 void CEncryptDecryptDlg::CreateWorkThread()

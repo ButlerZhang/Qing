@@ -64,7 +64,7 @@ bool SimpleCrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &Ta
         return false;
     }
 
-    if (!Reset(SourceFileHandle))
+    if (!Reset(SourceFileHandle, SourceFile))
     {
         return false;
     }
@@ -127,7 +127,7 @@ bool SimpleCrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring & 
         return false;
     }
 
-    if (!Reset(SourceFileHandle))
+    if (!Reset(SourceFileHandle, SourceFile))
     {
         return false;
     }
@@ -161,7 +161,19 @@ bool SimpleCrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring & 
     return DecryptResult;
 }
 
-bool SimpleCrypt::Reset(HANDLE SourceFileHandle)
+bool SimpleCrypt::Delete(const std::wstring &SourceFile)
+{
+    if (!DeleteFile(SourceFile.c_str()))
+    {
+        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        Qing::BoostLog::WriteError(L"Delete failed, file = " + SourceFile + L", error = " + m_ErrorMessage);
+        return false;
+    }
+
+    return true;
+}
+
+bool SimpleCrypt::Reset(HANDLE SourceFileHandle, const std::wstring &SourceFile)
 {
     m_FileSize = 0;
     m_ErrorMessage.clear();
@@ -172,6 +184,11 @@ bool SimpleCrypt::Reset(HANDLE SourceFileHandle)
     {
         m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
         Qing::BoostLog::WriteError(L"Prepare init file size error = " + m_ErrorMessage);
+        return false;
+    }
+
+    if (!IsSpaceEnough(m_FileSize, SourceFile))
+    {
         return false;
     }
 
@@ -192,12 +209,26 @@ bool SimpleCrypt::Reset(HANDLE SourceFileHandle)
     return true;
 }
 
-bool SimpleCrypt::Delete(const std::wstring &SourceFile)
+bool SimpleCrypt::IsSpaceEnough(unsigned long FileSize, std::wstring SourceFile)
 {
-    if (!DeleteFile(SourceFile.c_str()))
+    PathStripToRoot((LPWSTR)SourceFile.c_str());
+    if (SourceFile.empty())
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
-        Qing::BoostLog::WriteError(L"Delete failed, file = " + SourceFile + L", error = " + m_ErrorMessage);
+        m_ErrorMessage = L"Can not find root directory.";
+        Qing::BoostLog::WriteError(m_ErrorMessage);
+        return false;
+    }
+
+    DWORD64 qwFreeBytes, qwFreeBytesToCaller, qwTotalBytes;
+    BOOL bResult = GetDiskFreeSpaceEx(SourceFile.c_str(),
+        (PULARGE_INTEGER)&qwFreeBytesToCaller,              //磁盘总容量
+        (PULARGE_INTEGER)&qwTotalBytes,                     //可用的磁盘空间容量
+        (PULARGE_INTEGER)&qwFreeBytes);                     //磁盘空闲容量
+
+    if (FileSize >= qwFreeBytes)
+    {
+        m_ErrorMessage = L"Not enough free disk space.";
+        Qing::BoostLog::WriteError(m_ErrorMessage);
         return false;
     }
 
@@ -218,6 +249,64 @@ void SimpleCrypt::EncryptDecryptBuffer(wchar_t * DataBuffer, int DataSize) const
         DataBuffer[Index] ^= m_Password[PasswordIndex];
         PasswordIndex = (PasswordIndex + 1) % m_Password.size();
     }
+}
+
+bool SimpleCrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset)
+{
+    DWORD RealWriteLength = 0;
+    DWORD RealReadLength = m_DataBufferSize;
+
+    while (RealReadLength == m_DataBufferSize)
+    {
+        if (::SetFilePointer(SourceFileHandle, FileOffset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
+        {
+            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+            Qing::BoostLog::WriteError(L"EncryptDecryptFileData::SetFilePointer, error = " + m_ErrorMessage);
+            return false;
+        }
+
+        if (m_IsForceStop)
+        {
+            break;
+        }
+
+        wmemset(m_FileDataBuffer, 0, sizeof(m_FileDataBuffer));
+        if (::ReadFile(SourceFileHandle, m_FileDataBuffer, m_DataBufferSize, &RealReadLength, NULL) <= 0)
+        {
+            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+            Qing::BoostLog::WriteError(L"EncryptDecryptFileData::ReadFile, error = " + m_ErrorMessage);
+            return false;
+        }
+
+        if (m_IsForceStop || RealReadLength <= 0)
+        {
+            break;
+        }
+
+        EncryptDecryptBuffer(m_FileDataBuffer, RealReadLength);
+
+        if (m_IsForceStop)
+        {
+            break;
+        }
+
+        if (::WriteFile(TargetFileHandle, m_FileDataBuffer, RealReadLength, &RealWriteLength, NULL) <= 0)
+        {
+            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+            Qing::BoostLog::WriteError(L"EncryptDecryptFileData::WriteFile, error = " + m_ErrorMessage);
+            return false;
+        }
+
+        FileOffset += m_DataBufferSize;
+    }
+
+    if (m_IsForceStop)
+    {
+        m_ErrorMessage = L"Force stop.";
+        Qing::BoostLog::WriteError(m_ErrorMessage);
+    }
+
+    return true;
 }
 
 bool SimpleCrypt::EncryptHeader(const std::wstring &SourceFile, HANDLE SourceFileHandle, HANDLE TargetFileHandle)
@@ -280,64 +369,6 @@ bool SimpleCrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &OriginalF
 
     std::wstring::size_type StartIndex = SplitVector[FILE_NAME].find(m_HeaderVector[FILE_NAME]) + m_HeaderVector[FILE_NAME].size();
     OriginalFile = SplitVector[FILE_NAME].substr(StartIndex, SplitVector[FILE_NAME].size() - StartIndex);
-    return true;
-}
-
-bool SimpleCrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset)
-{
-    DWORD RealWriteLength = 0;
-    DWORD RealReadLength = m_DataBufferSize;
-
-    while (RealReadLength == m_DataBufferSize)
-    {
-        if (::SetFilePointer(SourceFileHandle, FileOffset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
-        {
-            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
-            Qing::BoostLog::WriteError(L"EncryptDecryptFileData::SetFilePointer, error = " + m_ErrorMessage);
-            return false;
-        }
-
-        if (m_IsForceStop)
-        {
-            break;
-        }
-
-        wmemset(m_FileDataBuffer, 0, sizeof(m_FileDataBuffer));
-        if (::ReadFile(SourceFileHandle, m_FileDataBuffer, m_DataBufferSize, &RealReadLength, NULL) <= 0)
-        {
-            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
-            Qing::BoostLog::WriteError(L"EncryptDecryptFileData::ReadFile, error = " + m_ErrorMessage);
-            return false;
-        }
-
-        if (m_IsForceStop || RealReadLength <= 0)
-        {
-            break;
-        }
-
-        EncryptDecryptBuffer(m_FileDataBuffer, RealReadLength);
-
-        if (m_IsForceStop)
-        {
-            break;
-        }
-
-        if (::WriteFile(TargetFileHandle, m_FileDataBuffer, RealReadLength, &RealWriteLength, NULL) <= 0)
-        {
-            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
-            Qing::BoostLog::WriteError(L"EncryptDecryptFileData::WriteFile, error = " + m_ErrorMessage);
-            return false;
-        }
-
-        FileOffset += m_DataBufferSize;
-    }
-
-    if (m_IsForceStop)
-    {
-        m_ErrorMessage = L"Force stop.";
-        Qing::BoostLog::WriteError(m_ErrorMessage);
-    }
-
     return true;
 }
 

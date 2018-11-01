@@ -26,8 +26,10 @@ public:
 
 private:
 
-    bool Reset(HANDLE SourceFileHandle);
     bool Delete(const std::wstring &SourceFile);
+    bool Reset(HANDLE SourceFileHandle, const std::wstring &SourceFile);
+    bool IsSpaceEnough(unsigned long FileSize, std::wstring SourceFile);
+
     bool IsEncrypt(const std::wstring &SourceFile);
     void EncryptDecryptBuffer(wchar_t *DataBuffer, int DataSize) const;
     bool EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset);
