@@ -24,6 +24,9 @@ public:
     bool Encrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
     bool DeCrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
 
+    bool Base64Encode(const std::wstring &Input, std::wstring &Output);
+    bool Base64Decode(const std::wstring &Input, std::wstring &Output);
+
     bool IsForceStop() const { return m_IsForceStop; }
     std::wstring GetErrorMessage() const { return m_ErrorMessage; }
 

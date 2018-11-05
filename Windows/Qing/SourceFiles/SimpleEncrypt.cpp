@@ -2,7 +2,10 @@
 #include "..\HeaderFiles\BoostLog.h"
 #include "..\HeaderFiles\CommonFunction.h"
 
+#include <boost\beast\core\detail\base64.hpp>
 #include <Shlwapi.h>
+#include <iostream>
+#include <sstream>
 
 QING_NAMESPACE_BEGIN
 
@@ -162,6 +165,24 @@ bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring 
     }
 
     return DecryptResult;
+}
+
+bool SimpleEncrypt::Base64Encode(const std::wstring &Input, std::wstring &Output)
+{
+    const std::string &TempInput = WStringToString(Input);
+    const std::string &TempResult = boost::beast::detail::base64_encode(TempInput);
+    Output = StringToWString(TempResult);
+
+    return !Output.empty();
+}
+
+bool SimpleEncrypt::Base64Decode(const std::wstring &Input, std::wstring &Output)
+{
+    const std::string &TempInput = WStringToString(Input);
+    const std::string &TempResult = boost::beast::detail::base64_decode(TempInput);
+    Output = StringToWString(TempResult);
+
+    return !Output.empty();
 }
 
 bool SimpleEncrypt::Delete(const std::wstring &SourceFile)
