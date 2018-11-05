@@ -4,7 +4,6 @@
 #include <memory>
 #include "afxwin.h"
 #include "afxcmn.h"
-
 #include "..\..\Qing\HeaderFiles\SimpleEncrypt.h"
 
 class FileEncryptDlg;
@@ -16,23 +15,10 @@ class EncryptDecryptPassword;
 
 class CEncryptDecryptDlg : public CDialogEx
 {
+    friend FileEncryptDlg;
+    friend FileDecryptDlg;
+    friend FileCamouflageDlg;
     friend EncryptDecryptPassword;
-
-private:
-
-    enum OperationType
-    {
-        OT_ENCRYPT,
-        OT_DECRYPT,
-        OT_UNKNOW
-    };
-
-    enum ProcessType
-    {
-        PT_PROCEING,
-        PT_SUCCEEDED,
-        PT_FAILED
-    };
 
 // Construction
 public:
@@ -44,10 +30,8 @@ public:
 	enum { IDD = IDD_ENCRYPTDECRYPT_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-    
-
 
 // Implementation
 protected:
@@ -64,36 +48,31 @@ private:
 
     afx_msg void OnBnClickedStop();
     afx_msg void OnBnClickedExit();
-    afx_msg void OnBnClickedEncrypt();
-    afx_msg void OnBnClickedDecrypt();
-
     afx_msg void OnBnClickedButtonFileEncrypt();
     afx_msg void OnBnClickedButtonFileDecrypt();
     afx_msg void OnBnClickedButtonFileCamouflage();
 
 private:
 
-    void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
-
-    bool Validate();
     void CreateResultList();
     void CreateWorkThread();
     void ReleaseThreadHandle();
+    void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
+
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
 private:
 
-    CButton                                 m_ButtonStop;
-    CButton                                 m_ButtonExit;
-    CListCtrl                               m_ResultList;
-    OperationType                           m_OperationType;
-    OperationType                           m_LastOperationType;
-    HANDLE                                  m_WorkerThread;
-    std::vector<std::wstring>               m_ProcessInfoVector;
+    CButton                                  m_ButtonStop;
+    CButton                                  m_ButtonExit;
+    CListCtrl                                m_ResultList;
+    OperationType                            m_OperationType;
+    OperationType                            m_LastOperationType;
+    HANDLE                                   m_WorkerThread;
 
-    FileEncryptDlg                         *m_FileEncryptDlg;
-    FileDecryptDlg                         *m_FileDecryptDlg;
-    FileCamouflageDlg                      *m_FileCamouflageDlg;
-    EncryptDecryptPassword                 *m_PasswordDlg;
-    std::shared_ptr<Qing::SimpleEncrypt>    m_SimpleCrypt;
+    FileEncryptDlg                          *m_FileEncryptDlg;
+    FileDecryptDlg                          *m_FileDecryptDlg;
+    FileCamouflageDlg                       *m_FileCamouflageDlg;
+    EncryptDecryptPassword                  *m_PasswordDlg;
+    std::shared_ptr<Qing::SimpleEncrypt>     m_SimpleCrypt;
 };

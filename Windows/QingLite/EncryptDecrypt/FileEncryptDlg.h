@@ -16,6 +16,12 @@ public:
     enum { IDD = IDD_DIALOG_ENCRYPT };
 #endif
 
+    BOOL UserDefinedShow();
+    void ClickPasswordOK() { CDialogEx::OnOK(); }
+
+    bool IsEncryptFileName() const;
+    bool IsEncryptFileData() const;
+    bool IsDeleteOriginalFile() const;
 
     CString GetSourcePath() const;
     CString GetTargetPath() const;

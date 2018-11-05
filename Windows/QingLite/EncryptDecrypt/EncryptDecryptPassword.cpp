@@ -70,12 +70,6 @@ void EncryptDecryptPassword::OnBnClickedCheckInputPassword()
 void EncryptDecryptPassword::OnBnClickedOk()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    if (ParentDlg == NULL)
-    {
-        MessageBox(_T("Can not find parent dlg!"), _T("Error Tip"), MB_OK);
-        return;
-    }
-
     ParentDlg->CreateWorkThread();
     CDialogEx::OnOK();
 }
@@ -83,12 +77,6 @@ void EncryptDecryptPassword::OnBnClickedOk()
 void EncryptDecryptPassword::OnBnClickedCancel()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    if (ParentDlg == NULL)
-    {
-        MessageBox(_T("Can not find parent dlg!"), _T("Error Tip"), MB_OK);
-        return;
-    }
-
     ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
     CDialogEx::OnCancel();
 }

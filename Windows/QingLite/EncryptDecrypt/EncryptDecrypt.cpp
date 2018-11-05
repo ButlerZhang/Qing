@@ -104,6 +104,25 @@ BOOL CEncryptDecryptApp::InitInstance()
 	return FALSE;
 }
 
+bool CEncryptDecryptApp::Validate(CEdit & EditControl)
+{
+    CString SourcePath;
+    EditControl.GetWindowTextW(SourcePath);
+    if (SourcePath.IsEmpty())
+    {
+        MessageBox(m_pMainWnd->m_hWnd, _T("Source path is empty!"), _T("Error Tip"), MB_OK);
+        return false;
+    }
+
+    if (!PathFileExists(SourcePath.GetString()))
+    {
+        MessageBox(m_pMainWnd->m_hWnd, _T("Source path is not exists!"), _T("Error Tip"), MB_OK);
+        return false;
+    }
+
+    return true;
+}
+
 std::wstring CEncryptDecryptApp::GetSelectPath() const
 {
     wchar_t ResultBuffer[MAX_PATH];
@@ -129,4 +148,28 @@ std::wstring CEncryptDecryptApp::GetSelectPath() const
     }
 
     return std::wstring();
+}
+
+
+std::wstring CEncryptDecryptApp::GetOperationString(OperationType Type) const
+{
+    switch (Type)
+    {
+    case OT_ENCRYPT:            return L"文件加密";        break;
+    case OT_DECRYPT:            return L"文件解密";        break;
+    case OT_CAMOUFLAGE:         return L"文件伪装";        break;
+    case OT_UNKNOW:             return L"未知错误";        break;
+    default:                    return L"未知错误";        break;
+    }
+}
+
+std::wstring CEncryptDecryptApp::GetProcessString(ProcessType Type) const
+{
+    switch (Type)
+    {
+    case PT_PROCEING:           return L"正在处理";        break;
+    case PT_SUCCEEDED:          return L"执行成功";        break;
+    case PT_FAILED:             return L"执行失败";        break;
+    default:                    return L"未知错误";        break;
+    }
 }

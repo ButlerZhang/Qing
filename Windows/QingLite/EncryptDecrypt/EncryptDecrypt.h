@@ -5,7 +5,7 @@
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "include 'stdafx.h' before including this file for PCH"
+#error "include 'stdafx.h' before including this file for PCH"
 #endif
 
 #include "resource.h"		// main symbols
@@ -16,20 +16,37 @@
 // See EncryptDecrypt.cpp for the implementation of this class
 //
 
+enum OperationType
+{
+    OT_ENCRYPT,
+    OT_DECRYPT,
+    OT_CAMOUFLAGE,
+    OT_UNKNOW
+};
+
+enum ProcessType
+{
+    PT_PROCEING,
+    PT_SUCCEEDED,
+    PT_FAILED
+};
+
 class CEncryptDecryptApp : public CWinApp
 {
 public:
-	CEncryptDecryptApp();
 
-// Overrides
-public:
-	virtual BOOL InitInstance();
+    CEncryptDecryptApp();
+    // Overrides
 
+    bool Validate(CEdit &EditControl);
     std::wstring GetSelectPath() const;
+    std::wstring GetProcessString(ProcessType Type) const;
+    std::wstring GetOperationString(OperationType Type) const;
 
-// Implementation
+public:
 
-	DECLARE_MESSAGE_MAP()
+    virtual BOOL InitInstance();
+    DECLARE_MESSAGE_MAP()
 };
 
 extern CEncryptDecryptApp theApp;

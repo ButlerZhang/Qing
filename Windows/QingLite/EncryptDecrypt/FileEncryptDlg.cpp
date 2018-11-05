@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
 #include "FileEncryptDlg.h"
+#include "EncryptDecryptDlg.h"
+#include "EncryptDecryptPassword.h"
 #include "afxdialogex.h"
 
 IMPLEMENT_DYNAMIC(FileEncryptDlg, CDialogEx)
@@ -14,6 +16,29 @@ FileEncryptDlg::FileEncryptDlg(CWnd* pParent /*=NULL*/)
 
 FileEncryptDlg::~FileEncryptDlg()
 {
+}
+
+BOOL FileEncryptDlg::UserDefinedShow()
+{
+    m_CheckEncryptFileName.SetCheck(BST_CHECKED);
+    m_CheckEncryptFileData.SetCheck(BST_CHECKED);
+    m_CheckDeleteFile.SetCheck(BST_CHECKED);
+    return ShowWindow(SW_SHOW);
+}
+
+bool FileEncryptDlg::IsEncryptFileName() const
+{
+    return m_CheckEncryptFileName.GetState() == BST_CHECKED;
+}
+
+bool FileEncryptDlg::IsEncryptFileData() const
+{
+    return true;
+}
+
+bool FileEncryptDlg::IsDeleteOriginalFile() const
+{
+    return m_CheckDeleteFile.GetState() == BST_CHECKED;
 }
 
 CString FileEncryptDlg::GetSourcePath() const
@@ -89,25 +114,17 @@ void FileEncryptDlg::OnBnClickedCheckTargetPath()
 
 void FileEncryptDlg::OnBnClickedOk()
 {
-    CString SourcePath;
-    m_EditSourcePath.GetWindowTextW(SourcePath);
-    if (SourcePath.IsEmpty())
+    if (theApp.Validate(m_EditSourcePath))
     {
-        MessageBox(_T("Source path is empty!"), _T("Error Tip"), MB_OK);
-        return;
+        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        ParentDlg->m_PasswordDlg->UserDefinedShow();
     }
-
-    if (!PathFileExists(SourcePath.GetString()))
-    {
-        MessageBox(_T("Source path is not exists!"), _T("Error Tip"), MB_OK);
-        return;
-    }
-
-    CDialogEx::OnOK();
 }
 
 void FileEncryptDlg::OnBnClickedCancel()
 {
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
     CDialogEx::OnCancel();
 }
 
