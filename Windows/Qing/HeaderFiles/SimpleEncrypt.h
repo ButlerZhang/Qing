@@ -1,16 +1,19 @@
 #pragma once
+#include "QingBase.h"
 #include <string>
 #include <vector>
 #include <Windows.h>
 
+QING_NAMESPACE_BEGIN
 
 
-class SimpleCrypt
+
+class QING_DLL SimpleEncrypt
 {
 public:
 
-    SimpleCrypt();
-    ~SimpleCrypt();
+    SimpleEncrypt();
+    ~SimpleEncrypt();
 
     void SetPassword(const std::wstring &Password);
     void SetIsForceStop(bool IsForceStop) { m_IsForceStop = IsForceStop; }
@@ -53,3 +56,5 @@ private:
     unsigned long                            m_DataBufferSize;
     wchar_t                                 *m_FileDataBuffer;
 };
+
+QING_NAMESPACE_END

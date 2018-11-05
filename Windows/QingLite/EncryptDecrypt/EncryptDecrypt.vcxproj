@@ -213,13 +213,13 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h" />
+    <ClInclude Include="..\..\Qing\HeaderFiles\SimpleEncrypt.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h" />
     <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h" />
     <ClInclude Include="EncryptDecrypt.h" />
     <ClInclude Include="EncryptDecryptDlg.h" />
     <ClInclude Include="EncryptDecryptPassword.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="SimpleCrypt.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -227,7 +227,6 @@
     <ClCompile Include="EncryptDecrypt.cpp" />
     <ClCompile Include="EncryptDecryptDlg.cpp" />
     <ClCompile Include="EncryptDecryptPassword.cpp" />
-    <ClCompile Include="SimpleCrypt.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

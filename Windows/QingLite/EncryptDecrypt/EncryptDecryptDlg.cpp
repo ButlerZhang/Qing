@@ -8,7 +8,6 @@
 #include "..\..\Qing\HeaderFiles\FileManager.h"
 #include "..\..\Qing\HeaderFiles\CommonFunction.h"
 
-#include "SimpleCrypt.h"
 #include <shlobj.h>
 
 #ifdef _DEBUG
@@ -67,7 +66,7 @@ CEncryptDecryptDlg::CEncryptDecryptDlg(CWnd* pParent /*=NULL*/)
     m_OperationType = OT_UNKNOW;
     m_LastOperationType = OT_UNKNOW;
     m_WorkerThread = INVALID_HANDLE_VALUE;
-    m_SimpleCrypt = std::make_shared<SimpleCrypt>();
+    m_SimpleCrypt = std::make_shared<Qing::SimpleEncrypt>();
 }
 
 CEncryptDecryptDlg::~CEncryptDecryptDlg()

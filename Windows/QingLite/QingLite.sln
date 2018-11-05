@@ -21,9 +21,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QingTest", "QingTest\QingTe
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EncryptDecrypt", "EncryptDecrypt\EncryptDecrypt.vcxproj", "{58DB0F18-4931-486C-8F0F-31EF73A299C6}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7B247FD1-7119-4838-9F12-CB855D783DD2} = {7B247FD1-7119-4838-9F12-CB855D783DD2}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

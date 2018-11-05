@@ -42,6 +42,7 @@
     <ClInclude Include="HeaderFiles\QingBase.h" />
     <ClInclude Include="HeaderFiles\BoostLog.h" />
     <ClInclude Include="HeaderFiles\RandomGenerator.h" />
+    <ClInclude Include="HeaderFiles\SimpleEncrypt.h" />
     <ClInclude Include="HeaderFiles\SingleProgram.h" />
     <ClInclude Include="HeaderFiles\CommonFunction.h" />
     <ClInclude Include="HeaderFiles\SQLiteDatabase.h" />
@@ -87,6 +88,7 @@
     <ClCompile Include="SourceFiles\BoostLog.cpp" />
     <ClCompile Include="SourceFiles\RandomGenerator.cpp" />
     <ClCompile Include="SourceFiles\CommonFunction.cpp" />
+    <ClCompile Include="SourceFiles\SimpleEncrypt.cpp" />
     <ClCompile Include="SourceFiles\SQLiteDatabase.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

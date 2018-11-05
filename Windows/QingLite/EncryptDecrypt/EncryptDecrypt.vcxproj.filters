@@ -87,11 +87,11 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h">
       <Filter>Reference\Qing</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleCrypt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EncryptDecryptPassword.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\HeaderFiles\SimpleEncrypt.h">
+      <Filter>Reference\Qing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +102,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleCrypt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EncryptDecryptPassword.cpp">

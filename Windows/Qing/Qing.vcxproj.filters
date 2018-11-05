@@ -147,6 +147,9 @@
     <ClInclude Include="Model\BoostFormat.h">
       <Filter>Model</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\SimpleEncrypt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\FileManager.cpp">
@@ -241,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="Reference\sqlite_3250200\sqlite3.c">
       <Filter>Model\Database\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\SimpleEncrypt.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

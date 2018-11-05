@@ -5,7 +5,8 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 
-class SimpleCrypt;
+#include "..\..\Qing\HeaderFiles\SimpleEncrypt.h"
+
 class EncryptDecryptPassword;
 
 
@@ -13,6 +14,7 @@ class EncryptDecryptPassword;
 class CEncryptDecryptDlg : public CDialogEx
 {
     friend EncryptDecryptPassword;
+
 private:
 
     enum OperationType
@@ -95,5 +97,5 @@ private:
     HANDLE                                  m_WorkerThread;
     std::vector<std::wstring>               m_ProcessInfoVector;
     EncryptDecryptPassword                 *m_PasswordDlg;
-    std::shared_ptr<SimpleCrypt>            m_SimpleCrypt;
+    std::shared_ptr<Qing::SimpleEncrypt>    m_SimpleCrypt;
 };
