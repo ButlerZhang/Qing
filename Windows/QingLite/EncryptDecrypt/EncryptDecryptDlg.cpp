@@ -110,6 +110,7 @@ END_MESSAGE_MAP()
 BOOL CEncryptDecryptDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
+    Qing::SetProgramDMPEnable(true);
 
     // Add "About..." menu item to system menu.
 

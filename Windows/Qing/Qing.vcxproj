@@ -39,7 +39,6 @@
     <ClInclude Include="HeaderFiles\Network.h" />
     <ClInclude Include="HeaderFiles\NumericalConversion.h" />
     <ClInclude Include="HeaderFiles\PermutationCombination.h" />
-    <ClInclude Include="HeaderFiles\ProgramDump.h" />
     <ClInclude Include="HeaderFiles\QingBase.h" />
     <ClInclude Include="HeaderFiles\BoostLog.h" />
     <ClInclude Include="HeaderFiles\RandomGenerator.h" />

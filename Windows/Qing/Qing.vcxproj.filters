@@ -54,9 +54,6 @@
     <ClInclude Include="HeaderFiles\PermutationCombination.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\ProgramDump.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\SingleProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
