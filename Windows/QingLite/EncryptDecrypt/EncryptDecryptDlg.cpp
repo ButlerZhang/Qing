@@ -2,6 +2,9 @@
 #include "EncryptDecrypt.h"
 #include "EncryptDecryptDlg.h"
 #include "EncryptDecryptPassword.h"
+#include "FileEncryptDlg.h"
+#include "FileDecryptDlg.h"
+#include "FileCamouflageDlg.h"
 #include "afxdialogex.h"
 
 #include "..\..\Qing\HeaderFiles\BoostLog.h"
@@ -78,14 +81,7 @@ CEncryptDecryptDlg::~CEncryptDecryptDlg()
 void CEncryptDecryptDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_EDIT_SOURCE_PATH, m_EditSourcePath);
-    DDX_Control(pDX, IDC_EDIT_TARGET_PATH, m_EditTargetPath);
-    DDX_Control(pDX, IDC_CHECK_ENCRYPT_FILE_NAME, m_CheckEncryptFileName);
-    DDX_Control(pDX, IDC_CHECK_DELETE_FILE, m_CheckDeleteOriginalFile);
     DDX_Control(pDX, IDC_LIST_ED_RESULT, m_ResultList);
-    DDX_Control(pDX, IDC_ENCRYPT, m_ButtonEncrypt);
-    DDX_Control(pDX, IDC_DECRYPT, m_ButtonDecrypt);
-    DDX_Control(pDX, IDC_CHECK_TARGET_PATH, m_CheckTargetPath);
     DDX_Control(pDX, IDC_STOP, m_ButtonStop);
     DDX_Control(pDX, IDC_EXIT, m_ButtonExit);
 }
@@ -94,13 +90,13 @@ BEGIN_MESSAGE_MAP(CEncryptDecryptDlg, CDialogEx)
     ON_WM_SYSCOMMAND()
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
-    ON_BN_CLICKED(IDC_BUTTON_BROWSE_SOURCE, &CEncryptDecryptDlg::OnBnClickedButtonSelectSourcePath)
-    ON_BN_CLICKED(IDC_BUTTON_BROWSE_TARGET, &CEncryptDecryptDlg::OnBnClickedButtonSelectTargetPath)
     ON_BN_CLICKED(IDC_ENCRYPT, &CEncryptDecryptDlg::OnBnClickedEncrypt)
     ON_BN_CLICKED(IDC_DECRYPT, &CEncryptDecryptDlg::OnBnClickedDecrypt)
-    ON_BN_CLICKED(IDC_CHECK_TARGET_PATH, &CEncryptDecryptDlg::OnBnClickedCheckTargetPath)
     ON_BN_CLICKED(IDC_STOP, &CEncryptDecryptDlg::OnBnClickedStop)
     ON_BN_CLICKED(IDC_EXIT, &CEncryptDecryptDlg::OnBnClickedExit)
+    ON_BN_CLICKED(IDC_BUTTON_ENCRYPT, &CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt)
+    ON_BN_CLICKED(IDC_BUTTON_DECRYPT, &CEncryptDecryptDlg::OnBnClickedButtonFileDecrypt)
+    ON_BN_CLICKED(IDC_BUTTON_CAMOUFLAGE, &CEncryptDecryptDlg::OnBnClickedButtonFileCamouflage)
 END_MESSAGE_MAP()
 
 
@@ -138,11 +134,20 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
 
     // TODO: Add extra initialization here
     CreateResultList();
-    m_CheckEncryptFileName.SetCheck(BST_CHECKED);
-    m_CheckDeleteOriginalFile.SetCheck(BST_CHECKED);
+    //m_CheckEncryptFileName.SetCheck(BST_CHECKED);
+    //m_CheckDeleteOriginalFile.SetCheck(BST_CHECKED);
 
     m_PasswordDlg = new EncryptDecryptPassword(this->GetParent());
     m_PasswordDlg->Create(IDD_DIALOG_PASSWORD, this->GetParent());
+
+    m_FileEncryptDlg = new FileEncryptDlg(this->GetParent());
+    m_FileEncryptDlg->Create(IDD_DIALOG_ENCRYPT, this->GetParent());
+
+    m_FileDecryptDlg = new FileDecryptDlg(this->GetParent());
+    m_FileDecryptDlg->Create(IDD_DIALOG_DECRYPT, this->GetParent());
+
+    m_FileCamouflageDlg = new FileCamouflageDlg(this->GetParent());
+    m_FileCamouflageDlg->Create(IDD_DIALOG_CAMOUFLAGE, this->GetParent());
 
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -230,74 +235,21 @@ void CEncryptDecryptDlg::OnBnClickedDecrypt()
     }
 }
 
-void CEncryptDecryptDlg::OnBnClickedCheckTargetPath()
-{
-    CString TargetPath;
-    m_EditTargetPath.GetWindowTextW(TargetPath);
-    if (TargetPath.IsEmpty())
-    {
-        UpdateTargetPath();
-    }
-}
-
-void CEncryptDecryptDlg::OnBnClickedButtonSelectSourcePath()
-{
-    std::wstring SelectPath = GetSelectPath();
-    if (SelectPath.empty())
-    {
-        //Add log
-        return;
-    }
-
-    DWORD Result = ::GetFileAttributes(SelectPath.c_str());
-    if (INVALID_FILE_ATTRIBUTES == Result)
-    {
-        //Add log
-        return;
-    }
-
-    m_EditSourcePath.SetWindowTextW(SelectPath.c_str());
-    if (m_CheckTargetPath.GetState() == BST_CHECKED)
-    {
-        UpdateTargetPath();
-    }
-}
-
-void CEncryptDecryptDlg::OnBnClickedButtonSelectTargetPath()
-{
-    const std::wstring SelectPath = GetSelectPath();
-    m_EditTargetPath.SetWindowTextW(SelectPath.c_str());
-}
-
 bool CEncryptDecryptDlg::Validate()
 {
-    CString SourcePath;
-    m_EditSourcePath.GetWindowTextW(SourcePath);
-    if (SourcePath.IsEmpty())
-    {
-        MessageBox(_T("Source path is empty!"), _T("Error Tip"), MB_OK);
-        return false;
-    }
-
-    if (!PathFileExists(SourcePath.GetString()))
-    {
-        MessageBox(_T("Source path is not exists!"), _T("Error Tip"), MB_OK);
-        return false;
-    }
-
-    if (m_CheckTargetPath.GetState() == BST_CHECKED)
-    {
-        CString TargetPath;
-        m_EditTargetPath.GetWindowTextW(TargetPath);
-        if (!TargetPath.IsEmpty())
-        {
-            if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
-            {
-                MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
-                return false;
-            }
-        }
-    }
+    //if (m_CheckTargetPath.GetState() == BST_CHECKED)
+    //{
+    //    CString TargetPath;
+    //    m_EditTargetPath.GetWindowTextW(TargetPath);
+    //    if (!TargetPath.IsEmpty())
+    //    {
+    //        if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
+    //        {
+    //            MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
+    //            return false;
+    //        }
+    //    }
+    //}
 
     return true;
 }
@@ -318,16 +270,15 @@ void CEncryptDecryptDlg::CreateResultList()
     StylesEx |= LVS_EX_GRIDLINES;
     m_ResultList.SetExtendedStyle(StylesEx);
 
-    m_ResultList.InsertColumn(0, _T("Number"), LVCFMT_LEFT,  80);
-    m_ResultList.InsertColumn(1, _T("Option"), LVCFMT_LEFT,  80);
-    m_ResultList.InsertColumn(2, _T("File Path"), LVCFMT_LEFT, 400);
-    m_ResultList.InsertColumn(3, _T("Status"), LVCFMT_LEFT,  300);
+    m_ResultList.InsertColumn(0, _T("序号"), LVCFMT_LEFT,  80);
+    m_ResultList.InsertColumn(1, _T("操作"), LVCFMT_LEFT,  80);
+    m_ResultList.InsertColumn(2, _T("路径"), LVCFMT_LEFT,  300);
+    m_ResultList.InsertColumn(3, _T("状态"), LVCFMT_LEFT,  100);
 }
 
 void CEncryptDecryptDlg::CreateWorkThread()
 {
     ReleaseThreadHandle();
-    UpdateControlEnableStatus(false);
     m_SimpleCrypt->SetIsForceStop(false);
 
     if (m_LastOperationType != m_OperationType)
@@ -337,67 +288,6 @@ void CEncryptDecryptDlg::CreateWorkThread()
 
     DWORD nThreadID;
     m_WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
-}
-
-std::wstring CEncryptDecryptDlg::GetSelectPath() const
-{
-    wchar_t ResultBuffer[MAX_PATH];
-    wchar_t SelectPathBuffer[MAX_PATH];
-
-    memset(ResultBuffer, 0, sizeof(ResultBuffer));
-    memset(SelectPathBuffer, 0, sizeof(SelectPathBuffer));
-
-    BROWSEINFO BrowseInfo;
-    BrowseInfo.hwndOwner = m_hWnd;                                  //程序主窗口
-    BrowseInfo.pidlRoot = NULL;                                     //引用桌面目录
-    BrowseInfo.pszDisplayName = SelectPathBuffer;                   //返回选择的路径的缓冲区
-    BrowseInfo.lpszTitle = _T("Current Path");                      //弹出的窗口的文字提示
-    BrowseInfo.ulFlags = BIF_BROWSEINCLUDEFILES;                    //可以获取目录和文件
-    BrowseInfo.lpfn = NULL;                                         //回调函数
-    BrowseInfo.lParam = 0;                                          //给回调函数的参数指针
-    BrowseInfo.iImage = 0;                                          //与选中目录相关的图像
-    ITEMIDLIST* pidl = ::SHBrowseForFolder(&BrowseInfo);            //显示弹出窗口
-
-    if (::SHGetPathFromIDList(pidl, ResultBuffer))                  //在ITEMIDLIST中得到目录名的整个路径
-    {
-        return std::wstring(ResultBuffer);
-    }
-
-    return std::wstring();
-}
-
-void CEncryptDecryptDlg::UpdateTargetPath()
-{
-    m_EditTargetPath.SetWindowTextW(L"");
-
-    CString SourcePath;
-    m_EditSourcePath.GetWindowTextW(SourcePath);
-
-    if (!SourcePath.IsEmpty())
-    {
-        if (!PathIsDirectory(SourcePath.GetString()))
-        {
-            PathRemoveFileSpec((LPWSTR)SourcePath.GetString());
-        }
-
-        std::wstring TargetPath = SourcePath.GetString() + std::wstring(L"\\EncryptDecrypt\\");
-        m_EditTargetPath.SetWindowTextW(TargetPath.c_str());
-    }
-}
-
-void CEncryptDecryptDlg::UpdateControlEnableStatus(bool Enable)
-{
-    m_ButtonEncrypt.EnableWindow(Enable);
-    m_ButtonDecrypt.EnableWindow(Enable);
-    m_CheckTargetPath.EnableWindow(Enable);
-    m_CheckEncryptFileName.EnableWindow(Enable);
-    m_CheckDeleteOriginalFile.EnableWindow(Enable);
-
-    m_EditSourcePath.EnableWindow(Enable);
-    m_EditTargetPath.EnableWindow(Enable);
-
-    ((CButton *)GetDlgItem(IDC_BUTTON_BROWSE_SOURCE))->EnableWindow(Enable);
-    ((CButton *)GetDlgItem(IDC_BUTTON_BROWSE_TARGET))->EnableWindow(Enable);
 }
 
 void CEncryptDecryptDlg::UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type)
@@ -438,12 +328,8 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     try
     {
         //get path
-        CString SourcePath, TargetPath;
-        EDDlg->m_EditSourcePath.GetWindowTextW(SourcePath);
-        if (EDDlg->m_CheckTargetPath.GetState() == BST_CHECKED)
-        {
-            EDDlg->m_EditTargetPath.GetWindowTextW(TargetPath);
-        }
+        CString SourcePath = EDDlg->m_FileEncryptDlg->GetSourcePath();
+        CString TargetPath = EDDlg->m_FileEncryptDlg->GetTargetPath();
 
         //get files
         std::vector<std::wstring> FileNameVector;
@@ -458,8 +344,8 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
         }
 
         //set option
-        EDDlg->m_SimpleCrypt->SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
-        EDDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
+        //EDDlg->m_SimpleCrypt->SetIsEncryptFileName(EDDlg->m_CheckEncryptFileName.GetState() == BST_CHECKED);
+        //EDDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(EDDlg->m_CheckDeleteOriginalFile.GetState() == BST_CHECKED);
 
         const CString &PasswordCString = EDDlg->m_PasswordDlg->GetPassword();
         if (!PasswordCString.IsEmpty())
@@ -500,8 +386,22 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
 
     //reset
     EDDlg->m_ButtonStop.EnableWindow(TRUE);
-    EDDlg->UpdateControlEnableStatus(true);
     EDDlg->m_LastOperationType = EDDlg->m_OperationType;
     EDDlg->ReleaseThreadHandle();
     return 0;
+}
+
+void CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt()
+{
+    m_FileEncryptDlg->ShowWindow(SW_SHOW);
+}
+
+void CEncryptDecryptDlg::OnBnClickedButtonFileDecrypt()
+{
+    m_FileDecryptDlg->ShowWindow(SW_SHOW);
+}
+
+void CEncryptDecryptDlg::OnBnClickedButtonFileCamouflage()
+{
+    m_FileCamouflageDlg->ShowWindow(SW_SHOW);
 }

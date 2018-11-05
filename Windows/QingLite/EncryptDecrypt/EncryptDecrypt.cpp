@@ -104,3 +104,29 @@ BOOL CEncryptDecryptApp::InitInstance()
 	return FALSE;
 }
 
+std::wstring CEncryptDecryptApp::GetSelectPath() const
+{
+    wchar_t ResultBuffer[MAX_PATH];
+    wchar_t SelectPathBuffer[MAX_PATH];
+
+    memset(ResultBuffer, 0, sizeof(ResultBuffer));
+    memset(SelectPathBuffer, 0, sizeof(SelectPathBuffer));
+
+    BROWSEINFO BrowseInfo;
+    BrowseInfo.hwndOwner = m_pMainWnd->m_hWnd;                      //程序主窗口
+    BrowseInfo.pidlRoot = NULL;                                     //引用桌面目录
+    BrowseInfo.pszDisplayName = SelectPathBuffer;                   //返回选择的路径的缓冲区
+    BrowseInfo.lpszTitle = _T("Current Path");                      //弹出的窗口的文字提示
+    BrowseInfo.ulFlags = BIF_BROWSEINCLUDEFILES;                    //可以获取目录和文件
+    BrowseInfo.lpfn = NULL;                                         //回调函数
+    BrowseInfo.lParam = 0;                                          //给回调函数的参数指针
+    BrowseInfo.iImage = 0;                                          //与选中目录相关的图像
+    ITEMIDLIST* pidl = ::SHBrowseForFolder(&BrowseInfo);            //显示弹出窗口
+
+    if (::SHGetPathFromIDList(pidl, ResultBuffer))                  //在ITEMIDLIST中得到目录名的整个路径
+    {
+        return std::wstring(ResultBuffer);
+    }
+
+    return std::wstring();
+}

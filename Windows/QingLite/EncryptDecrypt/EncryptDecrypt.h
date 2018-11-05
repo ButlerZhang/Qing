@@ -9,6 +9,7 @@
 #endif
 
 #include "resource.h"		// main symbols
+#include <string>
 
 
 // CEncryptDecryptApp:
@@ -23,6 +24,8 @@ public:
 // Overrides
 public:
 	virtual BOOL InitInstance();
+
+    std::wstring GetSelectPath() const;
 
 // Implementation
 

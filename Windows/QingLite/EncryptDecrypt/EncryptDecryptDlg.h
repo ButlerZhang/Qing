@@ -7,6 +7,9 @@
 
 #include "..\..\Qing\HeaderFiles\SimpleEncrypt.h"
 
+class FileEncryptDlg;
+class FileDecryptDlg;
+class FileCamouflageDlg;
 class EncryptDecryptPassword;
 
 
@@ -63,32 +66,23 @@ private:
     afx_msg void OnBnClickedExit();
     afx_msg void OnBnClickedEncrypt();
     afx_msg void OnBnClickedDecrypt();
-    afx_msg void OnBnClickedCheckTargetPath();
-    afx_msg void OnBnClickedButtonSelectSourcePath();
-    afx_msg void OnBnClickedButtonSelectTargetPath();
+
+    afx_msg void OnBnClickedButtonFileEncrypt();
+    afx_msg void OnBnClickedButtonFileDecrypt();
+    afx_msg void OnBnClickedButtonFileCamouflage();
 
 private:
 
-    void UpdateTargetPath();
-    void UpdateControlEnableStatus(bool Enable);
     void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
 
     bool Validate();
     void CreateResultList();
     void CreateWorkThread();
     void ReleaseThreadHandle();
-    std::wstring GetSelectPath() const;
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
 private:
 
-    CEdit                                   m_EditSourcePath;
-    CEdit                                   m_EditTargetPath;
-    CButton                                 m_CheckTargetPath;
-    CButton                                 m_CheckEncryptFileName;
-    CButton                                 m_CheckDeleteOriginalFile;
-    CButton                                 m_ButtonEncrypt;
-    CButton                                 m_ButtonDecrypt;
     CButton                                 m_ButtonStop;
     CButton                                 m_ButtonExit;
     CListCtrl                               m_ResultList;
@@ -96,6 +90,10 @@ private:
     OperationType                           m_LastOperationType;
     HANDLE                                  m_WorkerThread;
     std::vector<std::wstring>               m_ProcessInfoVector;
+
+    FileEncryptDlg                         *m_FileEncryptDlg;
+    FileDecryptDlg                         *m_FileDecryptDlg;
+    FileCamouflageDlg                      *m_FileCamouflageDlg;
     EncryptDecryptPassword                 *m_PasswordDlg;
     std::shared_ptr<Qing::SimpleEncrypt>    m_SimpleCrypt;
 };

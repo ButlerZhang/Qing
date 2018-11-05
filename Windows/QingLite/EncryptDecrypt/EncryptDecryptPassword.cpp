@@ -90,6 +90,5 @@ void EncryptDecryptPassword::OnBnClickedCancel()
     }
 
     ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
-    ParentDlg->UpdateControlEnableStatus(true);
     CDialogEx::OnCancel();
 }
