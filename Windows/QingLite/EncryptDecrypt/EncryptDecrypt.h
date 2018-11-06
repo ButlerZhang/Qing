@@ -1,7 +1,3 @@
-
-// EncryptDecrypt.h : main header file for the PROJECT_NAME application
-//
-
 #pragma once
 
 #ifndef __AFXWIN_H__
@@ -12,9 +8,6 @@
 #include <string>
 
 
-// CEncryptDecryptApp:
-// See EncryptDecrypt.cpp for the implementation of this class
-//
 
 enum OperationType
 {
@@ -32,15 +25,27 @@ enum ProcessType
     PT_FAILED
 };
 
+class BaseDialog : public CDialogEx
+{
+public:
+
+    BaseDialog(UINT nIDTemplate, CWnd *pParent = NULL) : CDialogEx(nIDTemplate, pParent) {}
+    ~BaseDialog() {}
+
+    virtual BOOL UserDefinedShow() { return ShowWindow(SW_SHOW); }
+    virtual std::wstring GetSourcePath() const { return std::wstring(); }
+    virtual std::wstring GetTargetPath() const { return std::wstring(); }
+};
+
+
+
 class CEncryptDecryptApp : public CWinApp
 {
 public:
 
     CEncryptDecryptApp();
-    // Overrides
 
     bool Validate(CEdit &EditControl);
-
     std::wstring GetSelectPath() const;
     std::wstring GetProcessString(ProcessType Type) const;
     std::wstring GetOperationString(OperationType Type) const;

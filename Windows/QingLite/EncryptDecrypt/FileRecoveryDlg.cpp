@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
+#include "EncryptDecryptDlg.h"
 #include "FileRecoveryDlg.h"
 #include "afxdialogex.h"
 
@@ -8,7 +9,7 @@
 IMPLEMENT_DYNAMIC(FileRecoveryDlg, CDialogEx)
 
 FileRecoveryDlg::FileRecoveryDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(IDD_DIALOG_RECOVERY, pParent)
+    : BaseDialog(IDD_DIALOG_RECOVERY, pParent)
 {
 }
 
@@ -24,9 +25,28 @@ void FileRecoveryDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(FileRecoveryDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON1, &FileRecoveryDlg::OnBnClickedButtonSourcePath)
+    ON_BN_CLICKED(IDOK, &FileRecoveryDlg::OnBnClickedOk)
+    ON_BN_CLICKED(IDCANCEL, &FileRecoveryDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 // FileRecoveryDlg message handlers
+void FileRecoveryDlg::OnBnClickedOk()
+{
+    if (theApp.Validate(m_EditSourcePath))
+    {
+        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        ParentDlg->SetOperationType(OT_RECOVERY);
+        ParentDlg->CreateWorkThread();
+        CDialogEx::OnOK();
+    }
+}
+
+void FileRecoveryDlg::OnBnClickedCancel()
+{
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    ParentDlg->ResetOperationType();
+    CDialogEx::OnCancel();
+}
 
 void FileRecoveryDlg::OnBnClickedButtonSourcePath()
 {

@@ -9,7 +9,7 @@
 IMPLEMENT_DYNAMIC(FileDecryptDlg, CDialogEx)
 
 FileDecryptDlg::FileDecryptDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(IDD_DIALOG_DECRYPT, pParent)
+    : BaseDialog(IDD_DIALOG_DECRYPT, pParent)
 {
 }
 
@@ -28,11 +28,11 @@ BOOL FileDecryptDlg::UserDefinedShow()
     return ShowWindow(SW_SHOW);
 }
 
-CString FileDecryptDlg::GetSourcePath() const
+std::wstring FileDecryptDlg::GetSourcePath() const
 {
     CString SourcePath;
     m_EditSourcePath.GetWindowTextW(SourcePath);
-    return SourcePath;
+    return SourcePath.GetString();
 }
 
 bool FileDecryptDlg::Validate()
@@ -43,14 +43,14 @@ bool FileDecryptDlg::Validate()
 bool FileDecryptDlg::SetOption()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->m_SimpleCrypt->SetIsForceStop(false);
-    ParentDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(true);
+    ParentDlg->GetSimpleEncrypt()->SetIsForceStop(false);
+    ParentDlg->GetSimpleEncrypt()->SetIsDeleteOriginalFile(true);
 
     CString InputPassword;
     m_EditInputPassword.GetWindowTextW(InputPassword);
     if (!InputPassword.IsEmpty())
     {
-        ParentDlg->m_SimpleCrypt->SetPassword(InputPassword.GetString());
+        ParentDlg->GetSimpleEncrypt()->SetPassword(InputPassword.GetString());
     }
 
     return true;
@@ -59,7 +59,7 @@ bool FileDecryptDlg::SetOption()
 void FileDecryptDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_EDIT1, m_EditSourcePath);
+    DDX_Control(pDX, IDC_EDIT_SOURCE_PATH, m_EditSourcePath);
     DDX_Control(pDX, IDC_CHECK_DEFAULT_PASSWORD, m_CheckDefaultPassword);
     DDX_Control(pDX, IDC_CHECK_INPUT_PASSWORD, m_CheckInputPassword);
     DDX_Control(pDX, IDC_EDIT_DEFAULT_PASSWORD, m_EditDefaultPassword);
@@ -103,7 +103,7 @@ void FileDecryptDlg::OnBnClickedCheckInputPassword()
 void FileDecryptDlg::OnBnClickedCancel()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
+    ParentDlg->ResetOperationType();
     CDialogEx::OnCancel();
 }
 
@@ -112,7 +112,7 @@ void FileDecryptDlg::OnBnClickedOk()
     if (Validate() && SetOption())
     {
         CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-        ParentDlg->m_OperationType = OT_DECRYPT;
+        ParentDlg->SetOperationType(OT_DECRYPT);
         ParentDlg->CreateWorkThread();
         CDialogEx::OnOK();
     }

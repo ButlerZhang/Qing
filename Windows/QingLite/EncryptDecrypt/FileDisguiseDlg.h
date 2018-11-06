@@ -3,7 +3,7 @@
 
 
 
-class FileDisguiseDlg : public CDialogEx
+class FileDisguiseDlg : public BaseDialog
 {
     DECLARE_DYNAMIC(FileDisguiseDlg)
 

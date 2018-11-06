@@ -9,7 +9,7 @@
 IMPLEMENT_DYNAMIC(FileDisguiseDlg, CDialogEx)
 
 FileDisguiseDlg::FileDisguiseDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(IDD_DIALOG_DISGUISE, pParent)
+    : BaseDialog(IDD_DIALOG_DISGUISE, pParent)
 {
 }
 
@@ -35,7 +35,7 @@ void FileDisguiseDlg::OnBnClickedOk()
     if (theApp.Validate(m_EditSourcePath))
     {
         CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-        ParentDlg->m_OperationType = OT_DISGUISE;
+        ParentDlg->SetOperationType(OT_DISGUISE);
         ParentDlg->CreateWorkThread();
         CDialogEx::OnOK();
     }
@@ -44,7 +44,7 @@ void FileDisguiseDlg::OnBnClickedOk()
 void FileDisguiseDlg::OnBnClickedCancel()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
+    ParentDlg->ResetOperationType();
     CDialogEx::OnCancel();
 }
 

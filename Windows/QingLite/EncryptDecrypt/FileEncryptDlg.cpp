@@ -9,7 +9,7 @@ IMPLEMENT_DYNAMIC(FileEncryptDlg, CDialogEx)
 
 
 FileEncryptDlg::FileEncryptDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(IDD_DIALOG_ENCRYPT, pParent)
+    : BaseDialog(IDD_DIALOG_ENCRYPT, pParent)
 {
 }
 
@@ -32,14 +32,14 @@ BOOL FileEncryptDlg::UserDefinedShow()
     return ShowWindow(SW_SHOW);
 }
 
-CString FileEncryptDlg::GetSourcePath() const
+std::wstring FileEncryptDlg::GetSourcePath() const
 {
     CString SourcePath;
     m_EditSourcePath.GetWindowTextW(SourcePath);
-    return SourcePath;
+    return SourcePath.GetString();
 }
 
-CString FileEncryptDlg::GetTargetPath() const
+std::wstring FileEncryptDlg::GetTargetPath() const
 {
     CString TargetPath;
     if (m_CheckTargetPath.GetState() == BST_CHECKED)
@@ -47,7 +47,7 @@ CString FileEncryptDlg::GetTargetPath() const
         m_EditTargetPath.GetWindowTextW(TargetPath);
     }
 
-    return TargetPath;
+    return TargetPath.GetString();
 }
 
 bool FileEncryptDlg::Validate()
@@ -77,15 +77,15 @@ bool FileEncryptDlg::Validate()
 bool FileEncryptDlg::SetOption()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->m_SimpleCrypt->SetIsEncryptFileName(m_CheckEncryptFileName.GetState() == BST_CHECKED);
-    ParentDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(m_CheckDeleteFile.GetState() == BST_CHECKED);
-    ParentDlg->m_SimpleCrypt->SetIsForceStop(false);
+    ParentDlg->GetSimpleEncrypt()->SetIsEncryptFileName(m_CheckEncryptFileName.GetState() == BST_CHECKED);
+    ParentDlg->GetSimpleEncrypt()->SetIsDeleteOriginalFile(m_CheckDeleteFile.GetState() == BST_CHECKED);
+    ParentDlg->GetSimpleEncrypt()->SetIsForceStop(false);
 
     CString InputPassword;
     m_EditInputPassword.GetWindowTextW(InputPassword);
     if (!InputPassword.IsEmpty())
     {
-        ParentDlg->m_SimpleCrypt->SetPassword(InputPassword.GetString());
+        ParentDlg->GetSimpleEncrypt()->SetPassword(InputPassword.GetString());
     }
 
     return true;
@@ -183,7 +183,7 @@ void FileEncryptDlg::OnBnClickedCheckTargetPath()
 void FileEncryptDlg::OnBnClickedCancel()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
+    ParentDlg->ResetOperationType();
     CDialogEx::OnCancel();
 }
 
@@ -192,7 +192,7 @@ void FileEncryptDlg::OnBnClickedOk()
     if (Validate() && SetOption())
     {
         CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-        ParentDlg->m_OperationType = OT_ENCRYPT;
+        ParentDlg->SetOperationType(OT_ENCRYPT);
         ParentDlg->CreateWorkThread();
         CDialogEx::OnOK();
     }

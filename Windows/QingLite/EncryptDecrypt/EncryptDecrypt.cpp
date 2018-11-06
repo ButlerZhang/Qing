@@ -1,7 +1,3 @@
-
-// EncryptDecrypt.cpp : Defines the class behaviors for the application.
-//
-
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
 #include "EncryptDecryptDlg.h"

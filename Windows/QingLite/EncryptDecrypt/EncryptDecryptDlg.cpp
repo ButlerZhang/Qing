@@ -89,8 +89,8 @@ BEGIN_MESSAGE_MAP(CEncryptDecryptDlg, CDialogEx)
     ON_BN_CLICKED(IDC_EXIT, &CEncryptDecryptDlg::OnBnClickedExit)
     ON_BN_CLICKED(IDC_BUTTON_ENCRYPT, &CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt)
     ON_BN_CLICKED(IDC_BUTTON_DECRYPT, &CEncryptDecryptDlg::OnBnClickedButtonFileDecrypt)
-    ON_BN_CLICKED(IDC_BUTTON_CAMOUFLAGE, &CEncryptDecryptDlg::OnBnClickedButtonFileCamouflage)
-    ON_BN_CLICKED(IDC_BUTTON_UN_CAMOUFLAGE, &CEncryptDecryptDlg::OnBnClickedButtonFileUnCamouflage)
+    ON_BN_CLICKED(IDC_BUTTON_DISGUISE, &CEncryptDecryptDlg::OnBnClickedButtonFileDisguise)
+    ON_BN_CLICKED(IDC_BUTTON_RECOVERY, &CEncryptDecryptDlg::OnBnClickedButtonFileRecovery)
 END_MESSAGE_MAP()
 
 
@@ -129,17 +129,17 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
     // TODO: Add extra initialization here
     CreateResultList();
 
-    m_FileEncryptDlg = new FileEncryptDlg(this->GetParent());
-    m_FileEncryptDlg->Create(IDD_DIALOG_ENCRYPT, this->GetParent());
+    m_DialogVector.push_back(new FileEncryptDlg(this->GetParent()));
+    m_DialogVector[OT_ENCRYPT]->Create(IDD_DIALOG_ENCRYPT, this->GetParent());
 
-    m_FileDecryptDlg = new FileDecryptDlg(this->GetParent());
-    m_FileDecryptDlg->Create(IDD_DIALOG_DECRYPT, this->GetParent());
+    m_DialogVector.push_back(new FileDecryptDlg(this->GetParent()));
+    m_DialogVector[OT_DECRYPT]->Create(IDD_DIALOG_DECRYPT, this->GetParent());
 
-    m_FileCamouflageDlg = new FileDisguiseDlg(this->GetParent());
-    m_FileCamouflageDlg->Create(IDD_DIALOG_DISGUISE, this->GetParent());
+    m_DialogVector.push_back(new FileDisguiseDlg(this->GetParent()));
+    m_DialogVector[OT_DISGUISE]->Create(IDD_DIALOG_DISGUISE, this->GetParent());
 
-    m_FileUNCamouflageDlg = new FileRecoveryDlg(this->GetParent());
-    m_FileUNCamouflageDlg->Create(IDD_DIALOG_RECOVERY, this->GetParent());
+    m_DialogVector.push_back(new FileRecoveryDlg(this->GetParent()));
+    m_DialogVector[OT_RECOVERY]->Create(IDD_DIALOG_RECOVERY, this->GetParent());
 
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -211,27 +211,25 @@ void CEncryptDecryptDlg::OnBnClickedExit()
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt()
 {
-    m_FileEncryptDlg->UserDefinedShow();
+    m_DialogVector[OT_ENCRYPT]->UserDefinedShow();
     this->EnableWindow(FALSE);
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileDecrypt()
 {
-    m_FileDecryptDlg->UserDefinedShow();
+    m_DialogVector[OT_DECRYPT]->UserDefinedShow();
     this->EnableWindow(FALSE);
 }
 
-void CEncryptDecryptDlg::OnBnClickedButtonFileCamouflage()
+void CEncryptDecryptDlg::OnBnClickedButtonFileDisguise()
 {
-    m_OperationType = OT_DISGUISE;
-    m_FileCamouflageDlg->ShowWindow(SW_SHOW);
+    m_DialogVector[OT_DISGUISE]->UserDefinedShow();
     this->EnableWindow(FALSE);
 }
 
-void CEncryptDecryptDlg::OnBnClickedButtonFileUnCamouflage()
+void CEncryptDecryptDlg::OnBnClickedButtonFileRecovery()
 {
-    m_OperationType = OT_RECOVERY;
-    m_FileUNCamouflageDlg->ShowWindow(SW_SHOW);
+    m_DialogVector[OT_RECOVERY]->UserDefinedShow();
     this->EnableWindow(FALSE);
 }
 
@@ -241,34 +239,9 @@ void CEncryptDecryptDlg::ReleaseThreadHandle()
     m_WorkerThread = INVALID_HANDLE_VALUE;
 }
 
-std::wstring CEncryptDecryptDlg::GetPath(bool IsSourcePath)
-{
-    if (IsSourcePath)
-    {
-        switch (m_OperationType)
-        {
-        case OT_ENCRYPT:            return m_FileEncryptDlg->GetSourcePath().GetString();
-        case OT_DECRYPT:            return m_FileDecryptDlg->GetSourcePath().GetString();
-        case OT_DISGUISE:         return L"";
-        case OT_RECOVERY:      return L"";
-        case OT_UNKNOW:             return L"";
-        default:                    return L"";
-        }
-    }
-    else
-    {
-        if (m_OperationType == OT_ENCRYPT)
-        {
-            return m_FileEncryptDlg->GetTargetPath().GetString();
-        }
-    }
-
-    return std::wstring();
-}
-
 void CEncryptDecryptDlg::GetFiles(std::vector<std::wstring>& FileVector)
 {
-    const std::wstring &SourcePath = GetPath(true);
+    const std::wstring &SourcePath = m_DialogVector[m_OperationType]->GetSourcePath();
     if (PathIsDirectory(SourcePath.c_str()))
     {
         Qing::FileManager MyFileManager;
@@ -346,7 +319,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     try
     {
         std::vector<std::wstring> FileNameVector;
-        const std::wstring &TargetPath = EDDlg->GetPath(false);
+        const std::wstring &TargetPath = EDDlg->m_DialogVector[EDDlg->m_OperationType]->GetTargetPath();
 
         EDDlg->GetFiles(FileNameVector);
 

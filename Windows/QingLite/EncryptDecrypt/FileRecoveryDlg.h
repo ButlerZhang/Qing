@@ -3,7 +3,7 @@
 
 
 
-class FileRecoveryDlg : public CDialogEx
+class FileRecoveryDlg : public BaseDialog
 {
     DECLARE_DYNAMIC(FileRecoveryDlg)
 
@@ -21,6 +21,8 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     DECLARE_MESSAGE_MAP()
 
+    afx_msg void OnBnClickedOk();
+    afx_msg void OnBnClickedCancel();
     afx_msg void OnBnClickedButtonSourcePath();
 
 private:

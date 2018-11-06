@@ -3,7 +3,7 @@
 
 
 
-class FileDecryptDlg : public CDialogEx
+class FileDecryptDlg : public BaseDialog
 {
     DECLARE_DYNAMIC(FileDecryptDlg)
 
@@ -18,7 +18,7 @@ public:
 #endif
 
     BOOL UserDefinedShow();
-    CString GetSourcePath() const;
+    std::wstring GetSourcePath() const;
 
 protected:
 
