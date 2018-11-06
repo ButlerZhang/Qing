@@ -1,6 +1,3 @@
-// FileCamouflageDlg.cpp : implementation file
-//
-
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
 #include "FileCamouflageDlg.h"
@@ -9,14 +6,12 @@
 #include "afxdialogex.h"
 
 
-// FileCamouflageDlg dialog
 
 IMPLEMENT_DYNAMIC(FileCamouflageDlg, CDialogEx)
 
 FileCamouflageDlg::FileCamouflageDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_DIALOG_CAMOUFLAGE, pParent)
+    : CDialogEx(IDD_DIALOG_CAMOUFLAGE, pParent)
 {
-
 }
 
 FileCamouflageDlg::~FileCamouflageDlg()
@@ -26,9 +21,8 @@ FileCamouflageDlg::~FileCamouflageDlg()
 void FileCamouflageDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_EDIT1, m_EditSourcePath);
+    DDX_Control(pDX, IDC_EDIT_SOURCE_PATH, m_EditSourcePath);
 }
-
 
 BEGIN_MESSAGE_MAP(FileCamouflageDlg, CDialogEx)
     ON_BN_CLICKED(IDOK, &FileCamouflageDlg::OnBnClickedOk)
@@ -38,17 +32,15 @@ END_MESSAGE_MAP()
 
 
 // FileCamouflageDlg message handlers
-
-
 void FileCamouflageDlg::OnBnClickedOk()
 {
     if (theApp.Validate(m_EditSourcePath))
     {
         CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-        ParentDlg->m_PasswordDlg->UserDefinedShow();
+        ParentDlg->CreateWorkThread();
+        CDialogEx::OnOK();
     }
 }
-
 
 void FileCamouflageDlg::OnBnClickedCancel()
 {
@@ -56,7 +48,6 @@ void FileCamouflageDlg::OnBnClickedCancel()
     ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
     CDialogEx::OnCancel();
 }
-
 
 void FileCamouflageDlg::OnBnClickedButtonSelectSourcePath()
 {

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
 #include "EncryptDecryptDlg.h"
+#include "FileEncryptDlg.h"
 #include "EncryptDecryptPassword.h"
 #include "afxdialogex.h"
 
@@ -20,7 +21,7 @@ EncryptDecryptPassword::~EncryptDecryptPassword()
 BOOL EncryptDecryptPassword::UserDefinedShow()
 {
     m_EditInputPassword.SetWindowTextW(L"");
-    m_EditDefaultPassword.SetWindowTextW(L"**********");
+    m_EditDefaultPassword.SetWindowTextW(L"************");
 
     m_CheckInputPassword.SetCheck(BST_UNCHECKED);
     m_CheckDefaultPassword.SetCheck(BST_CHECKED);
@@ -70,6 +71,11 @@ void EncryptDecryptPassword::OnBnClickedCheckInputPassword()
 void EncryptDecryptPassword::OnBnClickedOk()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    if (ParentDlg->m_OperationType == OT_ENCRYPT && !ParentDlg->m_FileEncryptDlg->CreateTargetPath())
+    {
+        return;
+    }
+
     ParentDlg->CreateWorkThread();
     CDialogEx::OnOK();
 }

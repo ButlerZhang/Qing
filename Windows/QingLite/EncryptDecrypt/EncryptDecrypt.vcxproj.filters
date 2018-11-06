@@ -102,6 +102,9 @@
     <ClInclude Include="FileEncryptDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileUNCamouflageDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EncryptDecrypt.cpp">
@@ -123,6 +126,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileEncryptDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUNCamouflageDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

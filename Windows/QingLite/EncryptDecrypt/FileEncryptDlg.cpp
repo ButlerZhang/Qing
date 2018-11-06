@@ -26,6 +26,25 @@ BOOL FileEncryptDlg::UserDefinedShow()
     return ShowWindow(SW_SHOW);
 }
 
+bool FileEncryptDlg::CreateTargetPath()
+{
+    if (m_CheckTargetPath.GetState() == BST_CHECKED)
+    {
+        CString TargetPath;
+        m_EditTargetPath.GetWindowTextW(TargetPath);
+        if (!TargetPath.IsEmpty())
+        {
+            if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
+            {
+                MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 bool FileEncryptDlg::IsEncryptFileName() const
 {
     return m_CheckEncryptFileName.GetState() == BST_CHECKED;
@@ -33,7 +52,7 @@ bool FileEncryptDlg::IsEncryptFileName() const
 
 bool FileEncryptDlg::IsEncryptFileData() const
 {
-    return true;
+    return m_CheckEncryptFileData.GetState() == BST_CHECKED;
 }
 
 bool FileEncryptDlg::IsDeleteOriginalFile() const
@@ -94,7 +113,6 @@ void FileEncryptDlg::OnBnClickedButtonSourcePath()
         UpdateTargetPath();
     }
 }
-
 
 void FileEncryptDlg::OnBnClickedButtonTargetPath()
 {

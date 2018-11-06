@@ -158,6 +158,7 @@ std::wstring CEncryptDecryptApp::GetOperationString(OperationType Type) const
     case OT_ENCRYPT:            return L"文件加密";        break;
     case OT_DECRYPT:            return L"文件解密";        break;
     case OT_CAMOUFLAGE:         return L"文件伪装";        break;
+    case OT_UN_CAMOUFLAGE:      return L"解除伪装";        break;
     case OT_UNKNOW:             return L"未知错误";        break;
     default:                    return L"未知错误";        break;
     }

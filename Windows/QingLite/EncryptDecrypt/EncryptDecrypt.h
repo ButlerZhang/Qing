@@ -21,6 +21,7 @@ enum OperationType
     OT_ENCRYPT,
     OT_DECRYPT,
     OT_CAMOUFLAGE,
+    OT_UN_CAMOUFLAGE,
     OT_UNKNOW
 };
 
@@ -39,6 +40,7 @@ public:
     // Overrides
 
     bool Validate(CEdit &EditControl);
+
     std::wstring GetSelectPath() const;
     std::wstring GetProcessString(ProcessType Type) const;
     std::wstring GetOperationString(OperationType Type) const;

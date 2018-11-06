@@ -17,6 +17,7 @@ public:
 #endif
 
     BOOL UserDefinedShow();
+    bool CreateTargetPath();
     void ClickPasswordOK() { CDialogEx::OnOK(); }
 
     bool IsEncryptFileName() const;
@@ -30,8 +31,6 @@ protected:
 
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     DECLARE_MESSAGE_MAP()
-
-private:
 
     afx_msg void OnBnClickedButtonSourcePath();
     afx_msg void OnBnClickedButtonTargetPath();
