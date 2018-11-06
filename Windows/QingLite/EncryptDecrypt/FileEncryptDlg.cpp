@@ -20,7 +20,6 @@ FileEncryptDlg::~FileEncryptDlg()
 BOOL FileEncryptDlg::UserDefinedShow()
 {
     m_CheckEncryptFileName.SetCheck(BST_CHECKED);
-    m_CheckEncryptFileData.SetCheck(BST_CHECKED);
     m_CheckDeleteFile.SetCheck(BST_CHECKED);
 
     m_CheckInputPassword.SetCheck(BST_UNCHECKED);
@@ -117,7 +116,6 @@ void FileEncryptDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT_TARGET_PATH, m_EditTargetPath);
     DDX_Control(pDX, IDC_CHECK_TARGET_PATH, m_CheckTargetPath);
     DDX_Control(pDX, IDC_CHECK_ENCRYPT_FILE_NAME, m_CheckEncryptFileName);
-    DDX_Control(pDX, IDC_CHECK_ENCRYPT_FILE_DATA, m_CheckEncryptFileData);
     DDX_Control(pDX, IDC_CHECK_DELETE_FILE, m_CheckDeleteFile);
     DDX_Control(pDX, IDC_CHECK_DEFAULT_PASSWORD, m_CheckDefaultPassword);
     DDX_Control(pDX, IDC_CHECK_INPUT_PASSWORD, m_CheckInputPassword);

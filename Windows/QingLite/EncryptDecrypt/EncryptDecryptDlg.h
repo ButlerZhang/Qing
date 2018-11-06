@@ -48,6 +48,8 @@ private:
 
     void CreateResultList();
     void ReleaseThreadHandle();
+    void SetOptionButtonEnable(bool Enable);
+    void ResetControlAfterWorkerThreadStop();
     void GetFiles(std::vector<std::wstring> &FileVector);
     void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
 
@@ -57,6 +59,10 @@ private:
 
     CButton                                         m_ButtonStop;
     CButton                                         m_ButtonExit;
+    CButton                                         m_ButtonEncrypt;
+    CButton                                         m_ButtonDecrypt;
+    CButton                                         m_ButtonDisguise;
+    CButton                                         m_ButtonRecovery;
     CListCtrl                                       m_ResultList;
     OperationType                                   m_OperationType;
     OperationType                                   m_LastOperationType;

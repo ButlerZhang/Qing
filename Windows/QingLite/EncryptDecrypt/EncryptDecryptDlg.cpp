@@ -79,6 +79,10 @@ void CEncryptDecryptDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_LIST_ED_RESULT, m_ResultList);
     DDX_Control(pDX, IDC_STOP, m_ButtonStop);
     DDX_Control(pDX, IDC_EXIT, m_ButtonExit);
+    DDX_Control(pDX, IDC_BUTTON_ENCRYPT, m_ButtonEncrypt);
+    DDX_Control(pDX, IDC_BUTTON_DECRYPT, m_ButtonDecrypt);
+    DDX_Control(pDX, IDC_BUTTON_DISGUISE, m_ButtonDisguise);
+    DDX_Control(pDX, IDC_BUTTON_RECOVERY, m_ButtonRecovery);
 }
 
 BEGIN_MESSAGE_MAP(CEncryptDecryptDlg, CDialogEx)
@@ -206,7 +210,9 @@ void CEncryptDecryptDlg::OnBnClickedStop()
 
 void CEncryptDecryptDlg::OnBnClickedExit()
 {
-    OnCancel();
+    m_ButtonExit.EnableWindow(FALSE);
+    OnBnClickedStop();
+    //OnCancel();
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt()
@@ -239,6 +245,27 @@ void CEncryptDecryptDlg::ReleaseThreadHandle()
     m_WorkerThread = INVALID_HANDLE_VALUE;
 }
 
+void CEncryptDecryptDlg::SetOptionButtonEnable(bool Enable)
+{
+    m_ButtonEncrypt.EnableWindow(Enable);
+    m_ButtonDecrypt.EnableWindow(Enable);
+    m_ButtonDisguise.EnableWindow(Enable);
+    m_ButtonRecovery.EnableWindow(Enable);
+}
+
+void CEncryptDecryptDlg::ResetControlAfterWorkerThreadStop()
+{
+    ReleaseThreadHandle();
+    SetOptionButtonEnable(true);
+    m_ButtonStop.EnableWindow(TRUE);
+    m_LastOperationType = m_OperationType;
+
+    if (!m_ButtonExit.IsWindowEnabled())
+    {
+        OnCancel();
+    }
+}
+
 void CEncryptDecryptDlg::GetFiles(std::vector<std::wstring>& FileVector)
 {
     const std::wstring &SourcePath = m_DialogVector[m_OperationType]->GetSourcePath();
@@ -263,7 +290,7 @@ void CEncryptDecryptDlg::CreateResultList()
     StylesEx |= LVS_EX_GRIDLINES;
     m_ResultList.SetExtendedStyle(StylesEx);
 
-    m_ResultList.InsertColumn(0, _T("ÐòºÅ"), LVCFMT_CENTER,  80);
+    m_ResultList.InsertColumn(0, _T("ÐòºÅ"), LVCFMT_CENTER,  50);
     m_ResultList.InsertColumn(1, _T("²Ù×÷"), LVCFMT_CENTER,  80);
     m_ResultList.InsertColumn(2, _T("Â·¾¶"), LVCFMT_LEFT,    400);
     m_ResultList.InsertColumn(3, _T("×´Ì¬"), LVCFMT_LEFT,    170);
@@ -272,6 +299,7 @@ void CEncryptDecryptDlg::CreateResultList()
 void CEncryptDecryptDlg::CreateWorkThread()
 {
     ReleaseThreadHandle();
+    SetOptionButtonEnable(false);
     if (m_LastOperationType != m_OperationType)
     {
         m_ResultList.DeleteAllItems();
@@ -364,8 +392,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     }
 
     //reset
-    EDDlg->m_ButtonStop.EnableWindow(TRUE);
-    EDDlg->m_LastOperationType = EDDlg->m_OperationType;
-    EDDlg->ReleaseThreadHandle();
+    EDDlg->ResetControlAfterWorkerThreadStop();
+
     return 0;
 }

@@ -45,7 +45,6 @@ private:
     CEdit                           m_EditInputPassword;
     CButton                         m_CheckTargetPath;
     CButton                         m_CheckEncryptFileName;
-    CButton                         m_CheckEncryptFileData;
     CButton                         m_CheckDeleteFile;
     CButton                         m_CheckDefaultPassword;
     CButton                         m_CheckInputPassword;
