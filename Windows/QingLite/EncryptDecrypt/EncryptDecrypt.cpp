@@ -170,3 +170,30 @@ std::wstring CEncryptDecryptApp::GetProcessString(ProcessType Type) const
     default:                    return L"Î´Öª´íÎó";
     }
 }
+
+BOOL BaseDialog::UserDefinedShow()
+{
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    if (ParentDlg != NULL)
+    {
+        CRect ParentRect;
+        ParentDlg->GetWindowRect(ParentRect);
+        int ParentWidth = ParentRect.Width();
+        int ParentHeight = ParentRect.Height();
+
+        CRect ChildOldRect;
+        this->GetWindowRect(ChildOldRect);
+        int ChildWidth = ChildOldRect.Width();
+        int ChildHeight = ChildOldRect.Height();
+
+        CRect ChildNewRect;
+        ChildNewRect.left = ParentRect.left + (ParentWidth - ChildWidth) / 2;
+        ChildNewRect.right = ChildNewRect.left + ChildWidth;
+        ChildNewRect.top = ParentRect.top + (ParentHeight - ChildHeight) / 2;
+        ChildNewRect.bottom = ChildNewRect.top + ChildHeight;
+
+        this->MoveWindow(ChildNewRect);
+    }
+
+    return ShowWindow(SW_SHOW);
+}

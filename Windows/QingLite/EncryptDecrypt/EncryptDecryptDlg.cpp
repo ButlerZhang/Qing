@@ -210,9 +210,12 @@ void CEncryptDecryptDlg::OnBnClickedStop()
 
 void CEncryptDecryptDlg::OnBnClickedExit()
 {
-    m_ButtonExit.EnableWindow(FALSE);
-    OnBnClickedStop();
-    //OnCancel();
+    if (m_WorkerThread != INVALID_HANDLE_VALUE)
+    {
+        m_ButtonExit.EnableWindow(FALSE);
+        OnBnClickedStop();
+        //OnCancel();
+    }
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt()

@@ -32,7 +32,7 @@ public:
     BaseDialog(UINT nIDTemplate, CWnd *pParent = NULL) : CDialogEx(nIDTemplate, pParent) {}
     ~BaseDialog() {}
 
-    virtual BOOL UserDefinedShow() { return ShowWindow(SW_SHOW); }
+    virtual BOOL UserDefinedShow();
     virtual std::wstring GetSourcePath() const { return std::wstring(); }
     virtual std::wstring GetTargetPath() const { return std::wstring(); }
 };

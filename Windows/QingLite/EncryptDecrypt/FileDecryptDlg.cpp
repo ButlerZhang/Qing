@@ -25,7 +25,7 @@ BOOL FileDecryptDlg::UserDefinedShow()
     m_EditInputPassword.SetWindowTextW(L"");
     m_EditDefaultPassword.SetWindowTextW(L"************");
 
-    return ShowWindow(SW_SHOW);
+    return BaseDialog::UserDefinedShow();
 }
 
 std::wstring FileDecryptDlg::GetSourcePath() const
