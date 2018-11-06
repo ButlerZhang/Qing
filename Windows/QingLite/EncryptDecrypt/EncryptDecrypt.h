@@ -20,8 +20,8 @@ enum OperationType
 {
     OT_ENCRYPT,
     OT_DECRYPT,
-    OT_CAMOUFLAGE,
-    OT_UN_CAMOUFLAGE,
+    OT_DISGUISE,
+    OT_RECOVERY,
     OT_UNKNOW
 };
 

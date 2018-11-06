@@ -2,7 +2,6 @@
 #include "EncryptDecrypt.h"
 #include "FileDecryptDlg.h"
 #include "EncryptDecryptDlg.h"
-#include "EncryptDecryptPassword.h"
 #include "afxdialogex.h"
 
 
@@ -18,36 +17,65 @@ FileDecryptDlg::~FileDecryptDlg()
 {
 }
 
+BOOL FileDecryptDlg::UserDefinedShow()
+{
+    m_CheckInputPassword.SetCheck(BST_UNCHECKED);
+    m_CheckDefaultPassword.SetCheck(BST_CHECKED);
+
+    m_EditInputPassword.SetWindowTextW(L"");
+    m_EditDefaultPassword.SetWindowTextW(L"************");
+
+    return ShowWindow(SW_SHOW);
+}
+
+CString FileDecryptDlg::GetSourcePath() const
+{
+    CString SourcePath;
+    m_EditSourcePath.GetWindowTextW(SourcePath);
+    return SourcePath;
+}
+
+bool FileDecryptDlg::Validate()
+{
+    return theApp.Validate(m_EditSourcePath);
+}
+
+bool FileDecryptDlg::SetOption()
+{
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    ParentDlg->m_SimpleCrypt->SetIsForceStop(false);
+    ParentDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(true);
+
+    CString InputPassword;
+    m_EditInputPassword.GetWindowTextW(InputPassword);
+    if (!InputPassword.IsEmpty())
+    {
+        ParentDlg->m_SimpleCrypt->SetPassword(InputPassword.GetString());
+    }
+
+    return true;
+}
+
 void FileDecryptDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_EDIT1, m_EditSourcePath);
+    DDX_Control(pDX, IDC_CHECK_DEFAULT_PASSWORD, m_CheckDefaultPassword);
+    DDX_Control(pDX, IDC_CHECK_INPUT_PASSWORD, m_CheckInputPassword);
+    DDX_Control(pDX, IDC_EDIT_DEFAULT_PASSWORD, m_EditDefaultPassword);
+    DDX_Control(pDX, IDC_EDIT_INPUT_PASSWORD, m_EditInputPassword);
 }
 
 BEGIN_MESSAGE_MAP(FileDecryptDlg, CDialogEx)
     ON_BN_CLICKED(IDOK, &FileDecryptDlg::OnBnClickedOk)
     ON_BN_CLICKED(IDCANCEL, &FileDecryptDlg::OnBnClickedCancel)
     ON_BN_CLICKED(IDC_BUTTON1, &FileDecryptDlg::OnBnClickedButtonSelectSourcePath)
+    ON_BN_CLICKED(IDC_CHECK_DEFAULT_PASSWORD, &FileDecryptDlg::OnBnClickedCheckDefaultPassword)
+    ON_BN_CLICKED(IDC_CHECK_INPUT_PASSWORD, &FileDecryptDlg::OnBnClickedCheckInputPassword)
 END_MESSAGE_MAP()
 
 
 // FileDecryptDlg message handlers
-void FileDecryptDlg::OnBnClickedOk()
-{
-    if (theApp.Validate(m_EditSourcePath))
-    {
-        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-        ParentDlg->m_PasswordDlg->UserDefinedShow();
-    }
-}
-
-void FileDecryptDlg::OnBnClickedCancel()
-{
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
-    CDialogEx::OnCancel();
-}
-
 void FileDecryptDlg::OnBnClickedButtonSelectSourcePath()
 {
     const std::wstring &SelectPath = theApp.GetSelectPath();
@@ -58,4 +86,34 @@ void FileDecryptDlg::OnBnClickedButtonSelectSourcePath()
     }
 
     m_EditSourcePath.SetWindowTextW(SelectPath.c_str());
+}
+
+void FileDecryptDlg::OnBnClickedCheckDefaultPassword()
+{
+    m_CheckInputPassword.SetCheck(BST_UNCHECKED);
+    m_CheckDefaultPassword.SetCheck(BST_CHECKED);
+}
+
+void FileDecryptDlg::OnBnClickedCheckInputPassword()
+{
+    m_CheckInputPassword.SetCheck(BST_CHECKED);
+    m_CheckDefaultPassword.SetCheck(BST_UNCHECKED);
+}
+
+void FileDecryptDlg::OnBnClickedCancel()
+{
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    ParentDlg->m_OperationType = ParentDlg->m_LastOperationType;
+    CDialogEx::OnCancel();
+}
+
+void FileDecryptDlg::OnBnClickedOk()
+{
+    if (Validate() && SetOption())
+    {
+        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        ParentDlg->m_OperationType = OT_DECRYPT;
+        ParentDlg->CreateWorkThread();
+        CDialogEx::OnOK();
+    }
 }

@@ -8,9 +8,8 @@
 
 class FileEncryptDlg;
 class FileDecryptDlg;
-class FileCamouflageDlg;
-class FileUNCamouflageDlg;
-class EncryptDecryptPassword;
+class FileDisguiseDlg;
+class FileRecoveryDlg;
 
 
 
@@ -18,11 +17,9 @@ class CEncryptDecryptDlg : public CDialogEx
 {
     friend FileEncryptDlg;
     friend FileDecryptDlg;
-    friend FileCamouflageDlg;
-    friend FileUNCamouflageDlg;
-    friend EncryptDecryptPassword;
+    friend FileDisguiseDlg;
+    friend FileRecoveryDlg;
 
-    // Construction
 public:
     CEncryptDecryptDlg(CWnd* pParent = NULL);	// standard constructor
     ~CEncryptDecryptDlg();
@@ -60,7 +57,7 @@ private:
     void CreateResultList();
     void CreateWorkThread();
     void ReleaseThreadHandle();
-    void SetSimpleEncryptOption();
+    std::wstring GetPath(bool IsSourcePath);
     void GetFiles(std::vector<std::wstring> &FileVector);
     void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
 
@@ -77,8 +74,7 @@ private:
 
     FileEncryptDlg                          *m_FileEncryptDlg;
     FileDecryptDlg                          *m_FileDecryptDlg;
-    FileCamouflageDlg                       *m_FileCamouflageDlg;
-    FileUNCamouflageDlg                     *m_FileUNCamouflageDlg;
-    EncryptDecryptPassword                  *m_PasswordDlg;
+    FileDisguiseDlg                         *m_FileCamouflageDlg;
+    FileRecoveryDlg                         *m_FileUNCamouflageDlg;
     std::shared_ptr<Qing::SimpleEncrypt>     m_SimpleCrypt;
 };

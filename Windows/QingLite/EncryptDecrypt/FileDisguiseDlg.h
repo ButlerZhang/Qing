@@ -3,20 +3,18 @@
 
 
 
-class FileCamouflageDlg : public CDialogEx
+class FileDisguiseDlg : public CDialogEx
 {
-    DECLARE_DYNAMIC(FileCamouflageDlg)
+    DECLARE_DYNAMIC(FileDisguiseDlg)
 
 public:
-    FileCamouflageDlg(CWnd* pParent = NULL);   // standard constructor
-    virtual ~FileCamouflageDlg();
+    FileDisguiseDlg(CWnd* pParent = NULL);   // standard constructor
+    virtual ~FileDisguiseDlg();
 
     // Dialog Data
 #ifdef AFX_DESIGN_TIME
     enum { IDD = IDD_DIALOG_CAMOUFLAGE };
 #endif
-
-    void ClickPasswordOK() { CDialogEx::OnOK(); }
 
 protected:
 

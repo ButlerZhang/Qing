@@ -87,22 +87,19 @@
     <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h">
       <Filter>Reference\Qing</Filter>
     </ClInclude>
-    <ClInclude Include="EncryptDecryptPassword.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Qing\HeaderFiles\SimpleEncrypt.h">
       <Filter>Reference\Qing</Filter>
     </ClInclude>
     <ClInclude Include="FileDecryptDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileCamouflageDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FileEncryptDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileUNCamouflageDlg.h">
+    <ClInclude Include="FileDisguiseDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileRecoveryDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,19 +113,16 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EncryptDecryptPassword.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FileDecryptDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileCamouflageDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileEncryptDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileUNCamouflageDlg.cpp">
+    <ClCompile Include="FileDisguiseDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileRecoveryDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

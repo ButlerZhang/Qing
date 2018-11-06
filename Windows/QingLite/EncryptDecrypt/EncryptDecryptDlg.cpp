@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
 #include "EncryptDecryptDlg.h"
-#include "EncryptDecryptPassword.h"
 #include "FileEncryptDlg.h"
 #include "FileDecryptDlg.h"
-#include "FileCamouflageDlg.h"
-#include "FileUNCamouflageDlg.h"
+#include "FileDisguiseDlg.h"
+#include "FileRecoveryDlg.h"
 #include "afxdialogex.h"
 
 #include "..\..\Qing\HeaderFiles\BoostLog.h"
@@ -129,11 +128,6 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
 
     // TODO: Add extra initialization here
     CreateResultList();
-    //m_CheckEncryptFileName.SetCheck(BST_CHECKED);
-    //m_CheckDeleteOriginalFile.SetCheck(BST_CHECKED);
-
-    m_PasswordDlg = new EncryptDecryptPassword(this->GetParent());
-    m_PasswordDlg->Create(IDD_DIALOG_PASSWORD, this->GetParent());
 
     m_FileEncryptDlg = new FileEncryptDlg(this->GetParent());
     m_FileEncryptDlg->Create(IDD_DIALOG_ENCRYPT, this->GetParent());
@@ -141,11 +135,11 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
     m_FileDecryptDlg = new FileDecryptDlg(this->GetParent());
     m_FileDecryptDlg->Create(IDD_DIALOG_DECRYPT, this->GetParent());
 
-    m_FileCamouflageDlg = new FileCamouflageDlg(this->GetParent());
-    m_FileCamouflageDlg->Create(IDD_DIALOG_CAMOUFLAGE, this->GetParent());
+    m_FileCamouflageDlg = new FileDisguiseDlg(this->GetParent());
+    m_FileCamouflageDlg->Create(IDD_DIALOG_DISGUISE, this->GetParent());
 
-    m_FileUNCamouflageDlg = new FileUNCamouflageDlg(this->GetParent());
-    m_FileUNCamouflageDlg->Create(IDD_DIALOG_UN_CAMOUFLAGE, this->GetParent());
+    m_FileUNCamouflageDlg = new FileRecoveryDlg(this->GetParent());
+    m_FileUNCamouflageDlg->Create(IDD_DIALOG_RECOVERY, this->GetParent());
 
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -217,28 +211,26 @@ void CEncryptDecryptDlg::OnBnClickedExit()
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt()
 {
-    m_OperationType = OT_ENCRYPT;
     m_FileEncryptDlg->UserDefinedShow();
     this->EnableWindow(FALSE);
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileDecrypt()
 {
-    m_OperationType = OT_DECRYPT;
-    m_FileDecryptDlg->ShowWindow(SW_SHOW);
+    m_FileDecryptDlg->UserDefinedShow();
     this->EnableWindow(FALSE);
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileCamouflage()
 {
-    m_OperationType = OT_CAMOUFLAGE;
+    m_OperationType = OT_DISGUISE;
     m_FileCamouflageDlg->ShowWindow(SW_SHOW);
     this->EnableWindow(FALSE);
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileUnCamouflage()
 {
-    m_OperationType = OT_UN_CAMOUFLAGE;
+    m_OperationType = OT_RECOVERY;
     m_FileUNCamouflageDlg->ShowWindow(SW_SHOW);
     this->EnableWindow(FALSE);
 }
@@ -249,29 +241,42 @@ void CEncryptDecryptDlg::ReleaseThreadHandle()
     m_WorkerThread = INVALID_HANDLE_VALUE;
 }
 
-void CEncryptDecryptDlg::SetSimpleEncryptOption()
+std::wstring CEncryptDecryptDlg::GetPath(bool IsSourcePath)
 {
-    m_SimpleCrypt->SetIsEncryptFileName(m_FileEncryptDlg->IsEncryptFileName());
-    m_SimpleCrypt->SetIsDeleteOriginalFile(m_FileEncryptDlg->IsDeleteOriginalFile());
-
-    const CString &PasswordCString = m_PasswordDlg->GetPassword();
-    if (!PasswordCString.IsEmpty())
+    if (IsSourcePath)
     {
-        m_SimpleCrypt->SetPassword(PasswordCString.GetString());
+        switch (m_OperationType)
+        {
+        case OT_ENCRYPT:            return m_FileEncryptDlg->GetSourcePath().GetString();
+        case OT_DECRYPT:            return m_FileDecryptDlg->GetSourcePath().GetString();
+        case OT_DISGUISE:         return L"";
+        case OT_RECOVERY:      return L"";
+        case OT_UNKNOW:             return L"";
+        default:                    return L"";
+        }
     }
+    else
+    {
+        if (m_OperationType == OT_ENCRYPT)
+        {
+            return m_FileEncryptDlg->GetTargetPath().GetString();
+        }
+    }
+
+    return std::wstring();
 }
 
 void CEncryptDecryptDlg::GetFiles(std::vector<std::wstring>& FileVector)
 {
-    const CString &SourcePath = m_FileEncryptDlg->GetSourcePath();
-    if (PathIsDirectory(SourcePath.GetString()))
+    const std::wstring &SourcePath = GetPath(true);
+    if (PathIsDirectory(SourcePath.c_str()))
     {
         Qing::FileManager MyFileManager;
-        MyFileManager.GetFileNameNonRecursion(SourcePath.GetString(), FileVector);
+        MyFileManager.GetFileNameNonRecursion(SourcePath, FileVector);
     }
     else
     {
-        FileVector.push_back(SourcePath.GetString());
+        FileVector.push_back(SourcePath);
     }
 }
 
@@ -294,11 +299,6 @@ void CEncryptDecryptDlg::CreateResultList()
 void CEncryptDecryptDlg::CreateWorkThread()
 {
     ReleaseThreadHandle();
-    m_SimpleCrypt->SetIsForceStop(false);
-    m_FileEncryptDlg->ClickPasswordOK();
-    m_FileDecryptDlg->ClickPasswordOK();
-    m_FileCamouflageDlg->ClickPasswordOK();
-
     if (m_LastOperationType != m_OperationType)
     {
         m_ResultList.DeleteAllItems();
@@ -346,10 +346,9 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     try
     {
         std::vector<std::wstring> FileNameVector;
-        const std::wstring &TargetPath = EDDlg->m_FileEncryptDlg->GetTargetPath().GetString();
+        const std::wstring &TargetPath = EDDlg->GetPath(false);
 
         EDDlg->GetFiles(FileNameVector);
-        EDDlg->SetSimpleEncryptOption();
 
         bool ProcessResult = false;
         for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
@@ -372,10 +371,10 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
                 ProcessResult = EDDlg->m_SimpleCrypt->DeCrypt(FileNameVector[Index], TargetPath);
                 break;
 
-            case OT_CAMOUFLAGE:
+            case OT_DISGUISE:
                 break;
 
-            case OT_UN_CAMOUFLAGE:
+            case OT_RECOVERY:
                 break;
 
             default:

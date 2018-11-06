@@ -3,14 +3,13 @@
 
 
 
-
-class FileUNCamouflageDlg : public CDialogEx
+class FileRecoveryDlg : public CDialogEx
 {
-    DECLARE_DYNAMIC(FileUNCamouflageDlg)
+    DECLARE_DYNAMIC(FileRecoveryDlg)
 
 public:
-    FileUNCamouflageDlg(CWnd* pParent = NULL);   // standard constructor
-    virtual ~FileUNCamouflageDlg();
+    FileRecoveryDlg(CWnd* pParent = NULL);   // standard constructor
+    virtual ~FileRecoveryDlg();
 
     // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -21,7 +20,10 @@ protected:
 
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     DECLARE_MESSAGE_MAP()
-public:
+
     afx_msg void OnBnClickedButtonSourcePath();
-    CEdit m_EditSourcePath;
+
+private:
+
+    CEdit           m_EditSourcePath;
 };

@@ -2,7 +2,6 @@
 #include "EncryptDecrypt.h"
 #include "FileEncryptDlg.h"
 #include "EncryptDecryptDlg.h"
-#include "EncryptDecryptPassword.h"
 #include "afxdialogex.h"
 
 IMPLEMENT_DYNAMIC(FileEncryptDlg, CDialogEx)
@@ -23,41 +22,14 @@ BOOL FileEncryptDlg::UserDefinedShow()
     m_CheckEncryptFileName.SetCheck(BST_CHECKED);
     m_CheckEncryptFileData.SetCheck(BST_CHECKED);
     m_CheckDeleteFile.SetCheck(BST_CHECKED);
+
+    m_CheckInputPassword.SetCheck(BST_UNCHECKED);
+    m_CheckDefaultPassword.SetCheck(BST_CHECKED);
+
+    m_EditInputPassword.SetWindowTextW(L"");
+    m_EditDefaultPassword.SetWindowTextW(L"************");
+
     return ShowWindow(SW_SHOW);
-}
-
-bool FileEncryptDlg::CreateTargetPath()
-{
-    if (m_CheckTargetPath.GetState() == BST_CHECKED)
-    {
-        CString TargetPath;
-        m_EditTargetPath.GetWindowTextW(TargetPath);
-        if (!TargetPath.IsEmpty())
-        {
-            if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
-            {
-                MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-bool FileEncryptDlg::IsEncryptFileName() const
-{
-    return m_CheckEncryptFileName.GetState() == BST_CHECKED;
-}
-
-bool FileEncryptDlg::IsEncryptFileData() const
-{
-    return m_CheckEncryptFileData.GetState() == BST_CHECKED;
-}
-
-bool FileEncryptDlg::IsDeleteOriginalFile() const
-{
-    return m_CheckDeleteFile.GetState() == BST_CHECKED;
 }
 
 CString FileEncryptDlg::GetSourcePath() const
@@ -78,6 +50,66 @@ CString FileEncryptDlg::GetTargetPath() const
     return TargetPath;
 }
 
+bool FileEncryptDlg::Validate()
+{
+    if (!theApp.Validate(m_EditSourcePath))
+    {
+        return false;
+    }
+
+    if (m_CheckTargetPath.GetState() == BST_CHECKED)
+    {
+        CString TargetPath;
+        m_EditTargetPath.GetWindowTextW(TargetPath);
+        if (!TargetPath.IsEmpty())
+        {
+            if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
+            {
+                MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool FileEncryptDlg::SetOption()
+{
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    ParentDlg->m_SimpleCrypt->SetIsEncryptFileName(m_CheckEncryptFileName.GetState() == BST_CHECKED);
+    ParentDlg->m_SimpleCrypt->SetIsDeleteOriginalFile(m_CheckDeleteFile.GetState() == BST_CHECKED);
+    ParentDlg->m_SimpleCrypt->SetIsForceStop(false);
+
+    CString InputPassword;
+    m_EditInputPassword.GetWindowTextW(InputPassword);
+    if (!InputPassword.IsEmpty())
+    {
+        ParentDlg->m_SimpleCrypt->SetPassword(InputPassword.GetString());
+    }
+
+    return true;
+}
+
+void FileEncryptDlg::UpdateTargetPath()
+{
+    m_EditTargetPath.SetWindowTextW(L"");
+
+    CString SourcePath;
+    m_EditSourcePath.GetWindowTextW(SourcePath);
+
+    if (!SourcePath.IsEmpty())
+    {
+        if (!PathIsDirectory(SourcePath.GetString()))
+        {
+            PathRemoveFileSpec((LPWSTR)SourcePath.GetString());
+        }
+
+        std::wstring TargetPath = SourcePath.GetString() + std::wstring(L"\\EncryptDecrypt\\");
+        m_EditTargetPath.SetWindowTextW(TargetPath.c_str());
+    }
+}
+
 void FileEncryptDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
@@ -87,6 +119,10 @@ void FileEncryptDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_CHECK_ENCRYPT_FILE_NAME, m_CheckEncryptFileName);
     DDX_Control(pDX, IDC_CHECK_ENCRYPT_FILE_DATA, m_CheckEncryptFileData);
     DDX_Control(pDX, IDC_CHECK_DELETE_FILE, m_CheckDeleteFile);
+    DDX_Control(pDX, IDC_CHECK_DEFAULT_PASSWORD, m_CheckDefaultPassword);
+    DDX_Control(pDX, IDC_CHECK_INPUT_PASSWORD, m_CheckInputPassword);
+    DDX_Control(pDX, IDC_EDIT_DEFAULT_PASSWORD, m_EditDefaultPassword);
+    DDX_Control(pDX, IDC_EDIT_INPUT_PASSWORD, m_EditInputPassword);
 }
 
 BEGIN_MESSAGE_MAP(FileEncryptDlg, CDialogEx)
@@ -95,9 +131,23 @@ BEGIN_MESSAGE_MAP(FileEncryptDlg, CDialogEx)
     ON_BN_CLICKED(IDOK, &FileEncryptDlg::OnBnClickedOk)
     ON_BN_CLICKED(IDCANCEL, &FileEncryptDlg::OnBnClickedCancel)
     ON_BN_CLICKED(IDC_CHECK_TARGET_PATH, &FileEncryptDlg::OnBnClickedCheckTargetPath)
+    ON_BN_CLICKED(IDC_CHECK_DEFAULT_PASSWORD, &FileEncryptDlg::OnBnClickedCheckDefaultPassword)
+    ON_BN_CLICKED(IDC_CHECK_INPUT_PASSWORD, &FileEncryptDlg::OnBnClickedCheckInputPassword)
 END_MESSAGE_MAP()
 
 // FileEncrypt message handlers
+void FileEncryptDlg::OnBnClickedCheckDefaultPassword()
+{
+    m_CheckInputPassword.SetCheck(BST_UNCHECKED);
+    m_CheckDefaultPassword.SetCheck(BST_CHECKED);
+}
+
+void FileEncryptDlg::OnBnClickedCheckInputPassword()
+{
+    m_CheckInputPassword.SetCheck(BST_CHECKED);
+    m_CheckDefaultPassword.SetCheck(BST_UNCHECKED);
+}
+
 void FileEncryptDlg::OnBnClickedButtonSourcePath()
 {
     const std::wstring &SelectPath = theApp.GetSelectPath();
@@ -130,15 +180,6 @@ void FileEncryptDlg::OnBnClickedCheckTargetPath()
     }
 }
 
-void FileEncryptDlg::OnBnClickedOk()
-{
-    if (theApp.Validate(m_EditSourcePath))
-    {
-        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-        ParentDlg->m_PasswordDlg->UserDefinedShow();
-    }
-}
-
 void FileEncryptDlg::OnBnClickedCancel()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
@@ -146,21 +187,13 @@ void FileEncryptDlg::OnBnClickedCancel()
     CDialogEx::OnCancel();
 }
 
-void FileEncryptDlg::UpdateTargetPath()
+void FileEncryptDlg::OnBnClickedOk()
 {
-    m_EditTargetPath.SetWindowTextW(L"");
-
-    CString SourcePath;
-    m_EditSourcePath.GetWindowTextW(SourcePath);
-
-    if (!SourcePath.IsEmpty())
+    if (Validate() && SetOption())
     {
-        if (!PathIsDirectory(SourcePath.GetString()))
-        {
-            PathRemoveFileSpec((LPWSTR)SourcePath.GetString());
-        }
-
-        std::wstring TargetPath = SourcePath.GetString() + std::wstring(L"\\EncryptDecrypt\\");
-        m_EditTargetPath.SetWindowTextW(TargetPath.c_str());
+        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        ParentDlg->m_OperationType = OT_ENCRYPT;
+        ParentDlg->CreateWorkThread();
+        CDialogEx::OnOK();
     }
 }
