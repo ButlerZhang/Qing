@@ -272,14 +272,17 @@ void CEncryptDecryptDlg::ResetControlAfterWorkerThreadStop()
 void CEncryptDecryptDlg::GetFiles(std::vector<std::wstring>& FileVector)
 {
     const std::wstring &SourcePath = m_DialogVector[m_OperationType]->GetSourcePath();
-    if (PathIsDirectory(SourcePath.c_str()))
+    if (!SourcePath.empty())
     {
-        Qing::FileManager MyFileManager;
-        MyFileManager.GetFileNameNonRecursion(SourcePath, FileVector);
-    }
-    else
-    {
-        FileVector.push_back(SourcePath);
+        if (PathIsDirectory(SourcePath.c_str()))
+        {
+            Qing::FileManager MyFileManager;
+            MyFileManager.GetFileNameNonRecursion(SourcePath, FileVector);
+        }
+        else
+        {
+            FileVector.push_back(SourcePath);
+        }
     }
 }
 
@@ -349,44 +352,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
 
     try
     {
-        std::vector<std::wstring> FileNameVector;
-        const std::wstring &TargetPath = EDDlg->m_DialogVector[EDDlg->m_OperationType]->GetTargetPath();
-
-        EDDlg->GetFiles(FileNameVector);
-
-        bool ProcessResult = false;
-        for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
-        {
-            if (EDDlg->m_SimpleCrypt->IsForceStop())
-            {
-                break;
-            }
-
-            size_t ResultIndex = Index + 1;
-            EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], PT_PROCEING);
-
-            switch (EDDlg->m_OperationType)
-            {
-            case OT_ENCRYPT:
-                ProcessResult = EDDlg->m_SimpleCrypt->Encrypt(FileNameVector[Index], TargetPath);
-                break;
-
-            case OT_DECRYPT:
-                ProcessResult = EDDlg->m_SimpleCrypt->DeCrypt(FileNameVector[Index], TargetPath);
-                break;
-
-            case OT_DISGUISE:
-                break;
-
-            case OT_RECOVERY:
-                break;
-
-            default:
-                break;
-            }
-
-            EDDlg->UpdateResultList(ResultIndex, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
-        }
+        EDDlg->m_DialogVector[EDDlg->m_OperationType]->ProcessWork(EDDlg);
     }
     catch (std::exception e)
     {
@@ -394,8 +360,6 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
         Qing::BoostLog::WriteError(ErrorMessage);
     }
 
-    //reset
     EDDlg->ResetControlAfterWorkerThreadStop();
-
     return 0;
 }

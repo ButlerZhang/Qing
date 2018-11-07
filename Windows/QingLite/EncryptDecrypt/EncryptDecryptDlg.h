@@ -20,6 +20,8 @@ public:
 #endif
 
     void CreateWorkThread();
+    void GetFiles(std::vector<std::wstring> &FileVector);
+    void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
 
     inline void ResetOperationType() { m_OperationType = m_LastOperationType; }
     inline void SetOperationType(OperationType Type) { m_OperationType = Type; }
@@ -50,9 +52,6 @@ private:
     void ReleaseThreadHandle();
     void SetOptionButtonEnable(bool Enable);
     void ResetControlAfterWorkerThreadStop();
-    void GetFiles(std::vector<std::wstring> &FileVector);
-    void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
-
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
 private:

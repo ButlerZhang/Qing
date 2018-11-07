@@ -32,7 +32,8 @@ SimpleEncrypt::SimpleEncrypt()
     m_DataBufferSize = 0;
     m_FileDataBuffer = NULL;
 
-    m_FileExtension = L".qing";
+    m_FileEncryptExtension = L".qing";
+    m_FileDisguiseExtension = L".ling";
     m_Password = L"89ec5b3a9bc86ec1005c8d230e29db98d7a4a240";
 
     m_HeaderVector.push_back(L"FileName=");
@@ -167,6 +168,63 @@ bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring 
     return DecryptResult;
 }
 
+bool SimpleEncrypt::Disguise(const std::wstring &SourceFile)
+{
+    if (IsDisguise(SourceFile))
+    {
+        return true;
+    }
+
+    std::wstring RecoveryName;
+    const std::wstring &SourceName = PathFindFileName(SourceFile.c_str());
+    if (!Base64Encode(SourceName, RecoveryName))
+    {
+        return false;
+    }
+
+    RecoveryName += m_FileDisguiseExtension;
+    std::wstring TargetFile(SourceFile);
+    TargetFile.replace(SourceFile.find(SourceName.c_str()), SourceName.size(), RecoveryName.c_str());
+
+    if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
+    {
+        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        BoostLog::WriteError(L"Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
+        return false;
+    }
+
+    return true;
+}
+
+bool SimpleEncrypt::Recovery(const std::wstring &SourceFile)
+{
+    if (!IsDisguise(SourceFile))
+    {
+        return true;
+    }
+
+    std::wstring SourceName = PathFindFileName(SourceFile.c_str());
+    PathRemoveExtension((LPWSTR)SourceName.c_str());
+
+    std::wstring RecoveryName;
+    if(!Base64Decode(SourceName, RecoveryName))
+    {
+        return false;
+    }
+
+    std::wstring TargetFile(SourceFile);
+    TargetFile.replace(SourceFile.find(SourceName.c_str()), SourceName.size(), RecoveryName.c_str());
+
+    if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
+    {
+        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        BoostLog::WriteError(L"Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
+        return false;
+    }
+
+    return true;
+}
+
 bool SimpleEncrypt::Base64Encode(const std::wstring &Input, std::wstring &Output)
 {
     const std::string &TempInput = WStringToString(Input);
@@ -264,10 +322,16 @@ bool SimpleEncrypt::IsSpaceEnough(unsigned long FileSize, std::wstring SourceFil
     return true;
 }
 
-bool SimpleEncrypt::IsEncrypt(const std::wstring &SourceFile)
+bool SimpleEncrypt::IsEncrypt(const std::wstring &SourceFile) const
 {
     const std::wstring &Extension = PathFindExtension(SourceFile.c_str());
-    return Extension == m_FileExtension;
+    return Extension == m_FileEncryptExtension;
+}
+
+bool SimpleEncrypt::IsDisguise(const std::wstring & SourceFile) const
+{
+    const std::wstring &Extension = PathFindExtension(SourceFile.c_str());
+    return Extension == m_FileDisguiseExtension;
 }
 
 void SimpleEncrypt::EncryptDecryptBuffer(wchar_t * DataBuffer, int DataSize) const
@@ -407,7 +471,7 @@ std::wstring SimpleEncrypt::GetEncryptFileName(const std::wstring &SourceFile, c
     if (m_IsEncryptFileName)
     {
         const std::wstring &FileName = PathFindFileName(SourceFile.c_str());
-        const std::wstring &FileNameSHA1 = Qing::GetSHA1(FileName, true) + m_FileExtension;
+        const std::wstring &FileNameSHA1 = Qing::GetSHA1(FileName, true) + m_FileEncryptExtension;
 
         if (TargetPath.empty())
         {
@@ -435,7 +499,7 @@ std::wstring SimpleEncrypt::GetEncryptFileName(const std::wstring &SourceFile, c
             TargetName = TargetPath + FileName;
         }
 
-        PathAddExtension((LPWSTR)TargetName.c_str(), (LPCWSTR)m_FileExtension.c_str());
+        PathAddExtension((LPWSTR)TargetName.c_str(), (LPCWSTR)m_FileEncryptExtension.c_str());
     }
 
     return TargetName;

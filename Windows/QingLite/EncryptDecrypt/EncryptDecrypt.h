@@ -33,6 +33,7 @@ public:
     ~BaseDialog() {}
 
     virtual BOOL UserDefinedShow();
+    virtual void ProcessWork(void *Parent) = 0;
     virtual std::wstring GetSourcePath() const { return std::wstring(); }
     virtual std::wstring GetTargetPath() const { return std::wstring(); }
 };

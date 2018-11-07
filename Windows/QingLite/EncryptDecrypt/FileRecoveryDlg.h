@@ -16,6 +16,9 @@ public:
     enum { IDD = IDD_DIALOG_UN_CAMOUFLAGE };
 #endif
 
+    void ProcessWork(void *Parent);
+    std::wstring GetSourcePath() const;
+
 protected:
 
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

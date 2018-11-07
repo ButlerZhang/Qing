@@ -17,6 +17,32 @@ FileDisguiseDlg::~FileDisguiseDlg()
 {
 }
 
+void FileDisguiseDlg::ProcessWork(void *Parent)
+{
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)Parent;
+    std::vector<std::wstring> FileNameVector;
+    ParentDlg->GetFiles(FileNameVector);
+
+    for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
+    {
+        if (ParentDlg->GetSimpleEncrypt()->IsForceStop())
+        {
+            break;
+        }
+
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING);
+        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->Disguise(FileNameVector[Index]);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
+    }
+}
+
+std::wstring FileDisguiseDlg::GetSourcePath() const
+{
+    CString SourcePath;
+    m_EditSourcePath.GetWindowTextW(SourcePath);
+    return SourcePath.GetString();
+}
+
 void FileDisguiseDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);

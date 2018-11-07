@@ -31,6 +31,27 @@ BOOL FileEncryptDlg::UserDefinedShow()
     return BaseDialog::UserDefinedShow();
 }
 
+void FileEncryptDlg::ProcessWork(void *Parent)
+{
+    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)Parent;
+    const std::wstring &TargetPath = GetTargetPath();
+
+    std::vector<std::wstring> FileNameVector;
+    ParentDlg->GetFiles(FileNameVector);
+
+    for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
+    {
+        if (ParentDlg->GetSimpleEncrypt()->IsForceStop())
+        {
+            break;
+        }
+
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING);
+        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->Encrypt(FileNameVector[Index], TargetPath);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
+    }
+}
+
 std::wstring FileEncryptDlg::GetSourcePath() const
 {
     CString SourcePath;

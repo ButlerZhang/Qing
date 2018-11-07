@@ -18,6 +18,7 @@ public:
 #endif
 
     BOOL UserDefinedShow();
+    void ProcessWork(void *Parent);
     std::wstring GetSourcePath() const;
 
 protected:
