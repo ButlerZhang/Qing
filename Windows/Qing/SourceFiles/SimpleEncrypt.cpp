@@ -2,7 +2,6 @@
 #include "..\HeaderFiles\BoostLog.h"
 #include "..\HeaderFiles\CommonFunction.h"
 
-#include <boost\beast\core\detail\base64.hpp>
 #include <Shlwapi.h>
 #include <iostream>
 #include <sstream>
@@ -71,7 +70,7 @@ bool SimpleEncrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &
         return false;
     }
 
-    if (!Reset(SourceFileHandle, SourceFile))
+    if (!Prepare(SourceFileHandle, SourceFile))
     {
         return false;
     }
@@ -134,7 +133,7 @@ bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring 
         return false;
     }
 
-    if (!Reset(SourceFileHandle, SourceFile))
+    if (!Prepare(SourceFileHandle, SourceFile))
     {
         return false;
     }
@@ -179,6 +178,8 @@ bool SimpleEncrypt::Disguise(const std::wstring &SourceFile)
     const std::wstring &SourceName = PathFindFileName(SourceFile.c_str());
     if (!Base64Encode(SourceName, RecoveryName))
     {
+        m_ErrorMessage = L"Base 64 encode failed.";
+        BoostLog::WriteError(m_ErrorMessage);
         return false;
     }
 
@@ -209,6 +210,8 @@ bool SimpleEncrypt::Recovery(const std::wstring &SourceFile)
     std::wstring RecoveryName;
     if(!Base64Decode(SourceName, RecoveryName))
     {
+        m_ErrorMessage = L"Base 64 decode failed.";
+        BoostLog::WriteError(m_ErrorMessage);
         return false;
     }
 
@@ -225,24 +228,6 @@ bool SimpleEncrypt::Recovery(const std::wstring &SourceFile)
     return true;
 }
 
-bool SimpleEncrypt::Base64Encode(const std::wstring &Input, std::wstring &Output)
-{
-    const std::string &TempInput = WStringToString(Input);
-    const std::string &TempResult = boost::beast::detail::base64_encode(TempInput);
-    Output = StringToWString(TempResult);
-
-    return !Output.empty();
-}
-
-bool SimpleEncrypt::Base64Decode(const std::wstring &Input, std::wstring &Output)
-{
-    const std::string &TempInput = WStringToString(Input);
-    const std::string &TempResult = boost::beast::detail::base64_decode(TempInput);
-    Output = StringToWString(TempResult);
-
-    return !Output.empty();
-}
-
 bool SimpleEncrypt::Delete(const std::wstring &SourceFile)
 {
     if (!DeleteFile(SourceFile.c_str()))
@@ -255,7 +240,7 @@ bool SimpleEncrypt::Delete(const std::wstring &SourceFile)
     return true;
 }
 
-bool SimpleEncrypt::Reset(HANDLE SourceFileHandle, const std::wstring &SourceFile)
+bool SimpleEncrypt::Prepare(HANDLE SourceFileHandle, const std::wstring &SourceFile)
 {
     m_FileSize = 0;
     m_ErrorMessage.clear();
@@ -296,6 +281,18 @@ bool SimpleEncrypt::Reset(HANDLE SourceFileHandle, const std::wstring &SourceFil
     return true;
 }
 
+bool SimpleEncrypt::IsEncrypt(const std::wstring &SourceFile) const
+{
+    const std::wstring &Extension = PathFindExtension(SourceFile.c_str());
+    return Extension == m_FileEncryptExtension;
+}
+
+bool SimpleEncrypt::IsDisguise(const std::wstring & SourceFile) const
+{
+    const std::wstring &Extension = PathFindExtension(SourceFile.c_str());
+    return Extension == m_FileDisguiseExtension;
+}
+
 bool SimpleEncrypt::IsSpaceEnough(unsigned long FileSize, std::wstring SourceFile)
 {
     PathStripToRoot((LPWSTR)SourceFile.c_str());
@@ -320,18 +317,6 @@ bool SimpleEncrypt::IsSpaceEnough(unsigned long FileSize, std::wstring SourceFil
     }
 
     return true;
-}
-
-bool SimpleEncrypt::IsEncrypt(const std::wstring &SourceFile) const
-{
-    const std::wstring &Extension = PathFindExtension(SourceFile.c_str());
-    return Extension == m_FileEncryptExtension;
-}
-
-bool SimpleEncrypt::IsDisguise(const std::wstring & SourceFile) const
-{
-    const std::wstring &Extension = PathFindExtension(SourceFile.c_str());
-    return Extension == m_FileDisguiseExtension;
 }
 
 void SimpleEncrypt::EncryptDecryptBuffer(wchar_t * DataBuffer, int DataSize) const
@@ -465,7 +450,7 @@ bool SimpleEncrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &Origina
     return true;
 }
 
-std::wstring SimpleEncrypt::GetEncryptFileName(const std::wstring &SourceFile, const std::wstring &TargetPath)
+std::wstring SimpleEncrypt::GetEncryptFileName(const std::wstring &SourceFile, const std::wstring &TargetPath) const
 {
     std::wstring TargetName;
     if (m_IsEncryptFileName)

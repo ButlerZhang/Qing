@@ -10,6 +10,7 @@
 #include <tchar.h>
 #include <DbgHelp.h>
 
+#include <boost\beast\core\detail\base64.hpp>
 #include <boost\uuid\name_generator_sha1.hpp>
 
 QING_NAMESPACE_BEGIN
@@ -245,6 +246,24 @@ void SplitString(const std::wstring & SourceString, std::vector<std::wstring>& S
     {
         StringVector.push_back(SourceString.substr(pos1));
     }
+}
+
+bool Base64Encode(const std::wstring &Input, std::wstring &Output)
+{
+    const std::string &TempInput = WStringToString(Input);
+    const std::string &TempResult = boost::beast::detail::base64_encode(TempInput);
+    Output = StringToWString(TempResult);
+
+    return !Output.empty();
+}
+
+bool Base64Decode(const std::wstring &Input, std::wstring &Output)
+{
+    const std::string &TempInput = WStringToString(Input);
+    const std::string &TempResult = boost::beast::detail::base64_decode(TempInput);
+    Output = StringToWString(TempResult);
+
+    return !Output.empty();
 }
 
 QING_NAMESPACE_END

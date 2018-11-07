@@ -22,4 +22,7 @@ std::string  QING_DLL WStringToString(const std::wstring &WString, int Codepage 
 void QING_DLL SetProgramDMPEnable(bool EnableProgramDMP);
 void QING_DLL SplitString(const std::wstring &SourceString, std::vector<std::wstring> &StringVector, const std::wstring &Seperator);
 
+bool Base64Encode(const std::wstring &Input, std::wstring &Output);
+bool Base64Decode(const std::wstring &Input, std::wstring &Output);
+
 QING_NAMESPACE_END
