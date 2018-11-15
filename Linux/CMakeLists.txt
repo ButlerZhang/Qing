@@ -15,4 +15,4 @@ add_subdirectory(src)
 add_executable(QingLite main.cpp ${DIR_SRCS})
 
 # 添加链接库
-target_link_libraries(QingLite Qing)
+target_link_libraries(QingLite SRCLib)
