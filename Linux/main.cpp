@@ -7,19 +7,12 @@
 //============================================================================
 
 #include <iostream>
-#include "src/HexString.h"
+#include "basic/algorithm/001_MaxSubSum.h"
 
 int main() 
 {
-
-	std::string ASCIIString;
-	std::string TempHexString("AA119203BB");
-
-	HexString MyHexString;
-	MyHexString.HexStringToASCIIString(TempHexString, ASCIIString);
-
-	std::cout << "Hex   String = " << TempHexString << std::endl;
-	std::cout << "ASCII String = " << ASCIIString   << std::endl;
+	MaxSubSum TestObject;
+	TestObject.Test();
 
 	std::cout << std::endl;
 	return 0;
