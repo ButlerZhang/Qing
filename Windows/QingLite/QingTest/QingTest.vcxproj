@@ -163,6 +163,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\AbstractFactory.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Adapter.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Bridge.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="UnitTest\TestIniFile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.cpp" />
     <ClCompile Include="QingTest.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

@@ -49,5 +49,5 @@ private:
      * Parameters: int subsequence.
      * Return: max sub sum.
     ****************************************************************/
-    int MaxSubSumRec(const std::vector<int> &Array, int left, int right) const;
+    int MaxSubSumRec(const std::vector<int> &Array, int Left, int Right) const;
 };

@@ -31,6 +31,12 @@
     <Filter Include="UnitTest">
       <UniqueIdentifier>{5f763ee5-6762-4a5f-b237-b8a9c5144e17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference\Basic">
+      <UniqueIdentifier>{28f228c2-50e2-45cf-81a3-8dd8cda30499}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Basic\Algorithm">
+      <UniqueIdentifier>{97a5ef51-bf29-4faf-96bf-1f88b84e9abb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -126,6 +132,9 @@
     <ClInclude Include="UnitTest\TestDatabase.h">
       <Filter>UnitTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.h">
+      <Filter>Reference\Basic\Algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -133,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="QingTest.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.cpp">
+      <Filter>Reference\Basic\Algorithm</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

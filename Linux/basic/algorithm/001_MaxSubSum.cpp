@@ -1,24 +1,25 @@
 #include "001_MaxSubSum.h"
 #include <iostream>
+#include <algorithm>
 
 
 
 int MaxSubSum::MaxSubSumTripleCycle(const std::vector<int> &Array) const
 {
-    int MaxSum =0;
+    int MaxSum = 0;
 
-    for(std::vector<int>::size_type i = 0; i < Array.size(); i++)
+    for (std::vector<int>::size_type i = 0; i < Array.size(); i++)
     {
-        for(std::vector<int>::size_type j = i + 1; j < Array.size(); j++)
+        for (std::vector<int>::size_type j = i + 1; j < Array.size(); j++)
         {
             int CurrentSum = 0;
 
-            for(std::vector<int>::size_type k = i; k < j; k++)
+            for (std::vector<int>::size_type k = i; k < j; k++)
             {
                 CurrentSum += Array[k];
             }
 
-            if(CurrentSum > MaxSum)
+            if (CurrentSum > MaxSum)
             {
                 MaxSum = CurrentSum;
             }
@@ -32,13 +33,13 @@ int MaxSubSum::MaxSubSumTwoCycle(const std::vector<int> &Array) const
 {
     int MaxSum = 0;
 
-    for(std::vector<int>::size_type i = 0; i < Array.size(); i++)
+    for (std::vector<int>::size_type i = 0; i < Array.size(); i++)
     {
-        int CurrentSum =0;
-        for(std::vector<int>::size_type j = i; j < Array.size(); j++)
+        int CurrentSum = 0;
+        for (std::vector<int>::size_type j = i; j < Array.size(); j++)
         {
             CurrentSum += Array[j];
-            if(CurrentSum > MaxSum)
+            if (CurrentSum > MaxSum)
             {
                 MaxSum = CurrentSum;
             }
@@ -56,15 +57,16 @@ int MaxSubSum::MaxSubSumRecursive(const std::vector<int> &Array) const
 int MaxSubSum::MaxSubSumSingleCycle(const std::vector<int> &Array) const
 {
     int MaxSum = 0, CurrentSum = 0;
-    for(std::vector<int>::size_type i = 0; i < Array.size(); i++)
+
+    for (std::vector<int>::size_type i = 0; i < Array.size(); i++)
     {
         CurrentSum += Array[i];
 
-        if(CurrentSum > MaxSum)
+        if (CurrentSum > MaxSum)
         {
             MaxSum = CurrentSum;
         }
-        else if(CurrentSum < 0)
+        else if (CurrentSum < 0)
         {
             CurrentSum = 0;
         }
@@ -73,32 +75,32 @@ int MaxSubSum::MaxSubSumSingleCycle(const std::vector<int> &Array) const
     return MaxSum;
 }
 
-int MaxSubSum::MaxSubSumRec(const std::vector<int> &Array, int left, int right) const
+int MaxSubSum::MaxSubSumRec(const std::vector<int> &Array, int Left, int Right) const
 {
-    if(left == right)   //base case
+    if (Left == Right)   //base case
     {
-        return (Array[left] > 0) ? Array[left] : 0;
+        return (Array[Left] > 0) ? Array[Left] : 0;
     }
 
-    int Center = (left + right) / 2;
-    int MaxLeftSum = MaxSubSumRec(Array, left, Center);
-    int MaxRightSum = MaxSubSumRec(Array, Center + 1, right);
+    int Center = (Left + Right) / 2;
+    int MaxLeftSum = MaxSubSumRec(Array, Left, Center);
+    int MaxRightSum = MaxSubSumRec(Array, Center + 1, Right);
 
     int MaxLeftBorderSum = 0, LeftBorderSum = 0;
-    for(int i = Center; i >= left; i--)
+    for (int i = Center; i >= Left; i--)
     {
         LeftBorderSum += Array[i];
-        if(LeftBorderSum > MaxLeftBorderSum)
+        if (LeftBorderSum > MaxLeftBorderSum)
         {
             MaxLeftBorderSum = LeftBorderSum;
         }
     }
 
     int MaxRightBorderSum = 0, RightBorderSum = 0;
-    for(int j = Center + 1; j <= right; j++)
+    for (int j = Center + 1; j <= Right; j++)
     {
         RightBorderSum += Array[j];
-        if(RightBorderSum > MaxRightBorderSum)
+        if (RightBorderSum > MaxRightBorderSum)
         {
             MaxRightBorderSum = RightBorderSum;
         }
@@ -110,7 +112,7 @@ int MaxSubSum::MaxSubSumRec(const std::vector<int> &Array, int left, int right) 
 
 void MaxSubSum::Test() const
 {
-	std::vector<int> Array = {-2, 11, -4, 13, -5, -2};
+    std::vector<int> Array = { -2, 11, -4, 13, -5, -2 };
 
     std::cout << MaxSubSumTripleCycle(Array) << std::endl;
     std::cout << MaxSubSumTwoCycle(Array) << std::endl;
