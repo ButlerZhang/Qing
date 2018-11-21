@@ -10,7 +10,7 @@ aux_source_directory(. DIR_SRCS)
 
 #添加src子目录
 add_subdirectory(src)
-add_subdirectory(basic/UNIX)
+add_subdirectory(basic/unix)
 add_subdirectory(basic/algorithm)
 
 #指定生成目标 
