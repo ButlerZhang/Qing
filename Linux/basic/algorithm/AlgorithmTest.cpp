@@ -1,6 +1,7 @@
 #include "AlgorithmTest.h"
 #include "001_MaxSubSum.h"
 #include "002_BinarySearch.h"
+#include "003_CommonMath.h"
 
 #include <iostream>
 
@@ -43,4 +44,22 @@ void TestBinarySearch()
     std::vector<int> Array = {1,2,3,4,5,6,7,8,9,10};
     std::cout << TestObject.GetBinarySearch(Array, 11) << std::endl;
     std::cout << TestObject.GetBinarySearch(Array, 9) << std::endl;
+}
+
+void TestGreatestCommonDivisor()
+{
+    TestOutputMessage Test("Greatest Common Divisor");
+
+    CommonMath TestObject;
+    std::cout << TestObject.GreatestCommonDivisor(50, 15) << std::endl;
+    std::cout << TestObject.GreatestCommonDivisor(15, 50) << std::endl;
+}
+
+void TestPowRecursive()
+{
+    TestOutputMessage Test("Pow Recursive");
+
+    CommonMath TestObject;
+    std::cout << TestObject.PowRecursive(2, 10) << std::endl;
+    std::cout << TestObject.PowRecursive(3, 2) << std::endl;
 }

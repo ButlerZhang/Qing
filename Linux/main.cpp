@@ -12,7 +12,9 @@
 int main() 
 {
 	//TestMaxSubSum();
-	TestBinarySearch();
+	//TestBinarySearch();
+	//TestGreatestCommonDivisor();
+	TestPowRecursive();
 
 	std::cout << std::endl;
 	return 0;
