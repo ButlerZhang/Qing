@@ -1,5 +1,4 @@
 #include "001_MaxSubSum.h"
-#include <iostream>
 #include <algorithm>
 
 
@@ -108,14 +107,4 @@ int MaxSubSum::MaxSubSumRec(const std::vector<int> &Array, int Left, int Right) 
 
     int TempMax = std::max(MaxLeftSum, MaxRightSum);
     return std::max(TempMax, MaxLeftBorderSum + MaxRightBorderSum);
-}
-
-void MaxSubSum::Test() const
-{
-    std::vector<int> Array = { -2, 11, -4, 13, -5, -2 };
-
-    std::cout << MaxSubSumTripleCycle(Array) << std::endl;
-    std::cout << MaxSubSumTwoCycle(Array) << std::endl;
-    std::cout << MaxSubSumRecursive(Array) << std::endl;
-    std::cout << MaxSubSumSingleCycle(Array) << std::endl;
 }

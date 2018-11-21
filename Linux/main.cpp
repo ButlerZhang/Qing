@@ -7,12 +7,12 @@
 //============================================================================
 
 #include <iostream>
-#include "basic/algorithm/001_MaxSubSum.h"
+#include "basic/algorithm/AlgorithmTest.h"
 
 int main() 
 {
-	MaxSubSum TestObject;
-	TestObject.Test();
+	//TestMaxSubSum();
+	TestBinarySearch();
 
 	std::cout << std::endl;
 	return 0;
