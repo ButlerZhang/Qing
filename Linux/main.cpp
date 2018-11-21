@@ -1,20 +1,18 @@
-//============================================================================
-// Name        : main.cpp
-// Author      : Butler
-// Version     :
-// Copyright   : 
-// Description : 
-//============================================================================
-
 #include <iostream>
+#include "basic/UNIX/UNIXTest.h"
 #include "basic/algorithm/AlgorithmTest.h"
 
-int main() 
+
+
+int main(int argc, char *argv[])
 {
 	//TestMaxSubSum();
 	//TestBinarySearch();
 	//TestGreatestCommonDivisor();
-	TestPowRecursive();
+	//TestPowRecursive();
+
+
+	TestListFileName();
 
 	std::cout << std::endl;
 	return 0;
