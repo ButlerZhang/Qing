@@ -4,16 +4,33 @@
 
 
 
+void TestUNIX();
+void TestAlgorithm();
+
 int main(int argc, char *argv[])
+{
+	TestUNIX();
+	TestAlgorithm();
+
+	std::cout << std::endl;
+	return 0;
+}
+
+void TestAlgorithm()
 {
 	//TestMaxSubSum();
 	//TestBinarySearch();
 	//TestGreatestCommonDivisor();
 	//TestPowRecursive();
+}
 
+void TestUNIX()
+{
+	TestShowProcessInformation();
 
-	TestListFileName();
-
-	std::cout << std::endl;
-	return 0;
+	//TestListFileName();
+	//TestReadToWriteNotBufferIO();
+	//TestReadToWriteStandardIO();	
+	TestExecuteCommand();
+	//TestHowToUseErrno();
 }
