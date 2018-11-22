@@ -3,15 +3,17 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "stdafx.h"
-#include "..\..\..\Linux\basic\algorithm\001_MaxSubSum.h"
+#include "..\..\..\Linux\basic\algorithm\AlgorithmTest.h"
 #include <iostream>
 
 
 
 int main()
 {
-    MaxSubSum TestObject;
-    TestObject.Test();
+    TestMaxSubSum();
+    TestBinarySearch();
+    TestGreatestCommonDivisor();
+    TestPowRecursive();
 
     system("pause");
     return 0;

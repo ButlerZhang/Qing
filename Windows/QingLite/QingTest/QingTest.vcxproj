@@ -164,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.h" />
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\002_BinarySearch.h" />
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\003_CommonMath.h" />
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\AlgorithmTest.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\AbstractFactory.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Adapter.h" />
     <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Bridge.h" />
@@ -197,6 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.cpp" />
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\002_BinarySearch.cpp" />
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\003_CommonMath.cpp" />
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\AlgorithmTest.cpp" />
     <ClCompile Include="QingTest.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

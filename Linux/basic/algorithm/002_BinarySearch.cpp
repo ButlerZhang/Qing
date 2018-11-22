@@ -6,15 +6,15 @@ int BinarySearch::GetBinarySearch(const std::vector<int> &Array, int TargetValue
 {
     std::vector<int>::size_type Left = 0;
     std::vector<int>::size_type Right = Array.size();
-    while(Left <= Right)
+    while (Left < Right)
     {
-        std::vector<int>::size_type mid = (Left + Right)/2;
-        if(Array[mid] == TargetValue)
+        std::vector<int>::size_type mid = (Left + Right) / 2;
+        if (Array[mid] == TargetValue)
         {
             return mid;
         }
 
-        if(Array[mid] > TargetValue)
+        if (Array[mid] > TargetValue)
         {
             Right = mid - 1;
         }

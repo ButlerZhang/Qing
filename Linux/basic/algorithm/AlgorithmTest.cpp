@@ -4,6 +4,7 @@
 #include "003_CommonMath.h"
 
 #include <iostream>
+#include <string>
 
 
 
@@ -41,9 +42,11 @@ void TestBinarySearch()
     TestOutputMessage Test("Binary Search");
 
     BinarySearch TestObject;
-    std::vector<int> Array = {1,2,3,4,5,6,7,8,9,10};
+    std::vector<int> Array = { 1,2,3,4,5,6,7,8,9,10 };
     std::cout << TestObject.GetBinarySearch(Array, 11) << std::endl;
+    std::cout << TestObject.GetBinarySearch(Array, 1) << std::endl;
     std::cout << TestObject.GetBinarySearch(Array, 9) << std::endl;
+    std::cout << TestObject.GetBinarySearch(Array, 10) << std::endl;
 }
 
 void TestGreatestCommonDivisor()

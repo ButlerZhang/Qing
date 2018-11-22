@@ -135,6 +135,15 @@
     <ClInclude Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.h">
       <Filter>Reference\Basic\Algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\002_BinarySearch.h">
+      <Filter>Reference\Basic\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\003_CommonMath.h">
+      <Filter>Reference\Basic\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Linux\basic\algorithm\AlgorithmTest.h">
+      <Filter>Reference\Basic\Algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -144,6 +153,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Linux\basic\algorithm\001_MaxSubSum.cpp">
+      <Filter>Reference\Basic\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\002_BinarySearch.cpp">
+      <Filter>Reference\Basic\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\003_CommonMath.cpp">
+      <Filter>Reference\Basic\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Linux\basic\algorithm\AlgorithmTest.cpp">
       <Filter>Reference\Basic\Algorithm</Filter>
     </ClCompile>
   </ItemGroup>
