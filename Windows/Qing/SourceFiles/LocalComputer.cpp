@@ -129,7 +129,7 @@ bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
     DWORD ErrorValue = GetLastError();
     if (ErrorValue != 0)
     {
-        const std::wstring &ErrorMessage = ConvertErrorCodeToString(ErrorValue);
+        const std::wstring &ErrorMessage = GetLastErrorString(ErrorValue);
         BoostLog::WriteError(BoostFormat(L"Start program fail, program name = %s, error = %s.", ProgramName.c_str(), ErrorMessage.c_str()));
         return false;
     }

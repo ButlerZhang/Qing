@@ -88,21 +88,31 @@ std::wstring GetRunningPath()
     return L"Qing";
 }
 
-std::wstring QING_DLL ConvertErrorCodeToString(DWORD LastErrorCode)
+std::wstring QING_DLL GetLastErrorString(DWORD LastErrorCode)
 {
-    std::wstring ErrorCodeString;
-
     LPVOID lpMsgBuf;
-    DWORD dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
-    if (FormatMessage(dwFlags, NULL, LastErrorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL))
+    std::wstring ErrorString;
+
+    if (FormatMessage(
+        FORMAT_MESSAGE_FROM_SYSTEM |         //获得与系统定义的错误代码对应的字符串
+        FORMAT_MESSAGE_IGNORE_INSERTS |      //允许获得含有%占位符的消息
+        FORMAT_MESSAGE_ALLOCATE_BUFFER,      //分配容纳文本描述的内存
+        NULL,                                       //通常为NULL
+        LastErrorCode,                              //错误代码
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),  //使用系统默认语言
+        (LPTSTR)&lpMsgBuf,                          //存放文本信息的缓冲区
+        0,                                          //缓冲区大小,已指定,所以为零
+        NULL))                                      //参数列表,通常不用
     {
-        ErrorCodeString.append((LPCTSTR)lpMsgBuf);
-        std::wstring::size_type DeleteCharCount = 2;    //delete "\r\n"
-        std::wstring::size_type StartIndex = ErrorCodeString.size() - DeleteCharCount;
-        ErrorCodeString.erase(StartIndex, DeleteCharCount);
+        ErrorString.append((LPCTSTR)lpMsgBuf);
+        std::wstring::size_type DeleteCharCount = 2;//delete "\r\n"
+        std::wstring::size_type StartIndex = ErrorString.size() - DeleteCharCount;
+        ErrorString.erase(StartIndex, DeleteCharCount);
+
+        LocalFree(lpMsgBuf);                        //系统分配内存，需要自己释放
     }
 
-    return ErrorCodeString;
+    return ErrorString;
 }
 
 std::wstring QING_DLL ConvertDoubleToString(double Value, int precision)
@@ -168,21 +178,54 @@ std::wstring QING_DLL GetSHA1(const std::wstring & DataString, bool IsUpper)
 
 std::wstring StringToWString(const std::string &String, int Codepage)
 {
-    int Length = MultiByteToWideChar(Codepage, 0, (LPCSTR)String.c_str(), static_cast<int>(String.length()), NULL, 0);
+    int nLen = MultiByteToWideChar(
+        Codepage,               //标识了与多字节字符串关联的一个代码页值
+        0,                      //允许进行额外的控制，会影响变音符号
+        (LPCSTR)String.c_str(), //要转换的字符串
+        String.length(),        //要转换的字符串长度，如果传-1，函数可自行判断
+        NULL,                   //转换的结果的缓冲区
+        0);                     //缓冲区的大小，如果为零，函数不执行转换，返回字符数
 
-    std::wstring ResultWString(Length, L'\0');
-    int ResultLength = MultiByteToWideChar(Codepage, 0, (LPCSTR)String.c_str(), static_cast<int>(String.length()), (LPWSTR)ResultWString.c_str(), Length);
+    std::wstring ResultWString;
+    ResultWString.resize(nLen, L'\0');
+
+    int nResult = MultiByteToWideChar(
+        Codepage,               //一般默认为CP_UTF8
+        0,                      //一般不用
+        (LPCSTR)String.c_str(), //源字符串
+        String.length(),        //源字符串长度
+        (LPWSTR)ResultWString.c_str(),   //结果缓冲区
+        nLen);                  //由第一次调用获得的缓冲区大小
 
     return ResultWString;
 }
 
 std::string WStringToString(const std::wstring &WString, int Codepage)
 {
-    int SourceLength = static_cast<int>(WString.length()) + 1;
-    int TargetLength = WideCharToMultiByte(Codepage, 0, (LPCWSTR)WString.c_str(), SourceLength, NULL, 0, NULL, FALSE) + 1;
+    int nLen = WideCharToMultiByte(
+        Codepage,               //标识了要与新转换的字符串关联的代码页
+        0,                      //指定额外的转换控制，例如变音符号
+        (LPCWSTR)WString.c_str(),//要转换的字符串的内存地址
+        -1,                     //字符串长度，传-1自行判断
+        NULL,                   //结果缓冲区
+        0,                      //结果缓冲区大小
+        NULL,                   //遇到不能转换的字符时会使用这个参数指向的字符
+        NULL);                  //指向一个布尔变量，如果在宽字符字符串中，如果
+                                //至少有一个字符不能转换为对应的多字节形式，函数
+                                //就会把这个变量设置为TRUE，否则为FALSE
 
-    std::string ResultString(TargetLength, '\0');
-    int ResultLength = WideCharToMultiByte(Codepage, 0, (LPCWSTR)WString.c_str(), SourceLength, (LPSTR)ResultString.c_str(), TargetLength, NULL, FALSE);
+    std::string ResultString;
+    ResultString.resize(nLen + 1, '\0');
+
+    int nResult = WideCharToMultiByte(
+        Codepage,                   //一般默认为CP_UTF8
+        0,                          //一般不用
+        (LPCWSTR)WString.c_str(),   //源字符串
+        WString.length() + 1,       //源字符串长度
+        (LPSTR)ResultString.c_str(),//结果缓冲区
+        nLen + 1,                   //结果缓冲区大小
+        NULL,                       //系统默认为问号
+        NULL);                      //通常传入NULL
 
     return ResultString;
 }

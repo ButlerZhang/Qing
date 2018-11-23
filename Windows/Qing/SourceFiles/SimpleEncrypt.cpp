@@ -65,7 +65,7 @@ bool SimpleEncrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &
         GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (SourceFileHandle == INVALID_HANDLE_VALUE)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Encrypt failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
@@ -80,7 +80,7 @@ bool SimpleEncrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &
         GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
     if (TargetFileHandle == INVALID_HANDLE_VALUE)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Encrypt failed, target file = " + TargetFile + L", error = " + m_ErrorMessage);
         CloseHandle(SourceFileHandle);
         return false;
@@ -128,7 +128,7 @@ bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring 
         GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (SourceFileHandle == INVALID_HANDLE_VALUE)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"DeCrypt failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
@@ -143,7 +143,7 @@ bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring 
         GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
     if (TargetFileHandle == INVALID_HANDLE_VALUE)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"DeCrypt failed, target file = " + TargetFile + L", error = " + m_ErrorMessage);
         CloseHandle(SourceFileHandle);
         return false;
@@ -189,7 +189,7 @@ bool SimpleEncrypt::Disguise(const std::wstring &SourceFile)
 
     if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
@@ -220,7 +220,7 @@ bool SimpleEncrypt::Recovery(const std::wstring &SourceFile)
 
     if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
@@ -232,7 +232,7 @@ bool SimpleEncrypt::Delete(const std::wstring &SourceFile)
 {
     if (!DeleteFile(SourceFile.c_str()))
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Delete failed, file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
@@ -249,7 +249,7 @@ bool SimpleEncrypt::Prepare(HANDLE SourceFileHandle, const std::wstring &SourceF
     m_FileSize = GetFileSize(SourceFileHandle, &FileSizeHigh);
     if (m_FileSize == INVALID_FILE_SIZE)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Prepare init file size error = " + m_ErrorMessage);
         return false;
     }
@@ -338,7 +338,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
     {
         if (::SetFilePointer(SourceFileHandle, FileOffset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
         {
-            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+            m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
             BoostLog::WriteError(L"EncryptDecryptFileData::SetFilePointer, error = " + m_ErrorMessage);
             return false;
         }
@@ -351,7 +351,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
         wmemset(m_FileDataBuffer, 0, sizeof(m_FileDataBuffer));
         if (::ReadFile(SourceFileHandle, m_FileDataBuffer, m_DataBufferSize, &RealReadLength, NULL) <= 0)
         {
-            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+            m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
             BoostLog::WriteError(L"EncryptDecryptFileData::ReadFile, error = " + m_ErrorMessage);
             return false;
         }
@@ -370,7 +370,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
 
         if (::WriteFile(TargetFileHandle, m_FileDataBuffer, RealReadLength, &RealWriteLength, NULL) <= 0)
         {
-            m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+            m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
             BoostLog::WriteError(L"EncryptDecryptFileData::WriteFile, error = " + m_ErrorMessage);
             return false;
         }
@@ -406,7 +406,7 @@ bool SimpleEncrypt::EncryptHeader(const std::wstring &SourceFile, HANDLE SourceF
     DWORD RealWriteLength = 0;
     if (::WriteFile(TargetFileHandle, m_FileDataBuffer, BUFFER_UNIT, &RealWriteLength, NULL) <= 0)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Encrypt header, write file = " + SourceFile + L"failed , error = " + m_ErrorMessage);
         return false;
     }
@@ -420,7 +420,7 @@ bool SimpleEncrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &Origina
     wmemset(m_FileDataBuffer, 0, BUFFER_UNIT);
     if (::ReadFile(SourceFileHandle, m_FileDataBuffer, BUFFER_UNIT, &RealReadLength, NULL) <= 0)
     {
-        m_ErrorMessage = Qing::ConvertErrorCodeToString(GetLastError());
+        m_ErrorMessage = Qing::GetLastErrorString(GetLastError());
         BoostLog::WriteError(L"Decrypt Header, read file, error = " + m_ErrorMessage);
         return false;
     }
