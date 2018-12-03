@@ -50,7 +50,7 @@ int MaxSubSum::MaxSubSumTwoCycle(const std::vector<int> &Array) const
 
 int MaxSubSum::MaxSubSumRecursive(const std::vector<int> &Array) const
 {
-    return MaxSubSumRec(Array, 0, Array.size() - 1);
+    return MaxSubSumRec(Array, 0, static_cast<int>(Array.size()) - 1);
 }
 
 int MaxSubSum::MaxSubSumSingleCycle(const std::vector<int> &Array) const

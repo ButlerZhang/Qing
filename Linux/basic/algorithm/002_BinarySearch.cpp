@@ -11,7 +11,7 @@ int BinarySearch::GetBinarySearch(const std::vector<int> &Array, int TargetValue
         std::vector<int>::size_type mid = (Left + Right) / 2;
         if (Array[mid] == TargetValue)
         {
-            return mid;
+            return static_cast<int>(mid);
         }
 
         if (Array[mid] > TargetValue)

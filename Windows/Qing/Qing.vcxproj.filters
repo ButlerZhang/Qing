@@ -152,6 +152,9 @@
     <ClInclude Include="SourceCode\Example\Primer\StringVector.h">
       <Filter>Example\Primer</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Standard\StandardShare.h">
+      <Filter>Standard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Example\DesignPatterns\AbstractFactory.cpp">
@@ -252,6 +255,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Example\Primer\IOExample.cpp">
       <Filter>Example\Primer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Standard\StandardShare.cpp">
+      <Filter>Standard</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

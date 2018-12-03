@@ -2,6 +2,7 @@
 #include "..\Boost\BoostLog.h"
 #include "..\Boost\BoostShare.h"
 #include "..\System\SystemShare.h"
+#include "..\Standard\StandardShare.h"
 
 #include <Shlwapi.h>
 #include <iostream>

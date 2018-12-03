@@ -44,6 +44,7 @@
     <ClInclude Include="SourceCode\Standard\NumericalConversion.h" />
     <ClInclude Include="SourceCode\Standard\PermutationCombination.h" />
     <ClInclude Include="SourceCode\Standard\RandomGenerator.h" />
+    <ClInclude Include="SourceCode\Standard\StandardShare.h" />
     <ClInclude Include="SourceCode\System\FileManager.h" />
     <ClInclude Include="SourceCode\System\IniFile.h" />
     <ClInclude Include="SourceCode\System\LocalComputer.h" />
@@ -80,6 +81,7 @@
     <ClCompile Include="SourceCode\Standard\HexString.cpp" />
     <ClCompile Include="SourceCode\Standard\NumericalConversion.cpp" />
     <ClCompile Include="SourceCode\Standard\RandomGenerator.cpp" />
+    <ClCompile Include="SourceCode\Standard\StandardShare.cpp" />
     <ClCompile Include="SourceCode\System\FileManager.cpp" />
     <ClCompile Include="SourceCode\System\IniFile.cpp" />
     <ClCompile Include="SourceCode\System\LocalComputer.cpp" />
