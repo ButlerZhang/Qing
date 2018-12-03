@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "Network\ClientNetwork.h"
-#include "..\..\Qing\HeaderFiles\BoostLog.h"
+#include "..\..\Qing\SourceCode\Boost\BoostLog.h"
 #include <iostream>
 #include <string>
 

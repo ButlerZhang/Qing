@@ -37,8 +37,8 @@
     <ClInclude Include="SourceCode\Example\DesignPatterns\Prototype.h" />
     <ClInclude Include="SourceCode\Example\DesignPatterns\SimpleFactory.h" />
     <ClInclude Include="SourceCode\Example\DesignPatterns\Singleton.h" />
-    <ClInclude Include="SourceCode\Example\IOExample.h" />
-    <ClInclude Include="SourceCode\Example\StringVector.h" />
+    <ClInclude Include="SourceCode\Example\Primer\IOExample.h" />
+    <ClInclude Include="SourceCode\Example\Primer\StringVector.h" />
     <ClInclude Include="SourceCode\QingBase.h" />
     <ClInclude Include="SourceCode\Standard\HexString.h" />
     <ClInclude Include="SourceCode\Standard\NumericalConversion.h" />
@@ -76,7 +76,7 @@
     <ClCompile Include="SourceCode\Example\DesignPatterns\Prototype.cpp" />
     <ClCompile Include="SourceCode\Example\DesignPatterns\SimpleFactory.cpp" />
     <ClCompile Include="SourceCode\Example\DesignPatterns\Singleton.cpp" />
-    <ClCompile Include="SourceCode\Example\IOExample.cpp" />
+    <ClCompile Include="SourceCode\Example\Primer\IOExample.cpp" />
     <ClCompile Include="SourceCode\Standard\HexString.cpp" />
     <ClCompile Include="SourceCode\Standard\NumericalConversion.cpp" />
     <ClCompile Include="SourceCode\Standard\RandomGenerator.cpp" />

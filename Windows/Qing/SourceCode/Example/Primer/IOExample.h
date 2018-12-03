@@ -1,5 +1,5 @@
 #pragma once
-#include "..\QingBase.h"
+#include "..\..\QingBase.h"
 
 QING_EXAMPLE_BEGIN
 

@@ -19,15 +19,6 @@
     <Filter Include="Reference\Qing">
       <UniqueIdentifier>{01631da3-939d-496f-ae53-277b76602323}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Qing\Include">
-      <UniqueIdentifier>{31f61ca0-7986-470e-9516-383315b3c331}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Reference\Qing\Include\DesignPatterns">
-      <UniqueIdentifier>{2b630ea3-b558-48e3-b5d4-5ee7a091f851}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Reference\Qing\Include\Example">
-      <UniqueIdentifier>{6dd51d53-f288-4a73-8f09-cd1ad346f902}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UnitTest">
       <UniqueIdentifier>{5f763ee5-6762-4a5f-b237-b8a9c5144e17}</UniqueIdentifier>
     </Filter>
@@ -36,6 +27,18 @@
     </Filter>
     <Filter Include="Reference\Basic\Algorithm">
       <UniqueIdentifier>{97a5ef51-bf29-4faf-96bf-1f88b84e9abb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Boost">
+      <UniqueIdentifier>{454b1b62-7daa-400f-b06c-270414261ea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Database">
+      <UniqueIdentifier>{d20affc6-3025-45f1-82af-f0469f15313c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\Standard">
+      <UniqueIdentifier>{6b920fe4-f54c-41f4-926e-9bc6ef1c7b4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Qing\System">
+      <UniqueIdentifier>{73b67a88-720a-494b-88c4-3092aef33628}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,84 +50,6 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\AbstractFactory.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Adapter.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Bridge.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Builder.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Decorator.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\FactoryMethod.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Prototype.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\SimpleFactory.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\DesignPatterns\Header\Singleton.h">
-      <Filter>Reference\Qing\Include\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\GBKandUTF8.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\RandomAdapter.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\Example\IOExample.h">
-      <Filter>Reference\Qing\Include\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingNetwork.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\IniFile.h">
-      <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
     <ClInclude Include="UnitTest\TestIniFile.h">
       <Filter>UnitTest</Filter>
@@ -143,6 +68,54 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Linux\basic\algorithm\AlgorithmTest.h">
       <Filter>Reference\Basic\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Boost\BoostFormat.h">
+      <Filter>Reference\Qing\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Boost\BoostLog.h">
+      <Filter>Reference\Qing\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Boost\BoostShare.h">
+      <Filter>Reference\Qing\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Database\MSSQLDatabase.h">
+      <Filter>Reference\Qing\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Database\MySQLDatabase.h">
+      <Filter>Reference\Qing\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Database\SQLiteDatabase.h">
+      <Filter>Reference\Qing\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Standard\HexString.h">
+      <Filter>Reference\Qing\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Standard\NumericalConversion.h">
+      <Filter>Reference\Qing\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Standard\PermutationCombination.h">
+      <Filter>Reference\Qing\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Standard\RandomGenerator.h">
+      <Filter>Reference\Qing\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\System\FileManager.h">
+      <Filter>Reference\Qing\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\System\IniFile.h">
+      <Filter>Reference\Qing\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\System\LocalComputer.h">
+      <Filter>Reference\Qing\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\System\Network.h">
+      <Filter>Reference\Qing\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\System\SingleProgram.h">
+      <Filter>Reference\Qing\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\System\SystemShare.h">
+      <Filter>Reference\Qing\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

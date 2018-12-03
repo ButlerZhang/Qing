@@ -1,6 +1,6 @@
 #include "ClientNetwork.h"
-#include "..\..\..\Qing\HeaderFiles\CommonFunction.h"
-#include "..\..\..\Qing\HeaderFiles\RandomGenerator.h"
+#include "..\..\..\Qing\SourceCode\System\SystemShare.h"
+#include "..\..\..\Qing\SourceCode\Standard\RandomGenerator.h"
 
 
 

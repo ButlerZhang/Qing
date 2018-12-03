@@ -16,9 +16,6 @@
     <Filter Include="Reference">
       <UniqueIdentifier>{4b0f046d-5d86-4a1a-a4c5-fc63181dc018}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Qing">
-      <UniqueIdentifier>{e2008958-8b0c-433a-bce8-68170a8761aa}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -38,57 +35,6 @@
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\BoostLog.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\CommonFunction.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\IniFile.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\MSSQLDatabase.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\MySQLDatabase.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h">
-      <Filter>Reference\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\SimpleEncrypt.h">
-      <Filter>Reference\Qing</Filter>
     </ClInclude>
     <ClInclude Include="FileDecryptDlg.h">
       <Filter>Header Files</Filter>

@@ -19,12 +19,6 @@
     <Filter Include="Reference">
       <UniqueIdentifier>{bdc9bd29-2f0f-4aba-9c73-ffbad16508df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Qing">
-      <UniqueIdentifier>{63a80908-631b-4a9b-84b1-2fc91c7ebf4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Reference\Qing\Include">
-      <UniqueIdentifier>{14e14d4b-18ac-47f8-b356-c69632728d94}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -38,45 +32,6 @@
     </ClInclude>
     <ClInclude Include="Network\ClientNetwork.h">
       <Filter>Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\Utility.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingLog.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingNetwork.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h">
-      <Filter>Reference\Qing\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h">
-      <Filter>Reference\Qing\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

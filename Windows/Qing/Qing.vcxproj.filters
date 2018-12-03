@@ -35,14 +35,11 @@
     <Filter Include="Reference\sqlite_3250200">
       <UniqueIdentifier>{ed52873b-5141-4f2b-9e5b-e4019b863d75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\Primer">
+      <UniqueIdentifier>{5e0bc56c-99a3-4966-9564-c79afc320012}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\Example\IOExample.h">
-      <Filter>Example</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Example\StringVector.h">
-      <Filter>Example</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Example\DesignPatterns\AbstractFactory.h">
       <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
@@ -149,11 +146,14 @@
     <ClInclude Include="SourceCode\System\SystemShare.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Example\Primer\IOExample.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Example\Primer\StringVector.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceCode\Example\IOExample.cpp">
-      <Filter>Example</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Example\DesignPatterns\AbstractFactory.cpp">
       <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
@@ -249,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\System\SystemShare.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Example\Primer\IOExample.cpp">
+      <Filter>Example\Primer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

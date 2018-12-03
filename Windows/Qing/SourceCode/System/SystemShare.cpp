@@ -125,11 +125,12 @@ std::wstring QING_DLL ConvertDoubleToString(double Value, int precision)
 
 std::wstring StringToWString(const std::string &String, int Codepage)
 {
+
     int nLen = MultiByteToWideChar(
         Codepage,               //标识了与多字节字符串关联的一个代码页值
         0,                      //允许进行额外的控制，会影响变音符号
         (LPCSTR)String.c_str(), //要转换的字符串
-        String.length(),        //要转换的字符串长度，如果传-1，函数可自行判断
+        -1,                     //要转换的字符串长度，如果传-1，函数可自行判断
         NULL,                   //转换的结果的缓冲区
         0);                     //缓冲区的大小，如果为零，函数不执行转换，返回字符数
 
@@ -140,8 +141,8 @@ std::wstring StringToWString(const std::string &String, int Codepage)
         Codepage,               //一般默认为CP_UTF8
         0,                      //一般不用
         (LPCSTR)String.c_str(), //源字符串
-        String.length(),        //源字符串长度
-        (LPWSTR)ResultWString.c_str(),   //结果缓冲区
+        static_cast<int>(String.length()), //源字符串长度
+        (LPWSTR)ResultWString.c_str(),     //结果缓冲区
         nLen);                  //由第一次调用获得的缓冲区大小
 
     return ResultWString;
@@ -163,12 +164,13 @@ std::string WStringToString(const std::wstring &WString, int Codepage)
 
     std::string ResultString;
     ResultString.resize(nLen + 1, '\0');
+    int WStringLength = static_cast<int>(WString.length()) +1;
 
     int nResult = WideCharToMultiByte(
         Codepage,                   //一般默认为CP_UTF8
         0,                          //一般不用
         (LPCWSTR)WString.c_str(),   //源字符串
-        WString.length() + 1,       //源字符串长度
+        WStringLength,              //源字符串长度
         (LPSTR)ResultString.c_str(),//结果缓冲区
         nLen + 1,                   //结果缓冲区大小
         NULL,                       //系统默认为问号

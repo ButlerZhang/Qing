@@ -199,23 +199,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Qing\HeaderFiles\BoostLog.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\CommonFunction.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\FileManager.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\HexString.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\IniFile.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\LocalComputer.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\MSSQLDatabase.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\MySQLDatabase.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\Network.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\NumericalConversion.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\PermutationCombination.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\ProgramDump.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\QingBase.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\RandomGenerator.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\SimpleEncrypt.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\SingleProgram.h" />
-    <ClInclude Include="..\..\Qing\HeaderFiles\SQLiteDatabase.h" />
     <ClInclude Include="EncryptDecrypt.h" />
     <ClInclude Include="EncryptDecryptDlg.h" />
     <ClInclude Include="FileDisguiseDlg.h" />

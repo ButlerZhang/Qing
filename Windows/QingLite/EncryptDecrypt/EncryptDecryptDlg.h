@@ -4,7 +4,7 @@
 #include <memory>
 #include "afxwin.h"
 #include "afxcmn.h"
-#include "..\..\Qing\HeaderFiles\SimpleEncrypt.h"
+#include "..\..\Qing\SourceCode\Tool\SimpleEncrypt.h"
 
 
 

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include "..\..\..\Qing\HeaderFiles\BoostLog.h"
-#include "..\..\..\Qing\HeaderFiles\CommonFunction.h"
-#include "..\..\..\Qing\HeaderFiles\MySQLDatabase.h"
-#include "..\..\..\Qing\HeaderFiles\MSSQLDatabase.h"
-#include "..\..\..\Qing\HeaderFiles\SQLiteDatabase.h"
+#include "..\..\..\Qing\SourceCode\Boost\BoostLog.h"
+#include "..\..\..\Qing\SourceCode\System\SystemShare.h"
+#include "..\..\..\Qing\SourceCode\Database\MySQLDatabase.h"
+#include "..\..\..\Qing\SourceCode\Database\MSSQLDatabase.h"
+#include "..\..\..\Qing\SourceCode\Database\SQLiteDatabase.h"
 
 
 
