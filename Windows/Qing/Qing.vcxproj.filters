@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -19,234 +11,244 @@
     <Filter Include="Example\DesignPatterns">
       <UniqueIdentifier>{384f6222-8226-4934-8516-a191364b8958}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Example\DesignPatterns\Header">
-      <UniqueIdentifier>{3fceb79d-e707-4e0c-8c93-4fac18949e23}</UniqueIdentifier>
+    <Filter Include="Boost">
+      <UniqueIdentifier>{8e2b9297-4b4e-4fa6-87a3-f998769fe247}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Example\DesignPatterns\Source">
-      <UniqueIdentifier>{d97444e6-8f08-4957-90e9-64e11ee61d9a}</UniqueIdentifier>
+    <Filter Include="Tool">
+      <UniqueIdentifier>{0981d227-579b-4980-9a5e-e5bd8c2d2f08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model">
-      <UniqueIdentifier>{9e9c58ac-70e7-407c-b2fd-a99d82c987ac}</UniqueIdentifier>
+    <Filter Include="System">
+      <UniqueIdentifier>{c0a47fc3-7c46-443d-8e56-bf22760d15d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\Network">
-      <UniqueIdentifier>{f29aff3d-82e0-49ed-8f19-6e3a8f99d9bb}</UniqueIdentifier>
+    <Filter Include="Database">
+      <UniqueIdentifier>{549cd2a2-665a-4e67-813d-15bda6c05d27}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\Database">
-      <UniqueIdentifier>{d965d7a5-33c7-4e86-a0cd-c26e23ce64e2}</UniqueIdentifier>
+    <Filter Include="Standard">
+      <UniqueIdentifier>{209f8c6e-0101-46e0-a02d-918a9b0808a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\Database\sqlite">
-      <UniqueIdentifier>{dc866d9a-b99a-46e1-9dde-fe62861a7107}</UniqueIdentifier>
+    <Filter Include="System\Network">
+      <UniqueIdentifier>{89750454-25ff-43a5-b49a-33e8534ec30d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{b1b6a081-4d40-4d38-bc9c-e3780d888560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\sqlite_3250200">
+      <UniqueIdentifier>{ed52873b-5141-4f2b-9e5b-e4019b863d75}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderFiles\QingBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\StringVector.h">
+    <ClInclude Include="SourceCode\Example\IOExample.h">
       <Filter>Example</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\FileManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\LocalComputer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\PermutationCombination.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\SingleProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\HexString.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\NumericalConversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\AbstractFactory.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\Adapter.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\Bridge.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\Builder.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\Decorator.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\FactoryMethod.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\Prototype.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\SimpleFactory.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\DesignPatterns\Header\Singleton.h">
-      <Filter>Example\DesignPatterns\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\RandomGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Example\IOExample.h">
+    <ClInclude Include="SourceCode\Example\StringVector.h">
       <Filter>Example</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\IOCPModel.h">
-      <Filter>Model\Network</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\AbstractFactory.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\ClientManager.h">
-      <Filter>Model\Network</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\Adapter.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\NetworkBase.h">
-      <Filter>Model\Network</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\Bridge.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\NetworkServer.h">
-      <Filter>Model\Network</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\Builder.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\NetworkClient.h">
-      <Filter>Model\Network</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\Decorator.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Network\NetworkEnvironment.h">
-      <Filter>Model\Network</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\FactoryMethod.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\IniFile.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\Prototype.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Database\Database.h">
-      <Filter>Model\Database</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\SimpleFactory.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\MySQLDatabase.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\Example\DesignPatterns\Singleton.h">
+      <Filter>Example\DesignPatterns</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\BoostLog.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\QingBase.h" />
+    <ClInclude Include="SourceCode\Boost\BoostFormat.h">
+      <Filter>Boost</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Network.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\Boost\BoostLog.h">
+      <Filter>Boost</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\CommonFunction.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\Tool\SimpleEncrypt.h">
+      <Filter>Tool</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\MSSQLDatabase.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\Database\Database.h">
+      <Filter>Database</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\SQLiteDatabase.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\Database\MSSQLDatabase.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Database\MySQLDatabase.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Database\SQLiteDatabase.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Standard\HexString.h">
+      <Filter>Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Standard\NumericalConversion.h">
+      <Filter>Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Standard\PermutationCombination.h">
+      <Filter>Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Standard\RandomGenerator.h">
+      <Filter>Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\FileManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\IniFile.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\LocalComputer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Network.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\SingleProgram.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Network\ClientManager.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Network\IOCPModel.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Network\NetworkBase.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Network\NetworkClient.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Network\NetworkEnvironment.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Network\NetworkServer.h">
+      <Filter>System\Network</Filter>
     </ClInclude>
     <ClInclude Include="Reference\sqlite_3250200\sqlite3.h">
-      <Filter>Model\Database\sqlite</Filter>
+      <Filter>Reference\sqlite_3250200</Filter>
     </ClInclude>
     <ClInclude Include="Reference\sqlite_3250200\sqlite3ext.h">
-      <Filter>Model\Database\sqlite</Filter>
+      <Filter>Reference\sqlite_3250200</Filter>
     </ClInclude>
-    <ClInclude Include="Model\BoostFormat.h">
-      <Filter>Model</Filter>
+    <ClInclude Include="SourceCode\Boost\BoostShare.h">
+      <Filter>Boost</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\SimpleEncrypt.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SourceCode\System\SystemShare.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceFiles\FileManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\LocalComputer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\HexString.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\NumericalConversion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\AbstractFactory.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\Adapter.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\Bridge.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\Builder.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\Decorator.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\FactoryMethod.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\Prototype.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\SimpleFactory.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\DesignPatterns\Source\Singleton.cpp">
-      <Filter>Example\DesignPatterns\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\RandomGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Example\IOExample.cpp">
+    <ClCompile Include="SourceCode\Example\IOExample.cpp">
       <Filter>Example</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\ClientManager.cpp">
-      <Filter>Model\Network</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\AbstractFactory.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\NetworkBase.cpp">
-      <Filter>Model\Network</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\Adapter.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\NetworkServer.cpp">
-      <Filter>Model\Network</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\Bridge.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\NetworkClient.cpp">
-      <Filter>Model\Network</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\Builder.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\IOCPModel.cpp">
-      <Filter>Model\Network</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\Decorator.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Network\NetworkEnvironment.cpp">
-      <Filter>Model\Network</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\FactoryMethod.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\IniFile.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\Prototype.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Database\Database.cpp">
-      <Filter>Model\Database</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\SimpleFactory.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\MySQLDatabase.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Example\DesignPatterns\Singleton.cpp">
+      <Filter>Example\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\BoostLog.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Boost\BoostLog.cpp">
+      <Filter>Boost</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\Network.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Tool\SimpleEncrypt.cpp">
+      <Filter>Tool</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\CommonFunction.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Database\Database.cpp">
+      <Filter>Database</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\MSSQLDatabase.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Database\MSSQLDatabase.cpp">
+      <Filter>Database</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\SQLiteDatabase.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Database\MySQLDatabase.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Database\SQLiteDatabase.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Standard\HexString.cpp">
+      <Filter>Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Standard\NumericalConversion.cpp">
+      <Filter>Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Standard\RandomGenerator.cpp">
+      <Filter>Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\FileManager.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\IniFile.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\LocalComputer.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Network.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Network\ClientManager.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Network\IOCPModel.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Network\NetworkBase.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Network\NetworkClient.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Network\NetworkEnvironment.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Network\NetworkServer.cpp">
+      <Filter>System\Network</Filter>
     </ClCompile>
     <ClCompile Include="Reference\sqlite_3250200\shell.c">
-      <Filter>Model\Database\sqlite</Filter>
+      <Filter>Reference\sqlite_3250200</Filter>
     </ClCompile>
     <ClCompile Include="Reference\sqlite_3250200\sqlite3.c">
-      <Filter>Model\Database\sqlite</Filter>
+      <Filter>Reference\sqlite_3250200</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\SimpleEncrypt.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SourceCode\Boost\BoostShare.cpp">
+      <Filter>Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\SystemShare.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
