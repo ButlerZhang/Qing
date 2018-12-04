@@ -9,8 +9,12 @@ QING_NAMESPACE_BEGIN
 
 
 std::wstring QING_DLL GetLastErrorString(DWORD LastErrorCode);
+
 std::wstring QING_DLL StringToWString(const std::string &String, int Codepage = CP_UTF8);
 std::string  QING_DLL WStringToString(const std::wstring &WString, int Codepage = CP_UTF8);
+
+void QING_DLL SplitCommandLine(std::vector<std::wstring> &CommandLineVector);
+void QING_DLL SplitEnvironment(std::vector<std::wstring> &EnvironmentVector);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,5 +1,6 @@
 #include "SystemShare.h"
 #include "..\Boost\BoostLog.h"
+#include "..\Standard\StandardShare.h"
 
 #include <cctype>
 #include <sstream>
@@ -9,12 +10,13 @@
 #include <functional>
 #include <tchar.h>
 #include <DbgHelp.h>
+#include <strsafe.h>
 
 QING_NAMESPACE_BEGIN
 
 
 
-std::wstring QING_DLL GetLastErrorString(DWORD LastErrorCode)
+std::wstring GetLastErrorString(DWORD LastErrorCode)
 {
     LPVOID lpMsgBuf;
     std::wstring ErrorString;
@@ -94,6 +96,42 @@ std::string  WStringToString(const std::wstring &WString, int Codepage)
         NULL);                      //通常传入NULL
 
     return ResultString;
+}
+
+void SplitCommandLine(std::vector<std::wstring> &CommandLineVector)
+{
+    int ArgsCount = 0;
+
+    //CommandLineToArgvW仅有Unicode版本
+    PWSTR *ppArgv = CommandLineToArgvW(GetCommandLineW(), &ArgsCount);
+
+    CommandLineVector.clear();
+    CommandLineVector.assign(ppArgv, ppArgv + ArgsCount);
+
+    HeapFree(GetProcessHeap(), 0, ppArgv);
+}
+
+void SplitEnvironment(std::vector<std::wstring>& EnvironmentVector)
+{
+    //获取环境变量有两种方法:
+    //(1)采用GetEnvironmentStrings函数;
+    //(2)CUI程序的main参数TCHAR* env[]。
+    PTSTR pEnvBlock = GetEnvironmentStrings();
+
+    PTSTR pszCurrent = pEnvBlock;
+    while (pszCurrent != NULL && *pszCurrent != TEXT('\0'))
+    {
+        EnvironmentVector.push_back(pszCurrent);
+
+        while (*pszCurrent != TEXT('\0'))
+        {
+            pszCurrent++;
+        }
+
+        pszCurrent++;
+    }
+
+    FreeEnvironmentStrings(pEnvBlock);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
