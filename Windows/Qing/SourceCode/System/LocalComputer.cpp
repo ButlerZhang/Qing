@@ -11,6 +11,7 @@
 #include <tlhelp32.h>
 #include <ATLComTime.h>
 #include <WS2tcpip.h>
+#include <ShlObj.h>
 
 QING_NAMESPACE_BEGIN
 
@@ -138,6 +139,34 @@ bool LocalComputer::StartProgram(const std::wstring &ProgramName) const
     return true;
 }
 
+bool LocalComputer::StartProgramEx(const std::wstring & ProgramName) const
+{
+    //Initialize the structure
+    SHELLEXECUTEINFO sei = { sizeof(SHELLEXECUTEINFO) };
+
+    //Ask for privileges elevation
+    sei.lpVerb = TEXT("runas");
+
+    //sei.lpFile = TEXT("cmd.exe");
+    sei.lpFile = ProgramName.c_str();
+    sei.nShow = SW_SHOWNORMAL;
+
+    if (!(ShellExecuteEx(&sei)))
+    {
+        DWORD dwStatus = GetLastError();
+        //if (dwStatus == ERROR_CANCELLED)
+        //{
+        //    //User refused to allow privileges elevation.
+        //}
+
+        const std::wstring &ErrorMessage = GetLastErrorString(dwStatus);
+        BoostLog::WriteError(BoostFormat(L"Start program fail, program name = %s, error = %s.", ProgramName.c_str(), ErrorMessage.c_str()));
+        return false;
+    }
+
+    return true;
+}
+
 bool LocalComputer::StartTouchScreenCalibration(HWND CurrentHWND) const
 {
     PVOID oldValue;
@@ -186,6 +215,9 @@ bool LocalComputer::KillProgram(const std::wstring & ProgramName) const
             HANDLE hProcess = ::OpenProcess(PROCESS_TERMINATE, FALSE, dwProcessID);
             ::TerminateProcess(hProcess, 0);
             CloseHandle(hProcess);
+
+            //TerminateProcess是异步函数，需要添加等待机制
+            //WaitForSingleObject(hProcess, INFINITE);
         }
     }
 
@@ -271,6 +303,49 @@ bool LocalComputer::GetMacAddress(std::string &MacAddress, const std::string &Ba
 
     delete pIPAdapterInfo;
     return !MacAddress.empty();
+}
+
+bool LocalComputer::GetProcessElevation(TOKEN_ELEVATION_TYPE * pElevationType, bool &IsAdmin) const
+{
+    HANDLE hToken = NULL;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
+    {
+        return false;
+    }
+
+    DWORD dwSize = 0;
+    BOOL *pIsAdmin = FALSE;
+    bool bGetResult = false;
+
+    //Retrieve elevation type information
+    if (GetTokenInformation(hToken, TokenElevationType, pElevationType, sizeof(TOKEN_ELEVATION_TYPE), &dwSize))
+    {
+        //Create the SID corresponding to the administrators group
+        BYTE AdminSIDArray[SECURITY_MAX_SID_SIZE];
+        dwSize = sizeof(AdminSIDArray);
+        CreateWellKnownSid(WinBuiltinAdministratorsSid, NULL, &AdminSIDArray, &dwSize);
+
+        if (*pElevationType == TokenElevationTypeLimited)
+        {
+            //Get handle to linked token(will have one if we are lua)
+            HANDLE hUnfiltereToken = NULL;
+            GetTokenInformation(hToken, TokenLinkedToken, (VOID*)&hUnfiltereToken, sizeof(HANDLE), &dwSize);
+
+            //Check if this original token contains admin SID
+            bGetResult = CheckTokenMembership(hUnfiltereToken, &AdminSIDArray, pIsAdmin) != FALSE;
+            CloseHandle(hUnfiltereToken);
+        }
+        else
+        {
+            *pIsAdmin = IsUserAnAdmin();
+            bGetResult = true;
+        }
+
+        IsAdmin = (*pIsAdmin != FALSE);
+    }
+
+    CloseHandle(hToken);
+    return bGetResult;
 }
 
 int LocalComputer::GetProcessorsCount() const
