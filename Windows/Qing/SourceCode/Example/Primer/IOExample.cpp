@@ -5,8 +5,6 @@
 #include <fstream>
 #include <string>
 
-QING_EXAMPLE_BEGIN
-
 
 
 IOExample::IOExample()
@@ -170,5 +168,3 @@ int IOExample::TestSeekTell()
     inOut << "\n";
     return 0;
 }
-
-QING_EXAMPLE_END

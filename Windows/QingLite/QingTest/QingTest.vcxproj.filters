@@ -40,6 +40,9 @@
     <Filter Include="Reference\Qing\System">
       <UniqueIdentifier>{73b67a88-720a-494b-88c4-3092aef33628}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference\Qing\Example">
+      <UniqueIdentifier>{19bcc799-4cf3-4afc-86d9-f95fea190024}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -116,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Qing\SourceCode\System\SystemShare.h">
       <Filter>Reference\Qing\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Qing\SourceCode\Example\Windows\Windows.h">
+      <Filter>Reference\Qing\Example</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

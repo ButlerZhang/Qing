@@ -38,6 +38,9 @@
     <Filter Include="Example\Primer">
       <UniqueIdentifier>{5e0bc56c-99a3-4966-9564-c79afc320012}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\Windows">
+      <UniqueIdentifier>{ac2c93f2-573e-4ab3-a57f-b6dfec1c4603}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Example\DesignPatterns\AbstractFactory.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Standard\StandardShare.h">
       <Filter>Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Example\Windows\WindowsCoreProgramming.h">
+      <Filter>Example\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

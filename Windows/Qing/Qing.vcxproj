@@ -39,6 +39,7 @@
     <ClInclude Include="SourceCode\Example\DesignPatterns\Singleton.h" />
     <ClInclude Include="SourceCode\Example\Primer\IOExample.h" />
     <ClInclude Include="SourceCode\Example\Primer\StringVector.h" />
+    <ClInclude Include="SourceCode\Example\Windows\WindowsCoreProgramming.h" />
     <ClInclude Include="SourceCode\QingBase.h" />
     <ClInclude Include="SourceCode\Standard\HexString.h" />
     <ClInclude Include="SourceCode\Standard\NumericalConversion.h" />

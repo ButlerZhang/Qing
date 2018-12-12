@@ -1,11 +1,8 @@
 #pragma once
-#include "..\..\QingBase.h"
-
-QING_EXAMPLE_BEGIN
 
 
 
-class QING_DLL IOExample
+class IOExample
 {
 public:
 
@@ -30,5 +27,3 @@ public:
     //seek and tell
     int TestSeekTell();
 };
-
-QING_EXAMPLE_END

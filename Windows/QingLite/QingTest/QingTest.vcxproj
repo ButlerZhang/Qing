@@ -173,6 +173,7 @@
     <ClInclude Include="..\..\Qing\SourceCode\Database\MSSQLDatabase.h" />
     <ClInclude Include="..\..\Qing\SourceCode\Database\MySQLDatabase.h" />
     <ClInclude Include="..\..\Qing\SourceCode\Database\SQLiteDatabase.h" />
+    <ClInclude Include="..\..\Qing\SourceCode\Example\Windows\Windows.h" />
     <ClInclude Include="..\..\Qing\SourceCode\Standard\HexString.h" />
     <ClInclude Include="..\..\Qing\SourceCode\Standard\NumericalConversion.h" />
     <ClInclude Include="..\..\Qing\SourceCode\Standard\PermutationCombination.h" />
