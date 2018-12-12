@@ -22,6 +22,7 @@ void TestAlgorithm()
 	//TestBinarySearch();
 	//TestGreatestCommonDivisor();
 	//TestPowRecursive();
+	TestVectorLite();
 }
 
 void TestUNIX()
@@ -31,6 +32,6 @@ void TestUNIX()
 	//TestListFileName();
 	//TestReadToWriteNotBufferIO();
 	//TestReadToWriteStandardIO();	
-	TestExecuteCommand();
+	//TestExecuteCommand();
 	//TestHowToUseErrno();
 }

@@ -2,6 +2,7 @@
 #include "001_MaxSubSum.h"
 #include "002_BinarySearch.h"
 #include "003_CommonMath.h"
+#include "004_VectorLite.h"
 
 #include <iostream>
 #include <string>
@@ -65,4 +66,20 @@ void TestPowRecursive()
     CommonMath TestObject;
     std::cout << TestObject.PowRecursive(2, 10) << std::endl;
     std::cout << TestObject.PowRecursive(3, 2) << std::endl;
+}
+
+void TestVectorLite()
+{
+    TestOutputMessage Test("Vector Lite");
+    VectorLite<int> TestObject(10);
+
+    for(int count = 0; count < 10; count++)
+    {
+        TestObject.push_back(count);
+    }
+
+    for(int Index = 0; Index < TestObject.size(); Index++)
+    {
+        std::cout << TestObject[Index] << std::endl;
+    }
 }
