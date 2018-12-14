@@ -161,6 +161,9 @@
     <ClInclude Include="SourceCode\Example\Windows\WindowsCoreProgramming.h">
       <Filter>Example\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\System\SystemTime.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Example\DesignPatterns\AbstractFactory.cpp">
@@ -264,6 +267,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Standard\StandardShare.cpp">
       <Filter>Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\SystemTime.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

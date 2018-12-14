@@ -2,6 +2,7 @@
 #include <tchar.h>
 #include <strsafe.h>
 #include <Windows.h>
+#include <TlHelp32.h>
 
 
 
@@ -97,4 +98,34 @@ void StartRestrictedProcess()
     //Clean up properly
     CloseHandle(pi.hProcess);
     CloseHandle(hjob);
+}
+
+
+
+void SuspendProcess(DWORD dwProcessID, BOOL fSuspend)
+{
+    //Get the list of threads in the system.
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, dwProcessID);
+    if (hSnapshot != INVALID_HANDLE_VALUE)
+    {
+        //Walk the list of threas.
+        THREADENTRY32 te = { sizeof(te) };
+        for (BOOL fOK = Thread32First(hSnapshot, &te); fOK; fOK = Thread32Next(hSnapshot, &te))
+        {
+            //Is this tread in the desired process?
+            if (te.th32OwnerProcessID == dwProcessID)
+            {
+                //Attempt to convert the thread ID into a handle
+                HANDLE hThread = OpenThread(THREAD_SUSPEND_RESUME, FALSE, te.th32ThreadID);
+                if (hThread != NULL)
+                {
+                    //Suspend or resume the thread
+                    fSuspend ? SuspendThread(hThread) : ResumeThread(hThread);
+                }
+
+                CloseHandle(hThread);
+            }
+        }
+        CloseHandle(hSnapshot);
+    }
 }
