@@ -2,6 +2,10 @@
 
 QING_NAMESPACE_BEGIN
 
+unsigned long TestTimeGetTime()
+{
+    return timeGetTime();
+}
 
 
 __int64 TimeGetTime()

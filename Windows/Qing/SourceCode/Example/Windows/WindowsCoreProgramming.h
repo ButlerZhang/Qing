@@ -3,6 +3,7 @@
 #include <strsafe.h>
 #include <Windows.h>
 #include <TlHelp32.h>
+#include <iostream>
 
 
 
@@ -128,4 +129,47 @@ void SuspendProcess(DWORD dwProcessID, BOOL fSuspend)
         }
         CloseHandle(hSnapshot);
     }
+}
+
+
+
+void AlignExample()
+{
+    struct CUSTINFO_1 {
+        DWORD   dwCustomerID;     //mostly read-only
+        int     nBalanceDue;      //read-write
+        wchar_t szName[100];      //mostly read-only
+        FILETIME ftLastOrderDate; //read-write
+    };
+
+    struct CUSTINFO_2 {
+        DWORD   dwCustomerID;     //mostly read-only
+        wchar_t szName[100];      //mostly read-only
+
+        int     nBalanceDue;      //read-write
+        FILETIME ftLastOrderDate; //read-write
+    };
+
+    //调整对齐后:
+#define CACHE_ALIGN 64
+
+    //Force each structure to be in a different cache line
+    struct __declspec(align(CACHE_ALIGN)) CUSTINFO_3 {
+        DWORD   dwCustomerID;     //mostly read-only
+        wchar_t szName[100];      //mostly read-only
+
+                                  //Force the following members to be in a difference cache line
+        int     nBalanceDue;      //read-write
+        FILETIME ftLastOrderDate; //read-write
+    };
+
+    std::cout << "char = " << sizeof(char) << std::endl;
+    std::cout << "wchar_t = " << sizeof(wchar_t) << std::endl;
+    std::cout << "DWORD = " << sizeof(DWORD) << std::endl;
+    std::cout << "int = " << sizeof(int) << std::endl;
+    std::cout << "FILETIME = " << sizeof(FILETIME) << std::endl << std::endl;
+
+    std::cout << "CUSTINFO_1 = " << sizeof(CUSTINFO_1) << std::endl;
+    std::cout << "CUSTINFO_2 = " << sizeof(CUSTINFO_2) << std::endl;
+    std::cout << "CUSTINFO_3 = " << sizeof(CUSTINFO_3) << std::endl << std::endl;
 }

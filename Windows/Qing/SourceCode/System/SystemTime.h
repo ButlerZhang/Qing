@@ -5,6 +5,9 @@
 QING_NAMESPACE_BEGIN
 
 
+unsigned long QING_DLL TestTimeGetTime();
+
+
 
 class QING_DLL ElapsedTime
 {

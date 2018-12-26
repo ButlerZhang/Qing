@@ -4,21 +4,24 @@
 
 #include "stdafx.h"
 #include "..\..\Qing\SourceCode\System\SystemTime.h"
+#include "..\..\Qing\SourceCode\Example\Windows\WindowsCoreProgramming.h"
 #include <iostream>
 
 
 int main()
 {
-    Qing::ElapsedTime TimeWatch;
+    //Qing::ElapsedTime TimeWatch;
 
-    Sleep(10000);
-    __int64 Elapsed = TimeWatch.Now();
-    std::cout << "Elapsed = " << Elapsed << " ms" << std::endl;
+    //Sleep(10000);
+    //__int64 Elapsed = TimeWatch.Now();
+    //std::cout << "Elapsed = " << Elapsed << " ms" << std::endl;
 
-    TimeWatch.Start();
-    Sleep(12345);
-    Elapsed = TimeWatch.Now();
-    std::cout << "Elapsed = " << Elapsed << " ms" << std::endl;
+    //TimeWatch.Start();
+    //Sleep(12345);
+    //Elapsed = TimeWatch.Now();
+    //std::cout << "Elapsed = " << Elapsed << " ms" << std::endl;
+
+    AlignExample();
 
     system("pause");
     return 0;
