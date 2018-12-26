@@ -164,6 +164,9 @@
     <ClInclude Include="SourceCode\System\SystemTime.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\System\Synchronization.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Example\DesignPatterns\AbstractFactory.cpp">
@@ -269,6 +272,9 @@
       <Filter>Standard</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\SystemTime.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Synchronization.cpp">
       <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>

@@ -57,6 +57,7 @@
     <ClInclude Include="SourceCode\System\Network\NetworkEnvironment.h" />
     <ClInclude Include="SourceCode\System\Network\NetworkServer.h" />
     <ClInclude Include="SourceCode\System\SingleProgram.h" />
+    <ClInclude Include="SourceCode\System\Synchronization.h" />
     <ClInclude Include="SourceCode\System\SystemShare.h" />
     <ClInclude Include="SourceCode\System\SystemTime.h" />
     <ClInclude Include="SourceCode\Tool\SimpleEncrypt.h" />
@@ -94,6 +95,7 @@
     <ClCompile Include="SourceCode\System\Network\NetworkClient.cpp" />
     <ClCompile Include="SourceCode\System\Network\NetworkEnvironment.cpp" />
     <ClCompile Include="SourceCode\System\Network\NetworkServer.cpp" />
+    <ClCompile Include="SourceCode\System\Synchronization.cpp" />
     <ClCompile Include="SourceCode\System\SystemShare.cpp" />
     <ClCompile Include="SourceCode\System\SystemTime.cpp" />
     <ClCompile Include="SourceCode\Tool\SimpleEncrypt.cpp" />
