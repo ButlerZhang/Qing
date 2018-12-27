@@ -87,4 +87,41 @@ bool CriticalSection::TryLock() const
     return (::TryEnterCriticalSection(&m_Section) == TRUE);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+
+Event::Event(bool IsManualReset, bool InitialState, const TCHAR *Name, PSECURITY_ATTRIBUTES psa)
+{
+    m_hEvent = ::CreateEvent(psa, IsManualReset, InitialState, Name);
+}
+
+Event::~Event()
+{
+    CloseHandle(m_hEvent);
+    m_hEvent = INVALID_HANDLE_VALUE;
+}
+
+bool Event::SetEvent()
+{
+    if (m_hEvent != INVALID_HANDLE_VALUE)
+    {
+        //Set trigger state
+        return ::SetEvent(m_hEvent) == TRUE;
+    }
+
+    return false;
+}
+
+bool Event::ResetEvent()
+{
+    if (m_hEvent != INVALID_HANDLE_VALUE)
+    {
+        //Set untrigger state
+        return ::ResetEvent(m_hEvent) == TRUE;
+    }
+
+    return false;
+}
+
 QING_NAMESPACE_END

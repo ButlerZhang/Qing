@@ -43,4 +43,21 @@ private:
     mutable CRITICAL_SECTION m_Section;
 };
 
+
+
+class QING_DLL Event
+{
+public:
+
+    Event(bool IsManualReset, bool InitialState, const TCHAR *Name = NULL, PSECURITY_ATTRIBUTES psa = NULL);
+    ~Event();
+
+    bool SetEvent();
+    bool ResetEvent();
+
+private:
+
+    HANDLE m_hEvent;
+};
+
 QING_NAMESPACE_END
