@@ -41,6 +41,9 @@
     <Filter Include="Example\Windows">
       <UniqueIdentifier>{ac2c93f2-573e-4ab3-a57f-b6dfec1c4603}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\Effective">
+      <UniqueIdentifier>{1436831b-6760-49bd-aaae-23fd82868c89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\Example\DesignPatterns\AbstractFactory.h">

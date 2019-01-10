@@ -173,3 +173,106 @@ void AlignExample()
     std::cout << "CUSTINFO_2 = " << sizeof(CUSTINFO_2) << std::endl;
     std::cout << "CUSTINFO_3 = " << sizeof(CUSTINFO_3) << std::endl << std::endl;
 }
+
+
+
+void SetTimer1()
+{
+    //First signaling
+    SYSTEMTIME st;
+    st.wYear = 2018;
+    st.wMonth = 1;
+    st.wDayOfWeek = 0;
+    st.wDay = 1;
+    st.wHour = 1;
+    st.wMinute = 0;
+    st.wSecond = 0;
+    st.wMilliseconds = 0;
+
+    FILETIME ftLocal;
+    SystemTimeToFileTime(&st, &ftLocal);
+
+    //Convert local time to UTC time
+    FILETIME ftUTC;
+    LocalFileTimeToFileTime(&ftLocal, &ftUTC);
+
+    //Convert FILETIME to LARGE_INTEGER because of different alignment
+    LARGE_INTEGER liUTC;
+    liUTC.LowPart = ftUTC.dwLowDateTime;
+    liUTC.HighPart = ftUTC.dwHighDateTime;
+
+    //Create an auto-reset timer
+    HANDLE hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
+
+    //Set timer
+    SetWaitableTimer(hTimer, &liUTC, 6 * 60 * 60 * 1000, NULL, NULL, FALSE);
+}
+
+void SetTimer2()
+{
+    //Timer unit is 100 nanoseconds.
+    const int nTimerUnitsPerSecond = 10000000;
+
+    //Set the timer to go off 5 seoncds after calling SetWaitableTimer.
+    //Negate the time so that SetWaitableTimer knows we want 
+    //relative time instead of absolute time.
+    LARGE_INTEGER li;
+    li.QuadPart = -(5 * nTimerUnitsPerSecond);
+
+    //Set timer
+    HANDLE hTimer = ::CreateWaitableTimer(NULL, FALSE, NULL);
+    SetWaitableTimer(hTimer, &li, 6 * 60 * 60 * 1000, NULL, NULL, FALSE);
+}
+
+
+
+HANDLE CreateNewCompletionPort(DWORD dwNumberOfConcurrentThreads)
+{
+    //1.创建完成端口时前三个参数固定
+    //2.dwNumberOfConcurrentThreads表示同一时间最多能有多少条线程处于
+    //可运行状态，传入0表示默认使用CPU数量
+    return (CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0,
+        dwNumberOfConcurrentThreads));
+}
+
+BOOL AssociateDeviceWithCompletionPort(
+    HANDLE hCompletionPort, HANDLE hDevice, DWORD dwCompletionKey)
+{
+    HANDLE h = CreateIoCompletionPort(
+        hDevice,            //设备句柄（文件、套接字、邮件槽、管道等）
+        hCompletionPort,    //已经存在的完成端口（CreateNewCompletionPort创建）
+        dwCompletionKey,    //完成键，传给处理函数的参数，操作系统不关心这个值
+        0);                 //同一时间可运行线程数量，绑定时忽略
+    return (h == hCompletionPort);
+}
+
+void PrcessGetQueuedCompletionStatusReturn()
+{
+    HANDLE hIOCP;
+    DWORD dwNumBytes;
+    ULONG_PTR CompletionKey;
+    OVERLAPPED *pOverlapped;
+
+    BOOL bOK = GetQueuedCompletionStatus(hIOCP,
+        &dwNumBytes, &CompletionKey, &pOverlapped, 1000);
+    DWORD dwError = GetLastError();
+
+    if (bOK) {
+        //Process a successfully completed IO request
+    }
+    else {
+        if (pOverlapped != NULL) {
+            //Process a failed completed IO request
+            //dwError contains the reason for failure
+        }
+        else {
+            if (dwError == WAIT_TIMEOUT) {
+                //Time-out while waitting for completed IO entry
+            }
+            else {
+                //Bad call to GetQueuedCompletionStatus
+                //dwError contains the reason for the bad call
+            }
+        }
+    }
+}

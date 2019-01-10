@@ -60,4 +60,22 @@ private:
     HANDLE m_hEvent;
 };
 
+
+
+class QING_DLL Semaphore
+{
+public:
+
+    Semaphore(long InitialCount, long MaxCount, const TCHAR *Name = NULL, PSECURITY_ATTRIBUTES psa = NULL);
+    ~Semaphore();
+
+    virtual bool Lock() const;
+    virtual bool UnLock() const;
+    bool UnLock(long ReleaseCount, long *PrevReleaseCount = 0) const;
+
+private:
+
+    HANDLE m_hSemaphore;
+};
+
 QING_NAMESPACE_END

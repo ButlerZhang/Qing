@@ -124,4 +124,50 @@ bool Event::ResetEvent()
     return false;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+
+Semaphore::Semaphore(long InitialCount, long MaxCount, const TCHAR * Name, PSECURITY_ATTRIBUTES psa)
+{
+    if (MaxCount <= 0)
+    {
+        MaxCount = 1;
+    }
+
+    if (InitialCount <= 0)
+    {
+        InitialCount = 1;
+    }
+
+    if (InitialCount > MaxCount)
+    {
+        InitialCount = MaxCount;
+    }
+
+    m_hSemaphore = ::CreateSemaphore(psa, InitialCount, MaxCount, Name);
+}
+
+Semaphore::~Semaphore()
+{
+    CloseHandle(m_hSemaphore);
+    m_hSemaphore = INVALID_HANDLE_VALUE;
+}
+
+bool Semaphore::Lock() const
+{
+    DWORD Ret = ::WaitForSingleObject(m_hSemaphore, INFINITE);
+    return (Ret == WAIT_OBJECT_0 || Ret == WAIT_ABANDONED);
+}
+
+bool Semaphore::UnLock() const
+{
+    return UnLock(1, NULL);
+}
+
+bool Semaphore::UnLock(long ReleaseCount, long * PrevReleaseCount) const
+{
+    return ::ReleaseSemaphore(m_hSemaphore, ReleaseCount, PrevReleaseCount) == TRUE;
+}
+
 QING_NAMESPACE_END
