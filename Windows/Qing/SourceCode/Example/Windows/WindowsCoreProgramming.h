@@ -276,3 +276,141 @@ void PrcessGetQueuedCompletionStatusReturn()
         }
     }
 }
+
+
+BOOL Funcarama1() {
+    HANDLE hFile = INVALID_HANDLE_VALUE;
+    PVOID pvBuf = NULL;
+    DWORD dwNumBytesRead;
+    BOOL bOK;
+
+    hFile = CreateFile(TEXT("SomeData.dat"), GENERIC_READ,
+        FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+    if (hFile == INVALID_HANDLE_VALUE){
+        return (FALSE);
+    }
+
+    SIZE_T stSize = 1024;
+    pvBuf = VirtualAlloc(NULL, stSize, MEM_COMMIT, PAGE_READWRITE);
+    if (pvBuf == NULL) {
+        CloseHandle(hFile);
+        return (FALSE);
+    }
+
+    bOK = ReadFile(hFile, pvBuf, stSize, &dwNumBytesRead, NULL);
+    if (!bOK || (dwNumBytesRead == 0)) {
+        VirtualFree(pvBuf, stSize, MEM_RELEASE | MEM_DECOMMIT);
+        CloseHandle(hFile);
+        return (FALSE);
+    }
+
+    //TODO
+
+    //Clean up all the resources.
+    VirtualFree(pvBuf, stSize, MEM_RELEASE | MEM_DECOMMIT);
+    CloseHandle(hFile);
+    return (TRUE);
+}
+
+BOOL Funcarama2() {
+    HANDLE hFile = INVALID_HANDLE_VALUE;
+    PVOID pvBuf = NULL;
+    DWORD dwNumBytesRead;
+    BOOL bOK, bSuccess = FALSE;
+
+    hFile = CreateFile(TEXT("SomeData.dat"), GENERIC_READ,
+        FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+
+    if (hFile != INVALID_HANDLE_VALUE) {
+        SIZE_T stSize = 1024;
+        pvBuf = VirtualAlloc(NULL, stSize, MEM_COMMIT, PAGE_READWRITE);
+
+        if (pvBuf != NULL) {
+            bOK = ReadFile(hFile, pvBuf, stSize, &dwNumBytesRead, NULL);
+            if (bOK && (dwNumBytesRead != 0)) {
+                //TODO
+                bSuccess = TRUE;
+            }
+
+            VirtualFree(pvBuf, stSize, MEM_RELEASE | MEM_DECOMMIT);
+        }
+
+        CloseHandle(hFile);
+    }
+
+    return (bSuccess);
+}
+
+BOOL Funcarama3() {
+    //IMPORTANT: Initialize all variables to assume failure.
+    HANDLE hFile = INVALID_HANDLE_VALUE;
+    PVOID pvBuf = NULL;
+    SIZE_T stSize = 1024;
+
+    __try {
+        DWORD dwNumBytesRead;
+        BOOL bOK;
+
+        hFile = CreateFile(TEXT("SomeData.dat"), GENERIC_READ,
+            FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+        if (hFile == INVALID_HANDLE_VALUE) {
+            return (FALSE);
+        }
+
+        pvBuf = VirtualAlloc(NULL, stSize, MEM_COMMIT, PAGE_READWRITE);
+        if (pvBuf == NULL) {
+            return (FALSE);
+        }
+
+        bOK = ReadFile(hFile, pvBuf, stSize, &dwNumBytesRead, NULL);
+        if (!bOK || (dwNumBytesRead == 0)) {
+            return (FALSE);
+        }
+
+        //TODO
+    }
+    __finally {
+        //Clean up all the resources.
+        if(pvBuf != NULL)
+            VirtualFree(pvBuf, stSize, MEM_RELEASE | MEM_DECOMMIT);
+        if (hFile != INVALID_HANDLE_VALUE)
+            CloseHandle(hFile);
+    }
+
+    return (TRUE);
+}
+
+BOOL Funcarama4() {
+    //IMPORTANT: Initialize all variables to assume failure.
+    HANDLE hFile = INVALID_HANDLE_VALUE;
+    PVOID pvBuf = NULL;
+    BOOL bFunctionOK = FALSE;
+    SIZE_T stSize = 1024;
+
+    __try {
+        DWORD dwNumBytesRead;
+        BOOL bOK;
+
+        hFile = CreateFile(TEXT("SomeData.dat"), GENERIC_READ,
+            FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+        if (hFile == INVALID_HANDLE_VALUE) __leave;
+
+        pvBuf = VirtualAlloc(NULL, stSize, MEM_COMMIT, PAGE_READWRITE);
+        if (pvBuf == NULL) __leave;
+
+        bOK = ReadFile(hFile, pvBuf, stSize, &dwNumBytesRead, NULL);
+        if (!bOK || (dwNumBytesRead == 0)) __leave;
+
+        //TODO
+        bFunctionOK = TRUE;
+    }
+    __finally {
+        //Clean up all the resources.
+        if (pvBuf != NULL)
+            VirtualFree(pvBuf, stSize, MEM_RELEASE | MEM_DECOMMIT);
+        if (hFile != INVALID_HANDLE_VALUE)
+            CloseHandle(hFile);
+    }
+
+    return (bFunctionOK);
+}

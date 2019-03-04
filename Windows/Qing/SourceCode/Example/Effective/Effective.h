@@ -1,5 +1,12 @@
 #pragma once
+#include "../../QingBase.h"
+
 #include <string>
+#include <new>
+
+#pragma warning( disable : 4290 )
+
+QING_EXAMPLE_BEGIN
 
 //////////////////////////////////////////////////////////////////////////////
 //条款03：尽量使用const。
@@ -27,3 +34,84 @@ public:
 private:
     std::string text;
 };
+
+//////////////////////////////////////////////////////////////////////////////
+//条款06：若不想使用编译器自动生成的函数就该明确拒绝。
+//示例代码：定义一个基类，将拷贝函数和赋值操作符都声明为private，如此一来，即使是
+//         member函数或friend函数，都无法拷贝对象了。可以使用boost::noncopyable。
+//////////////////////////////////////////////////////////////////////////////
+class Uncopyable
+{
+protected:
+    Uncopyable() {}
+    ~Uncopyable() {}
+private:
+    Uncopyable(const Uncopyable&);
+    Uncopyable& operator=(const Uncopyable&);
+};
+
+class UncopyableDerived : private Uncopyable
+{
+    //TODO
+};
+
+//////////////////////////////////////////////////////////////////////////////
+//条款52：写了placement new也要写placement delete。
+//示例代码：建立一个基类，内含所有正确形式的new和delete。
+//////////////////////////////////////////////////////////////////////////////
+class StandardNewDeleteForms
+{
+public:
+    //normal new/delete
+    static void* operator new(std::size_t size) throw(std::bad_alloc)
+    {
+        return ::operator new(size);
+    }
+
+    static void operator delete(void* pMemory) throw()
+    {
+        ::operator delete(pMemory);
+    }
+
+    //placement new/delete
+    static void* operator new(std::size_t size, void* ptr) throw()
+    {
+        return ::operator new(size, ptr);
+    }
+
+    static void operator delete(void* pMemory, void* ptr) throw()
+    {
+        ::operator delete(pMemory, ptr);
+    }
+
+    //nothrow new/delete
+    static void* operator new(std::size_t size, const std::nothrow_t& nt) throw()
+    {
+        return ::operator new(size, nt);
+    }
+
+    static void operator delete(void* pMemory, const std::nothrow_t&) throw()
+    {
+        ::operator delete(pMemory);
+    }
+};
+
+class MyWidget : public StandardNewDeleteForms    //继承标准形式
+{
+public:
+    //让这些形式可见
+    using StandardNewDeleteForms::operator new;
+    using StandardNewDeleteForms::operator delete;
+
+    static void* operator new(std::size_t size, std::ostream& logStream) throw(std::bad_alloc)  //添加一个自定义的placement new
+    {
+        //TODO
+    }
+
+    static void operator delete(void* pMemory, std::ostream& logStream) throw()        //添加一个自定义的placement delete
+    {
+        //TODO
+    }
+};
+
+QING_EXAMPLE_END

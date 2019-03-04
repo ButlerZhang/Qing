@@ -37,6 +37,7 @@
     <ClInclude Include="SourceCode\Example\DesignPatterns\Prototype.h" />
     <ClInclude Include="SourceCode\Example\DesignPatterns\SimpleFactory.h" />
     <ClInclude Include="SourceCode\Example\DesignPatterns\Singleton.h" />
+    <ClInclude Include="SourceCode\Example\Effective\Effective.h" />
     <ClInclude Include="SourceCode\Example\Primer\IOExample.h" />
     <ClInclude Include="SourceCode\Example\Primer\StringVector.h" />
     <ClInclude Include="SourceCode\Example\Windows\WindowsCoreProgramming.h" />

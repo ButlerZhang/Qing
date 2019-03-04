@@ -170,6 +170,9 @@
     <ClInclude Include="SourceCode\System\Synchronization.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Example\Effective\Effective.h">
+      <Filter>Example\Effective</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Example\DesignPatterns\AbstractFactory.cpp">
