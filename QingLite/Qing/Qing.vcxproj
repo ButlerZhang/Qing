@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3.h" />
+    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h" />
+    <ClInclude Include="SourceCode\Boost\BoostFormat.h" />
+    <ClInclude Include="SourceCode\Boost\BoostLog.h" />
+    <ClInclude Include="SourceCode\Boost\BoostShare.h" />
+    <ClInclude Include="SourceCode\Database\Database.h" />
+    <ClInclude Include="SourceCode\Database\MSSQLDatabase.h" />
+    <ClInclude Include="SourceCode\Database\MySQLDatabase.h" />
+    <ClInclude Include="SourceCode\Database\SQLiteDatabase.h" />
+    <ClInclude Include="SourceCode\Example\Effective\Effective.h" />
+    <ClInclude Include="SourceCode\Example\Primer\IOExample.h" />
+    <ClInclude Include="SourceCode\Example\Primer\StringVector.h" />
+    <ClInclude Include="SourceCode\Example\Windows\WindowsCoreProgramming.h" />
+    <ClInclude Include="SourceCode\QingBase.h" />
+    <ClInclude Include="SourceCode\Standard\HexString.h" />
+    <ClInclude Include="SourceCode\Standard\NumericalConversion.h" />
+    <ClInclude Include="SourceCode\Standard\PermutationCombination.h" />
+    <ClInclude Include="SourceCode\Standard\RandomGenerator.h" />
+    <ClInclude Include="SourceCode\Standard\StandardShare.h" />
+    <ClInclude Include="SourceCode\System\FileManager.h" />
+    <ClInclude Include="SourceCode\System\IniFile.h" />
+    <ClInclude Include="SourceCode\System\LocalComputer.h" />
+    <ClInclude Include="SourceCode\System\Network.h" />
+    <ClInclude Include="SourceCode\System\Network\ClientManager.h" />
+    <ClInclude Include="SourceCode\System\Network\IOCPModel.h" />
+    <ClInclude Include="SourceCode\System\Network\NetworkBase.h" />
+    <ClInclude Include="SourceCode\System\Network\NetworkClient.h" />
+    <ClInclude Include="SourceCode\System\Network\NetworkEnvironment.h" />
+    <ClInclude Include="SourceCode\System\Network\NetworkServer.h" />
+    <ClInclude Include="SourceCode\System\SingleProgram.h" />
+    <ClInclude Include="SourceCode\System\Synchronization.h" />
+    <ClInclude Include="SourceCode\System\SystemShare.h" />
+    <ClInclude Include="SourceCode\System\SystemTime.h" />
+    <ClInclude Include="SourceCode\Tool\SimpleEncrypt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\OpenSource\sqlite_3250200\shell.c" />
+    <ClCompile Include="..\..\OpenSource\sqlite_3250200\sqlite3.c" />
+    <ClCompile Include="SourceCode\Boost\BoostLog.cpp" />
+    <ClCompile Include="SourceCode\Boost\BoostShare.cpp" />
+    <ClCompile Include="SourceCode\Database\Database.cpp" />
+    <ClCompile Include="SourceCode\Database\MSSQLDatabase.cpp" />
+    <ClCompile Include="SourceCode\Database\MySQLDatabase.cpp" />
+    <ClCompile Include="SourceCode\Database\SQLiteDatabase.cpp" />
+    <ClCompile Include="SourceCode\Example\Primer\IOExample.cpp" />
+    <ClCompile Include="SourceCode\Standard\HexString.cpp" />
+    <ClCompile Include="SourceCode\Standard\NumericalConversion.cpp" />
+    <ClCompile Include="SourceCode\Standard\RandomGenerator.cpp" />
+    <ClCompile Include="SourceCode\Standard\StandardShare.cpp" />
+    <ClCompile Include="SourceCode\System\FileManager.cpp" />
+    <ClCompile Include="SourceCode\System\IniFile.cpp" />
+    <ClCompile Include="SourceCode\System\LocalComputer.cpp" />
+    <ClCompile Include="SourceCode\System\Network.cpp" />
+    <ClCompile Include="SourceCode\System\Network\ClientManager.cpp" />
+    <ClCompile Include="SourceCode\System\Network\IOCPModel.cpp" />
+    <ClCompile Include="SourceCode\System\Network\NetworkBase.cpp" />
+    <ClCompile Include="SourceCode\System\Network\NetworkClient.cpp" />
+    <ClCompile Include="SourceCode\System\Network\NetworkEnvironment.cpp" />
+    <ClCompile Include="SourceCode\System\Network\NetworkServer.cpp" />
+    <ClCompile Include="SourceCode\System\Synchronization.cpp" />
+    <ClCompile Include="SourceCode\System\SystemShare.cpp" />
+    <ClCompile Include="SourceCode\System\SystemTime.cpp" />
+    <ClCompile Include="SourceCode\Tool\SimpleEncrypt.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7B247FD1-7119-4838-9F12-CB855D783DD2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Qing</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\Deployment\Debug\x86\$(ProjectName)D\</OutDir>
+    <TargetName>$(ProjectName)32D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)64D</TargetName>
+    <OutDir>..\..\Deployment\Debug\x64\$(ProjectName)D\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\Deployment\Release\x86\$(ProjectName)\</OutDir>
+    <TargetName>$(ProjectName)32</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\Deployment\Release\x64\$(ProjectName)\</OutDir>
+    <TargetName>$(ProjectName)64</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0;D:\Program Files %28x86%29\MySQL\MySQL Server 5.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;libmysql.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_68_0\stage\lib;D:\Program Files %28x86%29\MySQL\MySQL Server 5.5\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>BuildEvents\CopyToDebugX86.bat</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;QING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0;D:\Program Files\MySQL\MySQL Server 5.6\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;libmysql.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>D:\Program Files\MySQL\MySQL Server 5.6\lib;..\..\OpenSource\boost_1_68_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>BuildEvents\CopyToDebugX64.bat</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;QING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0;D:\Program Files %28x86%29\MySQL\MySQL Server 5.5\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;libmysql.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_68_0\stage\lib;D:\Program Files %28x86%29\MySQL\MySQL Server 5.5\lib</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>BuildEvents\CopyToReleaseX86.bat</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;QING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0;D:\Program Files\MySQL\MySQL Server 5.6\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;libmysql.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_68_0\stage\lib;D:\Program Files\MySQL\MySQL Server 5.6\lib</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>BuildEvents\CopyToReleaseX64.bat</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
