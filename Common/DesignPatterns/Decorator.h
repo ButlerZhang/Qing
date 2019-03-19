@@ -94,4 +94,4 @@ private:
 
 
 
-void QING_DLL TestDecorator();
+void TestDecorator();

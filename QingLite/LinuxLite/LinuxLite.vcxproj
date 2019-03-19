@@ -76,6 +76,7 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Prototype.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
+    <ClCompile Include="..\..\Common\Example\IOExample.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UNIX\SystemExample.cpp" />
     <ClCompile Include="UNIX\UNIXTest.cpp" />
@@ -95,6 +96,9 @@
     <ClInclude Include="..\..\Common\DesignPatterns\Prototype.h" />
     <ClInclude Include="..\..\Common\DesignPatterns\SimpleFactory.h" />
     <ClInclude Include="..\..\Common\DesignPatterns\Singleton.h" />
+    <ClInclude Include="..\..\Common\Example\Effective.h" />
+    <ClInclude Include="..\..\Common\Example\IOExample.h" />
+    <ClInclude Include="..\..\Common\Example\StringVector.h" />
     <ClInclude Include="UNIX\SystemExample.h" />
     <ClInclude Include="UNIX\UNIXTest.h" />
   </ItemGroup>

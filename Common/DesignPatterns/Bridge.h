@@ -74,4 +74,4 @@ private:
 
 
 
-void QING_DLL TestBridge();
+void TestBridge();

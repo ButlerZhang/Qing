@@ -13,6 +13,9 @@
     <Filter Include="Common\DesignPatterns">
       <UniqueIdentifier>{5d3f0a21-49fa-4d41-b118-d93efd859360}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Example">
+      <UniqueIdentifier>{6ee288df-324f-4a0b-8303-8554089eb551}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -64,6 +67,9 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp">
       <Filter>Common\DesignPatterns</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Common\Example\IOExample.cpp">
+      <Filter>Common\Example</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -113,6 +119,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Common\DesignPatterns\Singleton.h">
       <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Example\Effective.h">
+      <Filter>Common\Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Example\IOExample.h">
+      <Filter>Common\Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Example\StringVector.h">
+      <Filter>Common\Example</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

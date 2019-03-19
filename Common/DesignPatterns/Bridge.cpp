@@ -1,8 +1,6 @@
 #include "Bridge.h"
 #include <iostream>
 
-QING_EXAMPLE_BEGIN
-
 
 
 void ConcreteImplementorA::OperatorImpl()
@@ -63,5 +61,3 @@ void TestBridge()
     Abstraction *pAbstraction2 = new RefineAbstractionB(pImplB);
     pAbstraction2->Operator();
 }
-
-QING_EXAMPLE_END

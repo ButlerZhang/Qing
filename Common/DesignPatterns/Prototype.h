@@ -36,4 +36,4 @@ public:
 
 
 
-void QING_DLL ProtoTypeTest();
+void ProtoTypeTest();

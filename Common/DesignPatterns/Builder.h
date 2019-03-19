@@ -53,4 +53,4 @@ private:
 
 
 
-void QING_DLL BuilderTest();
+void BuilderTest();

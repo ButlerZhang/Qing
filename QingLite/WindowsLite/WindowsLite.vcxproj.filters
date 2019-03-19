@@ -16,6 +16,21 @@
     <Filter Include="UnitTest">
       <UniqueIdentifier>{e858cd3a-80e7-4a80-b466-ba372d8f6a62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{4e89b8be-4136-41cf-950d-2c37e2d24c97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{6b69b84b-d4f7-41d3-97c5-8bea3d72691a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Algorithm">
+      <UniqueIdentifier>{1681ff42-adbb-4e2e-925a-0ae6b74fde7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\DesignPatterns">
+      <UniqueIdentifier>{572eefda-63c0-44ab-ba63-515335da705b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Example">
+      <UniqueIdentifier>{eaa593b8-3d61-49c0-aa04-05a265814572}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,6 +48,60 @@
     <ClInclude Include="UnitTest\TestIniFile.h">
       <Filter>UnitTest</Filter>
     </ClInclude>
+    <ClInclude Include="Windows\WindowsCoreProgramming.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h">
+      <Filter>Common\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Algorithm\002_BinarySearch.h">
+      <Filter>Common\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Algorithm\003_CommonMath.h">
+      <Filter>Common\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Algorithm\004_VectorLite.h">
+      <Filter>Common\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Algorithm\AlgorithmTest.h">
+      <Filter>Common\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\AbstractFactory.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\Adapter.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\Bridge.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\Builder.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\Decorator.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\FactoryMethod.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\Prototype.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\SimpleFactory.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DesignPatterns\Singleton.h">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Example\Effective.h">
+      <Filter>Common\Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Example\IOExample.h">
+      <Filter>Common\Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Example\StringVector.h">
+      <Filter>Common\Example</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -40,6 +109,51 @@
     </ClCompile>
     <ClCompile Include="WindowsLite.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp">
+      <Filter>Common\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Algorithm\002_BinarySearch.cpp">
+      <Filter>Common\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Algorithm\003_CommonMath.cpp">
+      <Filter>Common\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Algorithm\004_VectorLite.cpp">
+      <Filter>Common\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Algorithm\AlgorithmTest.cpp">
+      <Filter>Common\Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\AbstractFactory.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\Adapter.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\Bridge.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\Builder.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\Decorator.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\FactoryMethod.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\Prototype.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp">
+      <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Example\IOExample.cpp">
+      <Filter>Common\Example</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

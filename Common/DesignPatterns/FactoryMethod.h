@@ -61,4 +61,4 @@ public:
 
 
 
-void QING_DLL FactoryMethodTest();
+void FactoryMethodTest();

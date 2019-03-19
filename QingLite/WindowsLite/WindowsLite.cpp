@@ -2,9 +2,8 @@
 //
 
 #include "stdafx.h"
-#include "..\Qing\SourceCode\Example\Effective\Effective.h"
 #include <iostream>
-
+#include <vector>
 
 
 int main()

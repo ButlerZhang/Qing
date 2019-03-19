@@ -54,4 +54,4 @@ private:
 
 
 
-void QING_DLL TestAdapter();
+void TestAdapter();

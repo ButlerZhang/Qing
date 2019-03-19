@@ -89,4 +89,4 @@ public:
 
 
 
-void QING_DLL AbstractFactoryTest();
+void AbstractFactoryTest();

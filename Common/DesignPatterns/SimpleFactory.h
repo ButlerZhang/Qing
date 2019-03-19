@@ -51,4 +51,4 @@ public:
 
 
 
-void QING_DLL SimpleFactoryTest();
+void SimpleFactoryTest();
