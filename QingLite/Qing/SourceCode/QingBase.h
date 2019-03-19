@@ -23,14 +23,3 @@
 #ifndef QING_NAMESPACE_END
 #define QING_NAMESPACE_END   }
 #endif
-
-
-
-//namespace indication
-#ifndef QING_EXAMPLE_BEGIN
-#define QING_EXAMPLE_BEGIN namespace QingExample {    //Example
-#endif
-
-#ifndef QING_EXAMPLE_END
-#define QING_EXAMPLE_END   }
-#endif

@@ -70,6 +70,7 @@ public:
         return *this;
     }
 
+    //Îö¹¹º¯Êý
     ~StringVector() { free(); }
 
     //¿½±´ÔªËØ
