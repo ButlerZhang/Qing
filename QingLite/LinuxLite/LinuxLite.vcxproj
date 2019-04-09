@@ -76,7 +76,6 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Prototype.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
-    <ClCompile Include="..\..\Common\Example\IOExample.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UNIX\SystemExample.cpp" />
     <ClCompile Include="UNIX\UNIXTest.cpp" />

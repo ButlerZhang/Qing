@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinuxLite", "LinuxLite\LinuxLite.vcxproj", "{04503670-6553-4E99-9AFD-20580E070D75}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsLite", "WindowsLite\WindowsLite.vcxproj", "{9A3672CC-A611-486C-9570-8A5AC059FBF9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7B247FD1-7119-4838-9F12-CB855D783DD2} = {7B247FD1-7119-4838-9F12-CB855D783DD2}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientLite", "ClientLite\ClientLite.vcxproj", "{D06C8583-8BC8-42EB-9F26-634198FC1819}"
 	ProjectSection(ProjectDependencies) = postProject

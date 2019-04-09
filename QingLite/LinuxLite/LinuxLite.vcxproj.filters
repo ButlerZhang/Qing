@@ -67,9 +67,6 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp">
       <Filter>Common\DesignPatterns</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Common\Example\IOExample.cpp">
-      <Filter>Common\Example</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
