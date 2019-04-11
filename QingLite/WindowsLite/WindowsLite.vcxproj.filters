@@ -31,6 +31,9 @@
     <Filter Include="Common\Example">
       <UniqueIdentifier>{eaa593b8-3d61-49c0-aa04-05a265814572}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Tool">
+      <UniqueIdentifier>{c031813b-d96c-4875-8e4c-809ddb829e68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Common\Example\StringVector.h">
       <Filter>Common\Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Tool\Common.h">
+      <Filter>Common\Tool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

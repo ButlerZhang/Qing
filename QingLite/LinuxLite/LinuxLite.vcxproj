@@ -98,6 +98,7 @@
     <ClInclude Include="..\..\Common\Example\Effective.h" />
     <ClInclude Include="..\..\Common\Example\IOExample.h" />
     <ClInclude Include="..\..\Common\Example\StringVector.h" />
+    <ClInclude Include="..\..\Common\Tool\Common.h" />
     <ClInclude Include="UNIX\SystemExample.h" />
     <ClInclude Include="UNIX\UNIXTest.h" />
   </ItemGroup>

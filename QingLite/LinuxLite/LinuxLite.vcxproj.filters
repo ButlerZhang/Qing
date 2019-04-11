@@ -16,6 +16,12 @@
     <Filter Include="Common\Example">
       <UniqueIdentifier>{6ee288df-324f-4a0b-8303-8554089eb551}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YouShuang">
+      <UniqueIdentifier>{648a5db2-72a7-45dd-a595-57af84c1124b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Tool">
+      <UniqueIdentifier>{e506eba8-7e55-4f24-a8ac-dd85e9ba55e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -125,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Common\Example\StringVector.h">
       <Filter>Common\Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Tool\Common.h">
+      <Filter>Common\Tool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
