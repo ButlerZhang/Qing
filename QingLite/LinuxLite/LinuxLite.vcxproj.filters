@@ -135,6 +135,9 @@
     <ClInclude Include="..\..\Common\Tool\Common.h">
       <Filter>Common\Tool</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\1_list_file_name.h">
+      <Filter>UNIX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

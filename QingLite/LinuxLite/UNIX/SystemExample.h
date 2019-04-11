@@ -7,7 +7,6 @@ class SystemExample
 {
 public:
 
-    void ListFileName(const std::string &Directory) const;
     void ReadToWrite_NotBufferIO() const;
     void ReadToWrite_StandardIO() const;
     void ShowProcessInformation() const;

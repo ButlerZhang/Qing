@@ -9,24 +9,7 @@
 
 
 
-void SystemExample::ListFileName(const std::string &Directory) const
-{
-    DIR *pDIR = opendir(Directory.c_str());
-    if(pDIR == NULL)    
-    {
-        std::cout << "Can not open directory: " << Directory << std::endl;
-        return;
-    }
 
-    struct dirent *pDirent = NULL;
-    while((pDirent = readdir(pDIR)) != NULL)
-    {
-        //printf("%s\n", pDirent->d_name);
-        std::cout << pDirent->d_name << std::endl;
-    }
-
-    closedir(pDIR);
-}
 
 void SystemExample::ReadToWrite_NotBufferIO() const
 {

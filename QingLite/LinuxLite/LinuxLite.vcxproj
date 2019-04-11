@@ -99,6 +99,7 @@
     <ClInclude Include="..\..\Common\Example\IOExample.h" />
     <ClInclude Include="..\..\Common\Example\StringVector.h" />
     <ClInclude Include="..\..\Common\Tool\Common.h" />
+    <ClInclude Include="UNIX\1_list_file_name.h" />
     <ClInclude Include="UNIX\SystemExample.h" />
     <ClInclude Include="UNIX\UNIXTest.h" />
   </ItemGroup>

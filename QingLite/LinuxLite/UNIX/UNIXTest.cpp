@@ -11,11 +11,6 @@ SystemExample g_TestObject;
 
 void TestListFileName()
 {
-    g_TestObject.ListFileName("/home/butler/Butler");
-    std::cout << std::endl << std::endl;
-
-    g_TestObject.ListFileName("Butler/Home/");
-    std::cout << std::endl << std::endl;
 }
 
 void TestReadToWriteNotBufferIO()
