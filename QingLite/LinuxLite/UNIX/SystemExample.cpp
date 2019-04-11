@@ -11,33 +11,6 @@
 
 
 
-void SystemExample::ReadToWrite_NotBufferIO() const
-{
-    const unsigned int BUFFER_SIZE = 4096;
-    char DataBuffer[BUFFER_SIZE];
-
-    int ReadCount = 0;
-    while((ReadCount = read(STDIN_FILENO, DataBuffer, BUFFER_SIZE)) > 0)
-    {
-        if(write(STDOUT_FILENO, DataBuffer, ReadCount) != ReadCount)
-        {
-            std::cout << "write error!" << std::endl;
-        }
-    }
-}
-
-void SystemExample::ReadToWrite_StandardIO() const
-{
-    int ch;
-    while((ch = getc(stdin)) != EOF)
-    {
-        if(putc(ch, stdout) == EOF)
-        {
-            std::cout << "output error!" << std::endl;
-        }
-    }
-}
-
 void SystemExample::ShowProcessInformation() const
 {
     std::cout << "User ID = " <<  (long)getuid() << std::endl;

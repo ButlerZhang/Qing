@@ -78,7 +78,6 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UNIX\SystemExample.cpp" />
-    <ClCompile Include="UNIX\UNIXTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h" />
@@ -99,9 +98,10 @@
     <ClInclude Include="..\..\Common\Example\IOExample.h" />
     <ClInclude Include="..\..\Common\Example\StringVector.h" />
     <ClInclude Include="..\..\Common\Tool\Common.h" />
-    <ClInclude Include="UNIX\1_list_file_name.h" />
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
+    <ClInclude Include="UNIX\Chapter1\list_file_name.h" />
     <ClInclude Include="UNIX\SystemExample.h" />
-    <ClInclude Include="UNIX\UNIXTest.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />
