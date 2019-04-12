@@ -61,6 +61,9 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>a</TargetName>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp" />
     <ClCompile Include="..\..\Common\Algorithm\002_BinarySearch.cpp" />
@@ -110,6 +113,7 @@
     <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_client.h" />
     <ClInclude Include="YouShuang\Chapter5\oob_data_client.h" />
     <ClInclude Include="YouShuang\Chapter6\cgi_server.h" />
+    <ClInclude Include="YouShuang\Chapter6\writev_server.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />
