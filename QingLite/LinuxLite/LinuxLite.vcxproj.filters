@@ -180,6 +180,9 @@
     <ClInclude Include="YouShuang\Chapter6\sendfile_server.h">
       <Filter>YouShuang\Chapter6</Filter>
     </ClInclude>
+    <ClInclude Include="YouShuang\Chapter6\splice_server.h">
+      <Filter>YouShuang\Chapter6</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

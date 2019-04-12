@@ -9,6 +9,7 @@
 #include "YouShuang/Chapter6/cgi_server.h"
 #include "YouShuang/Chapter6/writev_server.h"
 #include "YouShuang/Chapter6/sendfile_server.h"
+#include "YouShuang/Chapter6/splice_server.h"
 
 
 int main(int argc, char *argv[])
@@ -22,7 +23,8 @@ int main(int argc, char *argv[])
     //YouShuang
     //cgi_server(argc, argv);
     //writev_server(argc, argv);
-    sendfile_server(argc, argv);
+    //sendfile_server(argc, argv);
+    splice_server(argc, argv);
 
     std::cout << std::endl;
     return 0;

@@ -63,7 +63,7 @@ void writev_server(int argc, char* argv[])
         printf("errno is : %d\n", errno);       //打印出错的原因
     }
     else {
-        printf("connect succeed\n");            //打印出错的原因
+        printf("connect succeed\n");
 
         const int BUFFER_SIZE = 1024;
         char header_buf[BUFFER_SIZE];           //用于保存HTTP应答的状态行、头部字段和一个空行的缓存区
