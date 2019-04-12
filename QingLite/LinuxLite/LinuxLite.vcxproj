@@ -104,8 +104,11 @@
     <ClInclude Include="UNIX\SystemExample.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />
     <ClInclude Include="YouShuang\Chapter5\backlog_test.h" />
-    <ClInclude Include="YouShuang\Chapter5\recv_oob_data.h" />
-    <ClInclude Include="YouShuang\Chapter5\send_oob_data.h" />
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_server.h" />
+    <ClInclude Include="YouShuang\Chapter5\daytime.h" />
+    <ClInclude Include="YouShuang\Chapter5\oob_data_server.h" />
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_client.h" />
+    <ClInclude Include="YouShuang\Chapter5\oob_data_client.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />

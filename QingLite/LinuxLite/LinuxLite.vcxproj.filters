@@ -153,10 +153,19 @@
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h">
       <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
-    <ClInclude Include="YouShuang\Chapter5\recv_oob_data.h">
+    <ClInclude Include="YouShuang\Chapter5\oob_data_client.h">
       <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
-    <ClInclude Include="YouShuang\Chapter5\send_oob_data.h">
+    <ClInclude Include="YouShuang\Chapter5\oob_data_server.h">
+      <Filter>YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_client.h">
+      <Filter>YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_server.h">
+      <Filter>YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\daytime.h">
       <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
   </ItemGroup>

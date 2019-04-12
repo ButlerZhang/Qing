@@ -11,7 +11,7 @@
 
 
 
-void accept_exception(int argc, char* argv[])
+void oob_data_server(int argc, char* argv[])
 {
     if (argc <= 2) {
         printf("usage: %s ip_address port_number\n",
@@ -45,8 +45,6 @@ void accept_exception(int argc, char* argv[])
         5);                                     //内核监听队列的最大长度，经验值为5
     assert(ret != -1);                          //成功返回0，失败返回-1并设置errno
 
-    sleep(20);                                  //暂停20秒以等待客户端连接和相关操作(掉线或退出)完成
-
     struct sockaddr_in client;
     socklen_t client_addrlength = sizeof(client);
     int connfd = accept(                        //接受客户端的连接
@@ -59,11 +57,26 @@ void accept_exception(int argc, char* argv[])
         printf("errno is : %d\n", errno);       //打印出错的原因
     }
     else {
-        char remote[INET_ADDRSTRLEN];
-        printf("connected with ip = %s and port = %d\n",
-            inet_ntop(AF_INET,                 //网络字节序IP转换成字符串IP
-                &client.sin_addr, remote, INET_ADDRSTRLEN),
-            ntohs(client.sin_port));           //网络字节序转换成主机字节序，端口值
+
+        const int BUFFER_SIZE = 1024;
+        char buffer[BUFFER_SIZE];
+        size_t rece_ret;
+
+        memset(buffer, '\0', BUFFER_SIZE);
+        rece_ret = recv(connfd, buffer, BUFFER_SIZE - 1, 0);
+        printf("got %d bytes of normal data '%s'\n", rece_ret, buffer);
+
+        memset(buffer, '\0', BUFFER_SIZE);
+        rece_ret = recv(                        //读取socket上的数据，即接收数据
+            connfd,                             //与客户端连接的socket
+            buffer,                             //缓冲区
+            BUFFER_SIZE - 1,                    //缓冲区大小
+            MSG_OOB);                           //提供额外的控制，MSG_OOB表示紧急数据
+        printf("got %d bytes of oob data '%s'\n", rece_ret, buffer);
+
+        memset(buffer, '\0', BUFFER_SIZE);
+        rece_ret = recv(connfd, buffer, BUFFER_SIZE - 1, 0);
+        printf("got %d bytes of normal data '%s'\n", rece_ret, buffer);
 
         close(connfd);
     }

@@ -9,14 +9,12 @@
 #include <string.h>
 #include <errno.h>
 
-#define BUF_SIZE 1024
 
 
-
-void recv_oob_data(int argc, char* argv[])
+void change_tcp_buffer_size_server(int argc, char* argv[])
 {
     if (argc <= 2) {
-        printf("usage: %s ip_address port_number backlot\n",
+        printf("usage: %s ip_address port_number recv buffer size\n",
             basename(argv[0]));                 //basename的头文件是<string.h>，获取路径中最后一个/后面的内容
         return;
     }
@@ -35,6 +33,25 @@ void recv_oob_data(int argc, char* argv[])
     address.sin_family = AF_INET;               //地址族，AF_INET=PF_INET，AF_INET6=PF_INET6，AF_UNIX=PF_UNIX
     inet_pton(AF_INET, ip, &address.sin_addr);  //将字符串IP地址转换成用网络字节序整数表示的IP地址
     address.sin_port = htons(port);             //将主机字节序转换成网络字节序
+
+    int recvbuf = atoi(argv[3]);
+    int len = sizeof(recvbuf);
+
+    setsockopt(                                 //设置socket属性
+        sock,                                   //要设置的socket
+        SOL_SOCKET,                             //要设置哪个协议(SOL_SOCKET/IPPROTO_IP/IPPROTO_IPV6/IPPROTO_TCP)的属性
+        SO_RCVBUF,                              //属性的名字
+        &recvbuf,                               //属性的新值
+        sizeof(recvbuf));                       //属性新值的长度
+
+    getsockopt(                                 //获取socket属性
+        sock,                                   //要获取的socket
+        SOL_SOCKET,                             //要设置哪个协议(SOL_SOCKET/IPPROTO_IP/IPPROTO_IPV6/IPPROTO_TCP)的属性
+        SO_RCVBUF,                              //属性的名字
+        &recvbuf,                               //属性的值
+        (socklen_t*)&len);                      //属性的值的长度
+
+    printf("TCP recv buffer size after setting is %d\n", recvbuf);
 
     int ret = bind(                             //绑定socket，也称为命名socket，仅用于服务端
         sock,                                   //要绑定的socket
@@ -60,21 +77,10 @@ void recv_oob_data(int argc, char* argv[])
     }
     else {
 
-        char buffer[BUF_SIZE];
-        size_t rece_ret;
-
-        memset(buffer, '\0', BUF_SIZE);
-        rece_ret = recv(connfd, buffer, BUF_SIZE - 1, 0);
-        printf("got %d bytes of normal data '%s'\n", rece_ret, buffer);
-
-        memset(buffer, '\0', BUF_SIZE);
-        rece_ret = recv(connfd, buffer, BUF_SIZE - 1, MSG_OOB);
-        printf("got %d bytes of oob data '%s'\n", rece_ret, buffer);
-
-        memset(buffer, '\0', BUF_SIZE);
-        rece_ret = recv(connfd, buffer, BUF_SIZE - 1, 0);
-        printf("got %d bytes of normal data '%s'\n", rece_ret, buffer);
-
+        const int BUFFER_SIZE = 1024;
+        char buffer[BUFFER_SIZE];
+        memset(buffer, '\0', BUFFER_SIZE);
+        while (recv(connfd, buffer, BUFFER_SIZE - 1, 0) > 0) {}
         close(connfd);
     }
 

@@ -24,7 +24,7 @@ void blacklog_test(int argc, char* argv[])
     signal(SIGTERM, handle_term);               //注册信号处理函数
 
     if (argc < 3) {
-        printf("usage: %s ip_address port_number backlot\n",
+        printf("usage: %s ip_address port_number backlog\n",
             basename(argv[0]));                 //basename的头文件是<string.h>，获取路径中最后一个/后面的内容
         return;
     }
