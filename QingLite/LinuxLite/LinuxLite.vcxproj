@@ -109,6 +109,7 @@
     <ClInclude Include="YouShuang\Chapter5\oob_data_server.h" />
     <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_client.h" />
     <ClInclude Include="YouShuang\Chapter5\oob_data_client.h" />
+    <ClInclude Include="YouShuang\Chapter6\cgi_server.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />

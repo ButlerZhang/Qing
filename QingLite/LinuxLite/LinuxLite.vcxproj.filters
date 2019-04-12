@@ -31,6 +31,9 @@
     <Filter Include="Qing">
       <UniqueIdentifier>{bab9ad82-351d-4d61-9d9d-c817a61b34ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YouShuang\Chapter6">
+      <UniqueIdentifier>{03bc4cda-ba19-416a-9969-a9d2863fc512}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -167,6 +170,9 @@
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\daytime.h">
       <Filter>YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter6\cgi_server.h">
+      <Filter>YouShuang\Chapter6</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
