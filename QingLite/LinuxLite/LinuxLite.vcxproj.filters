@@ -25,6 +25,12 @@
     <Filter Include="UNIX\Chapter1">
       <UniqueIdentifier>{973eabc3-1956-416d-baa9-0e9e90491ca2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YouShuang\Chapter5">
+      <UniqueIdentifier>{d96cc4ca-6d17-4aa5-9715-b97d9b458ffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Qing">
+      <UniqueIdentifier>{bab9ad82-351d-4d61-9d9d-c817a61b34ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -140,6 +146,18 @@
     </ClInclude>
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h">
       <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\backlog_test.h">
+      <Filter>YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\accept_exception.h">
+      <Filter>YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\recv_oob_data.h">
+      <Filter>YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\send_oob_data.h">
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
