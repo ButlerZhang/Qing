@@ -115,6 +115,7 @@
     <ClInclude Include="YouShuang\Chapter6\cgi_server.h" />
     <ClInclude Include="YouShuang\Chapter6\sendfile_server.h" />
     <ClInclude Include="YouShuang\Chapter6\splice_server.h" />
+    <ClInclude Include="YouShuang\Chapter6\tee_server.h" />
     <ClInclude Include="YouShuang\Chapter6\writev_server.h" />
   </ItemGroup>
   <ItemGroup>
