@@ -1,5 +1,5 @@
 #include <iostream>
-//#include "../../Common/Tool/Common.h"
+#include "../../Common/Tool/Common.h"
 //#include "../../Common/Algorithm/AlgorithmTest.h"
 
 //#include "UNIX/Chapter1/list_file_name.h"

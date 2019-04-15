@@ -30,7 +30,7 @@ void sendfile_server(int argc, char* argv[])
     int sock = socket(                          //创建socket
         PF_INET,                                //底层协议族，PF_INET表示IPv4，PF_INET6表示IPv6，PF_UNIX表示UNIX本地域协议
         SOCK_STREAM,                            //服务类型，SOCK_STREAM表示TCP，SOCK_DGRAM表示UDP
-        0);                                     //在前两个参数构成的协议集合下，再选择一个具体的协议，通常设为0，表示默认
+        0);                                     //在前两个参数构成的协议集合下，再选择一个具体的协议，通常设为0，表示默认协议
     assert(sock >= 0);                          //创建socket失败返回-1被设置errno
 
     struct sockaddr_in address;                 //sockaddr_in专用于IPv4地址，sockaddr_in6专用于IPv6地址
@@ -69,10 +69,11 @@ void sendfile_server(int argc, char* argv[])
         fstat(filefd, &stat_buf);
 
         sendfile(                               //在两个文件描述符之间直接传递数据，零拷贝操作
-            connfd,                             //要写入数据的文件描述符
-            filefd,                             //要读出数据的文件描述符
-            NULL,                               //从哪里开始读
+            connfd,                             //要写入数据的文件描述符，必须是socket
+            filefd,                             //要读出数据的文件描述符，必须是真实的文件
+            NULL,                               //从哪里开始读，NULL表示使用读入文件流默认的起始位置
             stat_buf.st_size);                  //读多少字节数
+                                                //成功时返回传输的字节数，失败返回-1并设置errno
         close(connfd);
     }
 

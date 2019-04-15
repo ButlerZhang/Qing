@@ -85,6 +85,9 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp">
       <Filter>Common\DesignPatterns</Filter>
     </ClCompile>
+    <ClCompile Include="Qing\NetworkBase.cpp">
+      <Filter>Qing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -197,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="YouShuang\api_note.h">
       <Filter>YouShuang</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkBase.h">
+      <Filter>Qing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

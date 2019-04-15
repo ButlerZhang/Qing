@@ -25,8 +25,13 @@ void accept_exception(int argc, char* argv[])
     int sock = socket(                          //创建socket
         PF_INET,                                //底层协议族，PF_INET表示IPv4，PF_INET6表示IPv6，PF_UNIX表示UNIX本地域协议
         SOCK_STREAM,                            //服务类型，SOCK_STREAM表示TCP，SOCK_DGRAM表示UDP
-        0);                                     //在前两个参数构成的协议集合下，再选择一个具体的协议，通常设为0，表示默认
+        0);                                     //在前两个参数构成的协议集合下，再选择一个具体的协议，通常设为0，表示默认协议
     assert(sock >= 0);                          //创建socket失败返回-1被设置errno
+
+    int reuse = 1;
+    setsockopt(sock, SOL_SOCKET,
+        SO_REUSEADDR,                           //重用本地地址，避免在TIME_WAIT状态下无法使用同一个端口号，仅用于服务端
+        &reuse, sizeof(reuse));
 
     struct sockaddr_in address;                 //sockaddr_in专用于IPv4地址，sockaddr_in6专用于IPv6地址
     bzero(&address, sizeof(address));           //将address初始化为0

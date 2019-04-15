@@ -30,7 +30,7 @@ void oob_data_client(int argc, char* argv[])
     int sockfd = socket(                        //创建socket
         PF_INET,                                //底层协议族，PF_INET表示IPv4，PF_INET6表示IPv6，PF_UNIX表示UNIX本地域协议
         SOCK_STREAM,                            //服务类型，SOCK_STREAM表示TCP，SOCK_DGRAM表示UDP
-        0);                                     //在前两个参数构成的协议集合下，再选择一个具体的协议，通常设为0，表示默认
+        0);                                     //在前两个参数构成的协议集合下，再选择一个具体的协议，通常设为0，表示默认协议
     assert(sockfd >= 0);                        //创建socket失败返回-1被设置errno
 
     if (connect(                                //客户端发起对服务器的连接
