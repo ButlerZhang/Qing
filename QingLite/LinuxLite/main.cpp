@@ -6,11 +6,9 @@
 //#include "UNIX/Chapter1/copy_stdin_stdout_nobuffer.h"
 //#include "UNIX/Chapter1/copy_stdin_stdout_standard.h"
 
-#include "YouShuang/Chapter6/cgi_server.h"
-#include "YouShuang/Chapter6/writev_server.h"
-#include "YouShuang/Chapter6/sendfile_server.h"
-#include "YouShuang/Chapter6/splice_server.h"
-#include "YouShuang/Chapter6/tee_server.h"
+#include "YouShuang/Chapter7/switch_to_user.h"
+#include "YouShuang/Chapter7/daemonize_demo.h"
+
 
 
 int main(int argc, char *argv[])
@@ -21,11 +19,8 @@ int main(int argc, char *argv[])
     //copy_stdin_stdout_standard();
 
     //YouShuang
-    //cgi_server(argc, argv);
-    //writev_server(argc, argv);
-    //sendfile_server(argc, argv);
-    //splice_server(argc, argv);
-    tee_server(argc, argv);
+    daemonize_demo();
+    switch_to_user(0, 0);
 
     std::cout << std::endl;
     return 0;

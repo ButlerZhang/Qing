@@ -34,6 +34,9 @@
     <Filter Include="YouShuang\Chapter6">
       <UniqueIdentifier>{03bc4cda-ba19-416a-9969-a9d2863fc512}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YouShuang\Chapter7">
+      <UniqueIdentifier>{5cc09146-03e1-454c-b73b-802dba8fecbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -185,6 +188,15 @@
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter6\tee_server.h">
       <Filter>YouShuang\Chapter6</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter7\switch_to_user.h">
+      <Filter>YouShuang\Chapter7</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter7\daemonize_demo.h">
+      <Filter>YouShuang\Chapter7</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\api_note.h">
+      <Filter>YouShuang</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
