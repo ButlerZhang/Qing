@@ -37,6 +37,9 @@
     <Filter Include="YouShuang\Chapter7">
       <UniqueIdentifier>{5cc09146-03e1-454c-b73b-802dba8fecbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YouShuang\Chapter8">
+      <UniqueIdentifier>{83c68fa7-5beb-455a-b1a8-93ca8fabac04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -203,6 +206,9 @@
     </ClInclude>
     <ClInclude Include="Qing\NetworkBase.h">
       <Filter>Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter8\http_demo.h">
+      <Filter>YouShuang\Chapter8</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
