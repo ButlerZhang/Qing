@@ -123,7 +123,9 @@
     <ClInclude Include="YouShuang\Chapter7\daemonize_demo.h" />
     <ClInclude Include="YouShuang\Chapter7\switch_to_user.h" />
     <ClInclude Include="YouShuang\Chapter8\http_demo.h" />
+    <ClInclude Include="YouShuang\Chapter9\select_client.h" />
     <ClInclude Include="YouShuang\Chapter9\select_demo.h" />
+    <ClInclude Include="YouShuang\Chapter9\select_server.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />

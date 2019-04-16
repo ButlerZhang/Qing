@@ -216,6 +216,12 @@
     <ClInclude Include="YouShuang\Chapter9\select_demo.h">
       <Filter>YouShuang\Chapter9</Filter>
     </ClInclude>
+    <ClInclude Include="YouShuang\Chapter9\select_server.h">
+      <Filter>YouShuang\Chapter9</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter9\select_client.h">
+      <Filter>YouShuang\Chapter9</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">
