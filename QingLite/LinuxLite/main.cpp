@@ -8,7 +8,9 @@
 
 //#include "YouShuang/Chapter7/switch_to_user.h"
 //#include "YouShuang/Chapter7/daemonize_demo.h"
-#include "YouShuang/Chapter8/http_demo.h"
+//#include "YouShuang/Chapter8/http_demo.h"
+#include "YouShuang/Chapter9/select_demo.h"
+#include "YouShuang/Chapter5/oob_data_client.h"
 
 
 
@@ -22,7 +24,9 @@ int main(int argc, char *argv[])
     //YouShuang
     //daemonize_demo();
     //switch_to_user(0, 0);
-    http_demo(argc, argv);
+    //http_demo(argc, argv);
+    select_demo(argc, argv);
+    //oob_data_client(argc, argv);
 
     std::cout << std::endl;
     return 0;

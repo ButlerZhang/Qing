@@ -28,9 +28,6 @@
     <Filter Include="YouShuang\Chapter5">
       <UniqueIdentifier>{d96cc4ca-6d17-4aa5-9715-b97d9b458ffb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Qing">
-      <UniqueIdentifier>{bab9ad82-351d-4d61-9d9d-c817a61b34ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="YouShuang\Chapter6">
       <UniqueIdentifier>{03bc4cda-ba19-416a-9969-a9d2863fc512}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,12 @@
     </Filter>
     <Filter Include="YouShuang\Chapter8">
       <UniqueIdentifier>{83c68fa7-5beb-455a-b1a8-93ca8fabac04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YouShuang\Chapter9">
+      <UniqueIdentifier>{e851c367-8b18-40ed-b2fa-3409efa3e1d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Qing">
+      <UniqueIdentifier>{bab9ad82-351d-4d61-9d9d-c817a61b34ef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter8\http_demo.h">
       <Filter>YouShuang\Chapter8</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter9\select_demo.h">
+      <Filter>YouShuang\Chapter9</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
