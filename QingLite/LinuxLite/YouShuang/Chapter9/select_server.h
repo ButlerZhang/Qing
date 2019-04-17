@@ -2,13 +2,13 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
-#include "../../Qing/NetworkBase.h"
+#include "../../Qing/NetworkServer.h"
 
 
 
 void select_server()
 {
-    NetworkBase Server;
+    NetworkServer Server;
     if (!Server.StartServer("192.168.3.126", 12345))
     {
         printf("start server failed.\n");

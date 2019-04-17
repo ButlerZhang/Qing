@@ -94,6 +94,12 @@
     <ClCompile Include="Qing\NetworkBase.cpp">
       <Filter>Qing</Filter>
     </ClCompile>
+    <ClCompile Include="Qing\NetworkClient.cpp">
+      <Filter>Qing</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\NetworkServer.cpp">
+      <Filter>Qing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -221,6 +227,12 @@
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter9\select_client.h">
       <Filter>YouShuang\Chapter9</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkClient.h">
+      <Filter>Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkServer.h">
+      <Filter>Qing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

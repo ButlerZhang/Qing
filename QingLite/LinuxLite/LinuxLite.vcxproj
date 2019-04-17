@@ -81,6 +81,8 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
+    <ClCompile Include="Qing\NetworkClient.cpp" />
+    <ClCompile Include="Qing\NetworkServer.cpp" />
     <ClCompile Include="UNIX\SystemExample.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +105,8 @@
     <ClInclude Include="..\..\Common\Example\StringVector.h" />
     <ClInclude Include="..\..\Common\Tool\Common.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
+    <ClInclude Include="Qing\NetworkClient.h" />
+    <ClInclude Include="Qing\NetworkServer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
     <ClInclude Include="UNIX\Chapter1\list_file_name.h" />

@@ -2,14 +2,14 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
-#include "../../Qing/NetworkBase.h"
+#include "../../Qing/NetworkClient.h"
 
 
 
 void select_client()
 {
-    NetworkBase Client;
-    if (!Client.StartClient() || !Client.ConnectServer("192.168.3.126", 12345))
+    NetworkClient Client;
+    if (!Client.StartClient("192.168.3.126", 12345))
     {
         printf("start client failed.\n");
         return;
