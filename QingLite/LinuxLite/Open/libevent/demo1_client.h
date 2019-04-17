@@ -1,93 +1,62 @@
 #pragma once
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <errno.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <event.h>
-#include <event2/util.h>
-#include <string>
+#include "demo_common.h"
 
 
 
-int ConnectServerByTCP(const char *ServerIP, int Port)
+void CallBack_InputFromCMD(int input, short events, void *arg)
 {
-    struct sockaddr_in ServerAddress;
-    bzero(&ServerAddress, sizeof(sockaddr_in));
-    ServerAddress.sin_family = AF_INET;
-    inet_pton(AF_INET, ServerIP, &(ServerAddress.sin_addr));
-    ServerAddress.sin_port = htons(static_cast<uint16_t>(Port));
+    char Message[1024];
+    memset(Message, 0, sizeof(Message));
 
-    int sockfd = socket(PF_INET, SOCK_STREAM, 0);
-    if (sockfd <= -1)
-    {
-        printf("create socket failed.\n");
-        return sockfd;
-    }
-
-    if (connect(sockfd, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress)) < 0)
-    {
-        printf("connected failed.\n");
-        close(sockfd);
-        return -1;
-    }
-
-    evutil_make_socket_nonblocking(sockfd);
-    return sockfd;
-}
-
-void CallBack_CMDMessage(int fd, short events, void *arg)
-{
-    char msg[1024];
-    ssize_t ret = read(fd, msg, sizeof(msg));
+    ssize_t ret = read(input, Message, sizeof(Message));
     if (ret <= 0)
     {
-        printf("read failed.\n");
-        return;
+        printf("can not read from cmd.\n");
     }
-
-    int sockfd = *((int*)arg);
-    write(sockfd, msg, ret);
-}
-
-void CallBack_ClientRead(int fd, short events, void *arg)
-{
-    char msg[1024];
-
-    ssize_t len = read(fd, msg, sizeof(msg) - 1);
-    if (len <= 0)
+    else
     {
-        printf("read failed.\n");
-        return;
+        Message[ret-1] = '\0';
+        int socket = *((int*)arg);
+        ssize_t writesize = write(socket, Message, ret);
+        printf("send message = %s, size = %d.\n", Message, writesize);
     }
-
-    msg[len - 1] = '\0';
-    printf("recv %s from server\n", msg);
 }
 
+void CallBack_RecvFromServer(int socket, short events, void *arg)
+{
+    char Message[1024];
+    memset(Message, 0, sizeof(Message));
 
+    ssize_t readsize = read(socket, Message, sizeof(Message));
+    if (readsize <= 0)
+    {
+        printf("read form server failed.\n");
+    }
+    else
+    {
+        printf("recv message = %s, size = %d.\n\n", Message, readsize);
+    }
+}
 
 void demo1_client()
 {
-    int sockfd = ConnectServerByTCP("192.168.3.126", 12345);
-    if (sockfd <= -1)
+    int ClientSocket = ConnectServer("192.168.3.126", 12345);
+    if (ClientSocket <= 0)
     {
-        printf("connect server failed.\n");
+        printf("Connect Server failed.\n");
         return;
     }
 
+    evutil_make_socket_nonblocking(ClientSocket);
+
     struct event_base *base = event_base_new();
 
-    struct event *ev_sockfd = event_new(base, sockfd, EV_READ | EV_PERSIST, CallBack_ClientRead, NULL);
+    struct event *ev_sockfd = event_new(base, ClientSocket, EV_READ | EV_PERSIST, CallBack_RecvFromServer, NULL);
     event_add(ev_sockfd, NULL);
 
-    struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_CMDMessage, (void*)&sockfd);
+    struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, (void*)&ClientSocket);
     event_add(ev_cmd, NULL);
 
     event_base_dispatch(base);
-    printf("start dispatch...\n");
+    printf("client start dispatch...\n");
 }

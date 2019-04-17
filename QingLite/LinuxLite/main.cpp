@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     //copy_stdin_stdout_standard();
 
     //libevent
-    demo1_client();
-    //demo1_server();
+    //demo1_client();
+    demo1_server();
 
     std::cout << std::endl;
     return 0;

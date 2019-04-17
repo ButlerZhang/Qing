@@ -1,100 +1,61 @@
 #pragma once
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <event.h>
-#include <string>
+#include "demo_common.h"
 
 
 
-int InitServerByTCP(int Port, int listen_num)
+void CallBack_RecvClient(int ClientSocket, short events, void *arg)
 {
-    evutil_socket_t listener = socket(AF_INET, SOCK_STREAM, 0);
-    if (listener <= -1)
+    char Message[4096];
+    memset(Message, 0, sizeof(Message));
+
+    ssize_t readsize = read(ClientSocket, Message, sizeof(Message));
+    if (readsize <= 0)
     {
-        return listener;
+        printf("recv client message error.\n");
+        event_free((struct event*)arg);
+        close(ClientSocket);
     }
-
-    evutil_make_listen_socket_reuseable(listener);
-
-    struct sockaddr_in addr;
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = 0;
-    addr.sin_port = htons(static_cast<uint16_t>(Port));
-
-    if (bind(listener, (sockaddr*)&addr, sizeof(addr)) < 0)
+    else
     {
-        printf("bind error\n");
-        evutil_closesocket(listener);
-        return -1;
-    }
+        printf("client = %d recv message = %s, size = %d.\n", ClientSocket, Message, readsize);
 
-    if (listen(listener, listen_num) < 0)
-    {
-        printf("listen error\n");
-        evutil_closesocket(listener);
-        return -1;
+        const std::string ACK("ACK");
+        ssize_t writesize = write(ClientSocket, ACK.c_str(), ACK.length());
+        printf("client = %d recv send ack, size = %d.\n\n", ClientSocket, writesize);
     }
-
-    evutil_make_socket_nonblocking(listener);
-    return listener;
 }
 
-void CallBack_ServerRead(int fd, short events, void *arg)
+void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
 {
-    char msg[4096];
-    struct event *ev = (struct event*)arg;
-    ssize_t len = read(fd, msg, sizeof(msg) - 1);
+    struct sockaddr_in ClientAddress;
+    socklen_t AddressLength = sizeof(ClientAddress);
 
-    if (len <= 0)
-    {
-        printf("read error\n");
-        event_free(ev);
-        close(fd);
-        return;
-    }
+    int ClientSocket = accept(ListenSocket, (struct sockaddr*)&ClientAddress, &AddressLength);
+    evutil_make_socket_nonblocking(ClientSocket);
 
-    msg[len] = '\0';
-    printf("recv message = %s.\n", msg);
-
-    char reply_msg[4096] = "I have received msg: ";
-    strcat(reply_msg + strlen(reply_msg), msg);
-
-    write(fd, reply_msg, strlen(reply_msg));
-}
-
-void CallBack_Accept(int fd, short events, void *arg)
-{
-    struct sockaddr_in client;
-    socklen_t len = sizeof(client);
-
-    evutil_socket_t sockfd = accept(fd, (struct sockaddr*)&client, &len);
-    evutil_make_socket_nonblocking(sockfd);
-
-    printf("accept client socket = %d.\n", sockfd);
+    printf("accept client socket = %d.\n\n", ClientSocket);
 
     struct event_base *base = (event_base*)arg;
-
     struct event *ev = event_new(NULL, -1, 0, NULL, NULL);
 
-    event_assign(ev, base, sockfd, EV_READ | EV_PERSIST, CallBack_ServerRead, (void*)ev);
+    event_assign(ev, base, ClientSocket, EV_READ | EV_PERSIST, CallBack_RecvClient, (void*)ev);
     event_add(ev, NULL);
 }
 
 void demo1_server()
 {
-    int listener = InitServerByTCP(12345, 10);
-    if (listener == -1)
+    int ListenSocket = StartServer("192.168.3.126", 12345);
+    if (ListenSocket == -1)
     {
-        printf("server init error.\n");
+        printf("Start Server failed.\n");
         return;
     }
 
     struct event_base *base = event_base_new();
 
-    struct event *ev_listen = event_new(base, listener, EV_READ | EV_PERSIST, CallBack_Accept, base);
+    struct event *ev_listen = event_new(base, ListenSocket, EV_READ | EV_PERSIST, CallBack_AcceptClient, base);
     event_add(ev_listen, NULL);
 
     event_base_dispatch(base);
+    printf("server start dispatch...\n");
 }

@@ -107,6 +107,7 @@
     <ClInclude Include="..\..\Common\Tool\Common.h" />
     <ClInclude Include="Open\libevent\demo1_client.h" />
     <ClInclude Include="Open\libevent\demo1_server.h" />
+    <ClInclude Include="Open\libevent\demo_common.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
     <ClInclude Include="Qing\NetworkServer.h" />
