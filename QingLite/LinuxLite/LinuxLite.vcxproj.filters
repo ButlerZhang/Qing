@@ -246,9 +246,6 @@
     <ClInclude Include="Open\libevent\demo1_server.h">
       <Filter>Open\libevent</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\demo_common.h">
-      <Filter>Open\libevent</Filter>
-    </ClInclude>
     <ClInclude Include="Open\libevent\demo2_client.h">
       <Filter>Open\libevent</Filter>
     </ClInclude>

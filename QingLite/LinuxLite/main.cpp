@@ -23,12 +23,12 @@ int main(int argc, char *argv[])
     //copy_stdin_stdout_standard();
 
     //libevent
-    //demo1_client();
-    //demo1_server();
-    //demo2_client();
-    //demo2_server();
-    demo3_client();
-    //demo3_server();
+    //demo1_client("192.168.3.126", 12345);
+    //demo1_server("192.168.3.126", 12345);
+    //demo2_client("192.168.3.126", 12345);
+    //demo2_server("192.168.3.126", 12345);
+    demo3_client("192.168.3.126", 12345);
+    //demo3_server("192.168.3.126", 12345);
 
     std::cout << std::endl;
     return 0;
