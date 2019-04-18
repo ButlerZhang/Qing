@@ -255,6 +255,12 @@
     <ClInclude Include="Open\libevent\demo2_server.h">
       <Filter>Open\libevent</Filter>
     </ClInclude>
+    <ClInclude Include="Open\libevent\demo3_client.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo3_server.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

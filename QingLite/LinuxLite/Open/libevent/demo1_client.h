@@ -55,7 +55,7 @@ void demo1_client()
     struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, (void*)&ClientSocket);
     event_add(ev_cmd, NULL);
 
-    printf("client start dispatch...\n");
+    printf("client start dispatch...\n\n");
     event_base_dispatch(base);
     event_base_free(base);
 }

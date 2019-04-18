@@ -20,7 +20,7 @@ void CallBack_RecvClient(bufferevent *bev, void *arg)
     printf("client = %d recv send ack, size = %d.\n\n", ClientSocket, ACK.length());
 }
 
-void event_cb(struct bufferevent *bev, short event, void *arg)
+void CallBack_Event(struct bufferevent *bev, short event, void *arg)
 {
     int ClientSocket = bufferevent_getfd(bev);
     if (event &BEV_EVENT_EOF)
@@ -47,7 +47,7 @@ void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
 
     struct event_base *base = (event_base*)arg;
     bufferevent *bev = bufferevent_socket_new(base, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
-    bufferevent_setcb(bev, CallBack_RecvClient, NULL, event_cb, arg);
+    bufferevent_setcb(bev, CallBack_RecvClient, NULL, CallBack_Event, arg);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
 }
 
@@ -65,7 +65,7 @@ void demo2_server()
     struct event *ev_listen = event_new(base, ListenSocket, EV_READ | EV_PERSIST, CallBack_AcceptClient, base);
     event_add(ev_listen, NULL);
 
-    printf("server start dispatch...\n");
+    printf("server start dispatch...\n\n");
     event_base_dispatch(base);
     event_base_free(base);
 }

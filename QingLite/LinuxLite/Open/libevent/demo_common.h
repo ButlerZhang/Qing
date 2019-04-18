@@ -49,6 +49,7 @@ int StartServer(const char* ServerIP, int Port)
     evutil_make_listen_socket_reuseable(ListenSocket);
 
     struct sockaddr_in BindAddress;
+    bzero(&BindAddress, sizeof(sockaddr_in));
     BindAddress.sin_family = AF_INET;
     inet_pton(AF_INET, ServerIP, &(BindAddress.sin_addr));
     BindAddress.sin_port = htons(static_cast<uint16_t>(Port));

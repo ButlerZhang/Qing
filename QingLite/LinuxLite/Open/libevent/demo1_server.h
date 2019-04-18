@@ -57,7 +57,7 @@ void demo1_server()
     struct event *ev_listen = event_new(base, ListenSocket, EV_READ | EV_PERSIST, CallBack_AcceptClient, base);
     event_add(ev_listen, NULL);
 
-    printf("server start dispatch...\n");
+    printf("server start dispatch...\n\n");
     event_base_dispatch(base);
     event_base_free(base);
 }
