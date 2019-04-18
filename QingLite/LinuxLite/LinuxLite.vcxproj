@@ -81,6 +81,7 @@
     <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Open\libevent\Project\ServerLite.cpp" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
     <ClCompile Include="Qing\NetworkClient.cpp" />
     <ClCompile Include="Qing\NetworkServer.cpp" />
@@ -105,12 +106,13 @@
     <ClInclude Include="..\..\Common\Example\IOExample.h" />
     <ClInclude Include="..\..\Common\Example\StringVector.h" />
     <ClInclude Include="..\..\Common\Tool\Common.h" />
-    <ClInclude Include="Open\libevent\demo1_client.h" />
-    <ClInclude Include="Open\libevent\demo1_server.h" />
-    <ClInclude Include="Open\libevent\demo2_client.h" />
-    <ClInclude Include="Open\libevent\demo2_server.h" />
-    <ClInclude Include="Open\libevent\demo3_client.h" />
-    <ClInclude Include="Open\libevent\demo3_server.h" />
+    <ClInclude Include="Open\libevent\Demo\demo1_client.h" />
+    <ClInclude Include="Open\libevent\Demo\demo1_server.h" />
+    <ClInclude Include="Open\libevent\Demo\demo2_client.h" />
+    <ClInclude Include="Open\libevent\Demo\demo2_server.h" />
+    <ClInclude Include="Open\libevent\Demo\demo3_client.h" />
+    <ClInclude Include="Open\libevent\Demo\demo3_server.h" />
+    <ClInclude Include="Open\libevent\Project\ServerLite.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
     <ClInclude Include="Qing\NetworkServer.h" />

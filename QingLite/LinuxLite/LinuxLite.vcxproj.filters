@@ -49,6 +49,12 @@
     <Filter Include="Open\libevent">
       <UniqueIdentifier>{3e83783f-22a8-441e-b9f4-74f6f47a3379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\libevent\Demo">
+      <UniqueIdentifier>{681534fa-1030-4331-afe0-4e4cc4993703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\libevent\Project">
+      <UniqueIdentifier>{3523a4d3-d4a9-4470-b70b-53d07eb90257}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -105,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="Qing\NetworkServer.cpp">
       <Filter>Qing</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\libevent\Project\ServerLite.cpp">
+      <Filter>Open\libevent\Project</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -240,23 +249,26 @@
     <ClInclude Include="Qing\NetworkServer.h">
       <Filter>Qing</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\demo1_client.h">
-      <Filter>Open\libevent</Filter>
+    <ClInclude Include="Open\libevent\Demo\demo1_client.h">
+      <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\demo1_server.h">
-      <Filter>Open\libevent</Filter>
+    <ClInclude Include="Open\libevent\Demo\demo1_server.h">
+      <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\demo2_client.h">
-      <Filter>Open\libevent</Filter>
+    <ClInclude Include="Open\libevent\Demo\demo2_client.h">
+      <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\demo2_server.h">
-      <Filter>Open\libevent</Filter>
+    <ClInclude Include="Open\libevent\Demo\demo2_server.h">
+      <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\demo3_client.h">
-      <Filter>Open\libevent</Filter>
+    <ClInclude Include="Open\libevent\Demo\demo3_client.h">
+      <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\demo3_server.h">
-      <Filter>Open\libevent</Filter>
+    <ClInclude Include="Open\libevent\Demo\demo3_server.h">
+      <Filter>Open\libevent\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\Project\ServerLite.h">
+      <Filter>Open\libevent\Project</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
