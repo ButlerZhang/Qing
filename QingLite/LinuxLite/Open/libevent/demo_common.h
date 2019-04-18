@@ -4,9 +4,10 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <strings.h>
 #include <event.h>
 #include <string.h>
+
+const int LIBEVENT_DEMO_BUFFER_SIZE = 1024;
 
 
 
@@ -32,6 +33,7 @@ int ConnectServer(const char *ServerIP, int Port)
         return -1;
     }
 
+    evutil_make_socket_nonblocking(ClientSocket);
     return ClientSocket;
 }
 

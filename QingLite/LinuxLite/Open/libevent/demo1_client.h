@@ -5,27 +5,27 @@
 
 void CallBack_InputFromCMD(int input, short events, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[LIBEVENT_DEMO_BUFFER_SIZE];
+    memset(Message, 0, LIBEVENT_DEMO_BUFFER_SIZE);
 
-    ssize_t ret = read(input, Message, sizeof(Message));
-    if (ret <= 0)
+    ssize_t readsize = read(input, Message, sizeof(Message));
+    if (readsize <= 0)
     {
         printf("can not read from cmd.\n");
     }
     else
     {
-        Message[ret-1] = '\0';
+        Message[readsize-1] = '\0';
         int socket = *((int*)arg);
-        ssize_t writesize = write(socket, Message, ret);
+        ssize_t writesize = write(socket, Message, readsize);
         printf("send message = %s, size = %d.\n", Message, writesize);
     }
 }
 
 void CallBack_RecvFromServer(int socket, short events, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[LIBEVENT_DEMO_BUFFER_SIZE];
+    memset(Message, 0, LIBEVENT_DEMO_BUFFER_SIZE);
 
     ssize_t readsize = read(socket, Message, sizeof(Message));
     if (readsize <= 0)
@@ -47,8 +47,6 @@ void demo1_client()
         return;
     }
 
-    evutil_make_socket_nonblocking(ClientSocket);
-
     struct event_base *base = event_base_new();
 
     struct event *ev_sockfd = event_new(base, ClientSocket, EV_READ | EV_PERSIST, CallBack_RecvFromServer, NULL);
@@ -57,6 +55,7 @@ void demo1_client()
     struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, (void*)&ClientSocket);
     event_add(ev_cmd, NULL);
 
-    event_base_dispatch(base);
     printf("client start dispatch...\n");
+    event_base_dispatch(base);
+    event_base_free(base);
 }

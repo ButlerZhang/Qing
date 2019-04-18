@@ -4,26 +4,35 @@
 
 
 
-void CallBack_RecvClient(int ClientSocket, short events, void *arg)
+void CallBack_RecvClient(bufferevent *bev, void *arg)
 {
     char Message[LIBEVENT_DEMO_BUFFER_SIZE];
     memset(Message, 0, LIBEVENT_DEMO_BUFFER_SIZE);
 
-    ssize_t readsize = read(ClientSocket, Message, sizeof(Message));
-    if (readsize <= 0)
-    {
-        printf("recv client message error.\n");
-        event_free((struct event*)arg);
-        close(ClientSocket);
-    }
-    else
-    {
-        printf("client = %d recv message = %s, size = %d.\n", ClientSocket, Message, readsize);
+    size_t len = bufferevent_read(bev, Message, sizeof(Message));
+    Message[len] = '\0';
 
-        const std::string ACK("ACK");
-        ssize_t writesize = write(ClientSocket, ACK.c_str(), ACK.length());
-        printf("client = %d recv send ack, size = %d.\n\n", ClientSocket, writesize);
+    int ClientSocket = bufferevent_getfd(bev);
+    printf("client = %d recv message = %s, size = %d.\n", ClientSocket, Message, len);
+
+    const std::string ACK("ACK");
+    bufferevent_write(bev, ACK.c_str(), ACK.length());
+    printf("client = %d recv send ack, size = %d.\n\n", ClientSocket, ACK.length());
+}
+
+void event_cb(struct bufferevent *bev, short event, void *arg)
+{
+    int ClientSocket = bufferevent_getfd(bev);
+    if (event &BEV_EVENT_EOF)
+    {
+        printf("client = %d connection closed.\n\n", ClientSocket);
     }
+    else if (event & BEV_EVENT_ERROR)
+    {
+        printf("client = %d unknow error.\n\n", ClientSocket);
+    }
+
+    bufferevent_free(bev);
 }
 
 void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
@@ -37,13 +46,12 @@ void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
     printf("accept client socket = %d.\n\n", ClientSocket);
 
     struct event_base *base = (event_base*)arg;
-    struct event *ev = event_new(NULL, -1, 0, NULL, NULL);
-
-    event_assign(ev, base, ClientSocket, EV_READ | EV_PERSIST, CallBack_RecvClient, (void*)ev);
-    event_add(ev, NULL);
+    bufferevent *bev = bufferevent_socket_new(base, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
+    bufferevent_setcb(bev, CallBack_RecvClient, NULL, event_cb, arg);
+    bufferevent_enable(bev, EV_READ | EV_PERSIST);
 }
 
-void demo1_server()
+void demo2_server()
 {
     int ListenSocket = StartServer("192.168.3.126", 12345);
     if (ListenSocket == -1)
