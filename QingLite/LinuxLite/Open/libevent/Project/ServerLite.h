@@ -2,9 +2,7 @@
 #include "ThreadNode.h"
 #include "TimerEvent.h"
 #include "SignalEvent.h"
-
 #include <string>
-#include <vector>
 #include <event2/listener.h>
 
 

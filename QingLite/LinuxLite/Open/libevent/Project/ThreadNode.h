@@ -1,5 +1,5 @@
 #pragma once
-#include <list>
+#include <vector>
 #include <event.h>
 #include <pthread.h>
 
@@ -25,5 +25,5 @@ struct ThreadNode
     struct event             m_NotifyEvent;
 
     struct ServerLite       *m_Server;
-    std::list<ConnectNode>   m_ConnectNodeList;
+    std::vector<ConnectNode> m_ConnectNodeVector;
 };

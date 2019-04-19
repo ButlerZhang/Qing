@@ -1,8 +1,8 @@
 #include "ServerLite.h"
 #include <arpa/inet.h>
 #include <strings.h>
+#include <string.h>
 #include <unistd.h>
-#include <algorithm>
 
 
 
@@ -65,13 +65,36 @@ bool ServerLite::ProcessConnect(ConnectNode & ConnectedNode)
 
 bool ServerLite::ProcessRecv(ConnectNode & ConnectedNode)
 {
-    printf("Client recv = %d data.\n", ConnectedNode.m_ClientSocket);
+    if (evbuffer_get_length(ConnectedNode.m_ReadBuffer) <= 0)
+    {
+        printf("Process recv, no data.\n\n");
+        return false;
+    }
+
+    char Message[1024];
+    memset(Message, 0, sizeof(Message));
+
+    int RecvSize = evbuffer_remove(ConnectedNode.m_ReadBuffer, Message, sizeof(Message));
+    Message[RecvSize] = '\0';
+
+    printf("Client = %d recv = %s, size = %d.\n", ConnectedNode.m_ClientSocket, Message, RecvSize);
+    return true;
+
+    const std::string ACK("ACK");
+    evbuffer_add(ConnectedNode.m_WriteBuffer, ACK.c_str(), ACK.length());
+    printf("Client = %d send ack, size = %d.\n\n", ConnectedNode.m_ClientSocket, ACK.length());
     return true;
 }
 
 bool ServerLite::ProcessSend(ConnectNode & ConnectedNode)
 {
-    printf("Client send = %d data.\n", ConnectedNode.m_ClientSocket);
+    if (evbuffer_get_length(ConnectedNode.m_WriteBuffer) <= 0)
+    {
+        printf("Process send, no data.\n\n");
+        return false;
+    }
+
+    printf("Client = %d send data.\n", ConnectedNode.m_ClientSocket);
     return true;
 }
 
@@ -120,7 +143,7 @@ bool ServerLite::CreateThreads(int ThreadCount)
         }
     }
 
-    printf("Create %d threads.\n", static_cast<int>(m_ThreadVector.size()));
+    printf("Create %d threads succeed.\n", static_cast<int>(m_ThreadVector.size()));
     return true;
 }
 
@@ -139,8 +162,8 @@ bool ServerLite::StartListen(const std::string & IP, int Port)
         m_MainThread.m_EventBase,
         CallBack_Listen,
         (void*)this,
-        LEV_OPT_REUSEABLE | BEV_OPT_CLOSE_ON_FREE,
-        -1,
+        LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE,
+        5,
         (sockaddr*)&BindAddress,
         sizeof(sockaddr_in));
     if (Listener == NULL)
@@ -187,6 +210,8 @@ void ServerLite::CallBack_Accept(int fd, short which, void *arg)
         return;
     }
 
+    printf("Accept: read socket = %d from recv pipe.\n", ClientSocket);
+
     struct bufferevent *bev = bufferevent_socket_new(CurrentNode->m_EventBase, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
     if (bev == NULL)
     {
@@ -195,19 +220,19 @@ void ServerLite::CallBack_Accept(int fd, short which, void *arg)
         return;
     }
 
-    ConnectNode NewConnectedNode;
+    CurrentNode->m_ConnectNodeVector.push_back(ConnectNode());
+    ConnectNode &NewConnectedNode = CurrentNode->m_ConnectNodeVector[CurrentNode->m_ConnectNodeVector.size() - 1];
     NewConnectedNode.m_ClientSocket = ClientSocket;
     NewConnectedNode.m_WorkThread = CurrentNode;
-    CurrentNode->m_ConnectNodeList.push_back(NewConnectedNode);
 
     bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Close, &NewConnectedNode);
-    bufferevent_enable(bev, EV_WRITE);
-    bufferevent_enable(bev, EV_READ);
+    bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
+    bufferevent_enable(bev, EV_READ | EV_PERSIST);
 
     CurrentNode->m_Server->ProcessConnect(NewConnectedNode);
 }
 
-void ServerLite::CallBack_Recv(bufferevent * bev, void * data)
+void ServerLite::CallBack_Recv(bufferevent * bev, void *data)
 {
     ConnectNode *CurrentNode = (ConnectNode*)data;
     CurrentNode->m_ReadBuffer = bufferevent_get_input(bev);
@@ -228,12 +253,12 @@ void ServerLite::CallBack_Close(bufferevent * bev, short events, void * data)
     ConnectNode *CurrentNode = (ConnectNode*)data;
     CurrentNode->m_WorkThread->m_Server->ProcessClose(*CurrentNode, events);
 
-    std::list<ConnectNode> &NodeList = CurrentNode->m_WorkThread->m_ConnectNodeList;
-    for (std::list<ConnectNode>::iterator it = NodeList.begin(); it != NodeList.end(); it++)
+    std::vector<ConnectNode> &NodeVector = CurrentNode->m_WorkThread->m_ConnectNodeVector;
+    for (std::vector<ConnectNode>::iterator it = NodeVector.begin(); it != NodeVector.end(); it++)
     {
         if (it->m_ClientSocket == CurrentNode->m_ClientSocket)
         {
-            NodeList.erase(it);
+            NodeVector.erase(it);
             break;
         }
     }
@@ -244,7 +269,6 @@ void ServerLite::CallBack_Close(bufferevent * bev, short events, void * data)
 void* ServerLite::CallBack_StartThreadEventLoop(void *arg)
 {
     ThreadNode *CurrentNode = (ThreadNode*)arg;
-    //CurrentNode->m_ThreadID = pthread_self();
     printf("Thread %u started.\n", CurrentNode->m_ThreadID);
 
     event_base_dispatch(CurrentNode->m_EventBase);
