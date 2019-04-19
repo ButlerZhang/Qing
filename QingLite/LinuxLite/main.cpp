@@ -10,10 +10,12 @@
 //#include "Open/libevent/Demo/demo1_server.h"
 //#include "Open/libevent/Demo/demo2_client.h"
 //#include "Open/libevent/Demo/demo2_server.h"
-//#include "Open/libevent/Demo/demo3_client.h"
+#include "Open/libevent/Demo/demo3_client.h"
 //#include "Open/libevent/Demo/demo3_server.h"
-#include "Open/libevent/Demo/demo4_client.h"
-#include "Open/libevent/Demo/demo4_server.h"
+//#include "Open/libevent/Demo/demo4_client.h"
+//#include "Open/libevent/Demo/demo4_server.h"
+
+#include "Open/libevent/Project/ServerLite.h"
 
 
 int main(int argc, char *argv[])
@@ -31,7 +33,9 @@ int main(int argc, char *argv[])
     //demo3_client("192.168.3.126", 12345);
     //demo3_server("192.168.3.126", 12345);
     //demo4_client();
-    demo4_server();
+
+    ServerLite Server;
+    Server.StartServer("192.168.3.126", 12345, 2);
 
     std::cout << std::endl;
     return 0;
