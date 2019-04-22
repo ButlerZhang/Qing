@@ -3,6 +3,7 @@
 #include <strings.h>
 #include <string.h>
 #include <unistd.h>
+#include <assert.h>
 #include <algorithm>
 #include <event2/bufferevent.h>
 
@@ -10,25 +11,28 @@
 
 SingleThreadServerLite::SingleThreadServerLite()
 {
-    m_base = NULL;
+    m_EventBase = NULL;
+    m_Listener = NULL;
 }
 
 SingleThreadServerLite::~SingleThreadServerLite()
 {
     m_ClientSocketVector.clear();
-    event_base_free(m_base);
+
+    evconnlistener_free(m_Listener);
+    event_base_free(m_EventBase);
 }
 
-bool SingleThreadServerLite::StartServer(const std::string &IP, int Port)
+bool SingleThreadServerLite::Initialize(const std::string &IP, int Port)
 {
-    if (m_base != NULL)
+    if (m_EventBase != NULL && m_Listener != NULL)
     {
         printf("Re-create event base.\n");
         return true;
     }
 
-    m_base = event_base_new();
-    if (m_base == NULL)
+    m_EventBase = event_base_new();
+    if (m_EventBase == NULL)
     {
         printf("Create main event base error.\n");
         return false;
@@ -43,8 +47,8 @@ bool SingleThreadServerLite::StartServer(const std::string &IP, int Port)
         inet_pton(AF_INET, IP.c_str(), &(BindAddress.sin_addr));
     }
 
-    evconnlistener * Listener = evconnlistener_new_bind(
-        m_base,
+    m_Listener = evconnlistener_new_bind(
+        m_EventBase,
         CallBack_Listen,
         (void*)this,
         LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE,
@@ -52,17 +56,33 @@ bool SingleThreadServerLite::StartServer(const std::string &IP, int Port)
         (sockaddr*)&BindAddress,
         sizeof(sockaddr_in));
 
-    if (Listener == NULL)
+    if (m_Listener == NULL)
     {
-        printf("Start listen error.\n");
+        printf("Create listener error.\n");
         return false;
     }
 
-    printf("Server start dispatch...\n\n");
-    event_base_dispatch(m_base);
-    evconnlistener_free(Listener);
-
     return true;
+}
+
+bool SingleThreadServerLite::Start()
+{
+    if (!m_UDPBroadcast.BindEventBase(m_EventBase))
+    {
+        printf("UDP bind event base error.\n");
+        return false;
+    }
+
+    m_UDPBroadcast.StartTimer(10);
+
+    printf("Server start dispatch...\n\n");
+    event_base_dispatch(m_EventBase);
+    return true;
+}
+
+bool SingleThreadServerLite::Stop()
+{
+    return false;
 }
 
 void SingleThreadServerLite::CallBack_Listen(evconnlistener * Listener, evutil_socket_t Socket, sockaddr *sa, int socklen, void *UserData)
@@ -71,7 +91,7 @@ void SingleThreadServerLite::CallBack_Listen(evconnlistener * Listener, evutil_s
     Server->m_ClientSocketVector.push_back(Socket);
     printf("Accept client, socket = %d, socket count = %d.\n\n", Socket, static_cast<int>(Server->m_ClientSocketVector.size()));
 
-    bufferevent *bev = bufferevent_socket_new(Server->m_base, Socket, BEV_OPT_CLOSE_ON_FREE);
+    bufferevent *bev = bufferevent_socket_new(Server->m_EventBase, Socket, BEV_OPT_CLOSE_ON_FREE);
     bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Event, Server);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);

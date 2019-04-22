@@ -36,7 +36,11 @@ int main(int argc, char *argv[])
     //demo4_client();
 
     SingleThreadServerLite Server;
-    Server.StartServer("192.168.3.126", 12345);
+    if (Server.Initialize("192.168.3.126", 12345))
+    {
+        Server.Start();
+    }
+
 
     std::cout << std::endl;
     return 0;

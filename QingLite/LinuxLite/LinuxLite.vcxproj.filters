@@ -130,6 +130,9 @@
     <ClCompile Include="Open\libevent\MultiThread\TimerEvent.cpp">
       <Filter>Open\libevent\MultiThread</Filter>
     </ClCompile>
+    <ClCompile Include="Open\libevent\SingleThread\UDPBroadcast.cpp">
+      <Filter>Open\libevent\SingleThread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -302,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="Open\libevent\MultiThread\TimerEvent.h">
       <Filter>Open\libevent\MultiThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\SingleThread\UDPBroadcast.h">
+      <Filter>Open\libevent\SingleThread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

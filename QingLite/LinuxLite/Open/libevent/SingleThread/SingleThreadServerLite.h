@@ -1,4 +1,5 @@
 #pragma once
+#include "UDPBroadcast.h"
 #include <string>
 #include <vector>
 #include <event.h>
@@ -13,7 +14,10 @@ public:
     SingleThreadServerLite();
     ~SingleThreadServerLite();
 
-    bool StartServer(const std::string &IP, int Port);
+    bool Initialize(const std::string &IP, int Port);
+
+    bool Start();
+    bool Stop();
 
 private:
 
@@ -24,6 +28,9 @@ private:
 
 private:
 
-    event_base                  *m_base;
-    std::vector<int>             m_ClientSocketVector;
+    event_base                      *m_EventBase;
+    evconnlistener                  *m_Listener;
+
+    UDPBroadcast                     m_UDPBroadcast;
+    std::vector<int>                 m_ClientSocketVector;
 };
