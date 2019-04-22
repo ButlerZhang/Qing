@@ -1,4 +1,4 @@
-#include "ServerLite.h"
+#include "MultiThreadServerLite.h"
 #include <arpa/inet.h>
 #include <strings.h>
 #include <string.h>
@@ -6,16 +6,16 @@
 
 
 
-ServerLite::ServerLite()
+MultiThreadServerLite::MultiThreadServerLite()
 {
 }
 
-ServerLite::~ServerLite()
+MultiThreadServerLite::~MultiThreadServerLite()
 {
     m_ThreadVector.clear();
 }
 
-bool ServerLite::StartServer(const std::string &IP, int Port, int ThreadCount)
+bool MultiThreadServerLite::StartServer(const std::string &IP, int Port, int ThreadCount)
 {
     m_MainThread.m_ThreadID = pthread_self();
     m_MainThread.m_EventBase = event_base_new();
@@ -40,7 +40,7 @@ bool ServerLite::StartServer(const std::string &IP, int Port, int ThreadCount)
     return true;
 }
 
-void ServerLite::StopServer()
+void MultiThreadServerLite::StopServer()
 {
     int EXIT_CODE = -1;
     for (std::vector<ThreadNode>::size_type Index = 0; Index < m_ThreadVector.size(); Index++)
@@ -57,13 +57,13 @@ void ServerLite::StopServer()
     }
 }
 
-bool ServerLite::ProcessConnect(ConnectNode & ConnectedNode)
+bool MultiThreadServerLite::ProcessConnect(ConnectNode & ConnectedNode)
 {
     printf("Client socket = %d connected.\n", ConnectedNode.m_ClientSocket);
     return true;
 }
 
-bool ServerLite::ProcessRecv(ConnectNode & ConnectedNode)
+bool MultiThreadServerLite::ProcessRecv(ConnectNode & ConnectedNode)
 {
     if (evbuffer_get_length(ConnectedNode.m_ReadBuffer) <= 0)
     {
@@ -86,7 +86,7 @@ bool ServerLite::ProcessRecv(ConnectNode & ConnectedNode)
     return true;
 }
 
-bool ServerLite::ProcessSend(ConnectNode & ConnectedNode)
+bool MultiThreadServerLite::ProcessSend(ConnectNode & ConnectedNode)
 {
     if (evbuffer_get_length(ConnectedNode.m_WriteBuffer) <= 0)
     {
@@ -98,13 +98,13 @@ bool ServerLite::ProcessSend(ConnectNode & ConnectedNode)
     return true;
 }
 
-bool ServerLite::ProcessClose(ConnectNode & ConnectedNode, short events)
+bool MultiThreadServerLite::ProcessClose(ConnectNode & ConnectedNode, short events)
 {
     printf("Client socket = %d closed.\n", ConnectedNode.m_ClientSocket);
     return true;
 }
 
-bool ServerLite::CreateThreads(int ThreadCount)
+bool MultiThreadServerLite::CreateThreads(int ThreadCount)
 {
     if (ThreadCount <= 0)
     {
@@ -147,7 +147,7 @@ bool ServerLite::CreateThreads(int ThreadCount)
     return true;
 }
 
-bool ServerLite::StartListen(const std::string & IP, int Port)
+bool MultiThreadServerLite::StartListen(const std::string & IP, int Port)
 {
     sockaddr_in BindAddress;
     bzero(&BindAddress, sizeof(sockaddr_in));
@@ -175,7 +175,7 @@ bool ServerLite::StartListen(const std::string & IP, int Port)
     return StartEventLoop(Listener);
 }
 
-bool ServerLite::StartEventLoop(evconnlistener *Listener)
+bool MultiThreadServerLite::StartEventLoop(evconnlistener *Listener)
 {
     for (std::vector<ThreadNode>::size_type Index = 0; Index < m_ThreadVector.size(); Index++)
     {
@@ -188,16 +188,16 @@ bool ServerLite::StartEventLoop(evconnlistener *Listener)
     return true;
 }
 
-void ServerLite::CallBack_Listen(evconnlistener * Listener, evutil_socket_t Socket, sockaddr *sa, int socklen, void *user_data)
+void MultiThreadServerLite::CallBack_Listen(evconnlistener * Listener, evutil_socket_t Socket, sockaddr *sa, int socklen, void *user_data)
 {
-    ServerLite *Server = (ServerLite*)user_data;
+    MultiThreadServerLite *Server = (MultiThreadServerLite*)user_data;
     std::vector<ThreadNode>::size_type Index = rand() % Server->m_ThreadVector.size();
 
     int Pipe = Server->m_ThreadVector[Index].m_NotifySendPipeFD;
     write(Pipe, &Socket, sizeof(evutil_socket_t));
 }
 
-void ServerLite::CallBack_Accept(int fd, short which, void *arg)
+void MultiThreadServerLite::CallBack_Accept(int fd, short which, void *arg)
 {
     ThreadNode *CurrentNode = (ThreadNode*)arg;
 
@@ -232,7 +232,7 @@ void ServerLite::CallBack_Accept(int fd, short which, void *arg)
     CurrentNode->m_Server->ProcessConnect(NewConnectedNode);
 }
 
-void ServerLite::CallBack_Recv(bufferevent * bev, void *data)
+void MultiThreadServerLite::CallBack_Recv(bufferevent * bev, void *data)
 {
     ConnectNode *CurrentNode = (ConnectNode*)data;
     CurrentNode->m_ReadBuffer = bufferevent_get_input(bev);
@@ -240,7 +240,7 @@ void ServerLite::CallBack_Recv(bufferevent * bev, void *data)
     CurrentNode->m_WorkThread->m_Server->ProcessRecv(*CurrentNode);
 }
 
-void ServerLite::CallBack_Send(bufferevent * bev, void * data)
+void MultiThreadServerLite::CallBack_Send(bufferevent * bev, void * data)
 {
     ConnectNode *CurrentNode = (ConnectNode*)data;
     CurrentNode->m_ReadBuffer = bufferevent_get_input(bev);
@@ -248,7 +248,7 @@ void ServerLite::CallBack_Send(bufferevent * bev, void * data)
     CurrentNode->m_WorkThread->m_Server->ProcessSend(*CurrentNode);
 }
 
-void ServerLite::CallBack_Close(bufferevent * bev, short events, void * data)
+void MultiThreadServerLite::CallBack_Close(bufferevent * bev, short events, void * data)
 {
     ConnectNode *CurrentNode = (ConnectNode*)data;
     CurrentNode->m_WorkThread->m_Server->ProcessClose(*CurrentNode, events);
@@ -266,7 +266,7 @@ void ServerLite::CallBack_Close(bufferevent * bev, short events, void * data)
     bufferevent_free(bev);
 }
 
-void* ServerLite::CallBack_StartThreadEventLoop(void *arg)
+void* MultiThreadServerLite::CallBack_StartThreadEventLoop(void *arg)
 {
     ThreadNode *CurrentNode = (ThreadNode*)arg;
     printf("Thread %u started.\n", CurrentNode->m_ThreadID);

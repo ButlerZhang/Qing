@@ -5,6 +5,7 @@
 #include <string.h>
 #include <assert.h>
 #include <event.h>
+#include <string>
 #include <event2/event.h>
 #include <event2/event_struct.h>
 
@@ -13,16 +14,14 @@
 int g_UDPSocket = -1;
 struct timeval g_LastSendTime;
 struct sockaddr_in g_BroadcastAddress;
-std::string g_UDPMessage("please connect 192.168.3.126:12345");
-
-
 
 void CallBack_TimeOut(evutil_socket_t fd, short event, void *arg)
 {
+    std::string Message("please connect 192.168.3.126:12345");
     ssize_t SendSize = sendto(g_UDPSocket,
-        g_UDPMessage.c_str(), g_UDPMessage.length(),
+        Message.c_str(), Message.length(),
         0, (struct sockaddr*)&g_BroadcastAddress, sizeof(g_BroadcastAddress));
-    assert(SendSize == static_cast<ssize_t>(g_UDPMessage.length()));
+    assert(SendSize == static_cast<ssize_t>(Message.length()));
 
     struct timeval NewTime, DifferentTime;
     evutil_gettimeofday(&NewTime, NULL);
@@ -31,7 +30,7 @@ void CallBack_TimeOut(evutil_socket_t fd, short event, void *arg)
         (static_cast<double>(DifferentTime.tv_usec) / 1.0e6);
 
     printf("Broadcast = %s, %d: %.3f seconds elapsed.\n\n",
-        g_UDPMessage.c_str(), (int)NewTime.tv_sec, elapsed);
+        Message.c_str(), (int)NewTime.tv_sec, elapsed);
 
     g_LastSendTime = NewTime;
 

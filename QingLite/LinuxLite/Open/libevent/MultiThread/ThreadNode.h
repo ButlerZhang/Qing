@@ -24,6 +24,6 @@ struct ThreadNode
     struct event_base       *m_EventBase;
     struct event             m_NotifyEvent;
 
-    struct ServerLite       *m_Server;
+    struct MultiThreadServerLite       *m_Server;
     std::vector<ConnectNode> m_ConnectNodeVector;
 };

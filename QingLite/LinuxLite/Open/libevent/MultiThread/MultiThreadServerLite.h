@@ -2,17 +2,18 @@
 #include "ThreadNode.h"
 #include "TimerEvent.h"
 #include "SignalEvent.h"
-#include <string>
+
 #include <event2/listener.h>
+#include <string>
 
 
 
-class ServerLite
+class MultiThreadServerLite
 {
 public:
 
-    ServerLite();
-    ~ServerLite();
+    MultiThreadServerLite();
+    ~MultiThreadServerLite();
 
     bool StartServer(const std::string &IP, int Port, int ThreadCount = 0);
     void StopServer();

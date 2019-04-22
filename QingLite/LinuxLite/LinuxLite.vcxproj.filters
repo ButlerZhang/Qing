@@ -52,8 +52,11 @@
     <Filter Include="Open\libevent\Demo">
       <UniqueIdentifier>{681534fa-1030-4331-afe0-4e4cc4993703}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Open\libevent\Project">
+    <Filter Include="Open\libevent\MultiThread">
       <UniqueIdentifier>{43f53926-921b-415e-b5f3-51706ff6ba47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\libevent\SingleThread">
+      <UniqueIdentifier>{abd5a657-c03e-4b4b-bedb-acface37f502}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,17 +115,17 @@
     <ClCompile Include="Qing\NetworkServer.cpp">
       <Filter>Qing</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\Project\ServerLite.cpp">
-      <Filter>Open\libevent\Project</Filter>
-    </ClCompile>
     <ClCompile Include="Open\libevent\Project\ThreadNode.cpp">
-      <Filter>Open\libevent\Project</Filter>
+      <Filter>Open\libevent\MultiThread</Filter>
     </ClCompile>
     <ClCompile Include="Open\libevent\Project\SignalEvent.cpp">
-      <Filter>Open\libevent\Project</Filter>
+      <Filter>Open\libevent\MultiThread</Filter>
     </ClCompile>
     <ClCompile Include="Open\libevent\Project\TimerEvent.cpp">
-      <Filter>Open\libevent\Project</Filter>
+      <Filter>Open\libevent\MultiThread</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\libevent\Project\MultiThreadServerLite.cpp">
+      <Filter>Open\libevent\MultiThread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -282,17 +285,17 @@
     <ClInclude Include="Open\libevent\Demo\demo4_server.h">
       <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\Project\ServerLite.h">
-      <Filter>Open\libevent\Project</Filter>
-    </ClInclude>
     <ClInclude Include="Open\libevent\Project\ThreadNode.h">
-      <Filter>Open\libevent\Project</Filter>
+      <Filter>Open\libevent\MultiThread</Filter>
     </ClInclude>
     <ClInclude Include="Open\libevent\Project\SignalEvent.h">
-      <Filter>Open\libevent\Project</Filter>
+      <Filter>Open\libevent\MultiThread</Filter>
     </ClInclude>
     <ClInclude Include="Open\libevent\Project\TimerEvent.h">
-      <Filter>Open\libevent\Project</Filter>
+      <Filter>Open\libevent\MultiThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\Project\MultiThreadServerLite.h">
+      <Filter>Open\libevent\MultiThread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
