@@ -20,6 +20,9 @@ private:
     bool ConnectServer(const std::string &ServerIP, int Port);
 
     static void CallBack_UDPBroadcastRecv(int Socket, short events, void *UserData);
+    static void CallBack_ClientEvent(struct bufferevent *bev, short events, void *UserData);
+    static void CallBack_InputFromCMD(int Input, short events, void *UserData);
+    static void CallBack_RecvFromServer(struct bufferevent *bev, void *UserData);
 
 private:
 

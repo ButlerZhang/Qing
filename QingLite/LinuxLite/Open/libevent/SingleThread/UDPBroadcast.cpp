@@ -34,7 +34,7 @@ bool UDPBroadcast::StartTimer(int Seconds, int Port)
     int iOptval = 1;
     if (setsockopt(m_UDPBroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &iOptval, sizeof(int)) < 0)
     {
-        printf("ERROR: setsockopt failed!");
+        printf("ERROR: setsockopt error.\n\n");
         return false;
     }
 
