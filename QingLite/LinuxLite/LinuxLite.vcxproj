@@ -85,6 +85,7 @@
     <ClCompile Include="Open\libevent\MultiThread\SignalEvent.cpp" />
     <ClCompile Include="Open\libevent\MultiThread\ThreadNode.cpp" />
     <ClCompile Include="Open\libevent\MultiThread\TimerEvent.cpp" />
+    <ClCompile Include="Open\libevent\SingleThread\SingleThreadClientLite.cpp" />
     <ClCompile Include="Open\libevent\SingleThread\SingleThreadServerLite.cpp" />
     <ClCompile Include="Open\libevent\SingleThread\UDPBroadcast.cpp" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="Open\libevent\MultiThread\SignalEvent.h" />
     <ClInclude Include="Open\libevent\MultiThread\ThreadNode.h" />
     <ClInclude Include="Open\libevent\MultiThread\TimerEvent.h" />
+    <ClInclude Include="Open\libevent\SingleThread\SingleThreadClientLite.h" />
     <ClInclude Include="Open\libevent\SingleThread\SingleThreadServerLite.h" />
     <ClInclude Include="Open\libevent\SingleThread\UDPBroadcast.h" />
     <ClInclude Include="Qing\NetworkBase.h" />

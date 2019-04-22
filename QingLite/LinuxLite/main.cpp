@@ -10,12 +10,13 @@
 //#include "Open/libevent/Demo/demo1_server.h"
 //#include "Open/libevent/Demo/demo2_client.h"
 //#include "Open/libevent/Demo/demo2_server.h"
-#include "Open/libevent/Demo/demo3_client.h"
+//#include "Open/libevent/Demo/demo3_client.h"
 //#include "Open/libevent/Demo/demo3_server.h"
 //#include "Open/libevent/Demo/demo4_client.h"
 //#include "Open/libevent/Demo/demo4_server.h"
 
 #include "Open/libevent/SingleThread/SingleThreadServerLite.h"
+#include "Open/libevent/SingleThread/SingleThreadClientLite.h"
 
 
 
@@ -35,12 +36,14 @@ int main(int argc, char *argv[])
     //demo3_server("192.168.3.126", 12345);
     //demo4_client();
 
-    SingleThreadServerLite Server;
-    if (Server.Initialize("192.168.3.126", 12345))
-    {
-        Server.Start();
-    }
+    //SingleThreadServerLite Server;
+    //if (Server.Initialize("192.168.3.126", 12345))
+    //{
+    //    Server.Start();
+    //}
 
+    SingleThreadClientLite Client;
+    Client.Start();
 
     std::cout << std::endl;
     return 0;

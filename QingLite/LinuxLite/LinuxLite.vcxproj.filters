@@ -133,6 +133,9 @@
     <ClCompile Include="Open\libevent\SingleThread\UDPBroadcast.cpp">
       <Filter>Open\libevent\SingleThread</Filter>
     </ClCompile>
+    <ClCompile Include="Open\libevent\SingleThread\SingleThreadClientLite.cpp">
+      <Filter>Open\libevent\SingleThread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -307,6 +310,9 @@
       <Filter>Open\libevent\MultiThread</Filter>
     </ClInclude>
     <ClInclude Include="Open\libevent\SingleThread\UDPBroadcast.h">
+      <Filter>Open\libevent\SingleThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\SingleThread\SingleThreadClientLite.h">
       <Filter>Open\libevent\SingleThread</Filter>
     </ClInclude>
   </ItemGroup>
