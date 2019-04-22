@@ -38,7 +38,7 @@ private:
     static void CallBack_Accept(int fd, short which, void *arg);
     static void CallBack_Recv(struct bufferevent *bev, void *data);
     static void CallBack_Send(struct bufferevent *bev, void *data);
-    static void CallBack_Close(struct bufferevent *bev, short events, void *data);
+    static void CallBack_Event(struct bufferevent *bev, short events, void *data);
     static void* CallBack_StartThreadEventLoop(void *arg);
 
 private:

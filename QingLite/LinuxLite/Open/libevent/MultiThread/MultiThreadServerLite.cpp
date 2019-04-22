@@ -225,7 +225,7 @@ void MultiThreadServerLite::CallBack_Accept(int fd, short which, void *arg)
     NewConnectedNode.m_ClientSocket = ClientSocket;
     NewConnectedNode.m_WorkThread = CurrentNode;
 
-    bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Close, &NewConnectedNode);
+    bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Event, &NewConnectedNode);
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
 
@@ -248,7 +248,7 @@ void MultiThreadServerLite::CallBack_Send(bufferevent * bev, void * data)
     CurrentNode->m_WorkThread->m_Server->ProcessSend(*CurrentNode);
 }
 
-void MultiThreadServerLite::CallBack_Close(bufferevent * bev, short events, void * data)
+void MultiThreadServerLite::CallBack_Event(bufferevent * bev, short events, void * data)
 {
     ConnectNode *CurrentNode = (ConnectNode*)data;
     CurrentNode->m_WorkThread->m_Server->ProcessClose(*CurrentNode, events);
