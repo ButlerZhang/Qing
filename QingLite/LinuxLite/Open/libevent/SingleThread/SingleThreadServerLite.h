@@ -2,7 +2,6 @@
 #include "UDPBroadcast.h"
 #include <string>
 #include <vector>
-#include <event.h>
 #include <event2/listener.h>
 
 
@@ -21,8 +20,8 @@ public:
 
 private:
 
-    static void CallBack_Listen(evconnlistener *Listener, evutil_socket_t Socket, sockaddr *sa, int socklen, void *UserData);
-    static void CallBack_Event(struct bufferevent *bev, short events, void *UserData);
+    static void CallBack_Listen(evconnlistener *Listener, evutil_socket_t Socket, sockaddr *Address, int SocketLen, void *UserData);
+    static void CallBack_Event(struct bufferevent *bev, short Events, void *UserData);
     static void CallBack_Recv(struct bufferevent *bev, void *UserData);
     static void CallBack_Send(struct bufferevent *bev, void *UserData);
 

@@ -15,7 +15,7 @@ public:
 
 private:
 
-    static void CallBack_UDPBroadcastTimeOut(evutil_socket_t Socket, short events, void *UserData);
+    static void CallBack_TimeOut(evutil_socket_t Socket, short Events, void *UserData);
 
 private:
 

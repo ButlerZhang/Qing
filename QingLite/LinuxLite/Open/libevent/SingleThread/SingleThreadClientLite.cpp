@@ -1,6 +1,6 @@
 #include "SingleThreadClientLite.h"
-#include <string.h>
 #include <arpa/inet.h>
+#include <string.h>
 #include <unistd.h>
 
 
@@ -8,24 +8,45 @@
 SingleThreadClientLite::SingleThreadClientLite()
 {
     m_ServerPort = 0;
-    m_EventBase = event_base_new();
+    m_UDPSocket = -1;
+    m_EventBase = NULL;
+    m_UDPBroadcastEvent = NULL;
 }
 
 SingleThreadClientLite::~SingleThreadClientLite()
 {
     event_base_free(m_EventBase);
+    event_free(m_UDPBroadcastEvent);
 }
 
 bool SingleThreadClientLite::Start()
 {
-    RecvUDPBroadcast();
+    if (m_EventBase != NULL)
+    {
+        printf("ERROR: re-start.\n");
+        return true;
+    }
+
+    m_EventBase = event_base_new();
+    if (m_EventBase == NULL)
+    {
+        printf("ERROR: Create event base error.\n");
+        return false;
+    }
+
+    if (!RecvUDPBroadcast())
+    {
+        return false;
+    }
+
+    printf("Client start dispatch...\n");
     event_base_dispatch(m_EventBase);
     return true;
 }
 
 bool SingleThreadClientLite::Stop()
 {
-    return false;
+    return event_base_loopbreak(m_EventBase) == 0;
 }
 
 bool SingleThreadClientLite::RecvUDPBroadcast()
@@ -33,14 +54,14 @@ bool SingleThreadClientLite::RecvUDPBroadcast()
     m_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_UDPSocket == -1)
     {
-        printf("ERROR: Create udp socket error.\n\n");
+        printf("ERROR: Create udp socket error.\n");
         return false;
     }
 
     int iOptval = 1;
     if (setsockopt(m_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &iOptval, sizeof(int)) < 0)
     {
-        printf("ERROR: setsockopt failed!");
+        printf("ERROR: setsockopt failed!\n");
         return false;
     }
 
@@ -51,18 +72,31 @@ bool SingleThreadClientLite::RecvUDPBroadcast()
 
     if (bind(m_UDPSocket, (struct sockaddr *)&m_BroadcastAddress, sizeof(m_BroadcastAddress)) == -1)
     {
-        printf("bind failed!\n");
+        printf("ERROR: Bind failed.\n");
         return false;
     }
 
-    struct event *UDPEvent = event_new(m_EventBase, m_UDPSocket, EV_READ | EV_PERSIST, CallBack_UDPBroadcastRecv, this);
-    if (event_add(UDPEvent, NULL) == -1)
+    m_UDPBroadcastEvent = event_new(m_EventBase, m_UDPSocket, EV_READ | EV_PERSIST, CallBack_RecvUDPBroadcast, this);
+    if (event_add(m_UDPBroadcastEvent, NULL) == -1)
     {
-        printf("event add failed\n");
+        printf("ERROR: Add event failed.\n");
         return false;
     }
 
     return true;
+}
+
+bool SingleThreadClientLite::UnbindUDPBroadcast()
+{
+    if (event_del(m_UDPBroadcastEvent) == 0)
+    {
+        printf("Delete udp broadcast recv event and close udp socket.\n");
+        close(m_UDPSocket);
+        return true;
+    }
+
+    printf("ERROR: unbind failed.\n");
+    return false;
 }
 
 bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port)
@@ -80,7 +114,7 @@ bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port
     {
         m_ServerPort = 0;
         m_ServerIP.clear();
-        printf("bufferevent connect error.\n");
+        printf("ERROR: bufferevent connect error.\n");
         return false;
     }
 
@@ -93,7 +127,7 @@ bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port
     return true;
 }
 
-void SingleThreadClientLite::CallBack_UDPBroadcastRecv(int Socket, short events, void *UserData)
+void SingleThreadClientLite::CallBack_RecvUDPBroadcast(int Socket, short events, void *UserData)
 {
     char Buffer[1024];
     memset(Buffer, 0, sizeof(Buffer));
@@ -104,49 +138,59 @@ void SingleThreadClientLite::CallBack_UDPBroadcastRecv(int Socket, short events,
 
     if (RecvSize == -1)
     {
-        printf("Recv error.\n\n");
-        return;
+        printf("ERROR: UDP broadcast recv error.\n");
     }
-
-    if (RecvSize == 0)
+    else if (RecvSize == 0)
     {
-        printf("Connection closed.\n");
-        return;
+        printf("ERROR: UDP connection closed.\n");
     }
-
-    if (Client->m_ServerIP.empty())
+    else
     {
-        printf("Recv message = %s.\n\n", Buffer);
-        Client->m_ServerIP = Buffer;
-        Client->m_ServerPort = 12345;
-        Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort);
-        return;
-    }
+        if (Client->m_ServerIP.empty())
+        {
+            printf("UDP broadcast recv message = %s.\n", Buffer);
 
-    if (Client->m_ServerIP == std::string(Buffer))
-    {
-        printf("Repeat recv.\n\n");
+            Client->m_ServerIP = Buffer;
+            Client->m_ServerPort = 12345;
+            Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort);
+        }
+        else if (Client->m_ServerIP == std::string(Buffer))
+        {
+            printf("UDP braodcast repeat recv.\n");
+            Client->UnbindUDPBroadcast();
+        }
     }
 }
 
-void SingleThreadClientLite::CallBack_ClientEvent(struct bufferevent *bev, short events, void *UserData)
+void SingleThreadClientLite::CallBack_ClientEvent(struct bufferevent *bev, short Events, void *UserData)
 {
-    if (events & BEV_EVENT_CONNECTED)
+    bool IsAllowDelete = false;
+    int ClientSocket = bufferevent_getfd(bev);
+
+    if (Events & BEV_EVENT_EOF)
     {
-        printf("Connected server succeed.\n\n");
-        return;
+        IsAllowDelete = true;
+        printf("Client = %d connection closed.\n", ClientSocket);
     }
-    else if (events & BEV_EVENT_EOF)
+    else if (Events & BEV_EVENT_TIMEOUT)
     {
-        printf("Connection closed.\n\n");
+        printf("ERROR: User specified timeout reached.\n");
     }
-    else if (events & BEV_EVENT_ERROR)
+    else if (Events & BEV_EVENT_CONNECTED)
     {
-        printf("Unknow error.\n\n");
+        printf("Connected server succeed.\n");
+    }
+    else
+    {
+        IsAllowDelete = true;
+        printf("ERROR: unknow error.\n");
     }
 
-    bufferevent_free(bev);
-    event_free((struct event*)UserData);
+    if (IsAllowDelete)
+    {
+        bufferevent_free(bev);
+        event_free((struct event*)UserData);
+    }
 }
 
 void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void * UserData)
@@ -157,7 +201,7 @@ void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void
     ssize_t ReadSize = read(Input, Message, sizeof(Message));
     if (ReadSize <= 0)
     {
-        printf("ERROR: Can not read from cmd.\n\n");
+        printf("ERROR: Can not read from cmd.\n");
         return;
     }
 
@@ -181,5 +225,5 @@ void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void * U
     size_t RecvSize = bufferevent_read(bev, Message, sizeof(Message));
     Message[RecvSize] = '\0';
 
-    printf("Recv message = %s, size = %d.\n\n", Message, RecvSize);
+    printf("Recv message = %s, size = %d.\n", Message, RecvSize);
 }

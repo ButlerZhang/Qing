@@ -1,7 +1,7 @@
 #include "UDPBroadcast.h"
 #include <arpa/inet.h>
-#include <string.h>
 #include <assert.h>
+#include <string.h>
 #include <string>
 
 
@@ -9,6 +9,8 @@
 UDPBroadcast::UDPBroadcast()
 {
     m_EventBase = NULL;
+    m_TimeInternal = 60;
+    m_UDPBroadcastSocket = -1;
 }
 
 UDPBroadcast::~UDPBroadcast()
@@ -24,17 +26,29 @@ bool UDPBroadcast::BindEventBase(event_base *EventBase)
 
 bool UDPBroadcast::StartTimer(int Seconds, int Port)
 {
-    m_UDPBroadcastSocket = socket(AF_INET, SOCK_DGRAM, 0);
-    if (m_UDPBroadcastSocket == -1)
+    if (Seconds <= 0)
     {
-        printf("ERROR: Create udp socket error.\n\n");
+        printf("ERROR: Timer at least needs one seconds.\n");
         return false;
     }
 
-    int iOptval = 1;
-    if (setsockopt(m_UDPBroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &iOptval, sizeof(int)) < 0)
+    if (m_EventBase == NULL)
     {
-        printf("ERROR: setsockopt error.\n\n");
+        printf("ERROR: No binding event base.\n");
+        return false;
+    }
+
+    m_UDPBroadcastSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (m_UDPBroadcastSocket == -1)
+    {
+        printf("ERROR: Create udp socket error.\n");
+        return false;
+    }
+
+    int Optval = 1;
+    if (setsockopt(m_UDPBroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
+    {
+        printf("ERROR: setsockopt error.\n");
         return false;
     }
 
@@ -44,7 +58,7 @@ bool UDPBroadcast::StartTimer(int Seconds, int Port)
     m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(Port));
 
     m_TimeInternal = Seconds;
-    event_assign(&m_TimeoutEvent, m_EventBase, -1, EV_PERSIST, CallBack_UDPBroadcastTimeOut, (void*)this);
+    event_assign(&m_TimeoutEvent, m_EventBase, -1, EV_PERSIST, CallBack_TimeOut, (void*)this);
 
     struct timeval tv;
     evutil_timerclear(&tv);
@@ -55,14 +69,19 @@ bool UDPBroadcast::StartTimer(int Seconds, int Port)
     return true;
 }
 
-void UDPBroadcast::CallBack_UDPBroadcastTimeOut(evutil_socket_t Socket, short events, void * UserData)
+void UDPBroadcast::CallBack_TimeOut(evutil_socket_t Socket, short Events, void *UserData)
 {
     UDPBroadcast *Broadcast = (UDPBroadcast*)UserData;
 
-    std::string Message("192.168.3.126");
-    ssize_t SendSize = sendto(Broadcast->m_UDPBroadcastSocket, Message.c_str(), Message.length(), 0,
-        (struct sockaddr*)&(Broadcast->m_BroadcastAddress), sizeof(Broadcast->m_BroadcastAddress));
-    assert(SendSize == static_cast<ssize_t>(Message.length()));
+    std::string UDPData("192.168.3.126");
+    ssize_t SendSize = sendto(
+        Broadcast->m_UDPBroadcastSocket,
+        UDPData.c_str(),
+        UDPData.length(),
+        0,
+        (struct sockaddr*)&(Broadcast->m_BroadcastAddress),
+        sizeof(Broadcast->m_BroadcastAddress));
+    assert(SendSize == static_cast<ssize_t>(UDPData.length()));
 
     struct timeval NewTime, DifferentTime;
     evutil_gettimeofday(&NewTime, NULL);
@@ -70,8 +89,8 @@ void UDPBroadcast::CallBack_UDPBroadcastTimeOut(evutil_socket_t Socket, short ev
     double elapsed = static_cast<double>(DifferentTime.tv_sec) +
         (static_cast<double>(DifferentTime.tv_usec) / 1.0e6);
 
-    printf("Broadcast = %s, %d: %.3f seconds elapsed.\n\n",
-        Message.c_str(), (int)NewTime.tv_sec, elapsed);
+    printf("Broadcast = %s, %d: %.3f seconds elapsed.\n",
+        UDPData.c_str(), (int)NewTime.tv_sec, elapsed);
 
     Broadcast->m_LastSendTime = NewTime;
 
