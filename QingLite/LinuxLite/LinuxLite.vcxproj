@@ -113,6 +113,7 @@
     <ClInclude Include="..\..\Common\Example\IOExample.h" />
     <ClInclude Include="..\..\Common\Example\StringVector.h" />
     <ClInclude Include="..\..\Common\Tool\Common.h" />
+    <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="Open\libevent\Demo\demo1_client.h" />
     <ClInclude Include="Open\libevent\Demo\demo1_server.h" />
     <ClInclude Include="Open\libevent\Demo\demo2_client.h" />

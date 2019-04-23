@@ -30,7 +30,6 @@ private:
 
     event_base                      *m_EventBase;
     evconnlistener                  *m_Listener;
-
     UDPBroadcast                     m_UDPBroadcast;
     MessageHandler                   m_MessageHandler;
     std::vector<int>                 m_ClientSocketVector;

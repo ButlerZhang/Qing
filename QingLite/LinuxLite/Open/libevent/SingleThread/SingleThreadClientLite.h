@@ -4,6 +4,7 @@
 #include <random>
 
 
+
 class SingleThreadClientLite
 {
 public:
@@ -37,6 +38,7 @@ private:
     struct sockaddr_in                           m_BroadcastAddress;
     struct bufferevent                          *m_Bufferevent;
     struct event_base                           *m_EventBase;
+    struct event                                *m_CMDInputEvent;
     struct event                                *m_UDPBroadcastEvent;
     struct event                                *m_SendDataRandomlyEvent;
 };

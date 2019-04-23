@@ -2,6 +2,7 @@
 #include <arpa/inet.h>
 #include <assert.h>
 #include <string.h>
+#include <unistd.h>
 #include <string>
 
 
@@ -9,6 +10,8 @@
 UDPBroadcast::UDPBroadcast()
 {
     m_EventBase = NULL;
+    m_TimeoutEvent = NULL;
+
     m_TimeInternal = 60;
     m_UDPBroadcastSocket = -1;
 }
@@ -16,6 +19,8 @@ UDPBroadcast::UDPBroadcast()
 UDPBroadcast::~UDPBroadcast()
 {
     m_EventBase = NULL;
+    event_free(m_TimeoutEvent);
+    close(m_UDPBroadcastSocket);
 }
 
 bool UDPBroadcast::BindEventBase(event_base *EventBase)
@@ -28,7 +33,7 @@ bool UDPBroadcast::StartTimer(int Seconds, int Port)
 {
     if (Seconds <= 0)
     {
-        printf("ERROR: Timer at least needs one seconds.\n");
+        printf("ERROR: Timer at least needs one second.\n");
         return false;
     }
 
@@ -58,12 +63,12 @@ bool UDPBroadcast::StartTimer(int Seconds, int Port)
     m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(Port));
 
     m_TimeInternal = Seconds;
-    event_assign(&m_TimeoutEvent, m_EventBase, -1, EV_PERSIST, CallBack_TimeOut, (void*)this);
+    m_TimeoutEvent = event_new(m_EventBase, -1, EV_PERSIST, CallBack_TimeOut, this);
 
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = m_TimeInternal;
-    event_add(&(m_TimeoutEvent), &tv);
+    event_add(m_TimeoutEvent, &tv);
 
     evutil_gettimeofday(&m_LastSendTime, NULL);
     return true;
@@ -89,13 +94,11 @@ void UDPBroadcast::CallBack_TimeOut(evutil_socket_t Socket, short Events, void *
     double elapsed = static_cast<double>(DifferentTime.tv_sec) +
         (static_cast<double>(DifferentTime.tv_usec) / 1.0e6);
 
-    printf("Broadcast = %s, %d: %.3f seconds elapsed.\n",
-        UDPData.c_str(), (int)NewTime.tv_sec, elapsed);
-
+    printf("Broadcast = %s, elapsed %.3f seconds.\n", UDPData.c_str(), elapsed);
     Broadcast->m_LastSendTime = NewTime;
 
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = Broadcast->m_TimeInternal;
-    event_add((struct event*)&(Broadcast->m_TimeoutEvent), &tv);
+    event_add(Broadcast->m_TimeoutEvent, &tv);
 }

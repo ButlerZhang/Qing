@@ -29,7 +29,7 @@ public:
 
 private:
 
-    static void WorkThread(void *Object);
+    static void WorkThread_Process(void *Object);
 
 private:
 

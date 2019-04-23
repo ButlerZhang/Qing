@@ -321,6 +321,7 @@
     <ClInclude Include="Open\libevent\SingleThread\MessageHandler.h">
       <Filter>Open\libevent\SingleThread</Filter>
     </ClInclude>
+    <ClInclude Include="LinuxTools.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

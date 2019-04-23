@@ -1,8 +1,8 @@
 #include "SingleThreadClientLite.h"
+#include "../../../LinuxTools.h"
 #include <arpa/inet.h>
 #include <string.h>
 #include <unistd.h>
-#include <uuid/uuid.h>
 
 
 
@@ -12,14 +12,18 @@ SingleThreadClientLite::SingleThreadClientLite()
     m_UDPSocket = -1;
     m_EventBase = NULL;
     m_Bufferevent = NULL;
+    m_CMDInputEvent = NULL;
     m_UDPBroadcastEvent = NULL;
     m_SendDataRandomlyEvent = NULL;
 }
 
 SingleThreadClientLite::~SingleThreadClientLite()
 {
-    event_base_free(m_EventBase);
+    event_free(m_CMDInputEvent);
     event_free(m_UDPBroadcastEvent);
+    event_free(m_SendDataRandomlyEvent);
+
+    event_base_free(m_EventBase);
 }
 
 bool SingleThreadClientLite::Start()
@@ -49,7 +53,14 @@ bool SingleThreadClientLite::Start()
 
 bool SingleThreadClientLite::Stop()
 {
-    return event_base_loopbreak(m_EventBase) == 0;
+    if (event_base_loopbreak(m_EventBase) == 0)
+    {
+        event_base_free(m_EventBase);
+        m_EventBase = NULL;
+        return true;
+    }
+
+    return false;
 }
 
 bool SingleThreadClientLite::RecvUDPBroadcast()
@@ -61,8 +72,8 @@ bool SingleThreadClientLite::RecvUDPBroadcast()
         return false;
     }
 
-    int iOptval = 1;
-    if (setsockopt(m_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &iOptval, sizeof(int)) < 0)
+    int Optval = 1;
+    if (setsockopt(m_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
         printf("ERROR: setsockopt failed!\n");
         return false;
@@ -95,6 +106,9 @@ bool SingleThreadClientLite::UnbindUDPBroadcast()
     {
         printf("Delete udp broadcast recv event and close udp socket.\n");
         close(m_UDPSocket);
+
+        m_UDPBroadcastEvent = NULL;
+        m_UDPSocket = -1;
         return true;
     }
 
@@ -132,10 +146,10 @@ bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port
         return false;
     }
 
-    struct event *ev_cmd = event_new(m_EventBase, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, (void*)m_Bufferevent);
-    event_add(ev_cmd, NULL);
+    m_CMDInputEvent = event_new(m_EventBase, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, this);
+    event_add(m_CMDInputEvent, NULL);
 
-    bufferevent_setcb(m_Bufferevent, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, (void*)ev_cmd);
+    bufferevent_setcb(m_Bufferevent, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, this);
     bufferevent_enable(m_Bufferevent, EV_READ | EV_PERSIST);
 
     return true;
@@ -168,13 +182,13 @@ void SingleThreadClientLite::CallBack_RecvUDPBroadcast(int Socket, short events,
             Client->m_ServerPort = 12345;
             if (Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort))
             {
+                Client->UnbindUDPBroadcast();
                 Client->EnableSendDataRandomly();
             }
         }
         else if (Client->m_ServerIP == std::string(Buffer))
         {
             printf("UDP braodcast repeat recv.\n");
-            Client->UnbindUDPBroadcast();
         }
     }
 }
@@ -205,12 +219,24 @@ void SingleThreadClientLite::CallBack_ClientEvent(struct bufferevent *bev, short
 
     if (IsAllowDelete)
     {
-        bufferevent_free(bev);
-        event_free((struct event*)UserData);
+        SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
+
+        bufferevent_free(Client->m_Bufferevent);
+        event_free(Client->m_CMDInputEvent);
+        event_free(Client->m_SendDataRandomlyEvent);
+
+        Client->m_Bufferevent = NULL;
+        Client->m_CMDInputEvent = NULL;
+        Client->m_SendDataRandomlyEvent = NULL;
+
+        if (Client->m_UDPBroadcastEvent == NULL && Client->m_UDPSocket != -1)
+        {
+            Client->RecvUDPBroadcast();
+        }
     }
 }
 
-void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void * UserData)
+void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void *UserData)
 {
     char Message[1024];
     memset(Message, 0, sizeof(Message));
@@ -228,13 +254,13 @@ void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void
         return;
     }
 
-    struct bufferevent *bev = (struct bufferevent*)UserData;
-    bufferevent_write(bev, Message, ReadSize);
+    SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
+    bufferevent_write(Client->m_Bufferevent, Message, ReadSize);
 
     printf("Send message = %s, size = %d.\n", Message, ReadSize);
 }
 
-void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void * UserData)
+void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void *UserData)
 {
     char Message[1024];
     memset(Message, 0, sizeof(Message));
@@ -242,23 +268,27 @@ void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void * U
     size_t RecvSize = bufferevent_read(bev, Message, sizeof(Message));
     Message[RecvSize] = '\0';
 
-    printf("Recv message = %s, size = %d.\n", Message, RecvSize);
+    printf("Recv %s.\n", Message);
 }
 
 void SingleThreadClientLite::CallBack_SendDataRandomly(evutil_socket_t Socket, short Events, void *UserData)
 {
-    uuid_t uuid;
-    char uuidstring[36];
-
-    uuid_generate(uuid);
-    uuid_unparse(uuid, uuidstring);
-
     SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
-    bufferevent_write(Client->m_Bufferevent, uuidstring, sizeof(uuidstring));
-    printf("Send message = %s, size = %d.\n", uuidstring, sizeof(uuidstring));
+    if (Client->m_Bufferevent != NULL)
+    {
+        const std::string &UUID = GetUUID();
+        if (bufferevent_write(Client->m_Bufferevent, UUID.c_str(), UUID.length()) == 0)
+        {
+            printf("Send message = %s succeed.\n", UUID.c_str(), UUID.length());
+        }
+        else
+        {
+            printf("Send message = %s failed.\n", UUID.c_str(), UUID.length());
+        }
 
-    struct timeval tv;
-    evutil_timerclear(&tv);
-    tv.tv_sec = rand() % 1 + 1;
-    event_add(Client->m_SendDataRandomlyEvent, &tv);
+        struct timeval tv;
+        evutil_timerclear(&tv);
+        tv.tv_sec = GetRandomUIntInRange(3, 10);
+        event_add(Client->m_SendDataRandomlyEvent, &tv);
+    }
 }

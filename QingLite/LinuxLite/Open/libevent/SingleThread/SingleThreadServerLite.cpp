@@ -85,7 +85,7 @@ bool SingleThreadServerLite::Start()
         return false;
     }
 
-    m_UDPBroadcast.StartTimer(10);
+    m_UDPBroadcast.StartTimer(30);
 
     printf("Server start dispatch...\n");
     event_base_dispatch(m_EventBase);
@@ -129,6 +129,7 @@ void SingleThreadServerLite::CallBack_Event(bufferevent * bev, short Events, voi
     }
     else
     {
+        IsAllowDelete = true;
         printf("ERROR: Client = %d unknow error.\n", ClientSocket);
     }
 
@@ -139,7 +140,7 @@ void SingleThreadServerLite::CallBack_Event(bufferevent * bev, short Events, voi
         if (it != Server->m_ClientSocketVector.end())
         {
             Server->m_ClientSocketVector.erase(it);
-            printf("Remove client = %d, current count = %d.\n", ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size()));
+            printf("Delete client = %d, surplus count = %d.\n", ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size()));
         }
 
         bufferevent_free(bev);

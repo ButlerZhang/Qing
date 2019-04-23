@@ -23,7 +23,7 @@ private:
     timeval                         m_LastSendTime;
     evutil_socket_t                 m_UDPBroadcastSocket;
 
-    struct event                    m_TimeoutEvent;
+    struct event                   *m_TimeoutEvent;
     struct event_base              *m_EventBase;
     struct sockaddr_in              m_BroadcastAddress;
 };
