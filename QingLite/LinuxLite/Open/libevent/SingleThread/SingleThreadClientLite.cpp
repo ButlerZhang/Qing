@@ -2,6 +2,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <unistd.h>
+#include <uuid/uuid.h>
 
 
 
@@ -10,7 +11,9 @@ SingleThreadClientLite::SingleThreadClientLite()
     m_ServerPort = 0;
     m_UDPSocket = -1;
     m_EventBase = NULL;
+    m_Bufferevent = NULL;
     m_UDPBroadcastEvent = NULL;
+    m_SendDataRandomlyEvent = NULL;
 }
 
 SingleThreadClientLite::~SingleThreadClientLite()
@@ -99,6 +102,17 @@ bool SingleThreadClientLite::UnbindUDPBroadcast()
     return false;
 }
 
+bool SingleThreadClientLite::EnableSendDataRandomly()
+{
+    m_SendDataRandomlyEvent = event_new(m_EventBase, -1, EV_PERSIST, CallBack_SendDataRandomly, this);
+
+    struct timeval tv;
+    evutil_timerclear(&tv);
+    tv.tv_sec = 1;
+    event_add(m_SendDataRandomlyEvent, &tv);
+    return true;
+}
+
 bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port)
 {
     struct sockaddr_in ServerAddress;
@@ -107,8 +121,8 @@ bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port
     inet_pton(AF_INET, ServerIP.c_str(), &(ServerAddress.sin_addr));
     ServerAddress.sin_port = htons(static_cast<uint16_t>(Port));
 
-    struct bufferevent *bev = bufferevent_socket_new(m_EventBase, -1, BEV_OPT_CLOSE_ON_FREE);
-    int ConnectResult = bufferevent_socket_connect(bev, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress));
+    m_Bufferevent = bufferevent_socket_new(m_EventBase, -1, BEV_OPT_CLOSE_ON_FREE);
+    int ConnectResult = bufferevent_socket_connect(m_Bufferevent, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress));
 
     if (ConnectResult == -1)
     {
@@ -118,11 +132,11 @@ bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port
         return false;
     }
 
-    struct event *ev_cmd = event_new(m_EventBase, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, (void*)bev);
+    struct event *ev_cmd = event_new(m_EventBase, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, (void*)m_Bufferevent);
     event_add(ev_cmd, NULL);
 
-    bufferevent_setcb(bev, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, (void*)ev_cmd);
-    bufferevent_enable(bev, EV_READ | EV_PERSIST);
+    bufferevent_setcb(m_Bufferevent, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, (void*)ev_cmd);
+    bufferevent_enable(m_Bufferevent, EV_READ | EV_PERSIST);
 
     return true;
 }
@@ -152,7 +166,10 @@ void SingleThreadClientLite::CallBack_RecvUDPBroadcast(int Socket, short events,
 
             Client->m_ServerIP = Buffer;
             Client->m_ServerPort = 12345;
-            Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort);
+            if (Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort))
+            {
+                Client->EnableSendDataRandomly();
+            }
         }
         else if (Client->m_ServerIP == std::string(Buffer))
         {
@@ -226,4 +243,22 @@ void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void * U
     Message[RecvSize] = '\0';
 
     printf("Recv message = %s, size = %d.\n", Message, RecvSize);
+}
+
+void SingleThreadClientLite::CallBack_SendDataRandomly(evutil_socket_t Socket, short Events, void *UserData)
+{
+    uuid_t uuid;
+    char uuidstring[36];
+
+    uuid_generate(uuid);
+    uuid_unparse(uuid, uuidstring);
+
+    SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
+    bufferevent_write(Client->m_Bufferevent, uuidstring, sizeof(uuidstring));
+    printf("Send message = %s, size = %d.\n", uuidstring, sizeof(uuidstring));
+
+    struct timeval tv;
+    evutil_timerclear(&tv);
+    tv.tv_sec = rand() % 1 + 1;
+    event_add(Client->m_SendDataRandomlyEvent, &tv);
 }

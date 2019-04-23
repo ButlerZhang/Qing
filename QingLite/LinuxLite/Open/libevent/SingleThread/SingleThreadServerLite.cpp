@@ -79,6 +79,12 @@ bool SingleThreadServerLite::Start()
         return false;
     }
 
+    if (!m_MessageHandler.Start())
+    {
+        printf("ERROR: Message handler start failed.\n");
+        return false;
+    }
+
     m_UDPBroadcast.StartTimer(10);
 
     printf("Server start dispatch...\n");
@@ -129,8 +135,12 @@ void SingleThreadServerLite::CallBack_Event(bufferevent * bev, short Events, voi
     if (IsAllowDelete)
     {
         SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
-        std::remove(Server->m_ClientSocketVector.begin(), Server->m_ClientSocketVector.end(), ClientSocket);
-        printf("Remove client = %d, current count = %d.\n", ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size()));
+        std::vector<int>::iterator it = std::find(Server->m_ClientSocketVector.begin(), Server->m_ClientSocketVector.end(), ClientSocket);
+        if (it != Server->m_ClientSocketVector.end())
+        {
+            Server->m_ClientSocketVector.erase(it);
+            printf("Remove client = %d, current count = %d.\n", ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size()));
+        }
 
         bufferevent_free(bev);
     }
@@ -147,9 +157,8 @@ void SingleThreadServerLite::CallBack_Recv(bufferevent *bev, void *UserData)
     int ClientSocket = bufferevent_getfd(bev);
     printf("Recv, client = %d, message = %s, size = %d.\n", ClientSocket, Message, RecvSize);
 
-    const std::string ACK("ACK");
-    bufferevent_write(bev, ACK.c_str(), ACK.length());
-    printf("Client = %d send ack, size = %d.\n", ClientSocket, ACK.length());
+    SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
+    Server->m_MessageHandler.PushMessage(ClientSocket, bev, Message);
 }
 
 void SingleThreadServerLite::CallBack_Send(bufferevent * bev, void * UserData)

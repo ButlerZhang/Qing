@@ -1,5 +1,6 @@
 #pragma once
 #include "UDPBroadcast.h"
+#include "MessageHandler.h"
 #include <string>
 #include <vector>
 #include <event2/listener.h>
@@ -31,5 +32,6 @@ private:
     evconnlistener                  *m_Listener;
 
     UDPBroadcast                     m_UDPBroadcast;
+    MessageHandler                   m_MessageHandler;
     std::vector<int>                 m_ClientSocketVector;
 };

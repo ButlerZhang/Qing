@@ -85,6 +85,7 @@
     <ClCompile Include="Open\libevent\MultiThread\SignalEvent.cpp" />
     <ClCompile Include="Open\libevent\MultiThread\ThreadNode.cpp" />
     <ClCompile Include="Open\libevent\MultiThread\TimerEvent.cpp" />
+    <ClCompile Include="Open\libevent\SingleThread\MessageHandler.cpp" />
     <ClCompile Include="Open\libevent\SingleThread\SingleThreadClientLite.cpp" />
     <ClCompile Include="Open\libevent\SingleThread\SingleThreadServerLite.cpp" />
     <ClCompile Include="Open\libevent\SingleThread\UDPBroadcast.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="Open\libevent\MultiThread\SignalEvent.h" />
     <ClInclude Include="Open\libevent\MultiThread\ThreadNode.h" />
     <ClInclude Include="Open\libevent\MultiThread\TimerEvent.h" />
+    <ClInclude Include="Open\libevent\SingleThread\MessageHandler.h" />
     <ClInclude Include="Open\libevent\SingleThread\SingleThreadClientLite.h" />
     <ClInclude Include="Open\libevent\SingleThread\SingleThreadServerLite.h" />
     <ClInclude Include="Open\libevent\SingleThread\UDPBroadcast.h" />
@@ -159,7 +161,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>event;pthread;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
