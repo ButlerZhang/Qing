@@ -23,6 +23,7 @@ SingleThreadClientLite::~SingleThreadClientLite()
     event_free(m_UDPBroadcastEvent);
     event_free(m_SendDataRandomlyEvent);
 
+    bufferevent_free(m_Bufferevent);
     event_base_free(m_EventBase);
 }
 
@@ -30,18 +31,18 @@ bool SingleThreadClientLite::Start()
 {
     if (m_EventBase != NULL)
     {
-        printf("ERROR: re-start.\n");
+        printf("ERROR: Re-start.\n");
         return true;
     }
 
     m_EventBase = event_base_new();
     if (m_EventBase == NULL)
     {
-        printf("ERROR: Create event base error.\n");
+        printf("ERROR: Create event base failed.\n");
         return false;
     }
 
-    if (!RecvUDPBroadcast())
+    if (!AddEventInputFromCMD() || !AddEventRecvUDPBroadcast())
     {
         return false;
     }
@@ -53,6 +54,11 @@ bool SingleThreadClientLite::Start()
 
 bool SingleThreadClientLite::Stop()
 {
+    if (m_EventBase == NULL)
+    {
+        return true;
+    }
+
     if (event_base_loopbreak(m_EventBase) == 0)
     {
         event_base_free(m_EventBase);
@@ -63,19 +69,51 @@ bool SingleThreadClientLite::Stop()
     return false;
 }
 
-bool SingleThreadClientLite::RecvUDPBroadcast()
+bool SingleThreadClientLite::AddEventInputFromCMD()
 {
+    if (m_CMDInputEvent != NULL)
+    {
+        printf("ERROR: Re-create CMD event.\n");
+        return true;
+    }
+
+    m_CMDInputEvent = event_new(m_EventBase, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, this);
+    if (m_CMDInputEvent == NULL)
+    {
+        printf("ERROR: Create CMD event failed.\n");
+        return false;
+    }
+
+    if (event_add(m_CMDInputEvent, NULL) != 0)
+    {
+        printf("ERROR: Add CMD event failed.\n");
+        event_free(m_CMDInputEvent);
+        m_CMDInputEvent = NULL;
+        return false;
+    }
+
+    return true;
+}
+
+bool SingleThreadClientLite::AddEventRecvUDPBroadcast()
+{
+    if (m_UDPBroadcastEvent != NULL)
+    {
+        printf("ERROR: Re-create udp broadcast event.\n");
+        return true;
+    }
+
     m_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_UDPSocket == -1)
     {
-        printf("ERROR: Create udp socket error.\n");
+        printf("ERROR: Create udp socket failed.\n");
         return false;
     }
 
     int Optval = 1;
     if (setsockopt(m_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
-        printf("ERROR: setsockopt failed!\n");
+        printf("ERROR: set udp sockopt failed.\n");
         return false;
     }
 
@@ -86,45 +124,78 @@ bool SingleThreadClientLite::RecvUDPBroadcast()
 
     if (bind(m_UDPSocket, (struct sockaddr *)&m_BroadcastAddress, sizeof(m_BroadcastAddress)) == -1)
     {
-        printf("ERROR: Bind failed.\n");
+        printf("ERROR: Bind udp socket failed.\n");
         return false;
     }
 
     m_UDPBroadcastEvent = event_new(m_EventBase, m_UDPSocket, EV_READ | EV_PERSIST, CallBack_RecvUDPBroadcast, this);
+    if (m_UDPBroadcastEvent == NULL)
+    {
+        printf("ERROR: Create udp broadcast event failed.\n");
+        close(m_UDPSocket);
+        return false;
+    }
+
     if (event_add(m_UDPBroadcastEvent, NULL) == -1)
     {
-        printf("ERROR: Add event failed.\n");
+        printf("ERROR: Add udp broadcast event failed.\n");
+        event_free(m_UDPBroadcastEvent);
+        m_UDPBroadcastEvent = NULL;
+        close(m_UDPSocket);
         return false;
     }
 
     return true;
 }
 
-bool SingleThreadClientLite::UnbindUDPBroadcast()
+bool SingleThreadClientLite::AddEventSendDataRandomly()
 {
-    if (event_del(m_UDPBroadcastEvent) == 0)
+    if (m_SendDataRandomlyEvent != NULL)
     {
-        printf("Delete udp broadcast recv event and close udp socket.\n");
-        close(m_UDPSocket);
-
-        m_UDPBroadcastEvent = NULL;
-        m_UDPSocket = -1;
+        printf("ERROR: Re-create send data randomly event.\n");
         return true;
     }
 
-    printf("ERROR: unbind failed.\n");
-    return false;
-}
-
-bool SingleThreadClientLite::EnableSendDataRandomly()
-{
     m_SendDataRandomlyEvent = event_new(m_EventBase, -1, EV_PERSIST, CallBack_SendDataRandomly, this);
+    if (m_SendDataRandomlyEvent == NULL)
+    {
+        printf("ERROR: Create send data randomly event failed.\n");
+        return false;
+    }
 
     struct timeval tv;
     evutil_timerclear(&tv);
-    tv.tv_sec = 1;
-    event_add(m_SendDataRandomlyEvent, &tv);
+    tv.tv_sec = GetRandomUIntInRange(3, 10);
+
+    if (event_add(m_SendDataRandomlyEvent, &tv) != 0)
+    {
+        printf("ERROR: Add send data randomly event failed.\n");
+        event_free(m_SendDataRandomlyEvent);
+        m_SendDataRandomlyEvent = NULL;
+        return false;
+    }
+
     return true;
+}
+
+bool SingleThreadClientLite::DeleteEventRecvUDPBroadcast()
+{
+    if (m_UDPBroadcastEvent == NULL)
+    {
+        return true;
+    }
+
+    if (event_del(m_UDPBroadcastEvent) == 0)
+    {
+        printf("Delete udp broadcast recv event and close udp socket.\n");
+        event_free(m_UDPBroadcastEvent);
+        m_UDPBroadcastEvent = NULL;
+        close(m_UDPSocket);
+        return true;
+    }
+
+    printf("ERROR: delete udp broadcast event failed.\n");
+    return false;
 }
 
 bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port)
@@ -136,23 +207,60 @@ bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port
     ServerAddress.sin_port = htons(static_cast<uint16_t>(Port));
 
     m_Bufferevent = bufferevent_socket_new(m_EventBase, -1, BEV_OPT_CLOSE_ON_FREE);
-    int ConnectResult = bufferevent_socket_connect(m_Bufferevent, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress));
-
-    if (ConnectResult == -1)
+    if (m_Bufferevent == NULL)
     {
-        m_ServerPort = 0;
-        m_ServerIP.clear();
-        printf("ERROR: bufferevent connect error.\n");
+        printf("ERROR: Create bufferevent failed.\n");
         return false;
     }
 
-    m_CMDInputEvent = event_new(m_EventBase, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, this);
-    event_add(m_CMDInputEvent, NULL);
+    int ConnectResult = bufferevent_socket_connect(m_Bufferevent, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress));
+    if (ConnectResult != 0)
+    {
+        m_ServerPort = 0;
+        m_ServerIP.clear();
+        bufferevent_free(m_Bufferevent);
+        printf("ERROR: bufferevent connect failed.\n");
+        return false;
+    }
 
     bufferevent_setcb(m_Bufferevent, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, this);
     bufferevent_enable(m_Bufferevent, EV_READ | EV_PERSIST);
-
     return true;
+}
+
+void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void *UserData)
+{
+    char Message[1024];
+    memset(Message, 0, sizeof(Message));
+
+    ssize_t ReadSize = read(Input, Message, sizeof(Message));
+    if (ReadSize <= 0)
+    {
+        printf("ERROR: Can not read from cmd.\n");
+        return;
+    }
+
+    Message[ReadSize - 1] = '\0';
+    if (strlen(Message) <= 0)
+    {
+        return;
+    }
+
+    SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
+    if (Client->m_Bufferevent == NULL)
+    {
+        printf("Can not send data, not connect server.\n");
+        return;
+    }
+
+    if (bufferevent_write(Client->m_Bufferevent, Message, ReadSize) == 0)
+    {
+        printf("Send message = %s, size = %d.\n", Message, ReadSize);
+    }
+    else
+    {
+        printf("Send message = %s failed.\n", Message, ReadSize);
+    }
 }
 
 void SingleThreadClientLite::CallBack_RecvUDPBroadcast(int Socket, short events, void *UserData)
@@ -182,14 +290,36 @@ void SingleThreadClientLite::CallBack_RecvUDPBroadcast(int Socket, short events,
             Client->m_ServerPort = 12345;
             if (Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort))
             {
-                Client->UnbindUDPBroadcast();
-                Client->EnableSendDataRandomly();
+                Client->AddEventSendDataRandomly();
+                Client->DeleteEventRecvUDPBroadcast();
             }
         }
         else if (Client->m_ServerIP == std::string(Buffer))
         {
             printf("UDP braodcast repeat recv.\n");
         }
+    }
+}
+
+void SingleThreadClientLite::CallBack_SendDataRandomly(evutil_socket_t Socket, short Events, void *UserData)
+{
+    SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
+    if (Client->m_Bufferevent != NULL)
+    {
+        const std::string &UUID = GetUUID();
+        if (bufferevent_write(Client->m_Bufferevent, UUID.c_str(), UUID.length()) == 0)
+        {
+            printf("Send succeed, message = %s\n", UUID.c_str(), UUID.length());
+        }
+        else
+        {
+            printf("Send failed, message = %s\n", UUID.c_str(), UUID.length());
+        }
+
+        struct timeval tv;
+        evutil_timerclear(&tv);
+        tv.tv_sec = GetRandomUIntInRange(3, 10);
+        event_add(Client->m_SendDataRandomlyEvent, &tv);
     }
 }
 
@@ -221,43 +351,18 @@ void SingleThreadClientLite::CallBack_ClientEvent(struct bufferevent *bev, short
     {
         SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
 
-        bufferevent_free(Client->m_Bufferevent);
-        event_free(Client->m_CMDInputEvent);
         event_free(Client->m_SendDataRandomlyEvent);
-
-        Client->m_Bufferevent = NULL;
-        Client->m_CMDInputEvent = NULL;
         Client->m_SendDataRandomlyEvent = NULL;
 
-        if (Client->m_UDPBroadcastEvent == NULL && Client->m_UDPSocket != -1)
+        bufferevent_free(Client->m_Bufferevent);
+        Client->m_Bufferevent = NULL;
+
+        if (Client->m_UDPBroadcastEvent == NULL)
         {
-            Client->RecvUDPBroadcast();
+            Client->m_ServerIP.clear();
+            Client->AddEventRecvUDPBroadcast();
         }
     }
-}
-
-void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void *UserData)
-{
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
-
-    ssize_t ReadSize = read(Input, Message, sizeof(Message));
-    if (ReadSize <= 0)
-    {
-        printf("ERROR: Can not read from cmd.\n");
-        return;
-    }
-
-    Message[ReadSize - 1] = '\0';
-    if (strlen(Message) <= 0)
-    {
-        return;
-    }
-
-    SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
-    bufferevent_write(Client->m_Bufferevent, Message, ReadSize);
-
-    printf("Send message = %s, size = %d.\n", Message, ReadSize);
 }
 
 void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void *UserData)
@@ -269,26 +374,4 @@ void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void *Us
     Message[RecvSize] = '\0';
 
     printf("Recv %s.\n", Message);
-}
-
-void SingleThreadClientLite::CallBack_SendDataRandomly(evutil_socket_t Socket, short Events, void *UserData)
-{
-    SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
-    if (Client->m_Bufferevent != NULL)
-    {
-        const std::string &UUID = GetUUID();
-        if (bufferevent_write(Client->m_Bufferevent, UUID.c_str(), UUID.length()) == 0)
-        {
-            printf("Send message = %s succeed.\n", UUID.c_str(), UUID.length());
-        }
-        else
-        {
-            printf("Send message = %s failed.\n", UUID.c_str(), UUID.length());
-        }
-
-        struct timeval tv;
-        evutil_timerclear(&tv);
-        tv.tv_sec = GetRandomUIntInRange(3, 10);
-        event_add(Client->m_SendDataRandomlyEvent, &tv);
-    }
 }

@@ -62,7 +62,7 @@ void MessageHandler::WorkThread_Process(void *Object)
     std::stringstream stream;
     stream << std::this_thread::get_id();
     unsigned long long ThreadID = std::stoull(stream.str());
-    printf("Wrok thread = %d start...\n", ThreadID);
+    printf("Wrok thread = %u start...\n", ThreadID);
 
     while (Handler->m_IsWork)
     {
@@ -98,5 +98,5 @@ void MessageHandler::WorkThread_Process(void *Object)
         }
     }
 
-    printf("Wrok thread = %d stop.\n", ThreadID);
+    printf("Wrok thread = %u stop.\n", ThreadID);
 }

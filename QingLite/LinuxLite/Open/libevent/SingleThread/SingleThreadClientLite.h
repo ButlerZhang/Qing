@@ -17,18 +17,19 @@ public:
 
 private:
 
-    bool RecvUDPBroadcast();
-    bool UnbindUDPBroadcast();
-    bool EnableSendDataRandomly();
+    bool AddEventInputFromCMD();
+    bool AddEventRecvUDPBroadcast();
+    bool AddEventSendDataRandomly();
+    bool DeleteEventRecvUDPBroadcast();
     bool ConnectServer(const std::string &ServerIP, int Port);
 
 private:
 
-    static void CallBack_RecvUDPBroadcast(int Socket, short Events, void *UserData);
-    static void CallBack_ClientEvent(struct bufferevent *bev, short Events, void *UserData);
     static void CallBack_InputFromCMD(int Input, short Events, void *UserData);
-    static void CallBack_RecvFromServer(struct bufferevent *bev, void *UserData);
+    static void CallBack_RecvUDPBroadcast(int Socket, short Events, void *UserData);
     static void CallBack_SendDataRandomly(evutil_socket_t Socket, short Events, void *UserData);
+    static void CallBack_ClientEvent(struct bufferevent *bev, short Events, void *UserData);
+    static void CallBack_RecvFromServer(struct bufferevent *bev, void *UserData);
 
 private:
 

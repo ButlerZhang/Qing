@@ -85,7 +85,7 @@ bool SingleThreadServerLite::Start()
         return false;
     }
 
-    m_UDPBroadcast.StartTimer(30);
+    m_UDPBroadcast.StartTimer(10);
 
     printf("Server start dispatch...\n");
     event_base_dispatch(m_EventBase);
@@ -156,7 +156,7 @@ void SingleThreadServerLite::CallBack_Recv(bufferevent *bev, void *UserData)
     Message[RecvSize] = '\0';
 
     int ClientSocket = bufferevent_getfd(bev);
-    printf("Recv, client = %d, message = %s, size = %d.\n", ClientSocket, Message, RecvSize);
+    printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, Message);
 
     SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
     Server->m_MessageHandler.PushMessage(ClientSocket, bev, Message);
