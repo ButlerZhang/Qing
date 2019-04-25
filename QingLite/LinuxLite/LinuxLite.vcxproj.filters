@@ -322,6 +322,12 @@
       <Filter>Open\libevent\SingleThread</Filter>
     </ClInclude>
     <ClInclude Include="LinuxTools.h" />
+    <ClInclude Include="Open\libevent\Demo\demo5_client.h">
+      <Filter>Open\libevent\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\Demo\demo5_server.h">
+      <Filter>Open\libevent\Demo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

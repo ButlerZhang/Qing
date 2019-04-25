@@ -122,6 +122,8 @@
     <ClInclude Include="Open\libevent\Demo\demo3_server.h" />
     <ClInclude Include="Open\libevent\Demo\demo4_client.h" />
     <ClInclude Include="Open\libevent\Demo\demo4_server.h" />
+    <ClInclude Include="Open\libevent\Demo\demo5_client.h" />
+    <ClInclude Include="Open\libevent\Demo\demo5_server.h" />
     <ClInclude Include="Open\libevent\MultiThread\MultiThreadServerLite.h" />
     <ClInclude Include="Open\libevent\MultiThread\SignalEvent.h" />
     <ClInclude Include="Open\libevent\MultiThread\ThreadNode.h" />
