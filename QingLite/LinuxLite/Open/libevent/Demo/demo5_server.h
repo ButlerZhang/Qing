@@ -1,63 +1,21 @@
 #pragma once
-#include <event.h>
-#include <event2/http.h>
-#include <event2/http_struct.h>
-#include <event2/event.h>
-#include <event2/http.h>
-#include <event2/buffer.h>
-#include <event2/util.h>
-#include <event2/keyvalq_struct.h>
-#include <event2/http_compat.h>
-
-#include <sys/stat.h>
-#include <sys/socket.h>
-#include <signal.h>
+#include <map>
+#include <string>
 #include <fcntl.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+
+#include <event.h>
+#include <event2/http.h>
 
 
-const struct table_entry {
-    const char *extension;
-    const char *content_type;
-} content_type_table[] = {
-    { "txt", "text/plain" },
-    { "c", "text/plain" },
-    { "h", "text/plain" },
-    { "html", "text/html" },
-    { "htm", "text/htm" },
-    { "css", "text/css" },
-    { "gif", "image/gif" },
-    { "jpg", "image/jpeg" },
-    { "jpeg", "image/jpeg" },
-    { "png", "image/png" },
-    { "pdf", "application/pdf" },
-    { "ps", "application/postscript" },
-    { NULL, NULL },
-};
-
-const char* guess_content_type(const char *path)
-{
-    const char *last_period = strrchr(path, '.');
-    if (!last_period || strchr(last_period, '/'))
-        return "application/misc";
-
-    const char *extension = last_period + 1;
-    for (const table_entry *ent = &content_type_table[0]; ent->extension; ++ent)
-    {
-        if (!evutil_ascii_strcasecmp(ent->extension, extension))
-        {
-            return ent->content_type;
-        }
-    }
-
-    return NULL;
-}
 
 void CallBack_DocumentRequest(struct evhttp_request* Request, void *arg)
 {
+    printf("Start process document request\n");
+
     const char *cmdtype;
     switch (evhttp_request_get_command(Request))
     {
@@ -73,7 +31,7 @@ void CallBack_DocumentRequest(struct evhttp_request* Request, void *arg)
     default:                    cmdtype = "unknown";    break;
     }
 
-    printf("Received a %s request for %s\nHeaders:\n",
+    printf("Received a %s request for: %s\nHeaders:\n",
         cmdtype, evhttp_request_get_uri(Request));
 
     struct evkeyvalq *headers = evhttp_request_get_input_headers(Request);
@@ -92,7 +50,7 @@ void CallBack_DocumentRequest(struct evhttp_request* Request, void *arg)
         if (n > 0)
             (void) fwrite(cbuf, 1, n, stdout);
     }
-    puts("\n\n");
+    puts("\n");
 
     struct evbuffer *ReplyBuf = evbuffer_new();
     if (ReplyBuf == NULL)
@@ -113,10 +71,13 @@ void CallBack_DocumentRequest(struct evhttp_request* Request, void *arg)
 
     evhttp_send_reply(Request, HTTP_OK, "OK", ReplyBuf);
     evbuffer_free(ReplyBuf);
+
+    printf("Stop process document request\n\n");
 }
 
-void CallBack_GenericHandler(struct evhttp_request *Request, void *arg)
+void CallBack_GenericRequest(struct evhttp_request *Request, void *arg)
 {
+    printf("Start process generic request\n");
     if (evhttp_request_get_command(Request) != EVHTTP_REQ_GET)
     {
         CallBack_DocumentRequest(Request, arg);
@@ -124,7 +85,7 @@ void CallBack_GenericHandler(struct evhttp_request *Request, void *arg)
     }
 
     const char *URI = evhttp_request_get_uri(Request);
-    printf("Got a GET request for <%s>\n", URI);
+    printf("Got a GET request for : %s\n", URI);
 
     /* Decode the URI */
     struct evhttp_uri *Decoded = evhttp_uri_parse(URI);
@@ -136,54 +97,64 @@ void CallBack_GenericHandler(struct evhttp_request *Request, void *arg)
     }
 
     /* Let's see what path the user asked for. */
-    const char *path = evhttp_uri_get_path(Decoded);
-    printf("evhttp_uri_get_path, path = %s\n", path);
-    if (path == NULL)
+    const char *RequestPath = evhttp_uri_get_path(Decoded);
+    printf("User request path = %s\n", RequestPath);
+    if (RequestPath == NULL)
     {
-        path = "/";
+        RequestPath = "/";
     }
 
     /* We need to decode it, to see what path the user really wanted. */
-    char *decoded_path = evhttp_uridecode(path, 0, NULL);
+    char *decoded_path = evhttp_uridecode(RequestPath, 0, NULL);
     if (decoded_path == NULL || strstr(decoded_path, ".."))
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found");
         return;
     }
 
-    const char *docroot = (const char*)arg;
-    size_t len = strlen(decoded_path) + strlen(docroot) + 2;
+    char WorkPath[PATH_MAX];
+    if (getcwd(WorkPath, PATH_MAX) == NULL)
+    {
+        printf("ERROR: Get work path failed.\n");
+        return;
+    }
 
-    printf("evhttp_uridecode, decoded_path = %s\n", decoded_path);
-    printf("docroot = %s\n", docroot);
+    size_t PathLength = strlen(decoded_path) + strlen(WorkPath) + 2;
+    printf("Work Path = %s\n", WorkPath);
+    printf("User request ture path = %s\n", decoded_path);
 
-    char whole_path[1024];
-    memset(whole_path, 0, sizeof(whole_path));
-    //evutil_snprintf(whole_path, len, "%s", decoded_path);
-    evutil_snprintf(whole_path, len, "%s/%s", docroot, decoded_path);
-    printf("whole_path = %s.\n", whole_path);
+    char WholePath[PATH_MAX];
+    if (strcmp(decoded_path, (const char*)("/")) == 0)
+    {
+        evutil_snprintf(WholePath, PathLength, "%s/", WorkPath);
+    }
+    else
+    {
+        evutil_snprintf(WholePath, PathLength, "%s/%s", WorkPath, decoded_path);
+    }
+
+    printf("Whole path = %s\n", WholePath);
 
     struct stat st;
-    if (stat(whole_path, &st) < 0)
+    if (stat(WholePath, &st) < 0)
     {
-        printf("stat whole_path failed.\n");
+        printf("stat whole_path failed.\n\n");
         return;
     }
 
     /* This holds the content we're sending. */
     struct evbuffer *evb = evbuffer_new();
+    if (evb == NULL)
+    {
+        printf("ERROR: evbuffer create failed.\n");
+        return;
+    }
 
     if (S_ISDIR(st.st_mode))
     {
-        printf("S_ISDIR\n");
-        const char *trailing_slash = "";
-        if (!strlen(path) || path[strlen(path) - 1] != '/')
-        {
-            trailing_slash = "/";
-        }
-
-        DIR *d = opendir(whole_path);
-        if (d == NULL)
+        printf("Enter directory\n");
+        DIR *Directory = opendir(WholePath);
+        if (Directory == NULL)
         {
             printf("ERROR: opendir failed.\n");
             return;
@@ -194,26 +165,28 @@ void CallBack_GenericHandler(struct evhttp_request *Request, void *arg)
             "<html>\n <head>\n"
             "  <meta charset='utf-8'>\n"
             "  <title>%s</title>\n"
-            "  <base href='%s%s'>\n"
+            "  <base href='%s'>\n"
             " </head>\n"
             " <body>\n"
             "  <h1>%s</h1>\n"
             "  <ul>\n",
             decoded_path, /* XXX html-escape this. */
-            path, /* XXX html-escape this? */
-            trailing_slash,
+            RequestPath, /* XXX html-escape this? */
             decoded_path /* XXX html-escape this */);
 
         struct dirent *ent = NULL;
-        while ((ent = readdir(d)))
+        while ((ent = readdir(Directory)))
         {
             const char *name = ent->d_name;
-            evbuffer_add_printf(evb, "    <li><a href=\"%s\">%s</a>\n",
-                name, name);/* XXX escape this */
+            if (strcmp(name, "..") != 0 && strcmp(name, ".") != 0)
+            {
+                evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n",
+                    name, name);/* XXX escape this */
+            }
         }
 
         evbuffer_add_printf(evb, "</ul></body></html>\n");
-        closedir(d);
+        closedir(Directory);
 
         evhttp_add_header(evhttp_request_get_output_headers(Request),
             "Content-Type", "text/html");
@@ -221,25 +194,52 @@ void CallBack_GenericHandler(struct evhttp_request *Request, void *arg)
     else
     {
         printf("It is File\n");
-        int fd = open(whole_path, O_RDONLY);
-        if (fd <= 0)
+        int FileDescriptor = open(WholePath, O_RDONLY);
+        if (FileDescriptor <= 0)
         {
             printf("ERROR: open failed.\n");
             return;
         }
 
-        if (fstat(fd, &st) < 0)
+        if (fstat(FileDescriptor, &st) < 0)
         {
             printf("ERROR: fstat failed.\n");
             return;
         }
 
-        const char *type = guess_content_type(decoded_path);
+        static std::map<std::string, std::string> ContentTypeMap;
+        if (ContentTypeMap.empty())
+        {
+            ContentTypeMap["txt"] = "text/plain";
+            ContentTypeMap["c"] = "text/plain";
+            ContentTypeMap["h"] = "text/plain";
+            ContentTypeMap["html"] = "text/html";
+            ContentTypeMap["htm"] = "text/htm";
+            ContentTypeMap["css"] = "text/css";
+            ContentTypeMap["gif"] = "image/gif";
+            ContentTypeMap["jpg"] = "image/jpeg";
+            ContentTypeMap["jpeg"] = "image/jpeg";
+            ContentTypeMap["png"] = "image/png";
+            ContentTypeMap["pdf"] = "application/pdf";
+            ContentTypeMap["ps"] = "application/postscript";
+            ContentTypeMap["misc"] = "application/misc";
+
+            printf("Content type map size = %d\n", static_cast<int>(ContentTypeMap.size()));
+        }
+
+        const char *extension = strrchr(decoded_path, '.') + 1;
+        printf("extension = %s\n", extension);
+
+        std::map<std::string, std::string>::iterator it = ContentTypeMap.find(extension);
+        const char *type = (it != ContentTypeMap.end()) ? it->second.c_str() : ContentTypeMap["misc"].c_str();
+        printf("File type = %s\n", type);
+
         evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", type);
-        evbuffer_add_file(evb, fd, 0, st.st_size);
+        evbuffer_add_file(evb, FileDescriptor, 0, st.st_size);
     }
 
     evhttp_send_reply(Request, HTTP_OK, "OK", evb);
+    printf("Stop process generic request\n\n");
 }
 
 void demo5_server(const char *ServerIP, int Port)
@@ -266,8 +266,7 @@ void demo5_server(const char *ServerIP, int Port)
 
     evhttp_set_timeout(http, 5);
 
-    const char *Dump = "/home/butler/Butler/Code/Deployment/QingLite/LinuxLite/bin/x64/Debug/";
-    evhttp_set_gencb(http, CallBack_GenericHandler, (void*)Dump);
+    evhttp_set_gencb(http, CallBack_GenericRequest, NULL);
     evhttp_set_cb(http, "/dump", CallBack_DocumentRequest, NULL);
 
     printf("HTTP Server start dispatch...\n\n");

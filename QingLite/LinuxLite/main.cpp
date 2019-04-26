@@ -36,9 +36,7 @@ int main(int argc, char *argv[])
     //demo3_client("192.168.3.126", 12345);
     //demo3_server("192.168.3.126", 12345);
     //demo4_client();
-
     demo5_server("192.168.3.126", 12345);
-    //demo5_server("0.0.0.0", 12345);
 
 
     //if (atoi(argv[1]) == 0)
