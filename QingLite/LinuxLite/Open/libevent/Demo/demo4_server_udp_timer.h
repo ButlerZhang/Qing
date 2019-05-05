@@ -15,7 +15,7 @@ int g_UDPSocket = -1;
 struct timeval g_LastSendTime;
 struct sockaddr_in g_BroadcastAddress;
 
-void CallBack_TimeOut(evutil_socket_t fd, short event, void *arg)
+void CallBack4_TimeOut(evutil_socket_t fd, short event, void *arg)
 {
     std::string Message("please connect 192.168.3.126:12345");
     ssize_t SendSize = sendto(g_UDPSocket,
@@ -40,7 +40,7 @@ void CallBack_TimeOut(evutil_socket_t fd, short event, void *arg)
     event_add((struct event*)arg, &tv);
 }
 
-void demo4_server()
+void demo4_server_udp_timer()
 {
     g_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (g_UDPSocket == -1)
@@ -63,7 +63,7 @@ void demo4_server()
 
     struct event timeout;
     struct event_base *base = event_base_new();
-    event_assign(&timeout, base, -1, EV_PERSIST, CallBack_TimeOut, (void*)&timeout);
+    event_assign(&timeout, base, -1, EV_PERSIST, CallBack4_TimeOut, (void*)&timeout);
 
     struct timeval tv;
     evutil_timerclear(&tv);

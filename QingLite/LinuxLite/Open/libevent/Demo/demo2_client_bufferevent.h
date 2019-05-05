@@ -7,7 +7,7 @@
 
 
 
-void CallBack_InputFromCMD(int Input, short events, void *arg)
+void CallBack2_InputFromCMD(int Input, short events, void *arg)
 {
     char Message[1024];
     memset(Message, 0, sizeof(Message));
@@ -31,7 +31,7 @@ void CallBack_InputFromCMD(int Input, short events, void *arg)
     printf("Send message = %s, size = %d.\n", Message, ReadSize);
 }
 
-void CallBack_RecvFromServer(struct bufferevent *bev, void *arg)
+void CallBack2_RecvFromServer(struct bufferevent *bev, void *arg)
 {
     char Message[1024];
     memset(Message, 0, sizeof(Message));
@@ -42,7 +42,7 @@ void CallBack_RecvFromServer(struct bufferevent *bev, void *arg)
     printf("Recv message = %s, size = %d.\n\n", Message, RecvSize);
 }
 
-void CallBack_ClientEvent(struct bufferevent *bev, short event, void *arg)
+void CallBack2_ClientEvent(struct bufferevent *bev, short event, void *arg)
 {
     if (event &BEV_EVENT_EOF)
     {
@@ -57,7 +57,7 @@ void CallBack_ClientEvent(struct bufferevent *bev, short event, void *arg)
     event_free((struct event*)arg);
 }
 
-void demo2_client(const char *ServerIP, int Port)
+void demo2_client_bufferevent(const char *ServerIP, int Port)
 {
     int ClientSocket = socket(PF_INET, SOCK_STREAM, 0);
     if (ClientSocket <= -1)
@@ -83,11 +83,11 @@ void demo2_client(const char *ServerIP, int Port)
 
     struct event_base *base = event_base_new();
     struct bufferevent *bev = bufferevent_socket_new(base, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
-    struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, (void*)bev);
+    struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack2_InputFromCMD, (void*)bev);
 
     event_add(ev_cmd, NULL);
 
-    bufferevent_setcb(bev, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, (void*)ev_cmd);
+    bufferevent_setcb(bev, CallBack2_RecvFromServer, NULL, CallBack2_ClientEvent, (void*)ev_cmd);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
 
     printf("Client start dispatch...\n\n");

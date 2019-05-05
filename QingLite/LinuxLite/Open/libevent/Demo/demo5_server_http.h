@@ -177,7 +177,7 @@ void ProcessFile(struct evhttp_request *Request, struct stat &st, const std::str
     evbuffer_free(evb);
 }
 
-void CallBack_GenericRequest(struct evhttp_request *Request, void *arg)
+void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
 {
     printf("Process generic request begin...\n");
     PrintRequest(Request);
@@ -207,7 +207,7 @@ void CallBack_GenericRequest(struct evhttp_request *Request, void *arg)
     printf("Process generic request end...\n\n");
 }
 
-void demo5_server(const char *ServerIP, int Port)
+void demo5_server_http(const char *ServerIP, int Port)
 {
     //get work direcotry
     {
@@ -260,7 +260,7 @@ void demo5_server(const char *ServerIP, int Port)
     }
 
     evhttp_set_timeout(http, 5);
-    evhttp_set_gencb(http, CallBack_GenericRequest, NULL);
+    evhttp_set_gencb(http, CallBack5_GenericRequest, NULL);
 
     printf("HTTP Server start dispatch...\n\n");
     event_base_dispatch(base);

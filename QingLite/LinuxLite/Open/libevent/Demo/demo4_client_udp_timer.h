@@ -9,7 +9,7 @@
 
 
 
-void demo4_client(void)
+void demo4_client_udp_timer(void)
 {
     int g_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (g_UDPSocket == -1)

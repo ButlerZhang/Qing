@@ -9,7 +9,7 @@
 
 
 
-void CallBack_RecvClient(bufferevent *bev, void *arg)
+void CallBack2_RecvClient(bufferevent *bev, void *arg)
 {
     char Message[1024];
     memset(Message, 0, sizeof(Message));
@@ -25,7 +25,7 @@ void CallBack_RecvClient(bufferevent *bev, void *arg)
     printf("Client = %d send ack, size = %d.\n\n", ClientSocket, ACK.length());
 }
 
-void CallBack_ServerEvent(struct bufferevent *bev, short event, void *arg)
+void CallBack2_ServerEvent(struct bufferevent *bev, short event, void *arg)
 {
     int ClientSocket = bufferevent_getfd(bev);
     if (event & BEV_EVENT_EOF)
@@ -40,7 +40,7 @@ void CallBack_ServerEvent(struct bufferevent *bev, short event, void *arg)
     bufferevent_free(bev);
 }
 
-void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
+void CallBack2_AcceptClient(int ListenSocket, short events, void *arg)
 {
     struct sockaddr_in ClientAddress;
     socklen_t AddressLength = sizeof(ClientAddress);
@@ -52,11 +52,11 @@ void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
 
     struct event_base *base = (event_base*)arg;
     bufferevent *bev = bufferevent_socket_new(base, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
-    bufferevent_setcb(bev, CallBack_RecvClient, NULL, CallBack_ServerEvent, arg);
+    bufferevent_setcb(bev, CallBack2_RecvClient, NULL, CallBack2_ServerEvent, arg);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
 }
 
-void demo2_server(const char *ServerIP, int Port)
+void demo2_server_bufferevent(const char *ServerIP, int Port)
 {
     int ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (ListenSocket <= -1)
@@ -91,7 +91,7 @@ void demo2_server(const char *ServerIP, int Port)
 
     struct event_base *base = event_base_new();
 
-    struct event *ev_listen = event_new(base, ListenSocket, EV_READ | EV_PERSIST, CallBack_AcceptClient, base);
+    struct event *ev_listen = event_new(base, ListenSocket, EV_READ | EV_PERSIST, CallBack2_AcceptClient, base);
     event_add(ev_listen, NULL);
 
     printf("Server start dispatch...\n\n");

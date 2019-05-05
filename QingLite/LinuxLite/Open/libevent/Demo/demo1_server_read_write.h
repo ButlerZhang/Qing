@@ -9,7 +9,7 @@
 
 
 
-void CallBack_RecvClient(int ClientSocket, short events, void *arg)
+void CallBack1_RecvClient(int ClientSocket, short events, void *arg)
 {
     char Message[1024];
     memset(Message, 0, sizeof(Message));
@@ -31,7 +31,7 @@ void CallBack_RecvClient(int ClientSocket, short events, void *arg)
     }
 }
 
-void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
+void CallBack1_AcceptClient(int ListenSocket, short events, void *arg)
 {
     struct sockaddr_in ClientAddress;
     socklen_t AddressLength = sizeof(ClientAddress);
@@ -44,11 +44,11 @@ void CallBack_AcceptClient(int ListenSocket, short events, void *arg)
     struct event_base *base = (event_base*)arg;
     struct event *ev = event_new(NULL, -1, 0, NULL, NULL);
 
-    event_assign(ev, base, ClientSocket, EV_READ | EV_PERSIST, CallBack_RecvClient, (void*)ev);
+    event_assign(ev, base, ClientSocket, EV_READ | EV_PERSIST, CallBack1_RecvClient, (void*)ev);
     event_add(ev, NULL);
 }
 
-void demo1_server(const char *ServerIP, int Port)
+void demo1_server_read_write(const char *ServerIP, int Port)
 {
     int ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (ListenSocket <= -1)
@@ -83,7 +83,7 @@ void demo1_server(const char *ServerIP, int Port)
 
     struct event_base *base = event_base_new();
 
-    struct event *ev_listen = event_new(base, ListenSocket, EV_READ | EV_PERSIST, CallBack_AcceptClient, base);
+    struct event *ev_listen = event_new(base, ListenSocket, EV_READ | EV_PERSIST, CallBack1_AcceptClient, base);
     event_add(ev_listen, NULL);
 
     printf("Server start dispatch...\n\n");
