@@ -43,6 +43,8 @@ void PrintRequest(struct evhttp_request* Request)
 bool ParseRequestPath(struct evhttp_request* Request, std::string &FullPath)
 {
     const char *URI = evhttp_request_get_uri(Request);
+    printf("URI = %s\n", URI);
+
     struct evhttp_uri *Decoded = evhttp_uri_parse(URI);
     if (Decoded == NULL)
     {
@@ -207,7 +209,7 @@ void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
     printf("Process generic request end...\n\n");
 }
 
-void demo5_server_http(const char *ServerIP, int Port)
+void demo5_server_evhttp(const char *ServerIP, int Port)
 {
     //get work direcotry
     {
