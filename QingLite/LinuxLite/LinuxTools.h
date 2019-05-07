@@ -1,7 +1,9 @@
 #pragma once
-#include <uuid/uuid.h>
 #include <string>
 #include <random>
+#include <unistd.h>
+#include <dirent.h>
+#include <uuid/uuid.h>
 
 
 
@@ -14,6 +16,21 @@ std::string GetUUID()
     uuid_unparse(uuid, uuidstring);
 
     return std::string(uuidstring);
+}
+
+std::string GetWorkDirectory()
+{
+    char WorkPath[PATH_MAX];
+    if (getcwd(WorkPath, PATH_MAX) == NULL)
+    {
+        //printf("ERROR: Get work path failed.\n");
+    }
+    else
+    {
+        //printf("Work Path = %s\n", WorkPath);
+    }
+
+    return std::string(WorkPath);
 }
 
 unsigned int GetRandomUIntInRange(int Min, int Max)

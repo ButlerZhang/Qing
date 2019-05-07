@@ -238,9 +238,9 @@ void CallBack6_Read(struct bufferevent *bev, void *user_data)
     //printf("Read buffer = %s", ReadBuffer);
 
     sscanf(ReadBuffer, "%[^ ] %[^ ] %[^ \r\n]", MethodBuffer, PathBuffer, ProtocolBuffer);
-    printf("Protocol = %s\n", ProtocolBuffer);
-    printf("Method = %s\n", MethodBuffer);
-    printf("Path = %s\n", PathBuffer);
+    //printf("Protocol = %s\n", ProtocolBuffer);
+    //printf("Method = %s\n", MethodBuffer);
+    printf("Request path = %s\n", PathBuffer);
 
     if (strcasecmp(MethodBuffer, "GET") == 0)
     {

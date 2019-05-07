@@ -39,8 +39,7 @@ int main(int argc, char *argv[])
         //demo2_server_bufferevent(ServerIP, ServerPort);
         //demo3_server_evconnlistener(ServerIP, ServerPort);
         //demo4_server_udp_timer();
-        //demo5_server_evhttp(ServerIP, ServerPort);
-        demo6_server_evconnlistener_http(ServerIP, ServerPort);
+        demo5_server_evhttp(ServerIP, ServerPort);
 
         //SingleThreadServerLite Server;
         //if (Server.Initialize(ServerIP, ServerPort))
@@ -54,6 +53,7 @@ int main(int argc, char *argv[])
         //demo2_client_bufferevent(ServerIP, ServerPort);
         //demo3_client_evconnlistener(ServerIP, ServerPort);
         //demo4_client_udp_timer();
+        demo6_server_evconnlistener_http(ServerIP, 54321);
 
         //SingleThreadClientLite Client;
         //Client.Start();

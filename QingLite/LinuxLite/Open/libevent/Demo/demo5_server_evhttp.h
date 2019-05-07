@@ -9,7 +9,6 @@
 #include <event.h>
 #include <event2/http.h>
 
-std::string g_WorkDirectory;
 std::map<std::string, std::string> g_ContentTypeMap;
 
 
@@ -78,11 +77,14 @@ bool ParseRequestPath(struct evhttp_request* Request, std::string &FullPath)
         return false;
     }
 
-    printf("Request decoded path = %s\n", DecodedPath);
-    FullPath = g_WorkDirectory + DecodedPath;
     if (strcmp(DecodedPath, "/") == 0)
     {
-        //FullPath += "index.html";
+        FullPath = "./";
+    }
+    else
+    {
+        FullPath.append(".");
+        FullPath.append(DecodedPath);
     }
 
     printf("Whole path = %s\n", FullPath.c_str());
@@ -120,13 +122,26 @@ void ProcessDirectory(struct evhttp_request *Request, const std::string &FullPat
         "  <h1>list</h1>\n"
         "  <ul>\n");
 
-    struct dirent *ent = NULL;
-    while ((ent = readdir(Directory)))
+    struct stat st;
+    struct dirent **DirentInfo;
+    int FileCount = scandir(FullPath.c_str(), &DirentInfo, NULL, alphasort);
+    for (int FileIndex = 0; FileIndex < FileCount; FileIndex++)
     {
-        const char *name = ent->d_name;
-        if (strcmp(name, "..") != 0 && strcmp(name, ".") != 0)
+        const char *FileName = DirentInfo[FileIndex]->d_name;
+        if (lstat((FullPath + FileName).c_str(), &st) < 0)
         {
-            evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n", name, name);
+            evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
+        }
+        else
+        {
+            if (S_ISDIR(st.st_mode))
+            {
+                evbuffer_add_printf(evb, "   <li><a href=\"%s/\">%s</a>\n", FileName, FileName);
+            }
+            else
+            {
+                evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
+            }
         }
     }
 
@@ -211,19 +226,6 @@ void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
 
 void demo5_server_evhttp(const char *ServerIP, int Port)
 {
-    //get work direcotry
-    {
-        char WorkPath[PATH_MAX];
-        if (getcwd(WorkPath, PATH_MAX) == NULL)
-        {
-            printf("ERROR: Get work path failed.\n");
-            return;
-        }
-
-        g_WorkDirectory = WorkPath;
-        printf("Work Path = %s\n", WorkPath);
-    }
-
     //initialize content type map
     {
         g_ContentTypeMap["txt"] = "text/plain";
