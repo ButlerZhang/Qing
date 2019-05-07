@@ -328,6 +328,9 @@
     <ClInclude Include="Open\libevent\Demo\demo6_server_evconnlistener_http.h">
       <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
+    <ClInclude Include="Open\libevent\Demo\demo5_client_evhttp.h">
+      <Filter>Open\libevent\Demo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

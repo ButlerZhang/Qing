@@ -261,12 +261,14 @@ void demo5_server_evhttp(const char *ServerIP, int Port)
     if (http == NULL)
     {
         printf("ERROR: could not create evhttp.\n");
+        event_base_free(base);
         return;
     }
 
     if (evhttp_bind_socket(http, ServerIP, static_cast<uint16_t>(Port)) != 0)
     {
         printf("ERROR: http server bind failed.\n");
+        event_base_free(base);
         return;
     }
 
@@ -275,4 +277,5 @@ void demo5_server_evhttp(const char *ServerIP, int Port)
 
     printf("HTTP Server start dispatch...\n\n");
     event_base_dispatch(base);
+    event_base_free(base);
 }
