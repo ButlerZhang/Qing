@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         //demo2_client_bufferevent(ServerIP, ServerPort);
         //demo3_client_evconnlistener(ServerIP, ServerPort);
         //demo4_client_udp_timer();
-        demo6_server_evconnlistener_http(ServerIP, 54321);
+        demo6_server_evconnlistener_http(ServerIP, ServerPort);
 
         //SingleThreadClientLite Client;
         //Client.Start();

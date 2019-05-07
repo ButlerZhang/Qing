@@ -35,75 +35,68 @@ void PrintRequest(struct evhttp_request* Request)
     struct evkeyvalq *Headers = evhttp_request_get_input_headers(Request);
     for (struct evkeyval *header = Headers->tqh_first; header != NULL; header = header->next.tqe_next)
     {
-        printf("    %s: %s\n", header->key, header->value);
+        printf("\t%s: %s\n", header->key, header->value);
     }
+
+    printf("\r\n");
 }
 
-bool ParseRequestPath(struct evhttp_request* Request, std::string &FullPath)
+bool ParseRequestPath(struct evhttp_request* Request, std::string &ActualllyPath)
 {
-    const char *URI = evhttp_request_get_uri(Request);
-    printf("URI = %s\n", URI);
+    const char *OriginalURI = evhttp_request_get_uri(Request);
+    printf("Original URI = %s\n", OriginalURI);
 
-    struct evhttp_uri *Decoded = evhttp_uri_parse(URI);
-    if (Decoded == NULL)
+    struct evhttp_uri *ParseURI = evhttp_uri_parse(OriginalURI);
+    if (ParseURI == NULL)
     {
-        printf("It is not a good URI. Sending BADREQUEST.\n");
         evhttp_send_error(Request, HTTP_BADREQUEST, "Can not decoded URI.");
+        printf("It is not a good URI. Sending BADREQUEST.\n");
         return false;
     }
 
-    const char *RequestPath = evhttp_uri_get_path(Decoded);
+    const char *RequestPath = evhttp_uri_get_path(ParseURI);
     printf("Request path = %s\n", RequestPath);
     if (RequestPath == NULL)
     {
         RequestPath = "/";
     }
 
-    char *DecodedPath = evhttp_uridecode(RequestPath, 0, NULL);
-    if (DecodedPath == NULL)
+    char *DecodeURI = evhttp_uridecode(RequestPath, 0, NULL);
+    if (DecodeURI == NULL)
     {
-        evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found");
-        printf("Decoded path is NULL.\n");
-        evhttp_uri_free(Decoded);
+        evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
+        printf("Decoded URI is NULL.\n");
+        evhttp_uri_free(ParseURI);
         return false;
     }
 
-    if (strstr(DecodedPath, ".."))
+    if (strstr(DecodeURI, ".."))
     {
-        evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found");
-        printf("Decoded path include '..' directory.\n");
-        evhttp_uri_free(Decoded);
-        free(DecodedPath);
+        evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
+        printf("Decoded URI include '..' directory.\n");
+        evhttp_uri_free(ParseURI);
+        free(DecodeURI);
         return false;
     }
 
-    if (strcmp(DecodedPath, "/") == 0)
+    if (strcmp(DecodeURI, "/") == 0)
     {
-        FullPath = "./";
+        ActualllyPath = "./";
     }
     else
     {
-        FullPath.append(".");
-        FullPath.append(DecodedPath);
+        ActualllyPath.append(".");
+        ActualllyPath.append(DecodeURI);
     }
 
-    printf("Whole path = %s\n", FullPath.c_str());
-    evhttp_uri_free(Decoded);
-    free(DecodedPath);
+    printf("Actuallly path = %s\r\n", ActualllyPath.c_str());
+    evhttp_uri_free(ParseURI);
+    free(DecodeURI);
     return true;
 }
 
-void ProcessDirectory(struct evhttp_request *Request, const std::string &FullPath)
+void ProcessDirectory(struct evhttp_request *Request, const std::string &ActualllyPath)
 {
-    printf("Process directory.\n");
-
-    DIR *Directory = opendir(FullPath.c_str());
-    if (Directory == NULL)
-    {
-        printf("ERROR: Open directory failed.\n");
-        return;
-    }
-
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
     {
@@ -115,28 +108,36 @@ void ProcessDirectory(struct evhttp_request *Request, const std::string &FullPat
         "<!DOCTYPE html>\n"
         "<html>\n <head>\n"
         "  <meta charset='utf-8'>\n"
-        "  <title>HTTP Server Test</title>\n"
+        "  <title>Qing Server</title>\n"
         "  <base href='Directory'>\n"
         " </head>\n"
         " <body>\n"
-        "  <h1>list</h1>\n"
+        "  <h1>Floder:</h1>\n"
         "  <ul>\n");
 
-    struct stat st;
+    printf("\nFloder:\r\n");
+
+    struct stat FileStat;
     struct dirent **DirentInfo;
-    int FileCount = scandir(FullPath.c_str(), &DirentInfo, NULL, alphasort);
+    int FileCount = scandir(ActualllyPath.c_str(), &DirentInfo, NULL, alphasort);
     for (int FileIndex = 0; FileIndex < FileCount; FileIndex++)
     {
         const char *FileName = DirentInfo[FileIndex]->d_name;
-        if (lstat((FullPath + FileName).c_str(), &st) < 0)
+        if (strcmp(FileName, ".") == 0)
+        {
+            continue;
+        }
+
+        printf("\t%s\n", FileName);
+        if (lstat((ActualllyPath + FileName).c_str(), &FileStat) < 0)
         {
             evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
         }
         else
         {
-            if (S_ISDIR(st.st_mode))
+            if (S_ISDIR(FileStat.st_mode))
             {
-                evbuffer_add_printf(evb, "   <li><a href=\"%s/\">%s</a>\n", FileName, FileName);
+                evbuffer_add_printf(evb, "   <li><a href=\"%s/\">%s/</a>\n", FileName, FileName);
             }
             else
             {
@@ -145,26 +146,25 @@ void ProcessDirectory(struct evhttp_request *Request, const std::string &FullPat
         }
     }
 
+    printf("\r\n");
     evbuffer_add_printf(evb, "</ul></body></html>\n");
-    closedir(Directory);
-
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", "text/html");
+
     evhttp_send_reply(Request, HTTP_OK, "OK", evb);
     evbuffer_free(evb);
 }
 
-void ProcessFile(struct evhttp_request *Request, struct stat &st, const std::string &FullPath)
+void ProcessFile(struct evhttp_request *Request, struct stat &FileStat, const std::string &ActualllyPath)
 {
-    printf("Process file.\n");
-
-    int FileDescriptor = open(FullPath.c_str(), O_RDONLY);
+    int FileDescriptor = open(ActualllyPath.c_str(), O_RDONLY);
     if (FileDescriptor <= 0)
     {
+        evhttp_send_error(Request, HTTP_NOTFOUND, "File was not found.");
         printf("ERROR: Open file descriptor failed.\n");
         return;
     }
 
-    if (fstat(FileDescriptor, &st) < 0)
+    if (fstat(FileDescriptor, &FileStat) < 0)
     {
         printf("ERROR: fstat failed.\n");
         close(FileDescriptor);
@@ -179,15 +179,13 @@ void ProcessFile(struct evhttp_request *Request, struct stat &st, const std::str
         return;
     }
 
-    const char *extension = strrchr(FullPath.c_str(), '.') + 1;
-    printf("File extension = %s\n", extension);
-
-    std::map<std::string, std::string>::iterator it = g_ContentTypeMap.find(extension);
+    const char *FileExtension = strrchr(ActualllyPath.c_str(), '.') + 1;
+    std::map<std::string, std::string>::iterator it = g_ContentTypeMap.find(FileExtension);
     const char *FileType = (it != g_ContentTypeMap.end()) ? it->second.c_str() : g_ContentTypeMap["misc"].c_str();
-    printf("File type = %s\n", FileType);
+    printf("\r\nFile:\r\n\tExtension = %s\n\tType = %s\n\n", FileExtension, FileType);
 
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", FileType);
-    evbuffer_add_file(evb, FileDescriptor, 0, st.st_size);
+    evbuffer_add_file(evb, FileDescriptor, 0, FileStat.st_size);
     evhttp_send_reply(Request, HTTP_OK, "OK", evb);
 
     close(FileDescriptor);
@@ -196,7 +194,6 @@ void ProcessFile(struct evhttp_request *Request, struct stat &st, const std::str
 
 void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
 {
-    printf("Process generic request begin...\n");
     PrintRequest(Request);
 
     std::string FullPath;
@@ -205,23 +202,21 @@ void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
         return;
     }
 
-    struct stat st;
-    if (stat(FullPath.c_str(), &st) < 0)
+    struct stat ActuallyPathStat;
+    if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
     {
-        printf("ERROR: stat full path failed.\n\n");
+        printf("ERROR: Stat actually path failed.\n\n");
         return;
     }
 
-    if (S_ISDIR(st.st_mode))
+    if (S_ISDIR(ActuallyPathStat.st_mode))
     {
         ProcessDirectory(Request, FullPath);
     }
     else
     {
-        ProcessFile(Request, st, FullPath);
+        ProcessFile(Request, ActuallyPathStat, FullPath);
     }
-
-    printf("Process generic request end...\n\n");
 }
 
 void demo5_server_evhttp(const char *ServerIP, int Port)
@@ -238,8 +233,20 @@ void demo5_server_evhttp(const char *ServerIP, int Port)
         g_ContentTypeMap["jpg"] = "image/jpeg";
         g_ContentTypeMap["jpeg"] = "image/jpeg";
         g_ContentTypeMap["png"] = "image/png";
+        g_ContentTypeMap["ogg"] = "application/ogg";
         g_ContentTypeMap["pdf"] = "application/pdf";
         g_ContentTypeMap["ps"] = "application/postscript";
+        g_ContentTypeMap["au"] = "audio/basic";
+        g_ContentTypeMap["wav"] = "audio/wav";
+        g_ContentTypeMap["mid"] = "audio/midi";
+        g_ContentTypeMap["midi"] = "audio/midi";
+        g_ContentTypeMap["mp3"] = "audio/mpeg";
+        g_ContentTypeMap["avi"] = "video/x-msvideo";
+        g_ContentTypeMap["qt"] = "video/quicktime";
+        g_ContentTypeMap["mov"] = "video/quicktime";
+        g_ContentTypeMap["mpeg"] = "video/mpeg";
+        g_ContentTypeMap["mpe"] = "video/mpeg";
+        g_ContentTypeMap["vrml"] = "model/vrml";
         g_ContentTypeMap["misc"] = "application/misc";
     }
 
