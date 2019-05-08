@@ -67,7 +67,7 @@ void CallBack5_InputFromCMD(int Input, short events, void *arg)
 
     Buffer[ReadSize] = '\0';
     int Choice = atoi(Buffer);
-    printf("User choice = %s\n", Buffer);
+    printf("==========User choice = %d==========\n", Choice);
 
     struct event_base* base = (event_base*)arg;
     struct evhttp_request* Request = evhttp_request_new(Callback5_RemoteRead, base);
@@ -96,7 +96,7 @@ void CallBack5_InputFromCMD(int Input, short events, void *arg)
             const std::string PostData("You are stupid.");
             evbuffer_add(evhttp_request_get_output_buffer(Request), PostData.c_str(), PostData.length());
 
-            sprintf(Buffer, "http://192.168.3.126:12345");
+            sprintf(Buffer, "http://192.168.3.126:12345?user=butler&password=1234567890");
             evhttp_make_request(g_Connection, Request, EVHTTP_REQ_POST, Buffer);
             break;
         }

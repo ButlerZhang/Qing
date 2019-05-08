@@ -30,6 +30,7 @@ void PrintRequest(struct evhttp_request* Request)
     default:                    RequestType = "unknown";    break;
     }
 
+    printf("==========new request=========\n");
     printf("Received a %s request for: %s\nHeaders:\n", RequestType, evhttp_request_get_uri(Request));
 
     struct evkeyvalq *Headers = evhttp_request_get_input_headers(Request);
@@ -53,6 +54,14 @@ bool ParseRequestPath(struct evhttp_request* Request, std::string &ActualllyPath
         printf("It is not a good URI. Sending BADREQUEST.\n");
         return false;
     }
+
+    printf("scheme:%s\n", evhttp_uri_get_scheme(ParseURI));
+    printf("host:%s\n", evhttp_uri_get_host(ParseURI));
+    printf("path:%s\n", evhttp_uri_get_path(ParseURI));
+    printf("port:%d\n", evhttp_uri_get_port(ParseURI));
+    printf("query:%s\n", evhttp_uri_get_query(ParseURI));
+    printf("userinfo:%s\n", evhttp_uri_get_userinfo(ParseURI));
+    printf("fragment:%s\n\n", evhttp_uri_get_fragment(ParseURI));
 
     const char *RequestPath = evhttp_uri_get_path(ParseURI);
     printf("Request path = %s\n", RequestPath);
@@ -79,7 +88,7 @@ bool ParseRequestPath(struct evhttp_request* Request, std::string &ActualllyPath
         return false;
     }
 
-    if (strcmp(DecodeURI, "/") == 0)
+    if (strcmp(DecodeURI, "/") == 0 || strcmp(DecodeURI, "") == 0)
     {
         ActualllyPath = "./";
     }
@@ -196,15 +205,15 @@ void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
 {
     PrintRequest(Request);
 
+    std::string FullPath;
+    if (!ParseRequestPath(Request, FullPath))
+    {
+        return;
+    }
+
     evhttp_cmd_type CurrentType = evhttp_request_get_command(Request);
     if (CurrentType == EVHTTP_REQ_GET)
     {
-        std::string FullPath;
-        if (!ParseRequestPath(Request, FullPath))
-        {
-            return;
-        }
-
         struct stat ActuallyPathStat;
         if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
         {
@@ -229,11 +238,12 @@ void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
         char PostDataBuffer[1024];
         memset(PostDataBuffer, 0, sizeof(PostDataBuffer));
         int ReadSize = evbuffer_remove(PostData, PostDataBuffer, sizeof(PostDataBuffer));
-        printf("Post data = %s, size = %d.\n", PostDataBuffer, ReadSize);
+        printf("Post data = %s, size = %d.\n\n", PostDataBuffer, ReadSize);
     }
     else
     {
         evhttp_send_error(Request, HTTP_BADMETHOD, "method not allowed for this uri.");
+        printf("method not allowed for this uri.\n\n");
     }
 }
 
