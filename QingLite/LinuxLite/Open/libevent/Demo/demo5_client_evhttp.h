@@ -6,13 +6,13 @@
 #include <event2/http.h>
 #include <event2/event_struct.h>
 
-struct evdns_base* g_DNSBase;
 
 
+struct evhttp_connection* g_Connection;
 
 void Callback5_RemoteRead(struct evhttp_request* Request, void* arg)
 {
-    printf("Remote read done.\n\n");
+    printf("Remote read done.\n");
     //event_base_loopexit((struct event_base*)arg, NULL);
 }
 
@@ -62,81 +62,59 @@ void Callback5_RemoteConnectionClose(struct evhttp_connection* connection, void*
 
 void CallBack5_InputFromCMD(int Input, short events, void *arg)
 {
-    char Message[1024];
-    read(Input, Message, sizeof(Message));
-    std::string InputChoice(Message);
+    char Buffer[1024];
+    ssize_t ReadSize = read(Input, Buffer, sizeof(Buffer));
 
-    const char* OriginalURL = NULL;
-    if (InputChoice == "1")          //get
-    {
-        OriginalURL = "http://192.168.3.126:12345/dump/";
-    }
-    else if (InputChoice == "2")     //post
-    {
-
-    }
-    else                             //index
-    {
-        OriginalURL = "http://192.168.3.126:12345";
-    }
-
-    if (OriginalURL == NULL)
-    {
-        printf("ERROR: original url is empty.\n");
-        return;
-    }
-
-    struct evhttp_uri* OriginalURI = evhttp_uri_parse(OriginalURL);
-    if (OriginalURI == NULL)
-    {
-        printf("ERROR: parse url failed.\n");
-        return;
-    }
-
-    const char* Host = evhttp_uri_get_host(OriginalURI);
-    if (Host == NULL)
-    {
-        printf("ERROR: parse host failed.\n");
-        evhttp_uri_free(OriginalURI);
-        return;
-    }
-
-    const char* RequestURL = OriginalURL;
-    const char* RequestPath = evhttp_uri_get_path(OriginalURI);
-    if (RequestPath == NULL || strlen(RequestPath) == 0)
-    {
-        RequestURL = (char*)"/";
-        printf("come here???\n");
-    }
+    Buffer[ReadSize] = '\0';
+    int Choice = atoi(Buffer);
+    printf("User choice = %s\n", Buffer);
 
     struct event_base* base = (event_base*)arg;
     struct evhttp_request* Request = evhttp_request_new(Callback5_RemoteRead, base);
     if (Request == NULL)
     {
-        printf("ERROR: create http request failed.\n");
+        printf("ERROR: Create request failed.\n");
         return;
     }
 
     evhttp_request_set_chunked_cb(Request, Callback5_ReadChunk);
     evhttp_request_set_header_cb(Request, Callback5_ReadHeaderDone);
     evhttp_request_set_error_cb(Request, Callback5_RemoteRequestError);
+    evhttp_add_header(evhttp_request_get_output_headers(Request), "Host", "192.168.3.126");
 
-    int PortFromURI = evhttp_uri_get_port(OriginalURI);
-    struct evhttp_connection* g_Connection = evhttp_connection_base_new(base, g_DNSBase, Host, static_cast<uint16_t>(PortFromURI));
-    if (g_Connection == NULL)
+    switch (Choice)
     {
-        printf("ERROR: create http connection failed.\n");
-        evhttp_uri_free(OriginalURI);
-        evhttp_request_free(Request);
-        event_base_free(base);
-        return;
+        case 1://get directory or file
+        {
+            sprintf(Buffer, "http://192.168.3.126:12345");
+            evhttp_make_request(g_Connection, Request, EVHTTP_REQ_GET, Buffer);
+            break;
+        }
+
+        case 2://post
+        {
+            const std::string PostData("You are stupid.");
+            evbuffer_add(evhttp_request_get_output_buffer(Request), PostData.c_str(), PostData.length());
+
+            sprintf(Buffer, "http://192.168.3.126:12345");
+            evhttp_make_request(g_Connection, Request, EVHTTP_REQ_POST, Buffer);
+            break;
+        }
+
+        case 3://delete
+        {
+            sprintf(Buffer, "http://192.168.3.126:12345");
+            evhttp_make_request(g_Connection, Request, EVHTTP_REQ_DELETE, Buffer);
+            break;
+        }
+
+        default://get 404.html
+        {
+            sprintf(Buffer, "http://192.168.3.126:12345/404.html");
+            evhttp_make_request(g_Connection, Request, EVHTTP_REQ_GET, Buffer);
+            break;
+        }
     }
-
-    evhttp_connection_set_closecb(g_Connection, Callback5_RemoteConnectionClose, base);
-    evhttp_add_header(evhttp_request_get_output_headers(Request), "Host", Host);
-    evhttp_make_request(g_Connection, Request, EVHTTP_REQ_GET, RequestURL);
-
-    printf("url:%s\nhost:%s\nport:%d\npath:%s\nRequest url:%s\n\n\n", OriginalURL, Host, PortFromURI, RequestPath, RequestURL);
 }
 
 void demo5_client_evhttp(const char *ServerIP, int Port)
@@ -148,13 +126,26 @@ void demo5_client_evhttp(const char *ServerIP, int Port)
         return;
     }
 
-    g_DNSBase = evdns_base_new(base, 1);
-    if (g_DNSBase == NULL)
+    struct evdns_base* DNSBase = evdns_base_new(base, 1);
+    if (DNSBase == NULL)
     {
         printf("ERROR: create DNS base failed.\n");
         event_base_free(base);
         return;
     }
+
+    g_Connection = evhttp_connection_base_new(base, DNSBase, ServerIP, static_cast<uint16_t>(Port));
+    if (g_Connection == NULL)
+    {
+        printf("ERROR: create http connection failed.\n");
+        evdns_base_free(DNSBase, 0);
+        event_base_free(base);
+        return;
+    }
+
+    evhttp_connection_set_timeout(g_Connection, 600);
+    evhttp_connection_set_retries(g_Connection, -1);
+    evhttp_connection_set_closecb(g_Connection, Callback5_RemoteConnectionClose, base);
 
     struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack5_InputFromCMD, base);
     event_add(ev_cmd, NULL);

@@ -196,26 +196,44 @@ void CallBack5_GenericRequest(struct evhttp_request *Request, void *arg)
 {
     PrintRequest(Request);
 
-    std::string FullPath;
-    if (!ParseRequestPath(Request, FullPath))
+    evhttp_cmd_type CurrentType = evhttp_request_get_command(Request);
+    if (CurrentType == EVHTTP_REQ_GET)
     {
-        return;
-    }
+        std::string FullPath;
+        if (!ParseRequestPath(Request, FullPath))
+        {
+            return;
+        }
 
-    struct stat ActuallyPathStat;
-    if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
-    {
-        printf("ERROR: Stat actually path failed.\n\n");
-        return;
-    }
+        struct stat ActuallyPathStat;
+        if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
+        {
+            printf("ERROR: Stat actually path failed.\n\n");
+            return;
+        }
 
-    if (S_ISDIR(ActuallyPathStat.st_mode))
+        if (S_ISDIR(ActuallyPathStat.st_mode))
+        {
+            ProcessDirectory(Request, FullPath);
+        }
+        else
+        {
+            ProcessFile(Request, ActuallyPathStat, FullPath);
+        }
+    }
+    else if (CurrentType == EVHTTP_REQ_POST)
     {
-        ProcessDirectory(Request, FullPath);
+        evhttp_send_error(Request, HTTP_NOTIMPLEMENTED, "Post not implemented.");
+        struct evbuffer* PostData = evhttp_request_get_input_buffer(Request);
+
+        char PostDataBuffer[1024];
+        memset(PostDataBuffer, 0, sizeof(PostDataBuffer));
+        int ReadSize = evbuffer_remove(PostData, PostDataBuffer, sizeof(PostDataBuffer));
+        printf("Post data = %s, size = %d.\n", PostDataBuffer, ReadSize);
     }
     else
     {
-        ProcessFile(Request, ActuallyPathStat, FullPath);
+        evhttp_send_error(Request, HTTP_BADMETHOD, "method not allowed for this uri.");
     }
 }
 
