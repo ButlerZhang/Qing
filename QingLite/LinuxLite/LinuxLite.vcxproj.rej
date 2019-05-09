@@ -1,0 +1,9 @@
+diff a/QingLite/LinuxLite/LinuxLite.vcxproj b/QingLite/LinuxLite/LinuxLite.vcxproj	(rejected hunks)
+@@ -64,6 +64,7 @@
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <TargetName>a</TargetName>
+     <LibraryPath>/usr/local/lib/;usr/lib/;$(LibraryPath)</LibraryPath>
++    <IncludePath>..\..\OpenSource\openssl-1.1.1b\include\;$(IncludePath)</IncludePath>
+   </PropertyGroup>
+   <ItemGroup>
+     <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp" />

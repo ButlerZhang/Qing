@@ -113,6 +113,7 @@
     <ClInclude Include="..\..\Common\Example\IOExample.h" />
     <ClInclude Include="..\..\Common\Example\StringVector.h" />
     <ClInclude Include="..\..\Common\Tool\Common.h" />
+    <ClInclude Include="..\..\Common\Tool\HexString.h" />
     <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="Open\libevent\Demo\demo1_client_read_write.h" />
     <ClInclude Include="Open\libevent\Demo\demo1_server_read_write.h" />
@@ -124,7 +125,7 @@
     <ClInclude Include="Open\libevent\Demo\demo4_server_udp_timer.h" />
     <ClInclude Include="Open\libevent\Demo\demo5_client_evhttp.h" />
     <ClInclude Include="Open\libevent\Demo\demo5_server_evhttp.h" />
-    <ClInclude Include="Open\libevent\Demo\demo6_server_evconnlistener_http.h" />
+    <ClInclude Include="Open\libevent\Demo\demo5_server_evconnlistener_http.h" />
     <ClInclude Include="Open\libevent\MultiThread\MultiThreadServerLite.h" />
     <ClInclude Include="Open\libevent\MultiThread\SignalEvent.h" />
     <ClInclude Include="Open\libevent\MultiThread\ThreadNode.h" />
@@ -133,6 +134,11 @@
     <ClInclude Include="Open\libevent\SingleThread\SingleThreadClientLite.h" />
     <ClInclude Include="Open\libevent\SingleThread\SingleThreadServerLite.h" />
     <ClInclude Include="Open\libevent\SingleThread\UDPBroadcast.h" />
+    <ClInclude Include="Open\openssl\demo_DES.h" />
+    <ClInclude Include="Open\openssl\demo_MD5.h" />
+    <ClInclude Include="Open\openssl\demo_RSA.h" />
+    <ClInclude Include="Open\openssl\demo_SHA256.h" />
+    <ClInclude Include="Open\openssl\demo_test.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
     <ClInclude Include="Qing\NetworkServer.h" />
@@ -165,8 +171,11 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>event;pthread;uuid;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;%(LibraryDependencies)</LibraryDependencies>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

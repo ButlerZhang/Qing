@@ -58,6 +58,9 @@
     <Filter Include="Open\libevent\SingleThread">
       <UniqueIdentifier>{abd5a657-c03e-4b4b-bedb-acface37f502}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\openssl">
+      <UniqueIdentifier>{81ae3a57-6f68-4811-8aa2-ea31100e4d7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -325,11 +328,29 @@
     <ClInclude Include="Open\libevent\Demo\demo5_server_evhttp.h">
       <Filter>Open\libevent\Demo</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo6_server_evconnlistener_http.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
     <ClInclude Include="Open\libevent\Demo\demo5_client_evhttp.h">
       <Filter>Open\libevent\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\Demo\demo5_server_evconnlistener_http.h">
+      <Filter>Open\libevent\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Tool\HexString.h">
+      <Filter>Common\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_DES.h">
+      <Filter>Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_MD5.h">
+      <Filter>Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_RSA.h">
+      <Filter>Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_SHA256.h">
+      <Filter>Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_test.h">
+      <Filter>Open\openssl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
