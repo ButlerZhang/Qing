@@ -352,6 +352,12 @@
     <ClInclude Include="Open\project\SingleThread\UDPBroadcast.h">
       <Filter>Open\project\SingleThread</Filter>
     </ClInclude>
+    <ClInclude Include="Open\libevent\demo6_client_https.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo6_server_https.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

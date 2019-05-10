@@ -14,14 +14,12 @@
 //#include "Open/libevent/demo3_server_evconnlistener.h"
 //#include "Open/libevent/demo4_client_udp_timer.h"
 //#include "Open/libevent/demo4_server_udp_timer.h"
-#include "Open/libevent/demo5_client_evhttp.h"
-#include "Open/libevent/demo5_server_evhttp.h"
-#include "Open/libevent/demo5_server_evconnlistener_http.h"
+//#include "Open/libevent/demo5_client_evhttp.h"
+//#include "Open/libevent/demo5_server_evhttp.h"
+//#include "Open/libevent/demo5_server_evconnlistener_http.h"
+#include "Open/libevent/demo6_client_https.h"
+#include "Open/libevent/demo6_server_https.h"
 
-//#include "Open/project/SingleThread/SingleThreadServerLite.h"
-//#include "Open/project/SingleThread/SingleThreadClientLite.h"
-
-#include "Open/openssl/demo_test.h"
 
 
 
@@ -31,9 +29,6 @@ int main(int argc, char *argv[])
     //list_file_name(argc, argv);
     //copy_stdin_stdout_nobuffer();
     //copy_stdin_stdout_standard();
-
-    OpenSSL_EncryptAndDecryptTest();
-    return 0;
 
     const char *ServerIP = "192.168.3.126";
     const int ServerPort = 12345;
@@ -45,8 +40,8 @@ int main(int argc, char *argv[])
         //demo2_server_bufferevent(ServerIP, ServerPort);
         //demo3_server_evconnlistener(ServerIP, ServerPort);
         //demo4_server_udp_timer();
-        demo5_server_evhttp(ServerIP, ServerPort);
-        //demo5_server_evconnlistener_http(ServerIP, ServerPort);
+        //demo5_server_evhttp(ServerIP, ServerPort);
+        demo6_server_https(ServerIP, ServerPort);
 
         //SingleThreadServerLite Server;
         //if (Server.Initialize(ServerIP, ServerPort))
@@ -60,7 +55,8 @@ int main(int argc, char *argv[])
         //demo2_client_bufferevent(ServerIP, ServerPort);
         //demo3_client_evconnlistener(ServerIP, ServerPort);
         //demo4_client_udp_timer();
-        demo5_client_evhttp(ServerIP, ServerPort);
+        //demo5_client_evhttp(ServerIP, ServerPort);
+        demo6_client_https(ServerIP, ServerPort);
 
         //SingleThreadClientLite Client;
         //Client.Start();

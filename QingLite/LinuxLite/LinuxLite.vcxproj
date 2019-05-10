@@ -126,6 +126,8 @@
     <ClInclude Include="Open\libevent\demo5_client_evhttp.h" />
     <ClInclude Include="Open\libevent\demo5_server_evconnlistener_http.h" />
     <ClInclude Include="Open\libevent\demo5_server_evhttp.h" />
+    <ClInclude Include="Open\libevent\demo6_client_https.h" />
+    <ClInclude Include="Open\libevent\demo6_server_https.h" />
     <ClInclude Include="Open\openssl\demo_DES.h" />
     <ClInclude Include="Open\openssl\demo_MD5.h" />
     <ClInclude Include="Open\openssl\demo_RSA.h" />
@@ -171,7 +173,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>event;pthread;uuid;crypto;ssl;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;%(LibraryDependencies)</LibraryDependencies>
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
