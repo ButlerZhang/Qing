@@ -49,17 +49,17 @@
     <Filter Include="Open\libevent">
       <UniqueIdentifier>{3e83783f-22a8-441e-b9f4-74f6f47a3379}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Open\libevent\Demo">
-      <UniqueIdentifier>{681534fa-1030-4331-afe0-4e4cc4993703}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Open\libevent\MultiThread">
-      <UniqueIdentifier>{43f53926-921b-415e-b5f3-51706ff6ba47}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Open\libevent\SingleThread">
-      <UniqueIdentifier>{abd5a657-c03e-4b4b-bedb-acface37f502}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Open\openssl">
       <UniqueIdentifier>{81ae3a57-6f68-4811-8aa2-ea31100e4d7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\project">
+      <UniqueIdentifier>{b0bb337e-d96e-41bd-9b01-923220dc6b71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\project\MultiThread">
+      <UniqueIdentifier>{113562d0-cddf-4c0d-9b33-b7225bbe8d09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\project\SingleThread">
+      <UniqueIdentifier>{2784e7ce-23df-4ef2-9d4d-c42f74de9ea8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,29 +118,29 @@
     <ClCompile Include="Qing\NetworkServer.cpp">
       <Filter>Qing</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\SingleThread\SingleThreadServerLite.cpp">
-      <Filter>Open\libevent\SingleThread</Filter>
+    <ClCompile Include="Open\project\MultiThread\MultiThreadServerLite.cpp">
+      <Filter>Open\project\MultiThread</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\MultiThread\MultiThreadServerLite.cpp">
-      <Filter>Open\libevent\MultiThread</Filter>
+    <ClCompile Include="Open\project\MultiThread\SignalEvent.cpp">
+      <Filter>Open\project\MultiThread</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\MultiThread\SignalEvent.cpp">
-      <Filter>Open\libevent\MultiThread</Filter>
+    <ClCompile Include="Open\project\MultiThread\ThreadNode.cpp">
+      <Filter>Open\project\MultiThread</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\MultiThread\ThreadNode.cpp">
-      <Filter>Open\libevent\MultiThread</Filter>
+    <ClCompile Include="Open\project\MultiThread\TimerEvent.cpp">
+      <Filter>Open\project\MultiThread</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\MultiThread\TimerEvent.cpp">
-      <Filter>Open\libevent\MultiThread</Filter>
+    <ClCompile Include="Open\project\SingleThread\MessageHandler.cpp">
+      <Filter>Open\project\SingleThread</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\SingleThread\UDPBroadcast.cpp">
-      <Filter>Open\libevent\SingleThread</Filter>
+    <ClCompile Include="Open\project\SingleThread\SingleThreadClientLite.cpp">
+      <Filter>Open\project\SingleThread</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\SingleThread\SingleThreadClientLite.cpp">
-      <Filter>Open\libevent\SingleThread</Filter>
+    <ClCompile Include="Open\project\SingleThread\SingleThreadServerLite.cpp">
+      <Filter>Open\project\SingleThread</Filter>
     </ClCompile>
-    <ClCompile Include="Open\libevent\SingleThread\MessageHandler.cpp">
-      <Filter>Open\libevent\SingleThread</Filter>
+    <ClCompile Include="Open\project\SingleThread\UDPBroadcast.cpp">
+      <Filter>Open\project\SingleThread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -276,64 +276,7 @@
     <ClInclude Include="Qing\NetworkServer.h">
       <Filter>Qing</Filter>
     </ClInclude>
-    <ClInclude Include="Open\libevent\SingleThread\SingleThreadServerLite.h">
-      <Filter>Open\libevent\SingleThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\MultiThread\MultiThreadServerLite.h">
-      <Filter>Open\libevent\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\MultiThread\SignalEvent.h">
-      <Filter>Open\libevent\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\MultiThread\ThreadNode.h">
-      <Filter>Open\libevent\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\MultiThread\TimerEvent.h">
-      <Filter>Open\libevent\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\SingleThread\UDPBroadcast.h">
-      <Filter>Open\libevent\SingleThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\SingleThread\SingleThreadClientLite.h">
-      <Filter>Open\libevent\SingleThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\SingleThread\MessageHandler.h">
-      <Filter>Open\libevent\SingleThread</Filter>
-    </ClInclude>
     <ClInclude Include="LinuxTools.h" />
-    <ClInclude Include="Open\libevent\Demo\demo1_client_read_write.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo1_server_read_write.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo2_client_bufferevent.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo2_server_bufferevent.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo3_client_evconnlistener.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo3_server_evconnlistener.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo4_client_udp_timer.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo4_server_udp_timer.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo5_server_evhttp.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo5_client_evhttp.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\Demo\demo5_server_evconnlistener_http.h">
-      <Filter>Open\libevent\Demo</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Common\Tool\HexString.h">
       <Filter>Common\Tool</Filter>
     </ClInclude>
@@ -351,6 +294,63 @@
     </ClInclude>
     <ClInclude Include="Open\openssl\demo_test.h">
       <Filter>Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo1_client_read_write.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo1_server_read_write.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo2_client_bufferevent.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo2_server_bufferevent.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo3_client_evconnlistener.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo3_server_evconnlistener.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo4_client_udp_timer.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo4_server_udp_timer.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo5_client_evhttp.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo5_server_evconnlistener_http.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo5_server_evhttp.h">
+      <Filter>Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MultiThread\MultiThreadServerLite.h">
+      <Filter>Open\project\MultiThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MultiThread\SignalEvent.h">
+      <Filter>Open\project\MultiThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MultiThread\ThreadNode.h">
+      <Filter>Open\project\MultiThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MultiThread\TimerEvent.h">
+      <Filter>Open\project\MultiThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleThread\MessageHandler.h">
+      <Filter>Open\project\SingleThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleThread\SingleThreadClientLite.h">
+      <Filter>Open\project\SingleThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleThread\SingleThreadServerLite.h">
+      <Filter>Open\project\SingleThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleThread\UDPBroadcast.h">
+      <Filter>Open\project\SingleThread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
