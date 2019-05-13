@@ -15,7 +15,7 @@
 
 
 
-SSL_CTX* InitClientSSLContext(const char *certfile, const char *keyfile, const char *cafile)
+SSL_CTX* CreateSSLContext_Client6(const char *certfile, const char *keyfile, const char *cafile)
 {
     /* Load encryption & hashing algorithms for the SSL program */
     SSL_library_init();
@@ -66,7 +66,7 @@ void CallBack6_SSLRead(struct bufferevent *bev, void *arg)
     char recvbuf[1024] = { '\0' };
     if (bufferevent_read(bev, recvbuf, 1024) > 0)
     {
-        printf("Recv from client: %s\n", recvbuf);
+        printf("Recv from server: %s\n", recvbuf);
     }
 }
 
@@ -91,9 +91,9 @@ void CallBack6_SSLEvent(struct bufferevent *bev, short events, void *arg)
     }
 }
 
-void demo6_client_https(const char *ServerIP, int Port)
+void demo6_client_bufferevent_openssl(const char *ServerIP, int Port)
 {
-    SSL_CTX *SSLContext = InitClientSSLContext("./client/client.crt", "./client/client.key", "./ca/ca.cert");
+    SSL_CTX *SSLContext = CreateSSLContext_Client6("./client/client.crt", "./client/client.key", "./ca/ca.cert");
     if (SSLContext == NULL)
     {
         printf("Create SSL context failed.\n");
@@ -145,6 +145,6 @@ void demo6_client_https(const char *ServerIP, int Port)
         return;
     }
 
-    printf("HTTPs Client start dispatch...\n\n");
+    printf("Openssl Client start dispatch...\n\n");
     event_base_dispatch(base);
 }

@@ -78,7 +78,7 @@ void CallBack6_AcceptError(struct evconnlistener *listener, void *ctx)
     printf("Got an error %d on listener: %s\n", err, evutil_socket_error_to_string(err));
 }
 
-SSL_CTX* InitServerSSLContext(const char *certfile, const char *keyfile, const char *cafile)
+SSL_CTX* CreateSSLContext_Server6(const char *certfile, const char *keyfile, const char *cafile)
 {
     /* Load encryption & hashing algorithms for the SSL program */
     SSL_library_init();
@@ -124,9 +124,9 @@ SSL_CTX* InitServerSSLContext(const char *certfile, const char *keyfile, const c
     return ctx;
 }
 
-void demo6_server_https(const char *ServerIP, int Port)
+void demo6_server_bufferevent_openssl(const char *ServerIP, int Port)
 {
-    SSL_CTX *SSLContext = InitServerSSLContext("./server/server.crt","./server/server.key", "./ca/ca.cert");
+    SSL_CTX *SSLContext = CreateSSLContext_Server6("./server/server.crt","./server/server.key", "./ca/ca.cert");
     if (SSLContext == NULL)
     {
         printf("Create SSL context failed.\n");
@@ -165,6 +165,6 @@ void demo6_server_https(const char *ServerIP, int Port)
 
     evconnlistener_set_error_cb(listener, CallBack6_AcceptError);
 
-    printf("HTTPs Server start dispatch...\n\n");
+    printf("Openssl Server start dispatch...\n\n");
     event_base_dispatch(base);
 }
