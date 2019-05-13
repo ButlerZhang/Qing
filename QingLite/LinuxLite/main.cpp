@@ -17,9 +17,10 @@
 //#include "Open/libevent/demo5_client_evhttp.h"
 //#include "Open/libevent/demo5_server_evhttp.h"
 //#include "Open/libevent/demo5_server_evconnlistener_http.h"
-#include "Open/libevent/demo6_client_bufferevent_openssl.h"
-#include "Open/libevent/demo6_server_bufferevent_openssl.h"
-
+//#include "Open/libevent/demo6_client_bufferevent_openssl.h"
+//#include "Open/libevent/demo6_server_bufferevent_openssl.h"
+#include "Open/libevent/demo7_client_https.h"
+#include "Open/libevent/demo7_server_https.h"
 
 
 
@@ -41,7 +42,8 @@ int main(int argc, char *argv[])
         //demo3_server_evconnlistener(ServerIP, ServerPort);
         //demo4_server_udp_timer();
         //demo5_server_evhttp(ServerIP, ServerPort);
-        demo6_server_bufferevent_openssl(ServerIP, ServerPort);
+        //demo6_server_bufferevent_openssl(ServerIP, ServerPort);
+        demo7_server_https(ServerIP, ServerPort);
 
         //SingleThreadServerLite Server;
         //if (Server.Initialize(ServerIP, ServerPort))
@@ -56,7 +58,8 @@ int main(int argc, char *argv[])
         //demo3_client_evconnlistener(ServerIP, ServerPort);
         //demo4_client_udp_timer();
         //demo5_client_evhttp(ServerIP, ServerPort);
-        demo6_client_bufferevent_openssl(ServerIP, ServerPort);
+        //demo6_client_bufferevent_openssl(ServerIP, ServerPort);
+        demo7_client_https(ServerIP, ServerPort);
 
         //SingleThreadClientLite Client;
         //Client.Start();

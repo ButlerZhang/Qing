@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <string.h>
 #include <unistd.h>
 #include <event.h>
@@ -10,13 +11,13 @@
 
 struct evhttp_connection* g_Connection;
 
-void Callback5_RemoteRead(struct evhttp_request* Request, void* arg)
+void Callback7_RemoteRead(struct evhttp_request* Request, void* arg)
 {
     printf("Remote read done.\n");
     //event_base_loopexit((struct event_base*)arg, NULL);
 }
 
-int Callback5_ReadHeaderDone(struct evhttp_request* Request, void* arg)
+int Callback7_ReadHeaderDone(struct evhttp_request* Request, void* arg)
 {
     int ResponseCode = evhttp_request_get_response_code(Request);
     const char *ResponseDescirption = evhttp_request_get_response_code_line(Request);
@@ -48,19 +49,19 @@ void Callback7_ReadChunk(struct evhttp_request* Request, void* arg)
     printf("\n");
 }
 
-void Callback5_RemoteRequestError(enum evhttp_request_error error, void* arg)
+void Callback7_RemoteRequestError(enum evhttp_request_error error, void* arg)
 {
     printf("ERROR: Remote request error.\n\n");
     //event_base_loopexit((struct event_base*)arg, NULL);
 }
 
-void Callback5_RemoteConnectionClose(struct evhttp_connection* connection, void* arg)
+void Callback7_RemoteConnectionClose(struct evhttp_connection* connection, void* arg)
 {
     printf("Remote connection closed.\n\n");
     //event_base_loopexit((struct event_base*)arg, NULL);
 }
 
-void CallBack5_InputFromCMD(int Input, short events, void *arg)
+void CallBack7_InputFromCMD(int Input, short events, void *arg)
 {
     char Buffer[1024];
     ssize_t ReadSize = read(Input, Buffer, sizeof(Buffer));
@@ -70,7 +71,7 @@ void CallBack5_InputFromCMD(int Input, short events, void *arg)
     printf("==========User choice = %d==========\n", Choice);
 
     struct event_base* base = (event_base*)arg;
-    struct evhttp_request* Request = evhttp_request_new(Callback5_RemoteRead, base);
+    struct evhttp_request* Request = evhttp_request_new(Callback7_RemoteRead, base);
     if (Request == NULL)
     {
         printf("ERROR: Create request failed.\n");
@@ -78,8 +79,8 @@ void CallBack5_InputFromCMD(int Input, short events, void *arg)
     }
 
     evhttp_request_set_chunked_cb(Request, Callback7_ReadChunk);
-    evhttp_request_set_header_cb(Request, Callback5_ReadHeaderDone);
-    evhttp_request_set_error_cb(Request, Callback5_RemoteRequestError);
+    evhttp_request_set_header_cb(Request, Callback7_ReadHeaderDone);
+    evhttp_request_set_error_cb(Request, Callback7_RemoteRequestError);
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Host", "192.168.3.126");
 
     switch (Choice)
@@ -117,7 +118,7 @@ void CallBack5_InputFromCMD(int Input, short events, void *arg)
     }
 }
 
-void demo5_client_evhttp(const char *ServerIP, int Port)
+void demo7_client_https(const char *ServerIP, int Port)
 {
     struct event_base* base = event_base_new();
     if (base == NULL)
@@ -145,9 +146,9 @@ void demo5_client_evhttp(const char *ServerIP, int Port)
 
     evhttp_connection_set_timeout(g_Connection, 600);
     evhttp_connection_set_retries(g_Connection, -1);
-    evhttp_connection_set_closecb(g_Connection, Callback5_RemoteConnectionClose, base);
+    evhttp_connection_set_closecb(g_Connection, Callback7_RemoteConnectionClose, base);
 
-    struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack5_InputFromCMD, base);
+    struct event *ev_cmd = event_new(base, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack7_InputFromCMD, base);
     event_add(ev_cmd, NULL);
 
     printf("Client start dispatch...\n\n");

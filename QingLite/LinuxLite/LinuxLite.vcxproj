@@ -128,6 +128,8 @@
     <ClInclude Include="Open\libevent\demo5_server_evhttp.h" />
     <ClInclude Include="Open\libevent\demo6_client_bufferevent_openssl.h" />
     <ClInclude Include="Open\libevent\demo6_server_bufferevent_openssl.h" />
+    <ClInclude Include="Open\libevent\demo7_client_https.h" />
+    <ClInclude Include="Open\libevent\demo7_server_https.h" />
     <ClInclude Include="Open\openssl\demo_DES.h" />
     <ClInclude Include="Open\openssl\demo_MD5.h" />
     <ClInclude Include="Open\openssl\demo_RSA.h" />
