@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Common\Tool\HexString.h" />
     <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3.h" />
     <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h" />
     <ClInclude Include="SourceCode\Boost\BoostFormat.h" />
@@ -29,7 +30,6 @@
     <ClInclude Include="SourceCode\Database\MySQLDatabase.h" />
     <ClInclude Include="SourceCode\Database\SQLiteDatabase.h" />
     <ClInclude Include="SourceCode\QingBase.h" />
-    <ClInclude Include="SourceCode\Standard\HexString.h" />
     <ClInclude Include="SourceCode\Standard\NumericalConversion.h" />
     <ClInclude Include="SourceCode\Standard\PermutationCombination.h" />
     <ClInclude Include="SourceCode\Standard\RandomGenerator.h" />
@@ -59,7 +59,6 @@
     <ClCompile Include="SourceCode\Database\MSSQLDatabase.cpp" />
     <ClCompile Include="SourceCode\Database\MySQLDatabase.cpp" />
     <ClCompile Include="SourceCode\Database\SQLiteDatabase.cpp" />
-    <ClCompile Include="SourceCode\Standard\HexString.cpp" />
     <ClCompile Include="SourceCode\Standard\NumericalConversion.cpp" />
     <ClCompile Include="SourceCode\Standard\RandomGenerator.cpp" />
     <ClCompile Include="SourceCode\Standard\StandardShare.cpp" />

@@ -53,9 +53,6 @@
     <ClInclude Include="SourceCode\Database\SQLiteDatabase.h">
       <Filter>Database</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Standard\HexString.h">
-      <Filter>Standard</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Standard\NumericalConversion.h">
       <Filter>Standard</Filter>
     </ClInclude>
@@ -119,6 +116,9 @@
     <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h">
       <Filter>Reference\sqlite_3250200</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Common\Tool\HexString.h">
+      <Filter>Standard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Boost\BoostLog.cpp">
@@ -138,9 +138,6 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Database\SQLiteDatabase.cpp">
       <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Standard\HexString.cpp">
-      <Filter>Standard</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Standard\NumericalConversion.cpp">
       <Filter>Standard</Filter>

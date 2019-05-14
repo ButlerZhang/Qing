@@ -364,6 +364,9 @@
     <ClInclude Include="Open\libevent\demo7_server_https.h">
       <Filter>Open\libevent</Filter>
     </ClInclude>
+    <ClInclude Include="Open\openssl\demo_AES.h">
+      <Filter>Open\openssl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

@@ -22,6 +22,7 @@
 #include "Open/libevent/demo7_client_https.h"
 #include "Open/libevent/demo7_server_https.h"
 
+#include "Open/openssl/demo_test.h"
 
 
 int main(int argc, char *argv[])
@@ -30,6 +31,9 @@ int main(int argc, char *argv[])
     //list_file_name(argc, argv);
     //copy_stdin_stdout_nobuffer();
     //copy_stdin_stdout_standard();
+
+    OpenSSL_EncryptAndDecryptTest();
+    return 0;
 
     const char *ServerIP = "192.168.3.126";
     const int ServerPort = 12345;
