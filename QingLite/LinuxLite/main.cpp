@@ -6,19 +6,19 @@
 //#include "UNIX/Chapter1/copy_stdin_stdout_nobuffer.h"
 //#include "UNIX/Chapter1/copy_stdin_stdout_standard.h"
 
-//#include "Open/libevent/demo1_client_read_write.h"
-//#include "Open/libevent/demo1_server_read_write.h"
-//#include "Open/libevent/demo2_client_bufferevent.h"
-//#include "Open/libevent/demo2_server_bufferevent.h"
-//#include "Open/libevent/demo3_client_evconnlistener.h"
-//#include "Open/libevent/demo3_server_evconnlistener.h"
-//#include "Open/libevent/demo4_client_udp_timer.h"
-//#include "Open/libevent/demo4_server_udp_timer.h"
-//#include "Open/libevent/demo5_client_evhttp.h"
-//#include "Open/libevent/demo5_server_evhttp.h"
-//#include "Open/libevent/demo5_server_evconnlistener_http.h"
-//#include "Open/libevent/demo6_client_bufferevent_openssl.h"
-//#include "Open/libevent/demo6_server_bufferevent_openssl.h"
+#include "Open/libevent/demo1_client_read_write.h"
+#include "Open/libevent/demo1_server_read_write.h"
+#include "Open/libevent/demo2_client_bufferevent.h"
+#include "Open/libevent/demo2_server_bufferevent.h"
+#include "Open/libevent/demo3_client_evconnlistener.h"
+#include "Open/libevent/demo3_server_evconnlistener.h"
+#include "Open/libevent/demo4_client_udp_timer.h"
+#include "Open/libevent/demo4_server_udp_timer.h"
+#include "Open/libevent/demo5_client_evhttp.h"
+#include "Open/libevent/demo5_server_evhttp.h"
+#include "Open/libevent/demo5_server_evconnlistener_http.h"
+#include "Open/libevent/demo6_client_bufferevent_openssl.h"
+#include "Open/libevent/demo6_server_bufferevent_openssl.h"
 #include "Open/libevent/demo7_client_https.h"
 #include "Open/libevent/demo7_server_https.h"
 
@@ -41,13 +41,13 @@ int main(int argc, char *argv[])
     //libevent
     if (atoi(argv[1]) == 0)
     {
-        //demo1_server_read_write(ServerIP, ServerPort);
-        //demo2_server_bufferevent(ServerIP, ServerPort);
-        //demo3_server_evconnlistener(ServerIP, ServerPort);
-        //demo4_server_udp_timer();
-        //demo5_server_evhttp(ServerIP, ServerPort);
-        //demo6_server_bufferevent_openssl(ServerIP, ServerPort);
-        demo7_server_https(ServerIP, ServerPort);
+        demo1_server_read_write(ServerIP, ServerPort);
+        demo2_server_bufferevent(ServerIP, ServerPort);
+        demo3_server_evconnlistener(ServerIP, ServerPort);
+        demo4_server_udp_timer();
+        demo5_server_evhttp(ServerIP, ServerPort);
+        demo6_server_bufferevent_openssl(ServerIP, ServerPort);
+        //demo7_server_https(ServerIP, ServerPort);
 
         //SingleThreadServerLite Server;
         //if (Server.Initialize(ServerIP, ServerPort))
@@ -57,13 +57,13 @@ int main(int argc, char *argv[])
     }
     else
     {
-        //demo1_client_read_write(ServerIP, ServerPort);
-        //demo2_client_bufferevent(ServerIP, ServerPort);
-        //demo3_client_evconnlistener(ServerIP, ServerPort);
-        //demo4_client_udp_timer();
-        //demo5_client_evhttp(ServerIP, ServerPort);
-        //demo6_client_bufferevent_openssl(ServerIP, ServerPort);
-        demo7_client_https(ServerIP, ServerPort);
+        demo1_client_read_write(ServerIP, ServerPort);
+        demo2_client_bufferevent(ServerIP, ServerPort);
+        demo3_client_evconnlistener(ServerIP, ServerPort);
+        demo4_client_udp_timer();
+        demo5_client_evhttp(ServerIP, ServerPort);
+        demo6_client_bufferevent_openssl(ServerIP, ServerPort);
+        //demo7_client_https(ServerIP, ServerPort);
 
         //SingleThreadClientLite Client;
         //Client.Start();

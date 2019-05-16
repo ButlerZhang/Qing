@@ -126,7 +126,7 @@ SSL_CTX* CreateSSLContext_Server6(const char *certfile, const char *keyfile, con
 
 void demo6_server_bufferevent_openssl(const char *ServerIP, int Port)
 {
-    SSL_CTX *SSLContext = CreateSSLContext_Server6("./server/server.crt","./server/server.key", "./ca/ca.cert");
+    SSL_CTX *SSLContext = CreateSSLContext_Server6("./server/server-cert.pem","./server/server-key.pem", "./ca/ca-cert.pem");
     if (SSLContext == NULL)
     {
         printf("Create SSL context failed.\n");

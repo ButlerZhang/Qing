@@ -93,7 +93,7 @@ void CallBack6_SSLEvent(struct bufferevent *bev, short events, void *arg)
 
 void demo6_client_bufferevent_openssl(const char *ServerIP, int Port)
 {
-    SSL_CTX *SSLContext = CreateSSLContext_Client6("./client/client.crt", "./client/client.key", "./ca/ca.cert");
+    SSL_CTX *SSLContext = CreateSSLContext_Client6("./client/client-cert.pem", "./client/client-key.pem", "./ca/ca-cert.pem");
     if (SSLContext == NULL)
     {
         printf("Create SSL context failed.\n");
