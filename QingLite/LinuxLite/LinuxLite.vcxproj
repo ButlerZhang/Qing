@@ -85,6 +85,7 @@
     <ClCompile Include="Open\project\MultiThread\SignalEvent.cpp" />
     <ClCompile Include="Open\project\MultiThread\ThreadNode.cpp" />
     <ClCompile Include="Open\project\MultiThread\TimerEvent.cpp" />
+    <ClCompile Include="Open\project\SingleThread\HTTPServer.cpp" />
     <ClCompile Include="Open\project\SingleThread\MessageHandler.cpp" />
     <ClCompile Include="Open\project\SingleThread\SingleThreadClientLite.cpp" />
     <ClCompile Include="Open\project\SingleThread\SingleThreadServerLite.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Open\project\MultiThread\SignalEvent.h" />
     <ClInclude Include="Open\project\MultiThread\ThreadNode.h" />
     <ClInclude Include="Open\project\MultiThread\TimerEvent.h" />
+    <ClInclude Include="Open\project\SingleThread\HTTPServer.h" />
     <ClInclude Include="Open\project\SingleThread\MessageHandler.h" />
     <ClInclude Include="Open\project\SingleThread\SingleThreadClientLite.h" />
     <ClInclude Include="Open\project\SingleThread\SingleThreadServerLite.h" />

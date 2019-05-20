@@ -1,4 +1,5 @@
 #pragma once
+#include "HTTPServer.h"
 #include "UDPBroadcast.h"
 #include "MessageHandler.h"
 #include <string>
@@ -28,8 +29,11 @@ private:
 
 private:
 
+    int                              m_ListenPort;
+    std::string                      m_ListenIP;
     event_base                      *m_EventBase;
     evconnlistener                  *m_Listener;
+    HTTPServer                       m_HTTPServer;
     UDPBroadcast                     m_UDPBroadcast;
     MessageHandler                   m_MessageHandler;
     std::vector<int>                 m_ClientSocketVector;

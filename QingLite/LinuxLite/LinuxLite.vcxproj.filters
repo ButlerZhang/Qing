@@ -142,6 +142,9 @@
     <ClCompile Include="Open\project\SingleThread\UDPBroadcast.cpp">
       <Filter>Open\project\SingleThread</Filter>
     </ClCompile>
+    <ClCompile Include="Open\project\SingleThread\HTTPServer.cpp">
+      <Filter>Open\project\SingleThread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -360,6 +363,9 @@
     </ClInclude>
     <ClInclude Include="Open\openssl\demo_AES.h">
       <Filter>Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleThread\HTTPServer.h">
+      <Filter>Open\project\SingleThread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -68,6 +68,8 @@ bool SingleThreadServerLite::Initialize(const std::string &IP, int Port)
         return false;
     }
 
+    m_ListenIP = IP;
+    m_ListenPort = Port;
     return true;
 }
 
@@ -76,6 +78,17 @@ bool SingleThreadServerLite::Start()
     if (!m_UDPBroadcast.BindEventBase(m_EventBase))
     {
         printf("ERROR: UDP braodcast bind event base failed.\n");
+        return false;
+    }
+
+    if (!m_HTTPServer.BindEventBase(m_EventBase))
+    {
+        printf("ERROR: HTTP server bind event base failed.\n");
+        return false;
+    }
+
+    if (!m_HTTPServer.Start(m_ListenIP, m_ListenPort + 1))
+    {
         return false;
     }
 
