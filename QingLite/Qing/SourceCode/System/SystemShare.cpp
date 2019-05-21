@@ -1,6 +1,6 @@
 #include "SystemShare.h"
-#include "..\Boost\BoostLog.h"
-#include "..\Standard\StandardShare.h"
+#include "../Boost/BoostLog.h"
+#include "../Standard/StandardShare.h"
 
 #include <cctype>
 #include <sstream>

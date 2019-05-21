@@ -1,7 +1,7 @@
 #include "LocalComputer.h"
-#include "..\Boost\BoostLog.h"
-#include "..\Boost\BoostFormat.h"
-#include "..\System\SystemShare.h"
+#include "../Boost/BoostLog.h"
+#include "../Boost/BoostFormat.h"
+#include "../System/SystemShare.h"
 
 #include <memory>
 #include <stdio.h>

@@ -1,5 +1,5 @@
 #pragma once
-#include "..\..\QingBase.h"
+#include "../../QingBase.h"
 #include <winsock2.h>
 #include <MSWSock.h>
 #include <memory>

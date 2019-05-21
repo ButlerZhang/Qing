@@ -1,8 +1,8 @@
 #include "NetworkBase.h"
 #include "NetworkEnvironment.h"
-#include "..\..\Boost\BoostLog.h"
-#include "..\..\Boost\BoostFormat.h"
-#include "..\LocalComputer.h"
+#include "../../Boost/BoostLog.h"
+#include "../../Boost/BoostFormat.h"
+#include "../LocalComputer.h"
 #include <WS2tcpip.h>
 
 QING_NAMESPACE_BEGIN

@@ -1,5 +1,5 @@
 #include "BoostLog.h"
-#include "..\System\SystemShare.h"
+#include "../System/SystemShare.h"
 
 #include <Windows.h>
 #include <boost/log/sinks.hpp>

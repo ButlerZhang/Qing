@@ -5,7 +5,7 @@ QING_NAMESPACE_BEGIN
 
 
 
-std::wstring QING_DLL ConvertDoubleToString(double Value, int precision)
+std::wstring ConvertDoubleToString(double Value, int precision)
 {
     std::wostringstream ConvertString;
 

@@ -1,8 +1,8 @@
 #include "NetworkServer.h"
 #include "NetworkEnvironment.h"
-#include "..\..\Boost\BoostLog.h"
-#include "..\..\Boost\BoostFormat.h"
-#include "..\LocalComputer.h"
+#include "../../Boost/BoostLog.h"
+#include "../../Boost/BoostFormat.h"
+#include "../LocalComputer.h"
 
 QING_NAMESPACE_BEGIN
 

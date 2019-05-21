@@ -1,6 +1,6 @@
 #include "FileManager.h"
-#include "..\Boost\BoostLog.h"
-#include "..\Boost\BoostFormat.h"
+#include "../Boost/BoostLog.h"
+#include "../Boost/BoostFormat.h"
 #include <io.h>
 #include <list>
 #include <Windows.h>

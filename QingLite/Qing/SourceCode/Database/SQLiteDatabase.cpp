@@ -1,8 +1,8 @@
 #include "SQLiteDatabase.h"
-#include "..\Boost\BoostLog.h"
-#include "..\Boost\BoostFormat.h"
-#include "..\System\SystemShare.h"
-#include "..\..\OpenSource\sqlite_3250200\sqlite3.h"
+#include "../Boost/BoostLog.h"
+#include "../Boost/BoostFormat.h"
+#include "../System/SystemShare.h"
+#include "../../OpenSource/sqlite_3250200/sqlite3.h"
 
 QING_NAMESPACE_BEGIN
 

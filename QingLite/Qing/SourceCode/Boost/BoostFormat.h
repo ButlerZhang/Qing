@@ -1,6 +1,6 @@
 #pragma once
-#include "..\QingBase.h"
-#include <boost\format.hpp>
+#include "../QingBase.h"
+#include <boost/format.hpp>
 
 QING_NAMESPACE_BEGIN
 

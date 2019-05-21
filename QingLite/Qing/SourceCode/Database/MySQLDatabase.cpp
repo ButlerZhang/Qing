@@ -1,5 +1,5 @@
 #include "MySQLDatabase.h"
-#include "..\System\SystemShare.h"
+#include "../System/SystemShare.h"
 #include <Windows.h>
 #include <mysql.h>
 

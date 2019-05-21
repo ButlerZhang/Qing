@@ -1,7 +1,7 @@
 #include "IniFile.h"
-#include "..\Boost\BoostLog.h"
-#include "..\Boost\BoostFormat.h"
-#include "..\System\SystemShare.h"
+#include "../Boost/BoostLog.h"
+#include "../Boost/BoostFormat.h"
+#include "../System/SystemShare.h"
 
 QING_NAMESPACE_BEGIN
 

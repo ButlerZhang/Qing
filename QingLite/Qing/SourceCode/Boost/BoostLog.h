@@ -1,5 +1,5 @@
 #pragma once
-#include "..\QingBase.h"
+#include "../QingBase.h"
 #include <string>
 
 QING_NAMESPACE_BEGIN
