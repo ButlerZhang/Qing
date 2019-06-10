@@ -136,7 +136,7 @@ std::wstring CEncryptDecryptApp::GetSelectPath() const
     BrowseInfo.lpfn = NULL;                                         //回调函数
     BrowseInfo.lParam = 0;                                          //给回调函数的参数指针
     BrowseInfo.iImage = 0;                                          //与选中目录相关的图像
-    ITEMIDLIST* pidl = ::SHBrowseForFolder(&BrowseInfo);            //显示弹出窗口
+    ITEMIDLIST* pidl = (ITEMIDLIST*)SHBrowseForFolder(&BrowseInfo); //显示弹出窗口
 
     if (::SHGetPathFromIDList(pidl, ResultBuffer))                  //在ITEMIDLIST中得到目录名的整个路径
     {
