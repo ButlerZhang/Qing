@@ -11,7 +11,7 @@ public:
     UDPBroadcast();
     ~UDPBroadcast();
 
-    bool BindEventBase(event_base *EventBase);
+    bool BindBaseEvent(event_base *EventBase);
     bool StartTimer(const std::string &ServerIP, int TimeInternal = 60, int Port = 12345);
 
 private:

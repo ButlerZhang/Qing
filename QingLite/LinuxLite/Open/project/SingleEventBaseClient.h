@@ -5,12 +5,12 @@
 
 
 
-class SingleEventClient
+class SingleEventBaseClient
 {
 public:
 
-    SingleEventClient();
-    ~SingleEventClient();
+    SingleEventBaseClient();
+    ~SingleEventBaseClient();
 
     bool Start(int BroadcastPort);
     bool Stop();

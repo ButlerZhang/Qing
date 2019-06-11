@@ -8,12 +8,12 @@
 
 
 
-class SingleEventServer
+class SingleEventBaseServer
 {
 public:
 
-    SingleEventServer();
-    ~SingleEventServer();
+    SingleEventBaseServer();
+    ~SingleEventBaseServer();
 
     bool Initialize(const std::string &IP, int Port);
     bool Start();

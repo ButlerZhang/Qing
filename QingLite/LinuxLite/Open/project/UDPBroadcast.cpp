@@ -24,7 +24,7 @@ UDPBroadcast::~UDPBroadcast()
     close(m_BroadcastSocket);
 }
 
-bool UDPBroadcast::BindEventBase(event_base *EventBase)
+bool UDPBroadcast::BindBaseEvent(event_base *EventBase)
 {
     m_EventBase = EventBase;
     return m_EventBase != NULL;

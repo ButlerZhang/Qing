@@ -1,4 +1,4 @@
-#include "SingleEventClient.h"
+#include "SingleEventBaseClient.h"
 #include "../../LinuxTools.h"
 #include <arpa/inet.h>
 #include <string.h>
@@ -6,7 +6,7 @@
 
 
 
-SingleEventClient::SingleEventClient()
+SingleEventBaseClient::SingleEventBaseClient()
 {
     m_ServerPort = 0;
     m_UDPSocket = -1;
@@ -19,7 +19,7 @@ SingleEventClient::SingleEventClient()
     m_SendDataRandomlyEvent = NULL;
 }
 
-SingleEventClient::~SingleEventClient()
+SingleEventBaseClient::~SingleEventBaseClient()
 {
     event_free(m_CMDInputEvent);
     event_free(m_UDPBroadcastEvent);
@@ -29,7 +29,7 @@ SingleEventClient::~SingleEventClient()
     event_base_free(m_EventBase);
 }
 
-bool SingleEventClient::Start(int BroadcastPort)
+bool SingleEventBaseClient::Start(int BroadcastPort)
 {
     if (m_EventBase != NULL)
     {
@@ -55,7 +55,7 @@ bool SingleEventClient::Start(int BroadcastPort)
     return true;
 }
 
-bool SingleEventClient::Stop()
+bool SingleEventBaseClient::Stop()
 {
     if (m_EventBase == NULL)
     {
@@ -72,7 +72,7 @@ bool SingleEventClient::Stop()
     return false;
 }
 
-bool SingleEventClient::AddEventInputFromCMD()
+bool SingleEventBaseClient::AddEventInputFromCMD()
 {
     if (m_CMDInputEvent != NULL)
     {
@@ -98,7 +98,7 @@ bool SingleEventClient::AddEventInputFromCMD()
     return true;
 }
 
-bool SingleEventClient::AddEventRecvUDPBroadcast()
+bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
 {
     if (m_UDPBroadcastEvent != NULL)
     {
@@ -151,7 +151,7 @@ bool SingleEventClient::AddEventRecvUDPBroadcast()
     return true;
 }
 
-bool SingleEventClient::AddEventSendDataRandomly()
+bool SingleEventBaseClient::AddEventSendDataRandomly()
 {
     if (m_SendDataRandomlyEvent != NULL)
     {
@@ -181,7 +181,7 @@ bool SingleEventClient::AddEventSendDataRandomly()
     return true;
 }
 
-bool SingleEventClient::DeleteEventRecvUDPBroadcast()
+bool SingleEventBaseClient::DeleteEventRecvUDPBroadcast()
 {
     if (m_UDPBroadcastEvent == NULL)
     {
@@ -201,7 +201,7 @@ bool SingleEventClient::DeleteEventRecvUDPBroadcast()
     return false;
 }
 
-bool SingleEventClient::ConnectServer(const std::string &ServerIP, int Port)
+bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
 {
     if (m_Bufferevent != NULL)
     {
@@ -237,7 +237,7 @@ bool SingleEventClient::ConnectServer(const std::string &ServerIP, int Port)
     return true;
 }
 
-void SingleEventClient::CallBack_InputFromCMD(int Input, short events, void *UserData)
+void SingleEventBaseClient::CallBack_InputFromCMD(int Input, short events, void *UserData)
 {
     char InputMessage[1024];
     memset(InputMessage, 0, sizeof(InputMessage));
@@ -255,7 +255,7 @@ void SingleEventClient::CallBack_InputFromCMD(int Input, short events, void *Use
         return;
     }
 
-    SingleEventClient *Client = (SingleEventClient*)UserData;
+    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
     if (Client->m_Bufferevent == NULL)
     {
         printf("Can not send data, not connect server.\n");
@@ -272,13 +272,13 @@ void SingleEventClient::CallBack_InputFromCMD(int Input, short events, void *Use
     }
 }
 
-void SingleEventClient::CallBack_RecvUDPBroadcast(int Socket, short events, void *UserData)
+void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, void *UserData)
 {
     char Buffer[1024];
     memset(Buffer, 0, sizeof(Buffer));
     socklen_t AddressLength = sizeof(socklen_t);
 
-    SingleEventClient *Client = (SingleEventClient*)UserData;
+    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
     ssize_t RecvSize = recvfrom(Client->m_UDPSocket, Buffer, sizeof(Buffer), 0, (struct sockaddr *)&(Client->m_BroadcastAddress), &AddressLength);
 
     if (RecvSize == -1)
@@ -322,9 +322,9 @@ void SingleEventClient::CallBack_RecvUDPBroadcast(int Socket, short events, void
     Client->DeleteEventRecvUDPBroadcast();
 }
 
-void SingleEventClient::CallBack_SendDataRandomly(int Socket, short Events, void *UserData)
+void SingleEventBaseClient::CallBack_SendDataRandomly(int Socket, short Events, void *UserData)
 {
-    SingleEventClient *Client = (SingleEventClient*)UserData;
+    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
     if (Client->m_Bufferevent != NULL)
     {
         const std::string &UUID = GetUUID();
@@ -344,7 +344,7 @@ void SingleEventClient::CallBack_SendDataRandomly(int Socket, short Events, void
     }
 }
 
-void SingleEventClient::CallBack_ClientEvent(struct bufferevent *bev, short Events, void *UserData)
+void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short Events, void *UserData)
 {
     bool IsAllowDelete = false;
     int ClientSocket = bufferevent_getfd(bev);
@@ -370,7 +370,7 @@ void SingleEventClient::CallBack_ClientEvent(struct bufferevent *bev, short Even
 
     if (IsAllowDelete)
     {
-        SingleEventClient *Client = (SingleEventClient*)UserData;
+        SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
 
         event_free(Client->m_SendDataRandomlyEvent);
         Client->m_SendDataRandomlyEvent = NULL;
@@ -386,7 +386,7 @@ void SingleEventClient::CallBack_ClientEvent(struct bufferevent *bev, short Even
     }
 }
 
-void SingleEventClient::CallBack_RecvFromServer(bufferevent * bev, void *UserData)
+void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent * bev, void *UserData)
 {
     char ServerMessage[1024];
     memset(ServerMessage, 0, sizeof(ServerMessage));

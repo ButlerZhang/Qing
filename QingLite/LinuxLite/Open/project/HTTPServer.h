@@ -13,7 +13,7 @@ public:
     HTTPServer();
     ~HTTPServer();
 
-    bool BindEventBase(event_base *EventBase);
+    bool BindBaseEvent(event_base *EventBase);
     bool Start(const std::string &ServerIP, int Port);
 
 private:

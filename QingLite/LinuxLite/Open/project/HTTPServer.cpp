@@ -50,7 +50,7 @@ HTTPServer::~HTTPServer()
     }
 }
 
-bool HTTPServer::BindEventBase(event_base * EventBase)
+bool HTTPServer::BindBaseEvent(event_base * EventBase)
 {
     m_EventBase = EventBase;
     return m_EventBase != NULL;

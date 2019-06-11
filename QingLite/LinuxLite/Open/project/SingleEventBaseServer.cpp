@@ -1,4 +1,4 @@
-#include "SingleEventServer.h"
+#include "SingleEventBaseServer.h"
 #include <arpa/inet.h>
 #include <strings.h>
 #include <string.h>
@@ -9,14 +9,14 @@
 
 
 
-SingleEventServer::SingleEventServer()
+SingleEventBaseServer::SingleEventBaseServer()
 {
     m_EventBase = NULL;
     m_Listener = NULL;
     m_ListenPort = 0;
 }
 
-SingleEventServer::~SingleEventServer()
+SingleEventBaseServer::~SingleEventBaseServer()
 {
     m_ClientSocketVector.clear();
 
@@ -24,7 +24,7 @@ SingleEventServer::~SingleEventServer()
     event_base_free(m_EventBase);
 }
 
-bool SingleEventServer::Initialize(const std::string &IP, int Port)
+bool SingleEventBaseServer::Initialize(const std::string &IP, int Port)
 {
     if (m_EventBase != NULL && m_Listener != NULL)
     {
@@ -74,15 +74,15 @@ bool SingleEventServer::Initialize(const std::string &IP, int Port)
     return true;
 }
 
-bool SingleEventServer::Start()
+bool SingleEventBaseServer::Start()
 {
-    if (!m_UDPBroadcast.BindEventBase(m_EventBase))
+    if (!m_UDPBroadcast.BindBaseEvent(m_EventBase))
     {
         printf("ERROR: UDP braodcast bind event base failed.\n");
         return false;
     }
 
-    if (!m_HTTPServer.BindEventBase(m_EventBase))
+    if (!m_HTTPServer.BindBaseEvent(m_EventBase))
     {
         printf("ERROR: HTTP server bind event base failed.\n");
         return false;
@@ -107,14 +107,14 @@ bool SingleEventServer::Start()
     return true;
 }
 
-bool SingleEventServer::Stop()
+bool SingleEventBaseServer::Stop()
 {
     return event_base_loopbreak(m_EventBase) == 0;
 }
 
-void SingleEventServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
+void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
 {
-    SingleEventServer *Server = (SingleEventServer*)UserData;
+    SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
     Server->m_ClientSocketVector.push_back(Socket);
     printf("Accept client, socket = %d, current count = %d.\n", Socket, static_cast<int>(Server->m_ClientSocketVector.size()));
 
@@ -124,7 +124,7 @@ void SingleEventServer::CallBack_Listen(evconnlistener * Listener, int Socket, s
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
 }
 
-void SingleEventServer::CallBack_Event(bufferevent * bev, short Events, void *UserData)
+void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void *UserData)
 {
     bool IsAllowDelete = false;
     int ClientSocket = bufferevent_getfd(bev);
@@ -150,7 +150,7 @@ void SingleEventServer::CallBack_Event(bufferevent * bev, short Events, void *Us
 
     if (IsAllowDelete)
     {
-        SingleEventServer *Server = (SingleEventServer*)UserData;
+        SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
         std::vector<int>::iterator it = std::find(Server->m_ClientSocketVector.begin(), Server->m_ClientSocketVector.end(), ClientSocket);
         if (it != Server->m_ClientSocketVector.end())
         {
@@ -162,7 +162,7 @@ void SingleEventServer::CallBack_Event(bufferevent * bev, short Events, void *Us
     }
 }
 
-void SingleEventServer::CallBack_Recv(bufferevent *bev, void *UserData)
+void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
 {
     char ClientMessage[1024];
     memset(ClientMessage, 0, sizeof(ClientMessage));
@@ -173,11 +173,11 @@ void SingleEventServer::CallBack_Recv(bufferevent *bev, void *UserData)
     int ClientSocket = bufferevent_getfd(bev);
     printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, ClientMessage);
 
-    SingleEventServer *Server = (SingleEventServer*)UserData;
+    SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
     Server->m_MessageHandler.PushMessage(ClientSocket, bev, ClientMessage);
 }
 
-void SingleEventServer::CallBack_Send(bufferevent * bev, void * UserData)
+void SingleEventBaseServer::CallBack_Send(bufferevent * bev, void * UserData)
 {
     //evbuffer *WriteBuffer = bufferevent_get_output(bev);
     //if (evbuffer_get_length(WriteBuffer) <= 0)

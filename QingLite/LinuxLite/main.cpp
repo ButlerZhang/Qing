@@ -20,8 +20,8 @@
 //#include "Open/libevent/demo6_client_bufferevent_openssl.h"
 //#include "Open/libevent/demo6_server_bufferevent_openssl.h"
 
-#include "Open/project/SingleEventServer.h"
-#include "Open/project/SingleEventClient.h"
+#include "Open/project/SingleEventBaseServer.h"
+#include "Open/project/SingleEventBaseClient.h"
 
 
 
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
         //demo5_server_evhttp(ServerIP, ServerPort);
         //demo6_server_bufferevent_openssl(ServerIP, ServerPort);
 
-        SingleEventServer Server;
+        SingleEventBaseServer Server;
         if (Server.Initialize(ServerIP, ServerPort))
         {
             Server.Start();
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         //demo5_client_evhttp(ServerIP, ServerPort);
         //demo6_client_bufferevent_openssl(ServerIP, ServerPort);
 
-        SingleEventClient Client;
+        SingleEventBaseClient Client;
         Client.Start(ServerPort);
     }
 

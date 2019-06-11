@@ -1,18 +1,17 @@
 #pragma once
 #include "ThreadNode.h"
-#include "SignalEvent.h"
 
-#include <event2/listener.h>
 #include <string>
+#include <event2/listener.h>
 
 
 
-class MultiEventServer
+class MultiEventBaseServer
 {
 public:
 
-    MultiEventServer();
-    ~MultiEventServer();
+    MultiEventBaseServer();
+    ~MultiEventBaseServer();
 
     bool StartServer(const std::string &IP, int Port, int ThreadCount = 0);
     void StopServer();
@@ -21,8 +20,6 @@ public:
     virtual bool ProcessRecv(ConnectNode &ConnectedNode);
     virtual bool ProcessSend(ConnectNode &ConnectedNode);
     virtual bool ProcessClose(ConnectNode &ConnectedNode, short events);
-
-    inline SignalEvent& GetSignalEvent() { return m_SignalEvent; }
 
 private:
 
@@ -42,6 +39,5 @@ private:
 private:
 
     ThreadNode                 m_MainThread;
-    SignalEvent                m_SignalEvent;
     std::vector<ThreadNode>    m_ThreadVector;
 };

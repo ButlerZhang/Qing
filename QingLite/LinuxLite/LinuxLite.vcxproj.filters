@@ -118,22 +118,22 @@
     <ClCompile Include="Open\project\MessageHandler.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SignalEvent.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
     <ClCompile Include="Open\project\ThreadNode.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
     <ClCompile Include="Open\project\UDPBroadcast.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\MultiEventServer.cpp">
+    <ClCompile Include="Open\project\MultiEventBaseServer.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SingleEventClient.cpp">
+    <ClCompile Include="Open\project\SingleEventBaseClient.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SingleEventServer.cpp">
+    <ClCompile Include="Open\project\SingleEventBaseServer.cpp">
+      <Filter>Open\project</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\SignalEventMap.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
   </ItemGroup>
@@ -337,22 +337,22 @@
     <ClInclude Include="Open\project\MessageHandler.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\SignalEvent.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\ThreadNode.h">
       <Filter>Open\project</Filter>
     </ClInclude>
     <ClInclude Include="Open\project\UDPBroadcast.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\MultiEventServer.h">
+    <ClInclude Include="Open\project\MultiEventBaseServer.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\SingleEventClient.h">
+    <ClInclude Include="Open\project\SingleEventBaseClient.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\SingleEventServer.h">
+    <ClInclude Include="Open\project\SingleEventBaseServer.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SignalEventMap.h">
       <Filter>Open\project</Filter>
     </ClInclude>
   </ItemGroup>
