@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         //demo6_client_bufferevent_openssl(ServerIP, ServerPort);
 
         SingleThreadClientLite Client;
-        Client.Start();
+        Client.Start(ServerPort);
     }
 
     std::cout << std::endl;

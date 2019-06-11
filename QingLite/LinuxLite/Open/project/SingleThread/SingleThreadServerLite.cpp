@@ -13,6 +13,7 @@ SingleThreadServerLite::SingleThreadServerLite()
 {
     m_EventBase = NULL;
     m_Listener = NULL;
+    m_ListenPort = 0;
 }
 
 SingleThreadServerLite::~SingleThreadServerLite()
@@ -89,6 +90,7 @@ bool SingleThreadServerLite::Start()
 
     if (!m_HTTPServer.Start(m_ListenIP, m_ListenPort + 1))
     {
+        printf("ERROR: http server start failed.\n");
         return false;
     }
 
@@ -98,7 +100,7 @@ bool SingleThreadServerLite::Start()
         return false;
     }
 
-    m_UDPBroadcast.StartTimer(10);
+    m_UDPBroadcast.StartTimer(m_ListenIP, 10, m_ListenPort);
 
     printf("Server start dispatch...\n");
     event_base_dispatch(m_EventBase);
@@ -110,7 +112,7 @@ bool SingleThreadServerLite::Stop()
     return event_base_loopbreak(m_EventBase) == 0;
 }
 
-void SingleThreadServerLite::CallBack_Listen(evconnlistener * Listener, evutil_socket_t Socket, sockaddr *sa, int socklen, void *UserData)
+void SingleThreadServerLite::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
 {
     SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
     Server->m_ClientSocketVector.push_back(Socket);
@@ -162,17 +164,17 @@ void SingleThreadServerLite::CallBack_Event(bufferevent * bev, short Events, voi
 
 void SingleThreadServerLite::CallBack_Recv(bufferevent *bev, void *UserData)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char ClientMessage[1024];
+    memset(ClientMessage, 0, sizeof(ClientMessage));
 
-    size_t RecvSize = bufferevent_read(bev, Message, sizeof(Message));
-    Message[RecvSize] = '\0';
+    size_t RecvSize = bufferevent_read(bev, ClientMessage, sizeof(ClientMessage));
+    ClientMessage[RecvSize] = '\0';
 
     int ClientSocket = bufferevent_getfd(bev);
-    printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, Message);
+    printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, ClientMessage);
 
     SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
-    Server->m_MessageHandler.PushMessage(ClientSocket, bev, Message);
+    Server->m_MessageHandler.PushMessage(ClientSocket, bev, ClientMessage);
 }
 
 void SingleThreadServerLite::CallBack_Send(bufferevent * bev, void * UserData)

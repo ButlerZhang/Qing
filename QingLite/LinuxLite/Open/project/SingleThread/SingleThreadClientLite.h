@@ -12,7 +12,7 @@ public:
     SingleThreadClientLite();
     ~SingleThreadClientLite();
 
-    bool Start();
+    bool Start(int BroadcastPort);
     bool Stop();
 
 private:
@@ -27,7 +27,7 @@ private:
 
     static void CallBack_InputFromCMD(int Input, short Events, void *UserData);
     static void CallBack_RecvUDPBroadcast(int Socket, short Events, void *UserData);
-    static void CallBack_SendDataRandomly(evutil_socket_t Socket, short Events, void *UserData);
+    static void CallBack_SendDataRandomly(int Socket, short Events, void *UserData);
     static void CallBack_ClientEvent(struct bufferevent *bev, short Events, void *UserData);
     static void CallBack_RecvFromServer(struct bufferevent *bev, void *UserData);
 
@@ -35,6 +35,7 @@ private:
 
     std::string                                  m_ServerIP;
     int                                          m_ServerPort;
+    int                                          m_BroadcastPort;
     int                                          m_UDPSocket;
     struct sockaddr_in                           m_BroadcastAddress;
     struct bufferevent                          *m_Bufferevent;

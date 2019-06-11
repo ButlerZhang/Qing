@@ -10,6 +10,8 @@ SingleThreadClientLite::SingleThreadClientLite()
 {
     m_ServerPort = 0;
     m_UDPSocket = -1;
+    m_BroadcastPort = 0;
+
     m_EventBase = NULL;
     m_Bufferevent = NULL;
     m_CMDInputEvent = NULL;
@@ -27,7 +29,7 @@ SingleThreadClientLite::~SingleThreadClientLite()
     event_base_free(m_EventBase);
 }
 
-bool SingleThreadClientLite::Start()
+bool SingleThreadClientLite::Start(int BroadcastPort)
 {
     if (m_EventBase != NULL)
     {
@@ -42,6 +44,7 @@ bool SingleThreadClientLite::Start()
         return false;
     }
 
+    m_BroadcastPort = BroadcastPort;
     if (!AddEventInputFromCMD() || !AddEventRecvUDPBroadcast())
     {
         return false;
@@ -120,7 +123,7 @@ bool SingleThreadClientLite::AddEventRecvUDPBroadcast()
     bzero(&m_BroadcastAddress, sizeof(sockaddr_in));
     m_BroadcastAddress.sin_family = AF_INET;
     m_BroadcastAddress.sin_addr.s_addr = INADDR_ANY;
-    m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(12345));
+    m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(m_BroadcastPort));
 
     if (bind(m_UDPSocket, (struct sockaddr *)&m_BroadcastAddress, sizeof(m_BroadcastAddress)) == -1)
     {
@@ -200,6 +203,12 @@ bool SingleThreadClientLite::DeleteEventRecvUDPBroadcast()
 
 bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port)
 {
+    if (m_Bufferevent != NULL)
+    {
+        printf("ERROR: Re-connect server.\n");
+        return true;
+    }
+
     struct sockaddr_in ServerAddress;
     bzero(&ServerAddress, sizeof(sockaddr_in));
     ServerAddress.sin_family = AF_INET;
@@ -230,18 +239,18 @@ bool SingleThreadClientLite::ConnectServer(const std::string &ServerIP, int Port
 
 void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void *UserData)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char InputMessage[1024];
+    memset(InputMessage, 0, sizeof(InputMessage));
 
-    ssize_t ReadSize = read(Input, Message, sizeof(Message));
+    ssize_t ReadSize = read(Input, InputMessage, sizeof(InputMessage));
     if (ReadSize <= 0)
     {
         printf("ERROR: Can not read from cmd.\n");
         return;
     }
 
-    Message[ReadSize - 1] = '\0';
-    if (strlen(Message) <= 0)
+    InputMessage[ReadSize - 1] = '\0';
+    if (strlen(InputMessage) <= 0)
     {
         return;
     }
@@ -253,13 +262,13 @@ void SingleThreadClientLite::CallBack_InputFromCMD(int Input, short events, void
         return;
     }
 
-    if (bufferevent_write(Client->m_Bufferevent, Message, ReadSize) == 0)
+    if (bufferevent_write(Client->m_Bufferevent, InputMessage, ReadSize) == 0)
     {
-        printf("Send message = %s, size = %d.\n", Message, ReadSize);
+        printf("Send message = %s, size = %d.\n", InputMessage, ReadSize);
     }
     else
     {
-        printf("Send message = %s failed.\n", Message, ReadSize);
+        printf("Send message = %s failed.\n", InputMessage);
     }
 }
 
@@ -275,33 +284,45 @@ void SingleThreadClientLite::CallBack_RecvUDPBroadcast(int Socket, short events,
     if (RecvSize == -1)
     {
         printf("ERROR: UDP broadcast recv error.\n");
+        return;
     }
-    else if (RecvSize == 0)
+
+    if (RecvSize == 0)
     {
         printf("ERROR: UDP connection closed.\n");
+        return;
     }
-    else
-    {
-        if (Client->m_ServerIP.empty())
-        {
-            printf("UDP broadcast recv message = %s.\n", Buffer);
 
-            Client->m_ServerIP = Buffer;
-            Client->m_ServerPort = 12345;
-            if (Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort))
-            {
-                Client->AddEventSendDataRandomly();
-                Client->DeleteEventRecvUDPBroadcast();
-            }
-        }
-        else if (Client->m_ServerIP == std::string(Buffer))
-        {
-            printf("UDP braodcast repeat recv.\n");
-        }
+    if (Client->m_ServerIP == std::string(Buffer))
+    {
+        printf("UDP braodcast repeat recv.\n");
+        return;
     }
+
+    std::string BroadcastMessage(Buffer);
+    printf("UDP broadcast recv message = %s.\n", Buffer);
+    std::string::size_type Index = BroadcastMessage.find(":");
+    if (Index == std::string::npos)
+    {
+        printf("ERROR: Can not parse message.\n");
+        return;
+    }
+
+    Client->m_ServerIP = BroadcastMessage.substr(0, Index);
+    Client->m_ServerPort = atoi(BroadcastMessage.substr(Index + 1, BroadcastMessage.size()).c_str());
+    printf("Connect Information: Server IP = %s, Port = %d\n", Client->m_ServerIP.c_str(), Client->m_ServerPort);
+
+    if (!Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort))
+    {
+        printf("ERROR: Can not connect server.\n");
+        return;
+    }
+
+    Client->AddEventSendDataRandomly();
+    Client->DeleteEventRecvUDPBroadcast();
 }
 
-void SingleThreadClientLite::CallBack_SendDataRandomly(evutil_socket_t Socket, short Events, void *UserData)
+void SingleThreadClientLite::CallBack_SendDataRandomly(int Socket, short Events, void *UserData)
 {
     SingleThreadClientLite *Client = (SingleThreadClientLite*)UserData;
     if (Client->m_Bufferevent != NULL)
@@ -309,11 +330,11 @@ void SingleThreadClientLite::CallBack_SendDataRandomly(evutil_socket_t Socket, s
         const std::string &UUID = GetUUID();
         if (bufferevent_write(Client->m_Bufferevent, UUID.c_str(), UUID.length()) == 0)
         {
-            printf("Send succeed, message = %s\n", UUID.c_str(), UUID.length());
+            printf("Send succeed, message = %s\n", UUID.c_str());
         }
         else
         {
-            printf("Send failed, message = %s\n", UUID.c_str(), UUID.length());
+            printf("Send failed, message = %s\n", UUID.c_str());
         }
 
         struct timeval tv;
@@ -367,11 +388,11 @@ void SingleThreadClientLite::CallBack_ClientEvent(struct bufferevent *bev, short
 
 void SingleThreadClientLite::CallBack_RecvFromServer(bufferevent * bev, void *UserData)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char ServerMessage[1024];
+    memset(ServerMessage, 0, sizeof(ServerMessage));
 
-    size_t RecvSize = bufferevent_read(bev, Message, sizeof(Message));
-    Message[RecvSize] = '\0';
+    size_t RecvSize = bufferevent_read(bev, ServerMessage, sizeof(ServerMessage));
+    ServerMessage[RecvSize] = '\0';
 
-    printf("Recv %s.\n", Message);
+    printf("Recv: %s.\n", ServerMessage);
 }

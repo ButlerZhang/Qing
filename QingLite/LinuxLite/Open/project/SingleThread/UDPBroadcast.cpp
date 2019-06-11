@@ -13,14 +13,15 @@ UDPBroadcast::UDPBroadcast()
     m_TimeoutEvent = NULL;
 
     m_TimeInternal = 60;
-    m_UDPBroadcastSocket = -1;
+    m_BroadcastPort = 0;
+    m_BroadcastSocket = -1;
 }
 
 UDPBroadcast::~UDPBroadcast()
 {
     m_EventBase = NULL;
     event_free(m_TimeoutEvent);
-    close(m_UDPBroadcastSocket);
+    close(m_BroadcastSocket);
 }
 
 bool UDPBroadcast::BindEventBase(event_base *EventBase)
@@ -29,9 +30,9 @@ bool UDPBroadcast::BindEventBase(event_base *EventBase)
     return m_EventBase != NULL;
 }
 
-bool UDPBroadcast::StartTimer(int Seconds, int Port)
+bool UDPBroadcast::StartTimer(const std::string &ServerIP, int TimeInternal, int Port)
 {
-    if (Seconds <= 0)
+    if (TimeInternal <= 0)
     {
         printf("ERROR: Timer at least needs one second.\n");
         return false;
@@ -43,26 +44,29 @@ bool UDPBroadcast::StartTimer(int Seconds, int Port)
         return false;
     }
 
-    m_UDPBroadcastSocket = socket(AF_INET, SOCK_DGRAM, 0);
-    if (m_UDPBroadcastSocket == -1)
+    m_BroadcastSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (m_BroadcastSocket == -1)
     {
         printf("ERROR: Create udp socket error.\n");
         return false;
     }
 
     int Optval = 1;
-    if (setsockopt(m_UDPBroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
+    if (setsockopt(m_BroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
         printf("ERROR: setsockopt error.\n");
         return false;
     }
 
+    m_BroadcastPort = Port;
+    m_BroadcastServerIP = ServerIP;
+
     bzero(&m_BroadcastAddress, sizeof(sockaddr_in));
     m_BroadcastAddress.sin_family = AF_INET;
     inet_pton(AF_INET, "255.255.255.255", &m_BroadcastAddress.sin_addr);
-    m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(Port));
+    m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(m_BroadcastPort));
 
-    m_TimeInternal = Seconds;
+    m_TimeInternal = TimeInternal;
     m_TimeoutEvent = event_new(m_EventBase, -1, EV_PERSIST, CallBack_TimeOut, this);
 
     struct timeval tv;
@@ -74,13 +78,13 @@ bool UDPBroadcast::StartTimer(int Seconds, int Port)
     return true;
 }
 
-void UDPBroadcast::CallBack_TimeOut(evutil_socket_t Socket, short Events, void *UserData)
+void UDPBroadcast::CallBack_TimeOut(int Socket, short Events, void *UserData)
 {
     UDPBroadcast *Broadcast = (UDPBroadcast*)UserData;
 
-    std::string UDPData("192.168.3.126");
+    const std::string UDPData = Broadcast->m_BroadcastServerIP + ":" + std::to_string(Broadcast->m_BroadcastPort);
     ssize_t SendSize = sendto(
-        Broadcast->m_UDPBroadcastSocket,
+        Broadcast->m_BroadcastSocket,
         UDPData.c_str(),
         UDPData.length(),
         0,

@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <event.h>
 
 
@@ -11,18 +12,19 @@ public:
     ~UDPBroadcast();
 
     bool BindEventBase(event_base *EventBase);
-    bool StartTimer(int TimeInternal = 60, int Port = 12345);
+    bool StartTimer(const std::string &ServerIP, int TimeInternal = 60, int Port = 12345);
 
 private:
 
-    static void CallBack_TimeOut(evutil_socket_t Socket, short Events, void *UserData);
+    static void CallBack_TimeOut(int Socket, short Events, void *UserData);
 
 private:
 
     int                             m_TimeInternal;
-    timeval                         m_LastSendTime;
-    evutil_socket_t                 m_UDPBroadcastSocket;
-
+    int                             m_BroadcastPort;
+    int                             m_BroadcastSocket;
+    std::string                     m_BroadcastServerIP;
+    struct timeval                  m_LastSendTime;
     struct event                   *m_TimeoutEvent;
     struct event_base              *m_EventBase;
     struct sockaddr_in              m_BroadcastAddress;

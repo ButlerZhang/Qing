@@ -16,13 +16,12 @@ public:
     ~SingleThreadServerLite();
 
     bool Initialize(const std::string &IP, int Port);
-
     bool Start();
     bool Stop();
 
 private:
 
-    static void CallBack_Listen(evconnlistener *Listener, evutil_socket_t Socket, sockaddr *Address, int SocketLen, void *UserData);
+    static void CallBack_Listen(evconnlistener *Listener, int Socket, sockaddr *Address, int SocketLen, void *UserData);
     static void CallBack_Event(struct bufferevent *bev, short Events, void *UserData);
     static void CallBack_Recv(struct bufferevent *bev, void *UserData);
     static void CallBack_Send(struct bufferevent *bev, void *UserData);
