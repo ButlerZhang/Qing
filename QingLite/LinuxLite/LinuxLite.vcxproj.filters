@@ -118,22 +118,22 @@
     <ClCompile Include="Open\project\MessageHandler.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\MultiThreadServerLite.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
     <ClCompile Include="Open\project\SignalEvent.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\SingleThreadClientLite.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\SingleThreadServerLite.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
     <ClCompile Include="Open\project\ThreadNode.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
     <ClCompile Include="Open\project\UDPBroadcast.cpp">
+      <Filter>Open\project</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\MultiEventServer.cpp">
+      <Filter>Open\project</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\SingleEventClient.cpp">
+      <Filter>Open\project</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\SingleEventServer.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
   </ItemGroup>
@@ -337,22 +337,22 @@
     <ClInclude Include="Open\project\MessageHandler.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\MultiThreadServerLite.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\SignalEvent.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleThreadClientLite.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleThreadServerLite.h">
       <Filter>Open\project</Filter>
     </ClInclude>
     <ClInclude Include="Open\project\ThreadNode.h">
       <Filter>Open\project</Filter>
     </ClInclude>
     <ClInclude Include="Open\project\UDPBroadcast.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MultiEventServer.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleEventClient.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleEventServer.h">
       <Filter>Open\project</Filter>
     </ClInclude>
   </ItemGroup>

@@ -83,10 +83,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Open\project\HTTPServer.cpp" />
     <ClCompile Include="Open\project\MessageHandler.cpp" />
-    <ClCompile Include="Open\project\MultiThreadServerLite.cpp" />
+    <ClCompile Include="Open\project\MultiEventServer.cpp" />
     <ClCompile Include="Open\project\SignalEvent.cpp" />
-    <ClCompile Include="Open\project\SingleThreadClientLite.cpp" />
-    <ClCompile Include="Open\project\SingleThreadServerLite.cpp" />
+    <ClCompile Include="Open\project\SingleEventClient.cpp" />
+    <ClCompile Include="Open\project\SingleEventServer.cpp" />
     <ClCompile Include="Open\project\ThreadNode.cpp" />
     <ClCompile Include="Open\project\UDPBroadcast.cpp" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
@@ -136,10 +136,10 @@
     <ClInclude Include="Open\openssl\demo_test.h" />
     <ClInclude Include="Open\project\HTTPServer.h" />
     <ClInclude Include="Open\project\MessageHandler.h" />
-    <ClInclude Include="Open\project\MultiThreadServerLite.h" />
+    <ClInclude Include="Open\project\MultiEventServer.h" />
     <ClInclude Include="Open\project\SignalEvent.h" />
-    <ClInclude Include="Open\project\SingleThreadClientLite.h" />
-    <ClInclude Include="Open\project\SingleThreadServerLite.h" />
+    <ClInclude Include="Open\project\SingleEventClient.h" />
+    <ClInclude Include="Open\project\SingleEventServer.h" />
     <ClInclude Include="Open\project\ThreadNode.h" />
     <ClInclude Include="Open\project\UDPBroadcast.h" />
     <ClInclude Include="Qing\NetworkBase.h" />

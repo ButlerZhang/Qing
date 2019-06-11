@@ -8,12 +8,12 @@
 
 
 
-class SingleThreadServerLite
+class SingleEventServer
 {
 public:
 
-    SingleThreadServerLite();
-    ~SingleThreadServerLite();
+    SingleEventServer();
+    ~SingleEventServer();
 
     bool Initialize(const std::string &IP, int Port);
     bool Start();

@@ -1,4 +1,4 @@
-#include "SingleThreadServerLite.h"
+#include "SingleEventServer.h"
 #include <arpa/inet.h>
 #include <strings.h>
 #include <string.h>
@@ -9,14 +9,14 @@
 
 
 
-SingleThreadServerLite::SingleThreadServerLite()
+SingleEventServer::SingleEventServer()
 {
     m_EventBase = NULL;
     m_Listener = NULL;
     m_ListenPort = 0;
 }
 
-SingleThreadServerLite::~SingleThreadServerLite()
+SingleEventServer::~SingleEventServer()
 {
     m_ClientSocketVector.clear();
 
@@ -24,7 +24,7 @@ SingleThreadServerLite::~SingleThreadServerLite()
     event_base_free(m_EventBase);
 }
 
-bool SingleThreadServerLite::Initialize(const std::string &IP, int Port)
+bool SingleEventServer::Initialize(const std::string &IP, int Port)
 {
     if (m_EventBase != NULL && m_Listener != NULL)
     {
@@ -74,7 +74,7 @@ bool SingleThreadServerLite::Initialize(const std::string &IP, int Port)
     return true;
 }
 
-bool SingleThreadServerLite::Start()
+bool SingleEventServer::Start()
 {
     if (!m_UDPBroadcast.BindEventBase(m_EventBase))
     {
@@ -107,14 +107,14 @@ bool SingleThreadServerLite::Start()
     return true;
 }
 
-bool SingleThreadServerLite::Stop()
+bool SingleEventServer::Stop()
 {
     return event_base_loopbreak(m_EventBase) == 0;
 }
 
-void SingleThreadServerLite::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
+void SingleEventServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
 {
-    SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
+    SingleEventServer *Server = (SingleEventServer*)UserData;
     Server->m_ClientSocketVector.push_back(Socket);
     printf("Accept client, socket = %d, current count = %d.\n", Socket, static_cast<int>(Server->m_ClientSocketVector.size()));
 
@@ -124,7 +124,7 @@ void SingleThreadServerLite::CallBack_Listen(evconnlistener * Listener, int Sock
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
 }
 
-void SingleThreadServerLite::CallBack_Event(bufferevent * bev, short Events, void *UserData)
+void SingleEventServer::CallBack_Event(bufferevent * bev, short Events, void *UserData)
 {
     bool IsAllowDelete = false;
     int ClientSocket = bufferevent_getfd(bev);
@@ -150,7 +150,7 @@ void SingleThreadServerLite::CallBack_Event(bufferevent * bev, short Events, voi
 
     if (IsAllowDelete)
     {
-        SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
+        SingleEventServer *Server = (SingleEventServer*)UserData;
         std::vector<int>::iterator it = std::find(Server->m_ClientSocketVector.begin(), Server->m_ClientSocketVector.end(), ClientSocket);
         if (it != Server->m_ClientSocketVector.end())
         {
@@ -162,7 +162,7 @@ void SingleThreadServerLite::CallBack_Event(bufferevent * bev, short Events, voi
     }
 }
 
-void SingleThreadServerLite::CallBack_Recv(bufferevent *bev, void *UserData)
+void SingleEventServer::CallBack_Recv(bufferevent *bev, void *UserData)
 {
     char ClientMessage[1024];
     memset(ClientMessage, 0, sizeof(ClientMessage));
@@ -173,11 +173,11 @@ void SingleThreadServerLite::CallBack_Recv(bufferevent *bev, void *UserData)
     int ClientSocket = bufferevent_getfd(bev);
     printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, ClientMessage);
 
-    SingleThreadServerLite *Server = (SingleThreadServerLite*)UserData;
+    SingleEventServer *Server = (SingleEventServer*)UserData;
     Server->m_MessageHandler.PushMessage(ClientSocket, bev, ClientMessage);
 }
 
-void SingleThreadServerLite::CallBack_Send(bufferevent * bev, void * UserData)
+void SingleEventServer::CallBack_Send(bufferevent * bev, void * UserData)
 {
     //evbuffer *WriteBuffer = bufferevent_get_output(bev);
     //if (evbuffer_get_length(WriteBuffer) <= 0)

@@ -5,12 +5,12 @@
 
 
 
-class SingleThreadClientLite
+class SingleEventClient
 {
 public:
 
-    SingleThreadClientLite();
-    ~SingleThreadClientLite();
+    SingleEventClient();
+    ~SingleEventClient();
 
     bool Start(int BroadcastPort);
     bool Stop();

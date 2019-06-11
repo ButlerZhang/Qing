@@ -7,12 +7,12 @@
 
 
 
-class MultiThreadServerLite
+class MultiEventServer
 {
 public:
 
-    MultiThreadServerLite();
-    ~MultiThreadServerLite();
+    MultiEventServer();
+    ~MultiEventServer();
 
     bool StartServer(const std::string &IP, int Port, int ThreadCount = 0);
     void StopServer();
