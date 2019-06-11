@@ -55,12 +55,6 @@
     <Filter Include="Open\project">
       <UniqueIdentifier>{b0bb337e-d96e-41bd-9b01-923220dc6b71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Open\project\MultiThread">
-      <UniqueIdentifier>{113562d0-cddf-4c0d-9b33-b7225bbe8d09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Open\project\SingleThread">
-      <UniqueIdentifier>{2784e7ce-23df-4ef2-9d4d-c42f74de9ea8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -118,32 +112,29 @@
     <ClCompile Include="Qing\NetworkServer.cpp">
       <Filter>Qing</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\MultiThread\MultiThreadServerLite.cpp">
-      <Filter>Open\project\MultiThread</Filter>
+    <ClCompile Include="Open\project\HTTPServer.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\MultiThread\SignalEvent.cpp">
-      <Filter>Open\project\MultiThread</Filter>
+    <ClCompile Include="Open\project\MessageHandler.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\MultiThread\ThreadNode.cpp">
-      <Filter>Open\project\MultiThread</Filter>
+    <ClCompile Include="Open\project\MultiThreadServerLite.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\MultiThread\TimerEvent.cpp">
-      <Filter>Open\project\MultiThread</Filter>
+    <ClCompile Include="Open\project\SignalEvent.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SingleThread\MessageHandler.cpp">
-      <Filter>Open\project\SingleThread</Filter>
+    <ClCompile Include="Open\project\SingleThreadClientLite.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SingleThread\SingleThreadClientLite.cpp">
-      <Filter>Open\project\SingleThread</Filter>
+    <ClCompile Include="Open\project\SingleThreadServerLite.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SingleThread\SingleThreadServerLite.cpp">
-      <Filter>Open\project\SingleThread</Filter>
+    <ClCompile Include="Open\project\ThreadNode.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SingleThread\UDPBroadcast.cpp">
-      <Filter>Open\project\SingleThread</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\SingleThread\HTTPServer.cpp">
-      <Filter>Open\project\SingleThread</Filter>
+    <ClCompile Include="Open\project\UDPBroadcast.cpp">
+      <Filter>Open\project</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,30 +322,6 @@
     <ClInclude Include="Open\libevent\demo5_server_evhttp.h">
       <Filter>Open\libevent</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\MultiThread\MultiThreadServerLite.h">
-      <Filter>Open\project\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\MultiThread\SignalEvent.h">
-      <Filter>Open\project\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\MultiThread\ThreadNode.h">
-      <Filter>Open\project\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\MultiThread\TimerEvent.h">
-      <Filter>Open\project\MultiThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleThread\MessageHandler.h">
-      <Filter>Open\project\SingleThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleThread\SingleThreadClientLite.h">
-      <Filter>Open\project\SingleThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleThread\SingleThreadServerLite.h">
-      <Filter>Open\project\SingleThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleThread\UDPBroadcast.h">
-      <Filter>Open\project\SingleThread</Filter>
-    </ClInclude>
     <ClInclude Include="Open\libevent\demo6_client_bufferevent_openssl.h">
       <Filter>Open\libevent</Filter>
     </ClInclude>
@@ -364,8 +331,29 @@
     <ClInclude Include="Open\openssl\demo_AES.h">
       <Filter>Open\openssl</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\SingleThread\HTTPServer.h">
-      <Filter>Open\project\SingleThread</Filter>
+    <ClInclude Include="Open\project\HTTPServer.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MessageHandler.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MultiThreadServerLite.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SignalEvent.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleThreadClientLite.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\SingleThreadServerLite.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\ThreadNode.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\UDPBroadcast.h">
+      <Filter>Open\project</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
 #pragma once
 #include "ThreadNode.h"
-#include "TimerEvent.h"
 #include "SignalEvent.h"
 
 #include <event2/listener.h>
@@ -23,7 +22,6 @@ public:
     virtual bool ProcessSend(ConnectNode &ConnectedNode);
     virtual bool ProcessClose(ConnectNode &ConnectedNode, short events);
 
-    inline TimerEvent& GetTimerEvent() { return m_TimerEvent; }
     inline SignalEvent& GetSignalEvent() { return m_SignalEvent; }
 
 private:
@@ -44,7 +42,6 @@ private:
 private:
 
     ThreadNode                 m_MainThread;
-    TimerEvent                 m_TimerEvent;
     SignalEvent                m_SignalEvent;
     std::vector<ThreadNode>    m_ThreadVector;
 };

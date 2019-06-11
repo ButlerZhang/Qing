@@ -20,8 +20,8 @@
 //#include "Open/libevent/demo6_client_bufferevent_openssl.h"
 //#include "Open/libevent/demo6_server_bufferevent_openssl.h"
 
-#include "Open/project/SingleThread/SingleThreadServerLite.h"
-#include "Open/project/SingleThread/SingleThreadClientLite.h"
+#include "Open/project/SingleThreadServerLite.h"
+#include "Open/project/SingleThreadClientLite.h"
 
 
 
