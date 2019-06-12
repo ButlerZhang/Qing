@@ -118,9 +118,6 @@
     <ClCompile Include="Open\project\MessageHandler.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\ThreadNode.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
     <ClCompile Include="Open\project\UDPBroadcast.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>

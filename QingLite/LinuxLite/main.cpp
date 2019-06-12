@@ -22,6 +22,7 @@
 
 #include "Open/project/SingleEventBaseServer.h"
 #include "Open/project/SingleEventBaseClient.h"
+#include "Open/project/MultiEventBaseServer.h"
 
 
 
@@ -45,11 +46,14 @@ int main(int argc, char *argv[])
         //demo5_server_evhttp(ServerIP, ServerPort);
         //demo6_server_bufferevent_openssl(ServerIP, ServerPort);
 
-        SingleEventBaseServer Server;
-        if (Server.Initialize(ServerIP, ServerPort))
-        {
-            Server.Start();
-        }
+        //SingleEventBaseServer Server;
+        //if (Server.Initialize(ServerIP, ServerPort))
+        //{
+        //    Server.Start();
+        //}
+
+        MultiEventBaseServer Server;
+        Server.Start(ServerIP, ServerPort, 2);
     }
     else
     {

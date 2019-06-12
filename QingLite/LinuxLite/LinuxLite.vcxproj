@@ -87,7 +87,6 @@
     <ClCompile Include="Open\project\SignalEventMap.cpp" />
     <ClCompile Include="Open\project\SingleEventBaseClient.cpp" />
     <ClCompile Include="Open\project\SingleEventBaseServer.cpp" />
-    <ClCompile Include="Open\project\ThreadNode.cpp" />
     <ClCompile Include="Open\project\UDPBroadcast.cpp" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
     <ClCompile Include="Qing\NetworkClient.cpp" />

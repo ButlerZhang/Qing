@@ -1,5 +1,6 @@
 #pragma once
 #include "ThreadNode.h"
+#include "UDPBroadcast.h"
 
 #include <string>
 #include <event2/listener.h>
@@ -13,8 +14,8 @@ public:
     MultiEventBaseServer();
     ~MultiEventBaseServer();
 
-    bool StartServer(const std::string &IP, int Port, int ThreadCount = 0);
-    void StopServer();
+    bool Start(const std::string &IP, int Port, int ThreadCount = 0);
+    void Stop();
 
     virtual bool ProcessConnect(ConnectNode &ConnectedNode);
     virtual bool ProcessRecv(ConnectNode &ConnectedNode);
@@ -29,7 +30,7 @@ private:
 
 private:
 
-    static void CallBack_Listen(evconnlistener *listener, evutil_socket_t Socket, sockaddr *sa, int socklen, void *user_data);
+    static void CallBack_Listen(evconnlistener *listener, int Socket, sockaddr *sa, int socklen, void *user_data);
     static void CallBack_Accept(int fd, short which, void *arg);
     static void CallBack_Recv(struct bufferevent *bev, void *data);
     static void CallBack_Send(struct bufferevent *bev, void *data);
@@ -39,5 +40,6 @@ private:
 private:
 
     ThreadNode                 m_MainThread;
+    UDPBroadcast               m_UDPBroadcast;
     std::vector<ThreadNode>    m_ThreadVector;
 };
