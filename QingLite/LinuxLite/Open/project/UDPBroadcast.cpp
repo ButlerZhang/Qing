@@ -11,6 +11,7 @@ UDPBroadcast::UDPBroadcast()
 {
     m_EventBase = NULL;
     m_TimeoutEvent = NULL;
+    m_IsDisplayLog = false;
 
     m_TimeInternal = 60;
     m_BroadcastPort = 0;
@@ -98,7 +99,11 @@ void UDPBroadcast::CallBack_TimeOut(int Socket, short Events, void *UserData)
     double elapsed = static_cast<double>(DifferentTime.tv_sec) +
         (static_cast<double>(DifferentTime.tv_usec) / 1.0e6);
 
-    printf("Broadcast = %s, elapsed %.3f seconds.\n", UDPData.c_str(), elapsed);
+    if (Broadcast->m_IsDisplayLog)
+    {
+        printf("Broadcast = %s, elapsed %.3f seconds.\n", UDPData.c_str(), elapsed);
+    }
+
     Broadcast->m_LastSendTime = NewTime;
 
     struct timeval tv;

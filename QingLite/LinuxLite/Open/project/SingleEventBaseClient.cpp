@@ -330,11 +330,11 @@ void SingleEventBaseClient::CallBack_SendDataRandomly(int Socket, short Events, 
         const std::string &UUID = GetUUID();
         if (bufferevent_write(Client->m_Bufferevent, UUID.c_str(), UUID.length()) == 0)
         {
-            printf("Send succeed, message = %s\n", UUID.c_str());
+            printf("Send = %s, size = %d, succeed.\n", UUID.c_str(), UUID.size());
         }
         else
         {
-            printf("Send failed, message = %s\n", UUID.c_str());
+            printf("Send = %s, size = %d, failed.\n", UUID.c_str(), UUID.size());
         }
 
         struct timeval tv;
@@ -386,7 +386,7 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
     }
 }
 
-void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent * bev, void *UserData)
+void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *UserData)
 {
     char ServerMessage[1024];
     memset(ServerMessage, 0, sizeof(ServerMessage));
@@ -394,5 +394,5 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent * bev, void *Use
     size_t RecvSize = bufferevent_read(bev, ServerMessage, sizeof(ServerMessage));
     ServerMessage[RecvSize] = '\0';
 
-    printf("Recv: %s.\n", ServerMessage);
+    printf("Recv = %s, size = %d\n", ServerMessage, RecvSize);
 }

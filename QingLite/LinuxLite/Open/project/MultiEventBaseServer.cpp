@@ -83,7 +83,7 @@ bool MultiEventBaseServer::ProcessRecv(ConnectNode & ConnectedNode)
 {
     if (evbuffer_get_length(ConnectedNode.m_ReadBuffer) <= 0)
     {
-        printf("Process recv, no data.\n\n");
+        printf("Process recv, no data.\n");
         return false;
     }
 
@@ -93,21 +93,21 @@ bool MultiEventBaseServer::ProcessRecv(ConnectNode & ConnectedNode)
     int RecvSize = evbuffer_remove(ConnectedNode.m_ReadBuffer, RecvBuffer, sizeof(RecvBuffer));
     RecvBuffer[RecvSize] = '\0';
 
-    printf("Client = %d recv = %s, size = %d.\n", ConnectedNode.m_ClientSocket, RecvBuffer, RecvSize);
-    return true;
+    printf("Client = %d, recv = %s, size = %d.\n", ConnectedNode.m_ClientSocket, RecvBuffer, RecvSize);
 
-    //const std::string ACK("ACK");
-    //evbuffer_add(ConnectedNode.m_WriteBuffer, ACK.c_str(), ACK.length());
-    //printf("Client = %d send ack, size = %d.\n\n", ConnectedNode.m_ClientSocket, ACK.length());
-    //return true;
+    std::string ACK("ACK:");
+    ACK.append(RecvBuffer);
+    evbuffer_add(ConnectedNode.m_WriteBuffer, ACK.c_str(), ACK.length());
+    printf("Client = %d, send = %s, size = %d.\n", ConnectedNode.m_ClientSocket, ACK.c_str(), ACK.length());
+
+    return true;
 }
 
-bool MultiEventBaseServer::ProcessSend(ConnectNode & ConnectedNode)
+bool MultiEventBaseServer::ProcessSend(ConnectNode &ConnectedNode)
 {
     if (evbuffer_get_length(ConnectedNode.m_WriteBuffer) <= 0)
     {
-        printf("Process send, no data.\n");
-        return false;
+        return true;
     }
 
     printf("Client = %d send data.\n", ConnectedNode.m_ClientSocket);
@@ -149,7 +149,12 @@ bool MultiEventBaseServer::CreateThreads(int ThreadCount)
         NewNode.m_NotifyRecvPipeFD = ThreadPipe[0];
         NewNode.m_NotifySendPipeFD = ThreadPipe[1];
         NewNode.m_MultiEventBaseServer = this;
+    }
 
+    //对于容器，不能一边push新元素，一边引用新元素的地址
+    for (int Index = 0; Index < ThreadCount; Index++)
+    {
+        ThreadNode &NewNode = m_ThreadVector[Index];
         event_set(&NewNode.m_NotifyEvent, NewNode.m_NotifyRecvPipeFD, EV_READ | EV_PERSIST, CallBack_Accept, &NewNode);
         event_base_set(NewNode.m_EventBase, &NewNode.m_NotifyEvent);
         if (event_add(&NewNode.m_NotifyEvent, 0) == -1)
@@ -218,22 +223,23 @@ bool MultiEventBaseServer::StartEventLoop(evconnlistener *Listener)
 void MultiEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *user_data)
 {
     MultiEventBaseServer *Server = (MultiEventBaseServer*)user_data;
-    const std::vector<ThreadNode> &NodeVector = Server->m_ThreadVector;
+    const std::vector<ThreadNode> &ThreadVector = Server->m_ThreadVector;
 
     std::vector<ThreadNode>::size_type TargetIndex = 0;
-    std::vector<ThreadNode>::size_type ConnectedNodeCount = __UINT32_MAX__;
-    for (std::vector<ThreadNode>::size_type Index = 0; Index < NodeVector.size(); Index++)
+    std::vector<ThreadNode>::size_type ConnectedNodeCount = __INT32_MAX__;
+    for (std::vector<ThreadNode>::size_type Index = 0; Index < ThreadVector.size(); Index++)
     {
-        if (ConnectedNodeCount < NodeVector[Index].m_ConnectNodeVector.size())
+        if (ConnectedNodeCount > ThreadVector[Index].m_ConnectNodeVector.size())
         {
-            ConnectedNodeCount = NodeVector[Index].m_ConnectNodeVector.size();
+            ConnectedNodeCount = ThreadVector[Index].m_ConnectNodeVector.size();
             TargetIndex = Index;
         }
     }
 
-    if (TargetIndex < 0 || TargetIndex >= NodeVector.size())
+    if (TargetIndex < 0 || TargetIndex >= ThreadVector.size())
     {
-        TargetIndex = rand() % NodeVector.size();
+        TargetIndex = rand() % ThreadVector.size();
+        printf("ERROR: I should not come here to find target index.\n");
     }
 
     int Pipe = Server->m_ThreadVector[TargetIndex].m_NotifySendPipeFD;
@@ -245,36 +251,36 @@ void MultiEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket
 
 void MultiEventBaseServer::CallBack_Accept(int fd, short which, void *arg)
 {
-    ThreadNode *CurrentNode = (ThreadNode*)arg;
+    ThreadNode *CurrentThreadNode = (ThreadNode*)arg;
 
     evutil_socket_t ClientSocket;
-    read(CurrentNode->m_NotifyRecvPipeFD, &ClientSocket, sizeof(evutil_socket_t));
+    read(CurrentThreadNode->m_NotifyRecvPipeFD, &ClientSocket, sizeof(evutil_socket_t));
     if (ClientSocket <= 0)
     {
         printf("Accept: loop break, client socket = %d.\n", ClientSocket);
-        event_base_loopbreak(CurrentNode->m_EventBase);
+        event_base_loopbreak(CurrentThreadNode->m_EventBase);
         return;
     }
 
     printf("Accept: read socket = %d from recv pipe.\n", ClientSocket);
 
-    struct bufferevent *bev = bufferevent_socket_new(CurrentNode->m_EventBase, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
+    struct bufferevent *bev = bufferevent_socket_new(CurrentThreadNode->m_EventBase, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
     if (bev == NULL)
     {
         printf("Accept: could not create bufferevent.\n");
         return;
     }
 
-    CurrentNode->m_ConnectNodeVector.push_back(ConnectNode());
-    ConnectNode &NewConnectedNode = CurrentNode->m_ConnectNodeVector[CurrentNode->m_ConnectNodeVector.size() - 1];
+    CurrentThreadNode->m_ConnectNodeVector.push_back(ConnectNode());
+    ConnectNode &NewConnectedNode = CurrentThreadNode->m_ConnectNodeVector[CurrentThreadNode->m_ConnectNodeVector.size() - 1];
     NewConnectedNode.m_ClientSocket = ClientSocket;
-    NewConnectedNode.m_WorkThread = CurrentNode;
+    NewConnectedNode.m_WorkThread = CurrentThreadNode;
 
     bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Event, &NewConnectedNode);
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
 
-    CurrentNode->m_MultiEventBaseServer->ProcessConnect(NewConnectedNode);
+    CurrentThreadNode->m_MultiEventBaseServer->ProcessConnect(NewConnectedNode);
 }
 
 void MultiEventBaseServer::CallBack_Recv(bufferevent * bev, void *data)
@@ -309,15 +315,15 @@ void MultiEventBaseServer::CallBack_Event(bufferevent * bev, short events, void 
     }
 
     bufferevent_free(bev);
-    printf("Surplus client count = %d.\n", NodeVector.size());
+    printf("Thread = %u surplus client count = %d.\n", CurrentNode->m_WorkThread->m_ThreadID, NodeVector.size());
 }
 
 void* MultiEventBaseServer::CallBack_StartThreadEventLoop(void *arg)
 {
     ThreadNode *CurrentNode = (ThreadNode*)arg;
-    printf("Thread %u started.\n", CurrentNode->m_ThreadID);
+    printf("Thread = %u started.\n", CurrentNode->m_ThreadID);
 
     event_base_dispatch(CurrentNode->m_EventBase);
-    printf("Thread %u done.\n", CurrentNode->m_ThreadID);
+    printf("Thread = %u done.\n", CurrentNode->m_ThreadID);
     return NULL;
 }
