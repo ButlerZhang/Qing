@@ -16,6 +16,8 @@ public:
     bool Start(int UDPBroadcastPort);
     bool Stop();
 
+    inline bool IsConnected() const { return m_IsConnected; }
+
 private:
 
     bool AddEventInputFromCMD();
@@ -45,7 +47,7 @@ private:
     int                                          m_BroadcastPort;
     int                                          m_UDPSocket;
     struct sockaddr_in                           m_BroadcastAddress;
-    struct bufferevent                          *m_Bufferevent;
+    struct bufferevent                          *m_DataBufferevent;
     struct event_base                           *m_EventBase;
     struct event                                *m_CMDInputEvent;
     struct event                                *m_UDPBroadcastEvent;
