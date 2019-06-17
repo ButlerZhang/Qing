@@ -1,0 +1,21 @@
+// user.proto
+
+syntax = "proto3";
+
+package Open;
+
+message User
+{
+
+    int32 id = 1;
+
+    string name = 2;
+
+    string password = 3;
+
+    string authority = 4;
+
+    repeated string nickname = 5;
+
+}
+

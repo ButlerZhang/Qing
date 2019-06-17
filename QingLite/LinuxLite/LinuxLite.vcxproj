@@ -88,6 +88,7 @@
     <ClCompile Include="Open\project\SingleEventBaseClient.cpp" />
     <ClCompile Include="Open\project\SingleEventBaseServer.cpp" />
     <ClCompile Include="Open\project\UDPBroadcast.cpp" />
+    <ClCompile Include="Open\protobuf\user.pb.cc" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
     <ClCompile Include="Qing\NetworkClient.cpp" />
     <ClCompile Include="Qing\NetworkServer.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Open\project\SingleEventBaseServer.h" />
     <ClInclude Include="Open\project\ThreadNode.h" />
     <ClInclude Include="Open\project\UDPBroadcast.h" />
+    <ClInclude Include="Open\protobuf\user.pb.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
     <ClInclude Include="Qing\NetworkServer.h" />
@@ -173,10 +175,10 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;%(LibraryDependencies)</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

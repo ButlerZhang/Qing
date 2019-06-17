@@ -55,6 +55,9 @@
     <Filter Include="Open\project">
       <UniqueIdentifier>{b0bb337e-d96e-41bd-9b01-923220dc6b71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\protobuf">
+      <UniqueIdentifier>{207b1f2f-6c84-44c7-9e49-bc66d9bb30f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -132,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="Open\project\SignalEventMap.cpp">
       <Filter>Open\project</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\protobuf\user.pb.cc">
+      <Filter>Open\protobuf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,6 +357,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\SignalEventMap.h">
       <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\protobuf\user.pb.h">
+      <Filter>Open\protobuf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
