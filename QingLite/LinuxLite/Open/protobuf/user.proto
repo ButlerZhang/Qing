@@ -1,21 +1,24 @@
 // user.proto
+// protoc -I=./ --cpp_out=./ ./user.proto
 
 syntax = "proto3";
 
 package Open;
 
+import "base.proto";
+
+//1.message等同于C++中struct，user为类名。enum表示枚举值。
+//2.required表示必要字段。
+//3.optional表示可选字段。
+//4.repeated表示重复字段，相当于数组。
+//5.字段名后面的标签数字表示不同的字段在序列化后的二进制数据中的布局位置。标签数字最好小于等于15，避免增加空间开销。
+
 message User
 {
-
-    int32 id = 1;
-
-    string name = 2;
-
-    string password = 3;
-
-    string authority = 4;
-
-    repeated string nickname = 5;
-
+    MessageHeader header = 1;
+    int32 ID = 2;
+    string Name = 3;
+    string Password = 4;
+    string Authority = 5;
+    repeated string Nickname = 6;
 }
-

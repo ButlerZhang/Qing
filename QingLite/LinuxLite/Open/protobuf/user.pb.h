@@ -32,6 +32,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
+#include "base.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_user_2eproto
@@ -175,10 +176,10 @@ class User :
 
   // accessors -------------------------------------------------------
 
-  // repeated string nickname = 5;
+  // repeated string Nickname = 6;
   int nickname_size() const;
   void clear_nickname();
-  static const int kNicknameFieldNumber = 5;
+  static const int kNicknameFieldNumber = 6;
   const std::string& nickname(int index) const;
   std::string* mutable_nickname(int index);
   void set_nickname(int index, const std::string& value);
@@ -193,9 +194,9 @@ class User :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& nickname() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_nickname();
 
-  // string name = 2;
+  // string Name = 3;
   void clear_name();
-  static const int kNameFieldNumber = 2;
+  static const int kNameFieldNumber = 3;
   const std::string& name() const;
   void set_name(const std::string& value);
   void set_name(std::string&& value);
@@ -205,9 +206,9 @@ class User :
   std::string* release_name();
   void set_allocated_name(std::string* name);
 
-  // string password = 3;
+  // string Password = 4;
   void clear_password();
-  static const int kPasswordFieldNumber = 3;
+  static const int kPasswordFieldNumber = 4;
   const std::string& password() const;
   void set_password(const std::string& value);
   void set_password(std::string&& value);
@@ -217,9 +218,9 @@ class User :
   std::string* release_password();
   void set_allocated_password(std::string* password);
 
-  // string authority = 4;
+  // string Authority = 5;
   void clear_authority();
-  static const int kAuthorityFieldNumber = 4;
+  static const int kAuthorityFieldNumber = 5;
   const std::string& authority() const;
   void set_authority(const std::string& value);
   void set_authority(std::string&& value);
@@ -229,9 +230,18 @@ class User :
   std::string* release_authority();
   void set_allocated_authority(std::string* authority);
 
-  // int32 id = 1;
+  // .Open.MessageHeader header = 1;
+  bool has_header() const;
+  void clear_header();
+  static const int kHeaderFieldNumber = 1;
+  const ::Open::MessageHeader& header() const;
+  ::Open::MessageHeader* release_header();
+  ::Open::MessageHeader* mutable_header();
+  void set_allocated_header(::Open::MessageHeader* header);
+
+  // int32 ID = 2;
   void clear_id();
-  static const int kIdFieldNumber = 1;
+  static const int kIDFieldNumber = 2;
   ::PROTOBUF_NAMESPACE_ID::int32 id() const;
   void set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
 
@@ -244,6 +254,7 @@ class User :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr password_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr authority_;
+  ::Open::MessageHeader* header_;
   ::PROTOBUF_NAMESPACE_ID::int32 id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_user_2eproto;
@@ -259,58 +270,103 @@ class User :
 #endif  // __GNUC__
 // User
 
-// int32 id = 1;
+// .Open.MessageHeader header = 1;
+inline bool User::has_header() const {
+  return this != internal_default_instance() && header_ != nullptr;
+}
+inline const ::Open::MessageHeader& User::header() const {
+  const ::Open::MessageHeader* p = header_;
+  // @@protoc_insertion_point(field_get:Open.User.header)
+  return p != nullptr ? *p : *reinterpret_cast<const ::Open::MessageHeader*>(
+      &::Open::_MessageHeader_default_instance_);
+}
+inline ::Open::MessageHeader* User::release_header() {
+  // @@protoc_insertion_point(field_release:Open.User.header)
+  
+  ::Open::MessageHeader* temp = header_;
+  header_ = nullptr;
+  return temp;
+}
+inline ::Open::MessageHeader* User::mutable_header() {
+  
+  if (header_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Open::MessageHeader>(GetArenaNoVirtual());
+    header_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:Open.User.header)
+  return header_;
+}
+inline void User::set_allocated_header(::Open::MessageHeader* header) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(header_);
+  }
+  if (header) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      header = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, header, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  header_ = header;
+  // @@protoc_insertion_point(field_set_allocated:Open.User.header)
+}
+
+// int32 ID = 2;
 inline void User::clear_id() {
   id_ = 0;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 User::id() const {
-  // @@protoc_insertion_point(field_get:Open.User.id)
+  // @@protoc_insertion_point(field_get:Open.User.ID)
   return id_;
 }
 inline void User::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
   id_ = value;
-  // @@protoc_insertion_point(field_set:Open.User.id)
+  // @@protoc_insertion_point(field_set:Open.User.ID)
 }
 
-// string name = 2;
+// string Name = 3;
 inline void User::clear_name() {
   name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline const std::string& User::name() const {
-  // @@protoc_insertion_point(field_get:Open.User.name)
+  // @@protoc_insertion_point(field_get:Open.User.Name)
   return name_.GetNoArena();
 }
 inline void User::set_name(const std::string& value) {
   
   name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Open.User.name)
+  // @@protoc_insertion_point(field_set:Open.User.Name)
 }
 inline void User::set_name(std::string&& value) {
   
   name_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Open.User.name)
+  // @@protoc_insertion_point(field_set_rvalue:Open.User.Name)
 }
 inline void User::set_name(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Open.User.name)
+  // @@protoc_insertion_point(field_set_char:Open.User.Name)
 }
 inline void User::set_name(const char* value, size_t size) {
   
   name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Open.User.name)
+  // @@protoc_insertion_point(field_set_pointer:Open.User.Name)
 }
 inline std::string* User::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:Open.User.name)
+  // @@protoc_insertion_point(field_mutable:Open.User.Name)
   return name_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* User::release_name() {
-  // @@protoc_insertion_point(field_release:Open.User.name)
+  // @@protoc_insertion_point(field_release:Open.User.Name)
   
   return name_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
@@ -321,47 +377,47 @@ inline void User::set_allocated_name(std::string* name) {
     
   }
   name_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:Open.User.name)
+  // @@protoc_insertion_point(field_set_allocated:Open.User.Name)
 }
 
-// string password = 3;
+// string Password = 4;
 inline void User::clear_password() {
   password_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline const std::string& User::password() const {
-  // @@protoc_insertion_point(field_get:Open.User.password)
+  // @@protoc_insertion_point(field_get:Open.User.Password)
   return password_.GetNoArena();
 }
 inline void User::set_password(const std::string& value) {
   
   password_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Open.User.password)
+  // @@protoc_insertion_point(field_set:Open.User.Password)
 }
 inline void User::set_password(std::string&& value) {
   
   password_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Open.User.password)
+  // @@protoc_insertion_point(field_set_rvalue:Open.User.Password)
 }
 inline void User::set_password(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   password_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Open.User.password)
+  // @@protoc_insertion_point(field_set_char:Open.User.Password)
 }
 inline void User::set_password(const char* value, size_t size) {
   
   password_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Open.User.password)
+  // @@protoc_insertion_point(field_set_pointer:Open.User.Password)
 }
 inline std::string* User::mutable_password() {
   
-  // @@protoc_insertion_point(field_mutable:Open.User.password)
+  // @@protoc_insertion_point(field_mutable:Open.User.Password)
   return password_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* User::release_password() {
-  // @@protoc_insertion_point(field_release:Open.User.password)
+  // @@protoc_insertion_point(field_release:Open.User.Password)
   
   return password_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
@@ -372,47 +428,47 @@ inline void User::set_allocated_password(std::string* password) {
     
   }
   password_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:Open.User.password)
+  // @@protoc_insertion_point(field_set_allocated:Open.User.Password)
 }
 
-// string authority = 4;
+// string Authority = 5;
 inline void User::clear_authority() {
   authority_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline const std::string& User::authority() const {
-  // @@protoc_insertion_point(field_get:Open.User.authority)
+  // @@protoc_insertion_point(field_get:Open.User.Authority)
   return authority_.GetNoArena();
 }
 inline void User::set_authority(const std::string& value) {
   
   authority_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Open.User.authority)
+  // @@protoc_insertion_point(field_set:Open.User.Authority)
 }
 inline void User::set_authority(std::string&& value) {
   
   authority_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Open.User.authority)
+  // @@protoc_insertion_point(field_set_rvalue:Open.User.Authority)
 }
 inline void User::set_authority(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   authority_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Open.User.authority)
+  // @@protoc_insertion_point(field_set_char:Open.User.Authority)
 }
 inline void User::set_authority(const char* value, size_t size) {
   
   authority_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Open.User.authority)
+  // @@protoc_insertion_point(field_set_pointer:Open.User.Authority)
 }
 inline std::string* User::mutable_authority() {
   
-  // @@protoc_insertion_point(field_mutable:Open.User.authority)
+  // @@protoc_insertion_point(field_mutable:Open.User.Authority)
   return authority_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* User::release_authority() {
-  // @@protoc_insertion_point(field_release:Open.User.authority)
+  // @@protoc_insertion_point(field_release:Open.User.Authority)
   
   return authority_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
@@ -423,10 +479,10 @@ inline void User::set_allocated_authority(std::string* authority) {
     
   }
   authority_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), authority);
-  // @@protoc_insertion_point(field_set_allocated:Open.User.authority)
+  // @@protoc_insertion_point(field_set_allocated:Open.User.Authority)
 }
 
-// repeated string nickname = 5;
+// repeated string Nickname = 6;
 inline int User::nickname_size() const {
   return nickname_.size();
 }
@@ -434,60 +490,60 @@ inline void User::clear_nickname() {
   nickname_.Clear();
 }
 inline const std::string& User::nickname(int index) const {
-  // @@protoc_insertion_point(field_get:Open.User.nickname)
+  // @@protoc_insertion_point(field_get:Open.User.Nickname)
   return nickname_.Get(index);
 }
 inline std::string* User::mutable_nickname(int index) {
-  // @@protoc_insertion_point(field_mutable:Open.User.nickname)
+  // @@protoc_insertion_point(field_mutable:Open.User.Nickname)
   return nickname_.Mutable(index);
 }
 inline void User::set_nickname(int index, const std::string& value) {
-  // @@protoc_insertion_point(field_set:Open.User.nickname)
+  // @@protoc_insertion_point(field_set:Open.User.Nickname)
   nickname_.Mutable(index)->assign(value);
 }
 inline void User::set_nickname(int index, std::string&& value) {
-  // @@protoc_insertion_point(field_set:Open.User.nickname)
+  // @@protoc_insertion_point(field_set:Open.User.Nickname)
   nickname_.Mutable(index)->assign(std::move(value));
 }
 inline void User::set_nickname(int index, const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   nickname_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:Open.User.nickname)
+  // @@protoc_insertion_point(field_set_char:Open.User.Nickname)
 }
 inline void User::set_nickname(int index, const char* value, size_t size) {
   nickname_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:Open.User.nickname)
+  // @@protoc_insertion_point(field_set_pointer:Open.User.Nickname)
 }
 inline std::string* User::add_nickname() {
-  // @@protoc_insertion_point(field_add_mutable:Open.User.nickname)
+  // @@protoc_insertion_point(field_add_mutable:Open.User.Nickname)
   return nickname_.Add();
 }
 inline void User::add_nickname(const std::string& value) {
   nickname_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:Open.User.nickname)
+  // @@protoc_insertion_point(field_add:Open.User.Nickname)
 }
 inline void User::add_nickname(std::string&& value) {
   nickname_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:Open.User.nickname)
+  // @@protoc_insertion_point(field_add:Open.User.Nickname)
 }
 inline void User::add_nickname(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   nickname_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:Open.User.nickname)
+  // @@protoc_insertion_point(field_add_char:Open.User.Nickname)
 }
 inline void User::add_nickname(const char* value, size_t size) {
   nickname_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:Open.User.nickname)
+  // @@protoc_insertion_point(field_add_pointer:Open.User.Nickname)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
 User::nickname() const {
-  // @@protoc_insertion_point(field_list:Open.User.nickname)
+  // @@protoc_insertion_point(field_list:Open.User.Nickname)
   return nickname_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
 User::mutable_nickname() {
-  // @@protoc_insertion_point(field_mutable_list:Open.User.nickname)
+  // @@protoc_insertion_point(field_mutable_list:Open.User.Nickname)
   return &nickname_;
 }
 

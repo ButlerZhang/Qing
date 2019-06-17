@@ -1,6 +1,7 @@
+#include "LinuxTools.h"
+#include "Open/protobuf/user.pb.h"
 #include <iostream>
 #include <fstream>
-#include "Open/protobuf/user.pb.h"
 
 
 
@@ -13,6 +14,10 @@ int main(int argc, char *argv[])
     LoginUser.set_authority("1001000100");
     LoginUser.add_nickname("Sky");
     LoginUser.add_nickname("Sea");
+
+    Open::MessageHeader *Header = LoginUser.mutable_header();
+    Header->set_type(Open::MessageType::MT_LOGIN);
+    Header->set_transmissionid(GetUUID());
 
     printf("Login user information:\n");
     LoginUser.PrintDebugString();

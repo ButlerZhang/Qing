@@ -88,6 +88,7 @@
     <ClCompile Include="Open\project\SingleEventBaseClient.cpp" />
     <ClCompile Include="Open\project\SingleEventBaseServer.cpp" />
     <ClCompile Include="Open\project\UDPBroadcast.cpp" />
+    <ClCompile Include="Open\protobuf\base.pb.cc" />
     <ClCompile Include="Open\protobuf\user.pb.cc" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
     <ClCompile Include="Qing\NetworkClient.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="Open\project\SingleEventBaseServer.h" />
     <ClInclude Include="Open\project\ThreadNode.h" />
     <ClInclude Include="Open\project\UDPBroadcast.h" />
+    <ClInclude Include="Open\protobuf\base.pb.h" />
     <ClInclude Include="Open\protobuf\user.pb.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
@@ -172,6 +174,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Open\protobuf\base.proto" />
+    <None Include="Open\protobuf\user.proto" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>

@@ -139,6 +139,9 @@
     <ClCompile Include="Open\protobuf\user.pb.cc">
       <Filter>Open\protobuf</Filter>
     </ClCompile>
+    <ClCompile Include="Open\protobuf\base.pb.cc">
+      <Filter>Open\protobuf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -361,10 +364,21 @@
     <ClInclude Include="Open\protobuf\user.pb.h">
       <Filter>Open\protobuf</Filter>
     </ClInclude>
+    <ClInclude Include="Open\protobuf\base.pb.h">
+      <Filter>Open\protobuf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">
       <Filter>Common\Algorithm</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Open\protobuf\user.proto">
+      <Filter>Open\protobuf</Filter>
+    </None>
+    <None Include="Open\protobuf\base.proto">
+      <Filter>Open\protobuf</Filter>
+    </None>
   </ItemGroup>
 </Project>
