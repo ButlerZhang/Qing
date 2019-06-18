@@ -4,14 +4,7 @@
 #include <string>
 #include <condition_variable>
 
-
-
-struct MessageNode
-{
-    int                     m_ClientSocket;
-    std::string             m_Message;
-    struct bufferevent     *m_bufferevent;
-};
+class SingleEventBaseServer;
 
 
 
@@ -19,10 +12,19 @@ class MessageHandler
 {
 public:
 
+    struct MessageNode
+    {
+        int                              m_ClientSocket;
+        std::string                      m_Message;
+        struct bufferevent              *m_bufferevent;
+    };
+
+public:
+
     MessageHandler();
     ~MessageHandler();
 
-    bool Start();
+    bool Start(SingleEventBaseServer *SingleServer);
     bool Stop();
 
     bool PushMessage(int ClientSocket, bufferevent *bev, const std::string &Message);
@@ -33,8 +35,9 @@ private:
 
 private:
 
-    bool                            m_IsWork;
-    std::mutex                      m_QueueLock;
-    std::condition_variable         m_Condition;
-    std::queue<MessageNode>         m_MessageQueue;
+    bool                                 m_IsWork;
+    std::mutex                           m_QueueLock;
+    std::condition_variable              m_Condition;
+    std::queue<MessageNode>              m_MessageQueue;
+    SingleEventBaseServer               *m_SingleServer;
 };

@@ -8,9 +8,9 @@ package Open;
 import "base.proto";
 
 //1.message等同于C++中struct，user为类名。enum表示枚举值。
-//2.required表示必要字段。
-//3.optional表示可选字段。
-//4.repeated表示重复字段，相当于数组。
+//2.required表示必要字段。proto3没有这个字段了。
+//3.optional表示可选字段。proto3将optional改名为singular。
+//4.repeated表示重复字段，相当于数组。不是singular就是repeated。
 //5.字段名后面的标签数字表示不同的字段在序列化后的二进制数据中的布局位置。标签数字最好小于等于15，避免增加空间开销。
 
 message User

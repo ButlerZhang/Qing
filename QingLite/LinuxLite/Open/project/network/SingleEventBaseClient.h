@@ -10,13 +10,21 @@ class SingleEventBaseClient
 public:
 
     SingleEventBaseClient();
-    ~SingleEventBaseClient();
+    virtual ~SingleEventBaseClient();
 
-    bool Start(const std::string &ServerIP, int Port);
-    bool Start(int UDPBroadcastPort);
-    bool Stop();
+    virtual bool Start(const std::string &ServerIP, int Port);
+    virtual bool Start(int UDPBroadcastPort);
+    virtual bool Stop();
 
     inline bool IsConnected() const { return m_IsConnected; }
+
+protected:
+
+    virtual bool Send(const void *Data, size_t Size);
+
+    virtual bool ProcessConnected() { return false; }
+    virtual bool ProcessDisconnected() { return false; }
+    virtual bool ProcessMessage(void *Data, size_t Size) { return false; }
 
 private:
 

@@ -1,4 +1,6 @@
 #include "MessageHandler.h"
+#include "SingleEventBaseServer.h"
+
 #include <thread>
 #include <unistd.h>
 #include <sstream>
@@ -9,22 +11,30 @@
 MessageHandler::MessageHandler()
 {
     m_IsWork = false;
+    m_SingleServer = NULL;
 }
 
 MessageHandler::~MessageHandler()
 {
     m_IsWork = false;
+    m_SingleServer = NULL;
     while (!m_MessageQueue.empty())
     {
         m_MessageQueue.pop();
     }
 }
 
-bool MessageHandler::Start()
+bool MessageHandler::Start(SingleEventBaseServer *SingleServer)
 {
+    if (SingleServer == NULL)
+    {
+        return false;
+    }
+
     if (!m_IsWork)
     {
         m_IsWork = true;
+        m_SingleServer = SingleServer;
 
         std::thread Worker(WorkThread_Process, this);
         Worker.detach();
@@ -36,6 +46,7 @@ bool MessageHandler::Start()
 bool MessageHandler::Stop()
 {
     m_IsWork = false;
+    m_SingleServer = NULL;
     return true;
 }
 
@@ -76,24 +87,10 @@ void MessageHandler::WorkThread_Process(void *Object)
         {
             std::unique_lock<std::mutex> Locker(Handler->m_QueueLock);
 
-            const MessageNode &Node = Handler->m_MessageQueue.front();
-
             //my work is sleep.
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            //std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-            std::string ACK("Client=");
-            ACK += std::to_string(Node.m_ClientSocket);
-            ACK += std::string(", ACK=") + Node.m_Message;
-
-            if (bufferevent_write(Node.m_bufferevent, ACK.c_str(), ACK.length()) != 0)
-            {
-                printf("Send failed, %s\n", ACK.c_str());
-            }
-            else
-            {
-                printf("%s\n", ACK.c_str());
-            }
-
+            Handler->m_SingleServer->ProcessMessage(Handler->m_MessageQueue.front());
             Handler->m_MessageQueue.pop();
         }
     }

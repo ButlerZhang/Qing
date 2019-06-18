@@ -13,11 +13,18 @@ class SingleEventBaseServer
 public:
 
     SingleEventBaseServer();
-    ~SingleEventBaseServer();
+    virtual ~SingleEventBaseServer();
 
-    bool Initialize(const std::string &IP, int Port);
-    bool Start();
-    bool Stop();
+    virtual bool Start(const std::string &IP, int Port);
+    virtual bool Stop();
+
+    virtual bool ProcessConnected() { return false; }
+    virtual bool ProcessDisconnected() { return false; }
+    virtual bool ProcessMessage(const MessageHandler::MessageNode &Message);
+
+protected:
+
+    bool CreateListener(const std::string &IP, int Port);
 
 private:
 

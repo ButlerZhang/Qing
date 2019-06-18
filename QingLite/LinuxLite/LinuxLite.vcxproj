@@ -81,14 +81,16 @@
     <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Open\project\message\project.pb.cc" />
-    <ClCompile Include="Open\project\network\HTTPServer.cpp" />
-    <ClCompile Include="Open\project\network\MessageHandler.cpp" />
-    <ClCompile Include="Open\project\network\MultiEventBaseServer.cpp" />
-    <ClCompile Include="Open\project\network\SignalEventMap.cpp" />
-    <ClCompile Include="Open\project\network\SingleEventBaseClient.cpp" />
-    <ClCompile Include="Open\project\network\SingleEventBaseServer.cpp" />
-    <ClCompile Include="Open\project\network\UDPBroadcast.cpp" />
+    <ClCompile Include="Open\project\Client.cpp" />
+    <ClCompile Include="Open\project\Message\project.pb.cc" />
+    <ClCompile Include="Open\project\Network\HTTPServer.cpp" />
+    <ClCompile Include="Open\project\Network\MessageHandler.cpp" />
+    <ClCompile Include="Open\project\Network\MultiEventBaseServer.cpp" />
+    <ClCompile Include="Open\project\Network\SignalEventMap.cpp" />
+    <ClCompile Include="Open\project\Network\SingleEventBaseClient.cpp" />
+    <ClCompile Include="Open\project\Network\SingleEventBaseServer.cpp" />
+    <ClCompile Include="Open\project\Network\UDPBroadcast.cpp" />
+    <ClCompile Include="Open\project\SingleServer.cpp" />
     <ClCompile Include="Open\protobuf\base.pb.cc" />
     <ClCompile Include="Open\protobuf\user.pb.cc" />
     <ClCompile Include="Qing\NetworkBase.cpp" />
@@ -136,16 +138,19 @@
     <ClInclude Include="Open\openssl\demo_RSA.h" />
     <ClInclude Include="Open\openssl\demo_SHA256.h" />
     <ClInclude Include="Open\openssl\demo_test.h" />
-    <ClInclude Include="Open\project\message\project.pb.h" />
-    <ClInclude Include="Open\project\network\HTTPServer.h" />
-    <ClInclude Include="Open\project\network\MessageHandler.h" />
-    <ClInclude Include="Open\project\network\MultiEventBaseServer.h" />
-    <ClInclude Include="Open\project\network\SignalEventMap.h" />
-    <ClInclude Include="Open\project\network\SingleEventBaseClient.h" />
-    <ClInclude Include="Open\project\network\SingleEventBaseServer.h" />
-    <ClInclude Include="Open\project\network\ThreadNode.h" />
-    <ClInclude Include="Open\project\network\UDPBroadcast.h" />
+    <ClInclude Include="Open\project\Client.h" />
+    <ClInclude Include="Open\project\Message\project.pb.h" />
+    <ClInclude Include="Open\project\Network\HTTPServer.h" />
+    <ClInclude Include="Open\project\Network\MessageHandler.h" />
+    <ClInclude Include="Open\project\Network\MultiEventBaseServer.h" />
+    <ClInclude Include="Open\project\Network\SignalEventMap.h" />
+    <ClInclude Include="Open\project\Network\SingleEventBaseClient.h" />
+    <ClInclude Include="Open\project\Network\SingleEventBaseServer.h" />
+    <ClInclude Include="Open\project\Network\ThreadNode.h" />
+    <ClInclude Include="Open\project\Network\UDPBroadcast.h" />
+    <ClInclude Include="Open\project\SingleServer.h" />
     <ClInclude Include="Open\protobuf\base.pb.h" />
+    <ClInclude Include="Open\protobuf\ProtobufDemo.h" />
     <ClInclude Include="Open\protobuf\user.pb.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
@@ -178,7 +183,7 @@
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Open\project\message\project.proto" />
+    <None Include="Open\project\Message\project.proto" />
     <None Include="Open\protobuf\base.proto" />
     <None Include="Open\protobuf\user.proto" />
   </ItemGroup>

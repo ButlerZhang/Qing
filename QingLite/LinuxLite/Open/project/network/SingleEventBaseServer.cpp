@@ -11,9 +11,9 @@
 
 SingleEventBaseServer::SingleEventBaseServer()
 {
-    m_EventBase = NULL;
     m_Listener = NULL;
     m_ListenPort = 0;
+    m_EventBase = event_base_new();
 }
 
 SingleEventBaseServer::~SingleEventBaseServer()
@@ -24,19 +24,79 @@ SingleEventBaseServer::~SingleEventBaseServer()
     event_base_free(m_EventBase);
 }
 
-bool SingleEventBaseServer::Initialize(const std::string &IP, int Port)
+bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 {
-    if (m_EventBase != NULL && m_Listener != NULL)
+    if (!CreateListener(IP, Port))
     {
-        printf("ERROR: Re-create event base.\n");
-        return true;
+        return false;
     }
 
-    m_EventBase = event_base_new();
+    if (!m_UDPBroadcast.BindBaseEvent(m_EventBase))
+    {
+        printf("ERROR: UDP braodcast bind event base failed.\n");
+        return false;
+    }
+
+    if (!m_HTTPServer.BindBaseEvent(m_EventBase))
+    {
+        printf("ERROR: HTTP server bind event base failed.\n");
+        return false;
+    }
+
+    if (!m_HTTPServer.Start(m_ListenIP, m_ListenPort + 1))
+    {
+        printf("ERROR: http server start failed.\n");
+        return false;
+    }
+
+    if (!m_MessageHandler.Start(this))
+    {
+        printf("ERROR: Message handler start failed.\n");
+        return false;
+    }
+
+    m_UDPBroadcast.StartTimer(m_ListenIP, 10, m_ListenPort);
+
+    printf("Server start dispatch...\n");
+    event_base_dispatch(m_EventBase);
+    return true;
+}
+
+bool SingleEventBaseServer::Stop()
+{
+    return event_base_loopbreak(m_EventBase) == 0;
+}
+
+bool SingleEventBaseServer::ProcessMessage(const MessageHandler::MessageNode &Message)
+{
+    std::string ACK("Client=");
+    ACK += std::to_string(Message.m_ClientSocket);
+    ACK += std::string(", ACK=") + Message.m_Message;
+
+    if (bufferevent_write(Message.m_bufferevent, ACK.c_str(), ACK.length()) != 0)
+    {
+        printf("Send failed, %s\n", ACK.c_str());
+        return false;
+    }
+    else
+    {
+        printf("%s\n", ACK.c_str());
+        return true;
+    }
+}
+
+bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
+{
     if (m_EventBase == NULL)
     {
         printf("ERROR: Create event base error.\n");
         return false;
+    }
+
+    if (m_Listener != NULL)
+    {
+        printf("ERROR: Re-create event base.\n");
+        return true;
     }
 
     sockaddr_in BindAddress;
@@ -72,44 +132,6 @@ bool SingleEventBaseServer::Initialize(const std::string &IP, int Port)
     m_ListenIP = IP;
     m_ListenPort = Port;
     return true;
-}
-
-bool SingleEventBaseServer::Start()
-{
-    if (!m_UDPBroadcast.BindBaseEvent(m_EventBase))
-    {
-        printf("ERROR: UDP braodcast bind event base failed.\n");
-        return false;
-    }
-
-    if (!m_HTTPServer.BindBaseEvent(m_EventBase))
-    {
-        printf("ERROR: HTTP server bind event base failed.\n");
-        return false;
-    }
-
-    if (!m_HTTPServer.Start(m_ListenIP, m_ListenPort + 1))
-    {
-        printf("ERROR: http server start failed.\n");
-        return false;
-    }
-
-    if (!m_MessageHandler.Start())
-    {
-        printf("ERROR: Message handler start failed.\n");
-        return false;
-    }
-
-    m_UDPBroadcast.StartTimer(m_ListenIP, 10, m_ListenPort);
-
-    printf("Server start dispatch...\n");
-    event_base_dispatch(m_EventBase);
-    return true;
-}
-
-bool SingleEventBaseServer::Stop()
-{
-    return event_base_loopbreak(m_EventBase) == 0;
 }
 
 void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)

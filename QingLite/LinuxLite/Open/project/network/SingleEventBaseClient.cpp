@@ -116,6 +116,23 @@ bool SingleEventBaseClient::Stop()
     return false;
 }
 
+bool SingleEventBaseClient::Send(const void * Data, size_t Size)
+{
+    if (!m_IsConnected || m_DataBufferevent == NULL)
+    {
+        return false;
+    }
+
+    if (bufferevent_write(m_DataBufferevent, Data, Size) != 0)
+    {
+        printf("Send failed.\n");
+        return false;
+    }
+
+    printf("Send succeed.\n");
+    return true;
+}
+
 bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
 {
     if (m_IsConnected)
@@ -504,6 +521,8 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
                 close(Client->m_UDPSocket);
             }
         }
+
+        Client->ProcessConnected();
     }
     else if(Events & BEV_EVENT_ERROR)
     {
@@ -523,6 +542,8 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
             bufferevent_free(Client->m_DataBufferevent);
             Client->m_DataBufferevent = NULL;
         }
+
+        Client->ProcessDisconnected();
     }
 }
 
@@ -535,4 +556,7 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *User
     ServerMessage[RecvSize] = '\0';
 
     printf("Recv = %s, size = %d\n", ServerMessage, RecvSize);
+
+    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
+    Client->ProcessMessage(ServerMessage, RecvSize);
 }
