@@ -1,0 +1,32 @@
+// project.proto
+// protoc -I=./ --cpp_out=./ ./project.proto
+
+syntax = "proto3";
+
+package Project;
+
+
+
+enum MessageType
+{
+    MT_UNKNOW                         = 0;
+
+    MT_LOGIN                          = 1000;
+    MT_LOGOUT                         = 1001;
+}
+
+message MessageHeader
+{
+    MessageType Type = 1;
+    string TransmissionID = 2;
+}
+
+message User
+{
+    MessageHeader header = 1;
+    int32 ID = 2;
+    string Name = 3;
+    string Password = 4;
+    string Authority = 5;
+    repeated string Nickname = 6;
+}

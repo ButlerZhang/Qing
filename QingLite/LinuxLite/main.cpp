@@ -1,5 +1,5 @@
 #include "LinuxTools.h"
-#include "Open/protobuf/user.pb.h"
+#include "Open/project/message/project.pb.h"
 #include "Open/project/network/MultiEventBaseServer.h"
 #include "Open/project/network/SingleEventBaseClient.h"
 
@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-    Open::User LoginUser;
+    Project::User LoginUser;
     LoginUser.set_id(1000);
     LoginUser.set_name("Butler");
     LoginUser.set_password("1234567890");
@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     LoginUser.add_nickname("Sky");
     LoginUser.add_nickname("Sea");
 
-    Open::MessageHeader *Header = LoginUser.mutable_header();
-    Header->set_type(Open::MessageType::MT_LOGIN);
+    Project::MessageHeader *Header = LoginUser.mutable_header();
+    Header->set_type(Project::MessageType::MT_LOGIN);
     Header->set_transmissionid(GetUUID());
 
     printf("Login user information:\n");
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     fout.close();
 
-    Open::User CheckUser;
+    Project::User CheckUser;
     std::ifstream fin("test.txt");
 
     if (!CheckUser.ParseFromIstream(&fin))

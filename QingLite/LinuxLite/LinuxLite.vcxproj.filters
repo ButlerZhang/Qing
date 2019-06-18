@@ -148,6 +148,9 @@
     <ClCompile Include="Open\project\network\UDPBroadcast.cpp">
       <Filter>Open\project\network</Filter>
     </ClCompile>
+    <ClCompile Include="Open\project\message\project.pb.cc">
+      <Filter>Open\project\message</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\SystemExample.h">
@@ -373,6 +376,9 @@
     <ClInclude Include="Open\project\network\UDPBroadcast.h">
       <Filter>Open\project\network</Filter>
     </ClInclude>
+    <ClInclude Include="Open\project\message\project.pb.h">
+      <Filter>Open\project\message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">
@@ -385,6 +391,9 @@
     </None>
     <None Include="Open\protobuf\base.proto">
       <Filter>Open\protobuf</Filter>
+    </None>
+    <None Include="Open\project\message\project.proto">
+      <Filter>Open\project\message</Filter>
     </None>
   </ItemGroup>
 </Project>

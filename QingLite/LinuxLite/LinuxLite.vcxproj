@@ -81,6 +81,7 @@
     <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Open\project\message\project.pb.cc" />
     <ClCompile Include="Open\project\network\HTTPServer.cpp" />
     <ClCompile Include="Open\project\network\MessageHandler.cpp" />
     <ClCompile Include="Open\project\network\MultiEventBaseServer.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="Open\openssl\demo_RSA.h" />
     <ClInclude Include="Open\openssl\demo_SHA256.h" />
     <ClInclude Include="Open\openssl\demo_test.h" />
+    <ClInclude Include="Open\project\message\project.pb.h" />
     <ClInclude Include="Open\project\network\HTTPServer.h" />
     <ClInclude Include="Open\project\network\MessageHandler.h" />
     <ClInclude Include="Open\project\network\MultiEventBaseServer.h" />
@@ -176,6 +178,7 @@
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Open\project\message\project.proto" />
     <None Include="Open\protobuf\base.proto" />
     <None Include="Open\protobuf\user.proto" />
   </ItemGroup>
