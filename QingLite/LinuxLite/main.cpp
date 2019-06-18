@@ -1,5 +1,8 @@
 #include "LinuxTools.h"
 #include "Open/protobuf/user.pb.h"
+#include "Open/project/network/MultiEventBaseServer.h"
+#include "Open/project/network/SingleEventBaseClient.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -45,24 +48,22 @@ int main(int argc, char *argv[])
     printf("\nCheck user information:\n");
     CheckUser.PrintDebugString();
 
+    const char *ServerIP = "192.168.3.126";
+    const int ServerPort = 12345;
+
+    //libevent
+    if (atoi(argv[1]) == 0)
+    {
+        MultiEventBaseServer Server;
+        Server.Start(ServerIP, ServerPort, 2);
+    }
+    else
+    {
+        SingleEventBaseClient Client;
+        //Client.Start(ServerPort);
+        Client.Start(ServerIP, ServerPort);
+    }
+
+    std::cout << std::endl;
     return 0;
-
-    //const char *ServerIP = "192.168.3.126";
-    //const int ServerPort = 12345;
-
-    ////libevent
-    //if (atoi(argv[1]) == 0)
-    //{
-    //    //MultiEventBaseServer Server;
-    //    //Server.Start(ServerIP, ServerPort, 2);
-    //}
-    //else
-    //{
-    //    //SingleEventBaseClient Client;
-    //    //Client.Start(ServerPort);
-    //    //Client.Start(ServerIP, ServerPort);
-    //}
-
-    //std::cout << std::endl;
-    //return 0;
 }

@@ -58,6 +58,12 @@
     <Filter Include="Open\protobuf">
       <UniqueIdentifier>{207b1f2f-6c84-44c7-9e49-bc66d9bb30f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\project\message">
+      <UniqueIdentifier>{bf3e4310-e1d5-44e8-85f6-e0ef984a3bbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\project\network">
+      <UniqueIdentifier>{a0fc19f9-011e-48de-99c5-bb77d1fc77ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UNIX\SystemExample.cpp">
@@ -115,32 +121,32 @@
     <ClCompile Include="Qing\NetworkServer.cpp">
       <Filter>Qing</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\HTTPServer.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\MessageHandler.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\UDPBroadcast.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\MultiEventBaseServer.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\SingleEventBaseClient.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\SingleEventBaseServer.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\project\SignalEventMap.cpp">
-      <Filter>Open\project</Filter>
-    </ClCompile>
     <ClCompile Include="Open\protobuf\user.pb.cc">
       <Filter>Open\protobuf</Filter>
     </ClCompile>
     <ClCompile Include="Open\protobuf\base.pb.cc">
       <Filter>Open\protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\network\HTTPServer.cpp">
+      <Filter>Open\project\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\network\MessageHandler.cpp">
+      <Filter>Open\project\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\network\MultiEventBaseServer.cpp">
+      <Filter>Open\project\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\network\SignalEventMap.cpp">
+      <Filter>Open\project\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\network\SingleEventBaseClient.cpp">
+      <Filter>Open\project\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\network\SingleEventBaseServer.cpp">
+      <Filter>Open\project\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\network\UDPBroadcast.cpp">
+      <Filter>Open\project\network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,35 +343,35 @@
     <ClInclude Include="Open\openssl\demo_AES.h">
       <Filter>Open\openssl</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\HTTPServer.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\MessageHandler.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\ThreadNode.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\UDPBroadcast.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\MultiEventBaseServer.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleEventBaseClient.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleEventBaseServer.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SignalEventMap.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
     <ClInclude Include="Open\protobuf\user.pb.h">
       <Filter>Open\protobuf</Filter>
     </ClInclude>
     <ClInclude Include="Open\protobuf\base.pb.h">
       <Filter>Open\protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\HTTPServer.h">
+      <Filter>Open\project\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\MessageHandler.h">
+      <Filter>Open\project\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\MultiEventBaseServer.h">
+      <Filter>Open\project\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\SignalEventMap.h">
+      <Filter>Open\project\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\SingleEventBaseClient.h">
+      <Filter>Open\project\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\SingleEventBaseServer.h">
+      <Filter>Open\project\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\ThreadNode.h">
+      <Filter>Open\project\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\network\UDPBroadcast.h">
+      <Filter>Open\project\network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
