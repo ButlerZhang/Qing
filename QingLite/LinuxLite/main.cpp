@@ -1,3 +1,5 @@
+#include "UNIX/unix_main.h"
+
 #include "Open/project/Client.h"
 #include "Open/project/SingleServer.h"
 #include <iostream>
@@ -6,6 +8,9 @@
 
 int main(int argc, char *argv[])
 {
+    return unix_chapter1_main(argc, argv);
+
+
     const char *ServerIP = "192.168.3.126";
     const int ServerPort = 12345;
 

@@ -3,10 +3,10 @@
 
 
 
-#define BUFFSIZE 4096
-
 void copy_stdin_stdout_nobuffer(void)
 {
+#define BUFFSIZE 4096
+
     long int     n;
     char         buf[BUFFSIZE];
 

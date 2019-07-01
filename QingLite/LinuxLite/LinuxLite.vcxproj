@@ -96,7 +96,6 @@
     <ClCompile Include="Qing\NetworkBase.cpp" />
     <ClCompile Include="Qing\NetworkClient.cpp" />
     <ClCompile Include="Qing\NetworkServer.cpp" />
-    <ClCompile Include="UNIX\SystemExample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h" />
@@ -157,8 +156,10 @@
     <ClInclude Include="Qing\NetworkServer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell.h" />
     <ClInclude Include="UNIX\Chapter1\list_file_name.h" />
-    <ClInclude Include="UNIX\SystemExample.h" />
+    <ClInclude Include="UNIX\Chapter1\display_process_information.h" />
+    <ClInclude Include="UNIX\unix_main.h" />
     <ClInclude Include="YouShuang\api_note.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />
     <ClInclude Include="YouShuang\Chapter5\backlog_test.h" />

@@ -66,9 +66,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="UNIX\SystemExample.cpp">
-      <Filter>UNIX</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp">
       <Filter>Common\Algorithm</Filter>
@@ -159,9 +156,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="UNIX\SystemExample.h">
-      <Filter>UNIX</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h">
       <Filter>Common\Algorithm</Filter>
     </ClInclude>
@@ -393,6 +387,15 @@
     </ClInclude>
     <ClInclude Include="Open\project\SingleServer.h">
       <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\display_process_information.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\unix_main.h">
+      <Filter>UNIX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
