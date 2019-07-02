@@ -2,7 +2,7 @@
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/message.h>
 
-//#include <zlib.h>
+#include <zlib.h>
 #include <string>
 #include <stdint.h>
 #include <arpa/inet.h>  // htonl, ntohl
@@ -40,10 +40,9 @@ inline std::string EncodeMessage(const google::protobuf::Message &ProtobufMessag
     printf("Encode: Protobuf size = %d\n", ProtobufDataString.size());
 
     //计算除了总长度外其余数据的CRC32值
-    //const char *CheckBegin = EncodeString.c_str() + INTSize;
-    //unsigned int CheckCharCount = static_cast<unsigned int>(EncodeString.size() - INTSize);
-    //int CRC32 = static_cast<int>(crc32(1, reinterpret_cast<const Bytef*>(CheckBegin), CheckCharCount));
-    int CRC32 = 12345;
+    const char *CheckBegin = EncodeString.c_str() + INTSize;
+    unsigned int CheckCharCount = static_cast<unsigned int>(EncodeString.size() - INTSize);
+    int CRC32 = static_cast<int>(crc32(1, reinterpret_cast<const Bytef*>(CheckBegin), CheckCharCount));
     int CRC32HostToNetwork = ::htonl(CRC32);
     EncodeString.append(reinterpret_cast<char*>(&CRC32HostToNetwork), INTSize);
     printf("Encode: crc32 = %d\n", CRC32);
@@ -100,8 +99,7 @@ inline google::protobuf::Message* DecodeMessage(const std::string &EncodeBuffer)
 
     //校验CRC32值
     int EpectedCheckSum = ConvertToINT(EncodeBuffer.c_str() + (EncodeBuffer.size() - INTSize));
-    //int CurrentCheckSum = static_cast<int>(crc32(1, reinterpret_cast<const Bytef*>(EncodeBuffer.c_str()), EncodeBufferLength - INTSize));
-    int CurrentCheckSum = 12345;
+    int CurrentCheckSum = static_cast<int>(crc32(1, reinterpret_cast<const Bytef*>(EncodeBuffer.c_str() + INTSize), EncodeBufferLength - INTSize * 2));
     printf("Decode: check sum, epected = %d, current = %d\n", EpectedCheckSum, CurrentCheckSum);
     if (CurrentCheckSum != EpectedCheckSum)
     {

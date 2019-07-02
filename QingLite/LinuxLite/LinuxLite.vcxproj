@@ -63,7 +63,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>a</TargetName>
-    <LibraryPath>/usr/local/lib/;usr/lib/;$(LibraryPath)</LibraryPath>
+    <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp" />
@@ -191,7 +191,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;%(LibraryDependencies)</LibraryDependencies>
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
