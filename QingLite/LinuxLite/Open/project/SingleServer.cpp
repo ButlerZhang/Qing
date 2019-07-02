@@ -1,5 +1,6 @@
 #include "SingleServer.h"
 #include "Message/project.pb.h"
+#include "Message/CodedMessage.h"
 
 
 
@@ -23,15 +24,13 @@ bool SingleServer::ProcessDisconnected()
 
 bool SingleServer::ProcessMessage(const MessageHandler::MessageNode &Message)
 {
-    Project::User CheckUser;
-    if(!CheckUser.ParseFromString(Message.m_Message))
+    google::protobuf::Message* ProtoMessage = DecodeMessage(Message.m_Message);
+    if (ProtoMessage != NULL)
     {
-        printf("ERROR: parse from istream failed.\n");
-        return false;
+        ProtoMessage->PrintDebugString();
+        delete ProtoMessage;
+        return true;
     }
 
-    printf("\nCheck user information:\n");
-    CheckUser.PrintDebugString();
-    printf("\nType=%d\n", CheckUser.mutable_header()->type());
-    return true;
+    return false;
 }

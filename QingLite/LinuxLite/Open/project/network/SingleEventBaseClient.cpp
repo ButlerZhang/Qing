@@ -301,6 +301,7 @@ bool SingleEventBaseClient::AddTimerReConnectServer()
 
 bool SingleEventBaseClient::AddTimerSendDataRandomly()
 {
+    return true;
     if (m_SendDataRandomlyTimer != NULL)
     {
         printf("ERROR: Re-create send data randomly event.\n");

@@ -1,6 +1,7 @@
 #include "Client.h"
 #include "../../LinuxTools.h"
 #include "Message/project.pb.h"
+#include "Message/CodedMessage.h"
 
 
 
@@ -30,7 +31,7 @@ bool Client::ProcessConnected()
     LoginMessage.PrintDebugString();
     printf("\n");
 
-    const std::string &DataString = LoginMessage.SerializeAsString();
+    const std::string &DataString = EncodeMessage(LoginMessage);
     return Send((void*)DataString.c_str(), DataString.size());
 }
 

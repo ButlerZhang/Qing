@@ -190,13 +190,13 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
     memset(ClientMessage, 0, sizeof(ClientMessage));
 
     size_t RecvSize = bufferevent_read(bev, ClientMessage, sizeof(ClientMessage));
-    ClientMessage[RecvSize] = '\0';
+    std::string MessageString(ClientMessage, ClientMessage + RecvSize);
 
     int ClientSocket = bufferevent_getfd(bev);
-    printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, ClientMessage);
+    printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, MessageString.c_str());
 
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-    Server->m_MessageHandler.PushMessage(ClientSocket, bev, ClientMessage);
+    Server->m_MessageHandler.PushMessage(ClientSocket, bev, MessageString);
 }
 
 void SingleEventBaseServer::CallBack_Send(bufferevent * bev, void * UserData)

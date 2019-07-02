@@ -138,6 +138,7 @@
     <ClInclude Include="Open\openssl\demo_SHA256.h" />
     <ClInclude Include="Open\openssl\demo_test.h" />
     <ClInclude Include="Open\project\Client.h" />
+    <ClInclude Include="Open\project\Message\CodedMessage.h" />
     <ClInclude Include="Open\project\Message\project.pb.h" />
     <ClInclude Include="Open\project\Network\HTTPServer.h" />
     <ClInclude Include="Open\project\Network\MessageHandler.h" />

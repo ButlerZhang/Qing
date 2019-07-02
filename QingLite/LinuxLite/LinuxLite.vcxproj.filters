@@ -397,6 +397,9 @@
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>UNIX</Filter>
     </ClInclude>
+    <ClInclude Include="Open\project\Message\CodedMessage.h">
+      <Filter>Open\project\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">

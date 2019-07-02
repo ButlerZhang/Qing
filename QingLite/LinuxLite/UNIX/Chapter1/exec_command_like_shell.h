@@ -25,7 +25,7 @@ void exec_command_like_shell(void)
 
         //fork创建一个新进程，返回两次
         pid_t pid;
-        if (pid = fork() < 0) {
+        if ((pid = fork()) < 0) {
             printf("fork error\n");
             continue;
         }
@@ -41,7 +41,7 @@ void exec_command_like_shell(void)
         //parent
         //父进程希望等待子进程终止，status可以判断子进程是如何终止的
         int status = 0;
-        if ((pid == waitpid(pid, &status, 0)) < 0) {
+        if ((pid = waitpid(pid, &status, 0)) < 0) {
             printf("waitpid error\n");
         }
 
