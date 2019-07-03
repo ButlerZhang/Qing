@@ -554,10 +554,10 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *User
     memset(ServerMessage, 0, sizeof(ServerMessage));
 
     size_t RecvSize = bufferevent_read(bev, ServerMessage, sizeof(ServerMessage));
-    ServerMessage[RecvSize] = '\0';
+    std::string MessageString(ServerMessage, ServerMessage + RecvSize);
 
     printf("Recv = %s, size = %d\n", ServerMessage, RecvSize);
 
     SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-    Client->ProcessMessage(ServerMessage, RecvSize);
+    Client->ProcessMessage(MessageString);
 }

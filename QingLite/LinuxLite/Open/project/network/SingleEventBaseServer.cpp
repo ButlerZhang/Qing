@@ -67,7 +67,7 @@ bool SingleEventBaseServer::Stop()
     return event_base_loopbreak(m_EventBase) == 0;
 }
 
-bool SingleEventBaseServer::ProcessMessage(const MessageHandler::MessageNode &Message)
+bool SingleEventBaseServer::ProcessMessage(MessageHandler::MessageNode &Message)
 {
     std::string ACK("Client=");
     ACK += std::to_string(Message.m_ClientSocket);

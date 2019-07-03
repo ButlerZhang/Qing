@@ -15,24 +15,7 @@ Client::~Client()
 
 bool Client::ProcessConnected()
 {
-    Project::User LoginMessage;
-    LoginMessage.set_id(1000);
-    LoginMessage.set_name("Butler");
-    LoginMessage.set_password("1234567890");
-    LoginMessage.set_authority("1001000100");
-    LoginMessage.add_nickname("Sky");
-    LoginMessage.add_nickname("Sea");
-
-    Project::MessageHeader *Header = LoginMessage.mutable_header();
-    Header->set_type(Project::MessageType::MT_LOGOUT);
-    Header->set_transmissionid(GetUUID());
-
-    printf("Login user information:\n");
-    LoginMessage.PrintDebugString();
-    printf("\n");
-
-    const std::string &DataString = EncodeMessage(LoginMessage);
-    return Send((void*)DataString.c_str(), DataString.size());
+    return SendLogin();
 }
 
 bool Client::ProcessDisconnected()
@@ -41,7 +24,62 @@ bool Client::ProcessDisconnected()
     return false;
 }
 
-bool Client::ProcessMessage(void * Data, size_t Size)
+bool Client::ProcessMessage(std::string &MessageString)
 {
-    return false;
+    int MessageType = DecodeMessage(MessageString);
+    switch (MessageType)
+    {
+    case Project::MessageType::MT_LOGIN_RESPONSE:   return ProcessLoginResponse(MessageString);
+    default:                                        return false;
+    }
+}
+
+bool Client::ProcessLoginResponse(std::string &MessageString)
+{
+    Project::UserLogin LoginResponse;
+    if (!LoginResponse.ParseFromString(MessageString))
+    {
+        return false;
+    }
+
+    LoginResponse.PrintDebugString();
+    return true;
+}
+
+bool Client::SendMessage(int MessageType, const google::protobuf::Message & message)
+{
+    const std::string &DataString = EncodeMessage(message, MessageType);
+    return Send((void*)DataString.c_str(), DataString.size());
+}
+
+bool Client::SendLogin()
+{
+    Project::UserLogin Login;
+    Login.set_id(1000);
+    Login.set_name("Butler");
+    Login.set_password("1234567890");
+    Login.set_authority("1001000100");
+    Login.add_nickname("Sky");
+    Login.add_nickname("Sea");
+
+    Project::MessageHeader *Header = Login.mutable_header();
+    Header->set_type(Project::MessageType::MT_LOGIN);
+    Header->set_transmissionid(GetUUID());
+
+    Login.PrintDebugString();
+    return SendMessage(Header->type(), Login);
+}
+
+bool Client::SendLogout()
+{
+    Project::UserLogout Logout;
+    Logout.set_id(1000);
+    Logout.set_name("Butler");
+
+    Project::MessageHeader *Header = Logout.mutable_header();
+    Header->set_type(Project::MessageType::MT_LOGOUT);
+    Header->set_transmissionid(GetUUID());
+
+    Logout.PrintDebugString();
+    return SendMessage(Header->type(), Logout);
 }

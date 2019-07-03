@@ -12,5 +12,10 @@ public:
 
     virtual bool ProcessConnected();
     virtual bool ProcessDisconnected();
-    virtual bool ProcessMessage(const MessageHandler::MessageNode &Message);
+    virtual bool ProcessMessage(MessageHandler::MessageNode &Message);
+
+private:
+
+    bool ProcessLogin(MessageHandler::MessageNode &Message);
+    bool ProcessLogout(MessageHandler::MessageNode &Message);
 };

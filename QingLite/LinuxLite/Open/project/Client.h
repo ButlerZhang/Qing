@@ -1,5 +1,6 @@
 #pragma once
 #include "Network/SingleEventBaseClient.h"
+#include <google/protobuf/message.h>
 
 
 
@@ -12,5 +13,14 @@ public:
 
     virtual bool ProcessConnected();
     virtual bool ProcessDisconnected();
-    virtual bool ProcessMessage(void *Data, size_t Size);
+    virtual bool ProcessMessage(std::string &MessageString);
+
+private:
+
+    bool ProcessLoginResponse(std::string &MessageString);
+
+    bool SendMessage(int MessageType, const google::protobuf::Message &message);
+
+    bool SendLogin();
+    bool SendLogout();
 };

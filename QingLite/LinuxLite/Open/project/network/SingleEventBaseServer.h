@@ -20,7 +20,7 @@ public:
 
     virtual bool ProcessConnected() { return false; }
     virtual bool ProcessDisconnected() { return false; }
-    virtual bool ProcessMessage(const MessageHandler::MessageNode &Message);
+    virtual bool ProcessMessage(MessageHandler::MessageNode &Message);
 
 protected:
 

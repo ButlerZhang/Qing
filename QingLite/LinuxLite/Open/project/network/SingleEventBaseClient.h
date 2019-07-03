@@ -24,7 +24,7 @@ protected:
 
     virtual bool ProcessConnected() { return false; }
     virtual bool ProcessDisconnected() { return false; }
-    virtual bool ProcessMessage(void *Data, size_t Size) { return false; }
+    virtual bool ProcessMessage(std::string &MessageString) { return false; }
 
 private:
 

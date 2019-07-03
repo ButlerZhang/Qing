@@ -48,7 +48,7 @@ struct TableStruct_project_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -59,26 +59,32 @@ namespace Project {
 class MessageHeader;
 class MessageHeaderDefaultTypeInternal;
 extern MessageHeaderDefaultTypeInternal _MessageHeader_default_instance_;
-class User;
-class UserDefaultTypeInternal;
-extern UserDefaultTypeInternal _User_default_instance_;
+class UserLogin;
+class UserLoginDefaultTypeInternal;
+extern UserLoginDefaultTypeInternal _UserLogin_default_instance_;
+class UserLogout;
+class UserLogoutDefaultTypeInternal;
+extern UserLogoutDefaultTypeInternal _UserLogout_default_instance_;
 }  // namespace Project
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Project::MessageHeader* Arena::CreateMaybeMessage<::Project::MessageHeader>(Arena*);
-template<> ::Project::User* Arena::CreateMaybeMessage<::Project::User>(Arena*);
+template<> ::Project::UserLogin* Arena::CreateMaybeMessage<::Project::UserLogin>(Arena*);
+template<> ::Project::UserLogout* Arena::CreateMaybeMessage<::Project::UserLogout>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Project {
 
 enum MessageType : int {
   MT_UNKNOW = 0,
   MT_LOGIN = 1000,
-  MT_LOGOUT = 1001,
+  MT_LOGIN_RESPONSE = 1001,
+  MT_LOGOUT = 1002,
+  MT_LOGOUT_RESPONSE = 1003,
   MessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   MessageType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool MessageType_IsValid(int value);
 constexpr MessageType MessageType_MIN = MT_UNKNOW;
-constexpr MessageType MessageType_MAX = MT_LOGOUT;
+constexpr MessageType MessageType_MAX = MT_LOGOUT_RESPONSE;
 constexpr int MessageType_ARRAYSIZE = MessageType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageType_descriptor();
@@ -236,23 +242,23 @@ class MessageHeader :
 };
 // -------------------------------------------------------------------
 
-class User :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Project.User) */ {
+class UserLogin :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Project.UserLogin) */ {
  public:
-  User();
-  virtual ~User();
+  UserLogin();
+  virtual ~UserLogin();
 
-  User(const User& from);
-  User(User&& from) noexcept
-    : User() {
+  UserLogin(const UserLogin& from);
+  UserLogin(UserLogin&& from) noexcept
+    : UserLogin() {
     *this = ::std::move(from);
   }
 
-  inline User& operator=(const User& from) {
+  inline UserLogin& operator=(const UserLogin& from) {
     CopyFrom(from);
     return *this;
   }
-  inline User& operator=(User&& from) noexcept {
+  inline UserLogin& operator=(UserLogin&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -270,34 +276,34 @@ class User :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const User& default_instance();
+  static const UserLogin& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const User* internal_default_instance() {
-    return reinterpret_cast<const User*>(
-               &_User_default_instance_);
+  static inline const UserLogin* internal_default_instance() {
+    return reinterpret_cast<const UserLogin*>(
+               &_UserLogin_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  void Swap(User* other);
-  friend void swap(User& a, User& b) {
+  void Swap(UserLogin* other);
+  friend void swap(UserLogin& a, UserLogin& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline User* New() const final {
-    return CreateMaybeMessage<User>(nullptr);
+  inline UserLogin* New() const final {
+    return CreateMaybeMessage<UserLogin>(nullptr);
   }
 
-  User* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<User>(arena);
+  UserLogin* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UserLogin>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const User& from);
-  void MergeFrom(const User& from);
+  void CopyFrom(const UserLogin& from);
+  void MergeFrom(const UserLogin& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -318,10 +324,10 @@ class User :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(User* other);
+  void InternalSwap(UserLogin* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Project.User";
+    return "Project.UserLogin";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -414,7 +420,7 @@ class User :
   ::PROTOBUF_NAMESPACE_ID::int32 id() const;
   void set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
 
-  // @@protoc_insertion_point(class_scope:Project.User)
+  // @@protoc_insertion_point(class_scope:Project.UserLogin)
  private:
   class HasBitSetters;
 
@@ -423,6 +429,155 @@ class User :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr password_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr authority_;
+  ::Project::MessageHeader* header_;
+  ::PROTOBUF_NAMESPACE_ID::int32 id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_project_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UserLogout :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Project.UserLogout) */ {
+ public:
+  UserLogout();
+  virtual ~UserLogout();
+
+  UserLogout(const UserLogout& from);
+  UserLogout(UserLogout&& from) noexcept
+    : UserLogout() {
+    *this = ::std::move(from);
+  }
+
+  inline UserLogout& operator=(const UserLogout& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UserLogout& operator=(UserLogout&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const UserLogout& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const UserLogout* internal_default_instance() {
+    return reinterpret_cast<const UserLogout*>(
+               &_UserLogout_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  void Swap(UserLogout* other);
+  friend void swap(UserLogout& a, UserLogout& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline UserLogout* New() const final {
+    return CreateMaybeMessage<UserLogout>(nullptr);
+  }
+
+  UserLogout* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UserLogout>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const UserLogout& from);
+  void MergeFrom(const UserLogout& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UserLogout* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Project.UserLogout";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_project_2eproto);
+    return ::descriptor_table_project_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string Name = 3;
+  void clear_name();
+  static const int kNameFieldNumber = 3;
+  const std::string& name() const;
+  void set_name(const std::string& value);
+  void set_name(std::string&& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  std::string* mutable_name();
+  std::string* release_name();
+  void set_allocated_name(std::string* name);
+
+  // .Project.MessageHeader header = 1;
+  bool has_header() const;
+  void clear_header();
+  static const int kHeaderFieldNumber = 1;
+  const ::Project::MessageHeader& header() const;
+  ::Project::MessageHeader* release_header();
+  ::Project::MessageHeader* mutable_header();
+  void set_allocated_header(::Project::MessageHeader* header);
+
+  // int32 ID = 2;
+  void clear_id();
+  static const int kIDFieldNumber = 2;
+  ::PROTOBUF_NAMESPACE_ID::int32 id() const;
+  void set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:Project.UserLogout)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::Project::MessageHeader* header_;
   ::PROTOBUF_NAMESPACE_ID::int32 id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -506,41 +661,41 @@ inline void MessageHeader::set_allocated_transmissionid(std::string* transmissio
 
 // -------------------------------------------------------------------
 
-// User
+// UserLogin
 
 // .Project.MessageHeader header = 1;
-inline bool User::has_header() const {
+inline bool UserLogin::has_header() const {
   return this != internal_default_instance() && header_ != nullptr;
 }
-inline void User::clear_header() {
+inline void UserLogin::clear_header() {
   if (GetArenaNoVirtual() == nullptr && header_ != nullptr) {
     delete header_;
   }
   header_ = nullptr;
 }
-inline const ::Project::MessageHeader& User::header() const {
+inline const ::Project::MessageHeader& UserLogin::header() const {
   const ::Project::MessageHeader* p = header_;
-  // @@protoc_insertion_point(field_get:Project.User.header)
+  // @@protoc_insertion_point(field_get:Project.UserLogin.header)
   return p != nullptr ? *p : *reinterpret_cast<const ::Project::MessageHeader*>(
       &::Project::_MessageHeader_default_instance_);
 }
-inline ::Project::MessageHeader* User::release_header() {
-  // @@protoc_insertion_point(field_release:Project.User.header)
+inline ::Project::MessageHeader* UserLogin::release_header() {
+  // @@protoc_insertion_point(field_release:Project.UserLogin.header)
   
   ::Project::MessageHeader* temp = header_;
   header_ = nullptr;
   return temp;
 }
-inline ::Project::MessageHeader* User::mutable_header() {
+inline ::Project::MessageHeader* UserLogin::mutable_header() {
   
   if (header_ == nullptr) {
     auto* p = CreateMaybeMessage<::Project::MessageHeader>(GetArenaNoVirtual());
     header_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:Project.User.header)
+  // @@protoc_insertion_point(field_mutable:Project.UserLogin.header)
   return header_;
 }
-inline void User::set_allocated_header(::Project::MessageHeader* header) {
+inline void UserLogin::set_allocated_header(::Project::MessageHeader* header) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete header_;
@@ -556,244 +711,366 @@ inline void User::set_allocated_header(::Project::MessageHeader* header) {
     
   }
   header_ = header;
-  // @@protoc_insertion_point(field_set_allocated:Project.User.header)
+  // @@protoc_insertion_point(field_set_allocated:Project.UserLogin.header)
 }
 
 // int32 ID = 2;
-inline void User::clear_id() {
+inline void UserLogin::clear_id() {
   id_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 User::id() const {
-  // @@protoc_insertion_point(field_get:Project.User.ID)
+inline ::PROTOBUF_NAMESPACE_ID::int32 UserLogin::id() const {
+  // @@protoc_insertion_point(field_get:Project.UserLogin.ID)
   return id_;
 }
-inline void User::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void UserLogin::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
   id_ = value;
-  // @@protoc_insertion_point(field_set:Project.User.ID)
+  // @@protoc_insertion_point(field_set:Project.UserLogin.ID)
 }
 
 // string Name = 3;
-inline void User::clear_name() {
+inline void UserLogin::clear_name() {
   name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline const std::string& User::name() const {
-  // @@protoc_insertion_point(field_get:Project.User.Name)
+inline const std::string& UserLogin::name() const {
+  // @@protoc_insertion_point(field_get:Project.UserLogin.Name)
   return name_.GetNoArena();
 }
-inline void User::set_name(const std::string& value) {
+inline void UserLogin::set_name(const std::string& value) {
   
   name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Project.User.Name)
+  // @@protoc_insertion_point(field_set:Project.UserLogin.Name)
 }
-inline void User::set_name(std::string&& value) {
+inline void UserLogin::set_name(std::string&& value) {
   
   name_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Project.User.Name)
+  // @@protoc_insertion_point(field_set_rvalue:Project.UserLogin.Name)
 }
-inline void User::set_name(const char* value) {
+inline void UserLogin::set_name(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Project.User.Name)
+  // @@protoc_insertion_point(field_set_char:Project.UserLogin.Name)
 }
-inline void User::set_name(const char* value, size_t size) {
+inline void UserLogin::set_name(const char* value, size_t size) {
   
   name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Project.User.Name)
+  // @@protoc_insertion_point(field_set_pointer:Project.UserLogin.Name)
 }
-inline std::string* User::mutable_name() {
+inline std::string* UserLogin::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:Project.User.Name)
+  // @@protoc_insertion_point(field_mutable:Project.UserLogin.Name)
   return name_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* User::release_name() {
-  // @@protoc_insertion_point(field_release:Project.User.Name)
+inline std::string* UserLogin::release_name() {
+  // @@protoc_insertion_point(field_release:Project.UserLogin.Name)
   
   return name_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void User::set_allocated_name(std::string* name) {
+inline void UserLogin::set_allocated_name(std::string* name) {
   if (name != nullptr) {
     
   } else {
     
   }
   name_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:Project.User.Name)
+  // @@protoc_insertion_point(field_set_allocated:Project.UserLogin.Name)
 }
 
 // string Password = 4;
-inline void User::clear_password() {
+inline void UserLogin::clear_password() {
   password_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline const std::string& User::password() const {
-  // @@protoc_insertion_point(field_get:Project.User.Password)
+inline const std::string& UserLogin::password() const {
+  // @@protoc_insertion_point(field_get:Project.UserLogin.Password)
   return password_.GetNoArena();
 }
-inline void User::set_password(const std::string& value) {
+inline void UserLogin::set_password(const std::string& value) {
   
   password_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Project.User.Password)
+  // @@protoc_insertion_point(field_set:Project.UserLogin.Password)
 }
-inline void User::set_password(std::string&& value) {
+inline void UserLogin::set_password(std::string&& value) {
   
   password_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Project.User.Password)
+  // @@protoc_insertion_point(field_set_rvalue:Project.UserLogin.Password)
 }
-inline void User::set_password(const char* value) {
+inline void UserLogin::set_password(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   password_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Project.User.Password)
+  // @@protoc_insertion_point(field_set_char:Project.UserLogin.Password)
 }
-inline void User::set_password(const char* value, size_t size) {
+inline void UserLogin::set_password(const char* value, size_t size) {
   
   password_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Project.User.Password)
+  // @@protoc_insertion_point(field_set_pointer:Project.UserLogin.Password)
 }
-inline std::string* User::mutable_password() {
+inline std::string* UserLogin::mutable_password() {
   
-  // @@protoc_insertion_point(field_mutable:Project.User.Password)
+  // @@protoc_insertion_point(field_mutable:Project.UserLogin.Password)
   return password_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* User::release_password() {
-  // @@protoc_insertion_point(field_release:Project.User.Password)
+inline std::string* UserLogin::release_password() {
+  // @@protoc_insertion_point(field_release:Project.UserLogin.Password)
   
   return password_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void User::set_allocated_password(std::string* password) {
+inline void UserLogin::set_allocated_password(std::string* password) {
   if (password != nullptr) {
     
   } else {
     
   }
   password_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:Project.User.Password)
+  // @@protoc_insertion_point(field_set_allocated:Project.UserLogin.Password)
 }
 
 // string Authority = 5;
-inline void User::clear_authority() {
+inline void UserLogin::clear_authority() {
   authority_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline const std::string& User::authority() const {
-  // @@protoc_insertion_point(field_get:Project.User.Authority)
+inline const std::string& UserLogin::authority() const {
+  // @@protoc_insertion_point(field_get:Project.UserLogin.Authority)
   return authority_.GetNoArena();
 }
-inline void User::set_authority(const std::string& value) {
+inline void UserLogin::set_authority(const std::string& value) {
   
   authority_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Project.User.Authority)
+  // @@protoc_insertion_point(field_set:Project.UserLogin.Authority)
 }
-inline void User::set_authority(std::string&& value) {
+inline void UserLogin::set_authority(std::string&& value) {
   
   authority_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Project.User.Authority)
+  // @@protoc_insertion_point(field_set_rvalue:Project.UserLogin.Authority)
 }
-inline void User::set_authority(const char* value) {
+inline void UserLogin::set_authority(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   authority_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Project.User.Authority)
+  // @@protoc_insertion_point(field_set_char:Project.UserLogin.Authority)
 }
-inline void User::set_authority(const char* value, size_t size) {
+inline void UserLogin::set_authority(const char* value, size_t size) {
   
   authority_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Project.User.Authority)
+  // @@protoc_insertion_point(field_set_pointer:Project.UserLogin.Authority)
 }
-inline std::string* User::mutable_authority() {
+inline std::string* UserLogin::mutable_authority() {
   
-  // @@protoc_insertion_point(field_mutable:Project.User.Authority)
+  // @@protoc_insertion_point(field_mutable:Project.UserLogin.Authority)
   return authority_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* User::release_authority() {
-  // @@protoc_insertion_point(field_release:Project.User.Authority)
+inline std::string* UserLogin::release_authority() {
+  // @@protoc_insertion_point(field_release:Project.UserLogin.Authority)
   
   return authority_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void User::set_allocated_authority(std::string* authority) {
+inline void UserLogin::set_allocated_authority(std::string* authority) {
   if (authority != nullptr) {
     
   } else {
     
   }
   authority_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), authority);
-  // @@protoc_insertion_point(field_set_allocated:Project.User.Authority)
+  // @@protoc_insertion_point(field_set_allocated:Project.UserLogin.Authority)
 }
 
 // repeated string Nickname = 6;
-inline int User::nickname_size() const {
+inline int UserLogin::nickname_size() const {
   return nickname_.size();
 }
-inline void User::clear_nickname() {
+inline void UserLogin::clear_nickname() {
   nickname_.Clear();
 }
-inline const std::string& User::nickname(int index) const {
-  // @@protoc_insertion_point(field_get:Project.User.Nickname)
+inline const std::string& UserLogin::nickname(int index) const {
+  // @@protoc_insertion_point(field_get:Project.UserLogin.Nickname)
   return nickname_.Get(index);
 }
-inline std::string* User::mutable_nickname(int index) {
-  // @@protoc_insertion_point(field_mutable:Project.User.Nickname)
+inline std::string* UserLogin::mutable_nickname(int index) {
+  // @@protoc_insertion_point(field_mutable:Project.UserLogin.Nickname)
   return nickname_.Mutable(index);
 }
-inline void User::set_nickname(int index, const std::string& value) {
-  // @@protoc_insertion_point(field_set:Project.User.Nickname)
+inline void UserLogin::set_nickname(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:Project.UserLogin.Nickname)
   nickname_.Mutable(index)->assign(value);
 }
-inline void User::set_nickname(int index, std::string&& value) {
-  // @@protoc_insertion_point(field_set:Project.User.Nickname)
+inline void UserLogin::set_nickname(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:Project.UserLogin.Nickname)
   nickname_.Mutable(index)->assign(std::move(value));
 }
-inline void User::set_nickname(int index, const char* value) {
+inline void UserLogin::set_nickname(int index, const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   nickname_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:Project.User.Nickname)
+  // @@protoc_insertion_point(field_set_char:Project.UserLogin.Nickname)
 }
-inline void User::set_nickname(int index, const char* value, size_t size) {
+inline void UserLogin::set_nickname(int index, const char* value, size_t size) {
   nickname_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:Project.User.Nickname)
+  // @@protoc_insertion_point(field_set_pointer:Project.UserLogin.Nickname)
 }
-inline std::string* User::add_nickname() {
-  // @@protoc_insertion_point(field_add_mutable:Project.User.Nickname)
+inline std::string* UserLogin::add_nickname() {
+  // @@protoc_insertion_point(field_add_mutable:Project.UserLogin.Nickname)
   return nickname_.Add();
 }
-inline void User::add_nickname(const std::string& value) {
+inline void UserLogin::add_nickname(const std::string& value) {
   nickname_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:Project.User.Nickname)
+  // @@protoc_insertion_point(field_add:Project.UserLogin.Nickname)
 }
-inline void User::add_nickname(std::string&& value) {
+inline void UserLogin::add_nickname(std::string&& value) {
   nickname_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:Project.User.Nickname)
+  // @@protoc_insertion_point(field_add:Project.UserLogin.Nickname)
 }
-inline void User::add_nickname(const char* value) {
+inline void UserLogin::add_nickname(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   nickname_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:Project.User.Nickname)
+  // @@protoc_insertion_point(field_add_char:Project.UserLogin.Nickname)
 }
-inline void User::add_nickname(const char* value, size_t size) {
+inline void UserLogin::add_nickname(const char* value, size_t size) {
   nickname_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:Project.User.Nickname)
+  // @@protoc_insertion_point(field_add_pointer:Project.UserLogin.Nickname)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-User::nickname() const {
-  // @@protoc_insertion_point(field_list:Project.User.Nickname)
+UserLogin::nickname() const {
+  // @@protoc_insertion_point(field_list:Project.UserLogin.Nickname)
   return nickname_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-User::mutable_nickname() {
-  // @@protoc_insertion_point(field_mutable_list:Project.User.Nickname)
+UserLogin::mutable_nickname() {
+  // @@protoc_insertion_point(field_mutable_list:Project.UserLogin.Nickname)
   return &nickname_;
+}
+
+// -------------------------------------------------------------------
+
+// UserLogout
+
+// .Project.MessageHeader header = 1;
+inline bool UserLogout::has_header() const {
+  return this != internal_default_instance() && header_ != nullptr;
+}
+inline void UserLogout::clear_header() {
+  if (GetArenaNoVirtual() == nullptr && header_ != nullptr) {
+    delete header_;
+  }
+  header_ = nullptr;
+}
+inline const ::Project::MessageHeader& UserLogout::header() const {
+  const ::Project::MessageHeader* p = header_;
+  // @@protoc_insertion_point(field_get:Project.UserLogout.header)
+  return p != nullptr ? *p : *reinterpret_cast<const ::Project::MessageHeader*>(
+      &::Project::_MessageHeader_default_instance_);
+}
+inline ::Project::MessageHeader* UserLogout::release_header() {
+  // @@protoc_insertion_point(field_release:Project.UserLogout.header)
+  
+  ::Project::MessageHeader* temp = header_;
+  header_ = nullptr;
+  return temp;
+}
+inline ::Project::MessageHeader* UserLogout::mutable_header() {
+  
+  if (header_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Project::MessageHeader>(GetArenaNoVirtual());
+    header_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:Project.UserLogout.header)
+  return header_;
+}
+inline void UserLogout::set_allocated_header(::Project::MessageHeader* header) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete header_;
+  }
+  if (header) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      header = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, header, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  header_ = header;
+  // @@protoc_insertion_point(field_set_allocated:Project.UserLogout.header)
+}
+
+// int32 ID = 2;
+inline void UserLogout::clear_id() {
+  id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 UserLogout::id() const {
+  // @@protoc_insertion_point(field_get:Project.UserLogout.ID)
+  return id_;
+}
+inline void UserLogout::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  id_ = value;
+  // @@protoc_insertion_point(field_set:Project.UserLogout.ID)
+}
+
+// string Name = 3;
+inline void UserLogout::clear_name() {
+  name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& UserLogout::name() const {
+  // @@protoc_insertion_point(field_get:Project.UserLogout.Name)
+  return name_.GetNoArena();
+}
+inline void UserLogout::set_name(const std::string& value) {
+  
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Project.UserLogout.Name)
+}
+inline void UserLogout::set_name(std::string&& value) {
+  
+  name_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Project.UserLogout.Name)
+}
+inline void UserLogout::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Project.UserLogout.Name)
+}
+inline void UserLogout::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Project.UserLogout.Name)
+}
+inline std::string* UserLogout::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:Project.UserLogout.Name)
+  return name_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* UserLogout::release_name() {
+  // @@protoc_insertion_point(field_release:Project.UserLogout.Name)
+  
+  return name_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void UserLogout::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:Project.UserLogout.Name)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 

@@ -12,7 +12,9 @@ enum MessageType
     MT_UNKNOW                         = 0;
 
     MT_LOGIN                          = 1000;
-    MT_LOGOUT                         = 1001;
+    MT_LOGIN_RESPONSE                 = 1001;
+    MT_LOGOUT                         = 1002;
+    MT_LOGOUT_RESPONSE                = 1003;
 }
 
 message MessageHeader
@@ -21,7 +23,7 @@ message MessageHeader
     string TransmissionID = 2;
 }
 
-message User
+message UserLogin
 {
     MessageHeader header = 1;
     int32 ID = 2;
@@ -29,4 +31,11 @@ message User
     string Password = 4;
     string Authority = 5;
     repeated string Nickname = 6;
+}
+
+message UserLogout
+{
+    MessageHeader header = 1;
+    int32 ID = 2;
+    string Name = 3;
 }
