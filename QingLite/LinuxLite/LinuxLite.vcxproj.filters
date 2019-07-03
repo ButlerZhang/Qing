@@ -400,6 +400,12 @@
     <ClInclude Include="Open\project\Message\CodedMessage.h">
       <Filter>Open\project\Message</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\print_errno_message.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Common\Algorithm\CMakeLists.txt">
