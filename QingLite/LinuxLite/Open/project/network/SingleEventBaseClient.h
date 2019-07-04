@@ -1,4 +1,5 @@
 #pragma once
+#include "NetworkBase.h"
 #include <event.h>
 #include <string>
 #include <random>
@@ -20,11 +21,11 @@ public:
 
 protected:
 
-    virtual bool Send(const void *Data, size_t Size);
+    bool Send(const void *Data, size_t Size);
 
     virtual bool ProcessConnected() { return false; }
     virtual bool ProcessDisconnected() { return false; }
-    virtual bool ProcessMessage(std::string &MessageString) { return false; }
+    virtual bool ProcessMessage(NetworkMessage &NetworkMsg) { return false; }
 
 private:
 

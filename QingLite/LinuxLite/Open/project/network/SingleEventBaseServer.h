@@ -1,7 +1,7 @@
 #pragma once
 #include "HTTPServer.h"
 #include "UDPBroadcast.h"
-#include "MessageHandler.h"
+#include "ServerNetworkMessageHandler.h"
 #include <string>
 #include <vector>
 #include <event2/listener.h>
@@ -20,11 +20,12 @@ public:
 
     virtual bool ProcessConnected() { return false; }
     virtual bool ProcessDisconnected() { return false; }
-    virtual bool ProcessMessage(MessageHandler::MessageNode &Message);
+    virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
 
 protected:
 
     bool CreateListener(const std::string &IP, int Port);
+    bool Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size);
 
 private:
 
@@ -41,6 +42,6 @@ private:
     evconnlistener                  *m_Listener;
     HTTPServer                       m_HTTPServer;
     UDPBroadcast                     m_UDPBroadcast;
-    MessageHandler                   m_MessageHandler;
+    ServerNetworkMessageHandler                   m_MessageHandler;
     std::vector<int>                 m_ClientSocketVector;
 };

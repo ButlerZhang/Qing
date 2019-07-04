@@ -23,7 +23,7 @@ bool SingleServer::ProcessDisconnected()
     return false;
 }
 
-bool SingleServer::ProcessMessage(MessageHandler::MessageNode &Message)
+bool SingleServer::ProcessMessage(NetworkMessage &Message)
 {
     int MessageType = DecodeMessage(Message.m_Message);
     switch (MessageType)
@@ -44,7 +44,7 @@ bool SingleServer::ProcessMessage(MessageHandler::MessageNode &Message)
     //return false;
 }
 
-bool SingleServer::ProcessLogin(MessageHandler::MessageNode &Message)
+bool SingleServer::ProcessLogin(NetworkMessage &Message)
 {
     Project::UserLogin Login;
     if (!Login.ParseFromString(Message.m_Message))
@@ -66,17 +66,10 @@ bool SingleServer::ProcessLogin(MessageHandler::MessageNode &Message)
     Header->set_type(Project::MessageType::MT_LOGIN_RESPONSE);
     Header->set_transmissionid(GetUUID());
 
-    const std::string &DataString = EncodeMessage(Response, Project::MessageType::MT_LOGIN_RESPONSE);
-    if (bufferevent_write(Message.m_bufferevent, (void*)DataString.c_str(), DataString.size()) != 0)
-    {
-        printf("Send failed.\n");
-        return false;
-    }
-
-    return true;
+    return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, Message, Response);
 }
 
-bool SingleServer::ProcessLogout(MessageHandler::MessageNode &Message)
+bool SingleServer::ProcessLogout(NetworkMessage &Message)
 {
     Project::UserLogout LogoutMessage;
     if (!LogoutMessage.ParseFromString(Message.m_Message))
@@ -86,4 +79,10 @@ bool SingleServer::ProcessLogout(MessageHandler::MessageNode &Message)
 
     LogoutMessage.PrintDebugString();
     return true;
+}
+
+bool SingleServer::SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg)
+{
+    const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
+    return Send(NetworkMsg, DataString.c_str(), DataString.size());
 }

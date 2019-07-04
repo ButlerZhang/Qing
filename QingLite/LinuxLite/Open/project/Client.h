@@ -13,14 +13,13 @@ public:
 
     virtual bool ProcessConnected();
     virtual bool ProcessDisconnected();
-    virtual bool ProcessMessage(std::string &MessageString);
+    virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
 
 private:
 
-    bool ProcessLoginResponse(std::string &MessageString);
-
-    bool SendMessage(int MessageType, const google::protobuf::Message &message);
+    bool ProcessLoginResponse(NetworkMessage &NetworkMsg);
 
     bool SendLogin();
     bool SendLogout();
+    bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
 };

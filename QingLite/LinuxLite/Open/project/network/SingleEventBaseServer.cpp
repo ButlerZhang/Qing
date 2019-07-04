@@ -67,13 +67,13 @@ bool SingleEventBaseServer::Stop()
     return event_base_loopbreak(m_EventBase) == 0;
 }
 
-bool SingleEventBaseServer::ProcessMessage(MessageHandler::MessageNode &Message)
+bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
     std::string ACK("Client=");
-    ACK += std::to_string(Message.m_ClientSocket);
-    ACK += std::string(", ACK=") + Message.m_Message;
+    ACK += std::to_string(NetworkMsg.m_Socket);
+    ACK += std::string(", ACK=") + NetworkMsg.m_Message;
 
-    if (bufferevent_write(Message.m_bufferevent, ACK.c_str(), ACK.length()) != 0)
+    if (bufferevent_write(NetworkMsg.m_Bufferevent, ACK.c_str(), ACK.length()) != 0)
     {
         printf("Send failed, %s\n", ACK.c_str());
         return false;
@@ -134,6 +134,23 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
     return true;
 }
 
+bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size)
+{
+    if (NetworkMsg.m_Bufferevent == NULL)
+    {
+        return false;
+    }
+
+    if (bufferevent_write(NetworkMsg.m_Bufferevent, Data, Size) != 0)
+    {
+        printf("Send failed.\n");
+        return false;
+    }
+
+    printf("Send succeed.\n");
+    return true;
+}
+
 void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
 {
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
@@ -186,17 +203,23 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
 
 void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
 {
-    char ClientMessage[1024];
+    char ClientMessage[NETWORK_BUFFER_SIZE];
     memset(ClientMessage, 0, sizeof(ClientMessage));
 
-    size_t RecvSize = bufferevent_read(bev, ClientMessage, sizeof(ClientMessage));
-    std::string MessageString(ClientMessage, ClientMessage + RecvSize);
-
     int ClientSocket = bufferevent_getfd(bev);
-    printf("Recv client = %d, size = %d, message = %s\n", ClientSocket, RecvSize, MessageString.c_str());
+    size_t RecvSize = bufferevent_read(bev, ClientMessage, sizeof(ClientMessage));
+    printf("Recv client = %d message size = %d\n", ClientSocket, RecvSize);
 
-    SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-    Server->m_MessageHandler.PushMessage(ClientSocket, bev, MessageString);
+    if (RecvSize > 0)
+    {
+        NetworkMessage NetworkMsg;
+        NetworkMsg.m_Bufferevent = bev;
+        NetworkMsg.m_Socket = bufferevent_getfd(bev);
+        NetworkMsg.m_Message.assign(ClientMessage, ClientMessage + RecvSize);
+
+        SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
+        Server->m_MessageHandler.PushMessage(NetworkMsg);
+    }
 }
 
 void SingleEventBaseServer::CallBack_Send(bufferevent * bev, void * UserData)

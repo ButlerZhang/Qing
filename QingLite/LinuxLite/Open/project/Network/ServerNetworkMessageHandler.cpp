@@ -1,6 +1,5 @@
-#include "MessageHandler.h"
+#include "ServerNetworkMessageHandler.h"
 #include "SingleEventBaseServer.h"
-
 #include <thread>
 #include <unistd.h>
 #include <sstream>
@@ -8,23 +7,23 @@
 
 
 
-MessageHandler::MessageHandler()
+ServerNetworkMessageHandler::ServerNetworkMessageHandler()
 {
     m_IsWork = false;
     m_SingleServer = NULL;
 }
 
-MessageHandler::~MessageHandler()
+ServerNetworkMessageHandler::~ServerNetworkMessageHandler()
 {
     m_IsWork = false;
     m_SingleServer = NULL;
-    while (!m_MessageQueue.empty())
+    while (!m_NetworkMsgQueue.empty())
     {
-        m_MessageQueue.pop();
+        m_NetworkMsgQueue.pop();
     }
 }
 
-bool MessageHandler::Start(SingleEventBaseServer *SingleServer)
+bool ServerNetworkMessageHandler::Start(SingleEventBaseServer *SingleServer)
 {
     if (SingleServer == NULL)
     {
@@ -43,32 +42,27 @@ bool MessageHandler::Start(SingleEventBaseServer *SingleServer)
     return m_IsWork;
 }
 
-bool MessageHandler::Stop()
+bool ServerNetworkMessageHandler::Stop()
 {
     m_IsWork = false;
     m_SingleServer = NULL;
     return true;
 }
 
-bool MessageHandler::PushMessage(int ClientSocket, bufferevent *bev, const std::string &Message)
+bool ServerNetworkMessageHandler::PushMessage(const NetworkMessage &NetworkMsg)
 {
-    MessageNode NewNode;
-    NewNode.m_Message = Message;
-    NewNode.m_bufferevent = bev;
-    NewNode.m_ClientSocket = ClientSocket;
-
     std::unique_lock<std::mutex> Locker(m_QueueLock);
-    m_MessageQueue.push(NewNode);
+    m_NetworkMsgQueue.push(NetworkMsg);
 
-    printf("Message queue size = %d.\n", m_MessageQueue.size());
+    printf("Message queue size = %d.\n", m_NetworkMsgQueue.size());
     m_Condition.notify_one();
 
-    return !m_MessageQueue.empty();
+    return !m_NetworkMsgQueue.empty();
 }
 
-void MessageHandler::WorkThread_Process(void *Object)
+void ServerNetworkMessageHandler::WorkThread_Process(void *Object)
 {
-    MessageHandler *Handler = (MessageHandler*)Object;
+    ServerNetworkMessageHandler *Handler = (ServerNetworkMessageHandler*)Object;
 
     std::stringstream stream;
     stream << std::this_thread::get_id();
@@ -77,21 +71,21 @@ void MessageHandler::WorkThread_Process(void *Object)
 
     while (Handler->m_IsWork)
     {
-        if (Handler->m_MessageQueue.empty())
+        if (Handler->m_NetworkMsgQueue.empty())
         {
             std::unique_lock<std::mutex> Locker(Handler->m_QueueLock);
             Handler->m_Condition.wait(Locker);
         }
 
-        if (!Handler->m_MessageQueue.empty())
+        if (!Handler->m_NetworkMsgQueue.empty())
         {
             std::unique_lock<std::mutex> Locker(Handler->m_QueueLock);
 
             //my work is sleep.
             //std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-            Handler->m_SingleServer->ProcessMessage(Handler->m_MessageQueue.front());
-            Handler->m_MessageQueue.pop();
+            Handler->m_SingleServer->ProcessMessage(Handler->m_NetworkMsgQueue.front());
+            Handler->m_NetworkMsgQueue.pop();
         }
     }
 

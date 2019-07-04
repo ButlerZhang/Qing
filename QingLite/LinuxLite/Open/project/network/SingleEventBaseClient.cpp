@@ -332,7 +332,7 @@ bool SingleEventBaseClient::AddTimerSendDataRandomly()
 
 void SingleEventBaseClient::CallBack_InputFromCMD(int Input, short events, void *UserData)
 {
-    char InputMessage[1024];
+    char InputMessage[NETWORK_BUFFER_SIZE];
     memset(InputMessage, 0, sizeof(InputMessage));
 
     ssize_t ReadSize = read(Input, InputMessage, sizeof(InputMessage));
@@ -373,7 +373,7 @@ void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, 
         return;
     }
 
-    char UDPBroadcastBuffer[1024];
+    char UDPBroadcastBuffer[NETWORK_BUFFER_SIZE];
     memset(UDPBroadcastBuffer, 0, sizeof(UDPBroadcastBuffer));
 
     socklen_t AddressLength = sizeof(socklen_t);
@@ -469,14 +469,7 @@ void SingleEventBaseClient::CallBack_SendDataRandomly(int Socket, short Events, 
     if (Client->m_IsConnected && Client->m_DataBufferevent != NULL)
     {
         const std::string &UUID = GetUUID();
-        if (bufferevent_write(Client->m_DataBufferevent, UUID.c_str(), UUID.length()) == 0)
-        {
-            printf("Send = %s, size = %d, succeed.\n", UUID.c_str(), UUID.size());
-        }
-        else
-        {
-            printf("Send = %s, size = %d, failed.\n", UUID.c_str(), UUID.size());
-        }
+        Client->Send(UUID.c_str(), UUID.size());
 
         struct timeval tv;
         evutil_timerclear(&tv);
@@ -550,14 +543,18 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
 
 void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *UserData)
 {
-    char ServerMessage[1024];
+    char ServerMessage[NETWORK_BUFFER_SIZE];
     memset(ServerMessage, 0, sizeof(ServerMessage));
 
     size_t RecvSize = bufferevent_read(bev, ServerMessage, sizeof(ServerMessage));
-    std::string MessageString(ServerMessage, ServerMessage + RecvSize);
+    printf("Recv message size = %d\n", RecvSize);
 
-    printf("Recv = %s, size = %d\n", ServerMessage, RecvSize);
+    if (RecvSize > 0)
+    {
+        NetworkMessage NetworkMsg;
+        NetworkMsg.m_Message.assign(ServerMessage, ServerMessage + RecvSize);
 
-    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-    Client->ProcessMessage(MessageString);
+        SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
+        Client->ProcessMessage(NetworkMsg);
+    }
 }

@@ -24,36 +24,39 @@ bool Client::ProcessDisconnected()
     return false;
 }
 
-bool Client::ProcessMessage(std::string &MessageString)
+bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
 {
-    int MessageType = DecodeMessage(MessageString);
+    int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {
-    case Project::MessageType::MT_LOGIN_RESPONSE:   return ProcessLoginResponse(MessageString);
+    case Project::MessageType::MT_LOGIN_RESPONSE:   return ProcessLoginResponse(NetworkMsg);
     default:                                        return false;
     }
 }
 
-bool Client::ProcessLoginResponse(std::string &MessageString)
+bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 {
+    printf("Process login response\n");
     Project::UserLogin LoginResponse;
-    if (!LoginResponse.ParseFromString(MessageString))
+    if (!LoginResponse.ParseFromString(NetworkMsg.m_Message))
     {
         return false;
     }
 
     LoginResponse.PrintDebugString();
+    SendLogout();
     return true;
 }
 
-bool Client::SendMessage(int MessageType, const google::protobuf::Message & message)
+bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)
 {
-    const std::string &DataString = EncodeMessage(message, MessageType);
+    const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
     return Send((void*)DataString.c_str(), DataString.size());
 }
 
 bool Client::SendLogin()
 {
+    printf("Process login:\n");
     Project::UserLogin Login;
     Login.set_id(1000);
     Login.set_name("Butler");
@@ -72,6 +75,7 @@ bool Client::SendLogin()
 
 bool Client::SendLogout()
 {
+    printf("Process logout:\n");
     Project::UserLogout Logout;
     Logout.set_id(1000);
     Logout.set_name("Butler");

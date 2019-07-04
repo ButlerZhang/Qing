@@ -1,33 +1,25 @@
 #pragma once
+#include "NetworkBase.h"
 #include <mutex>
 #include <queue>
-#include <string>
 #include <condition_variable>
 
+struct bufferevent;
 class SingleEventBaseServer;
 
 
 
-class MessageHandler
+class ServerNetworkMessageHandler
 {
 public:
 
-    struct MessageNode
-    {
-        int                              m_ClientSocket;
-        std::string                      m_Message;
-        struct bufferevent              *m_bufferevent;
-    };
-
-public:
-
-    MessageHandler();
-    ~MessageHandler();
+    ServerNetworkMessageHandler();
+    ~ServerNetworkMessageHandler();
 
     bool Start(SingleEventBaseServer *SingleServer);
     bool Stop();
 
-    bool PushMessage(int ClientSocket, bufferevent *bev, const std::string &Message);
+    bool PushMessage(const NetworkMessage &NetworkMsg);
 
 private:
 
@@ -38,6 +30,6 @@ private:
     bool                                 m_IsWork;
     std::mutex                           m_QueueLock;
     std::condition_variable              m_Condition;
-    std::queue<MessageNode>              m_MessageQueue;
+    std::queue<NetworkMessage>           m_NetworkMsgQueue;
     SingleEventBaseServer               *m_SingleServer;
 };
