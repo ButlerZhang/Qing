@@ -83,6 +83,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Open\project\Client.cpp" />
     <ClCompile Include="Open\project\Message\project.pb.cc" />
+    <ClCompile Include="Open\project\MultiServer.cpp" />
     <ClCompile Include="Open\project\Network\HTTPServer.cpp" />
     <ClCompile Include="Open\project\Network\ServerNetworkMessageHandler.cpp" />
     <ClCompile Include="Open\project\Network\MultiEventBaseServer.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Open\project\Client.h" />
     <ClInclude Include="Open\project\Message\CodedMessage.h" />
     <ClInclude Include="Open\project\Message\project.pb.h" />
+    <ClInclude Include="Open\project\MultiServer.h" />
     <ClInclude Include="Open\project\Network\HTTPServer.h" />
     <ClInclude Include="Open\project\Network\ServerNetworkMessageHandler.h" />
     <ClInclude Include="Open\project\Network\MultiEventBaseServer.h" />
@@ -147,7 +149,6 @@
     <ClInclude Include="Open\project\Network\SignalEventMap.h" />
     <ClInclude Include="Open\project\Network\SingleEventBaseClient.h" />
     <ClInclude Include="Open\project\Network\SingleEventBaseServer.h" />
-    <ClInclude Include="Open\project\Network\ThreadNode.h" />
     <ClInclude Include="Open\project\Network\UDPBroadcast.h" />
     <ClInclude Include="Open\project\SingleServer.h" />
     <ClInclude Include="Open\protobuf\base.pb.h" />

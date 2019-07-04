@@ -154,6 +154,9 @@
     <ClCompile Include="Open\project\Network\ServerNetworkMessageHandler.cpp">
       <Filter>Open\project\Network</Filter>
     </ClCompile>
+    <ClCompile Include="Open\project\MultiServer.cpp">
+      <Filter>Open\project</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h">
@@ -370,9 +373,6 @@
     <ClInclude Include="Open\project\Network\SingleEventBaseServer.h">
       <Filter>Open\project\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Network\ThreadNode.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\Network\UDPBroadcast.h">
       <Filter>Open\project\Network</Filter>
     </ClInclude>
@@ -408,6 +408,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\Network\ServerNetworkMessageHandler.h">
       <Filter>Open\project\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\MultiServer.h">
+      <Filter>Open\project</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

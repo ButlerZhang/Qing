@@ -73,13 +73,13 @@ void MultiEventBaseServer::Stop()
     }
 }
 
-bool MultiEventBaseServer::ProcessConnect(ConnectNode &ConnectedNode)
+bool MultiEventBaseServer::ProcessConnected(ConnectNode &ConnectedNode)
 {
     printf("Client socket = %d connected.\n", ConnectedNode.m_ClientSocket);
     return true;
 }
 
-bool MultiEventBaseServer::ProcessRecv(ConnectNode & ConnectedNode)
+bool MultiEventBaseServer::ProcessRecv(ConnectNode &ConnectedNode)
 {
     if (evbuffer_get_length(ConnectedNode.m_ReadBuffer) <= 0)
     {
@@ -87,20 +87,14 @@ bool MultiEventBaseServer::ProcessRecv(ConnectNode & ConnectedNode)
         return false;
     }
 
-    char RecvBuffer[1024];
-    memset(RecvBuffer, 0, sizeof(RecvBuffer));
+    char ClientMessage[NETWORK_BUFFER_SIZE];
+    memset(ClientMessage, 0, sizeof(ClientMessage));
 
-    int RecvSize = evbuffer_remove(ConnectedNode.m_ReadBuffer, RecvBuffer, sizeof(RecvBuffer));
-    RecvBuffer[RecvSize] = '\0';
+    int RecvSize = evbuffer_remove(ConnectedNode.m_ReadBuffer, ClientMessage, sizeof(ClientMessage));
+    printf("Client = %d recv message size = %d.\n", ConnectedNode.m_ClientSocket, RecvSize);
 
-    printf("Client = %d, recv = %s, size = %d.\n", ConnectedNode.m_ClientSocket, RecvBuffer, RecvSize);
-
-    std::string ACK("ACK:");
-    ACK.append(RecvBuffer);
-    evbuffer_add(ConnectedNode.m_WriteBuffer, ACK.c_str(), ACK.length());
-    printf("Client = %d, send = %s, size = %d.\n", ConnectedNode.m_ClientSocket, ACK.c_str(), ACK.length());
-
-    return true;
+    ConnectedNode.m_Message.assign(ClientMessage, ClientMessage + RecvSize);
+    return ProcessMessage(ConnectedNode);
 }
 
 bool MultiEventBaseServer::ProcessSend(ConnectNode &ConnectedNode)
@@ -114,7 +108,7 @@ bool MultiEventBaseServer::ProcessSend(ConnectNode &ConnectedNode)
     return true;
 }
 
-bool MultiEventBaseServer::ProcessClose(ConnectNode &ConnectedNode, short events)
+bool MultiEventBaseServer::ProcessDisconnected(ConnectNode &ConnectedNode, short events)
 {
     printf("Client socket = %d closed.\n", ConnectedNode.m_ClientSocket);
     return true;
@@ -220,6 +214,25 @@ bool MultiEventBaseServer::StartEventLoop(evconnlistener *Listener)
     return true;
 }
 
+bool MultiEventBaseServer::Send(ConnectNode & ConnectedNode, const std::string & DataString)
+{
+    int AddSize = evbuffer_add(ConnectedNode.m_WriteBuffer, DataString.c_str(), DataString.size());
+    if (AddSize != static_cast<int>(DataString.size()))
+    {
+        printf("evbuffer add error\n");
+        return false;
+    }
+
+    int WriteSize = evbuffer_write(ConnectedNode.m_WriteBuffer, ConnectedNode.m_ClientSocket);
+    if (WriteSize != static_cast<int>(DataString.size()))
+    {
+        printf("evbuffer write error\n");
+        return false;
+    }
+
+    return true;
+}
+
 void MultiEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *user_data)
 {
     MultiEventBaseServer *Server = (MultiEventBaseServer*)user_data;
@@ -280,7 +293,7 @@ void MultiEventBaseServer::CallBack_Accept(int fd, short which, void *arg)
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
 
-    CurrentThreadNode->m_MultiEventBaseServer->ProcessConnect(NewConnectedNode);
+    CurrentThreadNode->m_MultiEventBaseServer->ProcessConnected(NewConnectedNode);
 }
 
 void MultiEventBaseServer::CallBack_Recv(bufferevent * bev, void *data)
@@ -302,7 +315,7 @@ void MultiEventBaseServer::CallBack_Send(bufferevent * bev, void * data)
 void MultiEventBaseServer::CallBack_Event(bufferevent * bev, short events, void * data)
 {
     ConnectNode *CurrentNode = (ConnectNode*)data;
-    CurrentNode->m_WorkThread->m_MultiEventBaseServer->ProcessClose(*CurrentNode, events);
+    CurrentNode->m_WorkThread->m_MultiEventBaseServer->ProcessDisconnected(*CurrentNode, events);
 
     std::vector<ConnectNode> &NodeVector = CurrentNode->m_WorkThread->m_ConnectNodeVector;
     for (std::vector<ConnectNode>::iterator it = NodeVector.begin(); it != NodeVector.end(); it++)

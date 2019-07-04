@@ -2,7 +2,6 @@
 #include "HTTPServer.h"
 #include "UDPBroadcast.h"
 #include "ServerNetworkMessageHandler.h"
-#include <string>
 #include <vector>
 #include <event2/listener.h>
 
@@ -36,12 +35,12 @@ private:
 
 private:
 
-    int                              m_ListenPort;
-    std::string                      m_ListenIP;
-    event_base                      *m_EventBase;
-    evconnlistener                  *m_Listener;
-    HTTPServer                       m_HTTPServer;
-    UDPBroadcast                     m_UDPBroadcast;
-    ServerNetworkMessageHandler                   m_MessageHandler;
-    std::vector<int>                 m_ClientSocketVector;
+    int                                  m_ListenPort;
+    std::string                          m_ListenIP;
+    event_base                          *m_EventBase;
+    evconnlistener                      *m_Listener;
+    HTTPServer                           m_HTTPServer;
+    UDPBroadcast                         m_UDPBroadcast;
+    ServerNetworkMessageHandler          m_MessageHandler;
+    std::vector<int>                     m_ClientSocketVector;
 };

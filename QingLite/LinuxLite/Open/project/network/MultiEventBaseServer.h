@@ -1,8 +1,6 @@
 #pragma once
-#include "ThreadNode.h"
+#include "NetworkBase.h"
 #include "UDPBroadcast.h"
-
-#include <string>
 #include <event2/listener.h>
 
 
@@ -17,18 +15,22 @@ public:
     bool Start(const std::string &IP, int Port, int ThreadCount = 0);
     void Stop();
 
-    virtual bool ProcessConnect(ConnectNode &ConnectedNode);
-    virtual bool ProcessRecv(ConnectNode &ConnectedNode);
-    virtual bool ProcessSend(ConnectNode &ConnectedNode);
-    virtual bool ProcessClose(ConnectNode &ConnectedNode, short events);
+    virtual bool ProcessConnected(ConnectNode &ConnectedNode);
+    virtual bool ProcessDisconnected(ConnectNode &ConnectedNode, short events);
+    virtual bool ProcessMessage(ConnectNode &ConnectedNode) { return false; }
+
+protected:
+
+    bool Send(ConnectNode &ConnectedNode, const std::string &DataString);
 
 private:
+
+    bool ProcessRecv(ConnectNode &ConnectedNode);
+    bool ProcessSend(ConnectNode &ConnectedNode);
 
     bool CreateThreads(int ThreadCount);
     bool StartListen(const std::string &IP, int Port);
     bool StartEventLoop(evconnlistener *Listener);
-
-private:
 
     static void CallBack_Listen(evconnlistener *listener, int Socket, sockaddr *sa, int socklen, void *user_data);
     static void CallBack_Accept(int fd, short which, void *arg);

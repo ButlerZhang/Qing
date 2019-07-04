@@ -2,6 +2,7 @@
 
 #include "Open/project/Client.h"
 #include "Open/project/SingleServer.h"
+#include "Open/project/MultiServer.h"
 #include <iostream>
 
 
@@ -15,11 +16,11 @@ int main(int argc, char *argv[])
 
     if (atoi(argv[1]) == 0)
     {
-        SingleServer Server;
-        Server.Start(ServerIP, ServerPort);
+        //SingleServer Server;
+        //Server.Start(ServerIP, ServerPort);
 
-        //MultiEventBaseServer Server;
-        //Server.Start(ServerIP, ServerPort, 2);
+        MultiServer Server;
+        Server.Start(ServerIP, ServerPort, 2);
     }
     else
     {
