@@ -73,11 +73,11 @@ void OpenSSL_EncryptAndDecryptTest()
         std::cout << "Text Size = " << ClearText.size() << std::endl;
         std::cout << "Clear Text = " << std::endl << ClearText << std::endl << std::endl;
 
-        const std::string &AESEncryptString = AESEncrypt(ClearText, Key);
+        const std::string &AESEncryptString = AEScbcEncrypt(ClearText, Key);
         std::cout << "AES Encrypt:(encrypt size = " << AESEncryptString.size() << ")" << std::endl;
         std::cout << AESEncryptString << std::endl << std::endl;
 
-        const std::string &AESDecryptString = AESDecrypt(AESEncryptString, Key);
+        const std::string &AESDecryptString = AEScbcDecrypt(AESEncryptString, Key);
         std::cout << "AES Decrypt:(decrypt size = " << AESDecryptString.size() << ")" << std::endl;
         std::cout << AESDecryptString << std::endl << std::endl;
     }

@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
     OpenSSL_EncryptAndDecryptTest();
     return 0;
 
-    const char *ServerIP = "192.168.3.126";
-    const int ServerPort = 12345;
+    //const char *ServerIP = "192.168.3.126";
+    //const int ServerPort = 12345;
 
     //if (atoi(argv[1]) == 0)
     //{

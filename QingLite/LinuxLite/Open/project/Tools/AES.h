@@ -3,21 +3,21 @@
 #include <string.h>
 #include <stdlib.h>
 #include <openssl/aes.h>
-#include "../../../../../Common/Tool/HexString.h"
+
+const int KEY_BIT_SIZE = 128;
 
 
 
 inline std::string AESEncrypt(const std::string &ClearText, const std::string &Key)
 {
-    const int BIT_SIZE = 128;
-    if (static_cast<int>(Key.size()) > BIT_SIZE)
+    if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        printf("ERROR: Key length is more than %d\n", BIT_SIZE);
+        printf("ERROR: Key size is more than %d\n", KEY_BIT_SIZE);
         return std::string();
     }
 
     AES_KEY AESKey;
-    if (AES_set_encrypt_key((const unsigned char*)Key.c_str(), BIT_SIZE, &AESKey) < 0)
+    if (AES_set_encrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
         printf("ERROR: Set encrypt key failed.\n");
         return std::string();
@@ -37,9 +37,7 @@ inline std::string AESEncrypt(const std::string &ClearText, const std::string &K
     int CycleCount = static_cast<int>(ClearTextBackup.length() / AES_BLOCK_SIZE);
     for (int Count = 0; Count < CycleCount; Count++)
     {
-        ::memset(OutArray, 0, AES_BLOCK_SIZE);
         const std::string &SingleBlock = ClearTextBackup.substr(Count*AES_BLOCK_SIZE, AES_BLOCK_SIZE);
-
         AES_encrypt((const unsigned char*)SingleBlock.c_str(), OutArray, &AESKey);
         EncodeString.append((const char*)OutArray, AES_BLOCK_SIZE);
     }
@@ -49,15 +47,14 @@ inline std::string AESEncrypt(const std::string &ClearText, const std::string &K
 
 inline std::string AESDecrypt(const std::string &CipherText, const std::string &Key)
 {
-    const int BIT_SIZE = 128;
-    if (static_cast<int>(Key.size()) > BIT_SIZE)
+    if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        printf("ERROR: Key length is more than %d\n", BIT_SIZE);
+        printf("ERROR: Key size is more than %d\n", KEY_BIT_SIZE);
         return std::string();
     }
 
     AES_KEY AESKey;
-    if (AES_set_decrypt_key((const unsigned char*)Key.c_str(), BIT_SIZE, &AESKey) < 0)
+    if (AES_set_decrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
         printf("ERROR: Set decrypt key failed.\n");
         return std::string();
@@ -68,9 +65,7 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
     int CycleCount = static_cast<int>(CipherText.length() / AES_BLOCK_SIZE);
     for (int Count = 0; Count < CycleCount; Count++)
     {
-        ::memset(OutArray, 0, AES_BLOCK_SIZE);
-        const std::string &SingleBlock = CipherText.substr(Count*AES_BLOCK_SIZE, AES_BLOCK_SIZE);
-
+        const std::string &SingleBlock = CipherText.substr(Count * AES_BLOCK_SIZE, AES_BLOCK_SIZE);
         AES_decrypt((const unsigned char*)SingleBlock.c_str(), OutArray, &AESKey);
         DecodeString.append((const char*)OutArray, AES_BLOCK_SIZE);
     }
@@ -80,15 +75,14 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
 
 inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string &Key)
 {
-    const int BIT_SIZE = 128;
-    if (static_cast<int>(Key.size()) > BIT_SIZE)
+    if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        printf("ERROR: Key length is more than %d\n", BIT_SIZE);
+        printf("ERROR: Key size is more than %d\n", KEY_BIT_SIZE);
         return std::string();
     }
 
     AES_KEY AESKey;
-    if (AES_set_encrypt_key((const unsigned char*)Key.c_str(), BIT_SIZE, &AESKey) < 0)
+    if (AES_set_encrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
         printf("ERROR: Set encrypt key failed.\n");
         return std::string();
@@ -102,59 +96,35 @@ inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string
 
     std::string ClearTextBackup(ClearText);
     ClearTextBackup.append(PaddingCount, '\0');
+    std::vector<unsigned char> EncryptVector(ClearTextBackup.size(), 0);
 
-    //alloc encrypt_string
-    unsigned char* EncryptString = (unsigned char*)calloc(ClearTextBackup.size(), sizeof(unsigned char));
-    if (EncryptString == NULL)
-    {
-        printf("Unable to allocate memory for encrypt string.\n");
-        return std::string();
-    }
-
-    //encrypt
     unsigned char ivec[AES_BLOCK_SIZE];
     memset(ivec, 0, sizeof(ivec));
-    AES_cbc_encrypt((const unsigned char*)ClearTextBackup.c_str(), EncryptString, ClearTextBackup.size(), &AESKey, ivec, AES_ENCRYPT);
+    AES_cbc_encrypt((const unsigned char*)ClearTextBackup.c_str(), &EncryptVector[0], ClearTextBackup.size(), &AESKey, ivec, AES_ENCRYPT);
 
-    std::string ResultString(EncryptString, EncryptString + ClearTextBackup.size());
-    free(EncryptString);
-    EncryptString = NULL;
-
-    return ResultString;
+    return std::string(EncryptVector.begin(), EncryptVector.end());
 }
 
 inline std::string AEScbcDecrypt(const std::string &CipherText, const std::string &Key)
 {
-    const int BIT_SIZE = 128;
-    if (static_cast<int>(Key.size()) > BIT_SIZE)
+    if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        printf("ERROR: Key length is more than %d\n", BIT_SIZE);
+        printf("ERROR: Key size is more than %d\n", KEY_BIT_SIZE);
         return std::string();
     }
 
     AES_KEY AESKey;
-    if (AES_set_decrypt_key((const unsigned char*)Key.c_str(), BIT_SIZE, &AESKey) < 0)
+    if (AES_set_decrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
         printf("ERROR: Set decrypt key failed.\n");
         return std::string();
     }
 
-    unsigned char* DecryptString = (unsigned char*)calloc(CipherText.size(), sizeof(unsigned char));
-    if (DecryptString == NULL)
-    {
-        printf("Unable to allocate memory for decrypt string.\n");
-        return std::string();
-    }
-
-    // decrypt
     unsigned char ivec[AES_BLOCK_SIZE];
     memset(ivec, 0, sizeof(ivec));
 
-    AES_cbc_encrypt((const unsigned char*)CipherText.c_str(), DecryptString, CipherText.size(), &AESKey, ivec, AES_DECRYPT);
+    std::vector<unsigned char> DecryptVector(CipherText.size(), 0);
+    AES_cbc_encrypt((const unsigned char*)CipherText.c_str(), &DecryptVector[0], CipherText.size(), &AESKey, ivec, AES_DECRYPT);
 
-    std::string ResultString(DecryptString, DecryptString + CipherText.size());
-    free(DecryptString);
-    DecryptString = NULL;
-
-    return ResultString;
+    return std::string(DecryptVector.begin(), DecryptVector.end());
 }
