@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "Tools/AES.h"
 #include "../../LinuxTools.h"
 #include "Message/project.pb.h"
 #include "Message/CodedMessage.h"
@@ -26,6 +27,9 @@ bool Client::ProcessDisconnected()
 
 bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
 {
+    std::string DecryptDataString = AEScbcDecrypt(NetworkMsg.m_Message, "Butler");
+    NetworkMsg.m_Message.swap(DecryptDataString);
+
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {
@@ -51,7 +55,9 @@ bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
-    return Send((void*)DataString.c_str(), DataString.size());
+    const std::string &SendData = AEScbcEncrypt(DataString, "Butler");
+    printf("Encrypt : %s\n", SendData.c_str());
+    return Send((void*)SendData.c_str(), SendData.size());
 }
 
 bool Client::SendLogin()

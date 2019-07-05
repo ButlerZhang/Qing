@@ -50,7 +50,7 @@ void OpenSSL_EncryptAndDecryptTest()
     //}
 
     {
-        std::string Key("butler");
+        std::string Key("Butler");
         std::string ClearText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\
                          bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\
                          ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\

@@ -64,6 +64,9 @@
     <Filter Include="Open\project\Message">
       <UniqueIdentifier>{bf3e4310-e1d5-44e8-85f6-e0ef984a3bbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\project\Tools">
+      <UniqueIdentifier>{fba35f8c-bea9-4fac-9a40-5c6f5a9a9799}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -411,6 +414,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\MultiServer.h">
       <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Tools\AES.h">
+      <Filter>Open\project\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

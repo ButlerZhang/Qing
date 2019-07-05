@@ -1,4 +1,5 @@
 #include "SingleServer.h"
+#include "Tools/AES.h"
 #include "../../LinuxTools.h"
 #include "Message/project.pb.h"
 #include "Message/CodedMessage.h"
@@ -23,13 +24,20 @@ bool SingleServer::ProcessDisconnected()
     return false;
 }
 
-bool SingleServer::ProcessMessage(NetworkMessage &Message)
+bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
-    int MessageType = DecodeMessage(Message.m_Message);
+    std::string DecryptDataString = AEScbcDecrypt(NetworkMsg.m_Message, "Butler");
+    printf("Decrypt: %s, size = %d\n", DecryptDataString.c_str(), DecryptDataString.size());
+
+    NetworkMsg.m_Message.swap(DecryptDataString);
+    //NetworkMsg.m_Message.assign(DecryptDataString);
+    printf("NetworkMsg Message: %s\n", NetworkMsg.m_Message.c_str());
+
+    int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {
-    case Project::MessageType::MT_LOGIN:    return ProcessLogin(Message);
-    case Project::MessageType::MT_LOGOUT:   return ProcessLogout(Message);
+    case Project::MessageType::MT_LOGIN:    return ProcessLogin(NetworkMsg);
+    case Project::MessageType::MT_LOGOUT:   return ProcessLogout(NetworkMsg);
     default:                                return false;
     }
 
@@ -84,5 +92,6 @@ bool SingleServer::ProcessLogout(NetworkMessage &Message)
 bool SingleServer::SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg)
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
-    return Send(NetworkMsg, DataString.c_str(), DataString.size());
+    const std::string &SendData = AEScbcEncrypt(DataString, "Butler");
+    return Send(NetworkMsg, SendData.c_str(), SendData.size());
 }

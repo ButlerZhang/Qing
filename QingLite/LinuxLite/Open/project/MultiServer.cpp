@@ -1,4 +1,5 @@
 #include "MultiServer.h"
+#include "Tools/AES.h"
 #include "../../LinuxTools.h"
 #include "Message/project.pb.h"
 #include "Message/CodedMessage.h"
@@ -25,6 +26,10 @@ bool MultiServer::ProcessDisconnected(ConnectNode & ConnectedNode, short events)
 
 bool MultiServer::ProcessMessage(ConnectNode &ConnectedNode)
 {
+    std::string DecryptDataString = AEScbcDecrypt(ConnectedNode.m_Message, "Butler");
+    ConnectedNode.m_Message.swap(DecryptDataString);
+    printf("Decrypt: %s\n", ConnectedNode.m_Message.c_str());
+
     int MessageType = DecodeMessage(ConnectedNode.m_Message);
     switch (MessageType)
     {
@@ -84,5 +89,6 @@ bool MultiServer::ProcessLogout(ConnectNode &ConnectedNode)
 bool MultiServer::SendMessage(int MessageType, ConnectNode & ConnectedNode, const google::protobuf::Message & ProtobufMsg)
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
-    return Send(ConnectedNode, DataString);
+    const std::string &SendData = AEScbcEncrypt(DataString, "Butler");
+    return Send(ConnectedNode, SendData);
 }

@@ -129,7 +129,7 @@ bool SingleEventBaseClient::Send(const void * Data, size_t Size)
         return false;
     }
 
-    printf("Send succeed.\n");
+    printf("Send succeed, size = %d.\n", Size);
     return true;
 }
 
