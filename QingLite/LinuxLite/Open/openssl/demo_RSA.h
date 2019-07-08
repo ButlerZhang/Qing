@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <string.h>
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
 

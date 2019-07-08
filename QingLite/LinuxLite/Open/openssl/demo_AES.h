@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -70,6 +71,12 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
         DecodeString.append((const char*)OutArray, AES_BLOCK_SIZE);
     }
 
+    std::string::size_type Index = DecodeString.find_last_not_of('\0');
+    if (Index != std::string::npos)
+    {
+        DecodeString.erase(Index + 1, Index);
+    }
+
     return DecodeString;
 }
 
@@ -126,5 +133,12 @@ inline std::string AEScbcDecrypt(const std::string &CipherText, const std::strin
     std::vector<unsigned char> DecryptVector(CipherText.size(), 0);
     AES_cbc_encrypt((const unsigned char*)CipherText.c_str(), &DecryptVector[0], CipherText.size(), &AESKey, ivec, AES_DECRYPT);
 
-    return std::string(DecryptVector.begin(), DecryptVector.end());
+    std::string DecodeString(DecryptVector.begin(), DecryptVector.end());
+    std::string::size_type Index = DecodeString.find_last_not_of('\0');
+    if (Index != std::string::npos)
+    {
+        DecodeString.erase(Index + 1, Index);
+    }
+
+    return DecodeString;
 }

@@ -30,9 +30,6 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
     printf("Decrypt: %s, size = %d\n", DecryptDataString.c_str(), DecryptDataString.size());
 
     NetworkMsg.m_Message.swap(DecryptDataString);
-    //NetworkMsg.m_Message.assign(DecryptDataString);
-    printf("NetworkMsg Message: %s\n", NetworkMsg.m_Message.c_str());
-
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {

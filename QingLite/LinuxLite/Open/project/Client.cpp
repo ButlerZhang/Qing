@@ -52,14 +52,6 @@ bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
     return true;
 }
 
-bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)
-{
-    const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
-    const std::string &SendData = AEScbcEncrypt(DataString, "Butler");
-    printf("Encrypt : %s\n", SendData.c_str());
-    return Send((void*)SendData.c_str(), SendData.size());
-}
-
 bool Client::SendLogin()
 {
     printf("Process login:\n");
@@ -92,4 +84,12 @@ bool Client::SendLogout()
 
     Logout.PrintDebugString();
     return SendMessage(Header->type(), Logout);
+}
+
+bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)
+{
+    const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
+    const std::string &SendData = AEScbcEncrypt(DataString, "Butler");
+    //printf("Encrypt : %s\n", SendData.c_str());
+    return Send((void*)SendData.c_str(), SendData.size());
 }
