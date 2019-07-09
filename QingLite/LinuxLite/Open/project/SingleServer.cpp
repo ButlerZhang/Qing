@@ -26,10 +26,9 @@ bool SingleServer::ProcessDisconnected()
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
-    std::string DecryptDataString = AEScbcDecrypt(NetworkMsg.m_Message, "Butler");
-    printf("Decrypt: %s, size = %d\n", DecryptDataString.c_str(), DecryptDataString.size());
+    std::string DecryptString = AEScbcDecrypt(NetworkMsg.m_Message, "Butler");
 
-    NetworkMsg.m_Message.swap(DecryptDataString);
+    NetworkMsg.m_Message.swap(DecryptString);
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {

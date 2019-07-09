@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <openssl/aes.h>
+#include "../../../../../Common/Tool/HexString.h"
 
 const int KEY_BIT_SIZE = 128;
 
@@ -28,6 +29,7 @@ inline std::string AESEncrypt(const std::string &ClearText, const std::string &K
     if (ClearText.length() % AES_BLOCK_SIZE > 0)
     {
         PaddingCount = static_cast<int>(AES_BLOCK_SIZE - ClearText.length() % AES_BLOCK_SIZE);
+        printf("Padding count = %d\n", PaddingCount);
     }
 
     std::string ClearTextBackup(ClearText);
@@ -74,7 +76,9 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
     std::string::size_type Index = DecodeString.find_last_not_of('\0');
     if (Index != std::string::npos)
     {
-        DecodeString.erase(Index + 1, Index);
+        std::string::size_type EraseCount = DecodeString.size() - (Index + 1);
+        DecodeString.erase(Index + 1, EraseCount);
+        printf("Erase count = %d\n", EraseCount);
     }
 
     return DecodeString;
@@ -99,6 +103,7 @@ inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string
     if (ClearText.length() % AES_BLOCK_SIZE > 0)
     {
         PaddingCount = static_cast<int>(AES_BLOCK_SIZE - ClearText.length() % AES_BLOCK_SIZE);
+        printf("AEScbcEncrypt: Padding count = %d\n", PaddingCount);
     }
 
     std::string ClearTextBackup(ClearText);
@@ -109,7 +114,14 @@ inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string
     memset(ivec, 0, sizeof(ivec));
     AES_cbc_encrypt((const unsigned char*)ClearTextBackup.c_str(), &EncryptVector[0], ClearTextBackup.size(), &AESKey, ivec, AES_ENCRYPT);
 
-    return std::string(EncryptVector.begin(), EncryptVector.end());
+    std::string CipherText(EncryptVector.begin(), EncryptVector.end());
+    printf("AEScbcEncrypt: Clear text size = %d, Cipher text size = %d\n", ClearText.size(), CipherText.size());
+
+    HexString MyHexString;
+    const std::string &EncryptString =  MyHexString.ASCIIStringToHexString(CipherText.c_str(), CipherText.size(), false);
+    printf("AEScbcEncrypt: Encrypt hex, size = %d, string = %s\n", EncryptString.size(), EncryptString.c_str());
+
+    return EncryptString;
 }
 
 inline std::string AEScbcDecrypt(const std::string &CipherText, const std::string &Key)
@@ -127,18 +139,29 @@ inline std::string AEScbcDecrypt(const std::string &CipherText, const std::strin
         return std::string();
     }
 
+    printf("AEScbcDecrypt: Decrypt hex, size = %d, string = %s\n", CipherText.size(), CipherText.c_str());
+
+    HexString MyHexString;
+    std::string ASCIIChipherText;
+    MyHexString.HexStringToASCIIString(CipherText, ASCIIChipherText);
+
     unsigned char ivec[AES_BLOCK_SIZE];
     memset(ivec, 0, sizeof(ivec));
 
-    std::vector<unsigned char> DecryptVector(CipherText.size(), 0);
-    AES_cbc_encrypt((const unsigned char*)CipherText.c_str(), &DecryptVector[0], CipherText.size(), &AESKey, ivec, AES_DECRYPT);
+    std::vector<unsigned char> DecryptVector(ASCIIChipherText.size(), 0);
+    AES_cbc_encrypt((const unsigned char*)ASCIIChipherText.c_str(), &DecryptVector[0], ASCIIChipherText.size(), &AESKey, ivec, AES_DECRYPT);
 
-    std::string DecodeString(DecryptVector.begin(), DecryptVector.end());
-    std::string::size_type Index = DecodeString.find_last_not_of('\0');
+    std::string ClearText(DecryptVector.begin(), DecryptVector.end());
+    printf("AEScbcDecrypt: Cipher text size = %d, Clear text size = %d\n", ASCIIChipherText.size(), ClearText.size());
+
+    std::string::size_type Index = ClearText.find_last_not_of('\0');
     if (Index != std::string::npos)
     {
-        DecodeString.erase(Index + 1, Index);
+        std::string::size_type EraseCount = ClearText.size() - (Index + 1);
+        ClearText.erase(Index + 1, EraseCount);
+        printf("AEScbcDecrypt: Erase count = %d\n", EraseCount);
     }
 
-    return DecodeString;
+    printf("AEScbcDecrypt: Cipher text size = %d, Clear text size = %d\n", ASCIIChipherText.size(), ClearText.size());
+    return ClearText;
 }
