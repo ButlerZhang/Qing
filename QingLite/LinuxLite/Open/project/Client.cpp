@@ -27,8 +27,8 @@ bool Client::ProcessDisconnected()
 
 bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
 {
-    std::string DecryptDataString = AEScbcDecrypt(NetworkMsg.m_Message, "Butler");
-    NetworkMsg.m_Message.swap(DecryptDataString);
+    //std::string DecryptDataString = AESDecrypt(NetworkMsg.m_Message, "Butler");
+    //NetworkMsg.m_Message.swap(DecryptDataString);
 
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
@@ -65,8 +65,7 @@ bool Client::SendLogin()
 
     Project::MessageHeader *Header = Login.mutable_header();
     Header->set_type(Project::MessageType::MT_LOGIN);
-    //Header->set_transmissionid(GetUUID());
-    Header->set_transmissionid("62470C3C280F83BD9494AA1D580B");
+    Header->set_transmissionid(GetUUID());
 
     //Login.PrintDebugString();
     return SendMessage(Header->type(), Login);
@@ -90,13 +89,6 @@ bool Client::SendLogout()
 bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)
 {
     const std::string &EncodeString = EncodeMessage(ProtobufMsg, MessageType);
-    const std::string &EncryptString = AEScbcEncrypt(EncodeString, "Butler");
-
-    printf("++++++++++++++++++++++++++++++++++++++\n");
-
-    std::string DecryptString = AEScbcDecrypt(EncryptString, "Butler");
-    int MessageTypeTemp = DecodeMessage(DecryptString);
-    printf("Message Type = %d\n\n", MessageTypeTemp);
-
-    return Send((void*)EncryptString.c_str(), EncryptString.size());
+    //const std::string &EncryptString = AESEncrypt(EncodeString, "Butler");
+    return Send((void*)EncodeString.c_str(), EncodeString.size());
 }

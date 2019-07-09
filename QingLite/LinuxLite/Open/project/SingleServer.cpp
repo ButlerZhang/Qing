@@ -26,9 +26,8 @@ bool SingleServer::ProcessDisconnected()
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
-    std::string DecryptString = AEScbcDecrypt(NetworkMsg.m_Message, "Butler");
-
-    NetworkMsg.m_Message.swap(DecryptString);
+    //std::string DecryptString = AESDecrypt(NetworkMsg.m_Message, "Butler");
+    //NetworkMsg.m_Message.swap(DecryptString);
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {
@@ -88,6 +87,6 @@ bool SingleServer::ProcessLogout(NetworkMessage &Message)
 bool SingleServer::SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg)
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
-    const std::string &SendData = AEScbcEncrypt(DataString, "Butler");
-    return Send(NetworkMsg, SendData.c_str(), SendData.size());
+    //const std::string &SendData = AESEncrypt(DataString, "Butler");
+    return Send(NetworkMsg, DataString.c_str(), DataString.size());
 }

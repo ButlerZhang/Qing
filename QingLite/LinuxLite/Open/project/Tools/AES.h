@@ -35,17 +35,21 @@ inline std::string AESEncrypt(const std::string &ClearText, const std::string &K
     std::string ClearTextBackup(ClearText);
     ClearTextBackup.append(PaddingCount, '\0');
 
-    std::string EncodeString;
+    std::string CipherText;
     unsigned char OutArray[AES_BLOCK_SIZE];
     int CycleCount = static_cast<int>(ClearTextBackup.length() / AES_BLOCK_SIZE);
     for (int Count = 0; Count < CycleCount; Count++)
     {
         const std::string &SingleBlock = ClearTextBackup.substr(Count*AES_BLOCK_SIZE, AES_BLOCK_SIZE);
         AES_encrypt((const unsigned char*)SingleBlock.c_str(), OutArray, &AESKey);
-        EncodeString.append((const char*)OutArray, AES_BLOCK_SIZE);
+        CipherText.append((const char*)OutArray, AES_BLOCK_SIZE);
     }
 
-    return EncodeString;
+    HexString MyHexString;
+    const std::string &EncryptString = MyHexString.ASCIIStringToHexString(CipherText.c_str(), CipherText.size(), false);
+    printf("AESEncrypt: Encrypt hex, size = %d, string = %s\n", EncryptString.size(), EncryptString.c_str());
+
+    return EncryptString;
 }
 
 inline std::string AESDecrypt(const std::string &CipherText, const std::string &Key)
@@ -63,25 +67,33 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
         return std::string();
     }
 
-    std::string DecodeString;
+    printf("AESDecrypt: Decrypt hex, size = %d, string = %s\n", CipherText.size(), CipherText.c_str());
+
+    HexString MyHexString;
+    std::string ASCIIChipherText;
+    MyHexString.HexStringToASCIIString(CipherText, ASCIIChipherText);
+
+    std::string ClearText;
     unsigned char OutArray[AES_BLOCK_SIZE];
-    int CycleCount = static_cast<int>(CipherText.length() / AES_BLOCK_SIZE);
+    int CycleCount = static_cast<int>(ASCIIChipherText.length() / AES_BLOCK_SIZE);
     for (int Count = 0; Count < CycleCount; Count++)
     {
-        const std::string &SingleBlock = CipherText.substr(Count * AES_BLOCK_SIZE, AES_BLOCK_SIZE);
+        const std::string &SingleBlock = ASCIIChipherText.substr(Count * AES_BLOCK_SIZE, AES_BLOCK_SIZE);
         AES_decrypt((const unsigned char*)SingleBlock.c_str(), OutArray, &AESKey);
-        DecodeString.append((const char*)OutArray, AES_BLOCK_SIZE);
+        ClearText.append((const char*)OutArray, AES_BLOCK_SIZE);
     }
 
-    std::string::size_type Index = DecodeString.find_last_not_of('\0');
+    printf("AESDecrypt: Cipher text size = %d, Clear text size = %d\n", ASCIIChipherText.size(), ClearText.size());
+    std::string::size_type Index = ClearText.find_last_not_of('\0');
     if (Index != std::string::npos)
     {
-        std::string::size_type EraseCount = DecodeString.size() - (Index + 1);
-        DecodeString.erase(Index + 1, EraseCount);
+        std::string::size_type EraseCount = ClearText.size() - (Index + 1);
+        ClearText.erase(Index + 1, EraseCount);
         printf("Erase count = %d\n", EraseCount);
     }
 
-    return DecodeString;
+    printf("AESDecrypt: Cipher text size = %d, Clear text size = %d\n", ASCIIChipherText.size(), ClearText.size());
+    return ClearText;
 }
 
 inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string &Key)
