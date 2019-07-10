@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <random>
+#include <string.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <uuid/uuid.h>
@@ -21,16 +22,29 @@ inline std::string GetUUID()
 inline std::string GetWorkDirectory()
 {
     char WorkPath[PATH_MAX];
-    if (getcwd(WorkPath, PATH_MAX) == NULL)
+    memset(WorkPath, 0, PATH_MAX);
+
+    getcwd(WorkPath, PATH_MAX);
+    return std::string(WorkPath);
+}
+
+inline std::string GetProgramName()
+{
+    char ProgramFullPath[PATH_MAX];
+    memset(ProgramFullPath, 0, PATH_MAX);
+    if (readlink("/proc/self/exe", ProgramFullPath, PATH_MAX) > 0)
     {
-        //printf("ERROR: Get work path failed.\n");
-    }
-    else
-    {
-        //printf("Work Path = %s\n", WorkPath);
+        std::string ProgramPath(ProgramFullPath);
+        std::string::size_type StartIndex = ProgramPath.find_last_of('/') + 1;
+        if (StartIndex != std::string::npos)
+        {
+            std::size_t CharCount = ProgramPath.size() - StartIndex - 4; //sizeof(.out) == 4
+            std::string ProgramName = ProgramPath.substr(StartIndex, CharCount);
+            return ProgramName;
+        }
     }
 
-    return std::string(WorkPath);
+    return std::string();
 }
 
 inline unsigned int GetRandomUIntInRange(int Min, int Max)

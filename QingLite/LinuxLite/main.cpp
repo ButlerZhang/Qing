@@ -3,6 +3,7 @@
 #include "Open/project/Client.h"
 #include "Open/project/SingleServer.h"
 #include "Open/project/MultiServer.h"
+#include "Open/project/Tools/BoostLog.h"
 #include <iostream>
 
 
@@ -13,12 +14,14 @@ int main(int argc, char *argv[])
     //OpenSSL_EncryptAndDecryptTest();
     //return 0;
 
+    BoostLog::DefaultInit();
 
     const char *ServerIP = "192.168.3.126";
     const int ServerPort = 12345;
 
     if (argc <= 1 || atoi(argv[1]) == 0)
     {
+        BoostLog::WriteInfo("Start server...");
         SingleServer Server;
         Server.Start(ServerIP, ServerPort);
     
@@ -27,6 +30,7 @@ int main(int argc, char *argv[])
     }
     else
     {
+        BoostLog::WriteInfo("Start client...");
         Client MyClient;
         //MyClient.Start(ServerPort);
         MyClient.Start(ServerIP, ServerPort);

@@ -160,6 +160,9 @@
     <ClCompile Include="Open\project\MultiServer.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
+    <ClCompile Include="Open\project\Tools\BoostLog.cpp">
+      <Filter>Open\project\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h">
@@ -416,6 +419,12 @@
       <Filter>Open\project</Filter>
     </ClInclude>
     <ClInclude Include="Open\project\Tools\AES.h">
+      <Filter>Open\project\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Tools\BoostLog.h">
+      <Filter>Open\project\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Tools\BoostFormat.h">
       <Filter>Open\project\Tools</Filter>
     </ClInclude>
   </ItemGroup>
