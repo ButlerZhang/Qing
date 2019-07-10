@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "Tools/BoostLog.h"
 #include "Tools/OpenSSLAES.h"
 #include "../../LinuxTools.h"
 #include "Message/project.pb.h"
@@ -16,12 +17,13 @@ Client::~Client()
 
 bool Client::ProcessConnected()
 {
+    BoostLog::WriteDebug("Process connected.");
     return SendLogin();
 }
 
 bool Client::ProcessDisconnected()
 {
-    //Add Log
+    BoostLog::WriteDebug("Process disconnected.");
     return false;
 }
 
@@ -40,21 +42,21 @@ bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 {
-    printf("Process login response\n");
+    BoostLog::WriteDebug("Process login response.");
     Project::UserLogin LoginResponse;
     if (!LoginResponse.ParseFromString(NetworkMsg.m_Message))
     {
+        BoostLog::WriteError("Login response message parse failed.");
         return false;
     }
 
-    LoginResponse.PrintDebugString();
-    SendLogout();
-    return true;
+    BoostLog::WriteDebug(LoginResponse.DebugString());
+    return SendLogout();
 }
 
 bool Client::SendLogin()
 {
-    //printf("Process login:\n");
+    BoostLog::WriteDebug("Send Login.");
     Project::UserLogin Login;
     Login.set_id(1000);
     Login.set_name("Butler");
@@ -67,13 +69,13 @@ bool Client::SendLogin()
     Header->set_type(Project::MessageType::MT_LOGIN);
     Header->set_transmissionid(GetUUID());
 
-    //Login.PrintDebugString();
+    BoostLog::WriteDebug(Login.DebugString());
     return SendMessage(Header->type(), Login);
 }
 
 bool Client::SendLogout()
 {
-    printf("Process logout:\n");
+    BoostLog::WriteDebug("Send Logout.");
     Project::UserLogout Logout;
     Logout.set_id(1000);
     Logout.set_name("Butler");
@@ -82,7 +84,7 @@ bool Client::SendLogout()
     Header->set_type(Project::MessageType::MT_LOGOUT);
     Header->set_transmissionid(GetUUID());
 
-    Logout.PrintDebugString();
+    BoostLog::WriteDebug(Logout.DebugString());
     return SendMessage(Header->type(), Logout);
 }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include "BoostFormat.h"
 #include <boost/log/sinks.hpp>
 
 typedef boost::log::sinks::synchronous_sink<boost::log::sinks::text_file_backend> TextSink;

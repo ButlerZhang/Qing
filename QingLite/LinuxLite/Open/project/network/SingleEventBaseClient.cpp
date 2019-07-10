@@ -1,5 +1,6 @@
 #include "SingleEventBaseClient.h"
 #include "../../../LinuxTools.h"
+#include "../Tools/BoostLog.h"
 #include <arpa/inet.h>
 #include <string.h>
 #include <unistd.h>
@@ -38,17 +39,19 @@ bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
 {
     if (m_EventBase == NULL)
     {
-        printf("ERROR: Create event base failed.\n");
+        BoostLog::WriteError("Create event base failed.");
         return false;
     }
 
     if (m_IsConnected)
     {
+        BoostLog::WriteError("Re-start single event base client.");
         return true;
     }
 
     if (Port <= 0 || ServerIP.empty())
     {
+        BoostLog::WriteError(BoostFormat("Parameters worng, port = %d, ip = %s", Port, ServerIP.c_str()));
         return false;
     }
 
@@ -62,7 +65,7 @@ bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
         return false;
     }
 
-    printf("Client start dispatch...\n");
+    BoostLog::WriteInfo("Client start dispatch...");
     event_base_dispatch(m_EventBase);
     return true;
 }
@@ -71,17 +74,19 @@ bool SingleEventBaseClient::Start(int UDPBroadcastPort)
 {
     if (m_EventBase == NULL)
     {
-        printf("ERROR: Create event base failed.\n");
+        BoostLog::WriteError("Create event base failed.");
         return false;
     }
 
     if (m_IsConnected)
     {
+        BoostLog::WriteError("Re-start single event base client.");
         return true;
     }
 
     if (UDPBroadcastPort <= 0)
     {
+        BoostLog::WriteError(BoostFormat("Parameters worng, udp broad cast port = %d", UDPBroadcastPort));
         return false;
     }
 
@@ -94,7 +99,7 @@ bool SingleEventBaseClient::Start(int UDPBroadcastPort)
         return false;
     }
 
-    printf("Client start dispatch...\n");
+    BoostLog::WriteInfo("Client start dispatch...");
     event_base_dispatch(m_EventBase);
     return true;
 }
@@ -103,16 +108,19 @@ bool SingleEventBaseClient::Stop()
 {
     if (m_EventBase == NULL)
     {
+        BoostLog::WriteError("Single event base client has stop.");
         return true;
     }
 
     if (event_base_loopbreak(m_EventBase) == 0)
     {
+        BoostLog::WriteDebug("Single event base client loop break.");
         event_base_free(m_EventBase);
         m_EventBase = NULL;
         return true;
     }
 
+    BoostLog::WriteError("Single event base client can not stop.");
     return false;
 }
 
@@ -120,16 +128,17 @@ bool SingleEventBaseClient::Send(const void * Data, size_t Size)
 {
     if (!m_IsConnected || m_DataBufferevent == NULL)
     {
+        BoostLog::WriteError("Single event base client can not send data.");
         return false;
     }
 
     if (bufferevent_write(m_DataBufferevent, Data, Size) != 0)
     {
-        printf("Send failed.\n");
+        BoostLog::WriteError("Single event base client send data failed.");
         return false;
     }
 
-    printf("Send succeed, size = %d.\n", Size);
+    BoostLog::WriteDebug(BoostFormat("Single event base client send succeed, size = %d.", Size));
     return true;
 }
 
@@ -137,7 +146,7 @@ bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
 {
     if (m_IsConnected)
     {
-        printf("ERROR: Re-connect server.\n");
+        BoostLog::WriteError("Re-connect server.");
         return true;
     }
 
@@ -152,7 +161,7 @@ bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
         m_DataBufferevent = bufferevent_socket_new(m_EventBase, -1, BEV_OPT_CLOSE_ON_FREE);
         if (m_DataBufferevent == NULL)
         {
-            printf("ERROR: Create bufferevent failed.\n");
+            BoostLog::WriteError("Create bufferevent failed.");
             return false;
         }
 
@@ -163,7 +172,7 @@ bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
     int ConnectResult = bufferevent_socket_connect(m_DataBufferevent, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress));
     if (ConnectResult != 0)
     {
-        printf("ERROR: bufferevent connect failed.\n");
+        BoostLog::WriteError("bufferevent connect failed.");
         return false;
     }
 
@@ -174,20 +183,20 @@ bool SingleEventBaseClient::AddEventInputFromCMD()
 {
     if (m_CMDInputEvent != NULL)
     {
-        printf("ERROR: Re-create CMD event.\n");
+        BoostLog::WriteError("Re-create CMD event.");
         return true;
     }
 
     m_CMDInputEvent = event_new(m_EventBase, STDIN_FILENO, EV_READ | EV_PERSIST, CallBack_InputFromCMD, this);
     if (m_CMDInputEvent == NULL)
     {
-        printf("ERROR: Create CMD event failed.\n");
+        BoostLog::WriteError("Create CMD event failed.");
         return false;
     }
 
     if (event_add(m_CMDInputEvent, NULL) != 0)
     {
-        printf("ERROR: Add CMD event failed.\n");
+        BoostLog::WriteError("Add CMD event failed.");
         event_free(m_CMDInputEvent);
         m_CMDInputEvent = NULL;
         return false;
@@ -201,14 +210,14 @@ bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
     m_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_UDPSocket == -1)
     {
-        printf("ERROR: Create udp socket failed.\n");
+        BoostLog::WriteError("Create udp socket failed.");
         return false;
     }
 
     int Optval = 1;
     if (setsockopt(m_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
-        printf("ERROR: set udp sockopt failed.\n");
+        BoostLog::WriteError("Set udp sockopt failed.");
         return false;
     }
 
@@ -219,20 +228,20 @@ bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
 
     if (bind(m_UDPSocket, (struct sockaddr *)&m_BroadcastAddress, sizeof(m_BroadcastAddress)) == -1)
     {
-        printf("ERROR: Bind udp socket failed.\n");
+        BoostLog::WriteError("Bind udp socket failed.");
         return false;
     }
 
     m_UDPBroadcastEvent = event_new(m_EventBase, m_UDPSocket, EV_READ | EV_PERSIST, CallBack_RecvUDPBroadcast, this);
     if (m_UDPBroadcastEvent == NULL)
     {
-        printf("ERROR: Create udp broadcast event failed.\n");
+        BoostLog::WriteError("Create udp broadcast event failed.");
         return false;
     }
 
     if (event_add(m_UDPBroadcastEvent, NULL) == -1)
     {
-        printf("ERROR: Add udp broadcast event failed.\n");
+        BoostLog::WriteError("Add udp broadcast event failed.");
         return false;
     }
 
@@ -243,14 +252,14 @@ bool SingleEventBaseClient::AddTimerReBindUDPSocket()
 {
     if (m_ReBindUDPSocketTimer != NULL)
     {
-        printf("ERROR: Re-create re-bind udp socket timer.\n");
+        BoostLog::WriteError("Re-create re-bind udp socket timer.");
         return true;
     }
 
     m_ReBindUDPSocketTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_ReBindUDPSocket, this);
     if (m_ReBindUDPSocketTimer == NULL)
     {
-        printf("ERROR: Create re-bind udp socket timer failed.\n");
+        BoostLog::WriteError("Create re-bind udp socket timer failed.");
         return false;
     }
 
@@ -260,7 +269,7 @@ bool SingleEventBaseClient::AddTimerReBindUDPSocket()
 
     if (event_add(m_ReBindUDPSocketTimer, &tv) != 0)
     {
-        printf("ERROR: Add re-bind udp socket timer failed.\n");
+        BoostLog::WriteError("Add re-bind udp socket timer failed.");
         event_free(m_ReBindUDPSocketTimer);
         m_ReBindUDPSocketTimer = NULL;
         return false;
@@ -273,14 +282,14 @@ bool SingleEventBaseClient::AddTimerReConnectServer()
 {
     if (m_ReConnectServerTimer != NULL)
     {
-        printf("ERROR: Re-create re-connect server timer.\n");
+        BoostLog::WriteError("Re-create re-connect server timer.");
         return true;
     }
 
     m_ReConnectServerTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_ReConnectServer, this);
     if (m_ReConnectServerTimer == NULL)
     {
-        printf("ERROR: Create re-connect server timer failed.\n");
+        BoostLog::WriteError("Create re-connect server timer failed.");
         return false;
     }
 
@@ -290,7 +299,7 @@ bool SingleEventBaseClient::AddTimerReConnectServer()
 
     if (event_add(m_ReConnectServerTimer, &tv) != 0)
     {
-        printf("ERROR: Add re-connect server timer failed.\n");
+        BoostLog::WriteError("Add re-connect server timer failed.");
         event_free(m_ReConnectServerTimer);
         m_ReConnectServerTimer = NULL;
         return false;
@@ -304,14 +313,14 @@ bool SingleEventBaseClient::AddTimerSendDataRandomly()
     return true;
     if (m_SendDataRandomlyTimer != NULL)
     {
-        printf("ERROR: Re-create send data randomly event.\n");
+        BoostLog::WriteError("Re-create send data randomly event.");
         return true;
     }
 
     m_SendDataRandomlyTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_SendDataRandomly, this);
     if (m_SendDataRandomlyTimer == NULL)
     {
-        printf("ERROR: Create send data randomly event failed.\n");
+        BoostLog::WriteError("Create send data randomly event failed.");
         return false;
     }
 
@@ -321,7 +330,7 @@ bool SingleEventBaseClient::AddTimerSendDataRandomly()
 
     if (event_add(m_SendDataRandomlyTimer, &tv) != 0)
     {
-        printf("ERROR: Add send data randomly event failed.\n");
+        BoostLog::WriteError("Add send data randomly event failed.");
         event_free(m_SendDataRandomlyTimer);
         m_SendDataRandomlyTimer = NULL;
         return false;
@@ -338,30 +347,31 @@ void SingleEventBaseClient::CallBack_InputFromCMD(int Input, short events, void 
     ssize_t ReadSize = read(Input, InputMessage, sizeof(InputMessage));
     if (ReadSize <= 0)
     {
-        printf("ERROR: Can not read from cmd.\n");
+        BoostLog::WriteError("Can not read from cmd.");
         return;
     }
 
     InputMessage[ReadSize - 1] = '\0';
     if (strlen(InputMessage) <= 0)
     {
+        BoostLog::WriteError("Read empty data.");
         return;
     }
 
     SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
     if (Client->m_DataBufferevent == NULL || !Client->m_IsConnected)
     {
-        printf("Can not send data, not connect server.\n");
+        BoostLog::WriteError("Can not send data, not connect server.");
         return;
     }
 
     if (bufferevent_write(Client->m_DataBufferevent, InputMessage, ReadSize) == 0)
     {
-        printf("Send message = %s, size = %d.\n", InputMessage, ReadSize);
+        BoostLog::WriteDebug(BoostFormat("Send message = %s, size = %d.", InputMessage, ReadSize));
     }
     else
     {
-        printf("Send message = %s failed.\n", InputMessage);
+        BoostLog::WriteError(BoostFormat("Send message = %s failed.\n", InputMessage));
     }
 }
 
@@ -383,34 +393,34 @@ void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, 
 
     if (RecvSize == -1)
     {
-        printf("ERROR: UDP broadcast recv error.\n");
+        BoostLog::WriteError("UDP broadcast recv error.");
         return;
     }
 
     if (RecvSize == 0)
     {
-        printf("ERROR: UDP connection closed.\n");
+        BoostLog::WriteError("UDP connection closed.");
         return;
     }
 
     std::string BroadcastMessage(UDPBroadcastBuffer);
-    printf("UDP broadcast recv message = %s.\n", UDPBroadcastBuffer);
+    BoostLog::WriteDebug(BoostFormat("UDP broadcast recv message = %s.", UDPBroadcastBuffer));
     std::string::size_type Index = BroadcastMessage.find(":");
     if (Index == std::string::npos)
     {
-        printf("ERROR: Can not parse message.\n");
+        BoostLog::WriteError("Can not parse message.");
         return;
     }
 
     Client->m_ServerIP = BroadcastMessage.substr(0, Index);
     Client->m_ServerPort = atoi(BroadcastMessage.substr(Index + 1, BroadcastMessage.size()).c_str());
-    printf("Connect Information: Server IP = %s, Port = %d\n", Client->m_ServerIP.c_str(), Client->m_ServerPort);
+    BoostLog::WriteInfo(BoostFormat("Connect Information: Server IP = %s, Port = %d", Client->m_ServerIP.c_str(), Client->m_ServerPort));
 
     if (!Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort))
     {
         Client->m_ServerPort = 0;
         Client->m_ServerIP.clear();
-        printf("ERROR: Can not connect server.\n");
+        BoostLog::WriteError("Can not connect server.");
     }
 }
 
@@ -484,32 +494,32 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
     if (Events & BEV_EVENT_READING)
     {
         Client->m_IsConnected = false;
-        printf("error encountered while reading\n");
+        BoostLog::WriteError("error encountered while reading");
     }
     else if (Events & BEV_EVENT_WRITING)
     {
         Client->m_IsConnected = false;
-        printf("error encountered while writing\n");
+        BoostLog::WriteError("error encountered while writing");
     }
     else if (Events & BEV_EVENT_EOF)
     {
         Client->m_IsConnected = false;
         int ClientSocket = bufferevent_getfd(bev);
-        printf("Client = %d connection closed.\n", ClientSocket);
+        BoostLog::WriteInfo(BoostFormat("Client = %d connection closed.", ClientSocket));
     }
     else if (Events & BEV_EVENT_TIMEOUT)
     {
-        printf("ERROR: User specified timeout reached.\n");
+        BoostLog::WriteError("User specified timeout reached.");
     }
     else if (Events & BEV_EVENT_CONNECTED)
     {
         Client->m_IsConnected = true;
-        printf("Connected server succeed.\n");
+        BoostLog::WriteInfo("Connected server succeed.");
         if (Client->m_UDPBroadcastEvent != NULL)
         {
             if (event_del(Client->m_UDPBroadcastEvent) == 0)
             {
-                printf("Delete udp broadcast recv event and close udp socket.\n");
+                BoostLog::WriteInfo("Delete udp broadcast recv event and close udp socket.");
                 event_free(Client->m_UDPBroadcastEvent);
                 Client->m_UDPBroadcastEvent = NULL;
                 close(Client->m_UDPSocket);
@@ -521,12 +531,12 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
     else if(Events & BEV_EVENT_ERROR)
     {
         Client->m_IsConnected = false;
-        printf("unrecoverable error encountered\n");
+        BoostLog::WriteError("unrecoverable error encountered");
     }
     else
     {
         Client->m_IsConnected = false;
-        printf("ERROR: client event = %d, unknow error.\n", Events);
+        BoostLog::WriteError(BoostFormat("Client event = %d, unknow error.", Events));
     }
 
     if (!Client->m_IsConnected)
@@ -547,7 +557,7 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *User
     memset(ServerMessage, 0, sizeof(ServerMessage));
 
     size_t RecvSize = bufferevent_read(bev, ServerMessage, sizeof(ServerMessage));
-    printf("Recv message size = %d\n", RecvSize);
+    BoostLog::WriteDebug(BoostFormat("Recv message size = %d\n", RecvSize));
 
     if (RecvSize > 0)
     {

@@ -1,4 +1,5 @@
 #include "SingleServer.h"
+#include "Tools/BoostLog.h"
 #include "Tools/OpenSSLAES.h"
 #include "../../LinuxTools.h"
 #include "Message/project.pb.h"
@@ -16,11 +17,13 @@ SingleServer::~SingleServer()
 
 bool SingleServer::ProcessConnected()
 {
+    BoostLog::WriteDebug("Process connected.");
     return false;
 }
 
 bool SingleServer::ProcessDisconnected()
 {
+    BoostLog::WriteDebug("Process disconnected.");
     return false;
 }
 
@@ -49,13 +52,15 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool SingleServer::ProcessLogin(NetworkMessage &Message)
 {
+    BoostLog::WriteDebug("Process login.");
     Project::UserLogin Login;
     if (!Login.ParseFromString(Message.m_Message))
     {
+        BoostLog::WriteError("Login message parse failed.");
         return false;
     }
 
-    Login.PrintDebugString();
+    BoostLog::WriteDebug(Login.DebugString());
 
     Project::UserLogin Response;
     Response.set_id(Login.id());
@@ -69,18 +74,21 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
     Header->set_type(Project::MessageType::MT_LOGIN_RESPONSE);
     Header->set_transmissionid(GetUUID());
 
+    BoostLog::WriteDebug(Response.DebugString());
     return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, Message, Response);
 }
 
 bool SingleServer::ProcessLogout(NetworkMessage &Message)
 {
-    Project::UserLogout LogoutMessage;
-    if (!LogoutMessage.ParseFromString(Message.m_Message))
+    BoostLog::WriteDebug("Process logout.");
+    Project::UserLogout Logout;
+    if (!Logout.ParseFromString(Message.m_Message))
     {
+        BoostLog::WriteError("Logout message parse failed.");
         return false;
     }
 
-    LogoutMessage.PrintDebugString();
+    BoostLog::WriteDebug(Logout.DebugString());
     return true;
 }
 
