@@ -418,13 +418,13 @@
     <ClInclude Include="Open\project\MultiServer.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Tools\AES.h">
-      <Filter>Open\project\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\Tools\BoostLog.h">
       <Filter>Open\project\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Open\project\Tools\BoostFormat.h">
+      <Filter>Open\project\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Tools\OpenSSLAES.h">
       <Filter>Open\project\Tools</Filter>
     </ClInclude>
   </ItemGroup>

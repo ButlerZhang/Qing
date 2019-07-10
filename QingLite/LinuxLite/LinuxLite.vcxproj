@@ -153,9 +153,9 @@
     <ClInclude Include="Open\project\Network\SingleEventBaseServer.h" />
     <ClInclude Include="Open\project\Network\UDPBroadcast.h" />
     <ClInclude Include="Open\project\SingleServer.h" />
-    <ClInclude Include="Open\project\Tools\AES.h" />
     <ClInclude Include="Open\project\Tools\BoostFormat.h" />
     <ClInclude Include="Open\project\Tools\BoostLog.h" />
+    <ClInclude Include="Open\project\Tools\OpenSSLAES.h" />
     <ClInclude Include="Open\protobuf\base.pb.h" />
     <ClInclude Include="Open\protobuf\ProtobufDemo.h" />
     <ClInclude Include="Open\protobuf\user.pb.h" />

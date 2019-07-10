@@ -4,10 +4,11 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/support/date_time.hpp>
+#include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include "../../../LinuxTools.h"
 
 
@@ -57,9 +58,10 @@ void BoostLog::SetFilter(LogLevel Level)
 boost::shared_ptr<TextSink> BoostLog::CreateSink(const std::string & FileName)
 {
     const size_t ONE_MB = 1024 * 1024;
+    long ProcessID = (long)getpid();
 
     boost::shared_ptr<boost::log::sinks::text_file_backend> Backend = boost::make_shared<boost::log::sinks::text_file_backend>(
-        boost::log::keywords::file_name = m_LogDirectory + FileName + "_%Y%m%d_%H%M%S.log",
+        boost::log::keywords::file_name = m_LogDirectory + FileName + "_%Y%m%d_%H%M%S_" + std::to_string(ProcessID) + ".log",
         boost::log::keywords::rotation_size = 100 * ONE_MB,
         boost::log::keywords::time_based_rotation = boost::log::sinks::file::rotation_at_time_point(0, 0, 0),
         boost::log::keywords::min_free_space = 500 * ONE_MB);
@@ -70,8 +72,8 @@ boost::shared_ptr<TextSink> BoostLog::CreateSink(const std::string & FileName)
     NewSink->set_formatter(
         boost::log::expressions::format("[%1%][%2%][%3%]: %4%")
         % boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")
-        % boost::log::expressions::attr<LogLevel>("Severity")
         % boost::log::expressions::attr<boost::log::attributes::current_thread_id::value_type>("ThreadID")
+        % boost::log::expressions::attr<LogLevel>("Severity")
         % boost::log::expressions::smessage
     );
 
@@ -83,7 +85,12 @@ void BoostLog::InitBaseSink(const std::string &LogFileName)
     boost::shared_ptr<TextSink> BaseSink = CreateSink(LogFileName);
     BaseSink->set_filter(boost::log::expressions::attr<LogLevel>("Severity") >= LL_DEBUG);
 
+    auto ConsoleSink = boost::log::add_console_log();
+    ConsoleSink->set_filter(boost::log::expressions::attr<LogLevel>("Severity") >= LL_INFO);
+
     boost::log::core::get()->add_sink(BaseSink);
+    boost::log::core::get()->add_sink(ConsoleSink);
+
     boost::log::add_common_attributes();
 }
 
