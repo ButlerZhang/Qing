@@ -5,7 +5,7 @@
 
 
 
-void ProtobufDemo()
+void demo_protobuf()
 {
     Open::User LoginUser;
     LoginUser.set_id(1000);

@@ -138,7 +138,7 @@ bool SingleEventBaseClient::Send(const void * Data, size_t Size)
         return false;
     }
 
-    BoostLog::WriteDebug(BoostFormat("Single event base client send succeed, size = %d.", Size));
+    BoostLog::WriteInfo(BoostFormat("Single event base client send succeed, size = %d.", Size));
     return true;
 }
 
@@ -557,7 +557,7 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *User
     memset(ServerMessage, 0, sizeof(ServerMessage));
 
     size_t RecvSize = bufferevent_read(bev, ServerMessage, sizeof(ServerMessage));
-    BoostLog::WriteDebug(BoostFormat("Recv message size = %d\n", RecvSize));
+    BoostLog::WriteInfo(BoostFormat("Recv message size = %d", RecvSize));
 
     if (RecvSize > 0)
     {

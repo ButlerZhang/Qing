@@ -1,4 +1,5 @@
 #include "SignalEventMap.h"
+#include "../Tools/BoostLog.h"
 
 
 
@@ -26,20 +27,20 @@ bool SignalEventMap::AddSignalEvent(int Signal, void(*CallBack_Signal)(int, shor
 {
     if (m_EventBase == NULL)
     {
-        printf("ERROR: Add signal event failed, base event is NULL.\n");
+        BoostLog::WriteError("Add signal event failed, base event is NULL.");
         return false;
     }
 
     event *SignalEventMap = evsignal_new(m_EventBase, Signal, CallBack_Signal, (void*)this);
     if (SignalEventMap == NULL)
     {
-        printf("ERROR: Create signal event error.\n");
+        BoostLog::WriteError("Create signal event error.");
         return false;
     }
 
     if (event_add(SignalEventMap, NULL) < 0)
     {
-        printf("ERROR: Add signal event to base event error.\n");
+        BoostLog::WriteError("Add signal event to base event error.");
         event_del(SignalEventMap);
         return false;
     }

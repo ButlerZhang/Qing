@@ -1,4 +1,5 @@
 #include "HTTPServer.h"
+#include "../Tools/BoostLog.h"
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -60,26 +61,26 @@ bool HTTPServer::Start(const std::string & ServerIP, int Port)
 {
     if (m_EventBase == NULL)
     {
-        printf("ERROR: No binding event base.\n");
+        BoostLog::WriteError("No binding event base.");
         return false;
     }
 
     if (m_evHTTP != NULL)
     {
-        printf("ERROR: re-start.\n");
+        BoostLog::WriteError("HTTP server re-start.");
         return true;
     }
 
     m_evHTTP = evhttp_new(m_EventBase);
     if (m_evHTTP == NULL)
     {
-        printf("ERROR: could not create evhttp.\n");
+        BoostLog::WriteError("Could not create evhttp.");
         return false;
     }
 
     if (evhttp_bind_socket(m_evHTTP, ServerIP.c_str(), static_cast<uint16_t>(Port)) != 0)
     {
-        printf("ERROR: http server bind failed.\n");
+        BoostLog::WriteError("http server bind failed.");
         return false;
     }
 
@@ -106,41 +107,38 @@ void HTTPServer::PrintRequest(evhttp_request * Request)
     default:                    RequestType = "unknown";    break;
     }
 
-    printf("==========new request=========\n");
-    printf("Received a %s request for: %s\nHeaders:\n", RequestType, evhttp_request_get_uri(Request));
+    BoostLog::WriteDebug(BoostFormat("Received a %s request for: %s", RequestType, evhttp_request_get_uri(Request)));
 
     struct evkeyvalq *Headers = evhttp_request_get_input_headers(Request);
     for (struct evkeyval *header = Headers->tqh_first; header != NULL; header = header->next.tqe_next)
     {
-        printf("\t%s: %s\n", header->key, header->value);
+        BoostLog::WriteDebug(BoostFormat("%s: %s", header->key, header->value));
     }
-
-    printf("\r\n");
 }
 
 bool HTTPServer::ParseRequestPath(evhttp_request * Request, std::string & ActualllyPath)
 {
     const char *OriginalURI = evhttp_request_get_uri(Request);
-    printf("Original URI = %s\n", OriginalURI);
+    BoostLog::WriteDebug(BoostFormat("Original URI = %s", OriginalURI));
 
     struct evhttp_uri *ParseURI = evhttp_uri_parse(OriginalURI);
     if (ParseURI == NULL)
     {
         evhttp_send_error(Request, HTTP_BADREQUEST, "Can not decoded URI.");
-        printf("It is not a good URI. Sending BADREQUEST.\n");
+        BoostLog::WriteError("It is not a good URI. Sending BADREQUEST.");
         return false;
     }
 
-    printf("scheme:%s\n", evhttp_uri_get_scheme(ParseURI));
-    printf("host:%s\n", evhttp_uri_get_host(ParseURI));
-    printf("path:%s\n", evhttp_uri_get_path(ParseURI));
-    printf("port:%d\n", evhttp_uri_get_port(ParseURI));
-    printf("query:%s\n", evhttp_uri_get_query(ParseURI));
-    printf("userinfo:%s\n", evhttp_uri_get_userinfo(ParseURI));
-    printf("fragment:%s\n\n", evhttp_uri_get_fragment(ParseURI));
+    BoostLog::WriteDebug(BoostFormat("scheme:%s", evhttp_uri_get_scheme(ParseURI)));
+    BoostLog::WriteDebug(BoostFormat("host:%s", evhttp_uri_get_host(ParseURI)));
+    BoostLog::WriteDebug(BoostFormat("path:%s", evhttp_uri_get_path(ParseURI)));
+    BoostLog::WriteDebug(BoostFormat("port:%d", evhttp_uri_get_port(ParseURI)));
+    BoostLog::WriteDebug(BoostFormat("query:%s", evhttp_uri_get_query(ParseURI)));
+    BoostLog::WriteDebug(BoostFormat("userinfo:%s", evhttp_uri_get_userinfo(ParseURI)));
+    BoostLog::WriteDebug(BoostFormat("fragment:%s", evhttp_uri_get_fragment(ParseURI)));
 
     const char *RequestPath = evhttp_uri_get_path(ParseURI);
-    printf("Request path = %s\n", RequestPath);
+    BoostLog::WriteDebug(BoostFormat("Request path = %s", RequestPath));
     if (RequestPath == NULL)
     {
         RequestPath = "/";
@@ -150,7 +148,7 @@ bool HTTPServer::ParseRequestPath(evhttp_request * Request, std::string & Actual
     if (DecodeURI == NULL)
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
-        printf("Decoded URI is NULL.\n");
+        BoostLog::WriteError("Decoded URI is NULL.");
         evhttp_uri_free(ParseURI);
         return false;
     }
@@ -158,7 +156,7 @@ bool HTTPServer::ParseRequestPath(evhttp_request * Request, std::string & Actual
     if (strstr(DecodeURI, ".."))
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
-        printf("Decoded URI include '..' directory.\n");
+        BoostLog::WriteError("Decoded URI include '..' directory.");
         evhttp_uri_free(ParseURI);
         free(DecodeURI);
         return false;
@@ -174,7 +172,7 @@ bool HTTPServer::ParseRequestPath(evhttp_request * Request, std::string & Actual
         ActualllyPath.append(DecodeURI);
     }
 
-    printf("Actuallly path = %s\r\n", ActualllyPath.c_str());
+    BoostLog::WriteDebug(BoostFormat("Actuallly path = %s", ActualllyPath.c_str()));
     evhttp_uri_free(ParseURI);
     free(DecodeURI);
     return true;
@@ -185,7 +183,7 @@ void HTTPServer::ProcessDirectory(evhttp_request * Request, const std::string & 
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
     {
-        printf("ERROR: evbuffer create failed.\n");
+        BoostLog::WriteError("ProcessDirectory, evbuffer create failed.");
         return;
     }
 
@@ -200,7 +198,7 @@ void HTTPServer::ProcessDirectory(evhttp_request * Request, const std::string & 
         "  <h1>Floder:</h1>\n"
         "  <ul>\n");
 
-    printf("\nFloder:\r\n");
+    BoostLog::WriteDebug("Floder:");
 
     struct stat FileStat;
     struct dirent **DirentInfo;
@@ -213,7 +211,7 @@ void HTTPServer::ProcessDirectory(evhttp_request * Request, const std::string & 
             continue;
         }
 
-        printf("\t%s\n", FileName);
+        BoostLog::WriteDebug(BoostFormat("File name = %s", FileName));
         if (lstat((ActualllyPath + FileName).c_str(), &FileStat) < 0)
         {
             evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
@@ -231,7 +229,6 @@ void HTTPServer::ProcessDirectory(evhttp_request * Request, const std::string & 
         }
     }
 
-    printf("\r\n");
     evbuffer_add_printf(evb, "</ul></body></html>\n");
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", "text/html");
 
@@ -245,13 +242,13 @@ void HTTPServer::ProcessFile(evhttp_request * Request, struct stat & FileStat, c
     if (FileDescriptor <= 0)
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "File was not found.");
-        printf("ERROR: Open file descriptor failed.\n");
+        BoostLog::WriteError("ProcessFile, Open file descriptor failed.");
         return;
     }
 
     if (fstat(FileDescriptor, &FileStat) < 0)
     {
-        printf("ERROR: fstat failed.\n");
+        BoostLog::WriteError("ProcessFile, fstat failed.");
         close(FileDescriptor);
         return;
     }
@@ -259,7 +256,7 @@ void HTTPServer::ProcessFile(evhttp_request * Request, struct stat & FileStat, c
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
     {
-        printf("ERROR: evbuffer create failed.\n");
+        BoostLog::WriteError("ProcessFile, evbuffer create failed.");
         close(FileDescriptor);
         return;
     }
@@ -267,7 +264,7 @@ void HTTPServer::ProcessFile(evhttp_request * Request, struct stat & FileStat, c
     const char *FileExtension = strrchr(ActualllyPath.c_str(), '.') + 1;
     std::map<std::string, std::string>::iterator it = m_ContentTypeMap.find(FileExtension);
     const char *FileType = (it != m_ContentTypeMap.end()) ? it->second.c_str() : m_ContentTypeMap["misc"].c_str();
-    printf("\r\nFile:\r\n\tExtension = %s\n\tType = %s\n\n", FileExtension, FileType);
+    BoostLog::WriteDebug(BoostFormat("File: Extension = %s, Type = %s", FileExtension, FileType));
 
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", FileType);
     evbuffer_add_file(evb, FileDescriptor, 0, FileStat.st_size);
@@ -294,7 +291,7 @@ void HTTPServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
         struct stat ActuallyPathStat;
         if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
         {
-            printf("ERROR: Stat actually path failed.\n\n");
+            BoostLog::WriteError("Stat actually path failed.");
             return;
         }
 
@@ -315,11 +312,11 @@ void HTTPServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
         char PostDataBuffer[1024];
         memset(PostDataBuffer, 0, sizeof(PostDataBuffer));
         int ReadSize = evbuffer_remove(PostData, PostDataBuffer, sizeof(PostDataBuffer));
-        printf("Post data = %s, size = %d.\n\n", PostDataBuffer, ReadSize);
+        BoostLog::WriteDebug(BoostFormat("Post data = %s, size = %d.", PostDataBuffer, ReadSize));
     }
     else
     {
         evhttp_send_error(Request, HTTP_BADMETHOD, "method not allowed for this uri.");
-        printf("method not allowed for this uri.\n\n");
+        BoostLog::WriteDebug("method not allowed for this uri.");
     }
 }

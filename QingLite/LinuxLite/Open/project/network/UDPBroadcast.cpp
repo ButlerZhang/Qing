@@ -1,4 +1,5 @@
 #include "UDPBroadcast.h"
+#include "../Tools/BoostLog.h"
 #include <arpa/inet.h>
 #include <assert.h>
 #include <string.h>
@@ -35,27 +36,27 @@ bool UDPBroadcast::StartTimer(const std::string &ServerIP, int TimeInternal, int
 {
     if (TimeInternal <= 0)
     {
-        printf("ERROR: Timer at least needs one second.\n");
+        BoostLog::WriteError("UDPBroadcast: Timer at least needs one second.");
         return false;
     }
 
     if (m_EventBase == NULL)
     {
-        printf("ERROR: No binding event base.\n");
+        BoostLog::WriteError("UDPBroadcast: No binding event base.");
         return false;
     }
 
     m_BroadcastSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_BroadcastSocket == -1)
     {
-        printf("ERROR: Create udp socket error.\n");
+        BoostLog::WriteError("UDPBroadcast: Create udp socket error.");
         return false;
     }
 
     int Optval = 1;
     if (setsockopt(m_BroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
-        printf("ERROR: setsockopt error.\n");
+        BoostLog::WriteError("UDPBroadcast: setsockopt error.");
         return false;
     }
 
@@ -101,7 +102,7 @@ void UDPBroadcast::CallBack_TimeOut(int Socket, short Events, void *UserData)
 
     if (Broadcast->m_IsDisplayLog)
     {
-        printf("Broadcast = %s, elapsed %.3f seconds.\n", UDPData.c_str(), elapsed);
+        BoostLog::WriteInfo(BoostFormat("Broadcast = %s, elapsed %.3f seconds.", UDPData.c_str(), elapsed));
     }
 
     Broadcast->m_LastSendTime = NewTime;

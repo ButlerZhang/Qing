@@ -173,7 +173,7 @@ inline std::string AEScbcDecrypt(const std::string &CipherText, const std::strin
     {
         std::string::size_type EraseCount = ClearText.size() - (Index + 1);
         ClearText.erase(Index + 1, EraseCount);
-        printf("AEScbcDecrypt: Erase count = %d\n", EraseCount);
+        BoostLog::WriteDebug(BoostFormat("AEScbcDecrypt: Erase count = %d", EraseCount));
     }
 
     BoostLog::WriteDebug(BoostFormat("AEScbcDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));

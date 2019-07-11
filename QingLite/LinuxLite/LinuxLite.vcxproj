@@ -157,7 +157,7 @@
     <ClInclude Include="Open\project\Tools\BoostLog.h" />
     <ClInclude Include="Open\project\Tools\OpenSSLAES.h" />
     <ClInclude Include="Open\protobuf\base.pb.h" />
-    <ClInclude Include="Open\protobuf\ProtobufDemo.h" />
+    <ClInclude Include="Open\protobuf\demo_protobuf.h" />
     <ClInclude Include="Open\protobuf\user.pb.h" />
     <ClInclude Include="Qing\NetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />

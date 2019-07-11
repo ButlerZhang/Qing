@@ -1,4 +1,5 @@
 #include "SingleEventBaseServer.h"
+#include "../Tools/BoostLog.h"
 #include <arpa/inet.h>
 #include <strings.h>
 #include <string.h>
@@ -33,38 +34,45 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 
     if (!m_UDPBroadcast.BindBaseEvent(m_EventBase))
     {
-        printf("ERROR: UDP braodcast bind event base failed.\n");
+        BoostLog::WriteError("UDP braodcast bind event base failed.");
         return false;
     }
 
     if (!m_HTTPServer.BindBaseEvent(m_EventBase))
     {
-        printf("ERROR: HTTP server bind event base failed.\n");
+        BoostLog::WriteError("HTTP server bind event base failed.");
         return false;
     }
 
     if (!m_HTTPServer.Start(m_ListenIP, m_ListenPort + 1))
     {
-        printf("ERROR: http server start failed.\n");
+        BoostLog::WriteError("http server start failed.");
         return false;
     }
 
     if (!m_MessageHandler.Start(this))
     {
-        printf("ERROR: Message handler start failed.\n");
+        BoostLog::WriteError("Message handler start failed.");
         return false;
     }
 
     m_UDPBroadcast.StartTimer(m_ListenIP, 10, m_ListenPort);
 
-    printf("Server start dispatch...\n");
+    BoostLog::WriteInfo("Single Server start dispatch...");
     event_base_dispatch(m_EventBase);
     return true;
 }
 
 bool SingleEventBaseServer::Stop()
 {
-    return event_base_loopbreak(m_EventBase) == 0;
+    if (event_base_loopbreak(m_EventBase) == 0)
+    {
+        BoostLog::WriteInfo("Single Server loop break.");
+        return true;
+    }
+
+    BoostLog::WriteError("Single Server loop break failed.");
+    return false;
 }
 
 bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
@@ -75,12 +83,12 @@ bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
 
     if (bufferevent_write(NetworkMsg.m_Bufferevent, ACK.c_str(), ACK.length()) != 0)
     {
-        printf("Send failed, %s\n", ACK.c_str());
+        BoostLog::WriteError(BoostFormat("Send failed, %s", ACK.c_str()));
         return false;
     }
     else
     {
-        printf("%s\n", ACK.c_str());
+        BoostLog::WriteDebug(BoostFormat("%s", ACK.c_str()));
         return true;
     }
 }
@@ -89,13 +97,13 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
 {
     if (m_EventBase == NULL)
     {
-        printf("ERROR: Create event base error.\n");
+        BoostLog::WriteError("Create event base error.");
         return false;
     }
 
     if (m_Listener != NULL)
     {
-        printf("ERROR: Re-create event base.\n");
+        BoostLog::WriteError("Re-create event base.");
         return true;
     }
 
@@ -106,12 +114,12 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
     if (!IP.empty())
     {
         inet_pton(AF_INET, IP.c_str(), &(BindAddress.sin_addr));
-        printf("Server bind IP = %s, port = %d.\n", IP.c_str(), Port);
+        BoostLog::WriteInfo(BoostFormat("Server bind IP = %s, port = %d.", IP.c_str(), Port));
     }
     else
     {
         BindAddress.sin_addr.s_addr = INADDR_ANY;
-        printf("Server bind any IP, port = %d.\n", Port);
+        BoostLog::WriteInfo(BoostFormat("Server bind any IP, port = %d.", Port));
     }
 
     m_Listener = evconnlistener_new_bind(
@@ -125,7 +133,7 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
 
     if (m_Listener == NULL)
     {
-        printf("ERROR: Create listener failed.\n");
+        BoostLog::WriteInfo("Create listener failed.");
         return false;
     }
 
@@ -138,16 +146,17 @@ bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *D
 {
     if (NetworkMsg.m_Bufferevent == NULL)
     {
+        BoostLog::WriteError(BoostFormat("Client = %d bufferevent is NULL.", NetworkMsg.m_Socket));
         return false;
     }
 
     if (bufferevent_write(NetworkMsg.m_Bufferevent, Data, Size) != 0)
     {
-        printf("Send failed.\n");
+        BoostLog::WriteError(BoostFormat("Client = %d send failed.", NetworkMsg.m_Socket));
         return false;
     }
 
-    printf("Send succeed.\n");
+    BoostLog::WriteError(BoostFormat("Client = %d send size = %d succeed.", NetworkMsg.m_Socket, Size));
     return true;
 }
 
@@ -155,7 +164,8 @@ void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socke
 {
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
     Server->m_ClientSocketVector.push_back(Socket);
-    printf("Accept client, socket = %d, current count = %d.\n", Socket, static_cast<int>(Server->m_ClientSocketVector.size()));
+    BoostLog::WriteInfo(BoostFormat("Accept client, socket = %d, current count = %d.",
+        Socket, static_cast<int>(Server->m_ClientSocketVector.size())));
 
     bufferevent *bev = bufferevent_socket_new(Server->m_EventBase, Socket, BEV_OPT_CLOSE_ON_FREE);
     bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Event, Server);
@@ -171,20 +181,20 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
     if (Events & BEV_EVENT_EOF)
     {
         IsAllowDelete = true;
-        printf("Client = %d connection closed.\n", ClientSocket);
+        BoostLog::WriteError(BoostFormat("Client = %d connection closed.", ClientSocket));
     }
     else if (Events & BEV_EVENT_TIMEOUT)
     {
-        printf("Client = %d user specified timeout reached.\n", ClientSocket);
+        BoostLog::WriteError(BoostFormat("Client = %d user specified timeout reached.", ClientSocket));
     }
     else if (Events & BEV_EVENT_CONNECTED)
     {
-        printf("Client = %d connect operation finished.\n", ClientSocket);
+        BoostLog::WriteInfo(BoostFormat("Client = %d connect operation finished.", ClientSocket));
     }
     else
     {
         IsAllowDelete = true;
-        printf("ERROR: Client = %d unknow error.\n", ClientSocket);
+        BoostLog::WriteError(BoostFormat("Client = %d unknow error.", ClientSocket));
     }
 
     if (IsAllowDelete)
@@ -194,7 +204,8 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
         if (it != Server->m_ClientSocketVector.end())
         {
             Server->m_ClientSocketVector.erase(it);
-            printf("Delete client = %d, surplus count = %d.\n", ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size()));
+            BoostLog::WriteError(BoostFormat("Delete client = %d, surplus count = %d.",
+                ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size())));
         }
 
         bufferevent_free(bev);
@@ -208,7 +219,7 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
 
     int ClientSocket = bufferevent_getfd(bev);
     size_t RecvSize = bufferevent_read(bev, ClientMessage, sizeof(ClientMessage));
-    printf("Recv client = %d message size = %d\n", ClientSocket, RecvSize);
+    BoostLog::WriteInfo(BoostFormat("Recv client = %d message size = %d", ClientSocket, RecvSize));
 
     if (RecvSize > 0)
     {
@@ -227,10 +238,10 @@ void SingleEventBaseServer::CallBack_Send(bufferevent * bev, void * UserData)
     //evbuffer *WriteBuffer = bufferevent_get_output(bev);
     //if (evbuffer_get_length(WriteBuffer) <= 0)
     //{
-    //    printf("Process send, no data.\n\n");
+    //    BoostLog::WriteError("Process send, no data.");
     //    return;
     //}
 
     //int ClientSocket = bufferevent_getfd(bev);
-    //printf("Client = %d send data.\n", ClientSocket);
+    //BoostLog::WriteInfo(BoostFormat("Client = %d send data.", ClientSocket));
 }

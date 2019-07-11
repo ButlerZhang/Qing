@@ -385,9 +385,6 @@
     <ClInclude Include="Open\project\Message\project.pb.h">
       <Filter>Open\project\Message</Filter>
     </ClInclude>
-    <ClInclude Include="Open\protobuf\ProtobufDemo.h">
-      <Filter>Open\protobuf</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\SingleServer.h">
       <Filter>Open\project</Filter>
     </ClInclude>
@@ -426,6 +423,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\Tools\OpenSSLAES.h">
       <Filter>Open\project\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\protobuf\demo_protobuf.h">
+      <Filter>Open\protobuf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
