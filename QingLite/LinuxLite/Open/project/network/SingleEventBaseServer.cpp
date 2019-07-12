@@ -13,6 +13,8 @@
 SingleEventBaseServer::SingleEventBaseServer()
 {
     m_Listener = NULL;
+    m_SystemCheckoutTimer = NULL;
+
     m_ListenPort = 0;
     m_EventBase = event_base_new();
 }
@@ -21,6 +23,7 @@ SingleEventBaseServer::~SingleEventBaseServer()
 {
     m_ClientSocketVector.clear();
 
+    event_free(m_SystemCheckoutTimer);
     evconnlistener_free(m_Listener);
     event_base_free(m_EventBase);
 }
@@ -53,6 +56,12 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
     if (!m_MessageHandler.Start(this))
     {
         BoostLog::WriteError("Message handler start failed.");
+        return false;
+    }
+
+    if (!AddSystemCheckoutTimer(5))
+    {
+        BoostLog::WriteError("Add system checkout timer failed.");
         return false;
     }
 
@@ -91,6 +100,36 @@ bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
         BoostLog::WriteDebug(BoostFormat("%s", ACK.c_str()));
         return true;
     }
+}
+
+bool SingleEventBaseServer::AddSystemCheckoutTimer(int TimerInternal)
+{
+    if (m_SystemCheckoutTimer != NULL)
+    {
+        BoostLog::WriteError("Re-create system checkout timer.");
+        return true;
+    }
+
+    m_SystemCheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_SystemCheckout, this);
+    if (m_SystemCheckoutTimer == NULL)
+    {
+        BoostLog::WriteError("Create system chekcout timer failed.");
+        return false;
+    }
+
+    struct timeval tv;
+    evutil_timerclear(&tv);
+    tv.tv_sec = TimerInternal;
+
+    if (event_add(m_SystemCheckoutTimer, &tv) != 0)
+    {
+        BoostLog::WriteError("Add system checkout timer failed.");
+        event_free(m_SystemCheckoutTimer);
+        m_SystemCheckoutTimer = NULL;
+        return false;
+    }
+
+    return true;
 }
 
 bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
@@ -171,6 +210,17 @@ void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socke
     bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Event, Server);
     bufferevent_enable(bev, EV_READ | EV_PERSIST);
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
+}
+
+void SingleEventBaseServer::CallBack_SystemCheckout(int Socket, short Events, void *UserData)
+{
+    SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
+    Server->ProcessSystemCheckout();
+
+    struct timeval tv;
+    evutil_timerclear(&tv);
+    tv.tv_sec = 5;          //TimerInternal
+    event_add(Server->m_SystemCheckoutTimer, &tv);
 }
 
 void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void *UserData)

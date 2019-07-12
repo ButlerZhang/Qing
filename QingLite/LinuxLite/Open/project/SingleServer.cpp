@@ -24,13 +24,7 @@ bool SingleServer::Start(const std::string & IP, int Port)
     }
 
     BoostLog::WriteDebug("Connect database succeed.");
-
-    if (!SingleEventBaseServer::Start(IP, Port))
-    {
-        return false;
-    }
-
-    return true;
+    return SingleEventBaseServer::Start(IP, Port);
 }
 
 bool SingleServer::ProcessConnected()
@@ -43,6 +37,23 @@ bool SingleServer::ProcessDisconnected()
 {
     BoostLog::WriteDebug("Process disconnected.");
     return false;
+}
+
+bool SingleServer::ProcessSystemCheckout()
+{
+    BoostLog::WriteDebug("Process system chekout.");
+
+    if (!m_MySQLDatabase.Isconnected())
+    {
+        BoostLog::WriteError("Database is disconnected.");
+        if (m_MySQLDatabase.Reconnect())
+        {
+            BoostLog::WriteDebug("Database reconnect failed.");
+        }
+    }
+
+
+    return true;
 }
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)

@@ -15,6 +15,7 @@ public:
 
     virtual bool ProcessConnected();
     virtual bool ProcessDisconnected();
+    virtual bool ProcessSystemCheckout();
     virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
 
 private:

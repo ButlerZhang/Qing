@@ -19,16 +19,20 @@ public:
 
     virtual bool ProcessConnected() { return false; }
     virtual bool ProcessDisconnected() { return false; }
+    virtual bool ProcessSystemCheckout() { return false; }
     virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
 
 protected:
 
+    bool AddSystemCheckoutTimer(int TimerInternal);
     bool CreateListener(const std::string &IP, int Port);
     bool Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size);
 
 private:
 
     static void CallBack_Listen(evconnlistener *Listener, int Socket, sockaddr *Address, int SocketLen, void *UserData);
+    static void CallBack_SystemCheckout(int Socket, short Events, void *UserData);
+
     static void CallBack_Event(struct bufferevent *bev, short Events, void *UserData);
     static void CallBack_Recv(struct bufferevent *bev, void *UserData);
     static void CallBack_Send(struct bufferevent *bev, void *UserData);
@@ -39,6 +43,7 @@ private:
     std::string                          m_ListenIP;
     event_base                          *m_EventBase;
     evconnlistener                      *m_Listener;
+    event                               *m_SystemCheckoutTimer;
     HTTPServer                           m_HTTPServer;
     UDPBroadcast                         m_UDPBroadcast;
     ServerNetworkMessageHandler          m_MessageHandler;
