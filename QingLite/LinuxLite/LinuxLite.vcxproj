@@ -64,7 +64,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>a</TargetName>
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>/usr/local/mysql/include/;/usr/include/mysql/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp" />
@@ -83,6 +83,8 @@
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Open\project\Client.cpp" />
+    <ClCompile Include="Open\project\Database\Database.cpp" />
+    <ClCompile Include="Open\project\Database\MySQLDatabase.cpp" />
     <ClCompile Include="Open\project\Message\project.pb.cc" />
     <ClCompile Include="Open\project\MultiServer.cpp" />
     <ClCompile Include="Open\project\Network\HTTPServer.cpp" />
@@ -141,6 +143,8 @@
     <ClInclude Include="Open\openssl\demo_SHA256.h" />
     <ClInclude Include="Open\openssl\demo_test.h" />
     <ClInclude Include="Open\project\Client.h" />
+    <ClInclude Include="Open\project\Database\Database.h" />
+    <ClInclude Include="Open\project\Database\MySQLDatabase.h" />
     <ClInclude Include="Open\project\Message\CodedMessage.h" />
     <ClInclude Include="Open\project\Message\project.pb.h" />
     <ClInclude Include="Open\project\MultiServer.h" />
@@ -200,10 +204,10 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\mysql-5.6.28\include\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

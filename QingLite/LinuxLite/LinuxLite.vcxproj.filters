@@ -67,6 +67,9 @@
     <Filter Include="Open\project\Tools">
       <UniqueIdentifier>{fba35f8c-bea9-4fac-9a40-5c6f5a9a9799}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\project\Database">
+      <UniqueIdentifier>{9698744d-6e6d-41d1-8322-b6074d95fbf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -162,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="Open\project\Tools\BoostLog.cpp">
       <Filter>Open\project\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\Database\Database.cpp">
+      <Filter>Open\project\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\Database\MySQLDatabase.cpp">
+      <Filter>Open\project\Database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,6 +435,12 @@
     </ClInclude>
     <ClInclude Include="Open\protobuf\demo_protobuf.h">
       <Filter>Open\protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Database\Database.h">
+      <Filter>Open\project\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Database\MySQLDatabase.h">
+      <Filter>Open\project\Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

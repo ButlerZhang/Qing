@@ -15,6 +15,24 @@ SingleServer::~SingleServer()
 {
 }
 
+bool SingleServer::Start(const std::string & IP, int Port)
+{
+    if (!m_MySQLDatabase.Connect("192.168.3.126", "root", "root", "jpc", 3306))
+    {
+        BoostLog::WriteError("Connnect database failed.");
+        return false;
+    }
+
+    BoostLog::WriteDebug("Connect database succeed.");
+
+    if (!SingleEventBaseServer::Start(IP, Port))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool SingleServer::ProcessConnected()
 {
     BoostLog::WriteDebug("Process connected.");
@@ -61,6 +79,20 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
     }
 
     BoostLog::WriteDebug(Login.DebugString());
+
+    if (!m_MySQLDatabase.Isconnected())
+    {
+        BoostLog::WriteError("Database is disconnected.");
+        return false;
+    }
+
+    const std::string &InsertSQL = BoostFormat("INSERT IGNORE INTO events_log (code, description, date_time) VALUES(%d,'%s', %s)",
+        GetRandomUIntInRange(0, INT_MAX), "user login", "NOW()");
+    if (!m_MySQLDatabase.ExecuteQuery(InsertSQL.c_str()))
+    {
+        BoostLog::WriteError(BoostFormat("Insert falied: %s", InsertSQL.c_str()));
+        return false;
+    }
 
     Project::UserLogin Response;
     Response.set_id(Login.id());
