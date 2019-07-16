@@ -24,7 +24,9 @@ bool SingleServer::Start(const std::string &IP, int Port)
         return false;
     }
 
-    if (!m_HTTPServer->Start(IP, Port + 1))
+    std::string WorkDirectory;
+    WorkDirectory.append("jpc-web");
+    if (!m_HTTPServer->Start(IP, Port + 1, WorkDirectory))
     {
         BoostLog::WriteError("http server start failed.");
         return false;
@@ -54,7 +56,7 @@ bool SingleServer::ProcessDisconnected()
 
 bool SingleServer::ProcessSystemCheckout()
 {
-    BoostLog::WriteDebug("Process system chekout.");
+    //BoostLog::WriteDebug("Process system chekout.");
 
     if (!m_MySQLDatabase.Isconnected())
     {

@@ -42,7 +42,7 @@ void BoostLog::DefaultInit()
     SetLogDirectory(GetWorkDirectory());
 
     InitBaseSink(GetProgramName());
-    InitTemporarySink();
+    InitTemporarySink(GetProgramName() + "_Temp");
 }
 
 void BoostLog::DefaultShutdown()

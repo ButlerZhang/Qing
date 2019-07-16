@@ -13,6 +13,7 @@ HTTPBaseServer::HTTPBaseServer()
     m_EventBase = NULL;
 
     m_ContentTypeMap["txt"] = "text/plain";
+    m_ContentTypeMap["log"] = "text/plain";
     m_ContentTypeMap["c"] = "text/plain";
     m_ContentTypeMap["h"] = "text/plain";
     m_ContentTypeMap["html"] = "text/html";
@@ -59,7 +60,7 @@ bool HTTPBaseServer::BindBaseEvent(event_base *EventBase)
     return m_EventBase != NULL;
 }
 
-bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
+bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, const std::string &WorkDirectory)
 {
     if (m_EventBase == NULL)
     {
@@ -86,6 +87,7 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
         return false;
     }
 
+    m_WorkDirectory = WorkDirectory;
     evhttp_set_timeout(m_evHTTP, 5);
     evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
 
@@ -163,8 +165,9 @@ void HTTPBaseServer::PrintRequest(evhttp_request *Request)
     default:                    RequestType = "unknown";    break;
     }
 
-    std::string LogString = BoostFormat("Received a %s request for: %s\nHeader:\n", RequestType, evhttp_request_get_uri(Request));
+    BoostLog::WriteDebug(BoostFormat("Received a %s request for: %s", RequestType, evhttp_request_get_uri(Request)));
 
+    std::string LogString("Header:\n");
     struct evkeyvalq *Headers = evhttp_request_get_input_headers(Request);
     for (struct evkeyval *header = Headers->tqh_first; header != NULL; header = header->next.tqe_next)
     {
@@ -192,8 +195,8 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     LogString.append(BoostFormat("\tport:%d\n", evhttp_uri_get_port(ParseURI)));
     LogString.append(BoostFormat("\tquery:%s\n", evhttp_uri_get_query(ParseURI)));
     LogString.append(BoostFormat("\tuserinfo:%s\n", evhttp_uri_get_userinfo(ParseURI)));
-    LogString.append(BoostFormat("\tfragment:%s", evhttp_uri_get_fragment(ParseURI)));
-    BoostLog::WriteDebug(LogString);
+    LogString.append(BoostFormat("\tfragment:%s\n", evhttp_uri_get_fragment(ParseURI)));
+    //BoostLog::WriteDebug(LogString);
 
     const char *RequestPath = evhttp_uri_get_path(ParseURI);
     if (RequestPath == NULL)
@@ -221,11 +224,26 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
 
     if (strcmp(DecodeURI, "/") == 0 || strcmp(DecodeURI, "") == 0)
     {
-        ActualllyPath = "./";
+        if (m_WorkDirectory.empty())
+        {
+            ActualllyPath.append("./");
+        }
+        else
+        {
+            ActualllyPath.append("./" + m_WorkDirectory + "/index.html");
+        }
     }
     else
     {
-        ActualllyPath.append(".");
+        if (m_WorkDirectory.empty())
+        {
+            ActualllyPath.append(".");
+        }
+        else
+        {
+            ActualllyPath.append("./" + m_WorkDirectory + "/");
+        }
+
         ActualllyPath.append(DecodeURI);
     }
 
@@ -326,10 +344,9 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     const char *FileType = (it != m_ContentTypeMap.end()) ? it->second.c_str() : m_ContentTypeMap["misc"].c_str();
 
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", FileType);
-    evbuffer_add_file(evb, FileDescriptor, 0, FileStat.st_size);
+    evbuffer_add_file(evb, FileDescriptor, 0, FileStat.st_size); //evbuffer_add_file will close file descriptor after succeed
     evhttp_send_reply(Request, HTTP_OK, "OK", evb);
 
-    close(FileDescriptor);
     evbuffer_free(evb);
     return true;
 }
