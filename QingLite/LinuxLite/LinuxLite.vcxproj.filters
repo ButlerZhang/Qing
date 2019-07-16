@@ -133,9 +133,6 @@
     <ClCompile Include="Open\project\Client.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\HTTPServer.cpp">
-      <Filter>Open\project\Network</Filter>
-    </ClCompile>
     <ClCompile Include="Open\project\Network\MultiEventBaseServer.cpp">
       <Filter>Open\project\Network</Filter>
     </ClCompile>
@@ -171,6 +168,9 @@
     </ClCompile>
     <ClCompile Include="Open\project\Database\MySQLDatabase.cpp">
       <Filter>Open\project\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\Network\HTTPBaseServer.cpp">
+      <Filter>Open\project\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -373,9 +373,6 @@
     <ClInclude Include="Open\project\Client.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Network\HTTPServer.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\Network\MultiEventBaseServer.h">
       <Filter>Open\project\Network</Filter>
     </ClInclude>
@@ -441,6 +438,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\Database\MySQLDatabase.h">
       <Filter>Open\project\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Network\HTTPBaseServer.h">
+      <Filter>Open\project\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

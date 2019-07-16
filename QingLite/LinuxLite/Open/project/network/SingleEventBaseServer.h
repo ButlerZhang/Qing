@@ -1,5 +1,4 @@
 #pragma once
-#include "HTTPServer.h"
 #include "UDPBroadcast.h"
 #include "ServerNetworkMessageHandler.h"
 #include <vector>
@@ -24,6 +23,8 @@ public:
 
 protected:
 
+    inline event_base* GetEventBase() const { return m_EventBase; }
+
     bool AddSystemCheckoutTimer(int TimerInternal);
     bool CreateListener(const std::string &IP, int Port);
     bool Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size);
@@ -44,7 +45,6 @@ private:
     event_base                          *m_EventBase;
     evconnlistener                      *m_Listener;
     event                               *m_SystemCheckoutTimer;
-    HTTPServer                           m_HTTPServer;
     UDPBroadcast                         m_UDPBroadcast;
     ServerNetworkMessageHandler          m_MessageHandler;
     std::vector<int>                     m_ClientSocketVector;

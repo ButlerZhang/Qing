@@ -1,5 +1,6 @@
 #pragma once
 #include "Network/SingleEventBaseServer.h"
+#include "Network/HTTPBaseServer.h"
 #include "Database/MySQLDatabase.h"
 #include <google/protobuf/message.h>
 
@@ -27,5 +28,6 @@ private:
 
 private:
 
-    MySQLDatabase       m_MySQLDatabase;
+    MySQLDatabase                       m_MySQLDatabase;
+    std::shared_ptr<HTTPBaseServer>     m_HTTPServer;
 };

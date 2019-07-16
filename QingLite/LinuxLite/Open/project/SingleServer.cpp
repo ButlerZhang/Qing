@@ -15,8 +15,21 @@ SingleServer::~SingleServer()
 {
 }
 
-bool SingleServer::Start(const std::string & IP, int Port)
+bool SingleServer::Start(const std::string &IP, int Port)
 {
+    m_HTTPServer = std::make_shared<HTTPBaseServer>();
+    if (!m_HTTPServer->BindBaseEvent(GetEventBase()))
+    {
+        BoostLog::WriteError("HTTP server bind event base failed.");
+        return false;
+    }
+
+    if (!m_HTTPServer->Start(IP, Port + 1))
+    {
+        BoostLog::WriteError("http server start failed.");
+        return false;
+    }
+
     if (!m_MySQLDatabase.Connect("192.168.3.126", "root", "root", "jpc", 3306))
     {
         BoostLog::WriteError("Connnect database failed.");

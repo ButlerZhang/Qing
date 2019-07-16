@@ -6,17 +6,17 @@
 
 
 
-class HTTPServer
+class HTTPBaseServer
 {
 public:
 
-    HTTPServer();
-    ~HTTPServer();
+    HTTPBaseServer();
+    virtual ~HTTPBaseServer();
 
     bool BindBaseEvent(event_base *EventBase);
     bool Start(const std::string &ServerIP, int Port);
 
-private:
+protected:
 
     void PrintRequest(struct evhttp_request* Request);
     bool ParseRequestPath(struct evhttp_request* Request, std::string &ActualllyPath);

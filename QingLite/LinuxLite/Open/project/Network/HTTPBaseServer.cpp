@@ -1,4 +1,4 @@
-#include "HTTPServer.h"
+#include "HTTPBaseServer.h"
 #include "../Tools/BoostLog.h"
 #include <string.h>
 #include <fcntl.h>
@@ -7,7 +7,7 @@
 
 
 
-HTTPServer::HTTPServer()
+HTTPBaseServer::HTTPBaseServer()
 {
     m_evHTTP = NULL;
     m_EventBase = NULL;
@@ -17,6 +17,7 @@ HTTPServer::HTTPServer()
     m_ContentTypeMap["h"] = "text/plain";
     m_ContentTypeMap["html"] = "text/html";
     m_ContentTypeMap["htm"] = "text/htm";
+    m_ContentTypeMap["svg"] = "text/xml";
     m_ContentTypeMap["css"] = "text/css";
     m_ContentTypeMap["gif"] = "image/gif";
     m_ContentTypeMap["jpg"] = "image/jpeg";
@@ -25,6 +26,7 @@ HTTPServer::HTTPServer()
     m_ContentTypeMap["ogg"] = "application/ogg";
     m_ContentTypeMap["pdf"] = "application/pdf";
     m_ContentTypeMap["ps"] = "application/postscript";
+    m_ContentTypeMap["js"] = "application/x-javascript";
     m_ContentTypeMap["au"] = "audio/basic";
     m_ContentTypeMap["wav"] = "audio/wav";
     m_ContentTypeMap["mid"] = "audio/midi";
@@ -39,7 +41,7 @@ HTTPServer::HTTPServer()
     m_ContentTypeMap["misc"] = "application/misc";
 }
 
-HTTPServer::~HTTPServer()
+HTTPBaseServer::~HTTPBaseServer()
 {
     m_EventBase = NULL;
     m_ContentTypeMap.clear();
@@ -51,13 +53,13 @@ HTTPServer::~HTTPServer()
     }
 }
 
-bool HTTPServer::BindBaseEvent(event_base * EventBase)
+bool HTTPBaseServer::BindBaseEvent(event_base * EventBase)
 {
     m_EventBase = EventBase;
     return m_EventBase != NULL;
 }
 
-bool HTTPServer::Start(const std::string & ServerIP, int Port)
+bool HTTPBaseServer::Start(const std::string & ServerIP, int Port)
 {
     if (m_EventBase == NULL)
     {
@@ -90,7 +92,7 @@ bool HTTPServer::Start(const std::string & ServerIP, int Port)
     return true;
 }
 
-void HTTPServer::PrintRequest(evhttp_request * Request)
+void HTTPBaseServer::PrintRequest(evhttp_request * Request)
 {
     const char *RequestType = NULL;
     switch (evhttp_request_get_command(Request))
@@ -116,7 +118,7 @@ void HTTPServer::PrintRequest(evhttp_request * Request)
     }
 }
 
-bool HTTPServer::ParseRequestPath(evhttp_request * Request, std::string & ActualllyPath)
+bool HTTPBaseServer::ParseRequestPath(evhttp_request * Request, std::string & ActualllyPath)
 {
     const char *OriginalURI = evhttp_request_get_uri(Request);
     BoostLog::WriteDebug(BoostFormat("Original URI = %s", OriginalURI));
@@ -178,7 +180,7 @@ bool HTTPServer::ParseRequestPath(evhttp_request * Request, std::string & Actual
     return true;
 }
 
-void HTTPServer::ProcessDirectory(evhttp_request * Request, const std::string & ActualllyPath)
+void HTTPBaseServer::ProcessDirectory(evhttp_request * Request, const std::string & ActualllyPath)
 {
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
@@ -236,7 +238,7 @@ void HTTPServer::ProcessDirectory(evhttp_request * Request, const std::string & 
     evbuffer_free(evb);
 }
 
-void HTTPServer::ProcessFile(evhttp_request * Request, struct stat & FileStat, const std::string & ActualllyPath)
+void HTTPBaseServer::ProcessFile(evhttp_request * Request, struct stat & FileStat, const std::string & ActualllyPath)
 {
     int FileDescriptor = open(ActualllyPath.c_str(), O_RDONLY);
     if (FileDescriptor <= 0)
@@ -246,9 +248,10 @@ void HTTPServer::ProcessFile(evhttp_request * Request, struct stat & FileStat, c
         return;
     }
 
+    BoostLog::WriteDebug(BoostFormat("ProcessFile, Open file descriptor = %d.", FileDescriptor));
     if (fstat(FileDescriptor, &FileStat) < 0)
     {
-        BoostLog::WriteError("ProcessFile, fstat failed.");
+        BoostLog::WriteError(BoostFormat("ProcessFile, file descriptor = %d fstat failed.", FileDescriptor));
         close(FileDescriptor);
         return;
     }
@@ -274,9 +277,9 @@ void HTTPServer::ProcessFile(evhttp_request * Request, struct stat & FileStat, c
     evbuffer_free(evb);
 }
 
-void HTTPServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
+void HTTPBaseServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
 {
-    HTTPServer *Server = (HTTPServer*)arg;
+    HTTPBaseServer *Server = (HTTPBaseServer*)arg;
     Server->PrintRequest(Request);
 
     std::string FullPath;
@@ -297,7 +300,7 @@ void HTTPServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
 
         if (S_ISDIR(ActuallyPathStat.st_mode))
         {
-            Server->ProcessDirectory(Request, FullPath);
+            //Server->ProcessDirectory(Request, FullPath);
         }
         else
         {

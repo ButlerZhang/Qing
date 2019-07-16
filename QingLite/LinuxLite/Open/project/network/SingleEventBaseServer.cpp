@@ -41,18 +41,6 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
         return false;
     }
 
-    if (!m_HTTPServer.BindBaseEvent(m_EventBase))
-    {
-        BoostLog::WriteError("HTTP server bind event base failed.");
-        return false;
-    }
-
-    if (!m_HTTPServer.Start(m_ListenIP, m_ListenPort + 1))
-    {
-        BoostLog::WriteError("http server start failed.");
-        return false;
-    }
-
     if (!m_MessageHandler.Start(this))
     {
         BoostLog::WriteError("Message handler start failed.");
