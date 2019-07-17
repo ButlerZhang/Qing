@@ -172,6 +172,9 @@
     <ClCompile Include="Open\project\Network\HTTPBaseServer.cpp">
       <Filter>Open\project\Network</Filter>
     </ClCompile>
+    <ClCompile Include="Open\project\HTTPServer.cpp">
+      <Filter>Open\project</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h">
@@ -441,6 +444,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\Network\HTTPBaseServer.h">
       <Filter>Open\project\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\HTTPServer.h">
+      <Filter>Open\project</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

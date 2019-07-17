@@ -98,16 +98,10 @@ bool HTTPBaseServer::ProcessRequest(evhttp_request *Request)
 {
     PrintRequest(Request);
 
-    std::string FullPath;
-    if (!ParseRequestPath(Request, FullPath))
-    {
-        return false;
-    }
-
     switch (evhttp_request_get_command(Request))
     {
-    case EVHTTP_REQ_GET:    return ProcessGet(Request, FullPath);
-    case EVHTTP_REQ_POST:   return ProcessPost(Request, FullPath);
+    case EVHTTP_REQ_GET:    return ProcessGet(Request);
+    case EVHTTP_REQ_POST:   return ProcessPost(Request);
     default:                break;
     }
 
@@ -116,35 +110,34 @@ bool HTTPBaseServer::ProcessRequest(evhttp_request *Request)
     return true;
 }
 
-bool HTTPBaseServer::ProcessGet(evhttp_request * Request, const std::string &RequestPath)
+bool HTTPBaseServer::ProcessGet(evhttp_request * Request)
 {
-    struct stat ActuallyPathStat;
-    if (stat(RequestPath.c_str(), &ActuallyPathStat) < 0)
+    std::string FullPath;
+    if (!ParseRequestPath(Request, FullPath))
     {
-        BoostLog::WriteError(BoostFormat("Stat path = %s failed.", RequestPath.c_str()));
+        return false;
+    }
+
+    struct stat ActuallyPathStat;
+    if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
+    {
+        BoostLog::WriteError(BoostFormat("Stat path = %s failed.", FullPath.c_str()));
         return false;
     }
 
     if (S_ISDIR(ActuallyPathStat.st_mode))
     {
-        return ProcessDirectory(Request, RequestPath);
+        return ProcessDirectory(Request, FullPath);
     }
     else
     {
-        return ProcessFile(Request, ActuallyPathStat, RequestPath);
+        return ProcessFile(Request, ActuallyPathStat, FullPath);
     }
 }
 
-bool HTTPBaseServer::ProcessPost(evhttp_request * Request, const std::string &RequestPath)
+bool HTTPBaseServer::ProcessPost(evhttp_request * Request)
 {
     evhttp_send_error(Request, HTTP_NOTIMPLEMENTED, "Post not implemented.");
-    struct evbuffer* PostData = evhttp_request_get_input_buffer(Request);
-
-    char PostDataBuffer[1024];
-    memset(PostDataBuffer, 0, sizeof(PostDataBuffer));
-    int ReadSize = evbuffer_remove(PostData, PostDataBuffer, sizeof(PostDataBuffer));
-    BoostLog::WriteDebug(BoostFormat("Post data = %s, size = %d.", PostDataBuffer, ReadSize));
-
     return true;
 }
 
@@ -196,7 +189,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     LogString.append(BoostFormat("\tquery:%s\n", evhttp_uri_get_query(ParseURI)));
     LogString.append(BoostFormat("\tuserinfo:%s\n", evhttp_uri_get_userinfo(ParseURI)));
     LogString.append(BoostFormat("\tfragment:%s\n", evhttp_uri_get_fragment(ParseURI)));
-    //BoostLog::WriteDebug(LogString);
+    BoostLog::WriteDebug(LogString);
 
     const char *RequestPath = evhttp_uri_get_path(ParseURI);
     if (RequestPath == NULL)
@@ -241,7 +234,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
         }
         else
         {
-            ActualllyPath.append("./" + m_WorkDirectory + "/");
+            ActualllyPath.append("./" + m_WorkDirectory);
         }
 
         ActualllyPath.append(DecodeURI);

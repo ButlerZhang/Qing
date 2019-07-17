@@ -4,6 +4,7 @@
 #include "../../LinuxTools.h"
 #include "Message/project.pb.h"
 #include "Message/CodedMessage.h"
+#include "HTTPServer.h"
 
 
 
@@ -17,7 +18,7 @@ SingleServer::~SingleServer()
 
 bool SingleServer::Start(const std::string &IP, int Port)
 {
-    m_HTTPServer = std::make_shared<HTTPBaseServer>();
+    m_HTTPServer = std::make_shared<HTTPServer>();
     if (!m_HTTPServer->BindBaseEvent(GetEventBase()))
     {
         BoostLog::WriteError("HTTP server bind event base failed.");

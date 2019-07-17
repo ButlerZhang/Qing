@@ -17,8 +17,8 @@ public:
     virtual bool Start(const std::string &ServerIP, int Port, const std::string &WorkDirectory);
 
     virtual bool ProcessRequest(struct evhttp_request *Request);
-    virtual bool ProcessGet(struct evhttp_request *Request, const std::string &RequestPath);
-    virtual bool ProcessPost(struct evhttp_request *Request, const std::string &RequestPath);
+    virtual bool ProcessGet(struct evhttp_request *Request);
+    virtual bool ProcessPost(struct evhttp_request *Request);
 
 protected:
 
