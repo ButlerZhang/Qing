@@ -1,9 +1,10 @@
 #include "SingleServer.h"
+#include "../../../LinuxTools.h"
 #include "../core/tools/BoostLog.h"
 #include "../core/tools/OpenSSLAES.h"
-#include "../../../LinuxTools.h"
 #include "../message/project.pb.h"
 #include "../message/CodedMessage.h"
+#include "../handler/DatabaseManager.h"
 #include "HTTPServer.h"
 
 
@@ -31,9 +32,9 @@ bool SingleServer::Start(const std::string &IP, int Port)
         return false;
     }
 
-    if (!m_MySQLDatabase.Connect("192.168.3.126", "root", "root", "jpc", 3306))
+    if (!g_DBManager.Start())
     {
-        BoostLog::WriteError("Connnect database failed.");
+        BoostLog::WriteError("Database start failed.");
         return false;
     }
 
@@ -56,17 +57,7 @@ bool SingleServer::ProcessDisconnected()
 bool SingleServer::ProcessSystemCheckout()
 {
     //BoostLog::WriteDebug("Process system chekout.");
-
-    if (!m_MySQLDatabase.Isconnected())
-    {
-        BoostLog::WriteError("Database is disconnected.");
-        if (m_MySQLDatabase.Reconnect())
-        {
-            BoostLog::WriteDebug("Database reconnect failed.");
-        }
-    }
-
-
+    g_DBManager.CheckConnect();
     return true;
 }
 
@@ -105,7 +96,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
 
     BoostLog::WriteDebug(Login.DebugString());
 
-    if (!m_MySQLDatabase.Isconnected())
+    if (!g_DBManager.GetSMIBDB()->Isconnected())
     {
         BoostLog::WriteError("Database is disconnected.");
         return false;
@@ -113,7 +104,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
 
     const std::string &InsertSQL = BoostFormat("INSERT IGNORE INTO events_log (code, description, date_time) VALUES(%d,'%s', %s)",
         GetRandomUIntInRange(0, INT_MAX), "user login", "NOW()");
-    if (!m_MySQLDatabase.ExecuteQuery(InsertSQL.c_str()))
+    if (!g_DBManager.GetSMIBDB()->ExecuteQuery(InsertSQL.c_str()))
     {
         BoostLog::WriteError(BoostFormat("Insert falied: %s", InsertSQL.c_str()));
         return false;

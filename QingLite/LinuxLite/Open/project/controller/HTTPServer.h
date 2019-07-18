@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "../handler/User.h"
 #include "../core/network/HTTPBaseServer.h"
 
 
@@ -16,9 +17,10 @@ public:
 
 private:
 
-    bool ProcessUserLogin(struct evhttp_request *Request);
-    bool ProcessUserLogout(struct evhttp_request *Request);
-
     bool GetRequestPath(struct evhttp_request *Request, std::string &RequestPath);
     bool SplitRequestPath(const std::string &RequestPath, std::vector<std::string> &PathVector);
+
+private:
+
+    User            m_User;
 };

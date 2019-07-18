@@ -1,25 +1,16 @@
 #pragma once
-#include "../core/network/SingleEventBaseClient.h"
-#include <google/protobuf/message.h>
+
+struct evhttp_request;
 
 
 
-class Client : public SingleEventBaseClient
+class User
 {
 public:
 
-    Client();
-    virtual ~Client();
+    User();
+    ~User();
 
-    virtual bool ProcessConnected();
-    virtual bool ProcessDisconnected();
-    virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
-
-private:
-
-    bool ProcessLoginResponse(NetworkMessage &NetworkMsg);
-
-    bool SendLogin();
-    bool SendLogout();
-    bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
+    bool ProcessLogin(struct evhttp_request *Request);
+    bool ProcessLogout(struct evhttp_request *Request);
 };

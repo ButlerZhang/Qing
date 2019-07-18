@@ -76,6 +76,9 @@
     <Filter Include="Open\project\controller">
       <UniqueIdentifier>{4610c4e2-7aac-4ddc-ae84-4c739f9573eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\project\handler">
+      <UniqueIdentifier>{0af088ab-d247-4cf7-9bdc-1c899fc21344}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -180,6 +183,12 @@
     </ClCompile>
     <ClCompile Include="Open\project\controller\SingleServer.cpp">
       <Filter>Open\project\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\handler\User.cpp">
+      <Filter>Open\project\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\handler\DatabaseManager.cpp">
+      <Filter>Open\project\handler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -453,6 +462,15 @@
     </ClInclude>
     <ClInclude Include="Open\project\controller\SingleServer.h">
       <Filter>Open\project\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\handler\User.h">
+      <Filter>Open\project\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\project.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\handler\DatabaseManager.h">
+      <Filter>Open\project\handler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

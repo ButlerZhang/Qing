@@ -1,96 +1,105 @@
-#include "Client.h"
+#include "User.h"
+#include <event.h>
+#include <event2/http.h>
+#include "DatabaseManager.h"
 #include "../core/tools/BoostLog.h"
-#include "../core/tools/OpenSSLAES.h"
-#include "../../../LinuxTools.h"
-#include "../message/project.pb.h"
-#include "../message/CodedMessage.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 
 
-Client::Client()
+User::User()
 {
 }
 
-Client::~Client()
+User::~User()
 {
 }
 
-bool Client::ProcessConnected()
+bool User::ProcessLogin(evhttp_request * Request)
 {
-    BoostLog::WriteDebug("Process connected.");
-    return SendLogin();
-}
-
-bool Client::ProcessDisconnected()
-{
-    BoostLog::WriteDebug("Process disconnected.");
-    return false;
-}
-
-bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
-{
-    //std::string DecryptDataString = AESDecrypt(NetworkMsg.m_Message, "Butler");
-    //NetworkMsg.m_Message.swap(DecryptDataString);
-
-    int MessageType = DecodeMessage(NetworkMsg.m_Message);
-    switch (MessageType)
+    struct evbuffer* PostData = evhttp_request_get_input_buffer(Request);
+    if (PostData == NULL)
     {
-    case Project::MessageType::MT_LOGIN_RESPONSE:   return ProcessLoginResponse(NetworkMsg);
-    default:                                        return false;
-    }
-}
-
-bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
-{
-    BoostLog::WriteDebug("Process login response.");
-    Project::UserLogin LoginResponse;
-    if (!LoginResponse.ParseFromString(NetworkMsg.m_Message))
-    {
-        BoostLog::WriteError("Login response message parse failed.");
+        BoostLog::WriteError("User Login: post data is NULL.");
         return false;
     }
 
-    BoostLog::WriteDebug(LoginResponse.DebugString());
-    return SendLogout();
+    size_t PostDataSize = evbuffer_get_length(PostData);
+    if (PostDataSize <= 0)
+    {
+        BoostLog::WriteError("User Login: post data size is 0.");
+        return false;
+    }
+
+    std::vector<char> PostDataBuffer(PostDataSize + 1, 0);
+    int ReadSize = evbuffer_remove(PostData, &PostDataBuffer[0], PostDataSize);
+    if (ReadSize != static_cast<int>(PostDataSize))
+    {
+        BoostLog::WriteError(BoostFormat("User Login: data size = %d, read size = %d.", PostDataSize, ReadSize));
+        return false;
+    }
+
+    BoostLog::WriteDebug(BoostFormat("Post data = %s, size = %d.", &PostDataBuffer[0], PostDataBuffer.size()));
+
+    std::stringstream JsonString(std::string(PostDataBuffer.begin(), PostDataBuffer.end() - 1));
+    boost::property_tree::ptree JsonTree;
+    boost::property_tree::read_json(JsonString, JsonTree);
+
+    const std::string &UserName = JsonTree.get<std::string>("username");
+    const std::string &Password = JsonTree.get<std::string>("password");
+    BoostLog::WriteDebug(BoostFormat("User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
+
+    MySQLDataSet DataSet;
+    std::string SQLString(BoostFormat("SELECT * FROM user WHERE name = '%s'", UserName.c_str()));
+    if (!g_DBManager.GetHTTPDB()->ExecuteQuery(SQLString.c_str(), &DataSet))
+    {
+        BoostLog::WriteDebug(BoostFormat("Execute query failed: %s", SQLString.c_str()));
+        return false;
+    }
+
+    if (DataSet.GetRecordCount() <= 0)
+    {
+        BoostLog::WriteDebug(BoostFormat("Can not find user = %s", UserName.c_str()));
+        return false;
+    }
+
+    int IsLock = 0, AuthorityID = 0;
+    std::string DBPassword, CreateTime, LastUpdateTime;
+    if(!DataSet.GetValue("password", DBPassword) ||
+       !DataSet.GetValue("create_time", CreateTime) ||
+       !DataSet.GetValue("last_update_time", LastUpdateTime) ||
+       !DataSet.GetValue("is_lock", IsLock) ||
+        !DataSet.GetValue("authority_id", AuthorityID))
+    {
+        BoostLog::WriteDebug("Get user value falied.");
+        return false;
+    }
+
+    if (Password != DBPassword)
+    {
+        BoostLog::WriteDebug("Password does not match");
+        return false;
+    }
+
+    if (CreateTime == LastUpdateTime)
+    {
+        BoostLog::WriteDebug("Login failed, please change your password for the first login!");
+        return false;
+    }
+
+    if (IsLock)
+    {
+        BoostLog::WriteDebug("Login failed, user is locked, please contact the administrators!");
+        return false;
+    }
+
+    BoostLog::WriteDebug(BoostFormat("User = %s login success.", UserName.c_str()));
+    evhttp_send_error(Request, HTTP_OK, "Login success.");
+    return true;
 }
 
-bool Client::SendLogin()
+bool User::ProcessLogout(evhttp_request * Request)
 {
-    BoostLog::WriteDebug("Send Login.");
-    Project::UserLogin Login;
-    Login.set_id(1000);
-    Login.set_name("Butler");
-    Login.set_password("1234567890");
-    Login.set_authority("1001000100");
-    Login.add_nickname("Sky");
-    Login.add_nickname("Sea");
-
-    Project::MessageHeader *Header = Login.mutable_header();
-    Header->set_type(Project::MessageType::MT_LOGIN);
-    Header->set_transmissionid(GetUUID());
-
-    BoostLog::WriteDebug(Login.DebugString());
-    return SendMessage(Header->type(), Login);
-}
-
-bool Client::SendLogout()
-{
-    BoostLog::WriteDebug("Send Logout.");
-    Project::UserLogout Logout;
-    Logout.set_id(1000);
-    Logout.set_name("Butler");
-
-    Project::MessageHeader *Header = Logout.mutable_header();
-    Header->set_type(Project::MessageType::MT_LOGOUT);
-    Header->set_transmissionid(GetUUID());
-
-    BoostLog::WriteDebug(Logout.DebugString());
-    return SendMessage(Header->type(), Logout);
-}
-
-bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)
-{
-    const std::string &EncodeString = EncodeMessage(ProtobufMsg, MessageType);
-    //const std::string &EncryptString = AESEncrypt(EncodeString, "Butler");
-    return Send((void*)EncodeString.c_str(), EncodeString.size());
+    return false;
 }
