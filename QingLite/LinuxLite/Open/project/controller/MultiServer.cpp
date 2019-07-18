@@ -1,8 +1,8 @@
 #include "MultiServer.h"
-#include "Tools/OpenSSLAES.h"
-#include "../../LinuxTools.h"
-#include "Message/project.pb.h"
-#include "Message/CodedMessage.h"
+#include "../core/tools/OpenSSLAES.h"
+#include "../../../LinuxTools.h"
+#include "../message/project.pb.h"
+#include "../message/CodedMessage.h"
 
 
 

@@ -1,6 +1,6 @@
 #include "SingleEventBaseClient.h"
-#include "../../../LinuxTools.h"
-#include "../Tools/BoostLog.h"
+#include "../../../../LinuxTools.h"
+#include "../tools/BoostLog.h"
 #include <arpa/inet.h>
 #include <string.h>
 #include <unistd.h>

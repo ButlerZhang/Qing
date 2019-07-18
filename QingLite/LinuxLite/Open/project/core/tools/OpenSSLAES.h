@@ -6,7 +6,7 @@
 #include <openssl/aes.h>
 
 #include "BoostLog.h"
-#include "../../../../../Common/Tool/HexString.h"
+#include "../../../../../../Common/Tool/HexString.h"
 
 const int KEY_BIT_SIZE = 128;
 

@@ -5,7 +5,7 @@
 #include <arpa/inet.h>  // htonl, ntohl
 #include <google/protobuf/message.h>
 #include <google/protobuf/descriptor.h>
-#include "../Tools/BoostLog.h"
+#include "../core/tools/BoostLog.h"
 
 
 

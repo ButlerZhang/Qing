@@ -1,5 +1,5 @@
 #include "UDPBroadcast.h"
-#include "../Tools/BoostLog.h"
+#include "../tools/BoostLog.h"
 #include <arpa/inet.h>
 #include <assert.h>
 #include <string.h>

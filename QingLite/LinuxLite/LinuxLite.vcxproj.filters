@@ -58,17 +58,23 @@
     <Filter Include="Open\protobuf">
       <UniqueIdentifier>{207b1f2f-6c84-44c7-9e49-bc66d9bb30f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Open\project\Network">
-      <UniqueIdentifier>{a0fc19f9-011e-48de-99c5-bb77d1fc77ca}</UniqueIdentifier>
+    <Filter Include="Open\project\core">
+      <UniqueIdentifier>{a0aeb74d-52be-40e6-9e23-9dad4d78ee39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Open\project\Message">
+    <Filter Include="Open\project\core\database">
+      <UniqueIdentifier>{b3329931-1128-4cbb-a777-fe47be0e4294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\project\core\network">
+      <UniqueIdentifier>{ca03453a-7fdc-4a08-a3fe-c430b33efa78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\project\core\tools">
+      <UniqueIdentifier>{f260b3fa-a4c7-4b11-b4ad-124387ec8f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Open\project\message">
       <UniqueIdentifier>{bf3e4310-e1d5-44e8-85f6-e0ef984a3bbf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Open\project\Tools">
-      <UniqueIdentifier>{fba35f8c-bea9-4fac-9a40-5c6f5a9a9799}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Open\project\Database">
-      <UniqueIdentifier>{9698744d-6e6d-41d1-8322-b6074d95fbf8}</UniqueIdentifier>
+    <Filter Include="Open\project\controller">
+      <UniqueIdentifier>{4610c4e2-7aac-4ddc-ae84-4c739f9573eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -130,50 +136,50 @@
     <ClCompile Include="Open\protobuf\base.pb.cc">
       <Filter>Open\protobuf</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Client.cpp">
-      <Filter>Open\project</Filter>
+    <ClCompile Include="Open\project\core\database\Database.cpp">
+      <Filter>Open\project\core\database</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\MultiEventBaseServer.cpp">
-      <Filter>Open\project\Network</Filter>
+    <ClCompile Include="Open\project\core\database\MySQLDatabase.cpp">
+      <Filter>Open\project\core\database</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\SignalEventMap.cpp">
-      <Filter>Open\project\Network</Filter>
+    <ClCompile Include="Open\project\core\network\HTTPBaseServer.cpp">
+      <Filter>Open\project\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\SingleEventBaseClient.cpp">
-      <Filter>Open\project\Network</Filter>
+    <ClCompile Include="Open\project\core\network\MultiEventBaseServer.cpp">
+      <Filter>Open\project\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\SingleEventBaseServer.cpp">
-      <Filter>Open\project\Network</Filter>
+    <ClCompile Include="Open\project\core\network\ServerNetworkMessageHandler.cpp">
+      <Filter>Open\project\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\UDPBroadcast.cpp">
-      <Filter>Open\project\Network</Filter>
+    <ClCompile Include="Open\project\core\network\SignalEventMap.cpp">
+      <Filter>Open\project\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Message\project.pb.cc">
-      <Filter>Open\project\Message</Filter>
+    <ClCompile Include="Open\project\core\network\SingleEventBaseClient.cpp">
+      <Filter>Open\project\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\SingleServer.cpp">
-      <Filter>Open\project</Filter>
+    <ClCompile Include="Open\project\core\network\SingleEventBaseServer.cpp">
+      <Filter>Open\project\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\ServerNetworkMessageHandler.cpp">
-      <Filter>Open\project\Network</Filter>
+    <ClCompile Include="Open\project\core\network\UDPBroadcast.cpp">
+      <Filter>Open\project\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\MultiServer.cpp">
-      <Filter>Open\project</Filter>
+    <ClCompile Include="Open\project\core\tools\BoostLog.cpp">
+      <Filter>Open\project\core\tools</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Tools\BoostLog.cpp">
-      <Filter>Open\project\Tools</Filter>
+    <ClCompile Include="Open\project\message\project.pb.cc">
+      <Filter>Open\project\message</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Database\Database.cpp">
-      <Filter>Open\project\Database</Filter>
+    <ClCompile Include="Open\project\controller\Client.cpp">
+      <Filter>Open\project\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Database\MySQLDatabase.cpp">
-      <Filter>Open\project\Database</Filter>
+    <ClCompile Include="Open\project\controller\HTTPServer.cpp">
+      <Filter>Open\project\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\Network\HTTPBaseServer.cpp">
-      <Filter>Open\project\Network</Filter>
+    <ClCompile Include="Open\project\controller\MultiServer.cpp">
+      <Filter>Open\project\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\HTTPServer.cpp">
-      <Filter>Open\project</Filter>
+    <ClCompile Include="Open\project\controller\SingleServer.cpp">
+      <Filter>Open\project\controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -373,30 +379,6 @@
     <ClInclude Include="Open\protobuf\base.pb.h">
       <Filter>Open\protobuf</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Client.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Network\MultiEventBaseServer.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Network\SignalEventMap.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Network\SingleEventBaseClient.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Network\SingleEventBaseServer.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Network\UDPBroadcast.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Message\project.pb.h">
-      <Filter>Open\project\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\SingleServer.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
     <ClInclude Include="UNIX\Chapter1\display_process_information.h">
       <Filter>UNIX\Chapter1</Filter>
     </ClInclude>
@@ -406,47 +388,71 @@
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>UNIX</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Message\CodedMessage.h">
-      <Filter>Open\project\Message</Filter>
-    </ClInclude>
     <ClInclude Include="UNIX\Chapter1\print_errno_message.h">
       <Filter>UNIX\Chapter1</Filter>
     </ClInclude>
     <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h">
       <Filter>UNIX\Chapter1</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Network\NetworkBase.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Network\ServerNetworkMessageHandler.h">
-      <Filter>Open\project\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\MultiServer.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Tools\BoostLog.h">
-      <Filter>Open\project\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Tools\BoostFormat.h">
-      <Filter>Open\project\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\Tools\OpenSSLAES.h">
-      <Filter>Open\project\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Open\protobuf\demo_protobuf.h">
       <Filter>Open\protobuf</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Database\Database.h">
-      <Filter>Open\project\Database</Filter>
+    <ClInclude Include="Open\project\core\database\Database.h">
+      <Filter>Open\project\core\database</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Database\MySQLDatabase.h">
-      <Filter>Open\project\Database</Filter>
+    <ClInclude Include="Open\project\core\database\MySQLDatabase.h">
+      <Filter>Open\project\core\database</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\Network\HTTPBaseServer.h">
-      <Filter>Open\project\Network</Filter>
+    <ClInclude Include="Open\project\core\network\HTTPBaseServer.h">
+      <Filter>Open\project\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\HTTPServer.h">
-      <Filter>Open\project</Filter>
+    <ClInclude Include="Open\project\core\network\MultiEventBaseServer.h">
+      <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\network\NetworkBase.h">
+      <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\network\ServerNetworkMessageHandler.h">
+      <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\network\SignalEventMap.h">
+      <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\network\SingleEventBaseClient.h">
+      <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\network\SingleEventBaseServer.h">
+      <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\network\UDPBroadcast.h">
+      <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\tools\BoostFormat.h">
+      <Filter>Open\project\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\tools\BoostLog.h">
+      <Filter>Open\project\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\tools\OpenSSLAES.h">
+      <Filter>Open\project\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\message\CodedMessage.h">
+      <Filter>Open\project\message</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\message\project.pb.h">
+      <Filter>Open\project\message</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\controller\Client.h">
+      <Filter>Open\project\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\controller\HTTPServer.h">
+      <Filter>Open\project\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\controller\MultiServer.h">
+      <Filter>Open\project\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\controller\SingleServer.h">
+      <Filter>Open\project\controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -461,8 +467,8 @@
     <None Include="Open\protobuf\base.proto">
       <Filter>Open\protobuf</Filter>
     </None>
-    <None Include="Open\project\Message\project.proto">
-      <Filter>Open\project\Message</Filter>
+    <None Include="Open\project\message\project.proto">
+      <Filter>Open\project\message</Filter>
     </None>
   </ItemGroup>
 </Project>

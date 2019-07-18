@@ -1,9 +1,9 @@
 //#include "UNIX/unix_main.h"
 //#include "Open/openssl/demo_test.h"
-#include "Open/project/Client.h"
-#include "Open/project/SingleServer.h"
-#include "Open/project/MultiServer.h"
-#include "Open/project/Tools/BoostLog.h"
+#include "Open/project/controller/Client.h"
+#include "Open/project/controller/SingleServer.h"
+#include "Open/project/controller/MultiServer.h"
+#include "Open/project/core/tools/BoostLog.h"
 #include <iostream>
 
 

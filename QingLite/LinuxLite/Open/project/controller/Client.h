@@ -1,5 +1,5 @@
 #pragma once
-#include "Network/SingleEventBaseClient.h"
+#include "../core/network/SingleEventBaseClient.h"
 #include <google/protobuf/message.h>
 
 

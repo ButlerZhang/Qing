@@ -1,6 +1,8 @@
 #include "HTTPServer.h"
-#include "Tools/BoostLog.h"
-#include "../../LinuxTools.h"
+#include "../core/tools/BoostLog.h"
+#include "../../../LinuxTools.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 
 
@@ -79,7 +81,7 @@ bool HTTPServer::ProcessPost(evhttp_request *Request)
     GetRequestPath(Request, RequestPath);
 
     std::vector<std::string> PathVector;
-    if (!SplitRequestPath(RequestPath, PathVector))
+    if (!SplitRequestPath(RequestPath, PathVector) || PathVector.empty())
     {
         return HTTPBaseServer::ProcessPost(Request);
     }
@@ -128,6 +130,15 @@ bool HTTPServer::ProcessUserLogin(evhttp_request * Request)
     }
 
     BoostLog::WriteDebug(BoostFormat("Post data = %s, size = %d.", &PostDataBuffer[0], PostDataBuffer.size()));
+
+    std::stringstream JsonString(std::string(PostDataBuffer.begin(), PostDataBuffer.end() - 1));
+    boost::property_tree::ptree JsonTree;
+    boost::property_tree::read_json(JsonString, JsonTree);
+
+    const std::string &UserName = JsonTree.get<std::string>("username");
+    const std::string &Password = JsonTree.get<std::string>("password");
+    BoostLog::WriteDebug(BoostFormat("User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
+
     return HTTPBaseServer::ProcessPost(Request);
 }
 

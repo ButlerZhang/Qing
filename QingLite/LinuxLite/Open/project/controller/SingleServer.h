@@ -1,6 +1,6 @@
 #pragma once
-#include "Network/SingleEventBaseServer.h"
-#include "Database/MySQLDatabase.h"
+#include "../core/network/SingleEventBaseServer.h"
+#include "../core/database/MySQLDatabase.h"
 #include <google/protobuf/message.h>
 
 class HTTPBaseServer;
