@@ -25,9 +25,7 @@ bool SingleServer::Start(const std::string &IP, int Port)
         return false;
     }
 
-    std::string WorkDirectory;
-    WorkDirectory.append("jpc-web");
-    if (!m_HTTPServer->Start(IP, Port + 1, WorkDirectory))
+    if (!m_HTTPServer->Start(IP, Port + 1))
     {
         BoostLog::WriteError("http server start failed.");
         return false;

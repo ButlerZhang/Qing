@@ -60,7 +60,7 @@ bool HTTPBaseServer::BindBaseEvent(event_base *EventBase)
     return m_EventBase != NULL;
 }
 
-bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, const std::string &WorkDirectory)
+bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
 {
     if (m_EventBase == NULL)
     {
@@ -87,7 +87,6 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, const std::str
         return false;
     }
 
-    m_WorkDirectory = WorkDirectory;
     evhttp_set_timeout(m_evHTTP, 5);
     evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
 
@@ -110,7 +109,7 @@ bool HTTPBaseServer::ProcessRequest(evhttp_request *Request)
     return true;
 }
 
-bool HTTPBaseServer::ProcessGet(evhttp_request * Request)
+bool HTTPBaseServer::ProcessGet(evhttp_request *Request)
 {
     std::string FullPath;
     if (!ParseRequestPath(Request, FullPath))
@@ -217,26 +216,11 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
 
     if (strcmp(DecodeURI, "/") == 0 || strcmp(DecodeURI, "") == 0)
     {
-        if (m_WorkDirectory.empty())
-        {
-            ActualllyPath.append("./");
-        }
-        else
-        {
-            ActualllyPath.append("./" + m_WorkDirectory + "/index.html");
-        }
+        ActualllyPath.append("./");
     }
     else
     {
-        if (m_WorkDirectory.empty())
-        {
-            ActualllyPath.append(".");
-        }
-        else
-        {
-            ActualllyPath.append("./" + m_WorkDirectory);
-        }
-
+        ActualllyPath.append(".");
         ActualllyPath.append(DecodeURI);
     }
 
@@ -316,7 +300,7 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
         return false;
     }
 
-    BoostLog::WriteDebug(BoostFormat("Process File: path = %s, descriptor = %d.", FileDescriptor, ActualllyPath.c_str()));
+    BoostLog::WriteDebug(BoostFormat("Process File: path = %s, descriptor = %d.", ActualllyPath.c_str(), FileDescriptor));
     if (fstat(FileDescriptor, &FileStat) < 0)
     {
         BoostLog::WriteError(BoostFormat("Process File: file descriptor = %d fstat failed.", FileDescriptor));

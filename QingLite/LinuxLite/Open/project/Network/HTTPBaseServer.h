@@ -14,7 +14,7 @@ public:
     virtual ~HTTPBaseServer();
 
     bool BindBaseEvent(event_base *EventBase);
-    virtual bool Start(const std::string &ServerIP, int Port, const std::string &WorkDirectory);
+    virtual bool Start(const std::string &ServerIP, int Port);
 
     virtual bool ProcessRequest(struct evhttp_request *Request);
     virtual bool ProcessGet(struct evhttp_request *Request);
@@ -31,7 +31,6 @@ protected:
 
 private:
 
-    std::string                                          m_WorkDirectory;
     struct event_base                                   *m_EventBase;
     struct evhttp                                       *m_evHTTP;
     std::map<std::string, std::string>                   m_ContentTypeMap;
