@@ -14,67 +14,101 @@ UserHandler::~UserHandler()
 {
 }
 
-bool UserHandler::ProcessLogin(evhttp_request * Request)
+bool UserHandler::ProcessLogin(evhttp_request *Request)
 {
-    if (!ParsePostData(GetPostData(Request)))
+    if (!ParsePostData(GetPostDataString(Request)))
     {
         return false;
     }
 
     const std::string &UserName = m_JsonTree.get<std::string>("Name");
     const std::string &Password = m_JsonTree.get<std::string>("Password");
-    BoostLog::WriteDebug(BoostFormat("User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
+    BoostLog::WriteDebug(BoostFormat("Process login: User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
+
+    UserModel ReplyModel;
+    ReplyModel.m_ErrorCode = 0;
+    ReplyModel.m_ReplayMessage = "Login successful!";
 
     MySQLDataSet DataSet;
     std::string SQLString(BoostFormat("SELECT * FROM user WHERE name = '%s'", UserName.c_str()));
     if (!g_DBManager.GetHTTPDB()->ExecuteQuery(SQLString.c_str(), &DataSet))
     {
-        BoostLog::WriteDebug(BoostFormat("Execute query failed: %s", SQLString.c_str()));
-        return false;
+        ReplyModel.m_ErrorCode = 105;
+        ReplyModel.m_ReplayMessage = "Login failed, query database error!";
+        BoostLog::WriteDebug(BoostFormat("Process login: Execute query failed: %s", SQLString.c_str()));
+        return SendLoginReply(Request, ReplyModel);
     }
 
     if (DataSet.GetRecordCount() <= 0)
     {
-        BoostLog::WriteDebug(BoostFormat("Can not find user = %s", UserName.c_str()));
-        return false;
+        ReplyModel.m_ErrorCode = 101;
+        ReplyModel.m_ReplayMessage = "Login failed, user does not exist!";
+        BoostLog::WriteDebug(BoostFormat("Process login: Can not find user = %s", UserName.c_str()));
+        return SendLoginReply(Request, ReplyModel);
     }
 
-    int IsLock = 0, AuthorityID = 0;
+    int IsLock = 0;
     std::string DBPassword, CreateTime, LastUpdateTime;
     if(!DataSet.GetValue("password", DBPassword) ||
        !DataSet.GetValue("create_time", CreateTime) ||
        !DataSet.GetValue("last_update_time", LastUpdateTime) ||
        !DataSet.GetValue("is_lock", IsLock) ||
-        !DataSet.GetValue("authority_id", AuthorityID))
+        !DataSet.GetValue("authority_id", ReplyModel.m_AuthorityID))
     {
-        BoostLog::WriteDebug("Get user value falied.");
-        return false;
+        ReplyModel.m_ErrorCode = 105;
+        ReplyModel.m_ReplayMessage = "Login failed, get database data error!";
+        BoostLog::WriteDebug("Process login: Get user value falied.");
+        return SendLoginReply(Request, ReplyModel);
     }
 
     if (Password != DBPassword)
     {
-        BoostLog::WriteDebug("Password does not match");
-        return false;
+        ReplyModel.m_ErrorCode = 104;
+        ReplyModel.m_ReplayMessage = "Login failed, the password is inocrrect!";
+        BoostLog::WriteDebug("Process login: Password does not match");
+        return SendLoginReply(Request, ReplyModel);
     }
 
     if (CreateTime == LastUpdateTime)
     {
-        BoostLog::WriteDebug("Login failed, please change your password for the first login!");
-        return false;
+        ReplyModel.m_ErrorCode = 102;
+        ReplyModel.m_ReplayMessage = "Login failed, please change your password for the first login!";
+        BoostLog::WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
+        return SendLoginReply(Request, ReplyModel);
     }
 
     if (IsLock)
     {
-        BoostLog::WriteDebug("Login failed, user is locked, please contact the administrators!");
-        return false;
+        ReplyModel.m_ErrorCode = 103;
+        ReplyModel.m_ReplayMessage = "Login failed, user is locked, please contact the administrators!";
+        BoostLog::WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
+        return SendLoginReply(Request, ReplyModel);
     }
 
-    BoostLog::WriteDebug(BoostFormat("User = %s login success.", UserName.c_str()));
-    evhttp_send_error(Request, HTTP_OK, "Login success.");
-    return true;
+    BoostLog::WriteDebug(BoostFormat("Process login: User = %s login success.", UserName.c_str()));
+    return SendLoginReply(Request, ReplyModel);
 }
 
 bool UserHandler::ProcessLogout(evhttp_request * Request)
 {
     return false;
+}
+
+bool UserHandler::SendLoginReply(evhttp_request *Request, const UserModel &ReplyModel)
+{
+    m_JsonTree.clear();
+    m_JsonTree.put("ErrorCode", ReplyModel.m_ErrorCode);
+    m_JsonTree.put("Message", ReplyModel.m_ReplayMessage);
+
+    boost::property_tree::ptree UserTree;
+    UserTree.put("AuthorityID", ReplyModel.m_AuthorityID);
+    UserTree.put("Name", ReplyModel.m_UserName);
+    m_JsonTree.push_back(std::make_pair("UserInfo", UserTree));
+
+    struct evbuffer *evbuffer_temp = evbuffer_new();
+    evbuffer_add_printf(m_evbuffer, GetReplyJsonString().c_str());
+    evhttp_send_reply(Request, ReplyModel.m_ErrorCode, ReplyModel.m_ReplayMessage.c_str(), m_evbuffer);
+    evbuffer_free(evbuffer_temp);
+
+    return true;
 }

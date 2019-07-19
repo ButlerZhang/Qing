@@ -79,6 +79,9 @@
     <Filter Include="Open\project\handler">
       <UniqueIdentifier>{0af088ab-d247-4cf7-9bdc-1c899fc21344}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\project\model">
+      <UniqueIdentifier>{c0561234-52ca-42c2-950a-0572569b6ba0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -477,6 +480,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\handler\UserHandler.h">
       <Filter>Open\project\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\model\Model.h">
+      <Filter>Open\project\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

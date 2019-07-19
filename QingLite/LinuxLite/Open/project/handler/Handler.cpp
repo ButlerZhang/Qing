@@ -7,13 +7,36 @@
 
 Handler::Handler()
 {
+    m_evbuffer = evbuffer_new();
 }
 
 Handler::~Handler()
 {
+    evbuffer_free(m_evbuffer);
 }
 
-std::string Handler::GetPostData(evhttp_request * Request)
+std::string Handler::GetReplyJsonString()
+{
+    std::string JsonString;
+
+    try
+    {
+        std::stringstream JsonStream;
+        boost::property_tree::write_json(JsonStream, m_JsonTree, false);
+
+        JsonString = JsonStream.str();
+        JsonString.erase(JsonString.end() - 1);
+        BoostLog::WriteDebug(BoostFormat("Handler: reply json = %s", JsonString.c_str()));
+    }
+    catch (...)
+    {
+        BoostLog::WriteError("Handler: Write json tree error.");
+    }
+
+    return JsonString;
+}
+
+std::string Handler::GetPostDataString(evhttp_request * Request)
 {
     std::string PostDataString;
 

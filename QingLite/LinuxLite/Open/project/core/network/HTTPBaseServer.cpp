@@ -166,6 +166,7 @@ void HTTPBaseServer::PrintRequest(evhttp_request *Request)
         LogString.append(BoostFormat("\t%s: %s\n", header->key, header->value));
     }
 
+    LogString.erase(LogString.end() - 1);
     BoostLog::WriteDebug(LogString);
 }
 
@@ -187,7 +188,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     LogString.append(BoostFormat("\tport:%d\n", evhttp_uri_get_port(ParseURI)));
     LogString.append(BoostFormat("\tquery:%s\n", evhttp_uri_get_query(ParseURI)));
     LogString.append(BoostFormat("\tuserinfo:%s\n", evhttp_uri_get_userinfo(ParseURI)));
-    LogString.append(BoostFormat("\tfragment:%s\n", evhttp_uri_get_fragment(ParseURI)));
+    LogString.append(BoostFormat("\tfragment:%s", evhttp_uri_get_fragment(ParseURI)));
     BoostLog::WriteDebug(LogString);
 
     const char *RequestPath = evhttp_uri_get_path(ParseURI);

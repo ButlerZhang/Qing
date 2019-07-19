@@ -1,5 +1,6 @@
 #pragma once
 #include "Handler.h"
+#include "../model/Model.h"
 
 struct evhttp_request;
 
@@ -14,4 +15,8 @@ public:
 
     bool ProcessLogin(struct evhttp_request *Request);
     bool ProcessLogout(struct evhttp_request *Request);
+
+private:
+
+    bool SendLoginReply(struct evhttp_request *Request, const UserModel &ReplyModel);
 };

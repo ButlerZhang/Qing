@@ -108,6 +108,7 @@ void BoostLog::WriteLog(LogLevel Level, const std::string &LogString)
     if (m_IsOkToWrite)
     {
         BOOST_LOG_SEV(BoostLogger::get(), Level) << LogString;
+        //boost::log::core::get()->flush();
     }
 }
 
