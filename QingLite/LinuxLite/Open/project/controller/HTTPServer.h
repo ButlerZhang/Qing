@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "../handler/User.h"
+#include "../handler/UserHandler.h"
 #include "../core/network/HTTPBaseServer.h"
 
 
@@ -22,5 +22,5 @@ private:
 
 private:
 
-    User            m_User;
+    UserHandler            m_UserHandler;
 };

@@ -75,10 +75,8 @@ bool HTTPServer::ProcessGet(evhttp_request *Request)
 
 bool HTTPServer::ProcessPost(evhttp_request *Request)
 {
-    std::string RequestPath;
-    GetRequestPath(Request, RequestPath);
-
     std::vector<std::string> PathVector;
+    std::string RequestPath(evhttp_request_get_uri(Request));
     if (!SplitRequestPath(RequestPath, PathVector) || PathVector.empty())
     {
         return HTTPBaseServer::ProcessPost(Request);
@@ -88,11 +86,11 @@ bool HTTPServer::ProcessPost(evhttp_request *Request)
     {
         if (PathVector[1] == "login")
         {
-            return m_User.ProcessLogin(Request);
+            return m_UserHandler.ProcessLogin(Request);
         }
         else if (PathVector[1] == "logout")
         {
-            return m_User.ProcessLogout(Request);
+            return m_UserHandler.ProcessLogout(Request);
         }
     }
     else

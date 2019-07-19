@@ -184,10 +184,13 @@
     <ClCompile Include="Open\project\controller\SingleServer.cpp">
       <Filter>Open\project\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\handler\User.cpp">
+    <ClCompile Include="Open\project\handler\DatabaseManager.cpp">
       <Filter>Open\project\handler</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\handler\DatabaseManager.cpp">
+    <ClCompile Include="Open\project\handler\Handler.cpp">
+      <Filter>Open\project\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\handler\UserHandler.cpp">
       <Filter>Open\project\handler</Filter>
     </ClCompile>
   </ItemGroup>
@@ -463,13 +466,16 @@
     <ClInclude Include="Open\project\controller\SingleServer.h">
       <Filter>Open\project\controller</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\handler\User.h">
-      <Filter>Open\project\handler</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\project.h">
       <Filter>Open\project</Filter>
     </ClInclude>
     <ClInclude Include="Open\project\handler\DatabaseManager.h">
+      <Filter>Open\project\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\handler\Handler.h">
+      <Filter>Open\project\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\handler\UserHandler.h">
       <Filter>Open\project\handler</Filter>
     </ClInclude>
   </ItemGroup>

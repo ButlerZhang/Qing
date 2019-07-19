@@ -1,53 +1,28 @@
-#include "User.h"
-#include <event.h>
-#include <event2/http.h>
+#include "UserHandler.h"
 #include "DatabaseManager.h"
 #include "../core/tools/BoostLog.h"
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include <event.h>
+#include <event2/http.h>
 
 
 
-User::User()
+UserHandler::UserHandler()
 {
 }
 
-User::~User()
+UserHandler::~UserHandler()
 {
 }
 
-bool User::ProcessLogin(evhttp_request * Request)
+bool UserHandler::ProcessLogin(evhttp_request * Request)
 {
-    struct evbuffer* PostData = evhttp_request_get_input_buffer(Request);
-    if (PostData == NULL)
+    if (!ParsePostData(GetPostData(Request)))
     {
-        BoostLog::WriteError("User Login: post data is NULL.");
         return false;
     }
 
-    size_t PostDataSize = evbuffer_get_length(PostData);
-    if (PostDataSize <= 0)
-    {
-        BoostLog::WriteError("User Login: post data size is 0.");
-        return false;
-    }
-
-    std::vector<char> PostDataBuffer(PostDataSize + 1, 0);
-    int ReadSize = evbuffer_remove(PostData, &PostDataBuffer[0], PostDataSize);
-    if (ReadSize != static_cast<int>(PostDataSize))
-    {
-        BoostLog::WriteError(BoostFormat("User Login: data size = %d, read size = %d.", PostDataSize, ReadSize));
-        return false;
-    }
-
-    BoostLog::WriteDebug(BoostFormat("Post data = %s, size = %d.", &PostDataBuffer[0], PostDataBuffer.size()));
-
-    std::stringstream JsonString(std::string(PostDataBuffer.begin(), PostDataBuffer.end() - 1));
-    boost::property_tree::ptree JsonTree;
-    boost::property_tree::read_json(JsonString, JsonTree);
-
-    const std::string &UserName = JsonTree.get<std::string>("username");
-    const std::string &Password = JsonTree.get<std::string>("password");
+    const std::string &UserName = m_JsonTree.get<std::string>("Name");
+    const std::string &Password = m_JsonTree.get<std::string>("Password");
     BoostLog::WriteDebug(BoostFormat("User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
 
     MySQLDataSet DataSet;
@@ -99,7 +74,7 @@ bool User::ProcessLogin(evhttp_request * Request)
     return true;
 }
 
-bool User::ProcessLogout(evhttp_request * Request)
+bool UserHandler::ProcessLogout(evhttp_request * Request)
 {
     return false;
 }

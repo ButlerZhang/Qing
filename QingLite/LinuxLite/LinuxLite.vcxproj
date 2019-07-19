@@ -97,7 +97,8 @@
     <ClCompile Include="Open\project\core\network\UDPBroadcast.cpp" />
     <ClCompile Include="Open\project\core\tools\BoostLog.cpp" />
     <ClCompile Include="Open\project\handler\DatabaseManager.cpp" />
-    <ClCompile Include="Open\project\handler\User.cpp" />
+    <ClCompile Include="Open\project\handler\Handler.cpp" />
+    <ClCompile Include="Open\project\handler\UserHandler.cpp" />
     <ClCompile Include="Open\project\message\project.pb.cc" />
     <ClCompile Include="Open\protobuf\base.pb.cc" />
     <ClCompile Include="Open\protobuf\user.pb.cc" />
@@ -163,7 +164,8 @@
     <ClInclude Include="Open\project\core\tools\BoostLog.h" />
     <ClInclude Include="Open\project\core\tools\OpenSSLAES.h" />
     <ClInclude Include="Open\project\handler\DatabaseManager.h" />
-    <ClInclude Include="Open\project\handler\User.h" />
+    <ClInclude Include="Open\project\handler\Handler.h" />
+    <ClInclude Include="Open\project\handler\UserHandler.h" />
     <ClInclude Include="Open\project\message\CodedMessage.h" />
     <ClInclude Include="Open\project\message\project.pb.h" />
     <ClInclude Include="Open\project\project.h" />
