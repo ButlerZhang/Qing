@@ -82,6 +82,7 @@
     <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp" />
     <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Open\project\Config.cpp" />
     <ClCompile Include="Open\project\controller\Client.cpp" />
     <ClCompile Include="Open\project\controller\HTTPServer.cpp" />
     <ClCompile Include="Open\project\controller\MultiServer.cpp" />
@@ -96,7 +97,6 @@
     <ClCompile Include="Open\project\core\network\SingleEventBaseServer.cpp" />
     <ClCompile Include="Open\project\core\network\UDPBroadcast.cpp" />
     <ClCompile Include="Open\project\core\tools\BoostLog.cpp" />
-    <ClCompile Include="Open\project\handler\DatabaseManager.cpp" />
     <ClCompile Include="Open\project\handler\Handler.cpp" />
     <ClCompile Include="Open\project\handler\UserHandler.cpp" />
     <ClCompile Include="Open\project\message\project.pb.cc" />
@@ -146,6 +146,7 @@
     <ClInclude Include="Open\openssl\demo_RSA.h" />
     <ClInclude Include="Open\openssl\demo_SHA256.h" />
     <ClInclude Include="Open\openssl\demo_test.h" />
+    <ClInclude Include="Open\project\Config.h" />
     <ClInclude Include="Open\project\controller\Client.h" />
     <ClInclude Include="Open\project\controller\HTTPServer.h" />
     <ClInclude Include="Open\project\controller\MultiServer.h" />
@@ -163,13 +164,12 @@
     <ClInclude Include="Open\project\core\tools\BoostFormat.h" />
     <ClInclude Include="Open\project\core\tools\BoostLog.h" />
     <ClInclude Include="Open\project\core\tools\OpenSSLAES.h" />
-    <ClInclude Include="Open\project\handler\DatabaseManager.h" />
     <ClInclude Include="Open\project\handler\Handler.h" />
     <ClInclude Include="Open\project\handler\UserHandler.h" />
     <ClInclude Include="Open\project\message\CodedMessage.h" />
     <ClInclude Include="Open\project\message\project.pb.h" />
     <ClInclude Include="Open\project\model\Model.h" />
-    <ClInclude Include="Open\project\project.h" />
+    <ClInclude Include="Open\project\Project.h" />
     <ClInclude Include="Open\protobuf\base.pb.h" />
     <ClInclude Include="Open\protobuf\demo_protobuf.h" />
     <ClInclude Include="Open\protobuf\user.pb.h" />

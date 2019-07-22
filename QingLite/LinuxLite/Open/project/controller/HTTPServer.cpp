@@ -1,8 +1,12 @@
 #include "HTTPServer.h"
 #include "../core/tools/BoostLog.h"
 #include "../../../LinuxTools.h"
+#include "../Config.h"
+#include <thread>
 
 
+
+HTTPServer g_HTTPServer;
 
 HTTPServer::HTTPServer()
 {
@@ -10,6 +14,21 @@ HTTPServer::HTTPServer()
 
 HTTPServer::~HTTPServer()
 {
+}
+
+bool HTTPServer::Start(const std::string & ServerIP, int Port)
+{
+    if (!m_IsWork)
+    {
+        m_IsWork = true;
+        m_HTTPPort = Port;
+        m_ServerIP = ServerIP;
+
+        std::thread Worker(WorkThread_Process, this);
+        Worker.detach();
+    }
+
+    return m_IsWork;
 }
 
 bool HTTPServer::ProcessGet(evhttp_request *Request)
@@ -144,4 +163,22 @@ bool HTTPServer::SplitRequestPath(const std::string &RequestPath, std::vector<st
     LogString.erase(LogString.end() - 2, LogString.end());
     BoostLog::WriteDebug(LogString);
     return true;
+}
+
+void HTTPServer::WorkThread_Process(void * Object)
+{
+    HTTPServer *Server = (HTTPServer*)Object;
+    if (Server->m_HTTPDB.Connect(g_Config.m_DBHost.c_str(),
+        g_Config.m_DBUser.c_str(),
+        g_Config.m_DBPassword.c_str(),
+        g_Config.m_DBName.c_str(),
+        g_Config.m_DBPort) == false)
+    {
+        BoostLog::WriteError("Connnect HTTP database failed.");
+    }
+    else
+    {
+        BoostLog::WriteDebug("Connect HTTP database succeed.");
+        Server->HTTPBaseServer::Start(Server->m_ServerIP, Server->m_HTTPPort);
+    }
 }

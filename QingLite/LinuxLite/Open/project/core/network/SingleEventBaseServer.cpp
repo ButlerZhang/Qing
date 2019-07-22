@@ -141,12 +141,12 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
     if (!IP.empty())
     {
         inet_pton(AF_INET, IP.c_str(), &(BindAddress.sin_addr));
-        BoostLog::WriteInfo(BoostFormat("Server bind IP = %s, port = %d.", IP.c_str(), Port));
+        BoostLog::WriteDebug(BoostFormat("Server bind IP = %s, port = %d.", IP.c_str(), Port));
     }
     else
     {
         BindAddress.sin_addr.s_addr = INADDR_ANY;
-        BoostLog::WriteInfo(BoostFormat("Server bind any IP, port = %d.", Port));
+        BoostLog::WriteDebug(BoostFormat("Server bind any IP, port = %d.", Port));
     }
 
     m_Listener = evconnlistener_new_bind(

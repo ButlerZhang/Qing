@@ -10,7 +10,7 @@
 HTTPBaseServer::HTTPBaseServer()
 {
     m_evHTTP = NULL;
-    m_EventBase = NULL;
+    m_EventBase = event_base_new();
 
     m_ContentTypeMap["txt"] = "text/plain";
     m_ContentTypeMap["log"] = "text/plain";
@@ -44,27 +44,25 @@ HTTPBaseServer::HTTPBaseServer()
 
 HTTPBaseServer::~HTTPBaseServer()
 {
-    m_EventBase = NULL;
     m_ContentTypeMap.clear();
-
     if (m_evHTTP != NULL)
     {
         evhttp_free(m_evHTTP);
         m_evHTTP = NULL;
     }
-}
 
-bool HTTPBaseServer::BindBaseEvent(event_base *EventBase)
-{
-    m_EventBase = EventBase;
-    return m_EventBase != NULL;
+    if (m_EventBase != NULL)
+    {
+        event_base_free(m_EventBase);
+        m_EventBase = NULL;
+    }
 }
 
 bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
 {
     if (m_EventBase == NULL)
     {
-        BoostLog::WriteError("HTTP server no binding event base.");
+        BoostLog::WriteError("HTTP server create event base error.");
         return false;
     }
 
@@ -90,6 +88,8 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
     evhttp_set_timeout(m_evHTTP, 5);
     evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
 
+    BoostLog::WriteInfo("HTTP Server start dispatch...");
+    event_base_dispatch(m_EventBase);
     return true;
 }
 

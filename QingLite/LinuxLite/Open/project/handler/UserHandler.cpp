@@ -1,6 +1,7 @@
 #include "UserHandler.h"
-#include "DatabaseManager.h"
+#include "../core/database/MySQLDatabase.h"
 #include "../core/tools/BoostLog.h"
+#include "../controller/HTTPServer.h"
 #include <event.h>
 #include <event2/http.h>
 
@@ -31,7 +32,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
 
     MySQLDataSet DataSet;
     std::string SQLString(BoostFormat("SELECT * FROM user WHERE name = '%s'", UserName.c_str()));
-    if (!g_DBManager.GetHTTPDB()->ExecuteQuery(SQLString.c_str(), &DataSet))
+    if (!g_HTTPServer.GetDB().ExecuteQuery(SQLString.c_str(), &DataSet))
     {
         ReplyModel.m_ErrorCode = 105;
         ReplyModel.m_ReplayMessage = "Login failed, query database error!";

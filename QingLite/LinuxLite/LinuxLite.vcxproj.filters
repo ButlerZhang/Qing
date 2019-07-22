@@ -178,23 +178,23 @@
     <ClCompile Include="Open\project\controller\Client.cpp">
       <Filter>Open\project\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\controller\HTTPServer.cpp">
-      <Filter>Open\project\controller</Filter>
-    </ClCompile>
     <ClCompile Include="Open\project\controller\MultiServer.cpp">
       <Filter>Open\project\controller</Filter>
     </ClCompile>
     <ClCompile Include="Open\project\controller\SingleServer.cpp">
       <Filter>Open\project\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\handler\DatabaseManager.cpp">
-      <Filter>Open\project\handler</Filter>
-    </ClCompile>
     <ClCompile Include="Open\project\handler\Handler.cpp">
       <Filter>Open\project\handler</Filter>
     </ClCompile>
     <ClCompile Include="Open\project\handler\UserHandler.cpp">
       <Filter>Open\project\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\Config.cpp">
+      <Filter>Open\project</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\controller\HTTPServer.cpp">
+      <Filter>Open\project\controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -469,12 +469,6 @@
     <ClInclude Include="Open\project\controller\SingleServer.h">
       <Filter>Open\project\controller</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\project.h">
-      <Filter>Open\project</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\project\handler\DatabaseManager.h">
-      <Filter>Open\project\handler</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\handler\Handler.h">
       <Filter>Open\project\handler</Filter>
     </ClInclude>
@@ -483,6 +477,12 @@
     </ClInclude>
     <ClInclude Include="Open\project\model\Model.h">
       <Filter>Open\project\model</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Config.h">
+      <Filter>Open\project</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\Project.h">
+      <Filter>Open\project</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

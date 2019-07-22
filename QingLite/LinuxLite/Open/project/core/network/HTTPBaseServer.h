@@ -13,7 +13,6 @@ public:
     HTTPBaseServer();
     virtual ~HTTPBaseServer();
 
-    bool BindBaseEvent(event_base *EventBase);
     virtual bool Start(const std::string &ServerIP, int Port);
 
     virtual bool ProcessRequest(struct evhttp_request *Request);

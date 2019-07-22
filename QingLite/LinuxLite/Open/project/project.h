@@ -1,6 +1,8 @@
+#pragma once
 #include "controller/Client.h"
 #include "controller/SingleServer.h"
 #include "controller/MultiServer.h"
+#include "controller/HTTPServer.h"
 #include "core/tools/BoostLog.h"
 #include <iostream>
 
@@ -15,11 +17,8 @@ int project(int argc, char *argv[])
 
     if (argc <= 1 || atoi(argv[1]) == 0)
     {
-        SingleServer Server;
-        Server.Start(ServerIP, ServerPort);
-
-        //MultiServer Server;
-        //Server.Start(ServerIP, ServerPort, 2);
+        g_HTTPServer.Start(ServerIP, ServerPort + 1);
+        g_SingleServer.Start(ServerIP, ServerPort);
     }
     else
     {

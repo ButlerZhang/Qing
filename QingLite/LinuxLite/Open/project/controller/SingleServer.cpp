@@ -4,10 +4,11 @@
 #include "../core/tools/OpenSSLAES.h"
 #include "../message/project.pb.h"
 #include "../message/CodedMessage.h"
-#include "../handler/DatabaseManager.h"
-#include "HTTPServer.h"
+#include "../Config.h"
 
 
+
+SingleServer g_SingleServer;
 
 SingleServer::SingleServer()
 {
@@ -19,26 +20,17 @@ SingleServer::~SingleServer()
 
 bool SingleServer::Start(const std::string &IP, int Port)
 {
-    m_HTTPServer = std::make_shared<HTTPServer>();
-    if (!m_HTTPServer->BindBaseEvent(GetEventBase()))
+    if (m_SMIBDB.Connect(g_Config.m_DBHost.c_str(),
+        g_Config.m_DBUser.c_str(),
+        g_Config.m_DBPassword.c_str(),
+        g_Config.m_DBName.c_str(),
+        g_Config.m_DBPort) == false)
     {
-        BoostLog::WriteError("HTTP server bind event base failed.");
+        BoostLog::WriteError("Connnect SMIB database failed.");
         return false;
     }
 
-    if (!m_HTTPServer->Start(IP, Port + 1))
-    {
-        BoostLog::WriteError("http server start failed.");
-        return false;
-    }
-
-    if (!g_DBManager.Start())
-    {
-        BoostLog::WriteError("Database start failed.");
-        return false;
-    }
-
-    BoostLog::WriteDebug("Connect database succeed.");
+    BoostLog::WriteDebug("Connect SMIB database succeed.");
     return SingleEventBaseServer::Start(IP, Port);
 }
 
@@ -57,7 +49,16 @@ bool SingleServer::ProcessDisconnected()
 bool SingleServer::ProcessSystemCheckout()
 {
     //BoostLog::WriteDebug("Process system chekout.");
-    g_DBManager.CheckConnect();
+
+    if (!m_SMIBDB.Isconnected())
+    {
+        BoostLog::WriteError("SMIB database is disconnected.");
+        if (m_SMIBDB.Reconnect())
+        {
+            BoostLog::WriteDebug("SMIB database reconnect failed.");
+        }
+    }
+
     return true;
 }
 
@@ -96,7 +97,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
 
     BoostLog::WriteDebug(Login.DebugString());
 
-    if (!g_DBManager.GetSMIBDB()->Isconnected())
+    if (!m_SMIBDB.Isconnected())
     {
         BoostLog::WriteError("Database is disconnected.");
         return false;
@@ -104,7 +105,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
 
     const std::string &InsertSQL = BoostFormat("INSERT IGNORE INTO events_log (code, description, date_time) VALUES(%d,'%s', %s)",
         GetRandomUIntInRange(0, INT_MAX), "user login", "NOW()");
-    if (!g_DBManager.GetSMIBDB()->ExecuteQuery(InsertSQL.c_str()))
+    if (!m_SMIBDB.ExecuteQuery(InsertSQL.c_str()))
     {
         BoostLog::WriteError(BoostFormat("Insert falied: %s", InsertSQL.c_str()));
         return false;
