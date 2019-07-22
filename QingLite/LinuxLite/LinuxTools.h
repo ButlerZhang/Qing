@@ -1,10 +1,12 @@
 #pragma once
 #include <string>
 #include <random>
+#include <netdb.h>
 #include <string.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <uuid/uuid.h>
+#include <arpa/inet.h>
 
 
 
@@ -45,6 +47,13 @@ inline std::string GetProgramName()
     }
 
     return std::string();
+}
+
+inline std::string GetHostIP()
+{
+    std::string IP;
+    //TODO
+    return IP;
 }
 
 inline unsigned int GetRandomUIntInRange(int Min, int Max)

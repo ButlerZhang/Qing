@@ -28,6 +28,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
 
     UserModel ReplyModel;
     ReplyModel.m_ErrorCode = 0;
+    ReplyModel.m_UserName = UserName;
     ReplyModel.m_ReplayMessage = "Login successful!";
 
     MySQLDataSet DataSet;

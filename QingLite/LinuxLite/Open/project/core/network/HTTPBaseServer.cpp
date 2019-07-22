@@ -88,7 +88,7 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
     evhttp_set_timeout(m_evHTTP, 5);
     evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
 
-    BoostLog::WriteInfo("HTTP Server start dispatch...");
+    BoostLog::WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));
     event_base_dispatch(m_EventBase);
     return true;
 }

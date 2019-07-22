@@ -69,7 +69,7 @@ void ServerNetworkMessageHandler::WorkThread_Process(void *Object)
     std::stringstream stream;
     stream << std::this_thread::get_id();
     unsigned long long ThreadID = std::stoull(stream.str());
-    BoostLog::WriteDebug(BoostFormat("Wrok thread = %u start...", ThreadID));
+    BoostLog::WriteDebug(BoostFormat("Network message handler thread = %u start...", ThreadID));
 
     while (Handler->m_IsWork)
     {

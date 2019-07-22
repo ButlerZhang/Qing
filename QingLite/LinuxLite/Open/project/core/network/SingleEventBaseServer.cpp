@@ -55,7 +55,7 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 
     m_UDPBroadcast.StartTimer(m_ListenIP, 10, m_ListenPort);
 
-    BoostLog::WriteInfo("Single Server start dispatch...");
+    BoostLog::WriteInfo(BoostFormat("Single Server(%s:%d) start dispatch...", m_ListenIP.c_str(), m_ListenPort));
     event_base_dispatch(m_EventBase);
     return true;
 }
