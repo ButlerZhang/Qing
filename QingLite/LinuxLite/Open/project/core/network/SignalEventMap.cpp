@@ -17,13 +17,13 @@ SignalEventMap::~SignalEventMap()
     }
 }
 
-bool SignalEventMap::BindBaseEvent(event_base * EventBase)
+bool SignalEventMap::BindBaseEvent(event_base *EventBase)
 {
     m_EventBase = EventBase;
     return m_EventBase != NULL;
 }
 
-bool SignalEventMap::AddSignalEvent(int Signal, void(*CallBack_Signal)(int, short, void *))
+bool SignalEventMap::AddSignalEvent(int Signal, void(*CallBack_Signal)(int, short, void *), void *UserData)
 {
     if (m_EventBase == NULL)
     {
@@ -31,16 +31,16 @@ bool SignalEventMap::AddSignalEvent(int Signal, void(*CallBack_Signal)(int, shor
         return false;
     }
 
-    event *SignalEventMap = evsignal_new(m_EventBase, Signal, CallBack_Signal, (void*)this);
+    event *SignalEventMap = evsignal_new(m_EventBase, Signal, CallBack_Signal, UserData);
     if (SignalEventMap == NULL)
     {
-        g_Log.WriteError("Create signal event error.");
+        g_Log.WriteError(BoostFormat("Create signal = %d event error.", Signal));
         return false;
     }
 
     if (event_add(SignalEventMap, NULL) < 0)
     {
-        g_Log.WriteError("Add signal event to base event error.");
+        g_Log.WriteError(BoostFormat("Add signal = %d event to base event error.", Signal));
         event_del(SignalEventMap);
         return false;
     }

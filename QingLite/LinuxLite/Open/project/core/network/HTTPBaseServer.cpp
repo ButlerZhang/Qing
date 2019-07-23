@@ -45,6 +45,7 @@ HTTPBaseServer::HTTPBaseServer()
 
 HTTPBaseServer::~HTTPBaseServer()
 {
+    event_base_loopbreak(m_EventBase);
     m_ContentTypeMap.clear();
 
     if (m_evHTTP != NULL)

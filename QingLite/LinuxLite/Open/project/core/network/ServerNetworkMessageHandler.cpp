@@ -16,12 +16,7 @@ ServerNetworkMessageHandler::ServerNetworkMessageHandler()
 
 ServerNetworkMessageHandler::~ServerNetworkMessageHandler()
 {
-    m_IsWork = false;
-    m_SingleServer = NULL;
-    while (!m_NetworkMsgQueue.empty())
-    {
-        m_NetworkMsgQueue.pop();
-    }
+    Stop();
 }
 
 bool ServerNetworkMessageHandler::Start(SingleEventBaseServer *SingleServer)
@@ -48,6 +43,12 @@ bool ServerNetworkMessageHandler::Stop()
 {
     m_IsWork = false;
     m_SingleServer = NULL;
+    m_Condition.notify_one();
+    while (!m_NetworkMsgQueue.empty())
+    {
+        m_NetworkMsgQueue.pop();
+    }
+
     return true;
 }
 
@@ -91,5 +92,5 @@ void ServerNetworkMessageHandler::WorkThread_Process(void *Object)
         }
     }
 
-    g_Log.WriteInfo(BoostFormat("Wrok thread = %u stop.", ThreadID));
+    g_Log.WriteDebug(BoostFormat("Network message handler thread = %u stop.", ThreadID));
 }

@@ -12,7 +12,6 @@ public:
 
     HTTPBaseServer();
     virtual ~HTTPBaseServer();
-
     virtual bool Start(const std::string &ServerIP, int Port);
 
     virtual bool ProcessCheckout() { return false; }

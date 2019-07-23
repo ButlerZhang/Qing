@@ -28,9 +28,9 @@ void Config::EnterToolMode()
     while (IsLoop)
     {
         std::cout << std::endl << "Input select number: " << std::endl;
-        std::cout << "1.Encrypt string;" << std::endl;
-        std::cout << "2.Decrypt string;" << std::endl;
-        std::cout << "3.Generate config file;" << std::endl;
+        std::cout << "1.Generate config file;" << std::endl;
+        std::cout << "2.Encrypt string;" << std::endl;
+        std::cout << "3.Decrypt string;" << std::endl;
         std::cout << "4.Exit program." << std::endl;
 
         std::cin >> InputString;
@@ -43,31 +43,7 @@ void Config::EnterToolMode()
         int Choice = atoi(InputString.c_str());
         switch (Choice)
         {
-        case 1:
-            {
-                std::cout << std::endl << "Input encrypt string:" << std::endl;
-                std::cin >> InputString;
-
-                const std::string &CipherText = AESEncrypt(InputString, DB_PASSWORD_KEY);
-                std::cout << std::endl << "Encrypt result: " << CipherText << std::endl << std::endl;
-
-                IsLoop = false;
-                break;
-            }
-
-        case 2:
-            {
-                std::cout << std::endl << "Input decrypt string:" << std::endl;
-                std::cin >> InputString;
-
-                const std::string &ClearText = AESDecrypt(InputString, DB_PASSWORD_KEY);
-                std::cout << std::endl << "Decrypt result: " << ClearText << std::endl << std::endl;
-
-                IsLoop = false;
-                break;
-            }
-
-        case 3:
+            case 1:
             {
                 boost::property_tree::ptree DBTree;
 
@@ -96,6 +72,30 @@ void Config::EnterToolMode()
                 boost::property_tree::write_ini(m_ConfigFileName, INITree);
 
                 std::cout << std::endl;
+                IsLoop = false;
+                break;
+            }
+
+        case 2:
+            {
+                std::cout << std::endl << "Input encrypt string:" << std::endl;
+                std::cin >> InputString;
+
+                const std::string &CipherText = AESEncrypt(InputString, DB_PASSWORD_KEY);
+                std::cout << std::endl << "Encrypt result: " << CipherText << std::endl << std::endl;
+
+                IsLoop = false;
+                break;
+            }
+
+        case 3:
+            {
+                std::cout << std::endl << "Input decrypt string:" << std::endl;
+                std::cin >> InputString;
+
+                const std::string &ClearText = AESDecrypt(InputString, DB_PASSWORD_KEY);
+                std::cout << std::endl << "Decrypt result: " << ClearText << std::endl << std::endl;
+
                 IsLoop = false;
                 break;
             }

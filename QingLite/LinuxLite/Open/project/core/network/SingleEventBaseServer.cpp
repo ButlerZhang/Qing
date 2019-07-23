@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <assert.h>
+#include <signal.h>
 #include <algorithm>
 #include <event2/bufferevent.h>
 
@@ -21,6 +22,8 @@ SingleEventBaseServer::SingleEventBaseServer()
 
 SingleEventBaseServer::~SingleEventBaseServer()
 {
+    m_MessageHandler.Stop();
+    event_base_loopbreak(m_EventBase);
     m_ClientSocketVector.clear();
 
     if (m_CheckoutTimer != NULL)
@@ -43,6 +46,12 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 {
     if (!CreateListener(IP, Port))
     {
+        return false;
+    }
+
+    if (!m_SignalEventMap.BindBaseEvent(m_EventBase) || !m_SignalEventMap.AddSignalEvent(SIGINT, CallBack_Signal, this))
+    {
+        g_Log.WriteError("Signal event map bind or add error.");
         return false;
     }
 
@@ -73,6 +82,7 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 
 bool SingleEventBaseServer::Stop()
 {
+    m_MessageHandler.Stop();
     if (event_base_loopbreak(m_EventBase) == 0)
     {
         g_Log.WriteInfo("Single Server loop break.");
@@ -220,6 +230,17 @@ void SingleEventBaseServer::CallBack_Checkout(int Socket, short Events, void *Us
     evutil_timerclear(&tv);
     tv.tv_sec = 5;          //TimerInternal
     event_add(Server->m_CheckoutTimer, &tv);
+}
+
+void SingleEventBaseServer::CallBack_Signal(int Signal, short Events, void *UserData)
+{
+    g_Log.WriteDebug("Single server caught an interrupt signal; exiting cleanly in one seconds.");
+
+    SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
+    Server->m_MessageHandler.Stop();
+
+    struct timeval delay = { 1, 0 };
+    event_base_loopexit(Server->m_EventBase, &delay);
 }
 
 void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void *UserData)
