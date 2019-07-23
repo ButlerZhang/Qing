@@ -18,31 +18,30 @@ class BoostLog
 {
 public:
 
-    static void DefaultInit();
-    static void DefaultShutdown();
+    BoostLog();
+    ~BoostLog();
 
-    static void InitBaseSink(const std::string &LogFileName = "Boost");
-    static void InitTemporarySink(const std::string &LogFileName = "Temp");
+    void InitBaseSink(const std::string &LogFileName = "Boost");
+    void InitTemporarySink(const std::string &LogFileName = "Temp");
 
-    static void WriteTemp(const std::string &LogString) { WriteLog(LL_TEMP, LogString); }
-    static void WriteInfo(const std::string &LogString) { WriteLog(LL_INFO, LogString); }
-    static void WriteDebug(const std::string &LogString) { WriteLog(LL_DEBUG, LogString); }
-    static void WriteError(const std::string &LogString) { WriteLog(LL_ERROR, LogString); }
+    void WriteTemp(const std::string &LogString) { WriteLog(LL_TEMP, LogString); }
+    void WriteInfo(const std::string &LogString) { WriteLog(LL_INFO, LogString); }
+    void WriteDebug(const std::string &LogString) { WriteLog(LL_DEBUG, LogString); }
+    void WriteError(const std::string &LogString) { WriteLog(LL_ERROR, LogString); }
 
-    static void SetFilter(LogLevel Level = LL_DEBUG);
-    static bool SetLogDirectory(const std::string &Directory);
-    static void SetIsOkToWrite(bool IsOkToLog) { m_IsOkToWrite = IsOkToLog; }
-
-private:
-
-    BoostLog() {}
-    ~BoostLog() {}
-
-    static boost::shared_ptr<TextSink> CreateSink(const std::string &FileName);
-    static void WriteLog(LogLevel Level, const std::string &LogString);
+    void SetFilter(LogLevel Level = LL_DEBUG);
+    bool SetLogDirectory(const std::string &Directory);
+    void SetIsOkToWrite(bool IsOkToLog) { m_IsOkToWrite = IsOkToLog; }
 
 private:
 
-    static bool                m_IsOkToWrite;
-    static std::string         m_LogDirectory;
+    boost::shared_ptr<TextSink> CreateSink(const std::string &FileName);
+    void WriteLog(LogLevel Level, const std::string &LogString);
+
+private:
+
+    bool                m_IsOkToWrite;
+    std::string         m_LogDirectory;
 };
+
+extern BoostLog g_Log;

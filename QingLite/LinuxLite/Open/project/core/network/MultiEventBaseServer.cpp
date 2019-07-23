@@ -20,7 +20,7 @@ bool MultiEventBaseServer::Start(const std::string &IP, int Port, int ThreadCoun
 {
     if (m_MainThread.m_EventBase != NULL)
     {
-        BoostLog::WriteError("Multi server Re-start.");
+        g_Log.WriteError("Multi server Re-start.");
         return true;
     }
 
@@ -28,13 +28,13 @@ bool MultiEventBaseServer::Start(const std::string &IP, int Port, int ThreadCoun
     m_MainThread.m_EventBase = event_base_new();
     if (m_MainThread.m_EventBase == NULL)
     {
-        BoostLog::WriteError("Create main event base failed.");
+        g_Log.WriteError("Create main event base failed.");
         return false;
     }
 
     if (!m_UDPBroadcast.BindBaseEvent(m_MainThread.m_EventBase))
     {
-        BoostLog::WriteError("UDP braodcast bind event base failed.");
+        g_Log.WriteError("UDP braodcast bind event base failed.");
         return false;
     }
 
@@ -42,17 +42,17 @@ bool MultiEventBaseServer::Start(const std::string &IP, int Port, int ThreadCoun
 
     if (!CreateThreads(ThreadCount))
     {
-        BoostLog::WriteError("Create threads failed.");
+        g_Log.WriteError("Create threads failed.");
         return false;
     }
 
     if (!StartListen(IP, Port))
     {
-        BoostLog::WriteError("Start listen failed.");
+        g_Log.WriteError("Start listen failed.");
         return false;
     }
 
-    BoostLog::WriteInfo("Multi Server start dispatch...");
+    g_Log.WriteInfo("Multi Server start dispatch...");
     return true;
 }
 
@@ -74,12 +74,12 @@ void MultiEventBaseServer::Stop()
         m_ThreadVector[Index].m_EventBase = NULL;
     }
 
-    BoostLog::WriteInfo("Multi server stop.");
+    g_Log.WriteInfo("Multi server stop.");
 }
 
 bool MultiEventBaseServer::ProcessConnected(ConnectNode &ConnectedNode)
 {
-    BoostLog::WriteDebug(BoostFormat("Client socket = %d connected.", ConnectedNode.m_ClientSocket));
+    g_Log.WriteDebug(BoostFormat("Client socket = %d connected.", ConnectedNode.m_ClientSocket));
     return true;
 }
 
@@ -87,7 +87,7 @@ bool MultiEventBaseServer::ProcessRecv(ConnectNode &ConnectedNode)
 {
     if (evbuffer_get_length(ConnectedNode.m_ReadBuffer) <= 0)
     {
-        BoostLog::WriteDebug("Process recv, no data.");
+        g_Log.WriteDebug("Process recv, no data.");
         return false;
     }
 
@@ -95,7 +95,7 @@ bool MultiEventBaseServer::ProcessRecv(ConnectNode &ConnectedNode)
     memset(ClientMessage, 0, sizeof(ClientMessage));
 
     int RecvSize = evbuffer_remove(ConnectedNode.m_ReadBuffer, ClientMessage, sizeof(ClientMessage));
-    BoostLog::WriteDebug(BoostFormat("Client = %d recv message size = %d.", ConnectedNode.m_ClientSocket, RecvSize));
+    g_Log.WriteDebug(BoostFormat("Client = %d recv message size = %d.", ConnectedNode.m_ClientSocket, RecvSize));
 
     ConnectedNode.m_Message.assign(ClientMessage, ClientMessage + RecvSize);
     return ProcessMessage(ConnectedNode);
@@ -108,13 +108,13 @@ bool MultiEventBaseServer::ProcessSend(ConnectNode &ConnectedNode)
         return true;
     }
 
-    BoostLog::WriteDebug(BoostFormat("Client = %d send data.", ConnectedNode.m_ClientSocket));
+    g_Log.WriteDebug(BoostFormat("Client = %d send data.", ConnectedNode.m_ClientSocket));
     return true;
 }
 
 bool MultiEventBaseServer::ProcessDisconnected(ConnectNode &ConnectedNode, short events)
 {
-    BoostLog::WriteDebug(BoostFormat("Client socket = %d closed.\n", ConnectedNode.m_ClientSocket));
+    g_Log.WriteDebug(BoostFormat("Client socket = %d closed.\n", ConnectedNode.m_ClientSocket));
     return true;
 }
 
@@ -133,14 +133,14 @@ bool MultiEventBaseServer::CreateThreads(int ThreadCount)
         NewNode.m_EventBase = event_base_new();
         if (NewNode.m_EventBase == NULL)
         {
-            BoostLog::WriteError("Create thread event base error.");
+            g_Log.WriteError("Create thread event base error.");
             return false;
         }
 
         int ThreadPipe[2];
         if (pipe(ThreadPipe) == -1)
         {
-            BoostLog::WriteError("Create pipe error.");
+            g_Log.WriteError("Create pipe error.");
             return false;
         }
 
@@ -157,12 +157,12 @@ bool MultiEventBaseServer::CreateThreads(int ThreadCount)
         event_base_set(NewNode.m_EventBase, &NewNode.m_NotifyEvent);
         if (event_add(&NewNode.m_NotifyEvent, 0) == -1)
         {
-            BoostLog::WriteError("Add thread event error.");
+            g_Log.WriteError("Add thread event error.");
             return false;
         }
     }
 
-    BoostLog::WriteInfo(BoostFormat("Create %d threads succeed.", static_cast<int>(m_ThreadVector.size())));
+    g_Log.WriteInfo(BoostFormat("Create %d threads succeed.", static_cast<int>(m_ThreadVector.size())));
     return !m_ThreadVector.empty();
 }
 
@@ -175,12 +175,12 @@ bool MultiEventBaseServer::StartListen(const std::string & IP, int Port)
     if (!IP.empty())
     {
         inet_pton(AF_INET, IP.c_str(), &(BindAddress.sin_addr));
-        BoostLog::WriteInfo(BoostFormat("Server bind IP = %s, port = %d.", IP.c_str(), Port));
+        g_Log.WriteInfo(BoostFormat("Server bind IP = %s, port = %d.", IP.c_str(), Port));
     }
     else
     {
         BindAddress.sin_addr.s_addr = INADDR_ANY;
-        BoostLog::WriteInfo(BoostFormat("Server bind any IP, port = %d.", Port));
+        g_Log.WriteInfo(BoostFormat("Server bind any IP, port = %d.", Port));
     }
 
     evconnlistener * Listener = evconnlistener_new_bind(
@@ -193,7 +193,7 @@ bool MultiEventBaseServer::StartListen(const std::string & IP, int Port)
         sizeof(sockaddr_in));
     if (Listener == NULL)
     {
-        BoostLog::WriteError("Create listener error.");
+        g_Log.WriteError("Create listener error.");
         return false;
     }
 
@@ -204,7 +204,7 @@ bool MultiEventBaseServer::StartEventLoop(evconnlistener *Listener)
 {
     if (m_MainThread.m_EventBase == NULL || m_ThreadVector.empty())
     {
-        BoostLog::WriteError("Start event loop failed, main event base is NULL or no thread.");
+        g_Log.WriteError("Start event loop failed, main event base is NULL or no thread.");
         return false;
     }
 
@@ -224,18 +224,18 @@ bool MultiEventBaseServer::Send(ConnectNode & ConnectedNode, const std::string &
     int AddSize = evbuffer_add(ConnectedNode.m_WriteBuffer, DataString.c_str(), DataString.size());
     if (AddSize != static_cast<int>(DataString.size()))
     {
-        BoostLog::WriteError("Send falied, evbuffer add error.");
+        g_Log.WriteError("Send falied, evbuffer add error.");
         return false;
     }
 
     int WriteSize = evbuffer_write(ConnectedNode.m_WriteBuffer, ConnectedNode.m_ClientSocket);
     if (WriteSize != static_cast<int>(DataString.size()))
     {
-        BoostLog::WriteError("Send falied, evbuffer write error.");
+        g_Log.WriteError("Send falied, evbuffer write error.");
         return false;
     }
 
-    BoostLog::WriteError(BoostFormat("Client = %d send size = %d succeed.", ConnectedNode.m_ClientSocket, WriteSize));
+    g_Log.WriteError(BoostFormat("Client = %d send size = %d succeed.", ConnectedNode.m_ClientSocket, WriteSize));
     return true;
 }
 
@@ -258,13 +258,13 @@ void MultiEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket
     if (TargetIndex < 0 || TargetIndex >= ThreadVector.size())
     {
         TargetIndex = rand() % ThreadVector.size();
-        BoostLog::WriteError("I should not come here to find target index.");
+        g_Log.WriteError("I should not come here to find target index.");
     }
 
     int Pipe = Server->m_ThreadVector[TargetIndex].m_NotifySendPipeFD;
     write(Pipe, &Socket, sizeof(evutil_socket_t));
 
-    BoostLog::WriteInfo(BoostFormat("Listen callback: Client = %d, index = %d, pipe = %d, thread = %u.\n",
+    g_Log.WriteInfo(BoostFormat("Listen callback: Client = %d, index = %d, pipe = %d, thread = %u.\n",
         Socket, TargetIndex, Pipe, Server->m_ThreadVector[TargetIndex].m_ThreadID));
 }
 
@@ -276,17 +276,17 @@ void MultiEventBaseServer::CallBack_Accept(int fd, short which, void *arg)
     read(CurrentThreadNode->m_NotifyRecvPipeFD, &ClientSocket, sizeof(evutil_socket_t));
     if (ClientSocket <= 0)
     {
-        BoostLog::WriteError(BoostFormat("Accept: loop break, client socket = %d.\n", ClientSocket));
+        g_Log.WriteError(BoostFormat("Accept: loop break, client socket = %d.\n", ClientSocket));
         event_base_loopbreak(CurrentThreadNode->m_EventBase);
         return;
     }
 
-    BoostLog::WriteInfo(BoostFormat("Accept: read socket = %d from recv pipe.\n", ClientSocket));
+    g_Log.WriteInfo(BoostFormat("Accept: read socket = %d from recv pipe.\n", ClientSocket));
 
     struct bufferevent *bev = bufferevent_socket_new(CurrentThreadNode->m_EventBase, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
     if (bev == NULL)
     {
-        BoostLog::WriteError("Accept: could not create bufferevent.");
+        g_Log.WriteError("Accept: could not create bufferevent.");
         return;
     }
 
@@ -334,15 +334,15 @@ void MultiEventBaseServer::CallBack_Event(bufferevent * bev, short events, void 
     }
 
     bufferevent_free(bev);
-    BoostLog::WriteInfo(BoostFormat("Thread = %u surplus client count = %d.\n", CurrentNode->m_WorkThread->m_ThreadID, NodeVector.size()));
+    g_Log.WriteInfo(BoostFormat("Thread = %u surplus client count = %d.\n", CurrentNode->m_WorkThread->m_ThreadID, NodeVector.size()));
 }
 
 void* MultiEventBaseServer::CallBack_StartThreadEventLoop(void *arg)
 {
     ThreadNode *CurrentNode = (ThreadNode*)arg;
-    BoostLog::WriteInfo(BoostFormat("Thread = %u started.\n", CurrentNode->m_ThreadID));
+    g_Log.WriteInfo(BoostFormat("Thread = %u started.\n", CurrentNode->m_ThreadID));
 
     event_base_dispatch(CurrentNode->m_EventBase);
-    BoostLog::WriteInfo(BoostFormat("Thread = %u done.\n", CurrentNode->m_ThreadID));
+    g_Log.WriteInfo(BoostFormat("Thread = %u done.\n", CurrentNode->m_ThreadID));
     return NULL;
 }

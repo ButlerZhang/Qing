@@ -55,39 +55,39 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
 {
     if (m_EventBase == NULL)
     {
-        BoostLog::WriteError("HTTP server create event base error.");
+        g_Log.WriteError("HTTP server create event base error.");
         return false;
     }
 
     if (!AddCheckoutTimer(5))
     {
-        BoostLog::WriteError("Add http server checkout timer failed.");
+        g_Log.WriteError("Add http server checkout timer failed.");
         return false;
     }
 
     if (m_evHTTP != NULL)
     {
-        BoostLog::WriteError("HTTP server re-start.");
+        g_Log.WriteError("HTTP server re-start.");
         return true;
     }
 
     m_evHTTP = evhttp_new(m_EventBase);
     if (m_evHTTP == NULL)
     {
-        BoostLog::WriteError("HTTP server could not create evhttp.");
+        g_Log.WriteError("HTTP server could not create evhttp.");
         return false;
     }
 
     if (evhttp_bind_socket(m_evHTTP, ServerIP.c_str(), static_cast<uint16_t>(Port)) != 0)
     {
-        BoostLog::WriteError(BoostFormat("http server bind (%s,%d) failed.", ServerIP.c_str(), Port));
+        g_Log.WriteError(BoostFormat("http server bind (%s,%d) failed.", ServerIP.c_str(), Port));
         return false;
     }
 
     evhttp_set_timeout(m_evHTTP, 5);
     evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
 
-    BoostLog::WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));
+    g_Log.WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));
     event_base_dispatch(m_EventBase);
     return true;
 }
@@ -104,7 +104,7 @@ bool HTTPBaseServer::ProcessRequest(evhttp_request *Request)
     }
 
     evhttp_send_error(Request, HTTP_BADMETHOD, "method not allowed for this uri.");
-    BoostLog::WriteError("method not allowed for this uri.");
+    g_Log.WriteError("method not allowed for this uri.");
     return true;
 }
 
@@ -119,7 +119,7 @@ bool HTTPBaseServer::ProcessGet(evhttp_request *Request)
     struct stat ActuallyPathStat;
     if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
     {
-        BoostLog::WriteError(BoostFormat("Stat path = %s failed.", FullPath.c_str()));
+        g_Log.WriteError(BoostFormat("Stat path = %s failed.", FullPath.c_str()));
         return false;
     }
 
@@ -143,14 +143,14 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 {
     if (m_CheckoutTimer != NULL)
     {
-        BoostLog::WriteError("Re-create http server checkout timer.");
+        g_Log.WriteError("Re-create http server checkout timer.");
         return true;
     }
 
     m_CheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_Checkout, this);
     if (m_CheckoutTimer == NULL)
     {
-        BoostLog::WriteError("Create http server chekcout timer failed.");
+        g_Log.WriteError("Create http server chekcout timer failed.");
         return false;
     }
 
@@ -160,7 +160,7 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 
     if (event_add(m_CheckoutTimer, &tv) != 0)
     {
-        BoostLog::WriteError("Add http server checkout timer failed.");
+        g_Log.WriteError("Add http server checkout timer failed.");
         event_free(m_CheckoutTimer);
         m_CheckoutTimer = NULL;
         return false;
@@ -186,7 +186,7 @@ void HTTPBaseServer::PrintRequest(evhttp_request *Request)
     default:                    RequestType = "unknown";    break;
     }
 
-    BoostLog::WriteDebug(BoostFormat("Received a %s request for: %s", RequestType, evhttp_request_get_uri(Request)));
+    g_Log.WriteDebug(BoostFormat("Received a %s request for: %s", RequestType, evhttp_request_get_uri(Request)));
 
     std::string LogString("Header:\n");
     struct evkeyvalq *Headers = evhttp_request_get_input_headers(Request);
@@ -196,7 +196,7 @@ void HTTPBaseServer::PrintRequest(evhttp_request *Request)
     }
 
     LogString.erase(LogString.end() - 1);
-    BoostLog::WriteDebug(LogString);
+    g_Log.WriteDebug(LogString);
 }
 
 bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &ActualllyPath)
@@ -205,7 +205,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     struct evhttp_uri *ParseURI = evhttp_uri_parse(OriginalURI);
     if (ParseURI == NULL)
     {
-        BoostLog::WriteError(BoostFormat("It is not a good URI = %s. Sending BADREQUEST.", OriginalURI));
+        g_Log.WriteError(BoostFormat("It is not a good URI = %s. Sending BADREQUEST.", OriginalURI));
         evhttp_send_error(Request, HTTP_BADREQUEST, "Can not parse original URI.");
         return false;
     }
@@ -218,7 +218,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     LogString.append(BoostFormat("\tquery:%s\n", evhttp_uri_get_query(ParseURI)));
     LogString.append(BoostFormat("\tuserinfo:%s\n", evhttp_uri_get_userinfo(ParseURI)));
     LogString.append(BoostFormat("\tfragment:%s", evhttp_uri_get_fragment(ParseURI)));
-    BoostLog::WriteDebug(LogString);
+    g_Log.WriteDebug(LogString);
 
     const char *RequestPath = evhttp_uri_get_path(ParseURI);
     if (RequestPath == NULL)
@@ -230,7 +230,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     if (DecodeURI == NULL)
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
-        BoostLog::WriteError("Decoded URI is NULL.");
+        g_Log.WriteError("Decoded URI is NULL.");
         evhttp_uri_free(ParseURI);
         return false;
     }
@@ -238,7 +238,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     if (strstr(DecodeURI, ".."))
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
-        BoostLog::WriteError("Decoded URI include '..' directory.");
+        g_Log.WriteError("Decoded URI include '..' directory.");
         evhttp_uri_free(ParseURI);
         free(DecodeURI);
         return false;
@@ -254,7 +254,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
         ActualllyPath.append(DecodeURI);
     }
 
-    BoostLog::WriteDebug(BoostFormat("Request actuallly path = %s", ActualllyPath.c_str()));
+    g_Log.WriteDebug(BoostFormat("Request actuallly path = %s", ActualllyPath.c_str()));
     evhttp_uri_free(ParseURI);
     free(DecodeURI);
     return true;
@@ -265,7 +265,7 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
     {
-        BoostLog::WriteError("Process Directory: evbuffer create failed.");
+        g_Log.WriteError("Process Directory: evbuffer create failed.");
         return false;
     }
 
@@ -315,7 +315,7 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", "text/html");
 
     evhttp_send_reply(Request, HTTP_OK, "OK", evb);
-    BoostLog::WriteDebug(LogString);
+    g_Log.WriteDebug(LogString);
     evbuffer_free(evb);
     return true;
 }
@@ -325,15 +325,15 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     int FileDescriptor = open(ActualllyPath.c_str(), O_RDONLY);
     if (FileDescriptor <= 0)
     {
-        BoostLog::WriteError("Process File: open file descriptor failed.");
+        g_Log.WriteError("Process File: open file descriptor failed.");
         evhttp_send_error(Request, HTTP_NOTFOUND, "File was not found.");
         return false;
     }
 
-    BoostLog::WriteDebug(BoostFormat("Process File: path = %s, descriptor = %d.", ActualllyPath.c_str(), FileDescriptor));
+    g_Log.WriteDebug(BoostFormat("Process File: path = %s, descriptor = %d.", ActualllyPath.c_str(), FileDescriptor));
     if (fstat(FileDescriptor, &FileStat) < 0)
     {
-        BoostLog::WriteError(BoostFormat("Process File: file descriptor = %d fstat failed.", FileDescriptor));
+        g_Log.WriteError(BoostFormat("Process File: file descriptor = %d fstat failed.", FileDescriptor));
         close(FileDescriptor);
         return false;
     }
@@ -341,7 +341,7 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
     {
-        BoostLog::WriteError("Process File: evbuffer create failed.");
+        g_Log.WriteError("Process File: evbuffer create failed.");
         close(FileDescriptor);
         return false;
     }

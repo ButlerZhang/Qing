@@ -16,14 +16,14 @@ inline std::string AESEncrypt(const std::string &ClearText, const std::string &K
 {
     if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        BoostLog::WriteError(BoostFormat("Key size is more than %d", KEY_BIT_SIZE));
+        g_Log.WriteError(BoostFormat("Key size is more than %d", KEY_BIT_SIZE));
         return std::string();
     }
 
     AES_KEY AESKey;
     if (AES_set_encrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
-        BoostLog::WriteError("Set encrypt key failed.");
+        g_Log.WriteError("Set encrypt key failed.");
         return std::string();
     }
 
@@ -31,7 +31,7 @@ inline std::string AESEncrypt(const std::string &ClearText, const std::string &K
     if (ClearText.length() % AES_BLOCK_SIZE > 0)
     {
         PaddingCount = static_cast<int>(AES_BLOCK_SIZE - ClearText.length() % AES_BLOCK_SIZE);
-        BoostLog::WriteDebug(BoostFormat("Padding count = %d", PaddingCount));
+        g_Log.WriteDebug(BoostFormat("Padding count = %d", PaddingCount));
     }
 
     std::string ClearTextBackup(ClearText);
@@ -49,7 +49,7 @@ inline std::string AESEncrypt(const std::string &ClearText, const std::string &K
 
     HexString MyHexString;
     const std::string &EncryptString = MyHexString.ASCIIStringToHexString(CipherText.c_str(), CipherText.size(), false);
-    BoostLog::WriteDebug(BoostFormat("AESEncrypt: Encrypt hex, size = %d, string = %s", EncryptString.size(), EncryptString.c_str()));
+    g_Log.WriteDebug(BoostFormat("AESEncrypt: Encrypt hex, size = %d, string = %s", EncryptString.size(), EncryptString.c_str()));
 
     return EncryptString;
 }
@@ -58,18 +58,18 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
 {
     if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        BoostLog::WriteError(BoostFormat("Key size is more than %d", KEY_BIT_SIZE));
+        g_Log.WriteError(BoostFormat("Key size is more than %d", KEY_BIT_SIZE));
         return std::string();
     }
 
     AES_KEY AESKey;
     if (AES_set_decrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
-        BoostLog::WriteError("Set decrypt key failed.");
+        g_Log.WriteError("Set decrypt key failed.");
         return std::string();
     }
 
-    BoostLog::WriteDebug(BoostFormat("AESDecrypt: Decrypt hex, size = %d, string = %s", CipherText.size(), CipherText.c_str()));
+    g_Log.WriteDebug(BoostFormat("AESDecrypt: Decrypt hex, size = %d, string = %s", CipherText.size(), CipherText.c_str()));
 
     HexString MyHexString;
     std::string ASCIIChipherText;
@@ -85,16 +85,16 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
         ClearText.append((const char*)OutArray, AES_BLOCK_SIZE);
     }
 
-    BoostLog::WriteDebug(BoostFormat("AESDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
+    g_Log.WriteDebug(BoostFormat("AESDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
     std::string::size_type Index = ClearText.find_last_not_of('\0');
     if (Index != std::string::npos)
     {
         std::string::size_type EraseCount = ClearText.size() - (Index + 1);
         ClearText.erase(Index + 1, EraseCount);
-        BoostLog::WriteDebug(BoostFormat("Erase count = %d\n", EraseCount));
+        g_Log.WriteDebug(BoostFormat("Erase count = %d\n", EraseCount));
     }
 
-    BoostLog::WriteDebug(BoostFormat("AESDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
+    g_Log.WriteDebug(BoostFormat("AESDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
     return ClearText;
 }
 
@@ -102,14 +102,14 @@ inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string
 {
     if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        BoostLog::WriteError(BoostFormat("Key size is more than %d", KEY_BIT_SIZE));
+        g_Log.WriteError(BoostFormat("Key size is more than %d", KEY_BIT_SIZE));
         return std::string();
     }
 
     AES_KEY AESKey;
     if (AES_set_encrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
-        BoostLog::WriteError("Set encrypt key failed.");
+        g_Log.WriteError("Set encrypt key failed.");
         return std::string();
     }
 
@@ -117,7 +117,7 @@ inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string
     if (ClearText.length() % AES_BLOCK_SIZE > 0)
     {
         PaddingCount = static_cast<int>(AES_BLOCK_SIZE - ClearText.length() % AES_BLOCK_SIZE);
-        BoostLog::WriteDebug(BoostFormat("AEScbcEncrypt: Padding count = %d\n", PaddingCount));
+        g_Log.WriteDebug(BoostFormat("AEScbcEncrypt: Padding count = %d\n", PaddingCount));
     }
 
     std::string ClearTextBackup(ClearText);
@@ -129,11 +129,11 @@ inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string
     AES_cbc_encrypt((const unsigned char*)ClearTextBackup.c_str(), &EncryptVector[0], ClearTextBackup.size(), &AESKey, ivec, AES_ENCRYPT);
 
     std::string CipherText(EncryptVector.begin(), EncryptVector.end());
-    BoostLog::WriteDebug(BoostFormat("AEScbcEncrypt: Clear text size = %d, Cipher text size = %d", ClearText.size(), CipherText.size()));
+    g_Log.WriteDebug(BoostFormat("AEScbcEncrypt: Clear text size = %d, Cipher text size = %d", ClearText.size(), CipherText.size()));
 
     HexString MyHexString;
     const std::string &EncryptString =  MyHexString.ASCIIStringToHexString(CipherText.c_str(), CipherText.size(), false);
-    BoostLog::WriteDebug(BoostFormat("AEScbcEncrypt: Encrypt hex, size = %d, string = %s", EncryptString.size(), EncryptString.c_str()));
+    g_Log.WriteDebug(BoostFormat("AEScbcEncrypt: Encrypt hex, size = %d, string = %s", EncryptString.size(), EncryptString.c_str()));
 
     return EncryptString;
 }
@@ -142,18 +142,18 @@ inline std::string AEScbcDecrypt(const std::string &CipherText, const std::strin
 {
     if (static_cast<int>(Key.size()) > KEY_BIT_SIZE)
     {
-        BoostLog::WriteError(BoostFormat("ERROR: Key size is more than %d", KEY_BIT_SIZE));
+        g_Log.WriteError(BoostFormat("ERROR: Key size is more than %d", KEY_BIT_SIZE));
         return std::string();
     }
 
     AES_KEY AESKey;
     if (AES_set_decrypt_key((const unsigned char*)Key.c_str(), KEY_BIT_SIZE, &AESKey) < 0)
     {
-        BoostLog::WriteError("Set decrypt key failed.");
+        g_Log.WriteError("Set decrypt key failed.");
         return std::string();
     }
 
-    BoostLog::WriteDebug(BoostFormat("AEScbcDecrypt: Decrypt hex, size = %d, string = %s", CipherText.size(), CipherText.c_str()));
+    g_Log.WriteDebug(BoostFormat("AEScbcDecrypt: Decrypt hex, size = %d, string = %s", CipherText.size(), CipherText.c_str()));
 
     HexString MyHexString;
     std::string ASCIIChipherText;
@@ -166,16 +166,16 @@ inline std::string AEScbcDecrypt(const std::string &CipherText, const std::strin
     AES_cbc_encrypt((const unsigned char*)ASCIIChipherText.c_str(), &DecryptVector[0], ASCIIChipherText.size(), &AESKey, ivec, AES_DECRYPT);
 
     std::string ClearText(DecryptVector.begin(), DecryptVector.end());
-    BoostLog::WriteDebug(BoostFormat("AEScbcDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
+    g_Log.WriteDebug(BoostFormat("AEScbcDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
 
     std::string::size_type Index = ClearText.find_last_not_of('\0');
     if (Index != std::string::npos)
     {
         std::string::size_type EraseCount = ClearText.size() - (Index + 1);
         ClearText.erase(Index + 1, EraseCount);
-        BoostLog::WriteDebug(BoostFormat("AEScbcDecrypt: Erase count = %d", EraseCount));
+        g_Log.WriteDebug(BoostFormat("AEScbcDecrypt: Erase count = %d", EraseCount));
     }
 
-    BoostLog::WriteDebug(BoostFormat("AEScbcDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
+    g_Log.WriteDebug(BoostFormat("AEScbcDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
     return ClearText;
 }

@@ -26,29 +26,29 @@ bool SingleServer::Start(const std::string &IP, int Port)
         g_Config.m_DBName.c_str(),
         g_Config.m_DBPort) == false)
     {
-        BoostLog::WriteError("Connnect SMIB database failed.");
+        g_Log.WriteError("Connnect SMIB database failed.");
         return false;
     }
 
-    BoostLog::WriteDebug("Connect SMIB database succeed.");
+    g_Log.WriteDebug("Connect SMIB database succeed.");
     return SingleEventBaseServer::Start(IP, Port);
 }
 
 bool SingleServer::ProcessCheckout()
 {
-    //BoostLog::WriteDebug("Process single server chekout.");
+    //g_Log.WriteDebug("Process single server chekout.");
 
     if (!m_SMIBDB.Isconnected())
     {
-        BoostLog::WriteError("SMIB database is disconnected.");
+        g_Log.WriteError("SMIB database is disconnected.");
 
         if (m_SMIBDB.Reconnect())
         {
-            BoostLog::WriteInfo("SMIB database reconnect succeed.");
+            g_Log.WriteInfo("SMIB database reconnect succeed.");
         }
         else
         {
-            BoostLog::WriteDebug("SMIB database reconnect failed.");
+            g_Log.WriteDebug("SMIB database reconnect failed.");
         }
     }
 
@@ -57,13 +57,13 @@ bool SingleServer::ProcessCheckout()
 
 bool SingleServer::ProcessConnected()
 {
-    BoostLog::WriteDebug("Process connected.");
+    g_Log.WriteDebug("Process connected.");
     return false;
 }
 
 bool SingleServer::ProcessDisconnected()
 {
-    BoostLog::WriteDebug("Process disconnected.");
+    g_Log.WriteDebug("Process disconnected.");
     return false;
 }
 
@@ -92,19 +92,19 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool SingleServer::ProcessLogin(NetworkMessage &Message)
 {
-    BoostLog::WriteDebug("Process login.");
+    g_Log.WriteDebug("Process login.");
     Project::UserLogin Login;
     if (!Login.ParseFromString(Message.m_Message))
     {
-        BoostLog::WriteError("Login message parse failed.");
+        g_Log.WriteError("Login message parse failed.");
         return false;
     }
 
-    BoostLog::WriteDebug(Login.DebugString());
+    g_Log.WriteDebug(Login.DebugString());
 
     if (!m_SMIBDB.Isconnected())
     {
-        BoostLog::WriteError("Database is disconnected.");
+        g_Log.WriteError("Database is disconnected.");
         return false;
     }
 
@@ -112,7 +112,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
         GetRandomUIntInRange(0, INT_MAX), "user login", "NOW()");
     if (!m_SMIBDB.ExecuteQuery(InsertSQL.c_str()))
     {
-        BoostLog::WriteError(BoostFormat("Insert falied: %s", InsertSQL.c_str()));
+        g_Log.WriteError(BoostFormat("Insert falied: %s", InsertSQL.c_str()));
         return false;
     }
 
@@ -128,21 +128,21 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
     Header->set_type(Project::MessageType::MT_LOGIN_RESPONSE);
     Header->set_transmissionid(GetUUID());
 
-    BoostLog::WriteDebug(Response.DebugString());
+    g_Log.WriteDebug(Response.DebugString());
     return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, Message, Response);
 }
 
 bool SingleServer::ProcessLogout(NetworkMessage &Message)
 {
-    BoostLog::WriteDebug("Process logout.");
+    g_Log.WriteDebug("Process logout.");
     Project::UserLogout Logout;
     if (!Logout.ParseFromString(Message.m_Message))
     {
-        BoostLog::WriteError("Logout message parse failed.");
+        g_Log.WriteError("Logout message parse failed.");
         return false;
     }
 
-    BoostLog::WriteDebug(Logout.DebugString());
+    g_Log.WriteDebug(Logout.DebugString());
     return true;
 }
 

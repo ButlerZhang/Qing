@@ -13,9 +13,7 @@
 
 
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(BoostLogger, boost::log::sources::severity_logger_mt<LogLevel>)
-
-bool BoostLog::m_IsOkToWrite = true;
-std::string BoostLog::m_LogDirectory;
+BoostLog g_Log;
 
 
 // The formatting logic for the severity level
@@ -36,7 +34,7 @@ inline std::basic_ostream< CharT, TraitsT >& operator<< (std::basic_ostream< Cha
 
 
 
-void BoostLog::DefaultInit()
+BoostLog::BoostLog()
 {
     SetIsOkToWrite(true);
     SetLogDirectory(GetWorkDirectory());
@@ -45,7 +43,7 @@ void BoostLog::DefaultInit()
     InitTemporarySink(GetProgramName() + "_Temp");
 }
 
-void BoostLog::DefaultShutdown()
+BoostLog::~BoostLog()
 {
     boost::log::core::get()->remove_all_sinks();
 }

@@ -21,17 +21,17 @@ bool Config::LoadConfig(const std::string & FileName)
 {
     if (!LoadFileConfig(FileName))
     {
-        BoostLog::WriteError("Config: Read config file failed.");
+        g_Log.WriteError("Config: Read config file failed.");
         return false;
     }
 
     if (!LoadDatabaseConfig())
     {
-        BoostLog::WriteError("Config: Read database failed.");
+        g_Log.WriteError("Config: Read database failed.");
         return false;
     }
 
-    BoostLog::WriteDebug("Config: Read config succeed.");
+    g_Log.WriteDebug("Config: Read config succeed.");
     return true;
 }
 
@@ -45,7 +45,7 @@ bool Config::LoadFileConfig(const std::string &FileName)
     }
     catch (...)
     {
-        BoostLog::WriteError("Config: boost::property_tree::read_ini throw error.");
+        g_Log.WriteError("Config: boost::property_tree::read_ini throw error.");
         return false;
     }
 
@@ -64,7 +64,7 @@ bool Config::LoadDatabaseConfig()
     MySQLDatabase MySQL;
     if (!MySQL.Connect(m_DBHost.c_str(), m_DBUser.c_str(), m_DBPassword.c_str(), m_DBName.c_str(), m_DBPort))
     {
-        BoostLog::WriteError("Config: Connnect config database failed.");
+        g_Log.WriteError("Config: Connnect config database failed.");
         return false;
     }
 
@@ -72,7 +72,7 @@ bool Config::LoadDatabaseConfig()
     std::string SQLString("SELECT * FROM server_config");
     if (!MySQL.ExecuteQuery(SQLString.c_str(), &DataSet))
     {
-        BoostLog::WriteError(BoostFormat("Config: Execute query failed: %s", SQLString.c_str()));
+        g_Log.WriteError(BoostFormat("Config: Execute query failed: %s", SQLString.c_str()));
         return false;
     }
 
@@ -84,7 +84,7 @@ bool Config::LoadDatabaseConfig()
             !DataSet.GetValue("config_value", ConfigValue) ||
             !DataSet.GetValue("section", Section))
         {
-            BoostLog::WriteError("Config: Data set get value error.");
+            g_Log.WriteError("Config: Data set get value error.");
             continue;
         }
 
@@ -114,7 +114,7 @@ bool Config::ParseServerSection(const std::string & ConfigName, const std::strin
         std::vector<std::string> IPVector;
         if (!GetHostIPv4(IPVector))
         {
-            BoostLog::WriteError("Can not get host IPv4 address.");
+            g_Log.WriteError("Can not get host IPv4 address.");
             return false;
         }
 

@@ -37,25 +37,25 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 
     if (!m_UDPBroadcast.BindBaseEvent(m_EventBase))
     {
-        BoostLog::WriteError("UDP braodcast bind event base failed.");
+        g_Log.WriteError("UDP braodcast bind event base failed.");
         return false;
     }
 
     if (!m_MessageHandler.Start(this))
     {
-        BoostLog::WriteError("Message handler start failed.");
+        g_Log.WriteError("Message handler start failed.");
         return false;
     }
 
     if (!AddCheckoutTimer(5))
     {
-        BoostLog::WriteError("Add single server checkout timer failed.");
+        g_Log.WriteError("Add single server checkout timer failed.");
         return false;
     }
 
     m_UDPBroadcast.StartTimer(m_ListenIP, 10, m_ListenPort);
 
-    BoostLog::WriteInfo(BoostFormat("Single Server(%s:%d) start dispatch...", m_ListenIP.c_str(), m_ListenPort));
+    g_Log.WriteInfo(BoostFormat("Single Server(%s:%d) start dispatch...", m_ListenIP.c_str(), m_ListenPort));
     event_base_dispatch(m_EventBase);
     return true;
 }
@@ -64,11 +64,11 @@ bool SingleEventBaseServer::Stop()
 {
     if (event_base_loopbreak(m_EventBase) == 0)
     {
-        BoostLog::WriteInfo("Single Server loop break.");
+        g_Log.WriteInfo("Single Server loop break.");
         return true;
     }
 
-    BoostLog::WriteError("Single Server loop break failed.");
+    g_Log.WriteError("Single Server loop break failed.");
     return false;
 }
 
@@ -80,12 +80,12 @@ bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
 
     if (bufferevent_write(NetworkMsg.m_Bufferevent, ACK.c_str(), ACK.length()) != 0)
     {
-        BoostLog::WriteError(BoostFormat("Send failed, %s", ACK.c_str()));
+        g_Log.WriteError(BoostFormat("Send failed, %s", ACK.c_str()));
         return false;
     }
     else
     {
-        BoostLog::WriteDebug(BoostFormat("%s", ACK.c_str()));
+        g_Log.WriteDebug(BoostFormat("%s", ACK.c_str()));
         return true;
     }
 }
@@ -94,14 +94,14 @@ bool SingleEventBaseServer::AddCheckoutTimer(int TimerInternal)
 {
     if (m_CheckoutTimer != NULL)
     {
-        BoostLog::WriteError("Re-create signle server checkout timer.");
+        g_Log.WriteError("Re-create signle server checkout timer.");
         return true;
     }
 
     m_CheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_Checkout, this);
     if (m_CheckoutTimer == NULL)
     {
-        BoostLog::WriteError("Create signle server chekcout timer failed.");
+        g_Log.WriteError("Create signle server chekcout timer failed.");
         return false;
     }
 
@@ -111,7 +111,7 @@ bool SingleEventBaseServer::AddCheckoutTimer(int TimerInternal)
 
     if (event_add(m_CheckoutTimer, &tv) != 0)
     {
-        BoostLog::WriteError("Add signle server checkout timer failed.");
+        g_Log.WriteError("Add signle server checkout timer failed.");
         event_free(m_CheckoutTimer);
         m_CheckoutTimer = NULL;
         return false;
@@ -124,13 +124,13 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
 {
     if (m_EventBase == NULL)
     {
-        BoostLog::WriteError("Create event base error.");
+        g_Log.WriteError("Create event base error.");
         return false;
     }
 
     if (m_Listener != NULL)
     {
-        BoostLog::WriteError("Re-create event base.");
+        g_Log.WriteError("Re-create event base.");
         return true;
     }
 
@@ -141,12 +141,12 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
     if (!IP.empty())
     {
         inet_pton(AF_INET, IP.c_str(), &(BindAddress.sin_addr));
-        BoostLog::WriteDebug(BoostFormat("Server bind IP = %s, port = %d.", IP.c_str(), Port));
+        g_Log.WriteDebug(BoostFormat("Server bind IP = %s, port = %d.", IP.c_str(), Port));
     }
     else
     {
         BindAddress.sin_addr.s_addr = INADDR_ANY;
-        BoostLog::WriteDebug(BoostFormat("Server bind any IP, port = %d.", Port));
+        g_Log.WriteDebug(BoostFormat("Server bind any IP, port = %d.", Port));
     }
 
     m_Listener = evconnlistener_new_bind(
@@ -160,7 +160,7 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
 
     if (m_Listener == NULL)
     {
-        BoostLog::WriteInfo("Create listener failed.");
+        g_Log.WriteInfo("Create listener failed.");
         return false;
     }
 
@@ -173,17 +173,17 @@ bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *D
 {
     if (NetworkMsg.m_Bufferevent == NULL)
     {
-        BoostLog::WriteError(BoostFormat("Client = %d bufferevent is NULL.", NetworkMsg.m_Socket));
+        g_Log.WriteError(BoostFormat("Client = %d bufferevent is NULL.", NetworkMsg.m_Socket));
         return false;
     }
 
     if (bufferevent_write(NetworkMsg.m_Bufferevent, Data, Size) != 0)
     {
-        BoostLog::WriteError(BoostFormat("Client = %d send failed.", NetworkMsg.m_Socket));
+        g_Log.WriteError(BoostFormat("Client = %d send failed.", NetworkMsg.m_Socket));
         return false;
     }
 
-    BoostLog::WriteError(BoostFormat("Client = %d send size = %d succeed.", NetworkMsg.m_Socket, Size));
+    g_Log.WriteError(BoostFormat("Client = %d send size = %d succeed.", NetworkMsg.m_Socket, Size));
     return true;
 }
 
@@ -191,7 +191,7 @@ void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socke
 {
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
     Server->m_ClientSocketVector.push_back(Socket);
-    BoostLog::WriteInfo(BoostFormat("Accept client, socket = %d, current count = %d.",
+    g_Log.WriteInfo(BoostFormat("Accept client, socket = %d, current count = %d.",
         Socket, static_cast<int>(Server->m_ClientSocketVector.size())));
 
     bufferevent *bev = bufferevent_socket_new(Server->m_EventBase, Socket, BEV_OPT_CLOSE_ON_FREE);
@@ -219,20 +219,20 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
     if (Events & BEV_EVENT_EOF)
     {
         IsAllowDelete = true;
-        BoostLog::WriteError(BoostFormat("Client = %d connection closed.", ClientSocket));
+        g_Log.WriteError(BoostFormat("Client = %d connection closed.", ClientSocket));
     }
     else if (Events & BEV_EVENT_TIMEOUT)
     {
-        BoostLog::WriteError(BoostFormat("Client = %d user specified timeout reached.", ClientSocket));
+        g_Log.WriteError(BoostFormat("Client = %d user specified timeout reached.", ClientSocket));
     }
     else if (Events & BEV_EVENT_CONNECTED)
     {
-        BoostLog::WriteInfo(BoostFormat("Client = %d connect operation finished.", ClientSocket));
+        g_Log.WriteInfo(BoostFormat("Client = %d connect operation finished.", ClientSocket));
     }
     else
     {
         IsAllowDelete = true;
-        BoostLog::WriteError(BoostFormat("Client = %d unknow error.", ClientSocket));
+        g_Log.WriteError(BoostFormat("Client = %d unknow error.", ClientSocket));
     }
 
     if (IsAllowDelete)
@@ -242,7 +242,7 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
         if (it != Server->m_ClientSocketVector.end())
         {
             Server->m_ClientSocketVector.erase(it);
-            BoostLog::WriteError(BoostFormat("Delete client = %d, surplus count = %d.",
+            g_Log.WriteError(BoostFormat("Delete client = %d, surplus count = %d.",
                 ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size())));
         }
 
@@ -257,7 +257,7 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
 
     int ClientSocket = bufferevent_getfd(bev);
     size_t RecvSize = bufferevent_read(bev, ClientMessage, sizeof(ClientMessage));
-    BoostLog::WriteInfo(BoostFormat("Recv client = %d message size = %d", ClientSocket, RecvSize));
+    g_Log.WriteInfo(BoostFormat("Recv client = %d message size = %d", ClientSocket, RecvSize));
 
     if (RecvSize > 0)
     {
@@ -276,10 +276,10 @@ void SingleEventBaseServer::CallBack_Send(bufferevent * bev, void * UserData)
     //evbuffer *WriteBuffer = bufferevent_get_output(bev);
     //if (evbuffer_get_length(WriteBuffer) <= 0)
     //{
-    //    BoostLog::WriteError("Process send, no data.");
+    //    g_Log.WriteError("Process send, no data.");
     //    return;
     //}
 
     //int ClientSocket = bufferevent_getfd(bev);
-    //BoostLog::WriteInfo(BoostFormat("Client = %d send data.", ClientSocket));
+    //g_Log.WriteInfo(BoostFormat("Client = %d send data.", ClientSocket));
 }

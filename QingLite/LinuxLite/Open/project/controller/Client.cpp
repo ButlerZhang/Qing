@@ -17,13 +17,13 @@ Client::~Client()
 
 bool Client::ProcessConnected()
 {
-    BoostLog::WriteDebug("Process connected.");
+    g_Log.WriteDebug("Process connected.");
     return SendLogin();
 }
 
 bool Client::ProcessDisconnected()
 {
-    BoostLog::WriteDebug("Process disconnected.");
+    g_Log.WriteDebug("Process disconnected.");
     return false;
 }
 
@@ -42,21 +42,21 @@ bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 {
-    BoostLog::WriteDebug("Process login response.");
+    g_Log.WriteDebug("Process login response.");
     Project::UserLogin LoginResponse;
     if (!LoginResponse.ParseFromString(NetworkMsg.m_Message))
     {
-        BoostLog::WriteError("Login response message parse failed.");
+        g_Log.WriteError("Login response message parse failed.");
         return false;
     }
 
-    BoostLog::WriteDebug(LoginResponse.DebugString());
+    g_Log.WriteDebug(LoginResponse.DebugString());
     return SendLogout();
 }
 
 bool Client::SendLogin()
 {
-    BoostLog::WriteDebug("Send Login.");
+    g_Log.WriteDebug("Send Login.");
     Project::UserLogin Login;
     Login.set_id(1000);
     Login.set_name("Butler");
@@ -69,13 +69,13 @@ bool Client::SendLogin()
     Header->set_type(Project::MessageType::MT_LOGIN);
     Header->set_transmissionid(GetUUID());
 
-    BoostLog::WriteDebug(Login.DebugString());
+    g_Log.WriteDebug(Login.DebugString());
     return SendMessage(Header->type(), Login);
 }
 
 bool Client::SendLogout()
 {
-    BoostLog::WriteDebug("Send Logout.");
+    g_Log.WriteDebug("Send Logout.");
     Project::UserLogout Logout;
     Logout.set_id(1000);
     Logout.set_name("Butler");
@@ -84,7 +84,7 @@ bool Client::SendLogout()
     Header->set_type(Project::MessageType::MT_LOGOUT);
     Header->set_transmissionid(GetUUID());
 
-    BoostLog::WriteDebug(Logout.DebugString());
+    g_Log.WriteDebug(Logout.DebugString());
     return SendMessage(Header->type(), Logout);
 }
 

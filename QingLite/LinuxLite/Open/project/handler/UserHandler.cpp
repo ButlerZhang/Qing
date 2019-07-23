@@ -24,7 +24,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
 
     const std::string &UserName = m_JsonTree.get<std::string>("Name");
     const std::string &Password = m_JsonTree.get<std::string>("Password");
-    BoostLog::WriteDebug(BoostFormat("Process login: User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
+    g_Log.WriteDebug(BoostFormat("Process login: User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
 
     UserModel ReplyModel;
     ReplyModel.m_ErrorCode = 0;
@@ -37,7 +37,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
     {
         ReplyModel.m_ErrorCode = 105;
         ReplyModel.m_ReplayMessage = "Login failed, query database error!";
-        BoostLog::WriteDebug(BoostFormat("Process login: Execute query failed: %s", SQLString.c_str()));
+        g_Log.WriteDebug(BoostFormat("Process login: Execute query failed: %s", SQLString.c_str()));
         return SendLoginReply(Request, ReplyModel);
     }
 
@@ -45,7 +45,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
     {
         ReplyModel.m_ErrorCode = 101;
         ReplyModel.m_ReplayMessage = "Login failed, user does not exist!";
-        BoostLog::WriteDebug(BoostFormat("Process login: Can not find user = %s", UserName.c_str()));
+        g_Log.WriteDebug(BoostFormat("Process login: Can not find user = %s", UserName.c_str()));
         return SendLoginReply(Request, ReplyModel);
     }
 
@@ -59,7 +59,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
     {
         ReplyModel.m_ErrorCode = 105;
         ReplyModel.m_ReplayMessage = "Login failed, get database data error!";
-        BoostLog::WriteDebug("Process login: Get user value falied.");
+        g_Log.WriteDebug("Process login: Get user value falied.");
         return SendLoginReply(Request, ReplyModel);
     }
 
@@ -67,7 +67,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
     {
         ReplyModel.m_ErrorCode = 104;
         ReplyModel.m_ReplayMessage = "Login failed, the password is inocrrect!";
-        BoostLog::WriteDebug("Process login: Password does not match");
+        g_Log.WriteDebug("Process login: Password does not match");
         return SendLoginReply(Request, ReplyModel);
     }
 
@@ -75,7 +75,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
     {
         ReplyModel.m_ErrorCode = 102;
         ReplyModel.m_ReplayMessage = "Login failed, please change your password for the first login!";
-        BoostLog::WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
+        g_Log.WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
         return SendLoginReply(Request, ReplyModel);
     }
 
@@ -83,11 +83,11 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
     {
         ReplyModel.m_ErrorCode = 103;
         ReplyModel.m_ReplayMessage = "Login failed, user is locked, please contact the administrators!";
-        BoostLog::WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
+        g_Log.WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
         return SendLoginReply(Request, ReplyModel);
     }
 
-    BoostLog::WriteDebug(BoostFormat("Process login: User = %s login success.", UserName.c_str()));
+    g_Log.WriteDebug(BoostFormat("Process login: User = %s login success.", UserName.c_str()));
     return SendLoginReply(Request, ReplyModel);
 }
 

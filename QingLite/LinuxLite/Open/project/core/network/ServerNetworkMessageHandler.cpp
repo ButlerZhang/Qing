@@ -28,7 +28,7 @@ bool ServerNetworkMessageHandler::Start(SingleEventBaseServer *SingleServer)
 {
     if (SingleServer == NULL)
     {
-        BoostLog::WriteError("Start message handler faile because single server is NULL.");
+        g_Log.WriteError("Start message handler faile because single server is NULL.");
         return false;
     }
 
@@ -56,7 +56,7 @@ bool ServerNetworkMessageHandler::PushMessage(const NetworkMessage &NetworkMsg)
     std::unique_lock<std::mutex> Locker(m_QueueLock);
     m_NetworkMsgQueue.push(NetworkMsg);
 
-    BoostLog::WriteDebug(BoostFormat("Message queue size = %d.", m_NetworkMsgQueue.size()));
+    g_Log.WriteDebug(BoostFormat("Message queue size = %d.", m_NetworkMsgQueue.size()));
     m_Condition.notify_one();
 
     return !m_NetworkMsgQueue.empty();
@@ -69,7 +69,7 @@ void ServerNetworkMessageHandler::WorkThread_Process(void *Object)
     std::stringstream stream;
     stream << std::this_thread::get_id();
     unsigned long long ThreadID = std::stoull(stream.str());
-    BoostLog::WriteDebug(BoostFormat("Network message handler thread = %u start...", ThreadID));
+    g_Log.WriteDebug(BoostFormat("Network message handler thread = %u start...", ThreadID));
 
     while (Handler->m_IsWork)
     {
@@ -91,5 +91,5 @@ void ServerNetworkMessageHandler::WorkThread_Process(void *Object)
         }
     }
 
-    BoostLog::WriteInfo(BoostFormat("Wrok thread = %u stop.", ThreadID));
+    g_Log.WriteInfo(BoostFormat("Wrok thread = %u stop.", ThreadID));
 }

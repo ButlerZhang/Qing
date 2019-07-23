@@ -11,7 +11,7 @@
 
 int project(int argc, char *argv[])
 {
-    BoostLog::DefaultInit();
+    g_Log.WriteInfo("Program start.");
 
     if (argc <= 1 || atoi(argv[1]) == 0)
     {

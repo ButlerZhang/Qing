@@ -92,6 +92,7 @@ bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
 
 MySQLDatabase::MySQLDatabase() : Database()
 {
+    m_Isconnected = false;
     m_MySQL = new MYSQL();
 }
 

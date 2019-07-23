@@ -36,27 +36,27 @@ bool UDPBroadcast::StartTimer(const std::string &ServerIP, int TimeInternal, int
 {
     if (TimeInternal <= 0)
     {
-        BoostLog::WriteError("UDPBroadcast: Timer at least needs one second.");
+        g_Log.WriteError("UDPBroadcast: Timer at least needs one second.");
         return false;
     }
 
     if (m_EventBase == NULL)
     {
-        BoostLog::WriteError("UDPBroadcast: No binding event base.");
+        g_Log.WriteError("UDPBroadcast: No binding event base.");
         return false;
     }
 
     m_BroadcastSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_BroadcastSocket == -1)
     {
-        BoostLog::WriteError("UDPBroadcast: Create udp socket error.");
+        g_Log.WriteError("UDPBroadcast: Create udp socket error.");
         return false;
     }
 
     int Optval = 1;
     if (setsockopt(m_BroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
-        BoostLog::WriteError("UDPBroadcast: setsockopt error.");
+        g_Log.WriteError("UDPBroadcast: setsockopt error.");
         return false;
     }
 
@@ -102,7 +102,7 @@ void UDPBroadcast::CallBack_TimeOut(int Socket, short Events, void *UserData)
 
     if (Broadcast->m_IsDisplayLog)
     {
-        BoostLog::WriteInfo(BoostFormat("Broadcast = %s, elapsed %.3f seconds.", UDPData.c_str(), elapsed));
+        g_Log.WriteInfo(BoostFormat("Broadcast = %s, elapsed %.3f seconds.", UDPData.c_str(), elapsed));
     }
 
     Broadcast->m_LastSendTime = NewTime;

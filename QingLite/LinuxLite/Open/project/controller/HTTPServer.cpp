@@ -33,19 +33,19 @@ bool HTTPServer::Start(const std::string & ServerIP, int Port)
 
 bool HTTPServer::ProcessCheckout()
 {
-    //BoostLog::WriteDebug("Process http server chekout.");
+    //g_Log.WriteDebug("Process http server chekout.");
 
     if (!m_HTTPDB.Isconnected())
     {
-        BoostLog::WriteError("HTTP database is disconnected.");
+        g_Log.WriteError("HTTP database is disconnected.");
 
         if (m_HTTPDB.Reconnect())
         {
-            BoostLog::WriteInfo("HTTP database reconnect succeed.");
+            g_Log.WriteInfo("HTTP database reconnect succeed.");
         }
         else
         {
-            BoostLog::WriteDebug("HTTP database reconnect failed.");
+            g_Log.WriteDebug("HTTP database reconnect failed.");
         }
     }
 
@@ -99,7 +99,7 @@ bool HTTPServer::ProcessGet(evhttp_request *Request)
     struct stat ActuallyPathStat;
     if (stat(RequestPath.c_str(), &ActuallyPathStat) < 0)
     {
-        BoostLog::WriteError(BoostFormat("Stat path = %s failed.", RequestPath.c_str()));
+        g_Log.WriteError(BoostFormat("Stat path = %s failed.", RequestPath.c_str()));
         return false;
     }
 
@@ -156,7 +156,7 @@ bool HTTPServer::GetRequestPath(evhttp_request *Request, std::string &RequestPat
     }
 
     RequestPath.append(evhttp_request_get_uri(Request));
-    BoostLog::WriteDebug("Request path = " + RequestPath);
+    g_Log.WriteDebug("Request path = " + RequestPath);
     return true;
 }
 
@@ -165,13 +165,13 @@ bool HTTPServer::SplitRequestPath(const std::string &RequestPath, std::vector<st
     const std::string Seperator("/");
     if (RequestPath == Seperator)
     {
-        BoostLog::WriteDebug("Split request URI, URI = /");
+        g_Log.WriteDebug("Split request URI, URI = /");
         return true;
     }
 
     if (!SplitString(RequestPath, PathVector, Seperator))
     {
-        BoostLog::WriteError("Split request URI failed.");
+        g_Log.WriteError("Split request URI failed.");
         return false;
     }
 
@@ -182,7 +182,7 @@ bool HTTPServer::SplitRequestPath(const std::string &RequestPath, std::vector<st
     }
 
     LogString.erase(LogString.end() - 2, LogString.end());
-    BoostLog::WriteDebug(LogString);
+    g_Log.WriteDebug(LogString);
     return true;
 }
 
@@ -195,11 +195,11 @@ void HTTPServer::WorkThread_Process(void * Object)
         g_Config.m_DBName.c_str(),
         g_Config.m_DBPort) == false)
     {
-        BoostLog::WriteError("Connnect HTTP database failed.");
+        g_Log.WriteError("Connnect HTTP database failed.");
     }
     else
     {
-        BoostLog::WriteDebug("Connect HTTP database succeed.");
+        g_Log.WriteDebug("Connect HTTP database succeed.");
         Server->HTTPBaseServer::Start(Server->m_ServerIP, Server->m_HTTPPort);
     }
 }

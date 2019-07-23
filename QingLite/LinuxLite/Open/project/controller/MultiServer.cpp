@@ -16,13 +16,13 @@ MultiServer::~MultiServer()
 
 bool MultiServer::ProcessConnected(ConnectNode & ConnectedNode)
 {
-    BoostLog::WriteDebug("Process connected.");
+    g_Log.WriteDebug("Process connected.");
     return false;
 }
 
 bool MultiServer::ProcessDisconnected(ConnectNode & ConnectedNode, short events)
 {
-    BoostLog::WriteDebug("Process disconnected.");
+    g_Log.WriteDebug("Process disconnected.");
     return false;
 }
 
@@ -51,15 +51,15 @@ bool MultiServer::ProcessMessage(ConnectNode &ConnectedNode)
 
 bool MultiServer::ProcessLogin(ConnectNode &ConnectedNode)
 {
-    BoostLog::WriteDebug("Process login.");
+    g_Log.WriteDebug("Process login.");
     Project::UserLogin Login;
     if (!Login.ParseFromString(ConnectedNode.m_Message))
     {
-        BoostLog::WriteError("Login message parse failed.");
+        g_Log.WriteError("Login message parse failed.");
         return false;
     }
 
-    BoostLog::WriteDebug(Login.DebugString());
+    g_Log.WriteDebug(Login.DebugString());
 
     Project::UserLogin Response;
     Response.set_id(Login.id());
@@ -73,21 +73,21 @@ bool MultiServer::ProcessLogin(ConnectNode &ConnectedNode)
     Header->set_type(Project::MessageType::MT_LOGIN_RESPONSE);
     Header->set_transmissionid(GetUUID());
 
-    BoostLog::WriteDebug(Response.DebugString());
+    g_Log.WriteDebug(Response.DebugString());
     return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, ConnectedNode, Response);
 }
 
 bool MultiServer::ProcessLogout(ConnectNode &ConnectedNode)
 {
-    BoostLog::WriteDebug("Process logout.");
+    g_Log.WriteDebug("Process logout.");
     Project::UserLogout Logout;
     if (!Logout.ParseFromString(ConnectedNode.m_Message))
     {
-        BoostLog::WriteError("Logout message parse failed.");
+        g_Log.WriteError("Logout message parse failed.");
         return false;
     }
 
-    BoostLog::WriteDebug(Logout.DebugString());
+    g_Log.WriteDebug(Logout.DebugString());
     return true;
 }
 
