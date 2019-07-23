@@ -11,11 +11,11 @@ public:
     ~Config();
 
     void EnterToolMode();
-    bool LoadConfig(const std::string &FileName);
+    bool LoadConfig();
 
 private:
 
-    bool LoadFileConfig(const std::string &FileName);
+    bool LoadFileConfig();
     bool LoadDatabaseConfig();
 
     bool ParseServerSection(const std::string &ConfigName, const std::string &ConfigValue);
@@ -33,6 +33,11 @@ public:
     int                     m_SMIBPort;
     int                     m_HTTPPort;
     std::string             m_ServerIP;
+
+private:
+
+    std::string             m_ConfigFileName;
+    const std::string       DB_PASSWORD_KEY;
 };
 
 extern Config g_Config;

@@ -10,9 +10,8 @@
 
 
 Config g_Config;
-std::string DB_PASSWORD_KEY("CJSZHCHCSZCJSZCJ");
 
-Config::Config()
+Config::Config() : m_ConfigFileName("project.ini"), DB_PASSWORD_KEY("CJSZHCHCSZCJSZCJ")
 {
 }
 
@@ -31,7 +30,8 @@ void Config::EnterToolMode()
         std::cout << std::endl << "Input select number: " << std::endl;
         std::cout << "1.Encrypt string;" << std::endl;
         std::cout << "2.Decrypt string;" << std::endl;
-        std::cout << "3.Exit program." << std::endl;
+        std::cout << "3.Generate config file;" << std::endl;
+        std::cout << "4.Exit program." << std::endl;
 
         std::cin >> InputString;
         if (InputString.size() != 1 || !std::isdigit(InputString[0]))
@@ -67,6 +67,39 @@ void Config::EnterToolMode()
                 break;
             }
 
+        case 3:
+            {
+                boost::property_tree::ptree DBTree;
+
+                std::cout << std::endl << "Input DB Host IP:" << std::endl;
+                std::cin >> InputString;
+                DBTree.put("Host", InputString);
+
+                std::cout << "Input DB Port:" << std::endl;
+                std::cin >> InputString;
+                DBTree.put("Port", InputString);
+
+                std::cout << "Input DB User:" << std::endl;
+                std::cin >> InputString;
+                DBTree.put("User", InputString);
+
+                std::cout << "Input DB Password:" << std::endl;
+                std::cin >> InputString;
+                DBTree.put("Password", AESEncrypt(InputString, DB_PASSWORD_KEY));
+
+                std::cout << "Input DB Name:" << std::endl;
+                std::cin >> InputString;
+                DBTree.put("DBName", InputString);
+
+                boost::property_tree::ptree INITree;
+                INITree.push_back(std::make_pair("Database", DBTree));
+                boost::property_tree::write_ini(m_ConfigFileName, INITree);
+
+                std::cout << std::endl;
+                IsLoop = false;
+                break;
+            }
+
         default:
             {
                 std::cout << std::endl;
@@ -77,9 +110,9 @@ void Config::EnterToolMode()
     }
 }
 
-bool Config::LoadConfig(const std::string & FileName)
+bool Config::LoadConfig()
 {
-    if (!LoadFileConfig(FileName))
+    if (!LoadFileConfig())
     {
         g_Log.WriteError("Config: Read config file failed.");
         return false;
@@ -95,13 +128,13 @@ bool Config::LoadConfig(const std::string & FileName)
     return true;
 }
 
-bool Config::LoadFileConfig(const std::string &FileName)
+bool Config::LoadFileConfig()
 {
     boost::property_tree::ptree INITree;
 
     try
     {
-        boost::property_tree::read_ini(FileName, INITree);
+        boost::property_tree::read_ini(m_ConfigFileName, INITree);
     }
     catch (...)
     {

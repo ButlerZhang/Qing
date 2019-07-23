@@ -13,13 +13,13 @@ int project(int argc, char *argv[])
 
     if (argc <= 1)                      //server
     {
-        if (g_Config.LoadConfig("project.ini"))
+        if (g_Config.LoadConfig())
         {
             g_HTTPServer.Start(g_Config.m_ServerIP, g_Config.m_HTTPPort);
             g_SingleServer.Start(g_Config.m_ServerIP, g_Config.m_SMIBPort);
         }
     }
-    else if (atoi(argv[1]) == 0)        //password tool
+    else if (atoi(argv[1]) == 0)        //tool mode
     {
         g_Config.EnterToolMode();
     }
