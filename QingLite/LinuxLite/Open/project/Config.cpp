@@ -7,8 +7,6 @@
 
 
 
-
-
 Config g_Config;
 
 Config::Config()
@@ -23,14 +21,17 @@ bool Config::LoadConfig(const std::string & FileName)
 {
     if (!LoadFileConfig(FileName))
     {
+        BoostLog::WriteError("Config: Read config file failed.");
         return false;
     }
 
     if (!LoadDatabaseConfig())
     {
+        BoostLog::WriteError("Config: Read database failed.");
         return false;
     }
 
+    BoostLog::WriteDebug("Config: Read config succeed.");
     return true;
 }
 
@@ -44,11 +45,9 @@ bool Config::LoadFileConfig(const std::string &FileName)
     }
     catch (...)
     {
-        BoostLog::WriteError("Config: Read config file error.");
+        BoostLog::WriteError("Config: boost::property_tree::read_ini throw error.");
         return false;
     }
-
-    BoostLog::WriteDebug("Config: Read config file succeed.");
 
     const boost::property_tree::ptree &DBTree = INITree.get_child("Database");
     m_DBPort = DBTree.get<int>("Port", 3306);
@@ -106,13 +105,29 @@ bool Config::ParseServerSection(const std::string & ConfigName, const std::strin
 {
     if (ConfigName == "server_ip")
     {
-        m_ServerIP = ConfigValue;
-        if (m_ServerIP.empty())
+        if (!ConfigValue.empty())
         {
-            //m_ServerIP = GetHostIP();
+            m_ServerIP = ConfigValue;
+            return true;
         }
 
-        return true;
+        std::vector<std::string> IPVector;
+        if (!GetHostIPv4(IPVector))
+        {
+            BoostLog::WriteError("Can not get host IPv4 address.");
+            return false;
+        }
+
+        for (std::vector<std::string>::size_type Index = 0; Index < IPVector.size(); Index++)
+        {
+            if (IPVector[Index].find("127") == std::string::npos)
+            {
+                m_ServerIP = IPVector[Index];
+                return true;
+            }
+        }
+
+        return false;
     }
 
     if (ConfigName == "smib_port")

@@ -7,6 +7,8 @@
 #include "core/tools/BoostLog.h"
 #include <iostream>
 
+
+
 int project(int argc, char *argv[])
 {
     BoostLog::DefaultInit();

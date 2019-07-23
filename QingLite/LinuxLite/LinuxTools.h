@@ -1,12 +1,16 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <random>
 #include <netdb.h>
 #include <string.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <ifaddrs.h>
+#include <net/if.h>
 #include <uuid/uuid.h>
 #include <arpa/inet.h>
+#include <sys/socket.h>
 
 
 
@@ -49,11 +53,70 @@ inline std::string GetProgramName()
     return std::string();
 }
 
-inline std::string GetHostIP()
+inline bool GetHostIPv4(std::vector<std::string> &IPVector)
 {
-    std::string IP;
-    //TODO
-    return IP;
+    struct ifaddrs *ifaddrsList;
+    if (getifaddrs(&ifaddrsList) != 0)
+    {
+        return false;
+    }
+
+    std::vector<char> IP(64, 0);
+    for (struct ifaddrs *CurrentAddress = ifaddrsList; CurrentAddress != NULL; CurrentAddress = CurrentAddress->ifa_next)
+    {
+        if (CurrentAddress->ifa_addr == NULL)
+            continue;
+
+        if (!(CurrentAddress->ifa_flags & IFF_UP))
+            continue;
+
+        if (CurrentAddress->ifa_addr->sa_family == AF_INET)
+        {
+            struct sockaddr_in *ipv4 = (struct sockaddr_in *)CurrentAddress->ifa_addr;
+            void *in_addr = &ipv4->sin_addr;
+
+            if (inet_ntop(CurrentAddress->ifa_addr->sa_family, in_addr, &IP[0], (socklen_t)IP.size()))
+            {
+                IPVector.push_back(std::string(IP.begin(), IP.end()));
+            }
+        }
+    }
+
+    freeifaddrs(ifaddrsList);
+    return true;
+}
+
+inline bool GetHostIPv6(std::vector<std::string> &IPVector)
+{
+    struct ifaddrs *ifaddrsList;
+    if (getifaddrs(&ifaddrsList) != 0)
+    {
+        return false;
+    }
+
+    std::vector<char> IP(64, 0);
+    for (struct ifaddrs *CurrentAddress = ifaddrsList; CurrentAddress != NULL; CurrentAddress = CurrentAddress->ifa_next)
+    {
+        if (CurrentAddress->ifa_addr == NULL)
+            continue;
+
+        if (!(CurrentAddress->ifa_flags & IFF_UP))
+            continue;
+
+        if (CurrentAddress->ifa_addr->sa_family == AF_INET6)
+        {
+            struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)CurrentAddress->ifa_addr;
+            void *in_addr = &ipv6->sin6_addr;
+
+            if (inet_ntop(CurrentAddress->ifa_addr->sa_family, in_addr, &IP[0], (socklen_t)IP.size()))
+            {
+                IPVector.push_back(std::string(IP.begin(), IP.end()));
+            }
+        }
+    }
+
+    freeifaddrs(ifaddrsList);
+    return true;
 }
 
 inline unsigned int GetRandomUIntInRange(int Min, int Max)
