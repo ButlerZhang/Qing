@@ -97,6 +97,7 @@ MySQLDatabase::MySQLDatabase() : Database()
 
 MySQLDatabase::~MySQLDatabase()
 {
+    Disconnect();
     delete m_MySQL;
     m_MySQL = NULL;
 }
@@ -150,7 +151,6 @@ void MySQLDatabase::Disconnect()
     if (m_Isconnected)
     {
         mysql_close(m_MySQL);
-        m_MySQL = NULL;
     }
 }
 

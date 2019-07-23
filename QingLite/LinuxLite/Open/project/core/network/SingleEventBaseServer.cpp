@@ -13,7 +13,7 @@
 SingleEventBaseServer::SingleEventBaseServer()
 {
     m_Listener = NULL;
-    m_SystemCheckoutTimer = NULL;
+    m_CheckoutTimer = NULL;
 
     m_ListenPort = 0;
     m_EventBase = event_base_new();
@@ -23,7 +23,7 @@ SingleEventBaseServer::~SingleEventBaseServer()
 {
     m_ClientSocketVector.clear();
 
-    event_free(m_SystemCheckoutTimer);
+    event_free(m_CheckoutTimer);
     evconnlistener_free(m_Listener);
     event_base_free(m_EventBase);
 }
@@ -47,9 +47,9 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
         return false;
     }
 
-    if (!AddSystemCheckoutTimer(5))
+    if (!AddCheckoutTimer(5))
     {
-        BoostLog::WriteError("Add system checkout timer failed.");
+        BoostLog::WriteError("Add single server checkout timer failed.");
         return false;
     }
 
@@ -90,18 +90,18 @@ bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
     }
 }
 
-bool SingleEventBaseServer::AddSystemCheckoutTimer(int TimerInternal)
+bool SingleEventBaseServer::AddCheckoutTimer(int TimerInternal)
 {
-    if (m_SystemCheckoutTimer != NULL)
+    if (m_CheckoutTimer != NULL)
     {
-        BoostLog::WriteError("Re-create system checkout timer.");
+        BoostLog::WriteError("Re-create signle server checkout timer.");
         return true;
     }
 
-    m_SystemCheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_SystemCheckout, this);
-    if (m_SystemCheckoutTimer == NULL)
+    m_CheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_Checkout, this);
+    if (m_CheckoutTimer == NULL)
     {
-        BoostLog::WriteError("Create system chekcout timer failed.");
+        BoostLog::WriteError("Create signle server chekcout timer failed.");
         return false;
     }
 
@@ -109,11 +109,11 @@ bool SingleEventBaseServer::AddSystemCheckoutTimer(int TimerInternal)
     evutil_timerclear(&tv);
     tv.tv_sec = TimerInternal;
 
-    if (event_add(m_SystemCheckoutTimer, &tv) != 0)
+    if (event_add(m_CheckoutTimer, &tv) != 0)
     {
-        BoostLog::WriteError("Add system checkout timer failed.");
-        event_free(m_SystemCheckoutTimer);
-        m_SystemCheckoutTimer = NULL;
+        BoostLog::WriteError("Add signle server checkout timer failed.");
+        event_free(m_CheckoutTimer);
+        m_CheckoutTimer = NULL;
         return false;
     }
 
@@ -200,15 +200,15 @@ void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socke
     bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
 }
 
-void SingleEventBaseServer::CallBack_SystemCheckout(int Socket, short Events, void *UserData)
+void SingleEventBaseServer::CallBack_Checkout(int Socket, short Events, void *UserData)
 {
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-    Server->ProcessSystemCheckout();
+    Server->ProcessCheckout();
 
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = 5;          //TimerInternal
-    event_add(Server->m_SystemCheckoutTimer, &tv);
+    event_add(Server->m_CheckoutTimer, &tv);
 }
 
 void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void *UserData)

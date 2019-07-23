@@ -13,10 +13,12 @@ public:
     virtual ~SingleServer();
     virtual bool Start(const std::string &IP, int Port);
 
+    virtual bool ProcessCheckout();
     virtual bool ProcessConnected();
     virtual bool ProcessDisconnected();
-    virtual bool ProcessSystemCheckout();
     virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
+
+    MySQLDatabase& GetDB() { return m_SMIBDB; }
 
 private:
 

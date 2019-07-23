@@ -10,6 +10,7 @@
 HTTPBaseServer::HTTPBaseServer()
 {
     m_evHTTP = NULL;
+    m_CheckoutTimer = NULL;
     m_EventBase = event_base_new();
 
     m_ContentTypeMap["txt"] = "text/plain";
@@ -45,17 +46,9 @@ HTTPBaseServer::HTTPBaseServer()
 HTTPBaseServer::~HTTPBaseServer()
 {
     m_ContentTypeMap.clear();
-    if (m_evHTTP != NULL)
-    {
-        evhttp_free(m_evHTTP);
-        m_evHTTP = NULL;
-    }
-
-    if (m_EventBase != NULL)
-    {
-        event_base_free(m_EventBase);
-        m_EventBase = NULL;
-    }
+    evhttp_free(m_evHTTP);
+    event_free(m_CheckoutTimer);
+    event_base_free(m_EventBase);
 }
 
 bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
@@ -63,6 +56,12 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
     if (m_EventBase == NULL)
     {
         BoostLog::WriteError("HTTP server create event base error.");
+        return false;
+    }
+
+    if (!AddCheckoutTimer(5))
+    {
+        BoostLog::WriteError("Add http server checkout timer failed.");
         return false;
     }
 
@@ -137,6 +136,36 @@ bool HTTPBaseServer::ProcessGet(evhttp_request *Request)
 bool HTTPBaseServer::ProcessPost(evhttp_request * Request)
 {
     evhttp_send_error(Request, HTTP_NOTIMPLEMENTED, "Post not implemented.");
+    return true;
+}
+
+bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
+{
+    if (m_CheckoutTimer != NULL)
+    {
+        BoostLog::WriteError("Re-create http server checkout timer.");
+        return true;
+    }
+
+    m_CheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_Checkout, this);
+    if (m_CheckoutTimer == NULL)
+    {
+        BoostLog::WriteError("Create http server chekcout timer failed.");
+        return false;
+    }
+
+    struct timeval tv;
+    evutil_timerclear(&tv);
+    tv.tv_sec = TimerInternal;
+
+    if (event_add(m_CheckoutTimer, &tv) != 0)
+    {
+        BoostLog::WriteError("Add http server checkout timer failed.");
+        event_free(m_CheckoutTimer);
+        m_CheckoutTimer = NULL;
+        return false;
+    }
+
     return true;
 }
 
@@ -333,4 +362,15 @@ void HTTPBaseServer::CallBack_GenericRequest(evhttp_request * Request, void * ar
 {
     HTTPBaseServer *Server = (HTTPBaseServer*)arg;
     Server->ProcessRequest(Request);
+}
+
+void HTTPBaseServer::CallBack_Checkout(int Socket, short Events, void * UserData)
+{
+    HTTPBaseServer *Server = (HTTPBaseServer*)UserData;
+    Server->ProcessCheckout();
+
+    struct timeval tv;
+    evutil_timerclear(&tv);
+    tv.tv_sec = 5;          //TimerInternal
+    event_add(Server->m_CheckoutTimer, &tv);
 }

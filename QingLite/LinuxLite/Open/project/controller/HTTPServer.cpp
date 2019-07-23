@@ -31,6 +31,27 @@ bool HTTPServer::Start(const std::string & ServerIP, int Port)
     return m_IsWork;
 }
 
+bool HTTPServer::ProcessCheckout()
+{
+    //BoostLog::WriteDebug("Process http server chekout.");
+
+    if (!m_HTTPDB.Isconnected())
+    {
+        BoostLog::WriteError("HTTP database is disconnected.");
+
+        if (m_HTTPDB.Reconnect())
+        {
+            BoostLog::WriteInfo("HTTP database reconnect succeed.");
+        }
+        else
+        {
+            BoostLog::WriteDebug("HTTP database reconnect failed.");
+        }
+    }
+
+    return true;
+}
+
 bool HTTPServer::ProcessGet(evhttp_request *Request)
 {
     std::string RequestPath;

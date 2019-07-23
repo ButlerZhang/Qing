@@ -34,6 +34,27 @@ bool SingleServer::Start(const std::string &IP, int Port)
     return SingleEventBaseServer::Start(IP, Port);
 }
 
+bool SingleServer::ProcessCheckout()
+{
+    //BoostLog::WriteDebug("Process single server chekout.");
+
+    if (!m_SMIBDB.Isconnected())
+    {
+        BoostLog::WriteError("SMIB database is disconnected.");
+
+        if (m_SMIBDB.Reconnect())
+        {
+            BoostLog::WriteInfo("SMIB database reconnect succeed.");
+        }
+        else
+        {
+            BoostLog::WriteDebug("SMIB database reconnect failed.");
+        }
+    }
+
+    return true;
+}
+
 bool SingleServer::ProcessConnected()
 {
     BoostLog::WriteDebug("Process connected.");
@@ -44,22 +65,6 @@ bool SingleServer::ProcessDisconnected()
 {
     BoostLog::WriteDebug("Process disconnected.");
     return false;
-}
-
-bool SingleServer::ProcessSystemCheckout()
-{
-    //BoostLog::WriteDebug("Process system chekout.");
-
-    if (!m_SMIBDB.Isconnected())
-    {
-        BoostLog::WriteError("SMIB database is disconnected.");
-        if (m_SMIBDB.Reconnect())
-        {
-            BoostLog::WriteDebug("SMIB database reconnect failed.");
-        }
-    }
-
-    return true;
 }
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)

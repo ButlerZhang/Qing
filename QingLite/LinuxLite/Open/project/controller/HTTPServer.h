@@ -14,6 +14,7 @@ public:
     virtual ~HTTPServer();
     virtual bool Start(const std::string &ServerIP, int Port);
 
+    virtual bool ProcessCheckout();
     virtual bool ProcessGet(struct evhttp_request *Request);
     virtual bool ProcessPost(struct evhttp_request *Request);
 
