@@ -1,13 +1,16 @@
 #include "Config.h"
 #include "../../LinuxTools.h"
 #include "core/tools/BoostLog.h"
+#include "core/tools/OpenSSLAES.h"
 #include "core/database/MySQLDatabase.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+#include <iostream>
 
 
 
 Config g_Config;
+std::string DB_PASSWORD_KEY("CJSZHCHCSZCJSZCJ");
 
 Config::Config()
 {
@@ -15,6 +18,63 @@ Config::Config()
 
 Config::~Config()
 {
+}
+
+void Config::EnterToolMode()
+{
+    bool IsLoop = true;
+    std::string InputString;
+    g_Log.WriteDebug("Enter tool mode.");
+
+    while (IsLoop)
+    {
+        std::cout << std::endl << "Input select number: " << std::endl;
+        std::cout << "1.Encrypt string;" << std::endl;
+        std::cout << "2.Decrypt string;" << std::endl;
+        std::cout << "3.Exit program." << std::endl;
+
+        std::cin >> InputString;
+        if (InputString.size() != 1 || !std::isdigit(InputString[0]))
+        {
+            std::cout << "Please choice again:" << std::endl << std::endl;
+            continue;
+        }
+
+        int Choice = atoi(InputString.c_str());
+        switch (Choice)
+        {
+        case 1:
+            {
+                std::cout << std::endl << "Input encrypt string:" << std::endl;
+                std::cin >> InputString;
+
+                const std::string &CipherText = AESEncrypt(InputString, DB_PASSWORD_KEY);
+                std::cout << std::endl << "Encrypt result: " << CipherText << std::endl << std::endl;
+
+                IsLoop = false;
+                break;
+            }
+
+        case 2:
+            {
+                std::cout << std::endl << "Input decrypt string:" << std::endl;
+                std::cin >> InputString;
+
+                const std::string &ClearText = AESDecrypt(InputString, DB_PASSWORD_KEY);
+                std::cout << std::endl << "Decrypt result: " << ClearText << std::endl << std::endl;
+
+                IsLoop = false;
+                break;
+            }
+
+        default:
+            {
+                std::cout << std::endl;
+                IsLoop = false;
+                break;
+            }
+        }
+    }
 }
 
 bool Config::LoadConfig(const std::string & FileName)
@@ -54,7 +114,9 @@ bool Config::LoadFileConfig(const std::string &FileName)
     m_DBHost = DBTree.get<std::string>("Host", "127.0.0.1");
     m_DBUser = DBTree.get<std::string>("User", "root");
     m_DBName = DBTree.get<std::string>("DBName", "jpc");
-    m_DBPassword = DBTree.get<std::string>("Password", "root");
+
+    const std::string &Password = DBTree.get<std::string>("Password", "root");
+    m_DBPassword = AESDecrypt(Password, DB_PASSWORD_KEY);
 
     return true;
 }
@@ -64,7 +126,8 @@ bool Config::LoadDatabaseConfig()
     MySQLDatabase MySQL;
     if (!MySQL.Connect(m_DBHost.c_str(), m_DBUser.c_str(), m_DBPassword.c_str(), m_DBName.c_str(), m_DBPort))
     {
-        g_Log.WriteError("Config: Connnect config database failed.");
+        g_Log.WriteError(BoostFormat("Config: Connnect config database failed, host = %s, user = %s, password = %s, name = %s, port = %d",
+            m_DBHost.c_str(), m_DBUser.c_str(), m_DBPassword.c_str(), m_DBName.c_str(), m_DBPort));
         return false;
     }
 

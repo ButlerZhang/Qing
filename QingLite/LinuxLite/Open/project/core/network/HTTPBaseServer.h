@@ -35,6 +35,6 @@ private:
 
     struct event_base                                   *m_EventBase;
     struct evhttp                                       *m_evHTTP;
-    event                                               *m_CheckoutTimer;
+    struct event                                        *m_CheckoutTimer;
     std::map<std::string, std::string>                   m_ContentTypeMap;
 };

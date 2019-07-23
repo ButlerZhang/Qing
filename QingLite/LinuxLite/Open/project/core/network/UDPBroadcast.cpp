@@ -22,8 +22,17 @@ UDPBroadcast::UDPBroadcast()
 UDPBroadcast::~UDPBroadcast()
 {
     m_EventBase = NULL;
-    event_free(m_TimeoutEvent);
-    close(m_BroadcastSocket);
+    if (m_TimeoutEvent != NULL)
+    {
+        event_free(m_TimeoutEvent);
+        m_TimeoutEvent = NULL;
+    }
+
+    if (m_BroadcastSocket > 0)
+    {
+        close(m_BroadcastSocket);
+        m_BroadcastSocket = -1;
+    }
 }
 
 bool UDPBroadcast::BindBaseEvent(event_base *EventBase)

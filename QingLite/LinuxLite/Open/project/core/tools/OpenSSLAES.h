@@ -91,7 +91,7 @@ inline std::string AESDecrypt(const std::string &CipherText, const std::string &
     {
         std::string::size_type EraseCount = ClearText.size() - (Index + 1);
         ClearText.erase(Index + 1, EraseCount);
-        g_Log.WriteDebug(BoostFormat("Erase count = %d\n", EraseCount));
+        g_Log.WriteDebug(BoostFormat("Erase count = %d", EraseCount));
     }
 
     g_Log.WriteDebug(BoostFormat("AESDecrypt: Cipher text size = %d, Clear text size = %d", ASCIIChipherText.size(), ClearText.size()));
@@ -117,7 +117,7 @@ inline std::string AEScbcEncrypt(const std::string &ClearText, const std::string
     if (ClearText.length() % AES_BLOCK_SIZE > 0)
     {
         PaddingCount = static_cast<int>(AES_BLOCK_SIZE - ClearText.length() % AES_BLOCK_SIZE);
-        g_Log.WriteDebug(BoostFormat("AEScbcEncrypt: Padding count = %d\n", PaddingCount));
+        g_Log.WriteDebug(BoostFormat("AEScbcEncrypt: Padding count = %d", PaddingCount));
     }
 
     std::string ClearTextBackup(ClearText);

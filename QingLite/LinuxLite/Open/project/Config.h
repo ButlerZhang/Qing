@@ -10,6 +10,7 @@ public:
     Config();
     ~Config();
 
+    void EnterToolMode();
     bool LoadConfig(const std::string &FileName);
 
 private:

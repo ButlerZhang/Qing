@@ -46,9 +46,21 @@ HTTPBaseServer::HTTPBaseServer()
 HTTPBaseServer::~HTTPBaseServer()
 {
     m_ContentTypeMap.clear();
-    evhttp_free(m_evHTTP);
-    event_free(m_CheckoutTimer);
+
+    if (m_evHTTP != NULL)
+    {
+        evhttp_free(m_evHTTP);
+        m_evHTTP = NULL;
+    }
+
+    if (m_CheckoutTimer != NULL)
+    {
+        event_free(m_CheckoutTimer);
+        m_CheckoutTimer = NULL;
+    }
+
     event_base_free(m_EventBase);
+    m_EventBase = NULL;
 }
 
 bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)

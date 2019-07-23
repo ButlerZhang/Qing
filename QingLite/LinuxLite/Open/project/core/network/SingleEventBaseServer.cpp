@@ -23,9 +23,20 @@ SingleEventBaseServer::~SingleEventBaseServer()
 {
     m_ClientSocketVector.clear();
 
-    event_free(m_CheckoutTimer);
-    evconnlistener_free(m_Listener);
+    if (m_CheckoutTimer != NULL)
+    {
+        event_free(m_CheckoutTimer);
+        m_CheckoutTimer = NULL;
+    }
+
+    if (m_Listener != NULL)
+    {
+        evconnlistener_free(m_Listener);
+        m_Listener = NULL;
+    }
+
     event_base_free(m_EventBase);
+    m_EventBase = NULL;
 }
 
 bool SingleEventBaseServer::Start(const std::string &IP, int Port)
