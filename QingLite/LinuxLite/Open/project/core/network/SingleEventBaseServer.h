@@ -26,6 +26,7 @@ protected:
 
     inline event_base* GetEventBase() const { return m_EventBase; }
 
+    bool DeleteSocket(int ClientSocket);
     bool AddCheckoutTimer(int TimerInternal);
     bool CreateListener(const std::string &IP, int Port);
     bool Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size);
@@ -50,5 +51,5 @@ private:
     UDPBroadcast                         m_UDPBroadcast;
     SignalEventMap                       m_SignalEventMap;
     ServerNetworkMessageHandler          m_MessageHandler;
-    std::vector<int>                     m_ClientSocketVector;
+    std::map<int, evbuffer*>             m_ClientSocketMap;
 };

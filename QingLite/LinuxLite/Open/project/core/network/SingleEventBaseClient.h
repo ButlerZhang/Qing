@@ -57,6 +57,7 @@ private:
     struct sockaddr_in                           m_BroadcastAddress;
     struct bufferevent                          *m_DataBufferevent;
     struct event_base                           *m_EventBase;
+    struct evbuffer                             *m_RecvBuffer;
     struct event                                *m_CMDInputEvent;
     struct event                                *m_UDPBroadcastEvent;
     struct event                                *m_ReBindUDPSocketTimer;

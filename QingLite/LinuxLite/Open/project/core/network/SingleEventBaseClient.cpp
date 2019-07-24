@@ -20,6 +20,8 @@ SingleEventBaseClient::SingleEventBaseClient()
     m_ReBindUDPSocketTimer = NULL;
     m_ReConnectServerTimer = NULL;
     m_SendDataRandomlyTimer = NULL;
+
+    m_RecvBuffer = evbuffer_new();
     m_EventBase = event_base_new();
 }
 
@@ -37,6 +39,7 @@ SingleEventBaseClient::~SingleEventBaseClient()
     event_free(m_SendDataRandomlyTimer);
 
     bufferevent_free(m_DataBufferevent);
+    evbuffer_free(m_RecvBuffer);
     event_base_free(m_EventBase);
     g_Log.WriteDebug("Single client is release.");
 }
@@ -347,10 +350,8 @@ bool SingleEventBaseClient::AddTimerSendDataRandomly()
 
 void SingleEventBaseClient::CallBack_InputFromCMD(int Input, short events, void *UserData)
 {
-    char InputMessage[NETWORK_BUFFER_SIZE];
-    memset(InputMessage, 0, sizeof(InputMessage));
-
-    ssize_t ReadSize = read(Input, InputMessage, sizeof(InputMessage));
+    std::vector<char> InputMessage(NETWORK_BUFFER_SIZE, 0);
+    ssize_t ReadSize = read(Input, &InputMessage[0], InputMessage.size());
     if (ReadSize <= 0)
     {
         g_Log.WriteError("Can not read from cmd.");
@@ -358,7 +359,7 @@ void SingleEventBaseClient::CallBack_InputFromCMD(int Input, short events, void 
     }
 
     InputMessage[ReadSize - 1] = '\0';
-    if (strlen(InputMessage) <= 0)
+    if (strlen(&InputMessage[0]) <= 0)
     {
         g_Log.WriteError("Read empty data.");
         return;
@@ -371,13 +372,13 @@ void SingleEventBaseClient::CallBack_InputFromCMD(int Input, short events, void 
         return;
     }
 
-    if (bufferevent_write(Client->m_DataBufferevent, InputMessage, ReadSize) == 0)
+    if (bufferevent_write(Client->m_DataBufferevent, &InputMessage[0], ReadSize) == 0)
     {
-        g_Log.WriteDebug(BoostFormat("Send message = %s, size = %d.", InputMessage, ReadSize));
+        g_Log.WriteDebug(BoostFormat("Send message = %s, size = %d.", &InputMessage[0], ReadSize));
     }
     else
     {
-        g_Log.WriteError(BoostFormat("Send message = %s failed.\n", InputMessage));
+        g_Log.WriteError(BoostFormat("Send message = %s failed.\n", &InputMessage[0]));
     }
 }
 
@@ -389,12 +390,11 @@ void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, 
         return;
     }
 
-    char UDPBroadcastBuffer[NETWORK_BUFFER_SIZE];
-    memset(UDPBroadcastBuffer, 0, sizeof(UDPBroadcastBuffer));
+    std::vector<char> UDPBroadcastBuffer(NETWORK_BUFFER_SIZE, 0);
 
     socklen_t AddressLength = sizeof(socklen_t);
     ssize_t RecvSize = recvfrom(Client->m_UDPSocket,
-        UDPBroadcastBuffer, sizeof(UDPBroadcastBuffer), 0,
+        &UDPBroadcastBuffer[0], UDPBroadcastBuffer.size(), 0,
         (struct sockaddr *)&(Client->m_BroadcastAddress), &AddressLength);
 
     if (RecvSize == -1)
@@ -409,8 +409,8 @@ void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, 
         return;
     }
 
-    std::string BroadcastMessage(UDPBroadcastBuffer);
-    g_Log.WriteDebug(BoostFormat("UDP broadcast recv message = %s.", UDPBroadcastBuffer));
+    std::string BroadcastMessage(UDPBroadcastBuffer.begin(), UDPBroadcastBuffer.end());
+    g_Log.WriteDebug(BoostFormat("UDP broadcast recv message = %s.", BroadcastMessage.c_str()));
     std::string::size_type Index = BroadcastMessage.find(":");
     if (Index == std::string::npos)
     {
@@ -559,18 +559,66 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
 
 void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *UserData)
 {
-    char ServerMessage[NETWORK_BUFFER_SIZE];
-    memset(ServerMessage, 0, sizeof(ServerMessage));
+    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
+    g_Log.WriteDebug("Process recv from server call back.");
 
-    size_t RecvSize = bufferevent_read(bev, ServerMessage, sizeof(ServerMessage));
-    g_Log.WriteInfo(BoostFormat("Recv message size = %d", RecvSize));
+    const size_t MESSAGE_HEADER_LENGTH_SIZE = 4;
+    std::vector<char> MessageHeaderLengthBuffer(MESSAGE_HEADER_LENGTH_SIZE, 0);
 
-    if (RecvSize > 0)
+    std::vector<char> RecvBuffer(NETWORK_BUFFER_SIZE, 0);
+    struct evbuffer *EventBuffer = Client->m_RecvBuffer;
+
+    size_t RecvSize = 0, EventBufferLength = 0;
+    while (RecvSize = bufferevent_read(bev, &RecvBuffer[0], RecvBuffer.size()), RecvSize > 0)
     {
-        NetworkMessage NetworkMsg;
-        NetworkMsg.m_Message.assign(ServerMessage, ServerMessage + RecvSize);
+        g_Log.WriteDebug(BoostFormat("Recv message size = %llu", RecvSize));
 
-        SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-        Client->ProcessMessage(NetworkMsg);
+        if (evbuffer_add(EventBuffer, &RecvBuffer[0], RecvSize) != 0)
+        {
+            g_Log.WriteError("Recv message can not add to evbuffer.");
+            continue;
+        }
+
+        while (EventBufferLength = evbuffer_get_length(EventBuffer), EventBufferLength > 0)
+        {
+            if (EventBufferLength <= MESSAGE_HEADER_LENGTH_SIZE)
+            {
+                g_Log.WriteError(BoostFormat("Recv message length is only %llu bytes.", EventBufferLength));
+                break;
+            }
+
+            if (evbuffer_copyout(EventBuffer, &MessageHeaderLengthBuffer[0], MESSAGE_HEADER_LENGTH_SIZE) != MESSAGE_HEADER_LENGTH_SIZE)
+            {
+                g_Log.WriteError("evbuffer_copyout can not read message length.");
+                break;
+            }
+
+            int MessageBodyLength = 0;
+            ::memcpy(&MessageBodyLength, &MessageHeaderLengthBuffer[0], sizeof(int));
+            size_t MessageTotalLength = ::ntohl(MessageBodyLength) + MESSAGE_HEADER_LENGTH_SIZE;
+
+            g_Log.WriteDebug(BoostFormat("Recv message total length = %llu, event buffer length = %llu.", MessageTotalLength, EventBufferLength));
+            if (EventBufferLength < MessageTotalLength)
+            {
+                break;
+            }
+
+            if (MessageTotalLength > RecvBuffer.size())
+            {
+                g_Log.WriteDebug(BoostFormat("Recv buffer old size = %llu, new size = %llu.", RecvBuffer.size(), MessageTotalLength));
+                RecvBuffer.resize(MessageTotalLength, 0);
+            }
+
+            if (evbuffer_remove(EventBuffer, &RecvBuffer[0], MessageTotalLength) != static_cast<int>(MessageTotalLength))
+            {
+                g_Log.WriteError(BoostFormat("evbuffer_remove can not remove size = %llu data.", MessageTotalLength));
+                break;
+            }
+
+            NetworkMessage NetworkMsg;
+            NetworkMsg.m_Bufferevent = bev;
+            NetworkMsg.m_Message.assign(RecvBuffer.begin(), RecvBuffer.begin() + MessageTotalLength);
+            Client->ProcessMessage(NetworkMsg);
+        }
     }
 }

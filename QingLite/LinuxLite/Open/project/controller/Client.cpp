@@ -19,6 +19,13 @@ bool Client::ProcessConnected()
 {
     g_Log.WriteDebug("Process connected.");
     return SendLogin();
+
+    //test case 1: send fast and more
+    //for (int Count = 0; Count < 1000; Count++)
+    //{
+    //    SendLogin();
+    //}
+    //return true;
 }
 
 bool Client::ProcessDisconnected()
@@ -50,8 +57,9 @@ bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
         return false;
     }
 
-    g_Log.WriteDebug(LoginResponse.DebugString());
-    return SendLogout();
+    g_Log.WriteDebug("Logout response message:\n" + LoginResponse.DebugString());
+    return true;
+    //return SendLogout();
 }
 
 bool Client::SendLogin()
@@ -69,7 +77,10 @@ bool Client::SendLogin()
     Header->set_type(Project::MessageType::MT_LOGIN);
     Header->set_transmissionid(GetUUID());
 
-    g_Log.WriteDebug(Login.DebugString());
+    //static int Count = 0;
+    //Header->set_transmissionid(std::to_string(++Count));
+
+    g_Log.WriteDebug("Login message:\n" + Login.DebugString());
     return SendMessage(Header->type(), Login);
 }
 
@@ -84,7 +95,7 @@ bool Client::SendLogout()
     Header->set_type(Project::MessageType::MT_LOGOUT);
     Header->set_transmissionid(GetUUID());
 
-    g_Log.WriteDebug(Logout.DebugString());
+    g_Log.WriteDebug("Logout message:\n" + Logout.DebugString());
     return SendMessage(Header->type(), Logout);
 }
 
@@ -93,4 +104,13 @@ bool Client::SendMessage(int MessageType, const google::protobuf::Message &Proto
     const std::string &EncodeString = EncodeMessage(ProtobufMsg, MessageType);
     //const std::string &EncryptString = AESEncrypt(EncodeString, "Butler");
     return Send((void*)EncodeString.c_str(), EncodeString.size());
+
+    //test case 1: slow send
+    //for (std::string::size_type Index = 0; Index < EncodeString.size(); Index++)
+    //{
+    //    g_Log.WriteDebug(BoostFormat("Send message test count = %d.", Index));
+    //    Send(&EncodeString[Index], 1);
+    //    sleep(1);
+    //}
+    //return true;
 }

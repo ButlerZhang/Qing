@@ -91,13 +91,11 @@ bool MultiEventBaseServer::ProcessRecv(ConnectNode &ConnectedNode)
         return false;
     }
 
-    char ClientMessage[NETWORK_BUFFER_SIZE];
-    memset(ClientMessage, 0, sizeof(ClientMessage));
-
-    int RecvSize = evbuffer_remove(ConnectedNode.m_ReadBuffer, ClientMessage, sizeof(ClientMessage));
+    std::vector<char> ClientMessage(NETWORK_BUFFER_SIZE, 0);
+    int RecvSize = evbuffer_remove(ConnectedNode.m_ReadBuffer, &ClientMessage[0], ClientMessage.size());
     g_Log.WriteDebug(BoostFormat("Client = %d recv message size = %d.", ConnectedNode.m_ClientSocket, RecvSize));
 
-    ConnectedNode.m_Message.assign(ClientMessage, ClientMessage + RecvSize);
+    ConnectedNode.m_Message.assign(ClientMessage.begin(), ClientMessage.begin() + RecvSize);
     return ProcessMessage(ConnectedNode);
 }
 

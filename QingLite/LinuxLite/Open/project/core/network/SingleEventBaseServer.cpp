@@ -27,15 +27,13 @@ SingleEventBaseServer::~SingleEventBaseServer()
         g_Log.WriteError("Single base server event can not loop break.");
     }
 
-    for (std::vector<int>::size_type Index = 0; Index < m_ClientSocketVector.size(); Index++)
+    for (auto it = m_ClientSocketMap.begin(); it != m_ClientSocketMap.end(); it++)
     {
-        if (evutil_closesocket(m_ClientSocketVector[Index]) != 0)
-        {
-            g_Log.WriteError(BoostFormat("Single base server can not close socket = %d.", m_ClientSocketVector[Index]));
-        }
+        evutil_closesocket(it->first);
+        evbuffer_free(it->second);
     }
 
-    m_ClientSocketVector.clear();
+    m_ClientSocketMap.clear();
     if (m_CheckoutTimer != NULL)
     {
         event_free(m_CheckoutTimer);
@@ -120,6 +118,29 @@ bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
         g_Log.WriteDebug(BoostFormat("%s", ACK.c_str()));
         return true;
     }
+}
+
+bool SingleEventBaseServer::DeleteSocket(int ClientSocket)
+{
+    std::map<int, evbuffer*>::iterator it = m_ClientSocketMap.find(ClientSocket);
+    if (it == m_ClientSocketMap.end())
+    {
+        g_Log.WriteError(BoostFormat("Delete socket, can not find socket = %d.", ClientSocket));
+        return false;
+    }
+
+    if (evutil_closesocket(ClientSocket) != 0)
+    {
+        g_Log.WriteError(BoostFormat("Delete socket, can not close socket = %d.", ClientSocket));
+        return false;
+    }
+
+    evbuffer_free(it->second);
+    m_ClientSocketMap.erase(it);
+    int ClientCount = static_cast<int>(m_ClientSocketMap.size());
+    g_Log.WriteError(BoostFormat("Delete socket = %d, surplus client count = %d.",ClientSocket, ClientCount));
+
+    return true;
 }
 
 bool SingleEventBaseServer::AddCheckoutTimer(int TimerInternal)
@@ -219,17 +240,39 @@ bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *D
     return true;
 }
 
-void SingleEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
+void SingleEventBaseServer::CallBack_Listen(evconnlistener *Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
 {
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-    Server->m_ClientSocketVector.push_back(Socket);
-    g_Log.WriteInfo(BoostFormat("Accept client, socket = %d, current count = %d.",
-        Socket, static_cast<int>(Server->m_ClientSocketVector.size())));
-
     bufferevent *bev = bufferevent_socket_new(Server->m_EventBase, Socket, BEV_OPT_CLOSE_ON_FREE);
+    if (bev == NULL)
+    {
+        g_Log.WriteError(BoostFormat("Listen: bufferevent_socket_new error, socket = %d.", Socket));
+        evutil_closesocket(Socket);
+        return;
+    }
+
+    struct evbuffer *ClientBuffer = evbuffer_new();
+    if (ClientBuffer == NULL)
+    {
+        g_Log.WriteError(BoostFormat("Listen: evbuffer_new error, socket = %d.", Socket));
+        evutil_closesocket(Socket);
+        return;
+    }
+
+    Server->m_ClientSocketMap[Socket] = ClientBuffer;
+    int ClientCount = static_cast<int>(Server->m_ClientSocketMap.size());
+    g_Log.WriteInfo(BoostFormat("Listen: Accept client, socket = %d, client count = %d.", Socket, ClientCount));
+
     bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Event, Server);
-    bufferevent_enable(bev, EV_READ | EV_PERSIST);
-    bufferevent_enable(bev, EV_WRITE | EV_PERSIST);
+    bufferevent_enable(bev, EV_READ | EV_WRITE | EV_PERSIST);
+    //bufferevent_setwatermark(bev, EV_READ, 0, 0);
+
+    size_t lowmark = 0, highmark = 0;
+    bufferevent_getwatermark(bev, EV_READ, &lowmark, &highmark);
+    g_Log.WriteDebug(BoostFormat("Listen: default read water low mark = %d, high mark = %d.", lowmark, highmark));
+
+    bufferevent_getwatermark(bev, EV_WRITE, &lowmark, &highmark);
+    g_Log.WriteDebug(BoostFormat("Listen: default write water low mark = %d, high mark = %d.", lowmark, highmark));
 }
 
 void SingleEventBaseServer::CallBack_Checkout(int Socket, short Events, void *UserData)
@@ -280,37 +323,84 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
     if (IsAllowDelete)
     {
         SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-        std::vector<int>::iterator it = std::find(Server->m_ClientSocketVector.begin(), Server->m_ClientSocketVector.end(), ClientSocket);
-        if (it != Server->m_ClientSocketVector.end())
+        if (Server->DeleteSocket(ClientSocket))
         {
-            evutil_closesocket(ClientSocket);
-            Server->m_ClientSocketVector.erase(it);
-            g_Log.WriteError(BoostFormat("Delete client = %d, surplus count = %d.",
-                ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size())));
+            bufferevent_free(bev);
         }
-
-        bufferevent_free(bev);
     }
 }
 
 void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
 {
-    char ClientMessage[NETWORK_BUFFER_SIZE];
-    memset(ClientMessage, 0, sizeof(ClientMessage));
+    SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
+    g_Log.WriteDebug("Process recv call back.");
 
     int ClientSocket = bufferevent_getfd(bev);
-    size_t RecvSize = bufferevent_read(bev, ClientMessage, sizeof(ClientMessage));
-    g_Log.WriteInfo(BoostFormat("Recv client = %d message size = %d", ClientSocket, RecvSize));
-
-    if (RecvSize > 0)
+    if (Server->m_ClientSocketMap.find(ClientSocket) == Server->m_ClientSocketMap.end())
     {
-        NetworkMessage NetworkMsg;
-        NetworkMsg.m_Bufferevent = bev;
-        NetworkMsg.m_Socket = bufferevent_getfd(bev);
-        NetworkMsg.m_Message.assign(ClientMessage, ClientMessage + RecvSize);
+        g_Log.WriteError(BoostFormat("Recv can not find socket = %d.", ClientSocket));
+        return;
+    }
 
-        SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-        Server->m_MessageHandler.PushMessage(NetworkMsg);
+    const size_t MESSAGE_HEADER_LENGTH_SIZE = 4;
+    std::vector<char> MessageHeaderLengthBuffer(MESSAGE_HEADER_LENGTH_SIZE, 0);
+
+    std::vector<char> RecvBuffer(NETWORK_BUFFER_SIZE, 0);
+    struct evbuffer *EventBuffer = Server->m_ClientSocketMap[ClientSocket];
+
+    size_t RecvSize = 0, EventBufferLength = 0;
+    while (RecvSize = bufferevent_read(bev, &RecvBuffer[0], RecvBuffer.size()), RecvSize > 0)
+    {
+        g_Log.WriteDebug(BoostFormat("Recv client = %d message size = %llu", ClientSocket, RecvSize));
+
+        if (evbuffer_add(EventBuffer, &RecvBuffer[0], RecvSize) != 0)
+        {
+            g_Log.WriteError(BoostFormat("Recv message can not add to evbuffer, client = %d.", ClientSocket));
+            continue;
+        }
+
+        while (EventBufferLength = evbuffer_get_length(EventBuffer), EventBufferLength > 0)
+        {
+            if (EventBufferLength <= MESSAGE_HEADER_LENGTH_SIZE)
+            {
+                g_Log.WriteError(BoostFormat("Recv message length is only %llu bytes.", EventBufferLength));
+                break;
+            }
+
+            if (evbuffer_copyout(EventBuffer, &MessageHeaderLengthBuffer[0], MESSAGE_HEADER_LENGTH_SIZE) != MESSAGE_HEADER_LENGTH_SIZE)
+            {
+                g_Log.WriteError("evbuffer_copyout can not read message length.");
+                break;
+            }
+
+            int MessageBodyLength = 0;
+            ::memcpy(&MessageBodyLength, &MessageHeaderLengthBuffer[0], sizeof(int));
+            size_t MessageTotalLength = ::ntohl(MessageBodyLength) + MESSAGE_HEADER_LENGTH_SIZE;
+
+            g_Log.WriteDebug(BoostFormat("Recv message total length = %llu, event buffer length = %llu.", MessageTotalLength, EventBufferLength));
+            if (EventBufferLength < MessageTotalLength)
+            {
+                break;
+            }
+
+            if (MessageTotalLength > RecvBuffer.size())
+            {
+                g_Log.WriteDebug(BoostFormat("Recv buffer old size = %llu, new size = %llu.", RecvBuffer.size(), MessageTotalLength));
+                RecvBuffer.resize(MessageTotalLength, 0);
+            }
+
+            if (evbuffer_remove(EventBuffer, &RecvBuffer[0], MessageTotalLength) != static_cast<int>(MessageTotalLength))
+            {
+                g_Log.WriteError(BoostFormat("evbuffer_remove can not remove size = %llu data.", MessageTotalLength));
+                break;
+            }
+
+            NetworkMessage NetworkMsg;
+            NetworkMsg.m_Bufferevent = bev;
+            NetworkMsg.m_Socket = ClientSocket;
+            NetworkMsg.m_Message.assign(RecvBuffer.begin(), RecvBuffer.begin() + MessageTotalLength);
+            Server->m_MessageHandler.PushMessage(NetworkMsg);
+        }
     }
 }
 

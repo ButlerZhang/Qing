@@ -104,7 +104,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
         return false;
     }
 
-    g_Log.WriteDebug(Login.DebugString());
+    g_Log.WriteDebug("Login message:\n" + Login.DebugString());
 
     if (!m_SMIBDB.Isconnected())
     {
@@ -130,9 +130,9 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
 
     Project::MessageHeader *Header = Response.mutable_header();
     Header->set_type(Project::MessageType::MT_LOGIN_RESPONSE);
-    Header->set_transmissionid(GetUUID());
+    Header->set_transmissionid(Login.mutable_header()->transmissionid());
 
-    g_Log.WriteDebug(Response.DebugString());
+    g_Log.WriteDebug("Login response message:\n" + Response.DebugString());
     return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, Message, Response);
 }
 
@@ -146,7 +146,7 @@ bool SingleServer::ProcessLogout(NetworkMessage &Message)
         return false;
     }
 
-    g_Log.WriteDebug(Logout.DebugString());
+    g_Log.WriteDebug("Logout message:\n" + Logout.DebugString());
     return true;
 }
 
