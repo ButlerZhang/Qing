@@ -15,6 +15,8 @@ SignalEventMap::~SignalEventMap()
         event_del(m_SignalEventMap.begin()->second);
         m_SignalEventMap.erase(m_SignalEventMap.begin());
     }
+
+    g_Log.WriteDebug(BoostFormat("Signal event map is release, surplus size = %d.", m_SignalEventMap.size()));
 }
 
 bool SignalEventMap::BindBaseEvent(event_base *EventBase)

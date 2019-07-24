@@ -45,8 +45,11 @@ HTTPBaseServer::HTTPBaseServer()
 
 HTTPBaseServer::~HTTPBaseServer()
 {
-    event_base_loopbreak(m_EventBase);
     m_ContentTypeMap.clear();
+    if (event_base_loopbreak(m_EventBase) != 0)
+    {
+        g_Log.WriteError("HTTP base server event can not loop break.");
+    }
 
     if (m_evHTTP != NULL)
     {
@@ -62,6 +65,7 @@ HTTPBaseServer::~HTTPBaseServer()
 
     event_base_free(m_EventBase);
     m_EventBase = NULL;
+    g_Log.WriteDebug("HTTP base server is release.");
 }
 
 bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)

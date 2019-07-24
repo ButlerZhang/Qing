@@ -10,7 +10,6 @@
 int project(int argc, char *argv[])
 {
     g_Log.WriteInfo("Program start.");
-
     if (argc <= 1)                      //server
     {
         if (g_Config.LoadConfig())
@@ -30,6 +29,6 @@ int project(int argc, char *argv[])
         MyClient.Start("192.168.3.126", 9000);
     }
 
-    g_Log.WriteInfo("Program stop.\n");
+    g_Log.WriteInfo("Program stop.");
     return 0;
 }

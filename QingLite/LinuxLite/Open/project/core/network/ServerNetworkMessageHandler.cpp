@@ -49,6 +49,7 @@ bool ServerNetworkMessageHandler::Stop()
         m_NetworkMsgQueue.pop();
     }
 
+    g_Log.WriteDebug(BoostFormat("Network message handler is release, queue size = %d.", m_NetworkMsgQueue.size()));
     return true;
 }
 

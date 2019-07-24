@@ -8,14 +8,18 @@
 
 
 
-SingleServer g_SingleServer;
-
 SingleServer::SingleServer()
 {
 }
 
 SingleServer::~SingleServer()
 {
+}
+
+SingleServer & SingleServer::GetInstance()
+{
+    static SingleServer g_Instance;
+    return g_Instance;
 }
 
 bool SingleServer::Start(const std::string &IP, int Port)

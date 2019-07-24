@@ -9,8 +9,8 @@ class SingleServer : public SingleEventBaseServer
 {
 public:
 
-    SingleServer();
-    virtual ~SingleServer();
+    static SingleServer& GetInstance();
+
     virtual bool Start(const std::string &IP, int Port);
 
     virtual bool ProcessCheckout();
@@ -22,6 +22,9 @@ public:
 
 private:
 
+    SingleServer();
+    virtual ~SingleServer();
+
     bool ProcessLogin(NetworkMessage &Message);
     bool ProcessLogout(NetworkMessage &Message);
 
@@ -32,4 +35,4 @@ private:
     MySQLDatabase                       m_SMIBDB;
 };
 
-extern SingleServer g_SingleServer;
+#define g_SingleServer SingleServer::GetInstance()

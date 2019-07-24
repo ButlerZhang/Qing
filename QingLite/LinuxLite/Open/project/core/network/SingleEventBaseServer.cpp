@@ -22,10 +22,20 @@ SingleEventBaseServer::SingleEventBaseServer()
 
 SingleEventBaseServer::~SingleEventBaseServer()
 {
-    m_MessageHandler.Stop();
-    event_base_loopbreak(m_EventBase);
-    m_ClientSocketVector.clear();
+    if (event_base_loopbreak(m_EventBase) != 0)
+    {
+        g_Log.WriteError("Single base server event can not loop break.");
+    }
 
+    for (std::vector<int>::size_type Index = 0; Index < m_ClientSocketVector.size(); Index++)
+    {
+        if (evutil_closesocket(m_ClientSocketVector[Index]) != 0)
+        {
+            g_Log.WriteError(BoostFormat("Single base server can not close socket = %d.", m_ClientSocketVector[Index]));
+        }
+    }
+
+    m_ClientSocketVector.clear();
     if (m_CheckoutTimer != NULL)
     {
         event_free(m_CheckoutTimer);
@@ -40,6 +50,7 @@ SingleEventBaseServer::~SingleEventBaseServer()
 
     event_base_free(m_EventBase);
     m_EventBase = NULL;
+    g_Log.WriteDebug("Single base server is release.");
 }
 
 bool SingleEventBaseServer::Start(const std::string &IP, int Port)
@@ -237,7 +248,6 @@ void SingleEventBaseServer::CallBack_Signal(int Signal, short Events, void *User
     g_Log.WriteDebug("Single server caught an interrupt signal; exiting cleanly in one seconds.");
 
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-    Server->m_MessageHandler.Stop();
 
     struct timeval delay = { 1, 0 };
     event_base_loopexit(Server->m_EventBase, &delay);
@@ -273,6 +283,7 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
         std::vector<int>::iterator it = std::find(Server->m_ClientSocketVector.begin(), Server->m_ClientSocketVector.end(), ClientSocket);
         if (it != Server->m_ClientSocketVector.end())
         {
+            evutil_closesocket(ClientSocket);
             Server->m_ClientSocketVector.erase(it);
             g_Log.WriteError(BoostFormat("Delete client = %d, surplus count = %d.",
                 ClientSocket, static_cast<int>(Server->m_ClientSocketVector.size())));

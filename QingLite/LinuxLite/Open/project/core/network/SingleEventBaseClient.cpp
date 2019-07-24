@@ -25,6 +25,11 @@ SingleEventBaseClient::SingleEventBaseClient()
 
 SingleEventBaseClient::~SingleEventBaseClient()
 {
+    if (event_base_loopbreak(m_EventBase) != 0)
+    {
+        g_Log.WriteError("Client event can not loop break.");
+    }
+
     event_free(m_CMDInputEvent);
     event_free(m_UDPBroadcastEvent);
     event_free(m_ReConnectServerTimer);
@@ -33,6 +38,7 @@ SingleEventBaseClient::~SingleEventBaseClient()
 
     bufferevent_free(m_DataBufferevent);
     event_base_free(m_EventBase);
+    g_Log.WriteDebug("Single client is release.");
 }
 
 bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)

@@ -6,14 +6,18 @@
 
 
 
-HTTPServer g_HTTPServer;
-
 HTTPServer::HTTPServer()
 {
 }
 
 HTTPServer::~HTTPServer()
 {
+}
+
+HTTPServer & HTTPServer::GetInstance()
+{
+    static HTTPServer g_Instance;
+    return g_Instance;
 }
 
 bool HTTPServer::Start(const std::string & ServerIP, int Port)

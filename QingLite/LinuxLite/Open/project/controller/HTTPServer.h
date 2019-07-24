@@ -10,8 +10,8 @@ class HTTPServer : public HTTPBaseServer
 {
 public:
 
-    HTTPServer();
-    virtual ~HTTPServer();
+    static HTTPServer& GetInstance();
+
     virtual bool Start(const std::string &ServerIP, int Port);
 
     virtual bool ProcessCheckout();
@@ -21,6 +21,9 @@ public:
     MySQLDatabase& GetDB() { return m_HTTPDB; }
 
 private:
+
+    HTTPServer();
+    virtual ~HTTPServer();
 
     bool GetRequestPath(struct evhttp_request *Request, std::string &RequestPath);
     bool SplitRequestPath(const std::string &RequestPath, std::vector<std::string> &PathVector);
@@ -36,4 +39,4 @@ private:
     UserHandler                          m_UserHandler;
 };
 
-extern HTTPServer g_HTTPServer;
+#define g_HTTPServer HTTPServer::GetInstance()
