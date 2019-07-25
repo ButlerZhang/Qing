@@ -24,7 +24,28 @@ int project(int argc, char *argv[])
     }
     else                                //test client
     {
-        Client MyClient;
+        int ClientCount = atoi(argv[1]);
+        if (ClientCount > 100)
+        {
+            ClientCount = 100;
+        }
+
+        pid_t Child;
+        for (int Count = 0; Count < ClientCount; Count++)
+        {
+            Child = fork();
+            if (Child < 0) {
+                g_Log.WriteError(BoostFormat("Fork failed, Count = %d", Count));
+            }
+            else if (Child > 0) {
+                sleep(1);
+            }
+            else {
+                break;
+            }
+        }
+
+        Client MyClient(getpid());
         //MyClient.Start(ServerPort);
         MyClient.Start("192.168.3.126", 9000);
     }

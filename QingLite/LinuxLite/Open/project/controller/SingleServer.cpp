@@ -1,7 +1,6 @@
 #include "SingleServer.h"
 #include "../../../LinuxTools.h"
 #include "../core/tools/BoostLog.h"
-#include "../core/tools/OpenSSLAES.h"
 #include "../message/project.pb.h"
 #include "../message/CodedMessage.h"
 #include "../Config.h"
@@ -73,8 +72,6 @@ bool SingleServer::ProcessDisconnected()
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
-    //std::string DecryptString = AESDecrypt(NetworkMsg.m_Message, "Butler");
-    //NetworkMsg.m_Message.swap(DecryptString);
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {
@@ -113,7 +110,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
     }
 
     const std::string &InsertSQL = BoostFormat("INSERT IGNORE INTO events_log (code, description, date_time) VALUES(%d,'%s', %s)",
-        GetRandomUIntInRange(0, INT_MAX), "user login", "NOW()");
+        Login.id(), "user login", "NOW()");
     if (!m_SMIBDB.ExecuteQuery(InsertSQL.c_str()))
     {
         g_Log.WriteError(BoostFormat("Insert falied: %s", InsertSQL.c_str()));
@@ -147,7 +144,17 @@ bool SingleServer::ProcessLogout(NetworkMessage &Message)
     }
 
     g_Log.WriteDebug("Logout message:\n" + Logout.DebugString());
-    return true;
+
+    Project::UserLogout Response;
+    Response.set_id(Logout.id());
+    Response.set_name(Logout.name());
+
+    Project::MessageHeader *Header = Response.mutable_header();
+    Header->set_type(Project::MessageType::MT_LOGOUT_RESPONSE);
+    Header->set_transmissionid(Logout.mutable_header()->transmissionid());
+
+    g_Log.WriteDebug("Login response message:\n" + Response.DebugString());
+    return SendMessage(Project::MessageType::MT_LOGOUT_RESPONSE, Message, Response);
 }
 
 bool SingleServer::SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg)

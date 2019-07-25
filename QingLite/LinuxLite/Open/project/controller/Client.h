@@ -8,7 +8,7 @@ class Client : public SingleEventBaseClient
 {
 public:
 
-    Client();
+    Client(long ClientID);
     virtual ~Client();
 
     virtual bool ProcessConnected();
@@ -18,8 +18,13 @@ public:
 private:
 
     bool ProcessLoginResponse(NetworkMessage &NetworkMsg);
+    bool ProcessLogoutResponse(NetworkMessage &NetworkMsg);
 
     bool SendLogin();
     bool SendLogout();
     bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
+
+private:
+
+    long             m_ClientID;
 };
