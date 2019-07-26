@@ -6,108 +6,70 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <iostream>
+#include <event.h>
 
 
 
-Config g_Config;
+void CallBack_LibEventLog(int Severity, const char *LogMsg)
+{
+    switch (Severity)
+    {
+    case EVENT_LOG_DEBUG:           g_Log.WriteDebug(LogMsg);   break;
+    case EVENT_LOG_MSG:             g_Log.WriteInfo(LogMsg);    break;
+    case EVENT_LOG_WARN:            g_Log.WriteError(LogMsg);   break;
+    case EVENT_LOG_ERR:             g_Log.WriteError(LogMsg);   break;
+    default:                        g_Log.WriteError(LogMsg);   break;
+    }
+}
+
+
 
 Config::Config() : m_ConfigFileName("project.ini"), DB_PASSWORD_KEY("CJSZHCHCSZCJSZCJ")
 {
+    event_set_log_callback(CallBack_LibEventLog);
 }
 
 Config::~Config()
 {
 }
 
-void Config::EnterToolMode()
+Config & Config::GetInstance()
 {
-    bool IsLoop = true;
+    static Config g_ConfigInstance;
+    return g_ConfigInstance;
+}
+
+void Config::GenerateConfigFile()
+{
     std::string InputString;
-    g_Log.WriteDebug("Enter tool mode.");
+    boost::property_tree::ptree DBTree;
+    g_Log.WriteInfo("Enter generate config file mode.");
 
-    while (IsLoop)
-    {
-        std::cout << std::endl << "Input select number: " << std::endl;
-        std::cout << "1.Generate config file;" << std::endl;
-        std::cout << "2.Encrypt string;" << std::endl;
-        std::cout << "3.Decrypt string;" << std::endl;
-        std::cout << "4.Exit program." << std::endl;
+    std::cout << std::endl << "Input DB Host IP:" << std::endl;
+    std::cin >> InputString;
+    DBTree.put("Host", InputString);
 
-        std::cin >> InputString;
-        if (InputString.size() != 1 || !std::isdigit(InputString[0]))
-        {
-            std::cout << "Please choice again:" << std::endl << std::endl;
-            continue;
-        }
+    std::cout << "Input DB Port:" << std::endl;
+    std::cin >> InputString;
+    DBTree.put("Port", InputString);
 
-        int Choice = atoi(InputString.c_str());
-        switch (Choice)
-        {
-            case 1:
-            {
-                boost::property_tree::ptree DBTree;
+    std::cout << "Input DB User:" << std::endl;
+    std::cin >> InputString;
+    DBTree.put("User", InputString);
 
-                std::cout << std::endl << "Input DB Host IP:" << std::endl;
-                std::cin >> InputString;
-                DBTree.put("Host", InputString);
+    std::cout << "Input DB Password:" << std::endl;
+    std::cin >> InputString;
+    DBTree.put("Password", AESEncrypt(InputString, DB_PASSWORD_KEY));
 
-                std::cout << "Input DB Port:" << std::endl;
-                std::cin >> InputString;
-                DBTree.put("Port", InputString);
+    std::cout << "Input DB Name:" << std::endl;
+    std::cin >> InputString;
+    DBTree.put("DBName", InputString);
 
-                std::cout << "Input DB User:" << std::endl;
-                std::cin >> InputString;
-                DBTree.put("User", InputString);
+    boost::property_tree::ptree IniFileTree;
+    IniFileTree.push_back(std::make_pair("Database", DBTree));
+    boost::property_tree::write_ini(m_ConfigFileName, IniFileTree);
 
-                std::cout << "Input DB Password:" << std::endl;
-                std::cin >> InputString;
-                DBTree.put("Password", AESEncrypt(InputString, DB_PASSWORD_KEY));
-
-                std::cout << "Input DB Name:" << std::endl;
-                std::cin >> InputString;
-                DBTree.put("DBName", InputString);
-
-                boost::property_tree::ptree INITree;
-                INITree.push_back(std::make_pair("Database", DBTree));
-                boost::property_tree::write_ini(m_ConfigFileName, INITree);
-
-                std::cout << std::endl;
-                IsLoop = false;
-                break;
-            }
-
-        case 2:
-            {
-                std::cout << std::endl << "Input encrypt string:" << std::endl;
-                std::cin >> InputString;
-
-                const std::string &CipherText = AESEncrypt(InputString, DB_PASSWORD_KEY);
-                std::cout << std::endl << "Encrypt result: " << CipherText << std::endl << std::endl;
-
-                IsLoop = false;
-                break;
-            }
-
-        case 3:
-            {
-                std::cout << std::endl << "Input decrypt string:" << std::endl;
-                std::cin >> InputString;
-
-                const std::string &ClearText = AESDecrypt(InputString, DB_PASSWORD_KEY);
-                std::cout << std::endl << "Decrypt result: " << ClearText << std::endl << std::endl;
-
-                IsLoop = false;
-                break;
-            }
-
-        default:
-            {
-                std::cout << std::endl;
-                IsLoop = false;
-                break;
-            }
-        }
-    }
+    std::cout << std::endl;
 }
 
 bool Config::LoadConfig()
@@ -130,28 +92,28 @@ bool Config::LoadConfig()
 
 bool Config::LoadFileConfig()
 {
-    boost::property_tree::ptree INITree;
-
     try
     {
-        boost::property_tree::read_ini(m_ConfigFileName, INITree);
+        boost::property_tree::ptree IniFileTree;
+        boost::property_tree::read_ini(m_ConfigFileName, IniFileTree);
+
+        const boost::property_tree::ptree &DBTree = IniFileTree.get_child("Database");
+        m_DBPort = DBTree.get<int>("Port", 3306);
+        m_DBHost = DBTree.get<std::string>("Host", "127.0.0.1");
+        m_DBUser = DBTree.get<std::string>("User", "root");
+        m_DBName = DBTree.get<std::string>("DBName", "jpc");
+
+        const std::string &Password = DBTree.get<std::string>("Password", "root");
+        m_DBPassword = AESDecrypt(Password, DB_PASSWORD_KEY);
+
+        return true;
+
     }
     catch (...)
     {
         g_Log.WriteError("Config: boost::property_tree::read_ini throw error.");
         return false;
     }
-
-    const boost::property_tree::ptree &DBTree = INITree.get_child("Database");
-    m_DBPort = DBTree.get<int>("Port", 3306);
-    m_DBHost = DBTree.get<std::string>("Host", "127.0.0.1");
-    m_DBUser = DBTree.get<std::string>("User", "root");
-    m_DBName = DBTree.get<std::string>("DBName", "jpc");
-
-    const std::string &Password = DBTree.get<std::string>("Password", "root");
-    m_DBPassword = AESDecrypt(Password, DB_PASSWORD_KEY);
-
-    return true;
 }
 
 bool Config::LoadDatabaseConfig()
@@ -174,6 +136,7 @@ bool Config::LoadDatabaseConfig()
 
     int Section = 0;
     std::string ConfigName, ConfigValue;
+
     do
     {
         if (!DataSet.GetValue("config_name", ConfigName) ||
@@ -187,7 +150,7 @@ bool Config::LoadDatabaseConfig()
         switch(Section)
         {
         case 0:             ParseServerSection(ConfigName, ConfigValue);    break;
-        case 1:             //TODO
+        case 1:             ParseDebugSection(ConfigName, ConfigValue);     break;
         default:            break;
         }
 
@@ -197,7 +160,31 @@ bool Config::LoadDatabaseConfig()
     return true;
 }
 
-bool Config::ParseServerSection(const std::string & ConfigName, const std::string & ConfigValue)
+bool Config::ParseDebugSection(const std::string &ConfigName, const std::string &ConfigValue)
+{
+    if (ConfigName == "log_severity")
+    {
+        if (ConfigValue.size() != 1 || std::isdigit(ConfigValue[0]))
+        {
+            g_Log.WriteError(BoostFormat("Config: log severity value = %s error.", ConfigValue.c_str()));
+            return false;
+        }
+
+        m_LogSeverity = atoi(ConfigValue.c_str());
+        if (m_LogSeverity < LL_TEMP || m_LogSeverity > LL_ERROR)
+        {
+            g_Log.WriteError(BoostFormat("Config: log severity value = %s error.", ConfigValue.c_str()));
+            return false;
+        }
+
+        g_Log.SetFilter(static_cast<LogLevel>(m_LogSeverity));
+        return true;
+    }
+
+    return false;
+}
+
+bool Config::ParseServerSection(const std::string &ConfigName, const std::string &ConfigValue)
 {
     if (ConfigName == "server_ip")
     {
@@ -210,7 +197,7 @@ bool Config::ParseServerSection(const std::string & ConfigName, const std::strin
         std::vector<std::string> IPVector;
         if (!GetHostIPv4(IPVector))
         {
-            g_Log.WriteError("Can not get host IPv4 address.");
+            g_Log.WriteError("Config: Can not get host IPv4 address.");
             return false;
         }
 

@@ -97,7 +97,7 @@ bool Client::SendLogin()
     Header->set_type(Project::MessageType::MT_LOGIN);
     //Header->set_transmissionid(GetUUID());
 
-    static int LoginCount = 0;
+    static unsigned long long LoginCount = 0;
     Header->set_transmissionid("Login count = " + std::to_string(++LoginCount));
 
     g_Log.WriteDebug("Login message:\n" + Login.DebugString());
@@ -116,7 +116,7 @@ bool Client::SendLogout()
     Project::MessageHeader *Header = Logout.mutable_header();
     Header->set_type(Project::MessageType::MT_LOGOUT);
 
-    static int LogoutCount = 0;
+    static unsigned long long LogoutCount = 0;
     Header->set_transmissionid("Logout count = " + std::to_string(++LogoutCount));
 
     g_Log.WriteDebug("Logout message:\n" + Logout.DebugString());
@@ -126,10 +126,9 @@ bool Client::SendLogout()
 bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)
 {
     const std::string &EncodeString = EncodeMessage(ProtobufMsg, MessageType);
-    //const std::string &EncryptString = AESEncrypt(EncodeString, "Butler");
     return Send((void*)EncodeString.c_str(), EncodeString.size());
 
-    //test case 1: slow send
+    //test case 2: slow send
     //for (std::string::size_type Index = 0; Index < EncodeString.size(); Index++)
     //{
     //    g_Log.WriteDebug(BoostFormat("Send message test count = %d.", Index));

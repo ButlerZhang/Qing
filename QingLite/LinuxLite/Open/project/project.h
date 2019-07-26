@@ -20,7 +20,7 @@ int project(int argc, char *argv[])
     }
     else if (atoi(argv[1]) == 0)        //tool mode
     {
-        g_Config.EnterToolMode();
+        g_Config.GenerateConfigFile();
     }
     else                                //test client
     {
