@@ -8,6 +8,7 @@
 
 HTTPServer::HTTPServer()
 {
+    m_IsWork = false;
 }
 
 HTTPServer::~HTTPServer()
@@ -16,11 +17,11 @@ HTTPServer::~HTTPServer()
 
 HTTPServer & HTTPServer::GetInstance()
 {
-    static HTTPServer g_Instance;
-    return g_Instance;
+    static HTTPServer g_HTTPServerInstance;
+    return g_HTTPServerInstance;
 }
 
-bool HTTPServer::Start(const std::string & ServerIP, int Port)
+bool HTTPServer::Start(const std::string &ServerIP, int Port)
 {
     if (!m_IsWork)
     {
@@ -37,19 +38,17 @@ bool HTTPServer::Start(const std::string & ServerIP, int Port)
 
 bool HTTPServer::ProcessCheckout()
 {
-    //g_Log.WriteDebug("Process http server chekout.");
-
     if (!m_HTTPDB.Isconnected())
     {
-        g_Log.WriteError("HTTP database is disconnected.");
+        g_Log.WriteError("HTTP Server database is disconnected.");
 
         if (m_HTTPDB.Reconnect())
         {
-            g_Log.WriteInfo("HTTP database reconnect succeed.");
+            g_Log.WriteInfo("HTTP Server database reconnect succeed.");
         }
         else
         {
-            g_Log.WriteDebug("HTTP database reconnect failed.");
+            g_Log.WriteDebug("HTTP Server database reconnect failed.");
         }
     }
 
@@ -63,7 +62,7 @@ bool HTTPServer::ProcessGet(evhttp_request *Request)
 
     if (RequestPath == "/")
     {
-        RequestPath = "./jpc-web/index.html";
+        RequestPath = "./jpc-web/index.html"; //add config to DB
     }
     else
     {
@@ -103,7 +102,7 @@ bool HTTPServer::ProcessGet(evhttp_request *Request)
     struct stat ActuallyPathStat;
     if (stat(RequestPath.c_str(), &ActuallyPathStat) < 0)
     {
-        g_Log.WriteError(BoostFormat("Stat path = %s failed.", RequestPath.c_str()));
+        g_Log.WriteError(BoostFormat("HTTP server stat path = %s failed.", RequestPath.c_str()));
         return false;
     }
 
@@ -136,10 +135,14 @@ bool HTTPServer::ProcessPost(evhttp_request *Request)
         {
             return m_UserHandler.ProcessLogout(Request);
         }
+        else
+        {
+            g_Log.WriteDebug("HTTP server needs to add user others process.");
+        }
     }
     else
     {
-
+        g_Log.WriteDebug("HTTP server needs to add not user post process.");
     }
 
     return HTTPBaseServer::ProcessPost(Request);
@@ -160,7 +163,7 @@ bool HTTPServer::GetRequestPath(evhttp_request *Request, std::string &RequestPat
     }
 
     RequestPath.append(evhttp_request_get_uri(Request));
-    g_Log.WriteDebug("Request path = " + RequestPath);
+    g_Log.WriteDebug("HTTP server get request path = " + RequestPath);
     return true;
 }
 
@@ -169,17 +172,17 @@ bool HTTPServer::SplitRequestPath(const std::string &RequestPath, std::vector<st
     const std::string Seperator("/");
     if (RequestPath == Seperator)
     {
-        g_Log.WriteDebug("Split request URI, URI = /");
+        g_Log.WriteDebug("HTTP server: Split request URI, URI = /");
         return true;
     }
 
     if (!SplitString(RequestPath, PathVector, Seperator))
     {
-        g_Log.WriteError("Split request URI failed.");
+        g_Log.WriteError("HTTP server: Split request URI failed.");
         return false;
     }
 
-    std::string LogString("String vector size = " + std::to_string(PathVector.size()) + ": ");
+    std::string LogString("HTTP server: String vector size = " + std::to_string(PathVector.size()) + ": ");
     for (std::vector<std::string>::size_type Index = 0; Index < PathVector.size(); Index++)
     {
         LogString += std::to_string(Index) + "=" + PathVector[Index] + "; ";
@@ -190,7 +193,7 @@ bool HTTPServer::SplitRequestPath(const std::string &RequestPath, std::vector<st
     return true;
 }
 
-void HTTPServer::WorkThread_Process(void * Object)
+void HTTPServer::WorkThread_Process(void *Object)
 {
     HTTPServer *Server = (HTTPServer*)Object;
     if (Server->m_HTTPDB.Connect(g_Config.m_DBHost.c_str(),
@@ -199,11 +202,11 @@ void HTTPServer::WorkThread_Process(void * Object)
         g_Config.m_DBName.c_str(),
         g_Config.m_DBPort) == false)
     {
-        g_Log.WriteError("Connnect HTTP database failed.");
+        g_Log.WriteError("HTTP Server connnect database failed.");
     }
     else
     {
-        g_Log.WriteDebug("Connect HTTP database succeed.");
+        g_Log.WriteDebug("HTTP Server connnect database succeed.");
         Server->HTTPBaseServer::Start(Server->m_ServerIP, Server->m_HTTPPort);
     }
 }

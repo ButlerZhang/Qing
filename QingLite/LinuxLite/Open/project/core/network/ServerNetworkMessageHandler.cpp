@@ -17,13 +17,14 @@ ServerNetworkMessageHandler::ServerNetworkMessageHandler()
 ServerNetworkMessageHandler::~ServerNetworkMessageHandler()
 {
     Stop();
+    g_Log.WriteDebug("Network message handler was destructored.");
 }
 
 bool ServerNetworkMessageHandler::Start(SingleEventBaseServer *SingleServer)
 {
     if (SingleServer == NULL)
     {
-        g_Log.WriteError("Start message handler faile because single server is NULL.");
+        g_Log.WriteError("Network message handler start faile because single base server is NULL.");
         return false;
     }
 
@@ -41,15 +42,20 @@ bool ServerNetworkMessageHandler::Start(SingleEventBaseServer *SingleServer)
 
 bool ServerNetworkMessageHandler::Stop()
 {
-    m_IsWork = false;
-    m_SingleServer = NULL;
-    m_Condition.notify_one();
-    while (!m_NetworkMsgQueue.empty())
+    if (m_IsWork)
     {
-        m_NetworkMsgQueue.pop();
+        m_IsWork = false;
+        m_SingleServer = NULL;
+        m_Condition.notify_one();
+
+        while (!m_NetworkMsgQueue.empty())
+        {
+            m_NetworkMsgQueue.pop();
+        }
+
+        g_Log.WriteDebug(BoostFormat("Network message handler was destructored, queue size = %d.", m_NetworkMsgQueue.size()));
     }
 
-    g_Log.WriteDebug(BoostFormat("Network message handler is release, queue size = %d.", m_NetworkMsgQueue.size()));
     return true;
 }
 
@@ -58,7 +64,7 @@ bool ServerNetworkMessageHandler::PushMessage(const NetworkMessage &NetworkMsg)
     std::unique_lock<std::mutex> Locker(m_QueueLock);
     m_NetworkMsgQueue.push(NetworkMsg);
 
-    g_Log.WriteDebug(BoostFormat("Message queue size = %d.", m_NetworkMsgQueue.size()));
+    g_Log.WriteDebug(BoostFormat("Network message handler queue size = %d.", m_NetworkMsgQueue.size()));
     m_Condition.notify_one();
 
     return !m_NetworkMsgQueue.empty();

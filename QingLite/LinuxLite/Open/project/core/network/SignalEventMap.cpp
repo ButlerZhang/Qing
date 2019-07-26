@@ -16,7 +16,7 @@ SignalEventMap::~SignalEventMap()
         m_SignalEventMap.erase(m_SignalEventMap.begin());
     }
 
-    g_Log.WriteDebug(BoostFormat("Signal event map is release, surplus size = %d.", m_SignalEventMap.size()));
+    g_Log.WriteDebug(BoostFormat("Signal event map was destructored, signal count = %d.", m_SignalEventMap.size()));
 }
 
 bool SignalEventMap::BindBaseEvent(event_base *EventBase)
@@ -59,6 +59,7 @@ bool SignalEventMap::DeleteSignalEvent(int Signal)
     {
         event_del(iter->second);
         m_SignalEventMap.erase(iter);
+        g_Log.WriteDebug(BoostFormat("Signal map delete signal = %d", Signal));
         return true;
     }
 

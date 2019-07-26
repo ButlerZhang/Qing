@@ -24,8 +24,6 @@ public:
 
 protected:
 
-    inline event_base* GetEventBase() const { return m_EventBase; }
-
     bool DeleteSocket(int ClientSocket);
     bool AddCheckoutTimer(int TimerInternal);
     bool CreateListener(const std::string &IP, int Port);
@@ -43,13 +41,13 @@ private:
 
 private:
 
-    int                                  m_ListenPort;
-    std::string                          m_ListenIP;
-    event_base                          *m_EventBase;
-    evconnlistener                      *m_Listener;
-    event                               *m_CheckoutTimer;
-    UDPBroadcast                         m_UDPBroadcast;
-    SignalEventMap                       m_SignalEventMap;
-    ServerNetworkMessageHandler          m_MessageHandler;
-    std::map<int, evbuffer*>             m_ClientSocketMap;
+    int                                          m_ListenPort;
+    std::string                                  m_BindIP;
+    event_base                                  *m_EventBase;
+    evconnlistener                              *m_Listener;
+    event                                       *m_CheckoutTimer;
+    UDPBroadcast                                 m_UDPBroadcast;
+    SignalEventMap                               m_SignalEventMap;
+    ServerNetworkMessageHandler                  m_MessageHandler;
+    std::map<int, evbuffer*>                     m_ClientSocketMap;
 };

@@ -17,8 +17,8 @@ SingleServer::~SingleServer()
 
 SingleServer & SingleServer::GetInstance()
 {
-    static SingleServer g_Instance;
-    return g_Instance;
+    static SingleServer g_SingleServerInstance;
+    return g_SingleServerInstance;
 }
 
 bool SingleServer::Start(const std::string &IP, int Port)
@@ -29,29 +29,27 @@ bool SingleServer::Start(const std::string &IP, int Port)
         g_Config.m_DBName.c_str(),
         g_Config.m_DBPort) == false)
     {
-        g_Log.WriteError("Connnect SMIB database failed.");
+        g_Log.WriteError("Single Server connnect SMIB database failed.");
         return false;
     }
 
-    g_Log.WriteDebug("Connect SMIB database succeed.");
+    g_Log.WriteDebug("Single Server connect SMIB database succeed.");
     return SingleEventBaseServer::Start(IP, Port);
 }
 
 bool SingleServer::ProcessCheckout()
 {
-    //g_Log.WriteDebug("Process single server chekout.");
-
     if (!m_SMIBDB.Isconnected())
     {
-        g_Log.WriteError("SMIB database is disconnected.");
+        g_Log.WriteError("Single Server SMIB database is disconnected.");
 
         if (m_SMIBDB.Reconnect())
         {
-            g_Log.WriteInfo("SMIB database reconnect succeed.");
+            g_Log.WriteInfo("Single Server SMIB database reconnect succeed.");
         }
         else
         {
-            g_Log.WriteDebug("SMIB database reconnect failed.");
+            g_Log.WriteDebug("Single Server SMIB database reconnect failed.");
         }
     }
 
@@ -60,14 +58,14 @@ bool SingleServer::ProcessCheckout()
 
 bool SingleServer::ProcessConnected()
 {
-    g_Log.WriteDebug("Process connected.");
-    return false;
+    g_Log.WriteDebug("Single Server process connected.");
+    return true;
 }
 
 bool SingleServer::ProcessDisconnected()
 {
-    g_Log.WriteDebug("Process disconnected.");
-    return false;
+    g_Log.WriteDebug("Single Server process disconnected.");
+    return true;
 }
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
@@ -91,29 +89,24 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
     //return false;
 }
 
-bool SingleServer::ProcessLogin(NetworkMessage &Message)
+bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
 {
-    g_Log.WriteDebug("Process login.");
+    g_Log.WriteDebug("Single Server process login.");
+
     Project::UserLogin Login;
-    if (!Login.ParseFromString(Message.m_Message))
+    if (!Login.ParseFromString(NetworkMsg.m_Message))
     {
-        g_Log.WriteError("Login message parse failed.");
+        g_Log.WriteError("Single Server login message parse failed.");
         return false;
     }
 
-    g_Log.WriteDebug("Login message:\n" + Login.DebugString());
-
-    if (!m_SMIBDB.Isconnected())
-    {
-        g_Log.WriteError("Database is disconnected.");
-        return false;
-    }
+    g_Log.WriteDebug("Single Server login message\n" + Login.DebugString());
 
     const std::string &InsertSQL = BoostFormat("INSERT IGNORE INTO events_log (code, description, date_time) VALUES(%d,'%s', %s)",
         Login.id(), "user login", "NOW()");
     if (!m_SMIBDB.ExecuteQuery(InsertSQL.c_str()))
     {
-        g_Log.WriteError(BoostFormat("Insert falied: %s", InsertSQL.c_str()));
+        g_Log.WriteError(BoostFormat("Single Server insert database falied: %s", InsertSQL.c_str()));
         return false;
     }
 
@@ -129,21 +122,22 @@ bool SingleServer::ProcessLogin(NetworkMessage &Message)
     Header->set_type(Project::MessageType::MT_LOGIN_RESPONSE);
     Header->set_transmissionid(Login.mutable_header()->transmissionid());
 
-    g_Log.WriteDebug("Login response message:\n" + Response.DebugString());
-    return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, Message, Response);
+    g_Log.WriteDebug("Single Server login response message\n" + Response.DebugString());
+    return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, NetworkMsg, Response);
 }
 
-bool SingleServer::ProcessLogout(NetworkMessage &Message)
+bool SingleServer::ProcessLogout(NetworkMessage &NetworkMsg)
 {
-    g_Log.WriteDebug("Process logout.");
+    g_Log.WriteDebug("Single Server process logout.");
+
     Project::UserLogout Logout;
-    if (!Logout.ParseFromString(Message.m_Message))
+    if (!Logout.ParseFromString(NetworkMsg.m_Message))
     {
-        g_Log.WriteError("Logout message parse failed.");
+        g_Log.WriteError("Single Server logout message parse failed.");
         return false;
     }
 
-    g_Log.WriteDebug("Logout message:\n" + Logout.DebugString());
+    g_Log.WriteDebug("Single Server logout message\n" + Logout.DebugString());
 
     Project::UserLogout Response;
     Response.set_id(Logout.id());
@@ -153,13 +147,12 @@ bool SingleServer::ProcessLogout(NetworkMessage &Message)
     Header->set_type(Project::MessageType::MT_LOGOUT_RESPONSE);
     Header->set_transmissionid(Logout.mutable_header()->transmissionid());
 
-    g_Log.WriteDebug("Login response message:\n" + Response.DebugString());
-    return SendMessage(Project::MessageType::MT_LOGOUT_RESPONSE, Message, Response);
+    g_Log.WriteDebug("Single Server logout response message\n" + Response.DebugString());
+    return SendMessage(Project::MessageType::MT_LOGOUT_RESPONSE, NetworkMsg, Response);
 }
 
 bool SingleServer::SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg)
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
-    //const std::string &SendData = AESEncrypt(DataString, "Butler");
     return Send(NetworkMsg, DataString.c_str(), DataString.size());
 }

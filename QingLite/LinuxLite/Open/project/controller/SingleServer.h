@@ -25,8 +25,8 @@ private:
     SingleServer();
     virtual ~SingleServer();
 
-    bool ProcessLogin(NetworkMessage &Message);
-    bool ProcessLogout(NetworkMessage &Message);
+    bool ProcessLogin(NetworkMessage &NetworkMsg);
+    bool ProcessLogout(NetworkMessage &NetworkMsg);
 
     bool SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg);
 

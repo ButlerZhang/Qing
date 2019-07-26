@@ -65,20 +65,20 @@ HTTPBaseServer::~HTTPBaseServer()
 
     event_base_free(m_EventBase);
     m_EventBase = NULL;
-    g_Log.WriteDebug("HTTP base server is release.");
+    g_Log.WriteDebug("HTTP base server was destructored.");
 }
 
 bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
 {
     if (m_EventBase == NULL)
     {
-        g_Log.WriteError("HTTP server create event base error.");
+        g_Log.WriteError("HTTP server event base is NULL.");
         return false;
     }
 
     if (!AddCheckoutTimer(5))
     {
-        g_Log.WriteError("Add http server checkout timer failed.");
+        g_Log.WriteError("HTTP server add checkout timer failed.");
         return false;
     }
 
@@ -97,7 +97,7 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
 
     if (evhttp_bind_socket(m_evHTTP, ServerIP.c_str(), static_cast<uint16_t>(Port)) != 0)
     {
-        g_Log.WriteError(BoostFormat("http server bind (%s,%d) failed.", ServerIP.c_str(), Port));
+        g_Log.WriteError(BoostFormat("HTTP server bind (%s,%d) failed.", ServerIP.c_str(), Port));
         return false;
     }
 
@@ -121,7 +121,7 @@ bool HTTPBaseServer::ProcessRequest(evhttp_request *Request)
     }
 
     evhttp_send_error(Request, HTTP_BADMETHOD, "method not allowed for this uri.");
-    g_Log.WriteError("method not allowed for this uri.");
+    g_Log.WriteError("HTTP base server: method not allowed for this uri.");
     return true;
 }
 
@@ -136,7 +136,7 @@ bool HTTPBaseServer::ProcessGet(evhttp_request *Request)
     struct stat ActuallyPathStat;
     if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
     {
-        g_Log.WriteError(BoostFormat("Stat path = %s failed.", FullPath.c_str()));
+        g_Log.WriteError(BoostFormat("HTTP base server: stat path = %s failed.", FullPath.c_str()));
         return false;
     }
 
@@ -153,21 +153,22 @@ bool HTTPBaseServer::ProcessGet(evhttp_request *Request)
 bool HTTPBaseServer::ProcessPost(evhttp_request * Request)
 {
     evhttp_send_error(Request, HTTP_NOTIMPLEMENTED, "Post not implemented.");
-    return true;
+    g_Log.WriteError("HTTP base server: Post not implemented.");
+    return false;
 }
 
 bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 {
     if (m_CheckoutTimer != NULL)
     {
-        g_Log.WriteError("Re-create http server checkout timer.");
+        g_Log.WriteError("HTTP Server re-create checkout timer.");
         return true;
     }
 
     m_CheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_Checkout, this);
     if (m_CheckoutTimer == NULL)
     {
-        g_Log.WriteError("Create http server chekcout timer failed.");
+        g_Log.WriteError("HTTP Server create chekcout timer failed.");
         return false;
     }
 
@@ -177,7 +178,7 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 
     if (event_add(m_CheckoutTimer, &tv) != 0)
     {
-        g_Log.WriteError("Add http server checkout timer failed.");
+        g_Log.WriteError("HTTP Server add checkout timer failed.");
         event_free(m_CheckoutTimer);
         m_CheckoutTimer = NULL;
         return false;
@@ -203,7 +204,7 @@ void HTTPBaseServer::PrintRequest(evhttp_request *Request)
     default:                    RequestType = "unknown";    break;
     }
 
-    g_Log.WriteDebug(BoostFormat("Received a %s request for: %s", RequestType, evhttp_request_get_uri(Request)));
+    g_Log.WriteDebug(BoostFormat("HTTP base server received a %s request for: %s", RequestType, evhttp_request_get_uri(Request)));
 
     std::string LogString("Header:\n");
     struct evkeyvalq *Headers = evhttp_request_get_input_headers(Request);
@@ -222,12 +223,12 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     struct evhttp_uri *ParseURI = evhttp_uri_parse(OriginalURI);
     if (ParseURI == NULL)
     {
-        g_Log.WriteError(BoostFormat("It is not a good URI = %s. Sending BADREQUEST.", OriginalURI));
+        g_Log.WriteError(BoostFormat("HTTP base server: It is not a good URI = %s. Sending BADREQUEST.", OriginalURI));
         evhttp_send_error(Request, HTTP_BADREQUEST, "Can not parse original URI.");
         return false;
     }
 
-    std::string LogString(BoostFormat("Original URI = %s\n", OriginalURI));
+    std::string LogString(BoostFormat("HTTP base server: Original URI = %s\n", OriginalURI));
     LogString.append(BoostFormat("\tscheme:%s\n", evhttp_uri_get_scheme(ParseURI)));
     LogString.append(BoostFormat("\thost:%s\n", evhttp_uri_get_host(ParseURI)));
     LogString.append(BoostFormat("\tpath:%s\n", evhttp_uri_get_path(ParseURI)));
@@ -247,7 +248,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     if (DecodeURI == NULL)
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
-        g_Log.WriteError("Decoded URI is NULL.");
+        g_Log.WriteError("HTTP base server: decoded URI is NULL.");
         evhttp_uri_free(ParseURI);
         return false;
     }
@@ -255,7 +256,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
     if (strstr(DecodeURI, ".."))
     {
         evhttp_send_error(Request, HTTP_NOTFOUND, "Document was not found.");
-        g_Log.WriteError("Decoded URI include '..' directory.");
+        g_Log.WriteError("HTTP base server: decoded URI include '..' directory.");
         evhttp_uri_free(ParseURI);
         free(DecodeURI);
         return false;
@@ -271,7 +272,7 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
         ActualllyPath.append(DecodeURI);
     }
 
-    g_Log.WriteDebug(BoostFormat("Request actuallly path = %s", ActualllyPath.c_str()));
+    g_Log.WriteDebug(BoostFormat("HTTP base server: Request actuallly path = %s", ActualllyPath.c_str()));
     evhttp_uri_free(ParseURI);
     free(DecodeURI);
     return true;
@@ -282,7 +283,7 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
     {
-        g_Log.WriteError("Process Directory: evbuffer create failed.");
+        g_Log.WriteError("HTTP base server process directory: evbuffer create failed.");
         return false;
     }
 
@@ -342,15 +343,15 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     int FileDescriptor = open(ActualllyPath.c_str(), O_RDONLY);
     if (FileDescriptor <= 0)
     {
-        g_Log.WriteError("Process File: open file descriptor failed.");
+        g_Log.WriteError("HTTP base server process file: open file descriptor failed.");
         evhttp_send_error(Request, HTTP_NOTFOUND, "File was not found.");
         return false;
     }
 
-    g_Log.WriteDebug(BoostFormat("Process File: path = %s, descriptor = %d.", ActualllyPath.c_str(), FileDescriptor));
+    g_Log.WriteDebug(BoostFormat("HTTP base server process file: path = %s, descriptor = %d.", ActualllyPath.c_str(), FileDescriptor));
     if (fstat(FileDescriptor, &FileStat) < 0)
     {
-        g_Log.WriteError(BoostFormat("Process File: file descriptor = %d fstat failed.", FileDescriptor));
+        g_Log.WriteError(BoostFormat("HTTP base server process file: file descriptor = %d fstat failed.", FileDescriptor));
         close(FileDescriptor);
         return false;
     }
@@ -358,7 +359,7 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     struct evbuffer *evb = evbuffer_new();
     if (evb == NULL)
     {
-        g_Log.WriteError("Process File: evbuffer create failed.");
+        g_Log.WriteError("HTTP base server process file: evbuffer create failed.");
         close(FileDescriptor);
         return false;
     }

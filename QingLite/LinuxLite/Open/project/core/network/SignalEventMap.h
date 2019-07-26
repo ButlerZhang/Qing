@@ -17,6 +17,6 @@ public:
 
 private:
 
-    struct event_base          *m_EventBase;
-    std::map<int, event*>       m_SignalEventMap;
+    struct event_base                   *m_EventBase;
+    std::map<int, event*>                m_SignalEventMap;
 };

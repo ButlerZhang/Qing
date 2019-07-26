@@ -23,13 +23,13 @@ private:
 
 private:
 
-    bool                            m_IsDisplayLog;
-    int                             m_TimeInternal;
-    int                             m_BroadcastPort;
-    int                             m_BroadcastSocket;
-    std::string                     m_BroadcastServerIP;
-    struct timeval                  m_LastSendTime;
-    struct event                   *m_TimeoutEvent;
-    struct event_base              *m_EventBase;
-    struct sockaddr_in              m_BroadcastAddress;
+    bool                                 m_IsDisplayLog;
+    int                                  m_TimeInternal;
+    int                                  m_BroadcastPort;
+    int                                  m_BroadcastSocket;
+    std::string                          m_BroadcastServerIP;
+    struct timeval                       m_LastSendTime;
+    struct event                        *m_TimeoutEvent;
+    struct event_base                   *m_EventBase;
+    struct sockaddr_in                   m_BroadcastAddress;
 };
