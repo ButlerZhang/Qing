@@ -13,12 +13,12 @@ Client::Client(long ClientID)
 
 Client::~Client()
 {
-    g_Log.WriteDebug(BoostFormat("Client ID = %d is release.", m_ClientID));
+    g_Log.WriteDebug(BoostFormat("Client ID = %d was destructored.", m_ClientID));
 }
 
 bool Client::ProcessConnected()
 {
-    g_Log.WriteDebug("Process connected.");
+    g_Log.WriteDebug("Client process connected.");
     return SendLogin();
 
     //test case 1: send fast and more
@@ -31,7 +31,7 @@ bool Client::ProcessConnected()
 
 bool Client::ProcessDisconnected()
 {
-    g_Log.WriteDebug("Process disconnected.");
+    g_Log.WriteDebug("Client process disconnected.");
     return false;
 }
 
@@ -48,7 +48,7 @@ bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 {
-    g_Log.WriteDebug("Process login response.");
+    g_Log.WriteDebug("Client process login response.");
     Project::UserLogin LoginResponse;
     if (!LoginResponse.ParseFromString(NetworkMsg.m_Message))
     {
@@ -65,7 +65,7 @@ bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 
 bool Client::ProcessLogoutResponse(NetworkMessage &NetworkMsg)
 {
-    g_Log.WriteDebug("Process logout response.");
+    g_Log.WriteDebug("Client process logout response.");
     Project::UserLogout LogoutResponse;
     if (!LogoutResponse.ParseFromString(NetworkMsg.m_Message))
     {
@@ -82,7 +82,7 @@ bool Client::ProcessLogoutResponse(NetworkMessage &NetworkMsg)
 
 bool Client::SendLogin()
 {
-    g_Log.WriteDebug("Send Login.");
+    g_Log.WriteDebug("Client send Login.");
     std::string ClientName("Client-" + std::to_string(m_ClientID));
 
     Project::UserLogin Login;
@@ -106,7 +106,7 @@ bool Client::SendLogin()
 
 bool Client::SendLogout()
 {
-    g_Log.WriteDebug("Send Logout.");
+    g_Log.WriteDebug("Client send Logout.");
     std::string ClientName("Client-" + std::to_string(m_ClientID));
 
     Project::UserLogout Logout;

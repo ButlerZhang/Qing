@@ -25,13 +25,13 @@ int project(int argc, char *argv[])
     else                                //test client
     {
         int ClientCount = atoi(argv[1]);
-        if (ClientCount > 100)
+        if (ClientCount > 1000)
         {
-            ClientCount = 100;
+            ClientCount = 1000;
         }
 
         pid_t Child;
-        for (int Count = 0; Count < ClientCount; Count++)
+        for (int Count = 1; Count < ClientCount; Count++)
         {
             Child = fork();
             if (Child < 0) {

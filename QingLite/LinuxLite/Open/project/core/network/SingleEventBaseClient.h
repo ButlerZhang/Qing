@@ -14,7 +14,6 @@ public:
 
     virtual bool Start(const std::string &ServerIP, int Port);
     virtual bool Start(int UDPBroadcastPort);
-    virtual bool Stop();
 
     inline bool IsConnected() const { return m_IsConnected; }
 
