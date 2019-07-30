@@ -11,8 +11,8 @@ public:
     RandomGenerator(unsigned int Seed);
     ~RandomGenerator();
 
-    unsigned int GetRandomUInt();
-    unsigned int GetRandomUIntInRange(int Min, int Max);
+    long unsigned int GetRandomUInt();
+    long unsigned int GetRandomUIntInRange(int Min, int Max);
 
     double GetRandomDouble();
     double GetRandomDoubleInRange(double Min, double Max);

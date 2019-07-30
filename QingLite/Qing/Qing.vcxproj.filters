@@ -5,9 +5,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Boost">
-      <UniqueIdentifier>{8e2b9297-4b4e-4fa6-87a3-f998769fe247}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Tool">
       <UniqueIdentifier>{0981d227-579b-4980-9a5e-e5bd8c2d2f08}</UniqueIdentifier>
     </Filter>
@@ -16,9 +13,6 @@
     </Filter>
     <Filter Include="Database">
       <UniqueIdentifier>{549cd2a2-665a-4e67-813d-15bda6c05d27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Standard">
-      <UniqueIdentifier>{209f8c6e-0101-46e0-a02d-918a9b0808a8}</UniqueIdentifier>
     </Filter>
     <Filter Include="System\Network">
       <UniqueIdentifier>{89750454-25ff-43a5-b49a-33e8534ec30d}</UniqueIdentifier>
@@ -32,12 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\QingBase.h" />
-    <ClInclude Include="SourceCode\Boost\BoostFormat.h">
-      <Filter>Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Boost\BoostLog.h">
-      <Filter>Boost</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Tool\SimpleEncrypt.h">
       <Filter>Tool</Filter>
     </ClInclude>
@@ -52,15 +40,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Database\SQLiteDatabase.h">
       <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Standard\NumericalConversion.h">
-      <Filter>Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Standard\PermutationCombination.h">
-      <Filter>Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Standard\RandomGenerator.h">
-      <Filter>Standard</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\FileManager.h">
       <Filter>System</Filter>
@@ -95,14 +74,8 @@
     <ClInclude Include="SourceCode\System\Network\NetworkServer.h">
       <Filter>System\Network</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Boost\BoostShare.h">
-      <Filter>Boost</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\System\SystemShare.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Standard\StandardShare.h">
-      <Filter>Standard</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\SystemTime.h">
       <Filter>System</Filter>
@@ -116,14 +89,8 @@
     <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h">
       <Filter>Reference\sqlite_3250200</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Common\Tool\HexString.h">
-      <Filter>Standard</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceCode\Boost\BoostLog.cpp">
-      <Filter>Boost</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Tool\SimpleEncrypt.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
@@ -138,12 +105,6 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Database\SQLiteDatabase.cpp">
       <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Standard\NumericalConversion.cpp">
-      <Filter>Standard</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Standard\RandomGenerator.cpp">
-      <Filter>Standard</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\FileManager.cpp">
       <Filter>System</Filter>
@@ -175,14 +136,8 @@
     <ClCompile Include="SourceCode\System\Network\NetworkServer.cpp">
       <Filter>System\Network</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Boost\BoostShare.cpp">
-      <Filter>Boost</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\System\SystemShare.cpp">
       <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Standard\StandardShare.cpp">
-      <Filter>Standard</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\SystemTime.cpp">
       <Filter>System</Filter>

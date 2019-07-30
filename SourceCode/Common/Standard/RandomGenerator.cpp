@@ -18,12 +18,12 @@ RandomGenerator::~RandomGenerator()
 {
 }
 
-unsigned int RandomGenerator::GetRandomUInt()
+long unsigned int RandomGenerator::GetRandomUInt()
 {
     return m_Engine();
 }
 
-unsigned int RandomGenerator::GetRandomUIntInRange(int Min, int Max)
+long unsigned int RandomGenerator::GetRandomUIntInRange(int Min, int Max)
 {
     static std::uniform_int_distribution<unsigned int> u(Min, Max);
     return u(m_Engine);

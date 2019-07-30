@@ -130,6 +130,7 @@
     <ClInclude Include="Open\project\core\network\UDPBroadcast.h" />
     <ClInclude Include="Open\project\core\tools\BoostFormat.h" />
     <ClInclude Include="Open\project\core\tools\BoostLog.h" />
+    <ClInclude Include="Open\project\core\tools\HexString.h" />
     <ClInclude Include="Open\project\core\tools\OpenSSLAES.h" />
     <ClInclude Include="Open\project\handler\Handler.h" />
     <ClInclude Include="Open\project\handler\UserHandler.h" />

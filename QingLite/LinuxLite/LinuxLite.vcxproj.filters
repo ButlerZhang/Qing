@@ -370,6 +370,9 @@
     <ClInclude Include="Open\project\Project.h">
       <Filter>Open\project</Filter>
     </ClInclude>
+    <ClInclude Include="Open\project\core\tools\HexString.h">
+      <Filter>Open\project\core\tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\protobuf\user.proto">

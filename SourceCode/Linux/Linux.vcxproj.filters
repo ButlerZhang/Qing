@@ -19,6 +19,9 @@
     <Filter Include="Common\Standard">
       <UniqueIdentifier>{a1784aee-9361-402c-ab22-ad4f00135ee3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Boost">
+      <UniqueIdentifier>{b61b2d44-9e3c-4bdd-b401-33b056d0bf9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">
@@ -69,6 +72,12 @@
     </ClCompile>
     <ClCompile Include="..\Common\Standard\RandomGenerator.cpp">
       <Filter>Common\Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Boost\BoostLog.cpp">
+      <Filter>Common\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Boost\BoostShare.cpp">
+      <Filter>Common\Boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +149,18 @@
     </ClInclude>
     <ClInclude Include="..\Common\Standard\StandardShare.h">
       <Filter>Common\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Boost\BoostFormat.h">
+      <Filter>Common\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Boost\BoostLog.h">
+      <Filter>Common\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Boost\BoostShare.h">
+      <Filter>Common\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\CrossPlatform.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -62,12 +62,19 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>a</TargetName>
+    <IncludePath>/usr/local/mysql/include/;/usr/include/mysql/;$(IncludePath)</IncludePath>
+    <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp" />
     <ClCompile Include="..\Common\Algorithm\002_BinarySearch.cpp" />
     <ClCompile Include="..\Common\Algorithm\003_CommonMath.cpp" />
     <ClCompile Include="..\Common\Algorithm\004_VectorLite.cpp" />
     <ClCompile Include="..\Common\Algorithm\AlgorithmTest.cpp" />
+    <ClCompile Include="..\Common\Boost\BoostLog.cpp" />
+    <ClCompile Include="..\Common\Boost\BoostShare.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\AbstractFactory.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\Adapter.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\Bridge.cpp" />
@@ -87,6 +94,10 @@
     <ClInclude Include="..\Common\Algorithm\003_CommonMath.h" />
     <ClInclude Include="..\Common\Algorithm\004_VectorLite.h" />
     <ClInclude Include="..\Common\Algorithm\AlgorithmTest.h" />
+    <ClInclude Include="..\Common\Boost\BoostFormat.h" />
+    <ClInclude Include="..\Common\Boost\BoostLog.h" />
+    <ClInclude Include="..\Common\Boost\BoostShare.h" />
+    <ClInclude Include="..\Common\CrossPlatform.h" />
     <ClInclude Include="..\Common\DesignPatterns\AbstractFactory.h" />
     <ClInclude Include="..\Common\DesignPatterns\Adapter.h" />
     <ClInclude Include="..\Common\DesignPatterns\Bridge.h" />
@@ -106,7 +117,17 @@
     <ClInclude Include="..\Common\Tool\Common.h" />
     <ClInclude Include="..\Common\Tool\HexString.h" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;pthread;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
