@@ -22,6 +22,9 @@
     <Filter Include="Common\Boost">
       <UniqueIdentifier>{b61b2d44-9e3c-4bdd-b401-33b056d0bf9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Database">
+      <UniqueIdentifier>{c34daae1-8e17-4317-b78e-09a1599cde1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">
@@ -78,6 +81,12 @@
     </ClCompile>
     <ClCompile Include="..\Common\Boost\BoostShare.cpp">
       <Filter>Common\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Database\Database.cpp">
+      <Filter>Common\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Database\MySQLDatabase.cpp">
+      <Filter>Common\Database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="..\Common\CrossPlatform.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Database\Database.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Database\MySQLDatabase.h">
+      <Filter>Common\Database</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

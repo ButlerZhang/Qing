@@ -34,6 +34,21 @@
     <Filter Include="Common\Boost">
       <UniqueIdentifier>{ed65ca2b-8a72-472d-92de-cc269162d8d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{7fc11232-18f1-433f-80f6-a0ec80d767d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Network">
+      <UniqueIdentifier>{8dc47fa0-4805-4e15-8da9-f1a809262b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Database">
+      <UniqueIdentifier>{fdac8e7b-ff81-4ae1-8548-de460832857a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{da998396-6123-415a-aed0-c6a5b455dd99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\sqlite_3250200">
+      <UniqueIdentifier>{8ce5ab4d-e866-47e6-9d91-d9ae3e1e4fcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">
@@ -92,6 +107,63 @@
     </ClCompile>
     <ClCompile Include="..\Common\Boost\BoostShare.cpp">
       <Filter>Common\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="System\FileManager.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\IniFile.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\LocalComputer.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Network.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Synchronization.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SystemShare.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SystemTime.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Network\ClientManager.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Network\IOCPModel.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Network\NetworkBase.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Network\NetworkClient.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Network\NetworkEnvironment.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Network\NetworkServer.cpp">
+      <Filter>System\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Database\Database.cpp">
+      <Filter>Common\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Database\MSSQLDatabase.cpp">
+      <Filter>Common\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Database\MySQLDatabase.cpp">
+      <Filter>Common\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Database\SQLiteDatabase.cpp">
+      <Filter>Common\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\OpenSource\sqlite_3250200\shell.c">
+      <Filter>Reference\sqlite_3250200</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\OpenSource\sqlite_3250200\sqlite3.c">
+      <Filter>Reference\sqlite_3250200</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +247,66 @@
     </ClInclude>
     <ClInclude Include="..\Common\CrossPlatform.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="System\FileManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IniFile.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\LocalComputer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Network.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SingleProgram.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Synchronization.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SystemShare.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SystemTime.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Network\ClientManager.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Network\IOCPModel.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Network\NetworkBase.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Network\NetworkClient.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Network\NetworkEnvironment.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Network\NetworkServer.h">
+      <Filter>System\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Database\Database.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Database\MSSQLDatabase.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Database\MySQLDatabase.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Database\SQLiteDatabase.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3.h">
+      <Filter>Reference\sqlite_3250200</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h">
+      <Filter>Reference\sqlite_3250200</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

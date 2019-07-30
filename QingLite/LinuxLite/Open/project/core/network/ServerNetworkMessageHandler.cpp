@@ -64,7 +64,7 @@ bool ServerNetworkMessageHandler::PushMessage(const NetworkMessage &NetworkMsg)
     std::unique_lock<std::mutex> Locker(m_QueueLock);
     m_NetworkMsgQueue.push(NetworkMsg);
 
-    g_Log.WriteInfo(BoostFormat("Network message handler queue size = %d.", m_NetworkMsgQueue.size()));
+    g_Log.WriteDebug(BoostFormat("Network message handler queue size = %d.", m_NetworkMsgQueue.size()));
     m_Condition.notify_one();
 
     return !m_NetworkMsgQueue.empty();

@@ -396,6 +396,8 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
                 break;
             }
 
+            g_Log.WriteInfo(BoostFormat("Single base server recv size = %d", MessageTotalLength));
+
             NetworkMessage NetworkMsg;
             NetworkMsg.m_Bufferevent = bev;
             NetworkMsg.m_Socket = ClientSocket;

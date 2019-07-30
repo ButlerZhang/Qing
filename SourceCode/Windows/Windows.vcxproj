@@ -41,7 +41,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -81,10 +81,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0;D:\Program Files\MySQL\MySQL Server 5.6\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_68_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_68_0\stage\lib;D:\Program Files\MySQL\MySQL Server 5.6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;libmysql.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -114,6 +115,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\OpenSource\sqlite_3250200\shell.c" />
+    <ClCompile Include="..\..\OpenSource\sqlite_3250200\sqlite3.c" />
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp" />
     <ClCompile Include="..\Common\Algorithm\002_BinarySearch.cpp" />
     <ClCompile Include="..\Common\Algorithm\003_CommonMath.cpp" />
@@ -121,6 +124,10 @@
     <ClCompile Include="..\Common\Algorithm\AlgorithmTest.cpp" />
     <ClCompile Include="..\Common\Boost\BoostLog.cpp" />
     <ClCompile Include="..\Common\Boost\BoostShare.cpp" />
+    <ClCompile Include="..\Common\Database\Database.cpp" />
+    <ClCompile Include="..\Common\Database\MSSQLDatabase.cpp" />
+    <ClCompile Include="..\Common\Database\MySQLDatabase.cpp" />
+    <ClCompile Include="..\Common\Database\SQLiteDatabase.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\AbstractFactory.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\Adapter.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\Bridge.cpp" />
@@ -133,8 +140,23 @@
     <ClCompile Include="..\Common\Standard\NumericalConversion.cpp" />
     <ClCompile Include="..\Common\Standard\RandomGenerator.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="System\FileManager.cpp" />
+    <ClCompile Include="System\IniFile.cpp" />
+    <ClCompile Include="System\LocalComputer.cpp" />
+    <ClCompile Include="System\Network.cpp" />
+    <ClCompile Include="System\Network\ClientManager.cpp" />
+    <ClCompile Include="System\Network\IOCPModel.cpp" />
+    <ClCompile Include="System\Network\NetworkBase.cpp" />
+    <ClCompile Include="System\Network\NetworkClient.cpp" />
+    <ClCompile Include="System\Network\NetworkEnvironment.cpp" />
+    <ClCompile Include="System\Network\NetworkServer.cpp" />
+    <ClCompile Include="System\Synchronization.cpp" />
+    <ClCompile Include="System\SystemShare.cpp" />
+    <ClCompile Include="System\SystemTime.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3.h" />
+    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h" />
     <ClInclude Include="..\Common\Algorithm\001_MaxSubSum.h" />
     <ClInclude Include="..\Common\Algorithm\002_BinarySearch.h" />
     <ClInclude Include="..\Common\Algorithm\003_CommonMath.h" />
@@ -144,6 +166,10 @@
     <ClInclude Include="..\Common\Boost\BoostLog.h" />
     <ClInclude Include="..\Common\Boost\BoostShare.h" />
     <ClInclude Include="..\Common\CrossPlatform.h" />
+    <ClInclude Include="..\Common\Database\Database.h" />
+    <ClInclude Include="..\Common\Database\MSSQLDatabase.h" />
+    <ClInclude Include="..\Common\Database\MySQLDatabase.h" />
+    <ClInclude Include="..\Common\Database\SQLiteDatabase.h" />
     <ClInclude Include="..\Common\DesignPatterns\AbstractFactory.h" />
     <ClInclude Include="..\Common\DesignPatterns\Adapter.h" />
     <ClInclude Include="..\Common\DesignPatterns\Bridge.h" />
@@ -162,6 +188,20 @@
     <ClInclude Include="..\Common\Standard\StandardShare.h" />
     <ClInclude Include="..\Common\Tool\Common.h" />
     <ClInclude Include="..\Common\Tool\HexString.h" />
+    <ClInclude Include="System\FileManager.h" />
+    <ClInclude Include="System\IniFile.h" />
+    <ClInclude Include="System\LocalComputer.h" />
+    <ClInclude Include="System\Network.h" />
+    <ClInclude Include="System\Network\ClientManager.h" />
+    <ClInclude Include="System\Network\IOCPModel.h" />
+    <ClInclude Include="System\Network\NetworkBase.h" />
+    <ClInclude Include="System\Network\NetworkClient.h" />
+    <ClInclude Include="System\Network\NetworkEnvironment.h" />
+    <ClInclude Include="System\Network\NetworkServer.h" />
+    <ClInclude Include="System\SingleProgram.h" />
+    <ClInclude Include="System\Synchronization.h" />
+    <ClInclude Include="System\SystemShare.h" />
+    <ClInclude Include="System\SystemTime.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

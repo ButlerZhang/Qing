@@ -75,6 +75,8 @@
     <ClCompile Include="..\Common\Algorithm\AlgorithmTest.cpp" />
     <ClCompile Include="..\Common\Boost\BoostLog.cpp" />
     <ClCompile Include="..\Common\Boost\BoostShare.cpp" />
+    <ClCompile Include="..\Common\Database\Database.cpp" />
+    <ClCompile Include="..\Common\Database\MySQLDatabase.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\AbstractFactory.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\Adapter.cpp" />
     <ClCompile Include="..\Common\DesignPatterns\Bridge.cpp" />
@@ -98,6 +100,8 @@
     <ClInclude Include="..\Common\Boost\BoostLog.h" />
     <ClInclude Include="..\Common\Boost\BoostShare.h" />
     <ClInclude Include="..\Common\CrossPlatform.h" />
+    <ClInclude Include="..\Common\Database\Database.h" />
+    <ClInclude Include="..\Common\Database\MySQLDatabase.h" />
     <ClInclude Include="..\Common\DesignPatterns\AbstractFactory.h" />
     <ClInclude Include="..\Common\DesignPatterns\Adapter.h" />
     <ClInclude Include="..\Common\DesignPatterns\Bridge.h" />
@@ -119,13 +123,13 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;..\..\OpenSource\sqlite_3250200\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;pthread;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;pthread;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

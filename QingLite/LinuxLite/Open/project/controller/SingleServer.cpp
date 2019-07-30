@@ -91,13 +91,18 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
 {
+    Project::UserLogin Response;
     g_Log.WriteDebug("Single Server process login.");
 
     Project::UserLogin Login;
     if (!Login.ParseFromString(NetworkMsg.m_Message))
     {
-        g_Log.WriteError("Single Server login message parse failed.");
-        return false;
+        const std::string &LogString = BoostFormat("Single Server login message parse failed, socket = %d.", NetworkMsg.m_Socket);
+        g_Log.WriteError(LogString);
+
+        Response.set_name(LogString);
+        Response.set_id(NetworkMsg.m_Socket);
+        return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, NetworkMsg, Response);
     }
 
     g_Log.WriteDebug("Single Server login message\n" + Login.DebugString());
@@ -107,10 +112,12 @@ bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
     if (!m_SMIBDB.ExecuteQuery(InsertSQL.c_str()))
     {
         g_Log.WriteError(BoostFormat("Single Server insert database falied: %s", InsertSQL.c_str()));
-        return false;
+
+        Response.set_name(InsertSQL);
+        Response.set_id(NetworkMsg.m_Socket);
+        return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, NetworkMsg, Response);
     }
 
-    Project::UserLogin Response;
     Response.set_id(Login.id());
     Response.set_name(Login.name());
     Response.set_password(Login.password());
