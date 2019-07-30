@@ -67,20 +67,6 @@
     <IncludePath>/usr/local/mysql/include/;/usr/include/mysql/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp" />
-    <ClCompile Include="..\..\Common\Algorithm\002_BinarySearch.cpp" />
-    <ClCompile Include="..\..\Common\Algorithm\003_CommonMath.cpp" />
-    <ClCompile Include="..\..\Common\Algorithm\004_VectorLite.cpp" />
-    <ClCompile Include="..\..\Common\Algorithm\AlgorithmTest.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\AbstractFactory.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\Adapter.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\Bridge.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\Builder.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\Decorator.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\FactoryMethod.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\Prototype.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp" />
-    <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Open\project\Config.cpp" />
     <ClCompile Include="Open\project\controller\Client.cpp" />
@@ -107,25 +93,6 @@
     <ClCompile Include="Qing\NetworkServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h" />
-    <ClInclude Include="..\..\Common\Algorithm\002_BinarySearch.h" />
-    <ClInclude Include="..\..\Common\Algorithm\003_CommonMath.h" />
-    <ClInclude Include="..\..\Common\Algorithm\004_VectorLite.h" />
-    <ClInclude Include="..\..\Common\Algorithm\AlgorithmTest.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\AbstractFactory.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\Adapter.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\Bridge.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\Builder.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\Decorator.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\FactoryMethod.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\Prototype.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\SimpleFactory.h" />
-    <ClInclude Include="..\..\Common\DesignPatterns\Singleton.h" />
-    <ClInclude Include="..\..\Common\Example\Effective.h" />
-    <ClInclude Include="..\..\Common\Example\IOExample.h" />
-    <ClInclude Include="..\..\Common\Example\StringVector.h" />
-    <ClInclude Include="..\..\Common\Tool\Common.h" />
-    <ClInclude Include="..\..\Common\Tool\HexString.h" />
     <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="Open\libevent\demo1_client_read_write.h" />
     <ClInclude Include="Open\libevent\demo1_server_read_write.h" />
@@ -205,9 +172,6 @@
     <ClInclude Include="YouShuang\Chapter9\select_server.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\Common\Algorithm\CMakeLists.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Open\project\message\project.proto" />
     <None Include="Open\protobuf\base.proto" />
     <None Include="Open\protobuf\user.proto" />
@@ -217,7 +181,7 @@
       <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\mysql-5.6.28\include\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

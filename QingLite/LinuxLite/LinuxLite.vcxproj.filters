@@ -1,26 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Common">
-      <UniqueIdentifier>{9a9e3575-1d1f-48f1-95a2-1b1a9b35ab61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Algorithm">
-      <UniqueIdentifier>{54b4acfc-68bf-4e64-97ad-cbe9e573e8ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UNIX">
       <UniqueIdentifier>{0e0c529e-5634-45b2-8da0-1c3c509e74d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common\DesignPatterns">
-      <UniqueIdentifier>{5d3f0a21-49fa-4d41-b118-d93efd859360}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Example">
-      <UniqueIdentifier>{6ee288df-324f-4a0b-8303-8554089eb551}</UniqueIdentifier>
-    </Filter>
     <Filter Include="YouShuang">
       <UniqueIdentifier>{648a5db2-72a7-45dd-a595-57af84c1124b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Tool">
-      <UniqueIdentifier>{e506eba8-7e55-4f24-a8ac-dd85e9ba55e9}</UniqueIdentifier>
     </Filter>
     <Filter Include="UNIX\Chapter1">
       <UniqueIdentifier>{973eabc3-1956-416d-baa9-0e9e90491ca2}</UniqueIdentifier>
@@ -85,48 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\..\Common\Algorithm\001_MaxSubSum.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\Algorithm\002_BinarySearch.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\Algorithm\003_CommonMath.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\Algorithm\004_VectorLite.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\Algorithm\AlgorithmTest.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\AbstractFactory.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\Adapter.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\Bridge.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\Builder.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\Decorator.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\FactoryMethod.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\Prototype.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\SimpleFactory.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Common\DesignPatterns\Singleton.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
     <ClCompile Include="Qing\NetworkBase.cpp">
       <Filter>Qing</Filter>
     </ClCompile>
@@ -198,60 +141,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Common\Algorithm\001_MaxSubSum.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Algorithm\002_BinarySearch.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Algorithm\003_CommonMath.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Algorithm\004_VectorLite.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Algorithm\AlgorithmTest.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\AbstractFactory.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\Adapter.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\Bridge.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\Builder.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\Decorator.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\FactoryMethod.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\Prototype.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\SimpleFactory.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\DesignPatterns\Singleton.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Example\Effective.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Example\IOExample.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Example\StringVector.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Common\Tool\Common.h">
-      <Filter>Common\Tool</Filter>
-    </ClInclude>
     <ClInclude Include="UNIX\Chapter1\list_file_name.h">
       <Filter>UNIX\Chapter1</Filter>
     </ClInclude>
@@ -328,9 +217,6 @@
       <Filter>Qing</Filter>
     </ClInclude>
     <ClInclude Include="LinuxTools.h" />
-    <ClInclude Include="..\..\Common\Tool\HexString.h">
-      <Filter>Common\Tool</Filter>
-    </ClInclude>
     <ClInclude Include="Open\openssl\demo_DES.h">
       <Filter>Open\openssl</Filter>
     </ClInclude>
@@ -484,11 +370,6 @@
     <ClInclude Include="Open\project\Project.h">
       <Filter>Open\project</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Common\Algorithm\CMakeLists.txt">
-      <Filter>Common\Algorithm</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\protobuf\user.proto">

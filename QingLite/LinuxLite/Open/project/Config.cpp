@@ -26,6 +26,7 @@ void CallBack_LibEventLog(int Severity, const char *LogMsg)
 
 Config::Config() : m_ConfigFileName("project.ini"), DB_PASSWORD_KEY("CJSZHCHCSZCJSZCJ")
 {
+    //evthread_use_pthreads();
     event_set_log_callback(CallBack_LibEventLog);
 }
 

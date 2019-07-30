@@ -7,17 +7,10 @@
 #include <list>
 #include <map>
 
-#include "../../Common/Example/Effective.h"
-#include "../../Common/Tool/Common.h"
-
 
 
 int main()
 {
-    std::cout << "Tool test" << std::endl;
-    if (IsBigEndian())
-        std::cout << "big endian" << std::endl;
-    else std::cout << "little endian" << std::endl;
 
     //QingExample::MyWidget Test;
     system("pause");
