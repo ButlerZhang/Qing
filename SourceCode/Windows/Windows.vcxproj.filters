@@ -28,6 +28,9 @@
     <Filter Include="Common\Tool">
       <UniqueIdentifier>{0e588593-5a0a-407c-86bc-23da72dd78f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Standard">
+      <UniqueIdentifier>{625500b0-3f8f-4c97-aa51-eea522a2d03c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">
@@ -74,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="..\Common\DesignPatterns\Singleton.cpp">
       <Filter>Common\DesignPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Standard\NumericalConversion.cpp">
+      <Filter>Common\Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Standard\RandomGenerator.cpp">
+      <Filter>Common\Standard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +142,18 @@
     </ClInclude>
     <ClInclude Include="..\Common\Tool\HexString.h">
       <Filter>Common\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Standard\NumericalConversion.h">
+      <Filter>Common\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Standard\PermutationCombination.h">
+      <Filter>Common\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Standard\RandomGenerator.h">
+      <Filter>Common\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Standard\StandardShare.h">
+      <Filter>Common\Standard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,6 @@
 #include "RandomGenerator.h"
 #include <ctime>
 
-QING_NAMESPACE_BEGIN
-
 
 
 RandomGenerator::RandomGenerator(void)
@@ -41,5 +39,3 @@ double RandomGenerator::GetRandomDoubleInRange(double Min, double Max)
     static std::uniform_real_distribution<double> u(Min, Max);
     return u(m_Engine);
 }
-
-QING_NAMESPACE_END

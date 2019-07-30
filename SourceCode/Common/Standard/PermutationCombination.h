@@ -1,9 +1,6 @@
 #pragma once
-#include "../QingBase.h"
 #include <vector>
 #include <bitset>
-
-QING_NAMESPACE_BEGIN
 
 
 
@@ -150,5 +147,3 @@ bool PermutationCombination<T, ElementCount>::AdjustPosition(std::bitset<Element
 
     return false;
 }
-
-QING_NAMESPACE_END

@@ -1,12 +1,9 @@
 #pragma once
-#include "../QingBase.h"
 #include <string>
 
-QING_NAMESPACE_BEGIN
 
 
-
-class QING_DLL NumericalConversion
+class NumericalConversion
 {
 public:
 
@@ -32,5 +29,3 @@ private:
 
     void Add(std::string &BasicString, std::string &AddString) const;
 };
-
-QING_NAMESPACE_END

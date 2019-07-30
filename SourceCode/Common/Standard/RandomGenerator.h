@@ -1,12 +1,9 @@
 #pragma once
-#include "../QingBase.h"
 #include <random>
 
-QING_NAMESPACE_BEGIN
 
 
-
-class QING_DLL RandomGenerator
+class RandomGenerator
 {
 public:
 
@@ -24,5 +21,3 @@ private:
 
     std::default_random_engine m_Engine;
 };
-
-QING_NAMESPACE_END

@@ -1,8 +1,6 @@
 #include "NumericalConversion.h"
 #include <algorithm>
 
-QING_NAMESPACE_BEGIN
-
 
 
 NumericalConversion::NumericalConversion(void)
@@ -262,5 +260,3 @@ void NumericalConversion::Add(std::string &BasicString, std::string &AddString) 
         BasicString += '1';
     }
 }
-
-QING_NAMESPACE_END
