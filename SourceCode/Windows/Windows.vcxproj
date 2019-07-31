@@ -150,6 +150,7 @@
     <ClCompile Include="System\Network\NetworkClient.cpp" />
     <ClCompile Include="System\Network\NetworkEnvironment.cpp" />
     <ClCompile Include="System\Network\NetworkServer.cpp" />
+    <ClCompile Include="System\SimpleEncrypt.cpp" />
     <ClCompile Include="System\Synchronization.cpp" />
     <ClCompile Include="System\SystemShare.cpp" />
     <ClCompile Include="System\SystemTime.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="System\Network\NetworkClient.h" />
     <ClInclude Include="System\Network\NetworkEnvironment.h" />
     <ClInclude Include="System\Network\NetworkServer.h" />
+    <ClInclude Include="System\SimpleEncrypt.h" />
     <ClInclude Include="System\SingleProgram.h" />
     <ClInclude Include="System\Synchronization.h" />
     <ClInclude Include="System\SystemShare.h" />

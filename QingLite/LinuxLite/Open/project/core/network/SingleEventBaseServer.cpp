@@ -402,8 +402,8 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
             NetworkMsg.m_Bufferevent = bev;
             NetworkMsg.m_Socket = ClientSocket;
             NetworkMsg.m_Message.assign(RecvBuffer.begin(), RecvBuffer.begin() + MessageTotalLength);
-            Server->m_MessageHandler.PushMessage(NetworkMsg);
-            //Server->ProcessMessage(NetworkMsg);
+            //Server->m_MessageHandler.PushMessage(NetworkMsg);
+            Server->ProcessMessage(NetworkMsg);
         }
     }
 }

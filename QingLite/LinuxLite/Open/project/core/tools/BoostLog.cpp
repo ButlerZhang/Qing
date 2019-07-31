@@ -60,7 +60,7 @@ boost::shared_ptr<TextSink> BoostLog::CreateSink(const std::string & FileName)
 
     boost::shared_ptr<boost::log::sinks::text_file_backend> Backend = boost::make_shared<boost::log::sinks::text_file_backend>(
         boost::log::keywords::file_name = m_LogDirectory + FileName + "_%Y%m%d_%H%M%S_" + std::to_string(ProcessID) + ".log",
-        boost::log::keywords::rotation_size = 50 * ONE_MB,
+        boost::log::keywords::rotation_size = 10 * ONE_MB,
         boost::log::keywords::time_based_rotation = boost::log::sinks::file::rotation_at_time_point(0, 0, 0),
         boost::log::keywords::min_free_space = 500 * ONE_MB);
 

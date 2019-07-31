@@ -4,7 +4,7 @@
 #include <memory>
 #include "afxwin.h"
 #include "afxcmn.h"
-#include "..\Qing\SourceCode\Tool\SimpleEncrypt.h"
+#include "../Windows/System/SimpleEncrypt.h"
 
 
 
@@ -25,7 +25,7 @@ public:
 
     inline void ResetOperationType() { m_OperationType = m_LastOperationType; }
     inline void SetOperationType(OperationType Type) { m_OperationType = Type; }
-    inline const std::shared_ptr<Qing::SimpleEncrypt>& GetSimpleEncrypt() const { return m_SimpleCrypt; }
+    inline const std::shared_ptr<SimpleEncrypt>& GetSimpleEncrypt() const { return m_SimpleCrypt; }
 
 protected:
     HICON m_hIcon;
@@ -67,5 +67,5 @@ private:
     OperationType                                   m_LastOperationType;
     HANDLE                                          m_WorkerThread;
     std::vector<BaseDialog*>                        m_DialogVector;
-    std::shared_ptr<Qing::SimpleEncrypt>            m_SimpleCrypt;
+    std::shared_ptr<SimpleEncrypt>                  m_SimpleCrypt;
 };

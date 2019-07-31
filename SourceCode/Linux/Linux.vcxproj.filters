@@ -25,6 +25,9 @@
     <Filter Include="Common\Database">
       <UniqueIdentifier>{c34daae1-8e17-4317-b78e-09a1599cde1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project">
+      <UniqueIdentifier>{f17f4d50-cd1d-4ab1-9126-4376c14c05fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">

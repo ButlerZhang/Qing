@@ -1,14 +1,11 @@
 #pragma once
-#include "../QingBase.h"
 #include <string>
 #include <vector>
 #include <Windows.h>
 
-QING_NAMESPACE_BEGIN
 
 
-
-class QING_DLL SimpleEncrypt
+class SimpleEncrypt
 {
 public:
 
@@ -65,4 +62,3 @@ private:
     wchar_t                                 *m_FileDataBuffer;
 };
 
-QING_NAMESPACE_END

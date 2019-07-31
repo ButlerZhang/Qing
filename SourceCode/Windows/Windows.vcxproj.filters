@@ -165,6 +165,9 @@
     <ClCompile Include="..\..\OpenSource\sqlite_3250200\sqlite3.c">
       <Filter>Reference\sqlite_3250200</Filter>
     </ClCompile>
+    <ClCompile Include="System\SimpleEncrypt.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Algorithm\001_MaxSubSum.h">
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h">
       <Filter>Reference\sqlite_3250200</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SimpleEncrypt.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

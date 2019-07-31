@@ -7,9 +7,9 @@
 #include "FileRecoveryDlg.h"
 #include "afxdialogex.h"
 
-#include "..\Qing\SourceCode\Boost\BoostLog.h"
-#include "..\Qing\SourceCode\System\FileManager.h"
-#include "..\Qing\SourceCode\System\SystemShare.h"
+#include "../Common/Boost/BoostLog.h"
+#include "../Windows/System/FileManager.h"
+#include "../Windows/System/SystemShare.h"
 
 #include <shlobj.h>
 

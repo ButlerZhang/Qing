@@ -135,18 +135,19 @@ bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
 
 bool SingleServer::ProcessLogout(NetworkMessage &NetworkMsg)
 {
+    Project::UserLogout Response;
     g_Log.WriteDebug("Single Server process logout.");
 
     Project::UserLogout Logout;
     if (!Logout.ParseFromString(NetworkMsg.m_Message))
     {
+        Response.set_name("Process log out");
         g_Log.WriteError("Single Server logout message parse failed.");
-        return false;
+        return SendMessage(Project::MessageType::MT_LOGOUT_RESPONSE, NetworkMsg, Response);;
     }
 
     g_Log.WriteDebug("Single Server logout message\n" + Logout.DebugString());
 
-    Project::UserLogout Response;
     Response.set_id(Logout.id());
     Response.set_name(Logout.name());
 

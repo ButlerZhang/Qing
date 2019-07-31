@@ -18,52 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3.h" />
-    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h" />
-    <ClInclude Include="SourceCode\Database\Database.h" />
-    <ClInclude Include="SourceCode\Database\MSSQLDatabase.h" />
-    <ClInclude Include="SourceCode\Database\MySQLDatabase.h" />
-    <ClInclude Include="SourceCode\Database\SQLiteDatabase.h" />
-    <ClInclude Include="SourceCode\QingBase.h" />
-    <ClInclude Include="SourceCode\System\FileManager.h" />
-    <ClInclude Include="SourceCode\System\IniFile.h" />
-    <ClInclude Include="SourceCode\System\LocalComputer.h" />
-    <ClInclude Include="SourceCode\System\Network.h" />
-    <ClInclude Include="SourceCode\System\Network\ClientManager.h" />
-    <ClInclude Include="SourceCode\System\Network\IOCPModel.h" />
-    <ClInclude Include="SourceCode\System\Network\NetworkBase.h" />
-    <ClInclude Include="SourceCode\System\Network\NetworkClient.h" />
-    <ClInclude Include="SourceCode\System\Network\NetworkEnvironment.h" />
-    <ClInclude Include="SourceCode\System\Network\NetworkServer.h" />
-    <ClInclude Include="SourceCode\System\SingleProgram.h" />
-    <ClInclude Include="SourceCode\System\Synchronization.h" />
-    <ClInclude Include="SourceCode\System\SystemShare.h" />
-    <ClInclude Include="SourceCode\System\SystemTime.h" />
-    <ClInclude Include="SourceCode\Tool\SimpleEncrypt.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\OpenSource\sqlite_3250200\shell.c" />
-    <ClCompile Include="..\..\OpenSource\sqlite_3250200\sqlite3.c" />
-    <ClCompile Include="SourceCode\Database\Database.cpp" />
-    <ClCompile Include="SourceCode\Database\MSSQLDatabase.cpp" />
-    <ClCompile Include="SourceCode\Database\MySQLDatabase.cpp" />
-    <ClCompile Include="SourceCode\Database\SQLiteDatabase.cpp" />
-    <ClCompile Include="SourceCode\System\FileManager.cpp" />
-    <ClCompile Include="SourceCode\System\IniFile.cpp" />
-    <ClCompile Include="SourceCode\System\LocalComputer.cpp" />
-    <ClCompile Include="SourceCode\System\Network.cpp" />
-    <ClCompile Include="SourceCode\System\Network\ClientManager.cpp" />
-    <ClCompile Include="SourceCode\System\Network\IOCPModel.cpp" />
-    <ClCompile Include="SourceCode\System\Network\NetworkBase.cpp" />
-    <ClCompile Include="SourceCode\System\Network\NetworkClient.cpp" />
-    <ClCompile Include="SourceCode\System\Network\NetworkEnvironment.cpp" />
-    <ClCompile Include="SourceCode\System\Network\NetworkServer.cpp" />
-    <ClCompile Include="SourceCode\System\Synchronization.cpp" />
-    <ClCompile Include="SourceCode\System\SystemShare.cpp" />
-    <ClCompile Include="SourceCode\System\SystemTime.cpp" />
-    <ClCompile Include="SourceCode\Tool\SimpleEncrypt.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7B247FD1-7119-4838-9F12-CB855D783DD2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
