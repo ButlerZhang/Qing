@@ -139,6 +139,9 @@
     <ClCompile Include="Open\project\controller\HTTPServer.cpp">
       <Filter>Open\project\controller</Filter>
     </ClCompile>
+    <ClCompile Include="Open\project\core\network\ThreadNoticeQueue.cpp">
+      <Filter>Open\project\core\network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UNIX\Chapter1\list_file_name.h">
@@ -372,6 +375,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\core\tools\HexString.h">
       <Filter>Open\project\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\core\network\ThreadNoticeQueue.h">
+      <Filter>Open\project\core\network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

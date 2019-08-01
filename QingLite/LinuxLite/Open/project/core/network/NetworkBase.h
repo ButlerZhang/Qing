@@ -20,6 +20,15 @@ struct NetworkMessage
     NetworkMessage() : m_Socket(0), m_Bufferevent(NULL) {}
 };
 
+struct ClientNode
+{
+    int                                      m_Socket;
+    struct evbuffer                         *m_EVBuffer;
+    struct bufferevent                      *m_Bufferevent;
+
+    ClientNode() : m_EVBuffer(NULL), m_Bufferevent(NULL) {}
+};
+
 
 
 struct ConnectNode

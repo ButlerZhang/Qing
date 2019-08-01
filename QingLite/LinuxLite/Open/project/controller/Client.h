@@ -17,6 +17,7 @@ public:
 
 private:
 
+    bool ProcessServerError(NetworkMessage &NetworkMsg);
     bool ProcessLoginResponse(NetworkMessage &NetworkMsg);
     bool ProcessLogoutResponse(NetworkMessage &NetworkMsg);
 

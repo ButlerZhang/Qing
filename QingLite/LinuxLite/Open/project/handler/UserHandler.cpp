@@ -1,7 +1,8 @@
 #include "UserHandler.h"
-#include "../core/database/MySQLDatabase.h"
 #include "../core/tools/BoostLog.h"
 #include "../controller/HTTPServer.h"
+#include "../core/database/MySQLDatabase.h"
+#include "../core/network/ThreadNoticeQueue.h"
 #include <event.h>
 #include <event2/http.h>
 
@@ -107,8 +108,11 @@ bool UserHandler::SendLoginReply(evhttp_request *Request, const UserModel &Reply
     UserTree.put("Name", ReplyModel.m_UserName);
     m_JsonTree.push_back(std::make_pair("UserInfo", UserTree));
 
+    const std::string &JsonString = GetReplyJsonString();
+    g_ThreadNoticeQueue.PushMessage(JsonString);
+
     struct evbuffer *evbuffer_temp = evbuffer_new();
-    evbuffer_add_printf(m_evbuffer, GetReplyJsonString().c_str());
+    evbuffer_add_printf(m_evbuffer, JsonString.c_str());
     evhttp_send_reply(Request, ReplyModel.m_ErrorCode, ReplyModel.m_ReplayMessage.c_str(), m_evbuffer);
     evbuffer_free(evbuffer_temp);
 

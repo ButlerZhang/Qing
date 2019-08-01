@@ -110,13 +110,13 @@ bool MySQLDatabase::Connect(const char *Host, const char *User, const char *Pass
 
     if (mysql_init(m_MySQL) == 0)
     {
-        g_Log.WriteError(BoostFormat("MySQL init: %s", mysql_error(m_MySQL)));
+        g_Log.WriteError(BoostFormat("MySQL init error: %s", mysql_error(m_MySQL)));
         return false;
     }
 
     if (mysql_real_connect(m_MySQL, Host, User, Passwd, DB, Port, 0, 0) == 0)
     {
-        g_Log.WriteError(BoostFormat("MySQL real connect: %s", mysql_error(m_MySQL)));
+        g_Log.WriteError(BoostFormat("MySQL real connect error: %s", mysql_error(m_MySQL)));
         return false;
     }
 
@@ -124,7 +124,7 @@ bool MySQLDatabase::Connect(const char *Host, const char *User, const char *Pass
     {
         if (mysql_set_character_set(m_MySQL, CharSet) != 0)
         {
-            g_Log.WriteError(BoostFormat("MySQL set character: %s", mysql_error(m_MySQL)));
+            g_Log.WriteError(BoostFormat("MySQL set character error: %s", mysql_error(m_MySQL)));
         }
     }
 
@@ -165,11 +165,10 @@ void MySQLDatabase::Disconnect()
 bool MySQLDatabase::Isconnected()
 {
     int PingResult = mysql_ping(m_MySQL);
-    g_Log.WriteDebug(BoostFormat("MySQL ping = %d", PingResult));
 
     if (PingResult != 0)
     {
-        g_Log.WriteError(BoostFormat("MySQL ping = %d: %s", PingResult, mysql_error(m_MySQL)));
+        g_Log.WriteError(BoostFormat("MySQL ping = %d, error = %s", PingResult, mysql_error(m_MySQL)));
     }
 
     return m_Isconnected && PingResult == 0;
@@ -202,7 +201,7 @@ bool MySQLDatabase::SetCharSet(const char *CharSet)
             return true;
         }
 
-        g_Log.WriteError(BoostFormat("MySQL set character: %s", mysql_error(m_MySQL)));
+        g_Log.WriteError(BoostFormat("MySQL set character error: %s", mysql_error(m_MySQL)));
     }
 
     return false;

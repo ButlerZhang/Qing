@@ -48,7 +48,7 @@ struct TableStruct_project_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[4]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -59,6 +59,9 @@ namespace Project {
 class MessageHeader;
 class MessageHeaderDefaultTypeInternal;
 extern MessageHeaderDefaultTypeInternal _MessageHeader_default_instance_;
+class ServerError;
+class ServerErrorDefaultTypeInternal;
+extern ServerErrorDefaultTypeInternal _ServerError_default_instance_;
 class UserLogin;
 class UserLoginDefaultTypeInternal;
 extern UserLoginDefaultTypeInternal _UserLogin_default_instance_;
@@ -68,6 +71,7 @@ extern UserLogoutDefaultTypeInternal _UserLogout_default_instance_;
 }  // namespace Project
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Project::MessageHeader* Arena::CreateMaybeMessage<::Project::MessageHeader>(Arena*);
+template<> ::Project::ServerError* Arena::CreateMaybeMessage<::Project::ServerError>(Arena*);
 template<> ::Project::UserLogin* Arena::CreateMaybeMessage<::Project::UserLogin>(Arena*);
 template<> ::Project::UserLogout* Arena::CreateMaybeMessage<::Project::UserLogout>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -75,10 +79,11 @@ namespace Project {
 
 enum MessageType : int {
   MT_UNKNOW = 0,
-  MT_LOGIN = 1000,
-  MT_LOGIN_RESPONSE = 1001,
-  MT_LOGOUT = 1002,
-  MT_LOGOUT_RESPONSE = 1003,
+  MT_ERROR = 1000,
+  MT_LOGIN = 1001,
+  MT_LOGIN_RESPONSE = 1002,
+  MT_LOGOUT = 1003,
+  MT_LOGOUT_RESPONSE = 1004,
   MessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   MessageType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
@@ -583,6 +588,155 @@ class UserLogout :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_project_2eproto;
 };
+// -------------------------------------------------------------------
+
+class ServerError :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Project.ServerError) */ {
+ public:
+  ServerError();
+  virtual ~ServerError();
+
+  ServerError(const ServerError& from);
+  ServerError(ServerError&& from) noexcept
+    : ServerError() {
+    *this = ::std::move(from);
+  }
+
+  inline ServerError& operator=(const ServerError& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ServerError& operator=(ServerError&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ServerError& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ServerError* internal_default_instance() {
+    return reinterpret_cast<const ServerError*>(
+               &_ServerError_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  void Swap(ServerError* other);
+  friend void swap(ServerError& a, ServerError& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ServerError* New() const final {
+    return CreateMaybeMessage<ServerError>(nullptr);
+  }
+
+  ServerError* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ServerError>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ServerError& from);
+  void MergeFrom(const ServerError& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ServerError* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Project.ServerError";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_project_2eproto);
+    return ::descriptor_table_project_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string ErrorDescriptor = 3;
+  void clear_errordescriptor();
+  static const int kErrorDescriptorFieldNumber = 3;
+  const std::string& errordescriptor() const;
+  void set_errordescriptor(const std::string& value);
+  void set_errordescriptor(std::string&& value);
+  void set_errordescriptor(const char* value);
+  void set_errordescriptor(const char* value, size_t size);
+  std::string* mutable_errordescriptor();
+  std::string* release_errordescriptor();
+  void set_allocated_errordescriptor(std::string* errordescriptor);
+
+  // .Project.MessageHeader header = 1;
+  bool has_header() const;
+  void clear_header();
+  static const int kHeaderFieldNumber = 1;
+  const ::Project::MessageHeader& header() const;
+  ::Project::MessageHeader* release_header();
+  ::Project::MessageHeader* mutable_header();
+  void set_allocated_header(::Project::MessageHeader* header);
+
+  // int32 ErrorType = 2;
+  void clear_errortype();
+  static const int kErrorTypeFieldNumber = 2;
+  ::PROTOBUF_NAMESPACE_ID::int32 errortype() const;
+  void set_errortype(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:Project.ServerError)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr errordescriptor_;
+  ::Project::MessageHeader* header_;
+  ::PROTOBUF_NAMESPACE_ID::int32 errortype_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_project_2eproto;
+};
 // ===================================================================
 
 
@@ -1066,9 +1220,131 @@ inline void UserLogout::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:Project.UserLogout.Name)
 }
 
+// -------------------------------------------------------------------
+
+// ServerError
+
+// .Project.MessageHeader header = 1;
+inline bool ServerError::has_header() const {
+  return this != internal_default_instance() && header_ != nullptr;
+}
+inline void ServerError::clear_header() {
+  if (GetArenaNoVirtual() == nullptr && header_ != nullptr) {
+    delete header_;
+  }
+  header_ = nullptr;
+}
+inline const ::Project::MessageHeader& ServerError::header() const {
+  const ::Project::MessageHeader* p = header_;
+  // @@protoc_insertion_point(field_get:Project.ServerError.header)
+  return p != nullptr ? *p : *reinterpret_cast<const ::Project::MessageHeader*>(
+      &::Project::_MessageHeader_default_instance_);
+}
+inline ::Project::MessageHeader* ServerError::release_header() {
+  // @@protoc_insertion_point(field_release:Project.ServerError.header)
+  
+  ::Project::MessageHeader* temp = header_;
+  header_ = nullptr;
+  return temp;
+}
+inline ::Project::MessageHeader* ServerError::mutable_header() {
+  
+  if (header_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Project::MessageHeader>(GetArenaNoVirtual());
+    header_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:Project.ServerError.header)
+  return header_;
+}
+inline void ServerError::set_allocated_header(::Project::MessageHeader* header) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete header_;
+  }
+  if (header) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      header = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, header, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  header_ = header;
+  // @@protoc_insertion_point(field_set_allocated:Project.ServerError.header)
+}
+
+// int32 ErrorType = 2;
+inline void ServerError::clear_errortype() {
+  errortype_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ServerError::errortype() const {
+  // @@protoc_insertion_point(field_get:Project.ServerError.ErrorType)
+  return errortype_;
+}
+inline void ServerError::set_errortype(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  errortype_ = value;
+  // @@protoc_insertion_point(field_set:Project.ServerError.ErrorType)
+}
+
+// string ErrorDescriptor = 3;
+inline void ServerError::clear_errordescriptor() {
+  errordescriptor_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& ServerError::errordescriptor() const {
+  // @@protoc_insertion_point(field_get:Project.ServerError.ErrorDescriptor)
+  return errordescriptor_.GetNoArena();
+}
+inline void ServerError::set_errordescriptor(const std::string& value) {
+  
+  errordescriptor_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Project.ServerError.ErrorDescriptor)
+}
+inline void ServerError::set_errordescriptor(std::string&& value) {
+  
+  errordescriptor_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Project.ServerError.ErrorDescriptor)
+}
+inline void ServerError::set_errordescriptor(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  errordescriptor_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Project.ServerError.ErrorDescriptor)
+}
+inline void ServerError::set_errordescriptor(const char* value, size_t size) {
+  
+  errordescriptor_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Project.ServerError.ErrorDescriptor)
+}
+inline std::string* ServerError::mutable_errordescriptor() {
+  
+  // @@protoc_insertion_point(field_mutable:Project.ServerError.ErrorDescriptor)
+  return errordescriptor_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* ServerError::release_errordescriptor() {
+  // @@protoc_insertion_point(field_release:Project.ServerError.ErrorDescriptor)
+  
+  return errordescriptor_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void ServerError::set_allocated_errordescriptor(std::string* errordescriptor) {
+  if (errordescriptor != nullptr) {
+    
+  } else {
+    
+  }
+  errordescriptor_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), errordescriptor);
+  // @@protoc_insertion_point(field_set_allocated:Project.ServerError.ErrorDescriptor)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -16,6 +16,7 @@ public:
     virtual bool ProcessCheckout();
     virtual bool ProcessConnected();
     virtual bool ProcessDisconnected();
+    virtual bool ProcessThreadNoticeQueue();
     virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
 
     MySQLDatabase& GetDB() { return m_SMIBDB; }
@@ -28,6 +29,7 @@ private:
     bool ProcessLogin(NetworkMessage &NetworkMsg);
     bool ProcessLogout(NetworkMessage &NetworkMsg);
 
+    bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
     bool SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg);
 
 private:

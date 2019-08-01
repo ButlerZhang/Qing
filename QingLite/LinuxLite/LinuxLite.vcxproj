@@ -81,6 +81,7 @@
     <ClCompile Include="Open\project\core\network\SignalEventMap.cpp" />
     <ClCompile Include="Open\project\core\network\SingleEventBaseClient.cpp" />
     <ClCompile Include="Open\project\core\network\SingleEventBaseServer.cpp" />
+    <ClCompile Include="Open\project\core\network\ThreadNoticeQueue.cpp" />
     <ClCompile Include="Open\project\core\network\UDPBroadcast.cpp" />
     <ClCompile Include="Open\project\core\tools\BoostLog.cpp" />
     <ClCompile Include="Open\project\handler\Handler.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Open\project\core\network\SignalEventMap.h" />
     <ClInclude Include="Open\project\core\network\SingleEventBaseClient.h" />
     <ClInclude Include="Open\project\core\network\SingleEventBaseServer.h" />
+    <ClInclude Include="Open\project\core\network\ThreadNoticeQueue.h" />
     <ClInclude Include="Open\project\core\network\UDPBroadcast.h" />
     <ClInclude Include="Open\project\core\tools\BoostFormat.h" />
     <ClInclude Include="Open\project\core\tools\BoostLog.h" />

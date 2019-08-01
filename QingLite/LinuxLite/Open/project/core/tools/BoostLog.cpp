@@ -47,6 +47,10 @@ BoostLog::~BoostLog()
 {
     boost::log::core::get()->remove_all_sinks();
 }
+void BoostLog::Flush()
+{
+    boost::log::core::get()->flush();
+}
 
 void BoostLog::SetFilter(LogLevel Level)
 {

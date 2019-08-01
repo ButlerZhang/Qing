@@ -1,5 +1,6 @@
 #include "SingleEventBaseServer.h"
 #include "../tools/BoostLog.h"
+#include "ThreadNoticeQueue.h"
 #include <string.h>
 #include <unistd.h>
 #include <assert.h>
@@ -16,6 +17,7 @@ SingleEventBaseServer::SingleEventBaseServer()
     m_ListenPort = 0;
     m_Listener = NULL;
     m_CheckoutTimer = NULL;
+    m_NoticeQueueEvent = NULL;
     m_EventBase = event_base_new();
 }
 
@@ -23,17 +25,31 @@ SingleEventBaseServer::~SingleEventBaseServer()
 {
     Stop();
 
-    for (auto it = m_ClientSocketMap.begin(); it != m_ClientSocketMap.end(); it++)
+    for (auto it = m_ClientMap.begin(); it != m_ClientMap.end(); it++)
     {
         evutil_closesocket(it->first);
-        evbuffer_free(it->second);
+        if (it->second.m_EVBuffer != NULL)
+        {
+            evbuffer_free(it->second.m_EVBuffer);
+            it->second.m_EVBuffer = NULL;
+        }
+        if (it->second.m_Bufferevent != NULL)
+        {
+            bufferevent_free(it->second.m_Bufferevent);
+            it->second.m_Bufferevent = NULL;
+        }
     }
 
-    m_ClientSocketMap.clear();
+    m_ClientMap.clear();
     if (m_CheckoutTimer != NULL)
     {
         event_free(m_CheckoutTimer);
         m_CheckoutTimer = NULL;
+    }
+    if (m_NoticeQueueEvent != NULL)
+    {
+        event_free(m_NoticeQueueEvent);
+        m_NoticeQueueEvent = NULL;
     }
 
     if (m_Listener != NULL)
@@ -51,6 +67,10 @@ SingleEventBaseServer::~SingleEventBaseServer()
 bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 {
     if (!CreateListener(IP, Port))
+    {
+        return false;
+    }
+    if (!AddThreadNoticeQueueEvent())
     {
         return false;
     }
@@ -117,10 +137,32 @@ bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
     }
 }
 
+bool SingleEventBaseServer::AddThreadNoticeQueueEvent()
+{
+    if (m_NoticeQueueEvent != NULL)
+    {
+        g_Log.WriteError("Single base server re-create message queue event.");
+        return true;
+    }
+    m_NoticeQueueEvent = event_new(m_EventBase, g_ThreadNoticeQueue.GetRecvDescriptor() , EV_READ | EV_PERSIST, CallBack_ThreadNoticeQueue, this);
+    if (m_NoticeQueueEvent == NULL)
+    {
+        g_Log.WriteError("Single base server create message queue event failed.");
+        return false;
+    }
+    if (event_add(m_NoticeQueueEvent, NULL) != 0)
+    {
+        g_Log.WriteError("Single base server add message queue event failed.");
+        event_free(m_NoticeQueueEvent);
+        m_NoticeQueueEvent = NULL;
+        return false;
+    }
+    return true;
+}
 bool SingleEventBaseServer::DeleteSocket(int ClientSocket)
 {
-    std::map<int, evbuffer*>::iterator it = m_ClientSocketMap.find(ClientSocket);
-    if (it == m_ClientSocketMap.end())
+    std::map<int, ClientNode>::iterator it = m_ClientMap.find(ClientSocket);
+    if (it == m_ClientMap.end())
     {
         g_Log.WriteError(BoostFormat("Single base server delete socket, can not find socket = %d.", ClientSocket));
         return false;
@@ -132,9 +174,18 @@ bool SingleEventBaseServer::DeleteSocket(int ClientSocket)
         return false;
     }
 
-    evbuffer_free(it->second);
-    m_ClientSocketMap.erase(it);
-    g_Log.WriteError(BoostFormat("Single base server delete socket = %d, surplus client count = %d.",ClientSocket, m_ClientSocketMap.size()));
+    if (it->second.m_EVBuffer != NULL)
+    {
+        evbuffer_free(it->second.m_EVBuffer);
+        it->second.m_EVBuffer = NULL;
+    }
+    if (it->second.m_Bufferevent != NULL)
+    {
+        bufferevent_free(it->second.m_Bufferevent);
+        it->second.m_Bufferevent = NULL;
+    }
+    m_ClientMap.erase(it);
+    g_Log.WriteError(BoostFormat("Single base server delete socket = %d, surplus client count = %d.",ClientSocket, m_ClientMap.size()));
 
     return true;
 }
@@ -218,6 +269,25 @@ bool SingleEventBaseServer::CreateListener(const std::string &IP, int Port)
     return true;
 }
 
+bool SingleEventBaseServer::Send(const void * Data, size_t Size)
+{
+    int SendCount = 0;
+    for (std::map<int, ClientNode>::iterator it = m_ClientMap.begin(); it != m_ClientMap.end(); it++)
+    {
+        if (it->first < 0 || it->second.m_Bufferevent == NULL || it->second.m_EVBuffer == NULL)
+        {
+            continue;
+        }
+        if (bufferevent_write(it->second.m_Bufferevent, Data, Size) != 0)
+        {
+            g_Log.WriteError(BoostFormat("Single base server client = %d broadcast send failed.", it->first));
+            continue;
+        }
+        ++SendCount;
+    }
+    g_Log.WriteDebug(BoostFormat("Single base server broadcast, succeed = %d, failed = %d", SendCount, m_ClientMap.size() - SendCount));
+    return true;
+}
 bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size)
 {
     if (NetworkMsg.m_Bufferevent == NULL)
@@ -239,7 +309,7 @@ bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *D
 void SingleEventBaseServer::CallBack_Listen(evconnlistener *Listener, int Socket, sockaddr *sa, int socklen, void *UserData)
 {
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-    if (Server->m_ClientSocketMap.find(Socket) != Server->m_ClientSocketMap.end())
+    if (Server->m_ClientMap.find(Socket) != Server->m_ClientMap.end())
     {
         g_Log.WriteError(BoostFormat("Single base server socket = %d has existed.", Socket));
         return;
@@ -253,16 +323,17 @@ void SingleEventBaseServer::CallBack_Listen(evconnlistener *Listener, int Socket
         return;
     }
 
-    struct evbuffer *ClientBuffer = evbuffer_new();
-    if (ClientBuffer == NULL)
+    struct evbuffer *ClientEVBuffer = evbuffer_new();
+    if (ClientEVBuffer == NULL)
     {
         g_Log.WriteError(BoostFormat("Single base server evbuffer_new error, socket = %d.", Socket));
         evutil_closesocket(Socket);
         return;
     }
 
-    Server->m_ClientSocketMap[Socket] = ClientBuffer;
-    g_Log.WriteInfo(BoostFormat("Single base server accept new client, socket = %d, client count = %llu.", Socket, Server->m_ClientSocketMap.size()));
+    Server->m_ClientMap[Socket].m_Bufferevent = bev;
+    Server->m_ClientMap[Socket].m_EVBuffer = ClientEVBuffer;
+    g_Log.WriteInfo(BoostFormat("Single base server accept new client, socket = %d, client count = %llu.", Socket, Server->m_ClientMap.size()));
 
     bufferevent_setcb(bev, CallBack_Recv, CallBack_Send, CallBack_Event, Server);
     bufferevent_enable(bev, EV_READ | EV_WRITE | EV_PERSIST);
@@ -274,6 +345,11 @@ void SingleEventBaseServer::CallBack_Listen(evconnlistener *Listener, int Socket
 
     bufferevent_getwatermark(bev, EV_WRITE, &lowmark, &highmark);
     g_Log.WriteDebug(BoostFormat("Single base server default write water mark, low = %d, high = %d.", lowmark, highmark));
+}
+void SingleEventBaseServer::CallBack_ThreadNoticeQueue(int Socket, short Events, void * UserData)
+{
+    SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
+    Server->ProcessThreadNoticeQueue();
 }
 
 void SingleEventBaseServer::CallBack_Checkout(int Socket, short Events, void *UserData)
@@ -324,10 +400,7 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
     if (IsAllowDelete)
     {
         SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
-        if (Server->DeleteSocket(ClientSocket))
-        {
-            bufferevent_free(bev);
-        }
+        Server->DeleteSocket(ClientSocket);
     }
 }
 
@@ -337,7 +410,7 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
     g_Log.WriteDebug("Single base server process recv call back.");
 
     int ClientSocket = bufferevent_getfd(bev);
-    if (Server->m_ClientSocketMap.find(ClientSocket) == Server->m_ClientSocketMap.end())
+    if (Server->m_ClientMap.find(ClientSocket) == Server->m_ClientMap.end())
     {
         g_Log.WriteError(BoostFormat("Single base server recv call back can not find socket = %d.", ClientSocket));
         return;
@@ -347,7 +420,7 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
     std::vector<char> MessageHeaderLengthBuffer(MESSAGE_HEADER_LENGTH_SIZE, 0);
 
     std::vector<char> RecvBuffer(NETWORK_BUFFER_SIZE, 0);
-    struct evbuffer *EventBuffer = Server->m_ClientSocketMap[ClientSocket];
+    struct evbuffer *EventBuffer = Server->m_ClientMap[ClientSocket].m_EVBuffer;
 
     size_t RecvSize = 0, EventBufferLength = 0;
     while (RecvSize = bufferevent_read(bev, &RecvBuffer[0], RecvBuffer.size()), RecvSize > 0)

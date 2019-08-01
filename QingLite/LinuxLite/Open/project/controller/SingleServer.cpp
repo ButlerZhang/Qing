@@ -1,6 +1,7 @@
 #include "SingleServer.h"
 #include "../../../LinuxTools.h"
 #include "../core/tools/BoostLog.h"
+#include "../core/network/ThreadNoticeQueue.h"
 #include "../message/project.pb.h"
 #include "../message/CodedMessage.h"
 #include "../Config.h"
@@ -53,6 +54,7 @@ bool SingleServer::ProcessCheckout()
         }
     }
 
+    g_Log.Flush();
     return true;
 }
 
@@ -68,6 +70,26 @@ bool SingleServer::ProcessDisconnected()
     return true;
 }
 
+bool SingleServer::ProcessThreadNoticeQueue()
+{
+    std::string JsonString;
+    if (g_ThreadNoticeQueue.PopMessage(JsonString))
+    {
+        g_Log.WriteDebug(BoostFormat("Single Server process message queue: %s", JsonString.c_str()));
+        Project::ServerError ServerPublic;
+        ServerPublic.set_errortype(12341234);
+        ServerPublic.set_errordescriptor("Http server: " + JsonString);
+        Project::MessageHeader *Header = ServerPublic.mutable_header();
+        Header->set_type(Project::MessageType::MT_ERROR);
+        Header->set_transmissionid(GetUUID());
+        return SendMessage(Project::MessageType::MT_ERROR, ServerPublic);
+    }
+    else
+    {
+        g_Log.WriteError("Single Server process message queue failed.");
+        return false;
+    }
+}
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
@@ -91,18 +113,13 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
 {
-    Project::UserLogin Response;
     g_Log.WriteDebug("Single Server process login.");
 
     Project::UserLogin Login;
     if (!Login.ParseFromString(NetworkMsg.m_Message))
     {
-        const std::string &LogString = BoostFormat("Single Server login message parse failed, socket = %d.", NetworkMsg.m_Socket);
-        g_Log.WriteError(LogString);
-
-        Response.set_name(LogString);
-        Response.set_id(NetworkMsg.m_Socket);
-        return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, NetworkMsg, Response);
+        g_Log.WriteError("Single Server login message parse failed.");
+        return false;
     }
 
     g_Log.WriteDebug("Single Server login message\n" + Login.DebugString());
@@ -112,12 +129,10 @@ bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
     if (!m_SMIBDB.ExecuteQuery(InsertSQL.c_str()))
     {
         g_Log.WriteError(BoostFormat("Single Server insert database falied: %s", InsertSQL.c_str()));
-
-        Response.set_name(InsertSQL);
-        Response.set_id(NetworkMsg.m_Socket);
-        return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, NetworkMsg, Response);
+        return false;
     }
 
+    Project::UserLogin Response;
     Response.set_id(Login.id());
     Response.set_name(Login.name());
     Response.set_password(Login.password());
@@ -135,19 +150,18 @@ bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
 
 bool SingleServer::ProcessLogout(NetworkMessage &NetworkMsg)
 {
-    Project::UserLogout Response;
     g_Log.WriteDebug("Single Server process logout.");
 
     Project::UserLogout Logout;
     if (!Logout.ParseFromString(NetworkMsg.m_Message))
     {
-        Response.set_name("Process log out");
         g_Log.WriteError("Single Server logout message parse failed.");
-        return SendMessage(Project::MessageType::MT_LOGOUT_RESPONSE, NetworkMsg, Response);;
+        return false;
     }
 
     g_Log.WriteDebug("Single Server logout message\n" + Logout.DebugString());
 
+    Project::UserLogout Response;
     Response.set_id(Logout.id());
     Response.set_name(Logout.name());
 
@@ -159,6 +173,11 @@ bool SingleServer::ProcessLogout(NetworkMessage &NetworkMsg)
     return SendMessage(Project::MessageType::MT_LOGOUT_RESPONSE, NetworkMsg, Response);
 }
 
+bool SingleServer::SendMessage(int MessageType, const google::protobuf::Message & ProtobufMsg)
+{
+    const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
+    return Send(DataString.c_str(), DataString.size());
+}
 bool SingleServer::SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg)
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);

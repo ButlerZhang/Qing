@@ -11,10 +11,11 @@ enum MessageType
 {
     MT_UNKNOW                         = 0;
 
-    MT_LOGIN                          = 1000;
-    MT_LOGIN_RESPONSE                 = 1001;
-    MT_LOGOUT                         = 1002;
-    MT_LOGOUT_RESPONSE                = 1003;
+    MT_ERROR                          = 1000;
+    MT_LOGIN                          = 1001;
+    MT_LOGIN_RESPONSE                 = 1002;
+    MT_LOGOUT                         = 1003;
+    MT_LOGOUT_RESPONSE                = 1004;
 }
 
 message MessageHeader
@@ -38,4 +39,11 @@ message UserLogout
     MessageHeader header = 1;
     int32 ID = 2;
     string Name = 3;
+}
+
+message ServerError
+{
+    MessageHeader header = 1;
+    int32 ErrorType = 2;
+    string ErrorDescriptor = 3;
 }

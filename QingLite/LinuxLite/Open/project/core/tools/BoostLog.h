@@ -29,6 +29,7 @@ public:
     void WriteDebug(const std::string &LogString) { WriteLog(LL_DEBUG, LogString); }
     void WriteError(const std::string &LogString) { WriteLog(LL_ERROR, LogString); }
 
+    void Flush();
     void SetFilter(LogLevel Level = LL_DEBUG);
     bool SetLogDirectory(const std::string &Directory);
     void SetIsOkToWrite(bool IsOkToLog) { m_IsOkToWrite = IsOkToLog; }

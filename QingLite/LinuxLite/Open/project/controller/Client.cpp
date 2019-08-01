@@ -40,10 +40,23 @@ bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {
+    case Project::MessageType::MT_ERROR:            return ProcessServerError(NetworkMsg);
     case Project::MessageType::MT_LOGIN_RESPONSE:   return ProcessLoginResponse(NetworkMsg);
     case Project::MessageType::MT_LOGOUT_RESPONSE:  return ProcessLogoutResponse(NetworkMsg);
     default:                                        return false;
     }
+}
+bool Client::ProcessServerError(NetworkMessage & NetworkMsg)
+{
+    g_Log.WriteDebug("Client process server error.");
+    Project::ServerError Error;
+    if (!Error.ParseFromString(NetworkMsg.m_Message))
+    {
+        g_Log.WriteError("Serer error message parse failed.");
+        return false;
+    }
+    g_Log.WriteDebug("Server error message:\n" + Error.DebugString());
+    return true;
 }
 
 bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
@@ -58,9 +71,9 @@ bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 
     g_Log.WriteDebug("Logout response message:\n" + LoginResponse.DebugString());
 
-    sleep(GetRandomUIntInRange(1, 3));
+    //sleep(GetRandomUIntInRange(1, 3));
 
-    return SendLogout();
+    return true;
 }
 
 bool Client::ProcessLogoutResponse(NetworkMessage &NetworkMsg)
