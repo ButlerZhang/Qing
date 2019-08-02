@@ -204,6 +204,7 @@
     <ClInclude Include="System\Synchronization.h" />
     <ClInclude Include="System\SystemShare.h" />
     <ClInclude Include="System\SystemTime.h" />
+    <ClInclude Include="WindowsCoreProgramming.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

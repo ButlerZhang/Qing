@@ -89,6 +89,27 @@
     <ClCompile Include="..\Common\Standard\NumericalConversion.cpp" />
     <ClCompile Include="..\Common\Standard\RandomGenerator.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Open\jpc\Config.cpp" />
+    <ClCompile Include="Open\jpc\controller\Client.cpp" />
+    <ClCompile Include="Open\jpc\controller\HTTPServer.cpp" />
+    <ClCompile Include="Open\jpc\controller\MultiServer.cpp" />
+    <ClCompile Include="Open\jpc\controller\SingleServer.cpp" />
+    <ClCompile Include="Open\jpc\core\network\HTTPBaseServer.cpp" />
+    <ClCompile Include="Open\jpc\core\network\MultiEventBaseServer.cpp" />
+    <ClCompile Include="Open\jpc\core\network\ServerNetworkMessageHandler.cpp" />
+    <ClCompile Include="Open\jpc\core\network\SignalEventMap.cpp" />
+    <ClCompile Include="Open\jpc\core\network\SingleEventBaseClient.cpp" />
+    <ClCompile Include="Open\jpc\core\network\SingleEventBaseServer.cpp" />
+    <ClCompile Include="Open\jpc\core\network\ThreadNoticeQueue.cpp" />
+    <ClCompile Include="Open\jpc\core\network\UDPBroadcast.cpp" />
+    <ClCompile Include="Open\jpc\handler\Handler.cpp" />
+    <ClCompile Include="Open\jpc\handler\httphandler\UserHandler.cpp" />
+    <ClCompile Include="Open\jpc\message\project.pb.cc" />
+    <ClCompile Include="Open\protobuf\base.pb.cc" />
+    <ClCompile Include="Open\protobuf\user.pb.cc" />
+    <ClCompile Include="Qing\NetworkBase.cpp" />
+    <ClCompile Include="Qing\NetworkClient.cpp" />
+    <ClCompile Include="Qing\NetworkServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Algorithm\001_MaxSubSum.h" />
@@ -120,16 +141,96 @@
     <ClInclude Include="..\Common\Standard\StandardShare.h" />
     <ClInclude Include="..\Common\Tool\Common.h" />
     <ClInclude Include="..\Common\Tool\HexString.h" />
+    <ClInclude Include="LinuxTools.h" />
+    <ClInclude Include="Open\jpc\Config.h" />
+    <ClInclude Include="Open\jpc\controller\Client.h" />
+    <ClInclude Include="Open\jpc\controller\HTTPServer.h" />
+    <ClInclude Include="Open\jpc\controller\MultiServer.h" />
+    <ClInclude Include="Open\jpc\controller\SingleServer.h" />
+    <ClInclude Include="Open\jpc\core\network\HTTPBaseServer.h" />
+    <ClInclude Include="Open\jpc\core\network\MultiEventBaseServer.h" />
+    <ClInclude Include="Open\jpc\core\network\NetworkBase.h" />
+    <ClInclude Include="Open\jpc\core\network\ServerNetworkMessageHandler.h" />
+    <ClInclude Include="Open\jpc\core\network\SignalEventMap.h" />
+    <ClInclude Include="Open\jpc\core\network\SingleEventBaseClient.h" />
+    <ClInclude Include="Open\jpc\core\network\SingleEventBaseServer.h" />
+    <ClInclude Include="Open\jpc\core\network\ThreadNoticeQueue.h" />
+    <ClInclude Include="Open\jpc\core\network\UDPBroadcast.h" />
+    <ClInclude Include="Open\jpc\core\tools\OpenSSLAES.h" />
+    <ClInclude Include="Open\jpc\handler\Handler.h" />
+    <ClInclude Include="Open\jpc\handler\httphandler\UserHandler.h" />
+    <ClInclude Include="Open\jpc\message\CodedMessage.h" />
+    <ClInclude Include="Open\jpc\message\project.pb.h" />
+    <ClInclude Include="Open\jpc\model\Model.h" />
+    <ClInclude Include="Open\jpc\Project.h" />
+    <ClInclude Include="Open\libevent\demo1_client_read_write.h" />
+    <ClInclude Include="Open\libevent\demo1_server_read_write.h" />
+    <ClInclude Include="Open\libevent\demo2_client_bufferevent.h" />
+    <ClInclude Include="Open\libevent\demo2_server_bufferevent.h" />
+    <ClInclude Include="Open\libevent\demo3_client_evconnlistener.h" />
+    <ClInclude Include="Open\libevent\demo3_server_evconnlistener.h" />
+    <ClInclude Include="Open\libevent\demo4_client_udp_timer.h" />
+    <ClInclude Include="Open\libevent\demo4_server_udp_timer.h" />
+    <ClInclude Include="Open\libevent\demo5_client_evhttp.h" />
+    <ClInclude Include="Open\libevent\demo5_server_evconnlistener_http.h" />
+    <ClInclude Include="Open\libevent\demo5_server_evhttp.h" />
+    <ClInclude Include="Open\libevent\demo6_client_bufferevent_openssl.h" />
+    <ClInclude Include="Open\libevent\demo6_server_bufferevent_openssl.h" />
+    <ClInclude Include="Open\openssl\demo_AES.h" />
+    <ClInclude Include="Open\openssl\demo_DES.h" />
+    <ClInclude Include="Open\openssl\demo_MD5.h" />
+    <ClInclude Include="Open\openssl\demo_RSA.h" />
+    <ClInclude Include="Open\openssl\demo_SHA256.h" />
+    <ClInclude Include="Open\openssl\demo_test.h" />
+    <ClInclude Include="Open\protobuf\base.pb.h" />
+    <ClInclude Include="Open\protobuf\demo_protobuf.h" />
+    <ClInclude Include="Open\protobuf\user.pb.h" />
+    <ClInclude Include="Qing\NetworkBase.h" />
+    <ClInclude Include="Qing\NetworkClient.h" />
+    <ClInclude Include="Qing\NetworkServer.h" />
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
+    <ClInclude Include="UNIX\Chapter1\display_process_information.h" />
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell.h" />
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h" />
+    <ClInclude Include="UNIX\Chapter1\list_file_name.h" />
+    <ClInclude Include="UNIX\Chapter1\print_errno_message.h" />
+    <ClInclude Include="UNIX\unix_main.h" />
+    <ClInclude Include="YouShuang\api_note.h" />
+    <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />
+    <ClInclude Include="YouShuang\Chapter5\backlog_test.h" />
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_client.h" />
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_server.h" />
+    <ClInclude Include="YouShuang\Chapter5\daytime.h" />
+    <ClInclude Include="YouShuang\Chapter5\oob_data_client.h" />
+    <ClInclude Include="YouShuang\Chapter5\oob_data_server.h" />
+    <ClInclude Include="YouShuang\Chapter6\cgi_server.h" />
+    <ClInclude Include="YouShuang\Chapter6\sendfile_server.h" />
+    <ClInclude Include="YouShuang\Chapter6\splice_server.h" />
+    <ClInclude Include="YouShuang\Chapter6\tee_server.h" />
+    <ClInclude Include="YouShuang\Chapter6\writev_server.h" />
+    <ClInclude Include="YouShuang\Chapter7\daemonize_demo.h" />
+    <ClInclude Include="YouShuang\Chapter7\switch_to_user.h" />
+    <ClInclude Include="YouShuang\Chapter8\http_demo.h" />
+    <ClInclude Include="YouShuang\Chapter9\select_client.h" />
+    <ClInclude Include="YouShuang\Chapter9\select_demo.h" />
+    <ClInclude Include="YouShuang\Chapter9\select_server.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Open\jpc\message\project.proto" />
+    <None Include="Open\jpc\project.ini" />
+    <None Include="Open\protobuf\base.proto" />
+    <None Include="Open\protobuf\user.proto" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;..\..\OpenSource\sqlite_3250200\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;pthread;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

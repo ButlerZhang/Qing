@@ -46,6 +46,11 @@ BoostLog::~BoostLog()
     boost::log::core::get()->remove_all_sinks();
 }
 
+void BoostLog::Flush()
+{
+    boost::log::core::get()->flush();
+}
+
 void BoostLog::SetFilter(LogLevel Level)
 {
     boost::log::core::get()->set_filter(boost::log::expressions::attr<LogLevel>("Severity") >= Level);

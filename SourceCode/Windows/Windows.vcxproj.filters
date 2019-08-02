@@ -314,5 +314,8 @@
     <ClInclude Include="System\SimpleEncrypt.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="WindowsCoreProgramming.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

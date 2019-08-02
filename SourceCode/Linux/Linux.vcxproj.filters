@@ -28,6 +28,72 @@
     <Filter Include="Project">
       <UniqueIdentifier>{f17f4d50-cd1d-4ab1-9126-4376c14c05fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\YouShuang">
+      <UniqueIdentifier>{6fb40273-8ed2-4d5f-ba67-ef3f4d1d83a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\YouShuang\Chapter5">
+      <UniqueIdentifier>{62e13bbd-69cd-4279-99bc-6f340aaccb03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\YouShuang\Chapter6">
+      <UniqueIdentifier>{92809bb5-6cda-4fea-8feb-684bcb9f13d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\YouShuang\Chapter7">
+      <UniqueIdentifier>{ed983155-ad60-4029-aae5-c762551aeb0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\YouShuang\Chapter8">
+      <UniqueIdentifier>{dcd937fb-83d2-4cef-aa09-c2a9e82dbda9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\YouShuang\Chapter9">
+      <UniqueIdentifier>{ac0eb52b-6c65-458b-838d-66bc8b6666a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\UNIX">
+      <UniqueIdentifier>{e5574d53-4e08-453d-8c81-db16b69bcba3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\UNIX\Chapter1">
+      <UniqueIdentifier>{e8830498-27c5-4a33-bab4-fb958fa8db0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Qing">
+      <UniqueIdentifier>{66ee867a-f9b0-46bc-8b51-92c74ed93c9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open">
+      <UniqueIdentifier>{e768f56b-1ee0-4439-9c53-c05ac884d55d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\libevent">
+      <UniqueIdentifier>{e5b260c3-ff17-4c11-8ba4-6cbb1a9761ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\openssl">
+      <UniqueIdentifier>{48e920a1-e40f-4c51-81ab-cd3e48b800e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\protobuf">
+      <UniqueIdentifier>{9ff43904-cf2c-480e-9421-f6c414006f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc">
+      <UniqueIdentifier>{c54eefdb-737e-4c66-8703-99240bdc808d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\controller">
+      <UniqueIdentifier>{733c3da3-542e-4e15-837f-b71d1e070363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\core">
+      <UniqueIdentifier>{84f5a9df-5bc4-45b3-910f-7f3b9f04fd6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\core\network">
+      <UniqueIdentifier>{e973a81d-1d49-4c71-a00d-be42e1e6cd7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\core\tools">
+      <UniqueIdentifier>{28837c83-ce01-4a18-b8f2-56e59355ba4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\handler">
+      <UniqueIdentifier>{8a9b0867-d12e-4457-b834-8aa2efd08496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\handler\httphandler">
+      <UniqueIdentifier>{0b8b847b-13f6-4aab-9fe5-9f7fcfa17300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\message">
+      <UniqueIdentifier>{4e04c6f2-cc12-4a8e-8fe5-4f2ce23dac50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Open\jpc\model">
+      <UniqueIdentifier>{c4947c74-fd7b-414f-85ee-525afdefadf2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">
@@ -90,6 +156,69 @@
     </ClCompile>
     <ClCompile Include="..\Common\Database\MySQLDatabase.cpp">
       <Filter>Common\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\NetworkBase.cpp">
+      <Filter>Project\Qing</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\NetworkClient.cpp">
+      <Filter>Project\Qing</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\NetworkServer.cpp">
+      <Filter>Project\Qing</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\protobuf\base.pb.cc">
+      <Filter>Project\Open\protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\protobuf\user.pb.cc">
+      <Filter>Project\Open\protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\Config.cpp">
+      <Filter>Project\Open\jpc</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\controller\Client.cpp">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\controller\HTTPServer.cpp">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\controller\MultiServer.cpp">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\controller\SingleServer.cpp">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\HTTPBaseServer.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\MultiEventBaseServer.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\ServerNetworkMessageHandler.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\SignalEventMap.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\SingleEventBaseClient.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\SingleEventBaseServer.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\ThreadNoticeQueue.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\core\network\UDPBroadcast.cpp">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\handler\Handler.cpp">
+      <Filter>Project\Open\jpc\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\handler\httphandler\UserHandler.cpp">
+      <Filter>Project\Open\jpc\handler\httphandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\jpc\message\project.pb.cc">
+      <Filter>Project\Open\jpc\message</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,5 +309,239 @@
     <ClInclude Include="..\Common\Database\MySQLDatabase.h">
       <Filter>Common\Database</Filter>
     </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\accept_exception.h">
+      <Filter>Project\YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\backlog_test.h">
+      <Filter>Project\YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_client.h">
+      <Filter>Project\YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_server.h">
+      <Filter>Project\YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\daytime.h">
+      <Filter>Project\YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\oob_data_client.h">
+      <Filter>Project\YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter5\oob_data_server.h">
+      <Filter>Project\YouShuang\Chapter5</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter6\cgi_server.h">
+      <Filter>Project\YouShuang\Chapter6</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter6\sendfile_server.h">
+      <Filter>Project\YouShuang\Chapter6</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter6\splice_server.h">
+      <Filter>Project\YouShuang\Chapter6</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter6\tee_server.h">
+      <Filter>Project\YouShuang\Chapter6</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter6\writev_server.h">
+      <Filter>Project\YouShuang\Chapter6</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter7\daemonize_demo.h">
+      <Filter>Project\YouShuang\Chapter7</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter7\switch_to_user.h">
+      <Filter>Project\YouShuang\Chapter7</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter8\http_demo.h">
+      <Filter>Project\YouShuang\Chapter8</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter9\select_client.h">
+      <Filter>Project\YouShuang\Chapter9</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter9\select_demo.h">
+      <Filter>Project\YouShuang\Chapter9</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\Chapter9\select_server.h">
+      <Filter>Project\YouShuang\Chapter9</Filter>
+    </ClInclude>
+    <ClInclude Include="YouShuang\api_note.h">
+      <Filter>Project\YouShuang</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h">
+      <Filter>Project\UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h">
+      <Filter>Project\UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\display_process_information.h">
+      <Filter>Project\UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell.h">
+      <Filter>Project\UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h">
+      <Filter>Project\UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\list_file_name.h">
+      <Filter>Project\UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\print_errno_message.h">
+      <Filter>Project\UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\unix_main.h">
+      <Filter>Project\UNIX</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkBase.h">
+      <Filter>Project\Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkClient.h">
+      <Filter>Project\Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkServer.h">
+      <Filter>Project\Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="LinuxTools.h" />
+    <ClInclude Include="Open\libevent\demo1_client_read_write.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo1_server_read_write.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo2_client_bufferevent.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo2_server_bufferevent.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo3_client_evconnlistener.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo3_server_evconnlistener.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo4_client_udp_timer.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo4_server_udp_timer.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo5_client_evhttp.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo5_server_evconnlistener_http.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo5_server_evhttp.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo6_client_bufferevent_openssl.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\libevent\demo6_server_bufferevent_openssl.h">
+      <Filter>Project\Open\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_AES.h">
+      <Filter>Project\Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_DES.h">
+      <Filter>Project\Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_MD5.h">
+      <Filter>Project\Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_RSA.h">
+      <Filter>Project\Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_SHA256.h">
+      <Filter>Project\Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\openssl\demo_test.h">
+      <Filter>Project\Open\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\protobuf\base.pb.h">
+      <Filter>Project\Open\protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\protobuf\demo_protobuf.h">
+      <Filter>Project\Open\protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\protobuf\user.pb.h">
+      <Filter>Project\Open\protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\Config.h">
+      <Filter>Project\Open\jpc</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\Project.h">
+      <Filter>Project\Open\jpc</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\controller\Client.h">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\controller\HTTPServer.h">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\controller\MultiServer.h">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\controller\SingleServer.h">
+      <Filter>Project\Open\jpc\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\HTTPBaseServer.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\MultiEventBaseServer.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\NetworkBase.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\ServerNetworkMessageHandler.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\SignalEventMap.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\SingleEventBaseClient.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\SingleEventBaseServer.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\ThreadNoticeQueue.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\network\UDPBroadcast.h">
+      <Filter>Project\Open\jpc\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\core\tools\OpenSSLAES.h">
+      <Filter>Project\Open\jpc\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\handler\Handler.h">
+      <Filter>Project\Open\jpc\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\handler\httphandler\UserHandler.h">
+      <Filter>Project\Open\jpc\handler\httphandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\message\CodedMessage.h">
+      <Filter>Project\Open\jpc\message</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\message\project.pb.h">
+      <Filter>Project\Open\jpc\message</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\jpc\model\Model.h">
+      <Filter>Project\Open\jpc\model</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Open\protobuf\base.proto">
+      <Filter>Project\Open\protobuf</Filter>
+    </None>
+    <None Include="Open\protobuf\user.proto">
+      <Filter>Project\Open\protobuf</Filter>
+    </None>
+    <None Include="Open\jpc\project.ini">
+      <Filter>Project\Open\jpc</Filter>
+    </None>
+    <None Include="Open\jpc\message\project.proto">
+      <Filter>Project\Open\jpc\message</Filter>
+    </None>
   </ItemGroup>
 </Project>
