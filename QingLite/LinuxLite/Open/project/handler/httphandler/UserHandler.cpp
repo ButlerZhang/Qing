@@ -1,8 +1,8 @@
 #include "UserHandler.h"
-#include "../core/tools/BoostLog.h"
-#include "../controller/HTTPServer.h"
-#include "../core/database/MySQLDatabase.h"
-#include "../core/network/ThreadNoticeQueue.h"
+#include "../../core/tools/BoostLog.h"
+#include "../../controller/HTTPServer.h"
+#include "../../core/database/MySQLDatabase.h"
+#include "../../core/network/ThreadNoticeQueue.h"
 #include <event.h>
 #include <event2/http.h>
 

@@ -1,15 +1,18 @@
 #include "HTTPBaseServer.h"
 #include "../tools/BoostLog.h"
-#include <string.h>
+
 #include <fcntl.h>
+#include <string.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <event2/bufferevent_ssl.h>
 
 
 
 HTTPBaseServer::HTTPBaseServer()
 {
     m_evHTTP = NULL;
+    m_SSLContext = NULL;
     m_CheckoutTimer = NULL;
     m_EventBase = event_base_new();
 
@@ -63,45 +66,60 @@ HTTPBaseServer::~HTTPBaseServer()
         m_CheckoutTimer = NULL;
     }
 
+    if (m_SSLContext != NULL)
+    {
+        SSL_CTX_free(m_SSLContext);
+        m_SSLContext = NULL;
+    }
     event_base_free(m_EventBase);
     m_EventBase = NULL;
     g_Log.WriteDebug("HTTP base server was destructored.");
 }
 
-bool HTTPBaseServer::Start(const std::string &ServerIP, int Port)
+bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableHTTPS)
 {
     if (m_EventBase == NULL)
     {
-        g_Log.WriteError("HTTP server event base is NULL.");
+        g_Log.WriteError("HTTP base server event base is NULL.");
         return false;
     }
 
     if (!AddCheckoutTimer(5))
     {
-        g_Log.WriteError("HTTP server add checkout timer failed.");
+        g_Log.WriteError("HTTP base server add checkout timer failed.");
         return false;
     }
 
     if (m_evHTTP != NULL)
     {
-        g_Log.WriteError("HTTP server re-start.");
+        g_Log.WriteError("HTTP base server re-start.");
         return true;
     }
 
     m_evHTTP = evhttp_new(m_EventBase);
     if (m_evHTTP == NULL)
     {
-        g_Log.WriteError("HTTP server could not create evhttp.");
+        g_Log.WriteError("HTTP base server could not create evhttp.");
         return false;
     }
 
     if (evhttp_bind_socket(m_evHTTP, ServerIP.c_str(), static_cast<uint16_t>(Port)) != 0)
     {
-        g_Log.WriteError(BoostFormat("HTTP server bind (%s,%d) failed.", ServerIP.c_str(), Port));
+        g_Log.WriteError(BoostFormat("HTTP base server bind (%s,%d) failed.", ServerIP.c_str(), Port));
         return false;
     }
 
-    evhttp_set_timeout(m_evHTTP, 5);
+    if (IsEnableHTTPS)
+    {
+        m_SSLContext = CreateSSLContext("./server/server-cert.pem", "./server/server-key.pem", "./ca/ca-cert.pem");
+        if (m_SSLContext == NULL)
+        {
+            g_Log.WriteError("HTTP base server create SSL context failed.");
+            return false;
+        }
+        evhttp_set_bevcb(m_evHTTP, CallBack_Bufferevent, m_SSLContext);
+    }
+    //evhttp_set_timeout(m_evHTTP, 5);
     evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
 
     g_Log.WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));
@@ -161,14 +179,14 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 {
     if (m_CheckoutTimer != NULL)
     {
-        g_Log.WriteError("HTTP Server re-create checkout timer.");
+        g_Log.WriteError("HTTP base server re-create checkout timer.");
         return true;
     }
 
     m_CheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_Checkout, this);
     if (m_CheckoutTimer == NULL)
     {
-        g_Log.WriteError("HTTP Server create chekcout timer failed.");
+        g_Log.WriteError("HTTP base server create chekcout timer failed.");
         return false;
     }
 
@@ -178,7 +196,7 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 
     if (event_add(m_CheckoutTimer, &tv) != 0)
     {
-        g_Log.WriteError("HTTP Server add checkout timer failed.");
+        g_Log.WriteError("HTTP base server add checkout timer failed.");
         event_free(m_CheckoutTimer);
         m_CheckoutTimer = NULL;
         return false;
@@ -376,6 +394,35 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     return true;
 }
 
+SSL_CTX* HTTPBaseServer::CreateSSLContext(const char *CertFile, const char *KeyFile, const char *CaFile)
+{
+    SSL_library_init();
+    SSL_load_error_strings();
+    const SSL_METHOD *meth = SSLv23_server_method();
+    SSL_CTX *ctx = SSL_CTX_new(meth);
+    if (NULL == ctx)
+    {
+        g_Log.WriteError("HTTP base server could not new SSL_CTX.");
+        return NULL;
+    }
+    if (SSL_CTX_load_verify_locations(ctx, CaFile, NULL) <= 0)
+    {
+        g_Log.WriteError("HTTP base server could not load ca cert file.");
+    }
+    if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
+    {
+        g_Log.WriteError("HTTP base server could not use certificate file.");
+    }
+    if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
+    {
+        g_Log.WriteError("HTTP base server could not use private key file.");
+    }
+    if (!SSL_CTX_check_private_key(ctx))
+    {
+        g_Log.WriteError("HTTP base server could private key does not match certfile.");
+    }
+    return ctx;
+}
 void HTTPBaseServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
 {
     HTTPBaseServer *Server = (HTTPBaseServer*)arg;
@@ -391,4 +438,19 @@ void HTTPBaseServer::CallBack_Checkout(int Socket, short Events, void * UserData
     evutil_timerclear(&tv);
     tv.tv_sec = 5;          //TimerInternal
     event_add(Server->m_CheckoutTimer, &tv);
+}
+bufferevent * HTTPBaseServer::CallBack_Bufferevent(event_base *base, void *arg)
+{
+    SSL_CTX *ctx = (SSL_CTX *)arg;
+    struct bufferevent* SSLbev = bufferevent_openssl_socket_new(
+        base,
+        -1,
+        SSL_new(ctx),
+        BUFFEREVENT_SSL_ACCEPTING,
+        BEV_OPT_CLOSE_ON_FREE);
+    if (SSLbev == NULL)
+    {
+        g_Log.WriteError("HTTP base server new bufferevent failed.");
+    }
+    return SSLbev;
 }

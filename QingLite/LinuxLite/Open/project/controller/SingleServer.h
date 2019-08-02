@@ -9,7 +9,6 @@ class SingleServer : public SingleEventBaseServer
 {
 public:
 
-    static SingleServer& GetInstance();
 
     virtual bool Start(const std::string &IP, int Port);
 
@@ -20,6 +19,7 @@ public:
     virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
 
     MySQLDatabase& GetDB() { return m_SMIBDB; }
+    static SingleServer& GetInstance() { static SingleServer g_Instance; return g_Instance; }
 
 private:
 

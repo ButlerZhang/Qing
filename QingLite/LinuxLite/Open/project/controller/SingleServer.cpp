@@ -14,12 +14,7 @@ SingleServer::SingleServer()
 
 SingleServer::~SingleServer()
 {
-}
 
-SingleServer & SingleServer::GetInstance()
-{
-    static SingleServer g_SingleServerInstance;
-    return g_SingleServerInstance;
 }
 
 bool SingleServer::Start(const std::string &IP, int Port)

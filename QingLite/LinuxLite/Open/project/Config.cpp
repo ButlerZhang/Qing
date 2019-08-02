@@ -26,7 +26,7 @@ void CallBack_LibEventLog(int Severity, const char *LogMsg)
 
 Config::Config() : m_ConfigFileName("project.ini"), DB_PASSWORD_KEY("CJSZHCHCSZCJSZCJ")
 {
-    //evthread_use_pthreads();
+    m_IsEnableHTTPS = true;
     event_set_log_callback(CallBack_LibEventLog);
 }
 
@@ -151,7 +151,7 @@ bool Config::LoadDatabaseConfig()
         switch(Section)
         {
         case 0:             ParseServerSection(ConfigName, ConfigValue);    break;
-        case 1:             ParseDebugSection(ConfigName, ConfigValue);     break;
+        case 1:             ParseSystemSection(ConfigName, ConfigValue);     break;
         default:            break;
         }
 
@@ -161,11 +161,11 @@ bool Config::LoadDatabaseConfig()
     return true;
 }
 
-bool Config::ParseDebugSection(const std::string &ConfigName, const std::string &ConfigValue)
+bool Config::ParseSystemSection(const std::string &ConfigName, const std::string &ConfigValue)
 {
     if (ConfigName == "log_severity")
     {
-        if (ConfigValue.size() != 1 || std::isdigit(ConfigValue[0]))
+        if (ConfigValue.size() != 1 || !std::isdigit(ConfigValue[0]))
         {
             g_Log.WriteError(BoostFormat("Config: log severity value = %s error.", ConfigValue.c_str()));
             return false;
@@ -180,6 +180,14 @@ bool Config::ParseDebugSection(const std::string &ConfigName, const std::string 
 
         g_Log.SetFilter(static_cast<LogLevel>(m_LogSeverity));
         return true;
+    }
+    if (ConfigName == "enable_https")
+    {
+        if (ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0)
+        {
+            m_IsEnableHTTPS = false;
+            return true;
+        }
     }
 
     return false;

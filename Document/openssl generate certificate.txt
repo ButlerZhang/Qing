@@ -1,0 +1,83 @@
+1.生成用于签发Client和Server证书的ca根证书：
+（1）创建目录：
+	mkdir ca
+（2）生成CA密钥，1024位RSA密钥，这里简单起见，没有对私钥进行加密：
+	openssl genrsa -out ca/ca-key.pem 1024
+（3）生成ca的证书请求文件：
+	openssl req -new -out ca/ca-req.csr -key ca/ca-key.pem
+
+	*Country Name (2 letter code) [AU]:cn 
+	*State or Province Name (full name) [Some-State]:guangdong
+	*Locality Name (eg, city) []:shenzhen
+	*Organization Name (eg, company) [Internet Widgits Pty Ltd]:CJ
+	*Organizational Unit Name (eg, section) []:0755
+	*Common Name (eg, YOUR name) []:butler
+	*Email Address []:zwq@163.com
+	*弹出密码输入选项，Enter默认即可
+
+（4）用CA私钥进行自签名，生成ca的证书文件：
+	openssl x509 -req -in ca/ca-req.csr -out ca/ca-cert.pem -signkey ca/ca-key.pem -days 365
+
+（5）将证书导出成浏览器支持的.p12格式：
+	openssl pkcs12 -export -clcerts -in ca/ca-cert.pem -inkey ca/ca-key.pem -out ca/ca.p12
+	输入密码：butler
+
+
+
+2.利用ca签发生成Client证书：
+（1）创建目录：
+	mkdir client
+（2）生成client私钥：
+	openssl genrsa -out client/client-key.pem 1024
+（3）生成client证书请求文件：
+	openssl req -new -out client/client-req.csr -key client/client-key.pem
+
+	*Country Name (2 letter code) [AU]:cn 
+	*State or Province Name (full name) [Some-State]:guangdong
+	*Locality Name (eg, city) []:shenzhen
+	*Organization Name (eg, company) [Internet Widgits Pty Ltd]:CJ
+	*Organizational Unit Name (eg, section) []:0755
+	*Common Name (eg, YOUR name) []:Client
+	*Email Address []:zwq@163.com
+
+	*Please enter the following 'extra' attributes to be sent with your certificate request 
+	*A challenge password []:butler
+	*An optional company name []:cj
+
+（4）ca签发client证书：
+	openssl x509 -req -in client/client-req.csr -out client/client-cert.pem -signkey client/client-key.pem -CA ca/ca-cert.pem -CAkey ca/ca-key.pem -CAcreateserial -days 365
+
+（5）将证书导出成浏览器支持的.p12格式：
+	openssl pkcs12 -export -clcerts -in client/client-cert.pem -inkey client/client-key.pem -out client/client.p12
+	输入密码：butler
+
+
+
+3.利用ca签发生成Server的证书：
+（1）创建目录：
+	mkdir server
+（2）生成server私钥：
+	openssl genrsa -out server/server-key.pem 1024
+（3）生成server证书请求文件：
+	openssl req -new -out server/server-req.csr -key server/server-key.pem
+
+	*Country Name (2 letter code) [AU]:cn 
+	*State or Province Name (full name) [Some-State]:guangdong
+	*Locality Name (eg, city) []:shenzhen
+	*Organization Name (eg, company) [Internet Widgits Pty Ltd]:CJ
+	*Organizational Unit Name (eg, section) []:0755
+	*Common Name (eg, YOUR name) []:192.168.3.126#需要填写服务器IP
+	*Email Address []:zwq@163.com
+	*弹出密码输入选项，Enter默认即可
+
+（4）ca签发server证书：
+	openssl x509 -req -in server/server-req.csr -out server/server-cert.pem -signkey server/server-key.pem -CA ca/ca-cert.pem -CAkey ca/ca-key.pem -CAcreateserial -days 365
+
+（5）将证书导出成浏览器支持的.p12格式：
+	openssl pkcs12 -export -clcerts -in server/server-cert.pem -inkey server/server-key.pem -out server/server.p12
+	输入密码：butler
+
+
+4.导入证书：
+（1）ca.p12导入至“受信任的根证书颁发机构”。
+（2）client.p12导入至个人。

@@ -216,7 +216,7 @@ bool MySQLDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet * MyData
 
     if (mysql_query(m_MySQL, QueryStr) != 0)
     {
-        g_Log.WriteError(BoostFormat("MySQL query: %s", mysql_error(m_MySQL)));
+        g_Log.WriteError(BoostFormat("MySQL query error: %s", mysql_error(m_MySQL)));
         return false;
     }
 

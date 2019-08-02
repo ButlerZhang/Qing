@@ -20,7 +20,7 @@ private:
     bool LoadFileConfig();
     bool LoadDatabaseConfig();
 
-    bool ParseDebugSection(const std::string &ConfigName, const std::string &ConfigValue);
+    bool ParseSystemSection(const std::string &ConfigName, const std::string &ConfigValue);
     bool ParseServerSection(const std::string &ConfigName, const std::string &ConfigValue);
 
 public:
@@ -38,6 +38,7 @@ public:
     std::string                     m_ServerIP;
 
     //debug
+    bool                            m_IsEnableHTTPS;
     int                             m_LogSeverity;
 
 private:

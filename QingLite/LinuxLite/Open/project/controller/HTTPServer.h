@@ -1,16 +1,14 @@
 #pragma once
 #include <vector>
-#include "../handler/UserHandler.h"
 #include "../core/database/MySQLDatabase.h"
 #include "../core/network/HTTPBaseServer.h"
+#include "../handler/httphandler/UserHandler.h"
 
 
 
 class HTTPServer : public HTTPBaseServer
 {
 public:
-
-    static HTTPServer& GetInstance();
 
     virtual bool Start(const std::string &ServerIP, int Port);
 
@@ -19,6 +17,7 @@ public:
     virtual bool ProcessPost(struct evhttp_request *Request);
 
     MySQLDatabase& GetDB() { return m_HTTPDB; }
+    static HTTPServer& GetInstance() { static HTTPServer g_Instance; return g_Instance; }
 
 private:
 

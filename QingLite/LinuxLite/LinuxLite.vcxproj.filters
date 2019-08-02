@@ -67,6 +67,9 @@
     <Filter Include="Open\project\model">
       <UniqueIdentifier>{c0561234-52ca-42c2-950a-0572569b6ba0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Open\project\handler\httphandler">
+      <UniqueIdentifier>{2719d097-c005-4033-976b-4680c0bb423e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -130,9 +133,6 @@
     <ClCompile Include="Open\project\handler\Handler.cpp">
       <Filter>Open\project\handler</Filter>
     </ClCompile>
-    <ClCompile Include="Open\project\handler\UserHandler.cpp">
-      <Filter>Open\project\handler</Filter>
-    </ClCompile>
     <ClCompile Include="Open\project\Config.cpp">
       <Filter>Open\project</Filter>
     </ClCompile>
@@ -141,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="Open\project\core\network\ThreadNoticeQueue.cpp">
       <Filter>Open\project\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\project\handler\httphandler\UserHandler.cpp">
+      <Filter>Open\project\handler\httphandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -361,9 +364,6 @@
     <ClInclude Include="Open\project\handler\Handler.h">
       <Filter>Open\project\handler</Filter>
     </ClInclude>
-    <ClInclude Include="Open\project\handler\UserHandler.h">
-      <Filter>Open\project\handler</Filter>
-    </ClInclude>
     <ClInclude Include="Open\project\model\Model.h">
       <Filter>Open\project\model</Filter>
     </ClInclude>
@@ -378,6 +378,9 @@
     </ClInclude>
     <ClInclude Include="Open\project\core\network\ThreadNoticeQueue.h">
       <Filter>Open\project\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\project\handler\httphandler\UserHandler.h">
+      <Filter>Open\project\handler\httphandler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

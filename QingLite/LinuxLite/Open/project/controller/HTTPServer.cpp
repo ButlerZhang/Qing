@@ -13,12 +13,7 @@ HTTPServer::HTTPServer()
 
 HTTPServer::~HTTPServer()
 {
-}
 
-HTTPServer & HTTPServer::GetInstance()
-{
-    static HTTPServer g_HTTPServerInstance;
-    return g_HTTPServerInstance;
 }
 
 bool HTTPServer::Start(const std::string &ServerIP, int Port)
@@ -57,8 +52,7 @@ bool HTTPServer::ProcessCheckout()
 
 bool HTTPServer::ProcessGet(evhttp_request *Request)
 {
-    std::string RequestPath;
-    GetRequestPath(Request, RequestPath);
+    std::string RequestPath(evhttp_request_get_uri(Request));
 
     if (RequestPath == "/")
     {
@@ -72,30 +66,14 @@ bool HTTPServer::ProcessGet(evhttp_request *Request)
             return HTTPBaseServer::ProcessGet(Request);
         }
 
-        std::string WorkPath;
-        if (PathVector[0] == "log")
-        {
-            WorkPath = "./LogFile/";
+        std::string WorkPath("./jpc-web");
             if (PathVector.size() == 1)
-            {
-                RequestPath = WorkPath;
-            }
-            else
-            {
-                RequestPath.replace(0, PathVector[0].size(), WorkPath);
-            }
-        }
-        else
         {
-            WorkPath = "./jpc-web";
-            if (PathVector.size() == 1)
-            {
                 RequestPath.insert(0, WorkPath);
             }
             else
             {
                 RequestPath.replace(0, PathVector[0].size(), WorkPath);
-            }
         }
     }
 
@@ -207,6 +185,6 @@ void HTTPServer::WorkThread_Process(void *Object)
     else
     {
         g_Log.WriteDebug("HTTP Server connnect database succeed.");
-        Server->HTTPBaseServer::Start(Server->m_ServerIP, Server->m_HTTPPort);
+        Server->HTTPBaseServer::Start(Server->m_ServerIP, Server->m_HTTPPort, g_Config.m_IsEnableHTTPS);
     }
 }
