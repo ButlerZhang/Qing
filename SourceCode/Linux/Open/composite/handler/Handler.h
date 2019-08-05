@@ -3,7 +3,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-struct evbuffer;
 struct evhttp_request;
 
 
@@ -17,13 +16,9 @@ public:
 
 protected:
 
-    std::string GetReplyJsonString();
     std::string GetPostDataString(struct evhttp_request * Request);
 
-    bool ParsePostData(const std::string &PostDataString);
+    std::string GetReplyJsonString(boost::property_tree::ptree &JsonTree);
 
-protected:
-
-    struct evbuffer                *m_evbuffer;
-    boost::property_tree::ptree     m_JsonTree;
+    bool ParsePostData(boost::property_tree::ptree &JsonTree, const std::string &PostDataString);
 };

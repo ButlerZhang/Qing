@@ -18,13 +18,14 @@ UserHandler::~UserHandler()
 
 bool UserHandler::ProcessLogin(evhttp_request *Request)
 {
-    if (!ParsePostData(GetPostDataString(Request)))
+    boost::property_tree::ptree JsonTree;
+    if (!ParsePostData(JsonTree, GetPostDataString(Request)))
     {
         return false;
     }
 
-    const std::string &UserName = m_JsonTree.get<std::string>("Name");
-    const std::string &Password = m_JsonTree.get<std::string>("Password");
+    const std::string &UserName = JsonTree.get<std::string>("Name");
+    const std::string &Password = JsonTree.get<std::string>("Password");
     g_Log.WriteDebug(BoostFormat("Process login: User name = %s, Password = %s", UserName.c_str(), Password.c_str()));
 
     UserModel ReplyModel;
@@ -39,7 +40,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
         ReplyModel.m_ErrorCode = 105;
         ReplyModel.m_ReplayMessage = "Login failed, query database error!";
         g_Log.WriteDebug(BoostFormat("Process login: Execute query failed: %s", SQLString.c_str()));
-        return SendLoginReply(Request, ReplyModel);
+        return SendLoginReply(Request, JsonTree, ReplyModel);
     }
 
     if (DataSet.GetRecordCount() <= 0)
@@ -47,7 +48,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
         ReplyModel.m_ErrorCode = 101;
         ReplyModel.m_ReplayMessage = "Login failed, user does not exist!";
         g_Log.WriteDebug(BoostFormat("Process login: Can not find user = %s", UserName.c_str()));
-        return SendLoginReply(Request, ReplyModel);
+        return SendLoginReply(Request, JsonTree, ReplyModel);
     }
 
     int IsLock = 0;
@@ -61,7 +62,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
         ReplyModel.m_ErrorCode = 105;
         ReplyModel.m_ReplayMessage = "Login failed, get database data error!";
         g_Log.WriteDebug("Process login: Get user value falied.");
-        return SendLoginReply(Request, ReplyModel);
+        return SendLoginReply(Request, JsonTree, ReplyModel);
     }
 
     if (Password != DBPassword)
@@ -69,7 +70,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
         ReplyModel.m_ErrorCode = 104;
         ReplyModel.m_ReplayMessage = "Login failed, the password is inocrrect!";
         g_Log.WriteDebug("Process login: Password does not match");
-        return SendLoginReply(Request, ReplyModel);
+        return SendLoginReply(Request, JsonTree, ReplyModel);
     }
 
     if (CreateTime == LastUpdateTime)
@@ -77,7 +78,7 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
         ReplyModel.m_ErrorCode = 102;
         ReplyModel.m_ReplayMessage = "Login failed, please change your password for the first login!";
         g_Log.WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
-        return SendLoginReply(Request, ReplyModel);
+        return SendLoginReply(Request, JsonTree, ReplyModel);
     }
 
     if (IsLock)
@@ -85,11 +86,11 @@ bool UserHandler::ProcessLogin(evhttp_request *Request)
         ReplyModel.m_ErrorCode = 103;
         ReplyModel.m_ReplayMessage = "Login failed, user is locked, please contact the administrators!";
         g_Log.WriteDebug("Process login: " + ReplyModel.m_ReplayMessage);
-        return SendLoginReply(Request, ReplyModel);
+        return SendLoginReply(Request, JsonTree, ReplyModel);
     }
 
     g_Log.WriteDebug(BoostFormat("Process login: User = %s login success.", UserName.c_str()));
-    return SendLoginReply(Request, ReplyModel);
+    return SendLoginReply(Request, JsonTree, ReplyModel);
 }
 
 bool UserHandler::ProcessLogout(evhttp_request * Request)
@@ -97,23 +98,23 @@ bool UserHandler::ProcessLogout(evhttp_request * Request)
     return false;
 }
 
-bool UserHandler::SendLoginReply(evhttp_request *Request, const UserModel &ReplyModel)
+bool UserHandler::SendLoginReply(struct evhttp_request *Request, boost::property_tree::ptree &JsonTree, const UserModel &ReplyModel)
 {
-    m_JsonTree.clear();
-    m_JsonTree.put("ErrorCode", ReplyModel.m_ErrorCode);
-    m_JsonTree.put("Message", ReplyModel.m_ReplayMessage);
+    JsonTree.clear();
+    JsonTree.put("ErrorCode", ReplyModel.m_ErrorCode);
+    JsonTree.put("Message", ReplyModel.m_ReplayMessage);
 
     boost::property_tree::ptree UserTree;
     UserTree.put("AuthorityID", ReplyModel.m_AuthorityID);
     UserTree.put("Name", ReplyModel.m_UserName);
-    m_JsonTree.push_back(std::make_pair("UserInfo", UserTree));
+    JsonTree.push_back(std::make_pair("UserInfo", UserTree));
 
-    const std::string &JsonString = GetReplyJsonString();
+    const std::string &JsonString = GetReplyJsonString(JsonTree);
     g_ThreadNoticeQueue.PushMessage(JsonString);
 
     struct evbuffer *evbuffer_temp = evbuffer_new();
-    evbuffer_add_printf(m_evbuffer, JsonString.c_str());
-    evhttp_send_reply(Request, ReplyModel.m_ErrorCode, ReplyModel.m_ReplayMessage.c_str(), m_evbuffer);
+    evbuffer_add_printf(evbuffer_temp, JsonString.c_str());
+    evhttp_send_reply(Request, ReplyModel.m_ErrorCode, ReplyModel.m_ReplayMessage.c_str(), evbuffer_temp);
     evbuffer_free(evbuffer_temp);
 
     return true;

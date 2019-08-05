@@ -18,5 +18,5 @@ public:
 
 private:
 
-    bool SendLoginReply(struct evhttp_request *Request, const UserModel &ReplyModel);
+    bool SendLoginReply(struct evhttp_request *Request, boost::property_tree::ptree &JsonTree, const UserModel &ReplyModel);
 };

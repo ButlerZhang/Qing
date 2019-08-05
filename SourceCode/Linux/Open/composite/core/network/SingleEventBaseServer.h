@@ -29,6 +29,7 @@ protected:
     bool DeleteSocket(int ClientSocket);
     bool AddCheckoutTimer(int TimerInternal);
     bool CreateListener(const std::string &IP, int Port);
+    bool HasClient() const { return !m_ClientMap.empty(); }
     bool Send(const void *Data, size_t Size);
     bool Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size);
 

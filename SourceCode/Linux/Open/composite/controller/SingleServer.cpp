@@ -68,9 +68,17 @@ bool SingleServer::ProcessDisconnected()
 bool SingleServer::ProcessThreadNoticeQueue()
 {
     std::string JsonString;
-    if (g_ThreadNoticeQueue.PopMessage(JsonString))
+    if (!g_ThreadNoticeQueue.PopMessage(JsonString))
     {
-        g_Log.WriteDebug(BoostFormat("Single Server process message queue: %s", JsonString.c_str()));
+        g_Log.WriteDebug("Single Server process notice queue, pop message failed.");
+        return false;
+    }
+    if (!HasClient())
+    {
+        g_Log.WriteDebug("Single Server process notice queue, no client.");
+        return false;
+    }
+    g_Log.WriteDebug(BoostFormat("Single Server process notice queue: %s", JsonString.c_str()));
         Project::ServerError ServerPublic;
         ServerPublic.set_errortype(12341234);
         ServerPublic.set_errordescriptor("Http server: " + JsonString);
@@ -79,12 +87,7 @@ bool SingleServer::ProcessThreadNoticeQueue()
         Header->set_transmissionid(GetUUID());
         return SendMessage(Project::MessageType::MT_ERROR, ServerPublic);
     }
-    else
-    {
-        g_Log.WriteError("Single Server process message queue failed.");
-        return false;
-    }
-}
+
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
     int MessageType = DecodeMessage(NetworkMsg.m_Message);

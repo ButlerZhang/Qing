@@ -119,7 +119,8 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableH
         }
         evhttp_set_bevcb(m_evHTTP, CallBack_Bufferevent, m_SSLContext);
     }
-    //evhttp_set_timeout(m_evHTTP, 5);
+
+    evhttp_set_timeout(m_evHTTP, 5);
     evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
 
     g_Log.WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));

@@ -67,31 +67,31 @@
     <Filter Include="Project\Open\protobuf">
       <UniqueIdentifier>{9ff43904-cf2c-480e-9421-f6c414006f78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc">
+    <Filter Include="Project\Open\composite">
       <UniqueIdentifier>{c54eefdb-737e-4c66-8703-99240bdc808d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\controller">
+    <Filter Include="Project\Open\composite\controller">
       <UniqueIdentifier>{733c3da3-542e-4e15-837f-b71d1e070363}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\core">
+    <Filter Include="Project\Open\composite\core">
       <UniqueIdentifier>{84f5a9df-5bc4-45b3-910f-7f3b9f04fd6f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\core\network">
+    <Filter Include="Project\Open\composite\core\network">
       <UniqueIdentifier>{e973a81d-1d49-4c71-a00d-be42e1e6cd7d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\core\tools">
+    <Filter Include="Project\Open\composite\core\tools">
       <UniqueIdentifier>{28837c83-ce01-4a18-b8f2-56e59355ba4e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\handler">
+    <Filter Include="Project\Open\composite\handler">
       <UniqueIdentifier>{8a9b0867-d12e-4457-b834-8aa2efd08496}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\handler\httphandler">
+    <Filter Include="Project\Open\composite\handler\httphandler">
       <UniqueIdentifier>{0b8b847b-13f6-4aab-9fe5-9f7fcfa17300}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\message">
+    <Filter Include="Project\Open\composite\message">
       <UniqueIdentifier>{4e04c6f2-cc12-4a8e-8fe5-4f2ce23dac50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\jpc\model">
+    <Filter Include="Project\Open\composite\model">
       <UniqueIdentifier>{c4947c74-fd7b-414f-85ee-525afdefadf2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -172,53 +172,53 @@
     <ClCompile Include="Open\protobuf\user.pb.cc">
       <Filter>Project\Open\protobuf</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\Config.cpp">
-      <Filter>Project\Open\jpc</Filter>
+    <ClCompile Include="Open\composite\controller\Client.cpp">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\controller\Client.cpp">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClCompile Include="Open\composite\controller\HTTPServer.cpp">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\controller\HTTPServer.cpp">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClCompile Include="Open\composite\controller\MultiServer.cpp">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\controller\MultiServer.cpp">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClCompile Include="Open\composite\controller\SingleServer.cpp">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\controller\SingleServer.cpp">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClCompile Include="Open\composite\core\network\HTTPBaseServer.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\HTTPBaseServer.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\core\network\MultiEventBaseServer.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\MultiEventBaseServer.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\core\network\ServerNetworkMessageHandler.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\ServerNetworkMessageHandler.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\core\network\SignalEventMap.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\SignalEventMap.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\core\network\SingleEventBaseClient.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\SingleEventBaseClient.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\core\network\SingleEventBaseServer.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\SingleEventBaseServer.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\core\network\ThreadNoticeQueue.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\ThreadNoticeQueue.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\core\network\UDPBroadcast.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\core\network\UDPBroadcast.cpp">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClCompile Include="Open\composite\handler\Handler.cpp">
+      <Filter>Project\Open\composite\handler</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\handler\Handler.cpp">
-      <Filter>Project\Open\jpc\handler</Filter>
+    <ClCompile Include="Open\composite\handler\httphandler\UserHandler.cpp">
+      <Filter>Project\Open\composite\handler\httphandler</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\handler\httphandler\UserHandler.cpp">
-      <Filter>Project\Open\jpc\handler\httphandler</Filter>
+    <ClCompile Include="Open\composite\message\project.pb.cc">
+      <Filter>Project\Open\composite\message</Filter>
     </ClCompile>
-    <ClCompile Include="Open\jpc\message\project.pb.cc">
-      <Filter>Project\Open\jpc\message</Filter>
+    <ClCompile Include="Open\composite\Config.cpp">
+      <Filter>Project\Open\composite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -466,68 +466,68 @@
     <ClInclude Include="Open\protobuf\user.pb.h">
       <Filter>Project\Open\protobuf</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\Config.h">
-      <Filter>Project\Open\jpc</Filter>
+    <ClInclude Include="Open\composite\controller\Client.h">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\Project.h">
-      <Filter>Project\Open\jpc</Filter>
+    <ClInclude Include="Open\composite\controller\HTTPServer.h">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\controller\Client.h">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClInclude Include="Open\composite\controller\MultiServer.h">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\controller\HTTPServer.h">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClInclude Include="Open\composite\controller\SingleServer.h">
+      <Filter>Project\Open\composite\controller</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\controller\MultiServer.h">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClInclude Include="Open\composite\core\network\HTTPBaseServer.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\controller\SingleServer.h">
-      <Filter>Project\Open\jpc\controller</Filter>
+    <ClInclude Include="Open\composite\core\network\MultiEventBaseServer.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\HTTPBaseServer.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\network\NetworkBase.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\MultiEventBaseServer.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\network\ServerNetworkMessageHandler.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\NetworkBase.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\network\SignalEventMap.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\ServerNetworkMessageHandler.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\network\SingleEventBaseClient.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\SignalEventMap.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\network\SingleEventBaseServer.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\SingleEventBaseClient.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\network\ThreadNoticeQueue.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\SingleEventBaseServer.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\network\UDPBroadcast.h">
+      <Filter>Project\Open\composite\core\network</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\ThreadNoticeQueue.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h">
+      <Filter>Project\Open\composite\core\tools</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\network\UDPBroadcast.h">
-      <Filter>Project\Open\jpc\core\network</Filter>
+    <ClInclude Include="Open\composite\handler\Handler.h">
+      <Filter>Project\Open\composite\handler</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\core\tools\OpenSSLAES.h">
-      <Filter>Project\Open\jpc\core\tools</Filter>
+    <ClInclude Include="Open\composite\handler\httphandler\UserHandler.h">
+      <Filter>Project\Open\composite\handler\httphandler</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\handler\Handler.h">
-      <Filter>Project\Open\jpc\handler</Filter>
+    <ClInclude Include="Open\composite\message\CodedMessage.h">
+      <Filter>Project\Open\composite\message</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\handler\httphandler\UserHandler.h">
-      <Filter>Project\Open\jpc\handler\httphandler</Filter>
+    <ClInclude Include="Open\composite\message\project.pb.h">
+      <Filter>Project\Open\composite\message</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\message\CodedMessage.h">
-      <Filter>Project\Open\jpc\message</Filter>
+    <ClInclude Include="Open\composite\model\Model.h">
+      <Filter>Project\Open\composite\model</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\message\project.pb.h">
-      <Filter>Project\Open\jpc\message</Filter>
+    <ClInclude Include="Open\composite\Config.h">
+      <Filter>Project\Open\composite</Filter>
     </ClInclude>
-    <ClInclude Include="Open\jpc\model\Model.h">
-      <Filter>Project\Open\jpc\model</Filter>
+    <ClInclude Include="Open\composite\Project.h">
+      <Filter>Project\Open\composite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -537,11 +537,11 @@
     <None Include="Open\protobuf\user.proto">
       <Filter>Project\Open\protobuf</Filter>
     </None>
-    <None Include="Open\jpc\project.ini">
-      <Filter>Project\Open\jpc</Filter>
+    <None Include="Open\composite\message\project.proto">
+      <Filter>Project\Open\composite\message</Filter>
     </None>
-    <None Include="Open\jpc\message\project.proto">
-      <Filter>Project\Open\jpc\message</Filter>
+    <None Include="Open\composite\project.ini">
+      <Filter>Project\Open\composite</Filter>
     </None>
   </ItemGroup>
 </Project>
