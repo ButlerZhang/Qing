@@ -7,29 +7,18 @@
 
 
 
-SingleEventBaseClient::SingleEventBaseClient() : m_IOBuffer(std::make_shared<EventIOBuffer>())
+SingleEventBaseClient::SingleEventBaseClient()
 {
     m_ServerPort = 0;
     m_UDPSocket = -1;
     m_BroadcastPort = 0;
     m_IsConnected = false;
-
-
+    m_RecvDataBuffer = std::make_shared<EventDataBuffer>();
 }
 
 SingleEventBaseClient::~SingleEventBaseClient()
 {
-    if (event_base_loopbreak(m_EventBase.m_eventbase) != 0)
-    {
-        g_Log.WriteError("Single base client event can not loop break.");
-    }
-
-
-
-
-
-
-
+    event_base_loopbreak(m_EventBase.m_eventbase);
     g_Log.WriteDebug("Single base client was destructored.");
 }
 
@@ -37,7 +26,7 @@ bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
 {
     if (m_EventBase.m_eventbase == NULL)
     {
-        g_Log.WriteError("Single base client create event base failed.");
+        g_Log.WriteError("Single base client event base is NULL.");
         return false;
     }
 
@@ -56,9 +45,7 @@ bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
     m_ServerPort = Port;
     m_ServerIP = ServerIP;
 
-    if (!AddEventInputFromCMD() ||
-        !AddTimerSendDataRandomly() ||
-        !AddTimerReConnectServer())
+    if (!AddEventInputFromCMD() || !AddCheckoutTimer(1))
     {
         return false;
     }
@@ -72,7 +59,7 @@ bool SingleEventBaseClient::Start(int UDPBroadcastPort)
 {
     if (m_EventBase.m_eventbase == NULL)
     {
-        g_Log.WriteError("Single base client create event base failed.");
+        g_Log.WriteError("Single base client event base is NULL.");
         return false;
     }
 
@@ -89,10 +76,7 @@ bool SingleEventBaseClient::Start(int UDPBroadcastPort)
     }
 
     m_BroadcastPort = UDPBroadcastPort;
-
-    if (!AddEventInputFromCMD() ||
-        !AddTimerSendDataRandomly() ||
-        !AddTimerReBindUDPSocket())
+    if (!AddEventInputFromCMD() || !AddEventRecvUDPBroadcast() || !AddCheckoutTimer(1))
     {
         return false;
     }
@@ -120,41 +104,32 @@ bool SingleEventBaseClient::Send(const void * Data, size_t Size)
     return true;
 }
 
-bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
+bool SingleEventBaseClient::ProcessCheckout()
 {
     if (m_IsConnected)
     {
-        g_Log.WriteError("Single base client re-connect server.");
         return true;
     }
 
-    struct sockaddr_in ServerAddress;
-    bzero(&ServerAddress, sizeof(sockaddr_in));
-    ServerAddress.sin_family = AF_INET;
-    inet_pton(AF_INET, ServerIP.c_str(), &(ServerAddress.sin_addr));
-    ServerAddress.sin_port = htons(static_cast<uint16_t>(Port));
-
-    if (m_IOBuffer->m_bufferevent == NULL)
+    if (m_BroadcastPort > 0)
     {
-        m_IOBuffer->m_bufferevent = bufferevent_socket_new(m_EventBase.m_eventbase, -1, BEV_OPT_CLOSE_ON_FREE);
-        if (m_IOBuffer->m_bufferevent == NULL)
+        if (m_UDPBroadcastEvent == NULL)
         {
-            g_Log.WriteError("Single base client create bufferevent failed.");
-            return false;
+            g_Log.WriteDebug("Single base client process check out: add recv udp broadcast.");
+            AddEventRecvUDPBroadcast();
         }
 
-        bufferevent_setcb(m_IOBuffer->m_bufferevent, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, this);
-        bufferevent_enable(m_IOBuffer->m_bufferevent, EV_READ | EV_PERSIST);
-    }
-
-    int ConnectResult = bufferevent_socket_connect(m_IOBuffer->m_bufferevent, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress));
-    if (ConnectResult != 0)
-    {
-        g_Log.WriteError("Single base client bufferevent connect failed.");
         return false;
     }
 
-    return true;
+    if (!m_ServerIP.empty() && m_ServerPort > 0)
+    {
+        g_Log.WriteDebug("Single base client process check out: connect server.");
+        ConnectServer(m_ServerIP, m_ServerPort);
+        return false;
+    }
+
+    return false;
 }
 
 bool SingleEventBaseClient::AddEventInputFromCMD()
@@ -175,8 +150,6 @@ bool SingleEventBaseClient::AddEventInputFromCMD()
     if (event_add(m_CMDInputEvent.m_event, NULL) != 0)
     {
         g_Log.WriteError("Single base client add CMD event failed.");
-        event_free(m_CMDInputEvent.m_event);
-        m_CMDInputEvent.m_event = NULL;
         return false;
     }
 
@@ -185,17 +158,22 @@ bool SingleEventBaseClient::AddEventInputFromCMD()
 
 bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
 {
+    if (m_UDPSocket > 0)
+    {
+        close(m_UDPSocket);
+        m_UDPSocket = -1;
+    }
     m_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_UDPSocket == -1)
     {
-        g_Log.WriteError("Single base client create udp socket failed.");
+        g_Log.WriteError(BoostFormat("Single base client create udp socket error = %s.", strerror(errno)));
         return false;
     }
 
     int Optval = 1;
     if (setsockopt(m_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
-        g_Log.WriteError("Single base client set udp sockopt failed.");
+        g_Log.WriteError(BoostFormat("Single base client set udp sockopt error = %s.", strerror(errno)));
         return false;
     }
 
@@ -206,18 +184,19 @@ bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
 
     if (bind(m_UDPSocket, (struct sockaddr *)&m_BroadcastAddress, sizeof(m_BroadcastAddress)) == -1)
     {
-        g_Log.WriteError("Single base client bind udp socket failed.");
+        g_Log.WriteError(BoostFormat("Single base client bind udp socket error = %s.", strerror(errno)));
         return false;
     }
 
-    m_UDPBroadcastEvent.m_event = event_new(m_EventBase.m_eventbase, m_UDPSocket, EV_READ | EV_PERSIST, CallBack_RecvUDPBroadcast, this);
-    if (m_UDPBroadcastEvent.m_event == NULL)
+    m_UDPBroadcastEvent = std::make_shared<EventNormal>();
+    m_UDPBroadcastEvent->m_event = event_new(m_EventBase.m_eventbase, m_UDPSocket, EV_READ | EV_PERSIST, CallBack_RecvUDPBroadcast, this);
+    if (m_UDPBroadcastEvent->m_event == NULL)
     {
         g_Log.WriteError("Single base client create udp broadcast event failed.");
         return false;
     }
 
-    if (event_add(m_UDPBroadcastEvent.m_event, NULL) == -1)
+    if (event_add(m_UDPBroadcastEvent->m_event, NULL) == -1)
     {
         g_Log.WriteError("Single base client add udp broadcast event failed.");
         return false;
@@ -226,91 +205,61 @@ bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
     return true;
 }
 
-bool SingleEventBaseClient::AddTimerReBindUDPSocket()
+bool SingleEventBaseClient::AddCheckoutTimer(int TimerInternal)
 {
-    if (m_ReBindUDPSocketTimer.m_event != NULL)
+    if (m_CheckoutTimer.m_event != NULL)
     {
-        g_Log.WriteError("Single base client re-create re-bind udp socket timer.");
+        g_Log.WriteError("Single base client re-create checkout timer.");
         return true;
     }
 
-    m_ReBindUDPSocketTimer.m_event = event_new(m_EventBase.m_eventbase, -1, EV_PERSIST, CallBack_ReBindUDPSocket, this);
-    if (m_ReBindUDPSocketTimer.m_event == NULL)
+    m_CheckoutTimer.m_event = event_new(m_EventBase.m_eventbase, -1, EV_PERSIST, CallBack_Checkout, this);
+    if (m_CheckoutTimer.m_event == NULL)
     {
-        g_Log.WriteError("Single base client create re-bind udp socket timer failed.");
+        g_Log.WriteError("Single base client create chekcout timer failed.");
         return false;
     }
 
     struct timeval tv;
     evutil_timerclear(&tv);
-    tv.tv_sec = 1;
-
-    if (event_add(m_ReBindUDPSocketTimer.m_event, &tv) != 0)
+    tv.tv_sec = TimerInternal;
+    if (event_add(m_CheckoutTimer.m_event, &tv) != 0)
     {
-        g_Log.WriteError("Single base client add re-bind udp socket timer failed.");
-        event_free(m_ReBindUDPSocketTimer.m_event);
-        m_ReBindUDPSocketTimer.m_event = NULL;
+        g_Log.WriteError("Single base client add checkout timer failed.");
         return false;
     }
 
     return true;
 }
 
-bool SingleEventBaseClient::AddTimerReConnectServer()
+bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
 {
-    if (m_ReConnectServerTimer.m_event != NULL)
+    if (m_IsConnected)
     {
-        g_Log.WriteError("Single base client re-create re-connect server timer.");
+        g_Log.WriteError("Single base client re-connect server.");
         return true;
     }
 
-    m_ReConnectServerTimer.m_event = event_new(m_EventBase.m_eventbase, -1, EV_PERSIST, CallBack_ReConnectServer, this);
-    if (m_ReConnectServerTimer.m_event == NULL)
+    struct sockaddr_in ServerAddress;
+    bzero(&ServerAddress, sizeof(sockaddr_in));
+    ServerAddress.sin_family = AF_INET;
+    inet_pton(AF_INET, ServerIP.c_str(), &(ServerAddress.sin_addr));
+    ServerAddress.sin_port = htons(static_cast<uint16_t>(Port));
+
+    m_IOBuffer = std::make_shared<EventIOBuffer>();
+    m_IOBuffer->m_bufferevent = bufferevent_socket_new(m_EventBase.m_eventbase, -1, BEV_OPT_CLOSE_ON_FREE);
+    if (m_IOBuffer->m_bufferevent == NULL)
     {
-        g_Log.WriteError("Single base client create re-connect server timer failed.");
+        g_Log.WriteError("Single base client create bufferevent failed.");
         return false;
     }
 
-    struct timeval tv;
-    evutil_timerclear(&tv);
-    tv.tv_sec = 1;
+    bufferevent_setcb(m_IOBuffer->m_bufferevent, CallBack_RecvFromServer, NULL, CallBack_ClientEvent, this);
+    bufferevent_enable(m_IOBuffer->m_bufferevent, EV_READ | EV_PERSIST);
 
-    if (event_add(m_ReConnectServerTimer.m_event, &tv) != 0)
+    if (bufferevent_socket_connect(m_IOBuffer->m_bufferevent, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress)) != 0)
     {
-        g_Log.WriteError("Single base client add re-connect server timer failed.");
-        event_free(m_ReConnectServerTimer.m_event);
-        m_ReConnectServerTimer.m_event = NULL;
-        return false;
-    }
-
-    return true;
-}
-
-bool SingleEventBaseClient::AddTimerSendDataRandomly()
-{
-    return true;
-    if (m_SendDataRandomlyTimer.m_event != NULL)
-    {
-        g_Log.WriteError("Single base client re-create send data randomly event.");
-        return true;
-    }
-
-    m_SendDataRandomlyTimer.m_event = event_new(m_EventBase.m_eventbase, -1, EV_PERSIST, CallBack_SendDataRandomly, this);
-    if (m_SendDataRandomlyTimer.m_event == NULL)
-    {
-        g_Log.WriteError("Single base client create send data randomly event failed.");
-        return false;
-    }
-
-    struct timeval tv;
-    evutil_timerclear(&tv);
-    tv.tv_sec = GetRandomUIntInRange(3, 10);
-
-    if (event_add(m_SendDataRandomlyTimer.m_event, &tv) != 0)
-    {
-        g_Log.WriteError("Single base client add send data randomly event failed.");
-        event_free(m_SendDataRandomlyTimer.m_event);
-        m_SendDataRandomlyTimer.m_event = NULL;
+        g_Log.WriteError("Single base client bufferevent connect failed.");
         return false;
     }
 
@@ -399,70 +348,6 @@ void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, 
     }
 }
 
-void SingleEventBaseClient::CallBack_ReBindUDPSocket(int Socket, short Events, void * UserData)
-{
-    int TimerInternal = 5;
-    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-
-    if (Client->m_UDPSocket > 0)
-    {
-        close(Client->m_UDPSocket);
-        Client->m_UDPSocket = -1;
-    }
-
-    if (Client->m_UDPBroadcastEvent.m_event != NULL)
-    {
-        event_free(Client->m_UDPBroadcastEvent.m_event);
-        Client->m_UDPBroadcastEvent.m_event = NULL;
-    }
-
-    if (!Client->m_IsConnected)
-    {
-        if (Client->AddEventRecvUDPBroadcast() == false)
-        {
-            TimerInternal = 1;
-        }
-    }
-
-    struct timeval tv;
-    evutil_timerclear(&tv);
-    tv.tv_sec = TimerInternal;
-    event_add(Client->m_ReBindUDPSocketTimer.m_event, &tv);
-}
-
-void SingleEventBaseClient::CallBack_ReConnectServer(int Socket, short Events, void * UserData)
-{
-    int TimerInternal = 5;
-    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-    if (!Client->m_IsConnected && Client->m_IOBuffer->m_bufferevent == NULL)
-    {
-        if (Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort) == false)
-        {
-            TimerInternal = 1;
-        }
-    }
-
-    struct timeval tv;
-    evutil_timerclear(&tv);
-    tv.tv_sec = TimerInternal;
-    event_add(Client->m_ReConnectServerTimer.m_event, &tv);
-}
-
-void SingleEventBaseClient::CallBack_SendDataRandomly(int Socket, short Events, void *UserData)
-{
-    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-    if (Client->m_IsConnected && Client->m_IOBuffer->m_bufferevent != NULL)
-    {
-        const std::string &UUID = GetUUID();
-        Client->Send(UUID.c_str(), UUID.size());
-
-        struct timeval tv;
-        evutil_timerclear(&tv);
-        tv.tv_sec = GetRandomUIntInRange(3, 10);
-        event_add(Client->m_SendDataRandomlyTimer.m_event, &tv);
-    }
-}
-
 void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short Events, void *UserData)
 {
     SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
@@ -490,14 +375,12 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
     {
         Client->m_IsConnected = true;
         g_Log.WriteInfo("Single base client connected server succeed.");
-        if (Client->m_UDPBroadcastEvent.m_event != NULL)
+        if (Client->m_UDPBroadcastEvent != NULL && Client->m_UDPBroadcastEvent->m_event != NULL)
         {
-            if (event_del(Client->m_UDPBroadcastEvent.m_event) == 0)
+            if (event_del(Client->m_UDPBroadcastEvent->m_event) == 0)
             {
+                Client->m_UDPBroadcastEvent = NULL;
                 g_Log.WriteInfo("Single base client delete udp broadcast recv event and close udp socket.");
-                event_free(Client->m_UDPBroadcastEvent.m_event);
-                Client->m_UDPBroadcastEvent.m_event = NULL;
-                close(Client->m_UDPSocket);
             }
         }
 
@@ -516,10 +399,10 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
 
     if (!Client->m_IsConnected)
     {
-        if (Client->m_IOBuffer->m_bufferevent != NULL)
+        if (Client->m_BroadcastPort > 0)
         {
-            bufferevent_free(Client->m_IOBuffer->m_bufferevent);
-            Client->m_IOBuffer->m_bufferevent = NULL;
+            Client->m_ServerPort = 0;
+            Client->m_ServerIP.clear();
         }
 
         Client->ProcessDisconnected();
@@ -535,7 +418,7 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *User
     std::vector<char> MessageHeaderLengthBuffer(MESSAGE_HEADER_LENGTH_SIZE, 0);
 
     std::vector<char> RecvBuffer(NETWORK_BUFFER_SIZE, 0);
-    struct evbuffer *EventBuffer = Client->m_RecvDataBuffer.m_evbuffer;
+    struct evbuffer *EventBuffer = Client->m_RecvDataBuffer->m_evbuffer;
 
     size_t RecvSize = 0, EventBufferLength = 0;
     while (RecvSize = bufferevent_read(bev, &RecvBuffer[0], RecvBuffer.size()), RecvSize > 0)
@@ -590,4 +473,14 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *User
             Client->ProcessMessage(NetworkMsg);
         }
     }
+}
+
+void SingleEventBaseClient::CallBack_Checkout(int Socket, short Events, void * UserData)
+{
+    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
+    Client->ProcessCheckout();
+    struct timeval tv;
+    evutil_timerclear(&tv);
+    tv.tv_sec = GetRandomUIntInRange(1, 6);
+    event_add(Client->m_CheckoutTimer.m_event, &tv);
 }

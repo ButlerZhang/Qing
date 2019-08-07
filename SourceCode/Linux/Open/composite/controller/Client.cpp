@@ -15,6 +15,19 @@ Client::~Client()
 {
     g_Log.WriteDebug(BoostFormat("Client ID = %d was destructored.", m_ClientID));
 }
+bool Client::ProcessCheckout()
+{
+    if (SingleEventBaseClient::ProcessCheckout())
+    {
+        bool IsOkToSendDataRandomly = false; //TODO
+        if (IsOkToSendDataRandomly)
+        {
+            const std::string &UUID = GetUUID();
+            Send(UUID.c_str(), UUID.size());
+        }
+    }
+    return true;
+}
 
 bool Client::ProcessConnected()
 {

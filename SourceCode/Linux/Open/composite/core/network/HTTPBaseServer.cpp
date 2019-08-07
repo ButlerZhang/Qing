@@ -44,10 +44,7 @@ HTTPBaseServer::HTTPBaseServer()
 HTTPBaseServer::~HTTPBaseServer()
 {
     m_ContentTypeMap.clear();
-    if (event_base_loopbreak(m_EventBase.m_eventbase) != 0)
-    {
-        g_Log.WriteError("HTTP base server event can not loop break.");
-    }
+    event_base_loopbreak(m_EventBase.m_eventbase);
 
     g_Log.WriteDebug("HTTP base server was destructored.");
 }
@@ -89,10 +86,10 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableH
             g_Log.WriteError("HTTP base server create SSL context failed.");
             return false;
         }
-        evhttp_set_bevcb(m_EventHTTP.m_evhttp, CallBack_Bufferevent, SSLContext);
+        evhttp_set_bevcb(m_EventHTTP.m_evhttp, CallBack_CreateSSLBufferevent, SSLContext);
     }
 
-    //evhttp_set_timeout(m_EventHTTP.m_evhttp, 5);
+    evhttp_set_timeout(m_EventHTTP.m_evhttp, 5);
     evhttp_set_gencb(m_EventHTTP.m_evhttp, CallBack_GenericRequest, this);
 
     g_Log.WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));
@@ -128,6 +125,7 @@ bool HTTPBaseServer::ProcessGet(evhttp_request *Request)
     if (stat(FullPath.c_str(), &ActuallyPathStat) < 0)
     {
         g_Log.WriteError(BoostFormat("HTTP base server: stat path = %s failed.", FullPath.c_str()));
+        evhttp_send_error(Request, HTTP_BADMETHOD, "File was not found.");
         return false;
     }
 
@@ -170,8 +168,6 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
     if (event_add(m_CheckoutTimer.m_event, &tv) != 0)
     {
         g_Log.WriteError("HTTP base server add checkout timer failed.");
-        event_free(m_CheckoutTimer.m_event);
-        m_CheckoutTimer.m_event = NULL;
         return false;
     }
 
@@ -354,23 +350,16 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
         return false;
     }
 
-    struct evbuffer *evb = evbuffer_new();
-    if (evb == NULL)
-    {
-        g_Log.WriteError("HTTP base server process file: evbuffer create failed.");
-        close(FileDescriptor);
-        return false;
-    }
 
     const char *FileExtension = strrchr(ActualllyPath.c_str(), '.') + 1;
     std::map<std::string, std::string>::iterator it = m_ContentTypeMap.find(FileExtension);
     const char *FileType = (it != m_ContentTypeMap.end()) ? it->second.c_str() : m_ContentTypeMap["misc"].c_str();
 
+    EventDataBuffer DataBuffer;
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", FileType);
-    evbuffer_add_file(evb, FileDescriptor, 0, FileStat.st_size); //evbuffer_add_file will close file descriptor after succeed
-    evhttp_send_reply(Request, HTTP_OK, "OK", evb);
+    evbuffer_add_file(DataBuffer.m_evbuffer, FileDescriptor, 0, FileStat.st_size); //evbuffer_add_file will close file descriptor after succeed
+    evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
 
-    evbuffer_free(evb);
     return true;
 }
 
@@ -411,7 +400,7 @@ void HTTPBaseServer::CallBack_Checkout(int Socket, short Events, void * UserData
     tv.tv_sec = 5;          //TimerInternal
     event_add(Server->m_CheckoutTimer.m_event, &tv);
 }
-bufferevent * HTTPBaseServer::CallBack_Bufferevent(event_base *base, void *arg)
+bufferevent* HTTPBaseServer::CallBack_CreateSSLBufferevent(event_base *base, void *arg)
 {
     SSL_CTX *ctx = (SSL_CTX *)arg;
     struct bufferevent* SSLbev = bufferevent_openssl_socket_new(
@@ -422,7 +411,7 @@ bufferevent * HTTPBaseServer::CallBack_Bufferevent(event_base *base, void *arg)
         BEV_OPT_CLOSE_ON_FREE);
     if (SSLbev == NULL)
     {
-        g_Log.WriteError("HTTP base server new bufferevent failed.");
+        g_Log.WriteError("HTTP base server create SSL bufferevent failed.");
     }
     return SSLbev;
 }

@@ -55,14 +55,14 @@ bool ThreadNoticeQueue::PopMessage(std::string &JsonString)
 bool ThreadNoticeQueue::PushMessage(const std::string &JsonString)
 {
     std::unique_lock<std::mutex> Locker(m_QueueLock);
-    if (m_RecvDescriptor < 0 || m_SendDescriptor < 0)
+    if (m_RecvDescriptor <= 0 || m_SendDescriptor <= 0)
     {
-        g_Log.WriteError(BoostFormat("Thread notice queue descriptor is wrong, recv = %d, send = %d.", m_RecvDescriptor, m_SendDescriptor));
+        g_Log.WriteError(BoostFormat("Thread notice queue descriptors are wrong, recv = %d, send = %d.", m_RecvDescriptor, m_SendDescriptor));
         return false;
     }
 
     m_Queue.push(JsonString);
-    g_Log.WriteDebug(BoostFormat("Thread notice queue size = %d", m_Queue.size()));
+    g_Log.WriteDebug(BoostFormat("Thread notice queue push message, current size = %d", m_Queue.size()));
 
     int NoticeType = 1; //TODO
     if (write(m_SendDescriptor, &NoticeType, sizeof(NoticeType)) != sizeof(int))

@@ -30,11 +30,11 @@ protected:
     bool ProcessDirectory(struct evhttp_request *Request, const std::string &ActualllyPath);
     bool ProcessFile(struct evhttp_request *Request, struct stat &FileStat, const std::string &ActualllyPath);
 
+    static bufferevent* CallBack_CreateSSLBufferevent(struct event_base *base, void *arg);
     static void CallBack_ConnectionClose(struct evhttp_connection *Connection, void *arg);
     static void CallBack_GenericRequest(struct evhttp_request *Request, void *arg);
     static void CallBack_Checkout(int Socket, short Events, void *UserData);
 
-    static bufferevent* CallBack_Bufferevent(struct event_base *base, void *arg);
 private:
 
     EventBase                                            m_EventBase;

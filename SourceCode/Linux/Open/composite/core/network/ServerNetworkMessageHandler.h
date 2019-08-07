@@ -4,7 +4,6 @@
 #include <queue>
 #include <condition_variable>
 
-struct bufferevent;
 class SingleEventBaseServer;
 
 

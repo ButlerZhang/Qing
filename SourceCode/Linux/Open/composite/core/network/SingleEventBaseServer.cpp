@@ -3,9 +3,7 @@
 #include "ThreadNoticeQueue.h"
 #include <string.h>
 #include <unistd.h>
-#include <assert.h>
 #include <signal.h>
-#include <algorithm>
 #include <strings.h>
 #include <arpa/inet.h>
 #include <event2/bufferevent.h>
@@ -31,11 +29,7 @@ SingleEventBaseServer::~SingleEventBaseServer()
 
 bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 {
-    if (!CreateListener(IP, Port))
-    {
-        return false;
-    }
-    if (!AddThreadNoticeQueueEvent())
+    if (!CreateListener(IP, Port) || !AddThreadNoticeQueueEvent())
     {
         return false;
     }
@@ -48,15 +42,18 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
 
     if (!m_SignalEventMap.AddSignalEvent(m_EventBase.m_eventbase, SIGINT, CallBack_Signal, this))
     {
-        g_Log.WriteError("Single base server signal event map bind error or add error.");
+        g_Log.WriteError("Single base server signal event map add failed.");
 
         return false;
     }
 
+    if (false)  //TODO
+    {
     if (!m_MessageHandler.Start(this))
     {
         g_Log.WriteError("Single base server message handler start failed.");
         return false;
+        }
     }
 
     g_Log.WriteInfo(BoostFormat("Single Server(%s:%d) start dispatch...", m_BindIP.c_str(), m_ListenPort));
@@ -81,9 +78,7 @@ bool SingleEventBaseServer::Stop()
 
 bool SingleEventBaseServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
-    std::string ACK("Client=");
-    ACK += std::to_string(NetworkMsg.m_Socket);
-    ACK += std::string(", ACK=") + NetworkMsg.m_Message;
+    const std::string &ACK = "Client=" + std::to_string(NetworkMsg.m_Socket) + ", ACK=" + NetworkMsg.m_Message;
 
     if (bufferevent_write(NetworkMsg.m_IOBuffer->m_bufferevent, ACK.c_str(), ACK.length()) != 0)
     {
@@ -101,20 +96,18 @@ bool SingleEventBaseServer::AddThreadNoticeQueueEvent()
 {
     if (m_NoticeQueueEvent.m_event != NULL)
     {
-        g_Log.WriteError("Single base server re-create message queue event.");
+        g_Log.WriteError("Single base server re-create thread notice queue event.");
         return true;
     }
     m_NoticeQueueEvent.m_event = event_new(m_EventBase.m_eventbase, g_ThreadNoticeQueue.GetRecvDescriptor() , EV_READ | EV_PERSIST, CallBack_ThreadNoticeQueue, this);
     if (m_NoticeQueueEvent.m_event == NULL)
     {
-        g_Log.WriteError("Single base server create message queue event failed.");
+        g_Log.WriteError("Single base server create thread notice queue event failed.");
         return false;
     }
     if (event_add(m_NoticeQueueEvent.m_event, NULL) != 0)
     {
-        g_Log.WriteError("Single base server add message queue event failed.");
-        event_free(m_NoticeQueueEvent.m_event);
-        m_NoticeQueueEvent.m_event = NULL;
+        g_Log.WriteError("Single base server add thread notice queue event failed.");
         return false;
     }
     return true;
@@ -134,7 +127,6 @@ bool SingleEventBaseServer::DeleteSocket(int ClientSocket)
         return false;
     }
 
-    it->second.m_Socket = -1;
     m_ClientMap.erase(it);
     g_Log.WriteError(BoostFormat("Single base server delete socket = %d, surplus client count = %d.",ClientSocket, m_ClientMap.size()));
 
@@ -163,8 +155,6 @@ bool SingleEventBaseServer::AddCheckoutTimer(int TimerInternal)
     if (event_add(m_CheckoutTimer.m_event, &tv) != 0)
     {
         g_Log.WriteError("Single base server add checkout timer failed.");
-        event_free(m_CheckoutTimer.m_event);
-        m_CheckoutTimer.m_event = NULL;
         return false;
     }
 
@@ -241,7 +231,7 @@ bool SingleEventBaseServer::Send(const void * Data, size_t Size)
 }
 bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size)
 {
-    if (NetworkMsg.m_IOBuffer == NULL)
+    if (NetworkMsg.m_IOBuffer->m_bufferevent == NULL)
     {
         g_Log.WriteError(BoostFormat("Single base server client = %d bufferevent is NULL.", NetworkMsg.m_Socket));
         return false;

@@ -11,6 +11,7 @@ HTTPSession::HTTPSession()
 
 HTTPSession::~HTTPSession()
 {
+    m_SessionMap.clear();
 }
 
 bool HTTPSession::IsSessionExisted(const std::string &SessionID) const
@@ -18,7 +19,7 @@ bool HTTPSession::IsSessionExisted(const std::string &SessionID) const
     std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
     if (it != m_SessionMap.end())
     {
-        g_Log.WriteError(BoostFormat("HTTP session id = %s existed.", SessionID.c_str()));
+        g_Log.WriteError(BoostFormat("HTTP session id = %s was existed.", SessionID.c_str()));
         return true;
     }
 
@@ -30,7 +31,7 @@ bool HTTPSession::IsSessionTimeout(const std::string &SessionID) const
     std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
     if (it == m_SessionMap.end())
     {
-        g_Log.WriteError(BoostFormat("HTTP session check time out can not find id = %s.", SessionID.c_str()));
+        g_Log.WriteError(BoostFormat("HTTP session check time out, can not find id = %s.", SessionID.c_str()));
         return true;
     }
 
@@ -38,8 +39,10 @@ bool HTTPSession::IsSessionTimeout(const std::string &SessionID) const
     boost::posix_time::ptime Stop = boost::posix_time::second_clock::local_time();
 
     boost::posix_time::millisec_posix_time_system_config::time_duration_type Elapse = Stop - Start;
-    bool IsTimeOut = (Elapse.total_seconds() - (30 * 60)) > 0;
+    int64_t ElapseSeconds = Elapse.total_seconds();
+    g_Log.WriteDebug(BoostFormat("HTTP session check time out, elapse total seconds = %lld", ElapseSeconds));
 
+    bool IsTimeOut = (ElapseSeconds - (30 * 60)) > 0;
     return IsTimeOut;
 }
 

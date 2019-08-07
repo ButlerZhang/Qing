@@ -31,29 +31,29 @@ UDPBroadcast::~UDPBroadcast()
 
 bool UDPBroadcast::StartTimer(event_base *EventBase, const std::string &ServerIP, int TimeInternal, int Port)
 {
-    if (TimeInternal <= 0)
-    {
-        g_Log.WriteError("UDPBroadcast timer at least needs one second.");
-        return false;
-    }
-
     if (EventBase == NULL)
     {
         g_Log.WriteError("UDPBroadcast event base is NULL.");
         return false;
     }
 
+    if (TimeInternal <= 0)
+    {
+        g_Log.WriteError("UDPBroadcast time internal is less than 0.");
+        return false;
+    }
+
     m_BroadcastSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_BroadcastSocket == -1)
     {
-        g_Log.WriteError("UDPBroadcast create udp socket error.");
+        g_Log.WriteError(BoostFormat("UDPBroadcast create udp socket error = %s.", strerror(errno)));
         return false;
     }
 
     int Optval = 1;
     if (setsockopt(m_BroadcastSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, &Optval, sizeof(int)) < 0)
     {
-        g_Log.WriteError("UDPBroadcast setsockopt error.");
+        g_Log.WriteError(BoostFormat("UDPBroadcast setsockopt error = %s.", strerror(errno)));
         return false;
     }
 
@@ -71,7 +71,11 @@ bool UDPBroadcast::StartTimer(event_base *EventBase, const std::string &ServerIP
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = m_TimeInternal;
-    event_add(m_TimeoutEvent.m_event, &tv);
+    if (event_add(m_TimeoutEvent.m_event, &tv) != 0)
+    {
+        g_Log.WriteError("UDPBroadcast add time out event failed.");
+        return false;
+    }
 
     evutil_gettimeofday(&m_LastSendTime, NULL);
     return true;

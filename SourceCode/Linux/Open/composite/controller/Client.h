@@ -11,6 +11,7 @@ public:
     Client(long ClientID);
     virtual ~Client();
 
+    virtual bool ProcessCheckout();
     virtual bool ProcessConnected();
     virtual bool ProcessDisconnected();
     virtual bool ProcessMessage(NetworkMessage &NetworkMsg);
