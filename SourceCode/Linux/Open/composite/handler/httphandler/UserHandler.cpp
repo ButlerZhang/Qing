@@ -110,12 +110,17 @@ bool UserHandler::SendLoginReply(struct evhttp_request *Request, boost::property
     JsonTree.push_back(std::make_pair("UserInfo", UserTree));
 
     const std::string &JsonString = GetReplyJsonString(JsonTree);
-    g_ThreadNoticeQueue.PushMessage(JsonString);
 
-    struct evbuffer *evbuffer_temp = evbuffer_new();
-    evbuffer_add_printf(evbuffer_temp, JsonString.c_str());
-    evhttp_send_reply(Request, ReplyModel.m_ErrorCode, ReplyModel.m_ReplayMessage.c_str(), evbuffer_temp);
-    evbuffer_free(evbuffer_temp);
+    if (ReplyModel.m_ErrorCode == 0)
+    {
+        const std::string &SessionID = g_HTTPServer.GetHTTPSession().GenerateSession(ReplyModel.m_UserName, ReplyModel.m_Password);
+        const std::string &Cookie = BoostFormat("SID=%s; Max-Age=3600; HttpOnly", SessionID.c_str());
+        evhttp_add_header(evhttp_request_get_output_headers(Request), "Set-Cookie", Cookie.c_str());
+    }
 
-    return true;
+    EventDataBuffer DataBuffer;
+    evbuffer_add_printf(DataBuffer.m_evbuffer, JsonString.c_str());
+    evhttp_send_reply(Request, ReplyModel.m_ErrorCode, ReplyModel.m_ReplayMessage.c_str(), DataBuffer.m_evbuffer);
+
+    return g_ThreadNoticeQueue.PushMessage(JsonString);
 }

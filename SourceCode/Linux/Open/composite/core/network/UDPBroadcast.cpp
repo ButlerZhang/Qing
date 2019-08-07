@@ -4,14 +4,11 @@
 #include <assert.h>
 #include <string.h>
 #include <unistd.h>
-#include <string>
 
 
 
 UDPBroadcast::UDPBroadcast()
 {
-    m_EventBase = NULL;
-    m_TimeoutEvent = NULL;
     m_IsDisplayLog = false;
 
     m_TimeInternal = 60;
@@ -21,12 +18,6 @@ UDPBroadcast::UDPBroadcast()
 
 UDPBroadcast::~UDPBroadcast()
 {
-    m_EventBase = NULL;
-    if (m_TimeoutEvent != NULL)
-    {
-        event_free(m_TimeoutEvent);
-        m_TimeoutEvent = NULL;
-    }
 
     if (m_BroadcastSocket > 0)
     {
@@ -37,13 +28,8 @@ UDPBroadcast::~UDPBroadcast()
     g_Log.WriteDebug("UDPBroadcast was destructored.");
 }
 
-bool UDPBroadcast::BindBaseEvent(event_base *EventBase)
-{
-    m_EventBase = EventBase;
-    return m_EventBase != NULL;
-}
 
-bool UDPBroadcast::StartTimer(const std::string &ServerIP, int TimeInternal, int Port)
+bool UDPBroadcast::StartTimer(event_base *EventBase, const std::string &ServerIP, int TimeInternal, int Port)
 {
     if (TimeInternal <= 0)
     {
@@ -51,9 +37,9 @@ bool UDPBroadcast::StartTimer(const std::string &ServerIP, int TimeInternal, int
         return false;
     }
 
-    if (m_EventBase == NULL)
+    if (EventBase == NULL)
     {
-        g_Log.WriteError("UDPBroadcast no binding event base.");
+        g_Log.WriteError("UDPBroadcast event base is NULL.");
         return false;
     }
 
@@ -80,12 +66,12 @@ bool UDPBroadcast::StartTimer(const std::string &ServerIP, int TimeInternal, int
     m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(m_BroadcastPort));
 
     m_TimeInternal = TimeInternal;
-    m_TimeoutEvent = event_new(m_EventBase, -1, EV_PERSIST, CallBack_TimeOut, this);
+    m_TimeoutEvent.m_event = event_new(EventBase, -1, EV_PERSIST, CallBack_TimeOut, this);
 
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = m_TimeInternal;
-    event_add(m_TimeoutEvent, &tv);
+    event_add(m_TimeoutEvent.m_event, &tv);
 
     evutil_gettimeofday(&m_LastSendTime, NULL);
     return true;
@@ -121,5 +107,5 @@ void UDPBroadcast::CallBack_TimeOut(int Socket, short Events, void *UserData)
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = Broadcast->m_TimeInternal;
-    event_add(Broadcast->m_TimeoutEvent, &tv);
+    event_add(Broadcast->m_TimeoutEvent.m_event, &tv);
 }

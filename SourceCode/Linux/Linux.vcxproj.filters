@@ -220,6 +220,9 @@
     <ClCompile Include="Open\composite\Config.cpp">
       <Filter>Project\Open\composite</Filter>
     </ClCompile>
+    <ClCompile Include="Open\composite\core\network\HTTPSession.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Algorithm\001_MaxSubSum.h">
@@ -528,6 +531,12 @@
     </ClInclude>
     <ClInclude Include="Open\composite\Project.h">
       <Filter>Project\Open\composite</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\composite\core\network\HTTPSession.h">
+      <Filter>Project\Open\composite\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\composite\core\tools\OpenSSLContext.h">
+      <Filter>Project\Open\composite\core\tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

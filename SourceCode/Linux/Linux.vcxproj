@@ -95,6 +95,7 @@
     <ClCompile Include="Open\composite\controller\MultiServer.cpp" />
     <ClCompile Include="Open\composite\controller\SingleServer.cpp" />
     <ClCompile Include="Open\composite\core\network\HTTPBaseServer.cpp" />
+    <ClCompile Include="Open\composite\core\network\HTTPSession.cpp" />
     <ClCompile Include="Open\composite\core\network\MultiEventBaseServer.cpp" />
     <ClCompile Include="Open\composite\core\network\ServerNetworkMessageHandler.cpp" />
     <ClCompile Include="Open\composite\core\network\SignalEventMap.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Open\composite\controller\MultiServer.h" />
     <ClInclude Include="Open\composite\controller\SingleServer.h" />
     <ClInclude Include="Open\composite\core\network\HTTPBaseServer.h" />
+    <ClInclude Include="Open\composite\core\network\HTTPSession.h" />
     <ClInclude Include="Open\composite\core\network\MultiEventBaseServer.h" />
     <ClInclude Include="Open\composite\core\network\NetworkBase.h" />
     <ClInclude Include="Open\composite\core\network\ServerNetworkMessageHandler.h" />
@@ -157,6 +159,7 @@
     <ClInclude Include="Open\composite\core\network\ThreadNoticeQueue.h" />
     <ClInclude Include="Open\composite\core\network\UDPBroadcast.h" />
     <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h" />
+    <ClInclude Include="Open\composite\core\tools\OpenSSLContext.h" />
     <ClInclude Include="Open\composite\handler\Handler.h" />
     <ClInclude Include="Open\composite\handler\httphandler\UserHandler.h" />
     <ClInclude Include="Open\composite\message\CodedMessage.h" />

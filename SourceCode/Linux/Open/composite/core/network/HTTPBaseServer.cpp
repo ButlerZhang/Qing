@@ -1,6 +1,6 @@
 #include "HTTPBaseServer.h"
 #include "../../../../../Common/Boost/BoostLog.h"
-
+#include "../tools/OpenSSLContext.h"
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
@@ -11,11 +11,6 @@
 
 HTTPBaseServer::HTTPBaseServer()
 {
-    m_evHTTP = NULL;
-    m_SSLContext = NULL;
-    m_CheckoutTimer = NULL;
-    m_EventBase = event_base_new();
-
     m_ContentTypeMap["txt"] = "text/plain";
     m_ContentTypeMap["log"] = "text/plain";
     m_ContentTypeMap["c"] = "text/plain";
@@ -49,36 +44,17 @@ HTTPBaseServer::HTTPBaseServer()
 HTTPBaseServer::~HTTPBaseServer()
 {
     m_ContentTypeMap.clear();
-    if (event_base_loopbreak(m_EventBase) != 0)
+    if (event_base_loopbreak(m_EventBase.m_eventbase) != 0)
     {
         g_Log.WriteError("HTTP base server event can not loop break.");
     }
 
-    if (m_evHTTP != NULL)
-    {
-        evhttp_free(m_evHTTP);
-        m_evHTTP = NULL;
-    }
-
-    if (m_CheckoutTimer != NULL)
-    {
-        event_free(m_CheckoutTimer);
-        m_CheckoutTimer = NULL;
-    }
-
-    if (m_SSLContext != NULL)
-    {
-        SSL_CTX_free(m_SSLContext);
-        m_SSLContext = NULL;
-    }
-    event_base_free(m_EventBase);
-    m_EventBase = NULL;
     g_Log.WriteDebug("HTTP base server was destructored.");
 }
 
 bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableHTTPS)
 {
-    if (m_EventBase == NULL)
+    if (m_EventBase.m_eventbase == NULL)
     {
         g_Log.WriteError("HTTP base server event base is NULL.");
         return false;
@@ -90,20 +66,15 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableH
         return false;
     }
 
-    if (m_evHTTP != NULL)
-    {
-        g_Log.WriteError("HTTP base server re-start.");
-        return true;
-    }
 
-    m_evHTTP = evhttp_new(m_EventBase);
-    if (m_evHTTP == NULL)
+    m_EventHTTP.m_evhttp = evhttp_new(m_EventBase.m_eventbase);
+    if (m_EventHTTP.m_evhttp == NULL)
     {
         g_Log.WriteError("HTTP base server could not create evhttp.");
         return false;
     }
 
-    if (evhttp_bind_socket(m_evHTTP, ServerIP.c_str(), static_cast<uint16_t>(Port)) != 0)
+    if (evhttp_bind_socket(m_EventHTTP.m_evhttp, ServerIP.c_str(), static_cast<uint16_t>(Port)) != 0)
     {
         g_Log.WriteError(BoostFormat("HTTP base server bind (%s,%d) failed.", ServerIP.c_str(), Port));
         return false;
@@ -111,20 +82,21 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableH
 
     if (IsEnableHTTPS)
     {
-        m_SSLContext = CreateSSLContext("./server/server-cert.pem", "./server/server-key.pem", "./ca/ca-cert.pem");
-        if (m_SSLContext == NULL)
+        static OpenSSLContext SSL;
+        SSL_CTX *SSLContext = SSL.CreateSSLContext("./server/server-cert.pem", "./server/server-key.pem", "./ca/ca-cert.pem");
+        if (SSLContext == NULL)
         {
             g_Log.WriteError("HTTP base server create SSL context failed.");
             return false;
         }
-        evhttp_set_bevcb(m_evHTTP, CallBack_Bufferevent, m_SSLContext);
+        evhttp_set_bevcb(m_EventHTTP.m_evhttp, CallBack_Bufferevent, SSLContext);
     }
 
-    evhttp_set_timeout(m_evHTTP, 5);
-    evhttp_set_gencb(m_evHTTP, CallBack_GenericRequest, this);
+    //evhttp_set_timeout(m_EventHTTP.m_evhttp, 5);
+    evhttp_set_gencb(m_EventHTTP.m_evhttp, CallBack_GenericRequest, this);
 
     g_Log.WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));
-    event_base_dispatch(m_EventBase);
+    event_base_dispatch(m_EventBase.m_eventbase);
     return true;
 }
 
@@ -178,14 +150,14 @@ bool HTTPBaseServer::ProcessPost(evhttp_request * Request)
 
 bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 {
-    if (m_CheckoutTimer != NULL)
+    if (m_CheckoutTimer.m_event != NULL)
     {
         g_Log.WriteError("HTTP base server re-create checkout timer.");
         return true;
     }
 
-    m_CheckoutTimer = event_new(m_EventBase, -1, EV_PERSIST, CallBack_Checkout, this);
-    if (m_CheckoutTimer == NULL)
+    m_CheckoutTimer.m_event = event_new(m_EventBase.m_eventbase, -1, EV_PERSIST, CallBack_Checkout, this);
+    if (m_CheckoutTimer.m_event == NULL)
     {
         g_Log.WriteError("HTTP base server create chekcout timer failed.");
         return false;
@@ -195,11 +167,11 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
     evutil_timerclear(&tv);
     tv.tv_sec = TimerInternal;
 
-    if (event_add(m_CheckoutTimer, &tv) != 0)
+    if (event_add(m_CheckoutTimer.m_event, &tv) != 0)
     {
         g_Log.WriteError("HTTP base server add checkout timer failed.");
-        event_free(m_CheckoutTimer);
-        m_CheckoutTimer = NULL;
+        event_free(m_CheckoutTimer.m_event);
+        m_CheckoutTimer.m_event = NULL;
         return false;
     }
 
@@ -234,6 +206,20 @@ void HTTPBaseServer::PrintRequest(evhttp_request *Request)
 
     LogString.erase(LogString.end() - 1);
     g_Log.WriteDebug(LogString);
+}
+bool HTTPBaseServer::GetRequestIPandPort(evhttp_connection *Connection, std::string &RequestIP, int &Port)
+{
+    if (Connection != NULL)
+    {
+        Port = 0;
+        char IP[32] = { 0 };
+        char *AddressPointer = IP;
+        char **ArgumentPointer = &AddressPointer;
+        evhttp_connection_get_peer(Connection, ArgumentPointer, (ev_uint16_t*)&Port);
+        RequestIP = AddressPointer;
+        return true;
+    }
+    return false;
 }
 
 bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &ActualllyPath)
@@ -299,14 +285,8 @@ bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &Actu
 
 bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string &ActualllyPath)
 {
-    struct evbuffer *evb = evbuffer_new();
-    if (evb == NULL)
-    {
-        g_Log.WriteError("HTTP base server process directory: evbuffer create failed.");
-        return false;
-    }
-
-    evbuffer_add_printf(evb,
+    EventDataBuffer DataBuffer;
+    evbuffer_add_printf(DataBuffer.m_evbuffer,
         "<!DOCTYPE html>\n"
         "<html>\n <head>\n"
         "  <meta charset='utf-8'>\n"
@@ -333,27 +313,26 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
         LogString.append(BoostFormat("\tFile= %s\n", FileName));
         if (lstat((ActualllyPath + FileName).c_str(), &FileStat) < 0)
         {
-            evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
+            evbuffer_add_printf(DataBuffer.m_evbuffer, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
         }
         else
         {
             if (S_ISDIR(FileStat.st_mode))
             {
-                evbuffer_add_printf(evb, "   <li><a href=\"%s/\">%s/</a>\n", FileName, FileName);
+                evbuffer_add_printf(DataBuffer.m_evbuffer, "   <li><a href=\"%s/\">%s/</a>\n", FileName, FileName);
             }
             else
             {
-                evbuffer_add_printf(evb, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
+                evbuffer_add_printf(DataBuffer.m_evbuffer, "   <li><a href=\"%s\">%s</a>\n", FileName, FileName);
             }
         }
     }
 
-    evbuffer_add_printf(evb, "</ul></body></html>\n");
+    evbuffer_add_printf(DataBuffer.m_evbuffer, "</ul></body></html>\n");
     evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", "text/html");
 
-    evhttp_send_reply(Request, HTTP_OK, "OK", evb);
+    evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
     g_Log.WriteDebug(LogString);
-    evbuffer_free(evb);
     return true;
 }
 
@@ -395,38 +374,30 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     return true;
 }
 
-SSL_CTX* HTTPBaseServer::CreateSSLContext(const char *CertFile, const char *KeyFile, const char *CaFile)
+void HTTPBaseServer::CallBack_ConnectionClose(struct evhttp_connection *Connection, void *arg)
 {
-    SSL_library_init();
-    SSL_load_error_strings();
-    const SSL_METHOD *meth = SSLv23_server_method();
-    SSL_CTX *ctx = SSL_CTX_new(meth);
-    if (NULL == ctx)
+    int RequestPort = 0;
+    std::string RequestIP;
+    HTTPBaseServer *Server = (HTTPBaseServer*)arg;
+    if (Server->GetRequestIPandPort(Connection, RequestIP, RequestPort))
     {
-        g_Log.WriteError("HTTP base server could not new SSL_CTX.");
-        return NULL;
+        g_Log.WriteDebug(BoostFormat("HTTP base server close connection, client ip = %s, port = %d", RequestIP.c_str(), RequestPort));
     }
-    if (SSL_CTX_load_verify_locations(ctx, CaFile, NULL) <= 0)
+    else
     {
-        g_Log.WriteError("HTTP base server could not load ca cert file.");
+        g_Log.WriteError("HTTP base server connection close unknow error.");
     }
-    if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
-    {
-        g_Log.WriteError("HTTP base server could not use certificate file.");
     }
-    if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
-    {
-        g_Log.WriteError("HTTP base server could not use private key file.");
-    }
-    if (!SSL_CTX_check_private_key(ctx))
-    {
-        g_Log.WriteError("HTTP base server could private key does not match certfile.");
-    }
-    return ctx;
-}
+
 void HTTPBaseServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
 {
+    int RequestPort = 0;
+    std::string RequestIP;
     HTTPBaseServer *Server = (HTTPBaseServer*)arg;
+    evhttp_connection *NewConnection = evhttp_request_get_connection(Request);
+    evhttp_connection_set_closecb(NewConnection, CallBack_ConnectionClose, arg);
+    Server->GetRequestIPandPort(NewConnection, RequestIP, RequestPort);
+    g_Log.WriteDebug(BoostFormat("HTTP base server new request, client ip = %s, port = %d", RequestIP.c_str(), RequestPort));
     Server->ProcessRequest(Request);
 }
 
@@ -438,7 +409,7 @@ void HTTPBaseServer::CallBack_Checkout(int Socket, short Events, void * UserData
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = 5;          //TimerInternal
-    event_add(Server->m_CheckoutTimer, &tv);
+    event_add(Server->m_CheckoutTimer.m_event, &tv);
 }
 bufferevent * HTTPBaseServer::CallBack_Bufferevent(event_base *base, void *arg)
 {

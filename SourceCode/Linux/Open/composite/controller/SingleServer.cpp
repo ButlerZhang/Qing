@@ -75,7 +75,7 @@ bool SingleServer::ProcessThreadNoticeQueue()
     }
     if (!HasClient())
     {
-        g_Log.WriteDebug("Single Server process notice queue, no client.");
+        g_Log.WriteDebug("Single Server process notice queue, no smib client.");
         return false;
     }
     g_Log.WriteDebug(BoostFormat("Single Server process notice queue: %s", JsonString.c_str()));

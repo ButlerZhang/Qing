@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
+#include <memory>
 #include <vector>
 #include <event.h>
 #include <pthread.h>
-
+#include <event2/http.h>
+#include <event2/listener.h>
 
 
 struct ThreadNode;
@@ -11,25 +13,113 @@ const int NETWORK_BUFFER_SIZE = 2048;
 
 
 
+class EventBase
+{
+public:
+
+    EventBase() { m_eventbase = event_base_new(); }
+    ~EventBase() { event_base_free(m_eventbase); m_eventbase = NULL; }
+
+    event_base *m_eventbase;
+};
+
+class EventNormal
+{
+public:
+
+    EventNormal() { m_event = NULL; }
+    ~EventNormal()
+    {
+        if (m_event != NULL)
+        {
+            event_free(m_event);
+            m_event = NULL;
+        }
+    }
+
+    event *m_event;
+};
+
+class EventDataBuffer
+{
+public:
+
+    EventDataBuffer() { m_evbuffer = evbuffer_new(); }
+    ~EventDataBuffer() { evbuffer_free(m_evbuffer); m_evbuffer = NULL; }
+
+    evbuffer *m_evbuffer;
+};
+
+class EventIOBuffer
+{
+public:
+
+    EventIOBuffer() { m_bufferevent = NULL; }
+    ~EventIOBuffer()
+    {
+        if (m_bufferevent != NULL)
+        {
+            bufferevent_free(m_bufferevent);
+            m_bufferevent = NULL;
+        }
+    }
+
+    bufferevent *m_bufferevent;
+};
+
+class EventListener
+{
+public:
+
+    EventListener() { m_listener = NULL; }
+    ~EventListener()
+    {
+        if (m_listener != NULL)
+        {
+            evconnlistener_free(m_listener);
+            m_listener = NULL;
+        }
+    }
+
+    evconnlistener *m_listener;
+};
+
+class EventHTTP
+{
+public:
+
+    EventHTTP() { m_evhttp = NULL; }
+    ~EventHTTP()
+    {
+        if (m_evhttp != NULL)
+        {
+            evhttp_free(m_evhttp);
+            m_evhttp = NULL;
+        }
+    }
+
+    evhttp *m_evhttp;
+};
+
+
+
 struct NetworkMessage
 {
     int                                      m_Socket;
     std::string                              m_Message;
-    struct bufferevent                      *m_Bufferevent;
+    std::shared_ptr<EventIOBuffer>           m_IOBuffer;
 
-    NetworkMessage() : m_Socket(0), m_Bufferevent(NULL) {}
+    NetworkMessage() : m_Socket(0) {}
 };
 
 struct ClientNode
 {
     int                                      m_Socket;
-    struct evbuffer                         *m_EVBuffer;
-    struct bufferevent                      *m_Bufferevent;
+    std::shared_ptr<EventIOBuffer>           m_IOBuffer;
+    std::shared_ptr<EventDataBuffer>         m_DataBuffer;
 
-    ClientNode() : m_EVBuffer(NULL), m_Bufferevent(NULL) {}
+    ClientNode() : m_Socket(0), m_IOBuffer(std::make_shared<EventIOBuffer>()), m_DataBuffer(std::make_shared<EventDataBuffer>()) {}
 };
-
-
 
 struct ConnectNode
 {
@@ -47,8 +137,6 @@ struct ConnectNode
         m_WorkThread = NULL;
     }
 };
-
-
 
 struct ThreadNode
 {

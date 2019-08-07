@@ -80,6 +80,7 @@ bool HTTPServer::ProcessGet(evhttp_request *Request)
     struct stat ActuallyPathStat;
     if (stat(RequestPath.c_str(), &ActuallyPathStat) < 0)
     {
+        evhttp_send_error(Request, HTTP_BADMETHOD, "File was not found.");
         g_Log.WriteError(BoostFormat("HTTP server stat path = %s failed.", RequestPath.c_str()));
         return false;
     }

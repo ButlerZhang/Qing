@@ -3,7 +3,6 @@
 #include "SignalEventMap.h"
 #include "ServerNetworkMessageHandler.h"
 #include <vector>
-#include <event2/listener.h>
 
 
 
@@ -48,10 +47,10 @@ private:
 
     int                                          m_ListenPort;
     std::string                                  m_BindIP;
-    event_base                                  *m_EventBase;
-    evconnlistener                              *m_Listener;
-    event                                       *m_CheckoutTimer;
-    event                                       *m_NoticeQueueEvent;
+    EventBase                                    m_EventBase;
+    EventListener                                m_Listener;
+    EventNormal                                  m_CheckoutTimer;
+    EventNormal                                  m_NoticeQueueEvent;
     UDPBroadcast                                 m_UDPBroadcast;
     SignalEventMap                               m_SignalEventMap;
     ServerNetworkMessageHandler                  m_MessageHandler;

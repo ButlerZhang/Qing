@@ -1,6 +1,5 @@
 #pragma once
-#include <string>
-#include <event.h>
+#include "NetworkBase.h"
 
 
 
@@ -11,8 +10,7 @@ public:
     UDPBroadcast();
     ~UDPBroadcast();
 
-    bool BindBaseEvent(event_base *EventBase);
-    bool StartTimer(const std::string &ServerIP, int TimeInternal = 60, int Port = 12345);
+    bool StartTimer(event_base *EventBase, const std::string &ServerIP, int TimeInternal = 60, int Port = 12345);
 
     inline bool GetIsDisplayLog() const { return m_IsDisplayLog; }
     inline void SetIsDisplayLog(bool IsDisplayLog) { m_IsDisplayLog = IsDisplayLog; }
@@ -28,8 +26,7 @@ private:
     int                                  m_BroadcastPort;
     int                                  m_BroadcastSocket;
     std::string                          m_BroadcastServerIP;
+    EventNormal                          m_TimeoutEvent;
     struct timeval                       m_LastSendTime;
-    struct event                        *m_TimeoutEvent;
-    struct event_base                   *m_EventBase;
     struct sockaddr_in                   m_BroadcastAddress;
 };

@@ -1,7 +1,5 @@
 #pragma once
 #include "NetworkBase.h"
-#include <event.h>
-#include <random>
 
 
 
@@ -54,12 +52,12 @@ private:
     int                                          m_BroadcastPort;
     int                                          m_UDPSocket;
     struct sockaddr_in                           m_BroadcastAddress;
-    struct bufferevent                          *m_DataBufferevent;
-    struct event_base                           *m_EventBase;
-    struct evbuffer                             *m_RecvBuffer;
-    struct event                                *m_CMDInputEvent;
-    struct event                                *m_UDPBroadcastEvent;
-    struct event                                *m_ReBindUDPSocketTimer;
-    struct event                                *m_ReConnectServerTimer;
-    struct event                                *m_SendDataRandomlyTimer;
+    std::shared_ptr<EventIOBuffer>               m_IOBuffer;
+    EventBase                                    m_EventBase;
+    EventDataBuffer                              m_RecvDataBuffer;
+    EventNormal                                  m_CMDInputEvent;
+    EventNormal                                  m_UDPBroadcastEvent;
+    EventNormal                                  m_ReBindUDPSocketTimer;
+    EventNormal                                  m_ReConnectServerTimer;
+    EventNormal                                  m_SendDataRandomlyTimer;
 };

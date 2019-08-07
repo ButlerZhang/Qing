@@ -32,13 +32,7 @@ bool MultiEventBaseServer::Start(const std::string &IP, int Port, int ThreadCoun
         return false;
     }
 
-    if (!m_UDPBroadcast.BindBaseEvent(m_MainThread.m_EventBase))
-    {
-        g_Log.WriteError("UDP braodcast bind event base failed.");
-        return false;
-    }
-
-    m_UDPBroadcast.StartTimer(IP, 10, Port);
+    m_UDPBroadcast.StartTimer(m_MainThread.m_EventBase, IP, 10, Port);
 
     if (!CreateThreads(ThreadCount))
     {
