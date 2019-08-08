@@ -12,10 +12,11 @@ enum MessageType
     MT_UNKNOW                         = 0;
 
     MT_ERROR                          = 1000;
-    MT_LOGIN                          = 1001;
-    MT_LOGIN_RESPONSE                 = 1002;
-    MT_LOGOUT                         = 1003;
-    MT_LOGOUT_RESPONSE                = 1004;
+    MT_RANDOM                         = 1001;
+    MT_LOGIN                          = 1002;
+    MT_LOGIN_RESPONSE                 = 1003;
+    MT_LOGOUT                         = 1004;
+    MT_LOGOUT_RESPONSE                = 1005;
 }
 
 message MessageHeader
@@ -39,6 +40,14 @@ message UserLogout
     MessageHeader header = 1;
     int32 ID = 2;
     string Name = 3;
+}
+
+message RandomMessage
+{
+    MessageHeader header = 1;
+    int64 ClientSequence = 2;
+    int64 ServerSequence = 3;
+    string RandomDescriptor = 4;
 }
 
 message ServerError

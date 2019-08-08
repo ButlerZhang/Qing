@@ -18,12 +18,14 @@ public:
 
 private:
 
+    bool ProcessRandom(NetworkMessage &NetworkMsg);
     bool ProcessServerError(NetworkMessage &NetworkMsg);
     bool ProcessLoginResponse(NetworkMessage &NetworkMsg);
     bool ProcessLogoutResponse(NetworkMessage &NetworkMsg);
 
     bool SendLogin();
     bool SendLogout();
+    bool SendRandom();
     bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
 
 private:

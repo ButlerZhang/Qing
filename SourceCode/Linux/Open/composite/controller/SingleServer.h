@@ -9,7 +9,6 @@ class SingleServer : public SingleEventBaseServer
 {
 public:
 
-
     virtual bool Start(const std::string &IP, int Port);
 
     virtual bool ProcessCheckout();
@@ -28,6 +27,7 @@ private:
 
     bool ProcessLogin(NetworkMessage &NetworkMsg);
     bool ProcessLogout(NetworkMessage &NetworkMsg);
+    bool ProcessRandom(NetworkMessage &NetworkMsg);
 
     bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
     bool SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg);

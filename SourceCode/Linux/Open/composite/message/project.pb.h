@@ -48,7 +48,7 @@ struct TableStruct_project_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[4]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -59,6 +59,9 @@ namespace Project {
 class MessageHeader;
 class MessageHeaderDefaultTypeInternal;
 extern MessageHeaderDefaultTypeInternal _MessageHeader_default_instance_;
+class RandomMessage;
+class RandomMessageDefaultTypeInternal;
+extern RandomMessageDefaultTypeInternal _RandomMessage_default_instance_;
 class ServerError;
 class ServerErrorDefaultTypeInternal;
 extern ServerErrorDefaultTypeInternal _ServerError_default_instance_;
@@ -71,6 +74,7 @@ extern UserLogoutDefaultTypeInternal _UserLogout_default_instance_;
 }  // namespace Project
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Project::MessageHeader* Arena::CreateMaybeMessage<::Project::MessageHeader>(Arena*);
+template<> ::Project::RandomMessage* Arena::CreateMaybeMessage<::Project::RandomMessage>(Arena*);
 template<> ::Project::ServerError* Arena::CreateMaybeMessage<::Project::ServerError>(Arena*);
 template<> ::Project::UserLogin* Arena::CreateMaybeMessage<::Project::UserLogin>(Arena*);
 template<> ::Project::UserLogout* Arena::CreateMaybeMessage<::Project::UserLogout>(Arena*);
@@ -80,10 +84,11 @@ namespace Project {
 enum MessageType : int {
   MT_UNKNOW = 0,
   MT_ERROR = 1000,
-  MT_LOGIN = 1001,
-  MT_LOGIN_RESPONSE = 1002,
-  MT_LOGOUT = 1003,
-  MT_LOGOUT_RESPONSE = 1004,
+  MT_RANDOM = 1001,
+  MT_LOGIN = 1002,
+  MT_LOGIN_RESPONSE = 1003,
+  MT_LOGOUT = 1004,
+  MT_LOGOUT_RESPONSE = 1005,
   MessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   MessageType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
@@ -590,6 +595,162 @@ class UserLogout :
 };
 // -------------------------------------------------------------------
 
+class RandomMessage :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Project.RandomMessage) */ {
+ public:
+  RandomMessage();
+  virtual ~RandomMessage();
+
+  RandomMessage(const RandomMessage& from);
+  RandomMessage(RandomMessage&& from) noexcept
+    : RandomMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline RandomMessage& operator=(const RandomMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RandomMessage& operator=(RandomMessage&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const RandomMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RandomMessage* internal_default_instance() {
+    return reinterpret_cast<const RandomMessage*>(
+               &_RandomMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  void Swap(RandomMessage* other);
+  friend void swap(RandomMessage& a, RandomMessage& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RandomMessage* New() const final {
+    return CreateMaybeMessage<RandomMessage>(nullptr);
+  }
+
+  RandomMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<RandomMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const RandomMessage& from);
+  void MergeFrom(const RandomMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RandomMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Project.RandomMessage";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_project_2eproto);
+    return ::descriptor_table_project_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string RandomDescriptor = 4;
+  void clear_randomdescriptor();
+  static const int kRandomDescriptorFieldNumber = 4;
+  const std::string& randomdescriptor() const;
+  void set_randomdescriptor(const std::string& value);
+  void set_randomdescriptor(std::string&& value);
+  void set_randomdescriptor(const char* value);
+  void set_randomdescriptor(const char* value, size_t size);
+  std::string* mutable_randomdescriptor();
+  std::string* release_randomdescriptor();
+  void set_allocated_randomdescriptor(std::string* randomdescriptor);
+
+  // .Project.MessageHeader header = 1;
+  bool has_header() const;
+  void clear_header();
+  static const int kHeaderFieldNumber = 1;
+  const ::Project::MessageHeader& header() const;
+  ::Project::MessageHeader* release_header();
+  ::Project::MessageHeader* mutable_header();
+  void set_allocated_header(::Project::MessageHeader* header);
+
+  // int64 ClientSequence = 2;
+  void clear_clientsequence();
+  static const int kClientSequenceFieldNumber = 2;
+  ::PROTOBUF_NAMESPACE_ID::int64 clientsequence() const;
+  void set_clientsequence(::PROTOBUF_NAMESPACE_ID::int64 value);
+
+  // int64 ServerSequence = 3;
+  void clear_serversequence();
+  static const int kServerSequenceFieldNumber = 3;
+  ::PROTOBUF_NAMESPACE_ID::int64 serversequence() const;
+  void set_serversequence(::PROTOBUF_NAMESPACE_ID::int64 value);
+
+  // @@protoc_insertion_point(class_scope:Project.RandomMessage)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr randomdescriptor_;
+  ::Project::MessageHeader* header_;
+  ::PROTOBUF_NAMESPACE_ID::int64 clientsequence_;
+  ::PROTOBUF_NAMESPACE_ID::int64 serversequence_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_project_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ServerError :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Project.ServerError) */ {
  public:
@@ -632,7 +793,7 @@ class ServerError :
                &_ServerError_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(ServerError* other);
   friend void swap(ServerError& a, ServerError& b) {
@@ -1222,6 +1383,140 @@ inline void UserLogout::set_allocated_name(std::string* name) {
 
 // -------------------------------------------------------------------
 
+// RandomMessage
+
+// .Project.MessageHeader header = 1;
+inline bool RandomMessage::has_header() const {
+  return this != internal_default_instance() && header_ != nullptr;
+}
+inline void RandomMessage::clear_header() {
+  if (GetArenaNoVirtual() == nullptr && header_ != nullptr) {
+    delete header_;
+  }
+  header_ = nullptr;
+}
+inline const ::Project::MessageHeader& RandomMessage::header() const {
+  const ::Project::MessageHeader* p = header_;
+  // @@protoc_insertion_point(field_get:Project.RandomMessage.header)
+  return p != nullptr ? *p : *reinterpret_cast<const ::Project::MessageHeader*>(
+      &::Project::_MessageHeader_default_instance_);
+}
+inline ::Project::MessageHeader* RandomMessage::release_header() {
+  // @@protoc_insertion_point(field_release:Project.RandomMessage.header)
+  
+  ::Project::MessageHeader* temp = header_;
+  header_ = nullptr;
+  return temp;
+}
+inline ::Project::MessageHeader* RandomMessage::mutable_header() {
+  
+  if (header_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Project::MessageHeader>(GetArenaNoVirtual());
+    header_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:Project.RandomMessage.header)
+  return header_;
+}
+inline void RandomMessage::set_allocated_header(::Project::MessageHeader* header) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete header_;
+  }
+  if (header) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      header = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, header, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  header_ = header;
+  // @@protoc_insertion_point(field_set_allocated:Project.RandomMessage.header)
+}
+
+// int64 ClientSequence = 2;
+inline void RandomMessage::clear_clientsequence() {
+  clientsequence_ = PROTOBUF_LONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 RandomMessage::clientsequence() const {
+  // @@protoc_insertion_point(field_get:Project.RandomMessage.ClientSequence)
+  return clientsequence_;
+}
+inline void RandomMessage::set_clientsequence(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  clientsequence_ = value;
+  // @@protoc_insertion_point(field_set:Project.RandomMessage.ClientSequence)
+}
+
+// int64 ServerSequence = 3;
+inline void RandomMessage::clear_serversequence() {
+  serversequence_ = PROTOBUF_LONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 RandomMessage::serversequence() const {
+  // @@protoc_insertion_point(field_get:Project.RandomMessage.ServerSequence)
+  return serversequence_;
+}
+inline void RandomMessage::set_serversequence(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  serversequence_ = value;
+  // @@protoc_insertion_point(field_set:Project.RandomMessage.ServerSequence)
+}
+
+// string RandomDescriptor = 4;
+inline void RandomMessage::clear_randomdescriptor() {
+  randomdescriptor_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& RandomMessage::randomdescriptor() const {
+  // @@protoc_insertion_point(field_get:Project.RandomMessage.RandomDescriptor)
+  return randomdescriptor_.GetNoArena();
+}
+inline void RandomMessage::set_randomdescriptor(const std::string& value) {
+  
+  randomdescriptor_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Project.RandomMessage.RandomDescriptor)
+}
+inline void RandomMessage::set_randomdescriptor(std::string&& value) {
+  
+  randomdescriptor_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Project.RandomMessage.RandomDescriptor)
+}
+inline void RandomMessage::set_randomdescriptor(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  randomdescriptor_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Project.RandomMessage.RandomDescriptor)
+}
+inline void RandomMessage::set_randomdescriptor(const char* value, size_t size) {
+  
+  randomdescriptor_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Project.RandomMessage.RandomDescriptor)
+}
+inline std::string* RandomMessage::mutable_randomdescriptor() {
+  
+  // @@protoc_insertion_point(field_mutable:Project.RandomMessage.RandomDescriptor)
+  return randomdescriptor_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* RandomMessage::release_randomdescriptor() {
+  // @@protoc_insertion_point(field_release:Project.RandomMessage.RandomDescriptor)
+  
+  return randomdescriptor_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void RandomMessage::set_allocated_randomdescriptor(std::string* randomdescriptor) {
+  if (randomdescriptor != nullptr) {
+    
+  } else {
+    
+  }
+  randomdescriptor_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), randomdescriptor);
+  // @@protoc_insertion_point(field_set_allocated:Project.RandomMessage.RandomDescriptor)
+}
+
+// -------------------------------------------------------------------
+
 // ServerError
 
 // .Project.MessageHeader header = 1;
@@ -1343,6 +1638,8 @@ inline void ServerError::set_allocated_errordescriptor(std::string* errordescrip
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -15,15 +15,15 @@ Client::~Client()
 {
     g_Log.WriteDebug(BoostFormat("Client ID = %d was destructored.", m_ClientID));
 }
+
 bool Client::ProcessCheckout()
 {
     if (SingleEventBaseClient::ProcessCheckout())
     {
-        bool IsOkToSendDataRandomly = false; //TODO
+        bool IsOkToSendDataRandomly = true; //TODO
         if (IsOkToSendDataRandomly)
         {
-            const std::string &UUID = GetUUID();
-            Send(UUID.c_str(), UUID.size());
+            SendRandom();
         }
     }
     return true;
@@ -54,11 +54,26 @@ bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
     switch (MessageType)
     {
     case Project::MessageType::MT_ERROR:            return ProcessServerError(NetworkMsg);
+    case Project::MessageType::MT_RANDOM:           return ProcessRandom(NetworkMsg);
     case Project::MessageType::MT_LOGIN_RESPONSE:   return ProcessLoginResponse(NetworkMsg);
     case Project::MessageType::MT_LOGOUT_RESPONSE:  return ProcessLogoutResponse(NetworkMsg);
     default:                                        return false;
     }
 }
+
+bool Client::ProcessRandom(NetworkMessage &NetworkMsg)
+{
+    g_Log.WriteDebug("Client process random response message.");
+    Project::RandomMessage RandomMsg;
+    if (!RandomMsg.ParseFromString(NetworkMsg.m_Message))
+    {
+        g_Log.WriteError("Random message parse failed.");
+        return false;
+    }
+    g_Log.WriteDebug("Random response message:\n" + RandomMsg.DebugString());
+    return true;
+}
+
 bool Client::ProcessServerError(NetworkMessage & NetworkMsg)
 {
     g_Log.WriteDebug("Client process server error.");
@@ -82,10 +97,7 @@ bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
         return false;
     }
 
-    g_Log.WriteDebug("Logout response message:\n" + LoginResponse.DebugString());
-
-    //sleep(GetRandomUIntInRange(1, 3));
-
+    g_Log.WriteDebug("Login response message:\n" + LoginResponse.DebugString());
     return true;
 }
 
@@ -100,15 +112,11 @@ bool Client::ProcessLogoutResponse(NetworkMessage &NetworkMsg)
     }
 
     g_Log.WriteDebug("Logout response message:\n" + LogoutResponse.DebugString());
-
-    sleep(GetRandomUIntInRange(1, 3));
-
-    return SendLogin();
+    return true;
 }
 
 bool Client::SendLogin()
 {
-    g_Log.WriteDebug("Client send Login.");
     std::string ClientName("Client-" + std::to_string(m_ClientID));
 
     Project::UserLogin Login;
@@ -121,18 +129,14 @@ bool Client::SendLogin()
 
     Project::MessageHeader *Header = Login.mutable_header();
     Header->set_type(Project::MessageType::MT_LOGIN);
-    //Header->set_transmissionid(GetUUID());
+    Header->set_transmissionid(GetUUID());
 
-    static unsigned long long LoginCount = 0;
-    Header->set_transmissionid("Login count = " + std::to_string(++LoginCount));
-
-    g_Log.WriteDebug("Login message:\n" + Login.DebugString());
+    g_Log.WriteDebug("Client send login message:\n" + Login.DebugString());
     return SendMessage(Header->type(), Login);
 }
 
 bool Client::SendLogout()
 {
-    g_Log.WriteDebug("Client send Logout.");
     std::string ClientName("Client-" + std::to_string(m_ClientID));
 
     Project::UserLogout Logout;
@@ -141,12 +145,24 @@ bool Client::SendLogout()
 
     Project::MessageHeader *Header = Logout.mutable_header();
     Header->set_type(Project::MessageType::MT_LOGOUT);
+    Header->set_transmissionid(GetUUID());
 
-    static unsigned long long LogoutCount = 0;
-    Header->set_transmissionid("Logout count = " + std::to_string(++LogoutCount));
-
-    g_Log.WriteDebug("Logout message:\n" + Logout.DebugString());
+    g_Log.WriteDebug("Client send logout message:\n" + Logout.DebugString());
     return SendMessage(Header->type(), Logout);
+}
+
+bool Client::SendRandom()
+{
+    static int64_t Sequence = 0;
+    Project::RandomMessage RandomMsg;
+    RandomMsg.set_serversequence(-1);
+    RandomMsg.set_clientsequence(++Sequence);
+    RandomMsg.set_randomdescriptor("Client-" + std::to_string(m_ClientID) + " send sequence = " + std::to_string(Sequence));
+    Project::MessageHeader *Header = RandomMsg.mutable_header();
+    Header->set_type(Project::MessageType::MT_RANDOM);
+    Header->set_transmissionid(GetUUID());
+    g_Log.WriteDebug("Client send random message:\n" + RandomMsg.DebugString());
+    return SendMessage(Project::MessageType::MT_RANDOM, RandomMsg);
 }
 
 bool Client::SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg)

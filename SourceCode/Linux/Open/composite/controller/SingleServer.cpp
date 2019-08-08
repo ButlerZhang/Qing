@@ -93,6 +93,7 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
     int MessageType = DecodeMessage(NetworkMsg.m_Message);
     switch (MessageType)
     {
+    case Project::MessageType::MT_RANDOM:   return ProcessRandom(NetworkMsg);
     case Project::MessageType::MT_LOGIN:    return ProcessLogin(NetworkMsg);
     case Project::MessageType::MT_LOGOUT:   return ProcessLogout(NetworkMsg);
     default:                                return false;
@@ -111,7 +112,7 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 
 bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
 {
-    g_Log.WriteDebug("Single Server process login.");
+    g_Log.WriteDebug("Single Server process login message.");
 
     Project::UserLogin Login;
     if (!Login.ParseFromString(NetworkMsg.m_Message))
@@ -120,7 +121,7 @@ bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
         return false;
     }
 
-    g_Log.WriteDebug("Single Server login message\n" + Login.DebugString());
+    g_Log.WriteDebug("Single Server login message:\n" + Login.DebugString());
 
     const std::string &InsertSQL = BoostFormat("INSERT IGNORE INTO events_log (code, description, date_time) VALUES(%d,'%s', %s)",
         Login.id(), "user login", "NOW()");
@@ -142,13 +143,13 @@ bool SingleServer::ProcessLogin(NetworkMessage &NetworkMsg)
     Header->set_type(Project::MessageType::MT_LOGIN_RESPONSE);
     Header->set_transmissionid(Login.mutable_header()->transmissionid());
 
-    g_Log.WriteDebug("Single Server login response message\n" + Response.DebugString());
+    g_Log.WriteDebug("Single Server login response message:\n" + Response.DebugString());
     return SendMessage(Project::MessageType::MT_LOGIN_RESPONSE, NetworkMsg, Response);
 }
 
 bool SingleServer::ProcessLogout(NetworkMessage &NetworkMsg)
 {
-    g_Log.WriteDebug("Single Server process logout.");
+    g_Log.WriteDebug("Single Server process logout message.");
 
     Project::UserLogout Logout;
     if (!Logout.ParseFromString(NetworkMsg.m_Message))
@@ -157,7 +158,7 @@ bool SingleServer::ProcessLogout(NetworkMessage &NetworkMsg)
         return false;
     }
 
-    g_Log.WriteDebug("Single Server logout message\n" + Logout.DebugString());
+    g_Log.WriteDebug("Single Server logout message:\n" + Logout.DebugString());
 
     Project::UserLogout Response;
     Response.set_id(Logout.id());
@@ -167,10 +168,25 @@ bool SingleServer::ProcessLogout(NetworkMessage &NetworkMsg)
     Header->set_type(Project::MessageType::MT_LOGOUT_RESPONSE);
     Header->set_transmissionid(Logout.mutable_header()->transmissionid());
 
-    g_Log.WriteDebug("Single Server logout response message\n" + Response.DebugString());
+    g_Log.WriteDebug("Single Server logout response message:\n" + Response.DebugString());
     return SendMessage(Project::MessageType::MT_LOGOUT_RESPONSE, NetworkMsg, Response);
 }
 
+bool SingleServer::ProcessRandom(NetworkMessage & NetworkMsg)
+{
+    g_Log.WriteDebug("Single Server process random message.");
+    Project::RandomMessage RandomMsg;
+    if (!RandomMsg.ParseFromString(NetworkMsg.m_Message))
+    {
+        g_Log.WriteError("Single Server random message parse failed.");
+        return false;
+    }
+    g_Log.WriteDebug("Single Server random message:\n" + RandomMsg.DebugString());
+    Project::RandomMessage Response = RandomMsg;
+    Response.set_serversequence(RandomMsg.clientsequence());
+    g_Log.WriteDebug("Single Server random response message:\n" + Response.DebugString());
+    return SendMessage(Project::MessageType::MT_RANDOM, NetworkMsg, Response);
+}
 bool SingleServer::SendMessage(int MessageType, const google::protobuf::Message & ProtobufMsg)
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
