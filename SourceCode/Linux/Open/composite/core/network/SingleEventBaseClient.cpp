@@ -100,7 +100,8 @@ bool SingleEventBaseClient::Send(const void * Data, size_t Size)
         return false;
     }
 
-    g_Log.WriteInfo(BoostFormat("Single base client send succeed, size = %d.", Size));
+    static unsigned long long SendCount = 0;
+    g_Log.WriteInfo(BoostFormat("Single base client send succeed, size = %d, count = %llu.", Size, ++SendCount));
     return true;
 }
 

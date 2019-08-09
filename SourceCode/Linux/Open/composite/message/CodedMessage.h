@@ -6,6 +6,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/descriptor.h>
 #include "../../../../Common/Boost/BoostLog.h"
+#include "../core/tools/OpenSSLAES.h"
 
 
 
@@ -42,8 +43,13 @@ inline std::string EncodeMessage(const google::protobuf::Message &ProtobufMessag
 
     //保存protobuf内容
     const std::string &ProtobufDataString = ProtobufMessage.SerializeAsString();
-    EncodeString.append(ProtobufDataString.c_str(), ProtobufDataString.size());
-    g_Log.WriteDebug(BoostFormat("Encode: Protobuf size = %d", ProtobufDataString.size()));
+    //EncodeString.append(ProtobufDataString.c_str(), ProtobufDataString.size());
+    //g_Log.WriteDebug(BoostFormat("Encode: Protobuf size = %d", ProtobufDataString.size()));
+
+    //加密
+    const std::string &EncryptString = AEScbcEncrypt(ProtobufDataString, MY_AES_KEY);
+    EncodeString.append(EncryptString.c_str(), EncryptString.size());
+    g_Log.WriteDebug(BoostFormat("Encode: Protobuf size = %d", EncryptString.size()));
 
     //计算除了总长度外其余数据的CRC32值
     const char *CheckBegin = EncodeString.c_str() + INT_SIZE;
@@ -132,8 +138,10 @@ inline int DecodeMessage(std::string &EncodeBuffer)
     int ProtobufDataLength = EncodeBufferLength - INT_SIZE * 4 - MessageNameLength;
     g_Log.WriteDebug(BoostFormat("Decode: Protobuf message length = %d", ProtobufDataLength));
 
+    //解密
     std::string ProtobufString(ProtobufData, ProtobufData + ProtobufDataLength);
-    EncodeBuffer.swap(ProtobufString);
+    std::string DecryptString = AEScbcDecrypt(ProtobufString, MY_AES_KEY);
+    EncodeBuffer.swap(DecryptString);
 
     return MessageType;
 }

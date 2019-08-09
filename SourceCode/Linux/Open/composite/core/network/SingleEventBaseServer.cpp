@@ -339,6 +339,7 @@ void SingleEventBaseServer::CallBack_Event(bufferevent * bev, short Events, void
 
 void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
 {
+    static unsigned long long RecvCount = 0;
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;
     g_Log.WriteDebug("Single base server process recv call back.");
 
@@ -402,7 +403,7 @@ void SingleEventBaseServer::CallBack_Recv(bufferevent *bev, void *UserData)
                 break;
             }
 
-            g_Log.WriteInfo(BoostFormat("Single base server recv size = %d", MessageTotalLength));
+            g_Log.WriteInfo(BoostFormat("Single base server recv size = %d, count = %llu", MessageTotalLength, ++RecvCount));
 
             NetworkMessage NetworkMsg;
             NetworkMsg.m_Socket = ClientSocket;

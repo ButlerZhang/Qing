@@ -44,7 +44,6 @@ public:
 private:
 
     std::string                     m_ConfigFileName;
-    const std::string               DB_PASSWORD_KEY;
 };
 
 #define g_Config Config::GetInstance()

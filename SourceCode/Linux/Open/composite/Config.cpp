@@ -24,7 +24,7 @@ void CallBack_LibEventLog(int Severity, const char *LogMsg)
 
 
 
-Config::Config() : m_ConfigFileName("project.ini"), DB_PASSWORD_KEY("CJSZHCHCSZCJSZCJ")
+Config::Config() : m_ConfigFileName("project.ini")
 {
     m_IsEnableHTTPS = true;
     event_set_log_callback(CallBack_LibEventLog);
@@ -60,7 +60,7 @@ void Config::GenerateConfigFile()
 
     std::cout << "Input DB Password:" << std::endl;
     std::cin >> InputString;
-    DBTree.put("Password", AESEncrypt(InputString, DB_PASSWORD_KEY));
+    DBTree.put("Password", AESEncrypt(InputString, MY_AES_KEY));
 
     std::cout << "Input DB Name:" << std::endl;
     std::cin >> InputString;
@@ -105,7 +105,7 @@ bool Config::LoadFileConfig()
         m_DBName = DBTree.get<std::string>("DBName", "jpc");
 
         const std::string &Password = DBTree.get<std::string>("Password", "root");
-        m_DBPassword = AESDecrypt(Password, DB_PASSWORD_KEY);
+        m_DBPassword = AESDecrypt(Password, MY_AES_KEY);
 
         return true;
 
