@@ -121,9 +121,24 @@ inline bool GetHostIPv6(std::vector<std::string> &IPVector)
 
 inline unsigned int GetRandomUIntInRange(int Min, int Max)
 {
-    static std::default_random_engine RandomEngine;
+    static std::default_random_engine RandomEngine(time(NULL));
     static std::uniform_int_distribution<unsigned int> u(Min, Max);
     return u(RandomEngine);
+}
+
+inline std::string GenerateRandomKey(unsigned int CharacterCount)
+{
+    const std::string CHARACTER("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+    const int CHARACTER_SIZE = static_cast<int>(CHARACTER.size());
+
+    std::string RandomKey;
+    while (static_cast<unsigned int>(RandomKey.size()) < CharacterCount)
+    {
+        std::string::size_type Index = GetRandomUIntInRange(0, CHARACTER_SIZE);
+        RandomKey.push_back(CHARACTER[Index]);
+    }
+
+    return RandomKey;
 }
 
 inline bool SplitString(const std::string &SourceString, std::vector<std::string> &StringVector, const std::string &Seperator)
