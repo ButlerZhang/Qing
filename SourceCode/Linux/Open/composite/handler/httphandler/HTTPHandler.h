@@ -7,12 +7,12 @@ struct evhttp_request;
 
 
 
-class Handler
+class HTTPHandler
 {
 public:
 
-    Handler();
-    virtual ~Handler();
+    HTTPHandler();
+    virtual ~HTTPHandler();
 
 protected:
 

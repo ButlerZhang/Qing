@@ -103,8 +103,9 @@
     <ClCompile Include="Open\composite\core\network\SingleEventBaseServer.cpp" />
     <ClCompile Include="Open\composite\core\network\ThreadNoticeQueue.cpp" />
     <ClCompile Include="Open\composite\core\network\UDPBroadcast.cpp" />
-    <ClCompile Include="Open\composite\handler\Handler.cpp" />
+    <ClCompile Include="Open\composite\handler\httphandler\HTTPHandler.cpp" />
     <ClCompile Include="Open\composite\handler\httphandler\UserHandler.cpp" />
+    <ClCompile Include="Open\composite\handler\tcphandler\TCPHandler.cpp" />
     <ClCompile Include="Open\composite\message\project.pb.cc" />
     <ClCompile Include="Open\protobuf\base.pb.cc" />
     <ClCompile Include="Open\protobuf\user.pb.cc" />
@@ -160,8 +161,9 @@
     <ClInclude Include="Open\composite\core\network\UDPBroadcast.h" />
     <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h" />
     <ClInclude Include="Open\composite\core\tools\OpenSSLContext.h" />
-    <ClInclude Include="Open\composite\handler\Handler.h" />
+    <ClInclude Include="Open\composite\handler\httphandler\HTTPHandler.h" />
     <ClInclude Include="Open\composite\handler\httphandler\UserHandler.h" />
+    <ClInclude Include="Open\composite\handler\tcphandler\TCPHandler.h" />
     <ClInclude Include="Open\composite\message\CodedMessage.h" />
     <ClInclude Include="Open\composite\message\project.pb.h" />
     <ClInclude Include="Open\composite\model\Model.h" />

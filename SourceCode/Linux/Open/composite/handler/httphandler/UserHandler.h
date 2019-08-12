@@ -1,12 +1,12 @@
 #pragma once
-#include "../Handler.h"
+#include "HTTPHandler.h"
 #include "../../model/Model.h"
 
 struct evhttp_request;
 
 
 
-class UserHandler : public Handler
+class UserHandler : public HTTPHandler
 {
 public:
 

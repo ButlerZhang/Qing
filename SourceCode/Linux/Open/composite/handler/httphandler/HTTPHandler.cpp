@@ -1,23 +1,19 @@
-#include "Handler.h"
-#include "../../../../Common/Boost/BoostLog.h"
+#include "HTTPHandler.h"
+#include "../../../../../Common/Boost/BoostLog.h"
 #include <event.h>
 #include <event2/http.h>
 
 
 
-Handler::Handler()
+HTTPHandler::HTTPHandler()
 {
 }
 
-Handler::~Handler()
+HTTPHandler::~HTTPHandler()
 {
-
-
-
-
 }
 
-std::string Handler::GetPostDataString(evhttp_request * Request)
+std::string HTTPHandler::GetPostDataString(evhttp_request * Request)
 {
     std::string PostDataString;
 
@@ -48,7 +44,7 @@ std::string Handler::GetPostDataString(evhttp_request * Request)
     return PostDataString;
 }
 
-std::string Handler::GetReplyJsonString(boost::property_tree::ptree &JsonTree)
+std::string HTTPHandler::GetReplyJsonString(boost::property_tree::ptree &JsonTree)
 {
     std::string JsonString;
     try
@@ -65,7 +61,8 @@ std::string Handler::GetReplyJsonString(boost::property_tree::ptree &JsonTree)
     }
     return JsonString;
 }
-bool Handler::ParsePostData(boost::property_tree::ptree &JsonTree, const std::string &PostDataString)
+
+bool HTTPHandler::ParsePostData(boost::property_tree::ptree &JsonTree, const std::string &PostDataString)
 {
     if (PostDataString.empty())
     {

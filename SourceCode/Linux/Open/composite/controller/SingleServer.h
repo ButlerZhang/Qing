@@ -1,6 +1,7 @@
 #pragma once
 #include "../core/network/SingleEventBaseServer.h"
 #include "../../../../Common/Database/MySQLDatabase.h"
+#include "../handler/tcphandler/TCPHandler.h"
 #include <google/protobuf/message.h>
 
 
@@ -20,21 +21,18 @@ public:
     MySQLDatabase& GetDB() { return m_SMIBDB; }
     static SingleServer& GetInstance() { static SingleServer g_Instance; return g_Instance; }
 
-private:
-
-    SingleServer();
-    virtual ~SingleServer();
-
-    bool ProcessLogin(NetworkMessage &NetworkMsg);
-    bool ProcessLogout(NetworkMessage &NetworkMsg);
-    bool ProcessRandom(NetworkMessage &NetworkMsg);
-
     bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
     bool SendMessage(int MessageType, NetworkMessage &NetworkMsg, const google::protobuf::Message &ProtobufMsg);
 
 private:
 
-    MySQLDatabase                       m_SMIBDB;
+    SingleServer();
+    virtual ~SingleServer();
+
+private:
+
+    MySQLDatabase                               m_SMIBDB;
+    std::vector<std::shared_ptr<TCPHandler>>    m_HandlerVector;
 };
 
 #define g_SingleServer SingleServer::GetInstance()

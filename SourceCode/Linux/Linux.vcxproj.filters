@@ -94,6 +94,9 @@
     <Filter Include="Project\Open\composite\model">
       <UniqueIdentifier>{c4947c74-fd7b-414f-85ee-525afdefadf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Open\composite\handler\tcphandler">
+      <UniqueIdentifier>{e318ebc6-6d79-4d76-92e6-2f04bafff816}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">
@@ -208,9 +211,6 @@
     <ClCompile Include="Open\composite\core\network\UDPBroadcast.cpp">
       <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\composite\handler\Handler.cpp">
-      <Filter>Project\Open\composite\handler</Filter>
-    </ClCompile>
     <ClCompile Include="Open\composite\handler\httphandler\UserHandler.cpp">
       <Filter>Project\Open\composite\handler\httphandler</Filter>
     </ClCompile>
@@ -222,6 +222,12 @@
     </ClCompile>
     <ClCompile Include="Open\composite\core\network\HTTPSession.cpp">
       <Filter>Project\Open\composite\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\composite\handler\httphandler\HTTPHandler.cpp">
+      <Filter>Project\Open\composite\handler\httphandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\composite\handler\tcphandler\TCPHandler.cpp">
+      <Filter>Project\Open\composite\handler\tcphandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,9 +517,6 @@
     <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h">
       <Filter>Project\Open\composite\core\tools</Filter>
     </ClInclude>
-    <ClInclude Include="Open\composite\handler\Handler.h">
-      <Filter>Project\Open\composite\handler</Filter>
-    </ClInclude>
     <ClInclude Include="Open\composite\handler\httphandler\UserHandler.h">
       <Filter>Project\Open\composite\handler\httphandler</Filter>
     </ClInclude>
@@ -537,6 +540,12 @@
     </ClInclude>
     <ClInclude Include="Open\composite\core\tools\OpenSSLContext.h">
       <Filter>Project\Open\composite\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\composite\handler\httphandler\HTTPHandler.h">
+      <Filter>Project\Open\composite\handler\httphandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\composite\handler\tcphandler\TCPHandler.h">
+      <Filter>Project\Open\composite\handler\tcphandler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

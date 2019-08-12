@@ -106,10 +106,11 @@ public:
 struct NetworkMessage
 {
     int                                      m_Socket;
+    int                                      m_MessageType;
     std::string                              m_Message;
     std::shared_ptr<EventIOBuffer>           m_IOBuffer;
 
-    NetworkMessage() : m_Socket(0) {}
+    NetworkMessage() : m_Socket(0), m_MessageType(0) {}
 };
 
 struct ClientNode
