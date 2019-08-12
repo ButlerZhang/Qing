@@ -64,7 +64,7 @@ public:
         /* Check if the client certificate and private-key matches */
         if (!SSL_CTX_check_private_key(m_SSLContext))
         {
-            g_Log.WriteError("HTTP base server could private key does not match certfile.");
+            g_Log.WriteError("HTTP base server check private key does not match certfile.");
         }
 
         return m_SSLContext;

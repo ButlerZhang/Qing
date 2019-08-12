@@ -108,11 +108,11 @@ bool HTTPServer::ProcessPost(evhttp_request *Request)
     {
         if (PathVector[1] == "login")
         {
-            return m_UserHandler.ProcessLogin(Request);
+            return m_HTTPHandler.ProcessLogin(Request);
         }
         else if (PathVector[1] == "logout")
         {
-            return m_UserHandler.ProcessLogout(Request);
+            return m_HTTPHandler.ProcessLogout(Request);
         }
         else
         {

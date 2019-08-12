@@ -211,9 +211,6 @@
     <ClCompile Include="Open\composite\core\network\UDPBroadcast.cpp">
       <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Open\composite\handler\httphandler\UserHandler.cpp">
-      <Filter>Project\Open\composite\handler\httphandler</Filter>
-    </ClCompile>
     <ClCompile Include="Open\composite\message\project.pb.cc">
       <Filter>Project\Open\composite\message</Filter>
     </ClCompile>
@@ -516,9 +513,6 @@
     </ClInclude>
     <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h">
       <Filter>Project\Open\composite\core\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\handler\httphandler\UserHandler.h">
-      <Filter>Project\Open\composite\handler\httphandler</Filter>
     </ClInclude>
     <ClInclude Include="Open\composite\message\CodedMessage.h">
       <Filter>Project\Open\composite\message</Filter>

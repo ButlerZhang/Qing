@@ -2,7 +2,7 @@
 #include <vector>
 #include "../../../../Common/Database/MySQLDatabase.h"
 #include "../core/network/HTTPBaseServer.h"
-#include "../handler/httphandler/UserHandler.h"
+#include "../handler/httphandler/HTTPHandler.h"
 
 
 
@@ -35,7 +35,7 @@ private:
     int                                  m_HTTPPort;
     std::string                          m_ServerIP;
     MySQLDatabase                        m_HTTPDB;
-    UserHandler                          m_UserHandler;
+    HTTPHandler                          m_HTTPHandler;
 };
 
 #define g_HTTPServer HTTPServer::GetInstance()
