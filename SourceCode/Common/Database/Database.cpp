@@ -1,4 +1,5 @@
 #include "Database.h"
+#include "../Boost/BoostLog.h"
 #include <stdlib.h>
 
 
@@ -38,6 +39,7 @@ bool DatabaseDataSet::GetValue(const std::string &FieldName, int64_t &Data) cons
         return true;
     }
 
+    g_Log.WriteError(BoostFormat("DatabaseDataSet get int64 value failed, filed name = %s", FieldName.c_str()));
     return false;
 }
 
@@ -50,6 +52,7 @@ bool DatabaseDataSet::GetValue(const std::string &FieldName, int &Data) const
         return true;
     }
 
+    g_Log.WriteError(BoostFormat("DatabaseDataSet get int value failed, filed name = %s", FieldName.c_str()));
     return false;
 }
 
@@ -62,6 +65,7 @@ bool DatabaseDataSet::GetValue(const std::string &FieldName, double &Data) const
         return true;
     }
 
+    g_Log.WriteError(BoostFormat("DatabaseDataSet get double value failed, filed name = %s", FieldName.c_str()));
     return false;
 }
 

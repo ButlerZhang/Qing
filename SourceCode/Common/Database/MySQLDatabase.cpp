@@ -1,4 +1,5 @@
 #include "MySQLDatabase.h"
+#include "../Boost/BoostLog.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -76,6 +77,7 @@ bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
 {
     if (m_ResultSet == NULL || m_Row == NULL)
     {
+        g_Log.WriteError("MySQLDataSet get string value failed, resut set is NULL or row is NULL");
         return false;
     }
 
@@ -88,6 +90,7 @@ bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) co
         }
     }
 
+    g_Log.WriteError(BoostFormat("MySQLDataSet get string value failed, filed name = %s", FieldName.c_str()));
     return false;
 }
 
@@ -112,17 +115,22 @@ bool MySQLDatabase::Connect(const char *Host, const char *User, const char *Pass
 
     if (mysql_init(m_MySQL) == 0)
     {
+        g_Log.WriteError(BoostFormat("MySQL init error: %s", mysql_error(m_MySQL)));
         return false;
     }
 
     if (mysql_real_connect(m_MySQL, Host, User, Passwd, DB, Port, 0, 0) == 0)
     {
+        g_Log.WriteError(BoostFormat("MySQL real connect error: %s", mysql_error(m_MySQL)));
         return false;
     }
 
     if (CharSet != 0)
     {
-        mysql_set_character_set(m_MySQL, CharSet);
+        if (mysql_set_character_set(m_MySQL, CharSet) != 0)
+        {
+            g_Log.WriteError(BoostFormat("MySQL set character error: %s", mysql_error(m_MySQL)));
+        }
     }
 
     m_Isconnected = true;
@@ -155,12 +163,18 @@ void MySQLDatabase::Disconnect()
     if (m_Isconnected)
     {
         mysql_close(m_MySQL);
+        g_Log.WriteDebug("MySQL: close mysql.");
     }
 }
 
 bool MySQLDatabase::Isconnected()
 {
     int PingResult = mysql_ping(m_MySQL);
+    if (PingResult != 0)
+    {
+        g_Log.WriteError(BoostFormat("MySQL ping = %d, error = %s", PingResult, mysql_error(m_MySQL)));
+    }
+
     return m_Isconnected && PingResult == 0;
 }
 
@@ -186,8 +200,12 @@ bool MySQLDatabase::SetCharSet(const char *CharSet)
     if (m_Isconnected && CharSet != 0)
     {
         m_ConnectionInfo.m_DBCharset = CharSet;
+        if (mysql_set_character_set(m_MySQL, CharSet) == 0)
+        {
+            return true;
+        }
 
-        return mysql_set_character_set(m_MySQL, CharSet) == 0;
+        g_Log.WriteError(BoostFormat("MySQL set character error: %s", mysql_error(m_MySQL)));
     }
 
     return false;
@@ -202,6 +220,7 @@ bool MySQLDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet * MyData
 
     if (mysql_query(m_MySQL, QueryStr) != 0)
     {
+        g_Log.WriteError(BoostFormat("MySQL query error: %s", mysql_error(m_MySQL)));
         return false;
     }
 

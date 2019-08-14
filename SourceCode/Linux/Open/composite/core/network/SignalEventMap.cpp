@@ -9,12 +9,7 @@ SignalEventMap::SignalEventMap()
 
 SignalEventMap::~SignalEventMap()
 {
-    while (!m_SignalEventMap.empty())
-    {
-        event_del(m_SignalEventMap.begin()->second.m_event);
-        m_SignalEventMap.erase(m_SignalEventMap.begin());
-    }
-
+    m_SignalEventMap.clear();
     g_Log.WriteDebug(BoostFormat("Signal event map was destructored, signal count = %d.", m_SignalEventMap.size()));
 }
 
@@ -37,7 +32,6 @@ bool SignalEventMap::AddSignalEvent(event_base *EventBase, int Signal, void(*Cal
     if (event_add(SignalEvent, NULL) < 0)
     {
         g_Log.WriteError(BoostFormat("Add signal = %d event to base event error.", Signal));
-        event_del(SignalEvent);
         return false;
     }
 
@@ -51,7 +45,6 @@ bool SignalEventMap::DeleteSignalEvent(int Signal)
     std::map<int, EventNormal>::iterator iter = m_SignalEventMap.find(Signal);
     if (iter != m_SignalEventMap.end())
     {
-        event_del(iter->second.m_event);
         m_SignalEventMap.erase(iter);
         g_Log.WriteDebug(BoostFormat("Signal map delete signal = %d", Signal));
         return true;

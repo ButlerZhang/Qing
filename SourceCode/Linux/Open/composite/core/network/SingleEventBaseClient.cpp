@@ -378,11 +378,8 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
         g_Log.WriteInfo("Single base client connected server succeed.");
         if (Client->m_UDPBroadcastEvent != NULL && Client->m_UDPBroadcastEvent->m_event != NULL)
         {
-            if (event_del(Client->m_UDPBroadcastEvent->m_event) == 0)
-            {
-                Client->m_UDPBroadcastEvent = NULL;
-                g_Log.WriteInfo("Single base client delete udp broadcast recv event and close udp socket.");
-            }
+            Client->m_UDPBroadcastEvent = NULL;
+            g_Log.WriteInfo("Single base client delete udp broadcast recv event and close udp socket.");
         }
 
         Client->ProcessConnected();
