@@ -184,7 +184,7 @@ bool HTTPHandler::SendLoginReply(struct evhttp_request *Request, boost::property
 
     if (ReplyModel.m_ErrorCode == 0)
     {
-        const std::string &SessionID = g_HTTPServer.GetHTTPSession().GenerateSession(ReplyModel.m_UserName, ReplyModel.m_Password);
+        const std::string &SessionID = g_HTTPServer.GetHTTPSession().GenerateSession(ReplyModel.m_UserName, ReplyModel.m_Password, ReplyModel.m_AuthorityID);
         const std::string &Cookie = BoostFormat("SID=%s; Max-Age=3600; HttpOnly", SessionID.c_str());
         evhttp_add_header(evhttp_request_get_output_headers(Request), "Set-Cookie", Cookie.c_str());
     }

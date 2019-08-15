@@ -52,6 +52,10 @@ public:
     bool    SetCharSet(const char* CharSet);
     bool    ExecuteQuery(const char* QueryStr, DatabaseDataSet *DataSet = NULL);
 
+    bool    Commit();
+    bool    Rollback();
+    bool    SetAutoCommit(bool IsAutoCommit);
+
 private:
 
     MYSQL                              *m_MySQL;

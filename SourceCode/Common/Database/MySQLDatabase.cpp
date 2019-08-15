@@ -232,3 +232,54 @@ bool MySQLDatabase::ExecuteQuery(const char * QueryStr, DatabaseDataSet * MyData
 
     return true;
 }
+
+bool MySQLDatabase::Commit()
+{
+    if (!m_Isconnected)
+    {
+        g_Log.WriteDebug("MySQL can not commit because no connected.");
+        return false;
+    }
+
+    if (!mysql_commit(m_MySQL))
+    {
+        g_Log.WriteError(BoostFormat("MySQL commit error: %s", mysql_error(m_MySQL)));
+        return false;
+    }
+
+    return true;
+}
+
+bool MySQLDatabase::Rollback()
+{
+    if (!m_Isconnected)
+    {
+        g_Log.WriteDebug("MySQL can not rollback because no connected.");
+        return false;
+    }
+
+    if (!mysql_rollback(m_MySQL))
+    {
+        g_Log.WriteError(BoostFormat("MySQL rollback error: %s", mysql_error(m_MySQL)));
+        return false;
+    }
+
+    return true;
+}
+
+bool MySQLDatabase::SetAutoCommit(bool IsAutoCommit)
+{
+    if (!m_Isconnected)
+    {
+        g_Log.WriteDebug("MySQL can not set auto commit because no connected.");
+        return false;
+    }
+
+    if (!mysql_autocommit(m_MySQL, IsAutoCommit))
+    {
+        g_Log.WriteError(BoostFormat("MySQL set auto commit error: %s", mysql_error(m_MySQL)));
+        return false;
+    }
+
+    return true;
+}

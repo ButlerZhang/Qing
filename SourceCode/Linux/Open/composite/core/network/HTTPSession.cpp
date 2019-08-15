@@ -60,10 +60,10 @@ bool HTTPSession::UpdateSessionTime(const std::string &SessionID)
     return true;
 }
 
-std::string HTTPSession::GenerateSession(const std::string &UserName, const std::string &Password)
+std::string HTTPSession::GenerateSession(const std::string &UserName, const std::string &Password, int Authority)
 {
     SessionNode NewNode;
-    NewNode.m_Authority = 0;
+    NewNode.m_Authority = Authority;
     NewNode.m_UserName = UserName;
     NewNode.m_Password = Password;
     NewNode.m_SessionID = GetUUID();
@@ -74,4 +74,16 @@ std::string HTTPSession::GenerateSession(const std::string &UserName, const std:
         NewNode.m_SessionID.c_str(), UserName.c_str(), NewNode.m_LastUpdateTime.c_str()));
 
     return NewNode.m_SessionID;
+}
+
+int HTTPSession::GetAuthority(const std::string &SessionID) const
+{
+    std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
+    if (it == m_SessionMap.end())
+    {
+        g_Log.WriteError(BoostFormat("HTTP session get authority, can not find id = %s.", SessionID.c_str()));
+        return 0;
+    }
+
+    return it->second.m_Authority;
 }
