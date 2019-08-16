@@ -60,12 +60,10 @@ CEncryptDecryptDlg::CEncryptDecryptDlg(CWnd* pParent /*=NULL*/)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
-    Qing::BoostLog::DefaultInit();
-
     m_OperationType = OT_UNKNOW;
     m_LastOperationType = OT_UNKNOW;
     m_WorkerThread = INVALID_HANDLE_VALUE;
-    m_SimpleCrypt = std::make_shared<Qing::SimpleEncrypt>();
+    m_SimpleCrypt = std::make_shared<SimpleEncrypt>();
 }
 
 CEncryptDecryptDlg::~CEncryptDecryptDlg()
@@ -103,7 +101,7 @@ END_MESSAGE_MAP()
 BOOL CEncryptDecryptDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
-    Qing::SetProgramDMPEnable(true);
+    SetProgramDMPEnable(true);
 
     // Add "About..." menu item to system menu.
 
@@ -276,7 +274,7 @@ void CEncryptDecryptDlg::GetFiles(std::vector<std::wstring>& FileVector)
     {
         if (PathIsDirectory(SourcePath.c_str()))
         {
-            Qing::FileManager MyFileManager;
+            FileManager MyFileManager;
             MyFileManager.GetFileNameNonRecursion(SourcePath, FileVector);
         }
         else
@@ -356,8 +354,7 @@ DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
     }
     catch (std::exception e)
     {
-        const std::wstring &ErrorMessage = Qing::StringToWString(e.what());
-        Qing::BoostLog::WriteError(ErrorMessage);
+        g_Log.WriteError(e.what());
     }
 
     EDDlg->ResetControlAfterWorkerThreadStop();

@@ -122,11 +122,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>..\..\Deployment\Debug\x64\QingD\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_68_0\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;dbghelp.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -176,13 +177,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\..\Deployment\Release\x64\Qing\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;Qing64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_68_0\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -199,6 +201,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\Boost\BoostFormat.h" />
+    <ClInclude Include="..\Common\Boost\BoostLog.h" />
+    <ClInclude Include="..\Common\Boost\BoostShare.h" />
+    <ClInclude Include="..\Windows\System\FileManager.h" />
+    <ClInclude Include="..\Windows\System\SimpleEncrypt.h" />
+    <ClInclude Include="..\Windows\System\SystemShare.h" />
     <ClInclude Include="EncryptDecrypt.h" />
     <ClInclude Include="EncryptDecryptDlg.h" />
     <ClInclude Include="FileDisguiseDlg.h" />
@@ -210,6 +218,26 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\Boost\BoostLog.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Common\Boost\BoostShare.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Windows\System\FileManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Windows\System\SimpleEncrypt.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Windows\System\SystemShare.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="EncryptDecrypt.cpp" />
     <ClCompile Include="EncryptDecryptDlg.cpp" />
     <ClCompile Include="FileDisguiseDlg.cpp" />

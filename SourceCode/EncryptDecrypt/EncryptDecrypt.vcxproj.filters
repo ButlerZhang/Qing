@@ -48,6 +48,24 @@
     <ClInclude Include="FileRecoveryDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\Boost\BoostShare.h">
+      <Filter>Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Boost\BoostLog.h">
+      <Filter>Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Boost\BoostFormat.h">
+      <Filter>Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Windows\System\FileManager.h">
+      <Filter>Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Windows\System\SimpleEncrypt.h">
+      <Filter>Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Windows\System\SystemShare.h">
+      <Filter>Reference</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EncryptDecrypt.cpp">
@@ -70,6 +88,21 @@
     </ClCompile>
     <ClCompile Include="FileRecoveryDlg.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Boost\BoostShare.cpp">
+      <Filter>Reference</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Boost\BoostLog.cpp">
+      <Filter>Reference</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Windows\System\SystemShare.cpp">
+      <Filter>Reference</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Windows\System\SimpleEncrypt.cpp">
+      <Filter>Reference</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Windows\System\FileManager.cpp">
+      <Filter>Reference</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

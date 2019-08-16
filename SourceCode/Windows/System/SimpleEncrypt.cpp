@@ -20,6 +20,11 @@ enum
 };
 
 
+void WriteInfo(const std::wstring &Log) { g_Log.WriteInfo(WStringToString(Log)); }
+void WriteDebug(const std::wstring &Log) { g_Log.WriteDebug(WStringToString(Log)); }
+void WriteError(const std::wstring &Log) { g_Log.WriteError(WStringToString(Log)); }
+
+
 
 SimpleEncrypt::SimpleEncrypt()
 {
@@ -66,7 +71,7 @@ bool SimpleEncrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &
     if (SourceFileHandle == INVALID_HANDLE_VALUE)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Encrypt failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
+        WriteError(L"Encrypt failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
 
@@ -81,7 +86,7 @@ bool SimpleEncrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &
     if (TargetFileHandle == INVALID_HANDLE_VALUE)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Encrypt failed, target file = " + TargetFile + L", error = " + m_ErrorMessage);
+        WriteError(L"Encrypt failed, target file = " + TargetFile + L", error = " + m_ErrorMessage);
         CloseHandle(SourceFileHandle);
         return false;
     }
@@ -129,7 +134,7 @@ bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring 
     if (SourceFileHandle == INVALID_HANDLE_VALUE)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("DeCrypt failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
+        WriteError(L"DeCrypt failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
 
@@ -144,7 +149,7 @@ bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring 
     if (TargetFileHandle == INVALID_HANDLE_VALUE)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("DeCrypt failed, target file = " + TargetFile + L", error = " + m_ErrorMessage);
+        WriteError(L"DeCrypt failed, target file = " + TargetFile + L", error = " + m_ErrorMessage);
         CloseHandle(SourceFileHandle);
         return false;
     }
@@ -179,7 +184,7 @@ bool SimpleEncrypt::Disguise(const std::wstring &SourceFile)
     if (!Base64Encode(SourceName, RecoveryName))
     {
         m_ErrorMessage = L"Base 64 encode failed.";
-        g_Log.WriteError(m_ErrorMessage);
+        WriteError(m_ErrorMessage);
         return false;
     }
 
@@ -190,7 +195,7 @@ bool SimpleEncrypt::Disguise(const std::wstring &SourceFile)
     if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
+        WriteError(L"Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
 
@@ -211,7 +216,7 @@ bool SimpleEncrypt::Recovery(const std::wstring &SourceFile)
     if(!Base64Decode(SourceName, RecoveryName))
     {
         m_ErrorMessage = L"Base 64 decode failed.";
-        g_Log.WriteError(m_ErrorMessage);
+        WriteError(m_ErrorMessage);
         return false;
     }
 
@@ -221,7 +226,7 @@ bool SimpleEncrypt::Recovery(const std::wstring &SourceFile)
     if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
+        WriteError(L"Disguise failed, source file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
 
@@ -233,7 +238,7 @@ bool SimpleEncrypt::Delete(const std::wstring &SourceFile)
     if (!DeleteFile(SourceFile.c_str()))
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Delete failed, file = " + SourceFile + L", error = " + m_ErrorMessage);
+        WriteError(L"Delete failed, file = " + SourceFile + L", error = " + m_ErrorMessage);
         return false;
     }
 
@@ -250,7 +255,7 @@ bool SimpleEncrypt::Prepare(HANDLE SourceFileHandle, const std::wstring &SourceF
     if (m_FileSize == INVALID_FILE_SIZE)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Prepare init file size error = " + m_ErrorMessage);
+        WriteError(L"Prepare init file size error = " + m_ErrorMessage);
         return false;
     }
 
@@ -277,7 +282,7 @@ bool SimpleEncrypt::Prepare(HANDLE SourceFileHandle, const std::wstring &SourceF
 
     std::wstring LogString(L"Recreate buffer, old size = " + std::to_wstring(OldBufferSize));
     LogString.append(L", new size = " + std::to_wstring(m_DataBufferSize));
-    g_Log.WriteInfo(LogString);
+    WriteInfo(LogString);
     return true;
 }
 
@@ -299,7 +304,7 @@ bool SimpleEncrypt::IsSpaceEnough(unsigned long FileSize, std::wstring SourceFil
     if (SourceFile.empty())
     {
         m_ErrorMessage = L"Can not find root directory.";
-        g_Log.WriteError(m_ErrorMessage);
+        WriteError(m_ErrorMessage);
         return false;
     }
 
@@ -312,7 +317,7 @@ bool SimpleEncrypt::IsSpaceEnough(unsigned long FileSize, std::wstring SourceFil
     if (FileSize >= qwFreeBytes)
     {
         m_ErrorMessage = L"Not enough free disk space.";
-        g_Log.WriteError(m_ErrorMessage);
+        WriteError(m_ErrorMessage);
         return false;
     }
 
@@ -339,7 +344,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
         if (::SetFilePointer(SourceFileHandle, FileOffset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
         {
             m_ErrorMessage = GetLastErrorString(GetLastError());
-            g_Log.WriteError("EncryptDecryptFileData::SetFilePointer, error = " + m_ErrorMessage);
+            WriteError(L"EncryptDecryptFileData::SetFilePointer, error = " + m_ErrorMessage);
             return false;
         }
 
@@ -352,7 +357,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
         if (::ReadFile(SourceFileHandle, m_FileDataBuffer, m_DataBufferSize, &RealReadLength, NULL) <= 0)
         {
             m_ErrorMessage = GetLastErrorString(GetLastError());
-            g_Log.WriteError("EncryptDecryptFileData::ReadFile, error = " + m_ErrorMessage);
+            WriteError(L"EncryptDecryptFileData::ReadFile, error = " + m_ErrorMessage);
             return false;
         }
 
@@ -371,7 +376,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
         if (::WriteFile(TargetFileHandle, m_FileDataBuffer, RealReadLength, &RealWriteLength, NULL) <= 0)
         {
             m_ErrorMessage = GetLastErrorString(GetLastError());
-            g_Log.WriteError("EncryptDecryptFileData::WriteFile, error = " + m_ErrorMessage);
+            WriteError(L"EncryptDecryptFileData::WriteFile, error = " + m_ErrorMessage);
             return false;
         }
 
@@ -381,7 +386,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
     if (m_IsForceStop)
     {
         m_ErrorMessage = L"Force stop.";
-        g_Log.WriteError(m_ErrorMessage);
+        WriteError(m_ErrorMessage);
     }
 
     return true;
@@ -395,7 +400,7 @@ bool SimpleEncrypt::EncryptHeader(const std::wstring &SourceFile, HANDLE SourceF
     if (HeaderContext.size() > BUFFER_UNIT)
     {
         m_ErrorMessage = L"Header context size is more than BUFFER_UNIT.";
-        g_Log.WriteError("Encrypt header, file = " + SourceFile + L" , error = " + m_ErrorMessage);
+        WriteError(L"Encrypt header, file = " + SourceFile + L" , error = " + m_ErrorMessage);
         return false;
     }
 
@@ -407,7 +412,7 @@ bool SimpleEncrypt::EncryptHeader(const std::wstring &SourceFile, HANDLE SourceF
     if (::WriteFile(TargetFileHandle, m_FileDataBuffer, BUFFER_UNIT, &RealWriteLength, NULL) <= 0)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Encrypt header, write file = " + SourceFile + L"failed , error = " + m_ErrorMessage);
+        WriteError(L"Encrypt header, write file = " + SourceFile + L"failed , error = " + m_ErrorMessage);
         return false;
     }
 
@@ -421,7 +426,7 @@ bool SimpleEncrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &Origina
     if (::ReadFile(SourceFileHandle, m_FileDataBuffer, BUFFER_UNIT, &RealReadLength, NULL) <= 0)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        g_Log.WriteError("Decrypt Header, read file, error = " + m_ErrorMessage);
+        WriteError(L"Decrypt Header, read file, error = " + m_ErrorMessage);
         return false;
     }
 
@@ -432,16 +437,16 @@ bool SimpleEncrypt::DecryptHeader(HANDLE SourceFileHandle, std::wstring &Origina
     if (HeaderContext.find(m_HeaderVector[FILE_NAME]) == std::wstring::npos)
     {
         m_ErrorMessage = L"Can not find encrypt information.";
-        g_Log.WriteError(m_ErrorMessage);
+        WriteError(m_ErrorMessage);
         return false;
     }
 
-    std::vector<std::string> SplitVector;
+    std::vector<std::wstring> SplitVector;
     SplitString(HeaderContext, SplitVector, m_HeaderVector[SEPERATOR]);
     if (SplitVector.empty())
     {
         m_ErrorMessage = L"Can not find encrypt information.";
-        g_Log.WriteError(m_ErrorMessage);
+        WriteError(m_ErrorMessage);
         return false;
     }
 

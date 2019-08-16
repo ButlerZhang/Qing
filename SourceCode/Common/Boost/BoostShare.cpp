@@ -21,6 +21,16 @@ bool Base64Decode(const std::string &Input, std::string &Output)
     return !Output.empty();
 }
 
+bool Base64Encode(const std::wstring &Input, std::wstring &Output)
+{
+    return false;
+}
+
+bool Base64Decode(const std::wstring &Input, std::wstring &Output)
+{
+    return false;
+}
+
 std::string GetSHA1(const std::string & DataString, bool IsUpper)
 {
     //boost::uuids::detail::sha1 sha;
