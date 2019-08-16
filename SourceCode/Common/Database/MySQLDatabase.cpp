@@ -163,7 +163,6 @@ void MySQLDatabase::Disconnect()
     if (m_Isconnected)
     {
         mysql_close(m_MySQL);
-        g_Log.WriteDebug("MySQL: close mysql.");
     }
 }
 

@@ -26,7 +26,12 @@ void CallBack_LibEventLog(int Severity, const char *LogMsg)
 
 Config::Config() : m_ConfigFileName("project.ini")
 {
+    m_IsEnableLog = true;
     m_IsEnableHTTPS = true;
+    m_LogSeverity = LL_ERROR;
+
+    g_Log.SetFilter(LL_ERROR);
+    g_Log.SetIsOkToWrite(m_IsEnableLog);
     event_set_log_callback(CallBack_LibEventLog);
 }
 
@@ -87,7 +92,6 @@ bool Config::LoadConfig()
         return false;
     }
 
-    g_Log.WriteDebug("Config: Read config succeed.");
     return true;
 }
 
@@ -186,6 +190,15 @@ bool Config::ParseSystemSection(const std::string &ConfigName, const std::string
         if (ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0)
         {
             m_IsEnableHTTPS = false;
+            return true;
+        }
+    }
+    if (ConfigName == "enable_log")
+    {
+        if (ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0)
+        {
+            m_IsEnableLog = false;
+            g_Log.SetIsOkToWrite(m_IsEnableLog);
             return true;
         }
     }

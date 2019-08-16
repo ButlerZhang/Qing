@@ -7,6 +7,8 @@
 
 HTTPSession::HTTPSession()
 {
+    m_InvalidSessionID = GetUUID();
+    m_SessionMap[m_InvalidSessionID].m_Authority = 0;
 }
 
 HTTPSession::~HTTPSession()
@@ -46,6 +48,20 @@ bool HTTPSession::IsSessionTimeout(const std::string &SessionID) const
     return IsTimeOut;
 }
 
+bool HTTPSession::DeleteSession(const std::string &SessionID)
+{
+    std::map<std::string, SessionNode>::iterator it = m_SessionMap.find(SessionID);
+    if (it == m_SessionMap.end())
+    {
+        g_Log.WriteError(BoostFormat("HTTP session delete, can not find id = %s.", SessionID.c_str()));
+        return false;
+    }
+
+    m_SessionMap.erase(it);
+    g_Log.WriteError(BoostFormat("HTTP session id = %s deleted.", SessionID.c_str()));
+    return true;
+}
+
 bool HTTPSession::UpdateSessionTime(const std::string &SessionID)
 {
     std::map<std::string, SessionNode>::iterator it = m_SessionMap.find(SessionID);
@@ -60,7 +76,31 @@ bool HTTPSession::UpdateSessionTime(const std::string &SessionID)
     return true;
 }
 
-std::string HTTPSession::GenerateSession(const std::string &UserName, const std::string &Password, int Authority)
+int HTTPSession::GetAuthority(const std::string &SessionID) const
+{
+    std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
+    if (it == m_SessionMap.end())
+    {
+        g_Log.WriteError(BoostFormat("HTTP session get authority, can not find id = %s.", SessionID.c_str()));
+        return 0;
+    }
+
+    return it->second.m_Authority;
+}
+
+const std::string & HTTPSession::GetUserName(const std::string & SessionID) const
+{
+    std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
+    if (it == m_SessionMap.end())
+    {
+        g_Log.WriteError(BoostFormat("HTTP session get authority, can not find id = %s.", SessionID.c_str()));
+        return m_SessionMap.find(m_InvalidSessionID)->second.m_UserName;
+    }
+
+    return it->second.m_UserName;
+}
+
+const std::string& HTTPSession::GenerateSession(const std::string &UserName, const std::string &Password, int Authority)
 {
     SessionNode NewNode;
     NewNode.m_Authority = Authority;
@@ -73,17 +113,5 @@ std::string HTTPSession::GenerateSession(const std::string &UserName, const std:
     g_Log.WriteDebug(BoostFormat("HTTP session add new session id = %s, user = %s, update time = %s",
         NewNode.m_SessionID.c_str(), UserName.c_str(), NewNode.m_LastUpdateTime.c_str()));
 
-    return NewNode.m_SessionID;
-}
-
-int HTTPSession::GetAuthority(const std::string &SessionID) const
-{
-    std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
-    if (it == m_SessionMap.end())
-    {
-        g_Log.WriteError(BoostFormat("HTTP session get authority, can not find id = %s.", SessionID.c_str()));
-        return 0;
-    }
-
-    return it->second.m_Authority;
+    return m_SessionMap[NewNode.m_SessionID].m_SessionID;
 }

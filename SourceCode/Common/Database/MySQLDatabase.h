@@ -2,8 +2,6 @@
 #include "Database.h"
 #include <vector>
 
-
-
 typedef struct st_mysql MYSQL;
 typedef struct st_mysql_field MYSQL_FIELD;
 typedef struct st_mysql_res MYSQL_RES;

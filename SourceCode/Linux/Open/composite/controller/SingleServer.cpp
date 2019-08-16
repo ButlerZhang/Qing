@@ -80,14 +80,15 @@ bool SingleServer::ProcessThreadNoticeQueue()
         return false;
     }
     g_Log.WriteDebug(BoostFormat("Single Server process notice queue: %s", JsonString.c_str()));
-        Project::ServerError ServerPublic;
-        ServerPublic.set_errortype(12341234);
-        ServerPublic.set_errordescriptor("Http server: " + JsonString);
-        Project::MessageHeader *Header = ServerPublic.mutable_header();
-        Header->set_type(Project::MessageType::MT_ERROR);
-        Header->set_transmissionid(GetUUID());
-        return SendMessage(Project::MessageType::MT_ERROR, ServerPublic);
-    }
+
+    Project::ServerError ServerPublic;
+    ServerPublic.set_errortype(12341234);
+    ServerPublic.set_errordescriptor("Http server: " + JsonString);
+    Project::MessageHeader *Header = ServerPublic.mutable_header();
+    Header->set_type(Project::MessageType::MT_ERROR);
+    Header->set_transmissionid(GetUUID());
+    return SendMessage(Project::MessageType::MT_ERROR, ServerPublic);
+}
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {

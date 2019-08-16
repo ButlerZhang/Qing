@@ -21,11 +21,15 @@ public:
 
     HTTPSession& GetHTTPSession() { return m_HTTPSession; }
 
+    void PrintRequest(struct evhttp_request* Request);
+    void PrintHeaders(struct evkeyvalq *Headers, bool IsRequest);
+
 protected:
 
     bool AddCheckoutTimer(int TimerInternal);
-    void PrintRequest(struct evhttp_request* Request);
+    std::string GetSessionID(struct evhttp_request* Request) const;
     bool GetRequestIPandPort(struct evhttp_connection *Connection, std::string &RequestIP, int &Port);
+
     bool ParseRequestPath(struct evhttp_request* Request, std::string &ActualllyPath);
     bool ProcessDirectory(struct evhttp_request *Request, const std::string &ActualllyPath);
     bool ProcessFile(struct evhttp_request *Request, struct stat &FileStat, const std::string &ActualllyPath);

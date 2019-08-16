@@ -39,6 +39,7 @@ public:
 
     //debug
     bool                            m_IsEnableHTTPS;
+    bool                            m_IsEnableLog;
     int                             m_LogSeverity;
 
 private:

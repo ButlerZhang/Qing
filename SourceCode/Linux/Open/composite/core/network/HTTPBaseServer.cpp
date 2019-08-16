@@ -45,7 +45,6 @@ HTTPBaseServer::~HTTPBaseServer()
 {
     m_ContentTypeMap.clear();
     event_base_loopbreak(m_EventBase.m_eventbase);
-
     g_Log.WriteDebug("HTTP base server was destructored.");
 }
 
@@ -62,7 +61,6 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableH
         g_Log.WriteError("HTTP base server add checkout timer failed.");
         return false;
     }
-
 
     m_EventHTTP.m_evhttp = evhttp_new(m_EventBase.m_eventbase);
     if (m_EventHTTP.m_evhttp == NULL)
@@ -174,6 +172,17 @@ bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
     return true;
 }
 
+void HTTPBaseServer::PrintHeaders(evkeyvalq *Headers, bool IsRequest)
+{
+    std::string LogString(BoostFormat("%s headers:\n", IsRequest ? "Request" : "Response"));
+    for (struct evkeyval *header = Headers->tqh_first; header != NULL; header = header->next.tqe_next)
+    {
+        LogString.append(BoostFormat("\t%s: %s\n", header->key, header->value));
+    }
+    LogString.erase(LogString.end() - 1);
+    g_Log.WriteDebug(LogString);
+}
+
 void HTTPBaseServer::PrintRequest(evhttp_request *Request)
 {
     const char *RequestType = NULL;
@@ -192,17 +201,38 @@ void HTTPBaseServer::PrintRequest(evhttp_request *Request)
     }
 
     g_Log.WriteDebug(BoostFormat("HTTP base server received a %s request for: %s", RequestType, evhttp_request_get_uri(Request)));
+    PrintHeaders(evhttp_request_get_input_headers(Request), true);
+}
 
-    std::string LogString("Header:\n");
-    struct evkeyvalq *Headers = evhttp_request_get_input_headers(Request);
-    for (struct evkeyval *header = Headers->tqh_first; header != NULL; header = header->next.tqe_next)
+std::string HTTPBaseServer::GetSessionID(evhttp_request *Request) const
+{
+    const char *Cookie = evhttp_find_header(evhttp_request_get_input_headers(Request), "Cookie");
+    if (Cookie == NULL)
     {
-        LogString.append(BoostFormat("\t%s: %s\n", header->key, header->value));
+        g_Log.WriteError("HTTP base server can not find cookie.");
+        return std::string();
     }
 
-    LogString.erase(LogString.end() - 1);
-    g_Log.WriteDebug(LogString);
+    const std::string SIDFlag("SID=");
+    const std::string CookieString(Cookie);
+    std::string::size_type StatIndex = CookieString.find(SIDFlag);
+    if (StatIndex == std::string::npos)
+    {
+        g_Log.WriteError("HTTP base server can not find SID in cookie.");
+        return std::string();
+    }
+
+    std::string::size_type StopIndex = CookieString.size() - StatIndex - SIDFlag.size();
+    const std::string &SessionID = CookieString.substr(StatIndex + SIDFlag.size(), StopIndex);
+    if (!m_HTTPSession.IsSessionExisted(SessionID))
+    {
+        g_Log.WriteError(BoostFormat("HTTP base server sid = %s is not existed.", SessionID.c_str()));
+        return std::string();
+    }
+
+    return SessionID;
 }
+
 bool HTTPBaseServer::GetRequestIPandPort(evhttp_connection *Connection, std::string &RequestIP, int &Port)
 {
     if (Connection != NULL)
@@ -215,6 +245,7 @@ bool HTTPBaseServer::GetRequestIPandPort(evhttp_connection *Connection, std::str
         RequestIP = AddressPointer;
         return true;
     }
+
     return false;
 }
 
@@ -325,10 +356,14 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
     }
 
     evbuffer_add_printf(DataBuffer.m_evbuffer, "</ul></body></html>\n");
-    evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", "text/html");
+    size_t DataBufferLength = evbuffer_get_length(DataBuffer.m_evbuffer);
+
+    struct evkeyvalq *ResponseHeader = evhttp_request_get_output_headers(Request);
+    evhttp_add_header(ResponseHeader, "Content-Type", "text/html");
+    evhttp_add_header(ResponseHeader, "Content-Length", std::to_string(DataBufferLength).c_str());
 
     evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
-    g_Log.WriteDebug(LogString);
+    PrintHeaders(ResponseHeader, false);
     return true;
 }
 
@@ -350,16 +385,18 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
         return false;
     }
 
-
     const char *FileExtension = strrchr(ActualllyPath.c_str(), '.') + 1;
     std::map<std::string, std::string>::iterator it = m_ContentTypeMap.find(FileExtension);
     const char *FileType = (it != m_ContentTypeMap.end()) ? it->second.c_str() : m_ContentTypeMap["misc"].c_str();
 
+    struct evkeyvalq *ResponseHeader = evhttp_request_get_output_headers(Request);
+    evhttp_add_header(ResponseHeader, "Content-Type", FileType);
+    evhttp_add_header(ResponseHeader, "Content-Length", std::to_string(FileStat.st_size).c_str());
+
     EventDataBuffer DataBuffer;
-    evhttp_add_header(evhttp_request_get_output_headers(Request), "Content-Type", FileType);
     evbuffer_add_file(DataBuffer.m_evbuffer, FileDescriptor, 0, FileStat.st_size); //evbuffer_add_file will close file descriptor after succeed
     evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
-
+    PrintHeaders(ResponseHeader, false);
     return true;
 }
 
@@ -376,7 +413,7 @@ void HTTPBaseServer::CallBack_ConnectionClose(struct evhttp_connection *Connecti
     {
         g_Log.WriteError("HTTP base server connection close unknow error.");
     }
-    }
+}
 
 void HTTPBaseServer::CallBack_GenericRequest(evhttp_request * Request, void * arg)
 {
@@ -400,6 +437,7 @@ void HTTPBaseServer::CallBack_Checkout(int Socket, short Events, void * UserData
     tv.tv_sec = 5;          //TimerInternal
     event_add(Server->m_CheckoutTimer.m_event, &tv);
 }
+
 bufferevent* HTTPBaseServer::CallBack_CreateSSLBufferevent(event_base *base, void *arg)
 {
     SSL_CTX *ctx = (SSL_CTX *)arg;

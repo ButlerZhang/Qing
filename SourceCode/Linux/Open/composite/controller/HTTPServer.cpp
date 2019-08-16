@@ -13,7 +13,6 @@ HTTPServer::HTTPServer()
 
 HTTPServer::~HTTPServer()
 {
-
 }
 
 bool HTTPServer::Start(const std::string &ServerIP, int Port)

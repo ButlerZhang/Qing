@@ -18,12 +18,7 @@ SingleEventBaseServer::SingleEventBaseServer()
 SingleEventBaseServer::~SingleEventBaseServer()
 {
     Stop();
-
-
     m_ClientMap.clear();
-
-
-
     g_Log.WriteDebug("Single base server was destructored.");
 }
 
@@ -43,16 +38,15 @@ bool SingleEventBaseServer::Start(const std::string &IP, int Port)
     if (!m_SignalEventMap.AddSignalEvent(m_EventBase.m_eventbase, SIGINT, CallBack_Signal, this))
     {
         g_Log.WriteError("Single base server signal event map add failed.");
-
         return false;
     }
 
     if (false)  //TODO
     {
-    if (!m_MessageHandler.Start(this))
-    {
-        g_Log.WriteError("Single base server message handler start failed.");
-        return false;
+        if (!m_MessageHandler.Start(this))
+        {
+            g_Log.WriteError("Single base server message handler start failed.");
+            return false;
         }
     }
 
@@ -99,19 +93,23 @@ bool SingleEventBaseServer::AddThreadNoticeQueueEvent()
         g_Log.WriteError("Single base server re-create thread notice queue event.");
         return true;
     }
-    m_NoticeQueueEvent.m_event = event_new(m_EventBase.m_eventbase, g_ThreadNoticeQueue.GetRecvDescriptor() , EV_READ | EV_PERSIST, CallBack_ThreadNoticeQueue, this);
+
+    m_NoticeQueueEvent.m_event = event_new(m_EventBase.m_eventbase, g_ThreadNoticeQueue.GetRecvDescriptor(), EV_READ | EV_PERSIST, CallBack_ThreadNoticeQueue, this);
     if (m_NoticeQueueEvent.m_event == NULL)
     {
         g_Log.WriteError("Single base server create thread notice queue event failed.");
         return false;
     }
+
     if (event_add(m_NoticeQueueEvent.m_event, NULL) != 0)
     {
         g_Log.WriteError("Single base server add thread notice queue event failed.");
         return false;
     }
+
     return true;
 }
+
 bool SingleEventBaseServer::DeleteSocket(int ClientSocket)
 {
     std::map<int, ClientNode>::iterator it = m_ClientMap.find(ClientSocket);
@@ -128,8 +126,7 @@ bool SingleEventBaseServer::DeleteSocket(int ClientSocket)
     }
 
     m_ClientMap.erase(it);
-    g_Log.WriteError(BoostFormat("Single base server delete socket = %d, surplus client count = %d.",ClientSocket, m_ClientMap.size()));
-
+    g_Log.WriteError(BoostFormat("Single base server delete socket = %d, surplus client count = %d.", ClientSocket, m_ClientMap.size()));
     return true;
 }
 
@@ -151,7 +148,6 @@ bool SingleEventBaseServer::AddCheckoutTimer(int TimerInternal)
     struct timeval tv;
     evutil_timerclear(&tv);
     tv.tv_sec = TimerInternal;
-
     if (event_add(m_CheckoutTimer.m_event, &tv) != 0)
     {
         g_Log.WriteError("Single base server add checkout timer failed.");
@@ -229,6 +225,7 @@ bool SingleEventBaseServer::Send(const void * Data, size_t Size)
     g_Log.WriteDebug(BoostFormat("Single base server broadcast, succeed = %d, failed = %d", SendCount, m_ClientMap.size() - SendCount));
     return true;
 }
+
 bool SingleEventBaseServer::Send(const NetworkMessage &NetworkMsg, const void *Data, size_t Size)
 {
     if (NetworkMsg.m_IOBuffer->m_bufferevent == NULL)
@@ -279,6 +276,7 @@ void SingleEventBaseServer::CallBack_Listen(evconnlistener *Listener, int Socket
     bufferevent_getwatermark(bev, EV_WRITE, &lowmark, &highmark);
     g_Log.WriteDebug(BoostFormat("Single base server default write water mark, low = %d, high = %d.", lowmark, highmark));
 }
+
 void SingleEventBaseServer::CallBack_ThreadNoticeQueue(int Socket, short Events, void * UserData)
 {
     SingleEventBaseServer *Server = (SingleEventBaseServer*)UserData;

@@ -9,21 +9,23 @@
 
 int project(int argc, char *argv[])
 {
-    g_Log.WriteInfo("Program start.");
     if (argc <= 1)                      //server
     {
         if (g_Config.LoadConfig())
         {
+            g_Log.WriteInfo("Program start.");
             g_HTTPServer.Start(g_Config.m_ServerIP, g_Config.m_HTTPPort);
             g_SingleServer.Start(g_Config.m_ServerIP, g_Config.m_SMIBPort);
         }
     }
     else if (atoi(argv[1]) == 0)        //tool mode
     {
+        g_Log.WriteInfo("Program start.");
         g_Config.GenerateConfigFile();
     }
     else                                //test client
     {
+        g_Log.WriteInfo("Program start.");
         int ClientCount = atoi(argv[1]);
         if (ClientCount > 1000)
         {
