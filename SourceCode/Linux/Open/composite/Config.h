@@ -7,10 +7,12 @@ class Config
 {
 public:
 
-    static Config& GetInstance();
-
     void GenerateConfigFile();
+
     bool LoadConfig();
+    bool IsLoadSucceed() const { return m_IsLoadSucceed; }
+
+    static Config& GetInstance() { static Config g_Instance; return g_Instance; }
 
 private:
 
@@ -19,9 +21,10 @@ private:
 
     bool LoadFileConfig();
     bool LoadDatabaseConfig();
+    bool LoadDeviceJPCTable();
+    bool LoadServerConfigTable();
 
-    bool ParseSystemSection(const std::string &ConfigName, const std::string &ConfigValue);
-    bool ParseServerSection(const std::string &ConfigName, const std::string &ConfigValue);
+    bool ParseConfiguration(const std::string &ConfigName, const std::string &ConfigValue);
 
 public:
 
@@ -33,17 +36,16 @@ public:
     std::string                     m_DBPassword;
 
     //server
+    bool                            m_IsEnableHTTPS;
+    bool                            m_IsEnableLog;
+    int                             m_LogSeverity;
     int                             m_SMIBPort;
     int                             m_HTTPPort;
     std::string                     m_ServerIP;
 
-    //debug
-    bool                            m_IsEnableHTTPS;
-    bool                            m_IsEnableLog;
-    int                             m_LogSeverity;
-
 private:
 
+    bool                            m_IsLoadSucceed;
     std::string                     m_ConfigFileName;
 };
 

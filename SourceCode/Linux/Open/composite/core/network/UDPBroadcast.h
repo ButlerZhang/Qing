@@ -10,7 +10,7 @@ public:
     UDPBroadcast();
     ~UDPBroadcast();
 
-    bool StartTimer(event_base *EventBase, const std::string &ServerIP, int TimeInternal = 60, int Port = 12345);
+    bool StartTimer(event_base *EventBase, const std::string &ServerIP, int Port, int TimeInternal = 60);
 
     inline bool GetIsDisplayLog() const { return m_IsDisplayLog; }
     inline void SetIsDisplayLog(bool IsDisplayLog) { m_IsDisplayLog = IsDisplayLog; }

@@ -8,6 +8,7 @@
 HTTPSession::HTTPSession()
 {
     m_InvalidSessionID = GetUUID();
+    m_SessionMap[m_InvalidSessionID].m_UserID = 0;
     m_SessionMap[m_InvalidSessionID].m_Authority = 0;
 }
 
@@ -88,6 +89,18 @@ int HTTPSession::GetAuthority(const std::string &SessionID) const
     return it->second.m_Authority;
 }
 
+int HTTPSession::GetUserID(const std::string &SessionID) const
+{
+    std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
+    if (it == m_SessionMap.end())
+    {
+        g_Log.WriteError(BoostFormat("HTTP session get user id, can not find session id = %s.", SessionID.c_str()));
+        return 0;
+    }
+
+    return it->second.m_UserID;
+}
+
 const std::string & HTTPSession::GetUserName(const std::string & SessionID) const
 {
     std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
@@ -100,14 +113,14 @@ const std::string & HTTPSession::GetUserName(const std::string & SessionID) cons
     return it->second.m_UserName;
 }
 
-const std::string& HTTPSession::GenerateSession(const std::string &UserName, const std::string &Password, int Authority)
+const std::string& HTTPSession::GenerateSession(const std::string &UserName, int Authority, int UserID)
 {
     SessionNode NewNode;
     NewNode.m_Authority = Authority;
     NewNode.m_UserName = UserName;
-    NewNode.m_Password = Password;
     NewNode.m_SessionID = GetUUID();
     NewNode.m_LastUpdateTime = boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
+    NewNode.m_UserID = UserID;
 
     m_SessionMap[NewNode.m_SessionID] = NewNode;
     g_Log.WriteDebug(BoostFormat("HTTP session add new session id = %s, user = %s, update time = %s",

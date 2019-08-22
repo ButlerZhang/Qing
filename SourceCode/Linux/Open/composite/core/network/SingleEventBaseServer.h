@@ -1,7 +1,6 @@
 #pragma once
 #include "UDPBroadcast.h"
 #include "SignalEventMap.h"
-#include "ServerNetworkMessageHandler.h"
 
 
 
@@ -12,7 +11,7 @@ public:
     SingleEventBaseServer();
     virtual ~SingleEventBaseServer();
 
-    virtual bool Start(const std::string &IP, int Port);
+    virtual bool Start();
     virtual bool Stop();
 
     virtual bool ProcessCheckout() { return false; }
@@ -52,6 +51,5 @@ private:
     EventNormal                                  m_NoticeQueueEvent;
     UDPBroadcast                                 m_UDPBroadcast;
     SignalEventMap                               m_SignalEventMap;
-    ServerNetworkMessageHandler                  m_MessageHandler;
     std::map<int, ClientNode>                    m_ClientMap;
 };

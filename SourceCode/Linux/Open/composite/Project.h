@@ -2,56 +2,43 @@
 #include "Config.h"
 #include "controller/Client.h"
 #include "controller/SingleServer.h"
-#include "controller/HTTPServer.h"
-#include "../../../Common/Boost/BoostLog.h"
+#include "core/tools/RestartManager.h"
 
 
 
 int project(int argc, char *argv[])
 {
-    if (argc <= 1)                      //server
-    {
-        if (g_Config.LoadConfig())
-        {
-            g_Log.WriteInfo("Program start.");
-            g_HTTPServer.Start(g_Config.m_ServerIP, g_Config.m_HTTPPort);
-            g_SingleServer.Start(g_Config.m_ServerIP, g_Config.m_SMIBPort);
-        }
-    }
-    else if (atoi(argv[1]) == 0)        //tool mode
+    if (argc <= 1)                               //server
     {
         g_Log.WriteInfo("Program start.");
-        g_Config.GenerateConfigFile();
+        g_SingleServer.Start();
+        g_Log.WriteInfo("Program stop.");
     }
-    else                                //test client
+    else if (argc == 2)
     {
-        g_Log.WriteInfo("Program start.");
-        int ClientCount = atoi(argv[1]);
-        if (ClientCount > 1000)
+        int Param = atoi(argv[1]);
+        if (Param == 0)
         {
-            ClientCount = 1000;
+            g_Config.GenerateConfigFile();      //generate config
         }
-
-        pid_t Child;
-        for (int Count = 1; Count < ClientCount; Count++)
+        else if (Param > 0)                     //Start multi clients
         {
-            Child = fork();
-            if (Child < 0) {
-                g_Log.WriteError(BoostFormat("Fork failed, Count = %d", Count));
-            }
-            else if (Child > 0) {
-                sleep(1);
-            }
-            else {
-                break;
-            }
+            StartMultiClient(Param, std::string(), g_Config.m_SMIBPort);
         }
-
+    }
+    else if (argc == 3)                         //start single clients
+    {
         Client MyClient(getpid());
-        //MyClient.Start(9000);
-        MyClient.Start("192.168.3.126", 9000);
+        MyClient.Start(argv[1], atoi(argv[2]));
+    }
+    else if (argc == 4)                         //start multi client
+    {
+        StartMultiClient(atoi(argv[1]), argv[2], atoi(argv[3]));
+    }
+    else
+    {
+        g_Log.WriteError("Program parammeters are incorrect.");
     }
 
-    g_Log.WriteInfo("Program stop.");
     return 0;
 }

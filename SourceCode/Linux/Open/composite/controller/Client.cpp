@@ -1,31 +1,29 @@
 #include "Client.h"
-#include "../../../../Common/Boost/BoostLog.h"
 #include "../message/CodedMessage.h"
 #include "../message/project.pb.h"
 #include "../../../LinuxTools.h"
 
 
 
-Client::Client(long ClientID)
+Client::Client(long ClientID) : SingleEventBaseClient(ClientID)
 {
-    m_ClientID = ClientID;
 }
 
 Client::~Client()
 {
-    g_Log.WriteDebug(BoostFormat("Client ID = %d was destructored.", m_ClientID));
 }
 
 bool Client::ProcessCheckout()
 {
     if (SingleEventBaseClient::ProcessCheckout())
     {
-        bool IsOkToSendDataRandomly = true; //TODO
+        bool IsOkToSendDataRandomly = true; //TODO, config
         if (IsOkToSendDataRandomly)
         {
             SendRandom();
         }
     }
+
     return true;
 }
 
@@ -64,12 +62,14 @@ bool Client::ProcessMessage(NetworkMessage &NetworkMsg)
 bool Client::ProcessRandom(NetworkMessage &NetworkMsg)
 {
     g_Log.WriteDebug("Client process random response message.");
+
     Project::RandomMessage RandomMsg;
     if (!RandomMsg.ParseFromString(NetworkMsg.m_Message))
     {
         g_Log.WriteError("Random message parse failed.");
         return false;
     }
+
     g_Log.WriteDebug("Random response message:\n" + RandomMsg.DebugString());
     return true;
 }
@@ -77,12 +77,14 @@ bool Client::ProcessRandom(NetworkMessage &NetworkMsg)
 bool Client::ProcessServerError(NetworkMessage & NetworkMsg)
 {
     g_Log.WriteDebug("Client process server error.");
+
     Project::ServerError Error;
     if (!Error.ParseFromString(NetworkMsg.m_Message))
     {
         g_Log.WriteError("Serer error message parse failed.");
         return false;
     }
+
     g_Log.WriteDebug("Server error message:\n" + Error.DebugString());
     return true;
 }
@@ -90,6 +92,7 @@ bool Client::ProcessServerError(NetworkMessage & NetworkMsg)
 bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 {
     g_Log.WriteDebug("Client process login response.");
+
     Project::UserLogin LoginResponse;
     if (!LoginResponse.ParseFromString(NetworkMsg.m_Message))
     {
@@ -104,6 +107,7 @@ bool Client::ProcessLoginResponse(NetworkMessage &NetworkMsg)
 bool Client::ProcessLogoutResponse(NetworkMessage &NetworkMsg)
 {
     g_Log.WriteDebug("Client process logout response.");
+
     Project::UserLogout LogoutResponse;
     if (!LogoutResponse.ParseFromString(NetworkMsg.m_Message))
     {
@@ -117,7 +121,7 @@ bool Client::ProcessLogoutResponse(NetworkMessage &NetworkMsg)
 
 bool Client::SendLogin()
 {
-    std::string ClientName("Client-" + std::to_string(m_ClientID));
+    std::string ClientName("Client-" + std::to_string(GetClientID()));
 
     Project::UserLogin Login;
     Login.set_id(1000);
@@ -137,7 +141,7 @@ bool Client::SendLogin()
 
 bool Client::SendLogout()
 {
-    std::string ClientName("Client-" + std::to_string(m_ClientID));
+    std::string ClientName("Client-" + std::to_string(GetClientID()));
 
     Project::UserLogout Logout;
     Logout.set_id(1000);
@@ -154,13 +158,16 @@ bool Client::SendLogout()
 bool Client::SendRandom()
 {
     static int64_t Sequence = 0;
+
     Project::RandomMessage RandomMsg;
     RandomMsg.set_serversequence(-1);
     RandomMsg.set_clientsequence(++Sequence);
-    RandomMsg.set_randomdescriptor("Client-" + std::to_string(m_ClientID) + " send sequence = " + std::to_string(Sequence));
+    RandomMsg.set_randomdescriptor("Client-" + std::to_string(GetClientID()) + " send sequence = " + std::to_string(Sequence));
+
     Project::MessageHeader *Header = RandomMsg.mutable_header();
     Header->set_type(Project::MessageType::MT_RANDOM);
     Header->set_transmissionid(GetUUID());
+
     g_Log.WriteDebug("Client send random message:\n" + RandomMsg.DebugString());
     return SendMessage(Project::MessageType::MT_RANDOM, RandomMsg);
 }

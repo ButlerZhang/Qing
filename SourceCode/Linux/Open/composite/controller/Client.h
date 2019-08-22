@@ -27,8 +27,4 @@ private:
     bool SendLogout();
     bool SendRandom();
     bool SendMessage(int MessageType, const google::protobuf::Message &ProtobufMsg);
-
-private:
-
-    long             m_ClientID;
 };

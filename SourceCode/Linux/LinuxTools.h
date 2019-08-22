@@ -29,94 +29,38 @@ inline std::string GetWorkDirectory()
 {
     char WorkPath[PATH_MAX];
     memset(WorkPath, 0, PATH_MAX);
-
-    getcwd(WorkPath, PATH_MAX);
-    return std::string(WorkPath);
+    return (getcwd(WorkPath, PATH_MAX) != NULL) ? std::string(WorkPath) : std::string();
 }
 
-inline std::string GetProgramName()
+inline std::string GetProgramFullPath()
 {
     char ProgramFullPath[PATH_MAX];
     memset(ProgramFullPath, 0, PATH_MAX);
     if (readlink("/proc/self/exe", ProgramFullPath, PATH_MAX) > 0)
     {
-        std::string ProgramPath(ProgramFullPath);
-        std::string::size_type StartIndex = ProgramPath.find_last_of('/') + 1;
-        if (StartIndex != std::string::npos)
-        {
-            std::size_t CharCount = ProgramPath.size() - StartIndex - 4; //sizeof(.out) == 4
-            std::string ProgramName = ProgramPath.substr(StartIndex, CharCount);
-            return ProgramName;
-        }
+        return std::string(ProgramFullPath);
     }
 
     return std::string();
 }
 
-inline bool GetHostIPv4(std::vector<std::string> &IPVector)
+inline std::string GetProgramName(bool IsIncludeExtension)
 {
-    struct ifaddrs *ifaddrsList;
-    if (getifaddrs(&ifaddrsList) != 0)
+    std::string ProgramPath(GetProgramFullPath());
+    std::string::size_type StartIndex = ProgramPath.find_last_of('/') + 1;
+
+    if (StartIndex != std::string::npos)
     {
-        return false;
-    }
-
-    std::vector<char> IP(64, 0);
-    for (struct ifaddrs *CurrentAddress = ifaddrsList; CurrentAddress != NULL; CurrentAddress = CurrentAddress->ifa_next)
-    {
-        if (CurrentAddress->ifa_addr == NULL)
-            continue;
-
-        if (!(CurrentAddress->ifa_flags & IFF_UP))
-            continue;
-
-        if (CurrentAddress->ifa_addr->sa_family == AF_INET)
+        std::size_t CharCount = ProgramPath.size() - StartIndex;
+        if (!IsIncludeExtension)
         {
-            struct sockaddr_in *ipv4 = (struct sockaddr_in *)CurrentAddress->ifa_addr;
-            void *in_addr = &ipv4->sin_addr;
-
-            if (inet_ntop(CurrentAddress->ifa_addr->sa_family, in_addr, &IP[0], (socklen_t)IP.size()))
-            {
-                IPVector.push_back(std::string(IP.begin(), IP.end()));
-            }
+            CharCount -= 4;//sizeof(.out) == 4
         }
+
+        return ProgramPath.substr(StartIndex, CharCount);
     }
 
-    freeifaddrs(ifaddrsList);
-    return true;
-}
-
-inline bool GetHostIPv6(std::vector<std::string> &IPVector)
-{
-    struct ifaddrs *ifaddrsList;
-    if (getifaddrs(&ifaddrsList) != 0)
-    {
-        return false;
-    }
-
-    std::vector<char> IP(64, 0);
-    for (struct ifaddrs *CurrentAddress = ifaddrsList; CurrentAddress != NULL; CurrentAddress = CurrentAddress->ifa_next)
-    {
-        if (CurrentAddress->ifa_addr == NULL)
-            continue;
-
-        if (!(CurrentAddress->ifa_flags & IFF_UP))
-            continue;
-
-        if (CurrentAddress->ifa_addr->sa_family == AF_INET6)
-        {
-            struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)CurrentAddress->ifa_addr;
-            void *in_addr = &ipv6->sin6_addr;
-
-            if (inet_ntop(CurrentAddress->ifa_addr->sa_family, in_addr, &IP[0], (socklen_t)IP.size()))
-            {
-                IPVector.push_back(std::string(IP.begin(), IP.end()));
-            }
-        }
-    }
-
-    freeifaddrs(ifaddrsList);
-    return true;
+    return std::string();
 }
 
 inline unsigned int GetRandomUIntInRange(int Min, int Max)

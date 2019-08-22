@@ -2,8 +2,6 @@
 #include "../../../../../Common/Boost/BoostLog.h"
 #include <arpa/inet.h>
 #include <assert.h>
-#include <string.h>
-#include <unistd.h>
 
 
 
@@ -29,7 +27,7 @@ UDPBroadcast::~UDPBroadcast()
 }
 
 
-bool UDPBroadcast::StartTimer(event_base *EventBase, const std::string &ServerIP, int TimeInternal, int Port)
+bool UDPBroadcast::StartTimer(event_base *EventBase, const std::string &ServerIP, int Port, int TimeInternal)
 {
     if (EventBase == NULL)
     {
@@ -103,7 +101,7 @@ void UDPBroadcast::CallBack_TimeOut(int Socket, short Events, void *UserData)
 
     if (Broadcast->m_IsDisplayLog)
     {
-        g_Log.WriteDebug(BoostFormat("UDP Broadcast data = %s, elapsed %.3f seconds.", UDPData.c_str(), elapsed));
+        g_Log.WriteDebug(BoostFormat("UDP Broadcast data = %s, size = %d, elapsed %.3f seconds.", UDPData.c_str(), SendSize, elapsed));
     }
 
     Broadcast->m_LastSendTime = NewTime;

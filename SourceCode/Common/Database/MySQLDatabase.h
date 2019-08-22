@@ -52,7 +52,7 @@ public:
 
     bool    Commit();
     bool    Rollback();
-    bool    SetAutoCommit(bool IsAutoCommit);
+    bool    StartTransaction();
 
 private:
 

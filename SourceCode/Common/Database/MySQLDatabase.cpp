@@ -73,11 +73,11 @@ bool MySQLDataSet::MoveNext()
     return MoveResult;
 }
 
-bool MySQLDataSet::GetValue(const std::string & FieldName, std::string &Data) const
+bool MySQLDataSet::GetValue(const std::string &FieldName, std::string &Data) const
 {
     if (m_ResultSet == NULL || m_Row == NULL)
     {
-        g_Log.WriteError("MySQLDataSet get string value failed, resut set is NULL or row is NULL");
+        g_Log.WriteError(BoostFormat("MySQLDataSet get string value failed, result set is NULL or row is NULL, filed name = %s", FieldName.c_str()));
         return false;
     }
 
@@ -168,13 +168,18 @@ void MySQLDatabase::Disconnect()
 
 bool MySQLDatabase::Isconnected()
 {
-    int PingResult = mysql_ping(m_MySQL);
-    if (PingResult != 0)
+    if (m_Isconnected)
     {
+        int PingResult = mysql_ping(m_MySQL);
+        if (PingResult == 0)
+        {
+            return true;
+        }
+
         g_Log.WriteError(BoostFormat("MySQL ping = %d, error = %s", PingResult, mysql_error(m_MySQL)));
     }
 
-    return m_Isconnected && PingResult == 0;
+    return false;
 }
 
 bool MySQLDatabase::Reconnect()
@@ -240,9 +245,8 @@ bool MySQLDatabase::Commit()
         return false;
     }
 
-    if (!mysql_commit(m_MySQL))
+    if (!ExecuteQuery("commit"))
     {
-        g_Log.WriteError(BoostFormat("MySQL commit error: %s", mysql_error(m_MySQL)));
         return false;
     }
 
@@ -257,26 +261,24 @@ bool MySQLDatabase::Rollback()
         return false;
     }
 
-    if (!mysql_rollback(m_MySQL))
+    if (!ExecuteQuery("rollback"))
     {
-        g_Log.WriteError(BoostFormat("MySQL rollback error: %s", mysql_error(m_MySQL)));
         return false;
     }
 
     return true;
 }
 
-bool MySQLDatabase::SetAutoCommit(bool IsAutoCommit)
+bool MySQLDatabase::StartTransaction()
 {
     if (!m_Isconnected)
     {
-        g_Log.WriteDebug("MySQL can not set auto commit because no connected.");
+        g_Log.WriteDebug("MySQL can not start transaction because no connected.");
         return false;
     }
 
-    if (!mysql_autocommit(m_MySQL, IsAutoCommit))
+    if (!ExecuteQuery("start transaction"))
     {
-        g_Log.WriteError(BoostFormat("MySQL set auto commit error: %s", mysql_error(m_MySQL)));
         return false;
     }
 

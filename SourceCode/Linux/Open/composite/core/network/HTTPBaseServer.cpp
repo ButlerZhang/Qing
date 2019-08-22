@@ -2,8 +2,6 @@
 #include "../../../../../Common/Boost/BoostLog.h"
 #include "../tools/OpenSSLContext.h"
 #include <fcntl.h>
-#include <string.h>
-#include <unistd.h>
 #include <dirent.h>
 #include <event2/bufferevent_ssl.h>
 
@@ -364,6 +362,7 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
 
     evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
     PrintHeaders(ResponseHeader, false);
+    g_Log.WriteDebug(LogString);
     return true;
 }
 

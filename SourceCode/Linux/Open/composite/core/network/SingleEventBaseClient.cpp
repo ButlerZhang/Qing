@@ -1,25 +1,24 @@
 #include "SingleEventBaseClient.h"
 #include "../../../../LinuxTools.h"
 #include "../../../../../Common/Boost/BoostLog.h"
-#include <arpa/inet.h>
-#include <string.h>
-#include <unistd.h>
+#include "../../../../../Common/Boost/BoostTools.h"
 
 
 
-SingleEventBaseClient::SingleEventBaseClient()
+SingleEventBaseClient::SingleEventBaseClient(long ClientID)
 {
     m_ServerPort = 0;
     m_UDPSocket = -1;
     m_BroadcastPort = 0;
     m_IsConnected = false;
+    m_ClientID = ClientID;
     m_RecvDataBuffer = std::make_shared<EventDataBuffer>();
 }
 
 SingleEventBaseClient::~SingleEventBaseClient()
 {
     event_base_loopbreak(m_EventBase.m_eventbase);
-    g_Log.WriteDebug("Single base client was destructored.");
+    g_Log.WriteDebug(BoostFormat("Single base client = %ld was destructored.", GetClientID()));
 }
 
 bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
@@ -36,7 +35,7 @@ bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
         return true;
     }
 
-    if (Port <= 0 || ServerIP.empty())
+    if (Port <= 0 || !IsIPValid(ServerIP))
     {
         g_Log.WriteError(BoostFormat("Single base client parameters worng, port = %d, ip = %s", Port, ServerIP.c_str()));
         return false;
@@ -50,7 +49,7 @@ bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
         return false;
     }
 
-    g_Log.WriteInfo("Single base client start dispatch...");
+    g_Log.WriteInfo(BoostFormat("Single base client = %ld start dispatch...", GetClientID()));
     event_base_dispatch(m_EventBase.m_eventbase);
     return true;
 }
@@ -81,27 +80,32 @@ bool SingleEventBaseClient::Start(int UDPBroadcastPort)
         return false;
     }
 
-    g_Log.WriteInfo("Single base client start dispatch...");
+    g_Log.WriteInfo(BoostFormat("Single base client = %ld start dispatch...", GetClientID()));
     event_base_dispatch(m_EventBase.m_eventbase);
     return true;
 }
 
 bool SingleEventBaseClient::Send(const void * Data, size_t Size)
 {
-    if (!m_IsConnected || m_IOBuffer->m_bufferevent == NULL)
+    if (!m_IsConnected)
     {
         g_Log.WriteError("Single base client can not send data, no connected.");
         return false;
     }
 
+    if (m_IOBuffer == NULL || m_IOBuffer->m_bufferevent == NULL)
+    {
+        g_Log.WriteError("Single base client can not send data, IO buffer is NULL.");
+        return false;
+    }
     if (bufferevent_write(m_IOBuffer->m_bufferevent, Data, Size) != 0)
     {
-        g_Log.WriteError("Single base client send data failed.");
+        g_Log.WriteError(BoostFormat("Single base client send data failed, size = %d.", Size));
         return false;
     }
 
     static unsigned long long SendCount = 0;
-    g_Log.WriteInfo(BoostFormat("Single base client send succeed, size = %d, count = %llu.", Size, ++SendCount));
+    g_Log.WriteInfo(BoostFormat("Single base client = %ld send succeed, size = %d, count = %llu.", GetClientID(), Size, ++SendCount));
     return true;
 }
 
@@ -164,6 +168,7 @@ bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
         close(m_UDPSocket);
         m_UDPSocket = -1;
     }
+
     m_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (m_UDPSocket == -1)
     {
@@ -285,20 +290,7 @@ void SingleEventBaseClient::CallBack_InputFromCMD(int Input, short events, void 
     }
 
     SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-    if (Client->m_IOBuffer->m_bufferevent == NULL || !Client->m_IsConnected)
-    {
-        g_Log.WriteError("Single base client can not send data, not connect server.");
-        return;
-    }
-
-    if (bufferevent_write(Client->m_IOBuffer->m_bufferevent, &InputMessage[0], ReadSize) == 0)
-    {
-        g_Log.WriteDebug(BoostFormat("Single base client send message = %s, size = %d.", &InputMessage[0], ReadSize));
-    }
-    else
-    {
-        g_Log.WriteError(BoostFormat("Single base client send message = %s failed.\n", &InputMessage[0]));
-    }
+    Client->Send(&InputMessage[0], ReadSize);
 }
 
 void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, void *UserData)
@@ -312,13 +304,12 @@ void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, 
     std::vector<char> UDPBroadcastBuffer(NETWORK_BUFFER_SIZE, 0);
 
     socklen_t AddressLength = sizeof(socklen_t);
-    ssize_t RecvSize = recvfrom(Client->m_UDPSocket,
-        &UDPBroadcastBuffer[0], UDPBroadcastBuffer.size(), 0,
+    ssize_t RecvSize = recvfrom(Client->m_UDPSocket, &UDPBroadcastBuffer[0], UDPBroadcastBuffer.size(), 0,
         (struct sockaddr *)&(Client->m_BroadcastAddress), &AddressLength);
 
     if (RecvSize == -1)
     {
-        g_Log.WriteError("Single base client UDP broadcast recv error.");
+        g_Log.WriteError(BoostFormat("Single base client UDP broadcast recv error = %s.", strerror(errno)));
         return;
     }
 
@@ -339,7 +330,8 @@ void SingleEventBaseClient::CallBack_RecvUDPBroadcast(int Socket, short events, 
 
     Client->m_ServerIP = BroadcastMessage.substr(0, Index);
     Client->m_ServerPort = atoi(BroadcastMessage.substr(Index + 1, BroadcastMessage.size()).c_str());
-    g_Log.WriteInfo(BoostFormat("Single base client connect Information: Server IP = %s, Port = %d", Client->m_ServerIP.c_str(), Client->m_ServerPort));
+    g_Log.WriteInfo(BoostFormat("Single base client recv connect Information: Server IP = %s, Port = %d",
+        Client->m_ServerIP.c_str(), Client->m_ServerPort));
 
     if (!Client->ConnectServer(Client->m_ServerIP, Client->m_ServerPort))
     {
@@ -366,7 +358,7 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
     {
         Client->m_IsConnected = false;
         int ClientSocket = bufferevent_getfd(bev);
-        g_Log.WriteInfo(BoostFormat("Single base client = %d connection closed.", ClientSocket));
+        g_Log.WriteInfo(BoostFormat("Single base client socket = %d connection closed.", ClientSocket));
     }
     else if (Events & BEV_EVENT_TIMEOUT)
     {
@@ -410,7 +402,7 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
 void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *UserData)
 {
     SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-    g_Log.WriteDebug("Process recv from server call back.");
+    g_Log.WriteDebug("Process recv data from server call back.");
 
     const size_t MESSAGE_HEADER_LENGTH_SIZE = 4;
     std::vector<char> MessageHeaderLengthBuffer(MESSAGE_HEADER_LENGTH_SIZE, 0);
@@ -450,6 +442,7 @@ void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *User
             g_Log.WriteDebug(BoostFormat("Recv message total length = %llu, event buffer length = %llu.", MessageTotalLength, EventBufferLength));
             if (EventBufferLength < MessageTotalLength)
             {
+                g_Log.WriteError("Event buffer length is less than message total length, break while.");
                 break;
             }
 

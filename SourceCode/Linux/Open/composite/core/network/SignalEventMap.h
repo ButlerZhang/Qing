@@ -16,5 +16,5 @@ public:
 
 private:
 
-    std::map<int, EventNormal>                m_SignalEventMap;
+    std::map<int, EventNormal>                m_SignalMap;
 };

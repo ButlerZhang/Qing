@@ -55,7 +55,10 @@ void MultiEventBaseServer::Stop()
     int EXIT_CODE = -1;
     for (std::vector<ThreadNode>::size_type Index = 0; Index < m_ThreadVector.size(); Index++)
     {
-        write(m_ThreadVector[Index].m_NotifySendPipeFD, &EXIT_CODE, sizeof(int));
+        if (write(m_ThreadVector[Index].m_NotifySendPipeFD, (const void*)&EXIT_CODE, sizeof(int)) != sizeof(int))
+        {
+            //add log
+        }
     }
 
     event_base_loopexit(m_MainThread.m_EventBase, NULL);
@@ -254,7 +257,10 @@ void MultiEventBaseServer::CallBack_Listen(evconnlistener * Listener, int Socket
     }
 
     int Pipe = Server->m_ThreadVector[TargetIndex].m_NotifySendPipeFD;
-    write(Pipe, &Socket, sizeof(evutil_socket_t));
+    if (write(Pipe, (const void*)&Socket, sizeof(evutil_socket_t)) != sizeof(evutil_socket_t))
+    {
+        //add log
+    }
 
     g_Log.WriteInfo(BoostFormat("Listen callback: Client = %d, index = %d, pipe = %d, thread = %u.\n",
         Socket, TargetIndex, Pipe, Server->m_ThreadVector[TargetIndex].m_ThreadID));
@@ -265,8 +271,8 @@ void MultiEventBaseServer::CallBack_Accept(int fd, short which, void *arg)
     ThreadNode *CurrentThreadNode = (ThreadNode*)arg;
 
     evutil_socket_t ClientSocket;
-    read(CurrentThreadNode->m_NotifyRecvPipeFD, &ClientSocket, sizeof(evutil_socket_t));
-    if (ClientSocket <= 0)
+    ssize_t ReadSize = read(CurrentThreadNode->m_NotifyRecvPipeFD, &ClientSocket, sizeof(evutil_socket_t));
+    if (ReadSize <= 0 || ClientSocket <= 0)
     {
         g_Log.WriteError(BoostFormat("Accept: loop break, client socket = %d.\n", ClientSocket));
         event_base_loopbreak(CurrentThreadNode->m_EventBase);

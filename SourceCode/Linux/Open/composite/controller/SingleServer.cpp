@@ -1,9 +1,11 @@
 #include "SingleServer.h"
-#include "../../../LinuxTools.h"
 #include "../../../../Common/Boost/BoostLog.h"
+#include "../../../LinuxTools.h"
 #include "../core/network/ThreadNoticeQueue.h"
+#include "../handler/tcphandler/TCPHandler.h"
 #include "../message/project.pb.h"
 #include "../message/CodedMessage.h"
+#include "HTTPServer.h"
 #include "../Config.h"
 
 
@@ -18,24 +20,32 @@ SingleServer::~SingleServer()
     m_HandlerVector.clear();
 }
 
-bool SingleServer::Start(const std::string &IP, int Port)
+bool SingleServer::ProcessCheckout()
 {
-    if (m_SMIBDB.Connect(g_Config.m_DBHost.c_str(),
-        g_Config.m_DBUser.c_str(),
-        g_Config.m_DBPassword.c_str(),
-        g_Config.m_DBName.c_str(),
-        g_Config.m_DBPort) == false)
+    //step 1: load ethernet information
+    if (!m_Ethernet.Initialize())
     {
-        g_Log.WriteError("Single Server connnect SMIB database failed.");
         return false;
     }
 
-    g_Log.WriteDebug("Single Server connect SMIB database succeed.");
-    return SingleEventBaseServer::Start(IP, Port);
-}
+    //step 2: load configuration information
+    if (!g_Config.IsLoadSucceed())
+    {
+        if (!g_Config.LoadConfig())
+        {
+            return false;
+        }
 
-bool SingleServer::ProcessCheckout()
-{
+        if (!CreateListener(g_Config.m_ServerIP, g_Config.m_SMIBPort))
+        {
+            return false;
+        }
+
+        g_HTTPServer.Start(g_Config.m_ServerIP, g_Config.m_HTTPPort);
+        return true;
+    }
+
+    //step 3: check database connection
     if (!m_SMIBDB.Isconnected())
     {
         g_Log.WriteError("Single Server SMIB database is disconnected.");
@@ -50,6 +60,7 @@ bool SingleServer::ProcessCheckout()
         }
     }
 
+    //step 4: flush log file.
     g_Log.Flush();
     return true;
 }
@@ -74,19 +85,23 @@ bool SingleServer::ProcessThreadNoticeQueue()
         g_Log.WriteDebug("Single Server process notice queue, pop message failed.");
         return false;
     }
+
     if (!HasClient())
     {
         g_Log.WriteDebug("Single Server process notice queue, no smib client.");
         return false;
     }
+
     g_Log.WriteDebug(BoostFormat("Single Server process notice queue: %s", JsonString.c_str()));
 
     Project::ServerError ServerPublic;
     ServerPublic.set_errortype(12341234);
     ServerPublic.set_errordescriptor("Http server: " + JsonString);
+
     Project::MessageHeader *Header = ServerPublic.mutable_header();
     Header->set_type(Project::MessageType::MT_ERROR);
     Header->set_transmissionid(GetUUID());
+
     return SendMessage(Project::MessageType::MT_ERROR, ServerPublic);
 }
 
@@ -102,16 +117,6 @@ bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
     }
 
     return false;
-
-    //google::protobuf::Message* ProtoMessage = DecodeMessage(Message.m_Message);
-    //if (ProtoMessage != NULL)
-    //{
-    //    ProtoMessage->PrintDebugString();
-    //    delete ProtoMessage;
-    //    return true;
-    //}
-
-    //return false;
 }
 
 bool SingleServer::SendMessage(int MessageType, const google::protobuf::Message & ProtobufMsg)

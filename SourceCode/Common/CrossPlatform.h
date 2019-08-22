@@ -29,17 +29,21 @@ inline std::string GetWorkDirectory()
 {
 #ifdef _WIN32
 
-    return std::string();
+    //TODO
 
 #else
 
     char WorkPath[PATH_MAX];
     memset(WorkPath, 0, PATH_MAX);
 
-    getcwd(WorkPath, PATH_MAX);
-    return std::string(WorkPath);
+    if (getcwd(WorkPath, PATH_MAX) != NULL)
+    {
+        return std::string(WorkPath);
+    }
 
 #endif
+
+    return std::string();
 }
 
 inline std::string GetProgramName()

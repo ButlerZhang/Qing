@@ -6,22 +6,22 @@
 
 
 
-ThreadNoticeQueue& ThreadNoticeQueue::GetInstance()
-{
-    static ThreadNoticeQueue m_ThreadNoticeQueue;
-    return m_ThreadNoticeQueue;
-}
-
 ThreadNoticeQueue::ThreadNoticeQueue()
 {
     int ThreadPipe[2];
     ThreadPipe[0] = -1;
     ThreadPipe[1] = -1;
 
-    pipe(ThreadPipe);
+    if (pipe(ThreadPipe) == 0)
+    {
     m_RecvDescriptor = ThreadPipe[0];
     m_SendDescriptor = ThreadPipe[1];
-    g_Log.WriteDebug(BoostFormat("Thread notice queue create pipe, recv = %d, send = %d.", m_RecvDescriptor, m_SendDescriptor));
+    }
+    else
+    {
+        m_RecvDescriptor = m_SendDescriptor = -1;
+        g_Log.WriteError(BoostFormat("Thread notice queue create pipe error = %s.", strerror(errno)));
+    }
 }
 
 ThreadNoticeQueue::~ThreadNoticeQueue()
@@ -39,7 +39,9 @@ bool ThreadNoticeQueue::PopMessage(std::string &JsonString)
     std::unique_lock<std::mutex> Locker(m_QueueLock);
 
     int NoticeType = 1; //TODO
-    read(m_RecvDescriptor, &NoticeType, sizeof(NoticeType));
+    if (read(m_RecvDescriptor, &NoticeType, sizeof(NoticeType)) != sizeof(NoticeType))
+    {
+    }
 
     if (m_Queue.empty())
     {

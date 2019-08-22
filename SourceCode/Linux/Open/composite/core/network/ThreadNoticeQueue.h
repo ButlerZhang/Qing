@@ -9,13 +9,13 @@ class ThreadNoticeQueue
 {
 public:
 
-    static ThreadNoticeQueue& GetInstance();
-
     bool PopMessage(std::string &JsonString);
     bool PushMessage(const std::string &JsonString);
 
     int  GetRecvDescriptor() const { return m_RecvDescriptor; }
     int  GetSendDescriptor() const { return m_SendDescriptor; }
+
+    static ThreadNoticeQueue& GetInstance() { static ThreadNoticeQueue g_Instance; return g_Instance; }
 
 private:
 

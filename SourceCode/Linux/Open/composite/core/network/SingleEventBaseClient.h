@@ -7,12 +7,13 @@ class SingleEventBaseClient
 {
 public:
 
-    SingleEventBaseClient();
+    SingleEventBaseClient(long ClientID);
     virtual ~SingleEventBaseClient();
 
     virtual bool Start(const std::string &ServerIP, int Port);
     virtual bool Start(int UDPBroadcastPort);
 
+    inline long GetClientID() const { return m_ClientID; }
     inline bool IsConnected() const { return m_IsConnected; }
 
 protected:
@@ -42,6 +43,7 @@ private:
 private:
 
     bool                                         m_IsConnected;
+    long                                         m_ClientID;            //process id
     int                                          m_ServerPort;
     int                                          m_BroadcastPort;
     int                                          m_UDPSocket;

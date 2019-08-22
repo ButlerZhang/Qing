@@ -16,19 +16,21 @@ public:
 
     bool DeleteSession(const std::string &SessionID);
     bool UpdateSessionTime(const std::string &SessionID);
+
     int  GetAuthority(const std::string &SessionID) const;
+    int  GetUserID(const std::string &SessionID) const;
 
     const std::string& GetUserName(const std::string &SessionID) const;
-    const std::string& GenerateSession(const std::string &UserName, const std::string &Password, int Authority);
+    const std::string& GenerateSession(const std::string &UserName, int Authority,int UserID);
 
 private:
 
     struct SessionNode
     {
+        int                                      m_UserID;
         int                                      m_Authority;
         std::string                              m_SessionID;
         std::string                              m_UserName;
-        std::string                              m_Password;
         std::string                              m_LastUpdateTime;
     };
 

@@ -1,14 +1,16 @@
 #include "Config.h"
 #include "../../LinuxTools.h"
 #include "../../../Common/Boost/BoostLog.h"
-#include "../../../Common/Database/MySQLDatabase.h"
+#include "controller/SingleServer.h"
 #include "core/tools/OpenSSLAES.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <iostream>
-#include <event.h>
 
 
+
+const int HTTP_DEFAULT_PORT = 8000;
+const int SMIB_DEFAULT_PORT = 9000;
 
 void CallBack_LibEventLog(int Severity, const char *LogMsg)
 {
@@ -28,9 +30,11 @@ Config::Config() : m_ConfigFileName("project.ini")
 {
     m_IsEnableLog = true;
     m_IsEnableHTTPS = true;
-    m_LogSeverity = LL_ERROR;
+    m_IsLoadSucceed = false;
+    m_LogSeverity = LL_DEBUG;
+    m_SMIBPort = SMIB_DEFAULT_PORT;
+    m_HTTPPort = HTTP_DEFAULT_PORT;
 
-    g_Log.SetFilter(LL_ERROR);
     g_Log.SetIsOkToWrite(m_IsEnableLog);
     event_set_log_callback(CallBack_LibEventLog);
 }
@@ -39,35 +43,31 @@ Config::~Config()
 {
 }
 
-Config & Config::GetInstance()
-{
-    static Config g_ConfigInstance;
-    return g_ConfigInstance;
-}
-
 void Config::GenerateConfigFile()
 {
+    g_Log.SetFilter(LL_ERROR);
+
     std::string InputString;
     boost::property_tree::ptree DBTree;
-    g_Log.WriteInfo("Enter generate config file mode.");
+    std::cout << "Enter the mode to generate the configuration file." << std::endl;
 
-    std::cout << std::endl << "Input DB Host IP:" << std::endl;
+    std::cout << std::endl << "Input database host IP:" << std::endl;
     std::cin >> InputString;
     DBTree.put("Host", InputString);
 
-    std::cout << "Input DB Port:" << std::endl;
+    std::cout << "Input database port:" << std::endl;
     std::cin >> InputString;
     DBTree.put("Port", InputString);
 
-    std::cout << "Input DB User:" << std::endl;
+    std::cout << "Input database user:" << std::endl;
     std::cin >> InputString;
     DBTree.put("User", InputString);
 
-    std::cout << "Input DB Password:" << std::endl;
+    std::cout << "Input database password:" << std::endl;
     std::cin >> InputString;
     DBTree.put("Password", AESEncrypt(InputString, MY_AES_KEY));
 
-    std::cout << "Input DB Name:" << std::endl;
+    std::cout << "Input database name:" << std::endl;
     std::cin >> InputString;
     DBTree.put("DBName", InputString);
 
@@ -92,7 +92,8 @@ bool Config::LoadConfig()
         return false;
     }
 
-    return true;
+    m_IsLoadSucceed = true;
+    return m_IsLoadSucceed;
 }
 
 bool Config::LoadFileConfig()
@@ -104,7 +105,7 @@ bool Config::LoadFileConfig()
 
         const boost::property_tree::ptree &DBTree = IniFileTree.get_child("Database");
         m_DBPort = DBTree.get<int>("Port", 3306);
-        m_DBHost = DBTree.get<std::string>("Host", "127.0.0.1");
+        m_DBHost = DBTree.get<std::string>("Host", "localhost");
         m_DBUser = DBTree.get<std::string>("User", "root");
         m_DBName = DBTree.get<std::string>("DBName", "jpc");
 
@@ -116,30 +117,76 @@ bool Config::LoadFileConfig()
     }
     catch (...)
     {
-        g_Log.WriteError("Config: boost::property_tree::read_ini throw error.");
+        g_Log.WriteError("Config: Read ini file throw error.");
         return false;
     }
 }
 
 bool Config::LoadDatabaseConfig()
 {
-    MySQLDatabase MySQL;
-    if (!MySQL.Connect(m_DBHost.c_str(), m_DBUser.c_str(), m_DBPassword.c_str(), m_DBName.c_str(), m_DBPort))
+    if (!g_SingleServer.GetDB().Isconnected() && !g_SingleServer.GetDB().Connect(m_DBHost.c_str(), m_DBUser.c_str(), m_DBPassword.c_str(), m_DBName.c_str(), m_DBPort))
     {
-        g_Log.WriteError(BoostFormat("Config: Connnect config database failed, host = %s, user = %s, password = %s, name = %s, port = %d",
-            m_DBHost.c_str(), m_DBUser.c_str(), m_DBPassword.c_str(), m_DBName.c_str(), m_DBPort));
+        g_Log.WriteError(BoostFormat("Config: Connnect database failed, host = %s, user = %s, password = %s, name = %s, port = %d",
+            m_DBHost.c_str(), m_DBUser.c_str(), AESEncrypt(m_DBPassword, MY_AES_KEY).c_str(), m_DBName.c_str(), m_DBPort));
+
         return false;
     }
 
+    return LoadServerConfigTable() && LoadDeviceJPCTable();
+}
+
+bool Config::LoadDeviceJPCTable()
+{
+    const std::vector<Ethernet::EthernetNode>& NodeVector = g_SingleServer.GetEthernet().GetNodeVector();
+    for (std::vector<Ethernet::EthernetNode>::const_iterator it = NodeVector.begin(); it != NodeVector.end(); it++)
+    {
+        MySQLDataSet DataSet;
+        const std::string &SQLString = BoostFormat("SELECT * FROM device_jpc WHERE ip = '%s' and mac = '%s'", it->m_IP.c_str(), it->m_MAC.c_str());
+        if (!g_SingleServer.GetDB().ExecuteQuery(SQLString.c_str(), &DataSet))
+        {
+            g_Log.WriteError(BoostFormat("Config: Execute query failed: %s", SQLString.c_str()));
+            return false;
+        }
+
+        if (DataSet.GetRecordCount() > 0 && DataSet.GetValue("port", m_SMIBPort))
+        {
+            g_Log.WriteDebug(BoostFormat("Config: load server ip = %s and port = %d succeed.", it->m_IP.c_str(), m_SMIBPort));
+            m_ServerIP = it->m_IP;
+            return true;
+        }
+    }
+
+    m_SMIBPort = SMIB_DEFAULT_PORT;
+    m_ServerIP = g_SingleServer.GetEthernet().GetLocalIP();
+
+    std::string InsertSQL(BoostFormat("INSERT INTO device_jpc (name, mac, ip, port, subnet_mask, unreasonable_amount, last_update_time) VALUES('%s', '%s', '%s', %d, '%s', %d, %s)",
+        "JPC", g_SingleServer.GetEthernet().GetLocalMAC().c_str(), m_ServerIP.c_str(), m_SMIBPort, g_SingleServer.GetEthernet().GetLocalMask().c_str(), 0, "Now()"));
+    if (!g_SingleServer.GetDB().ExecuteQuery(InsertSQL.c_str()))
+    {
+        g_Log.WriteError(BoostFormat("Config: Execute query failed: %s", InsertSQL.c_str()));
+        return false;
+    }
+
+    return true;
+}
+
+bool Config::LoadServerConfigTable()
+{
     MySQLDataSet DataSet;
     std::string SQLString("SELECT * FROM server_config");
-    if (!MySQL.ExecuteQuery(SQLString.c_str(), &DataSet))
+    if (!g_SingleServer.GetDB().ExecuteQuery(SQLString.c_str(), &DataSet))
     {
         g_Log.WriteError(BoostFormat("Config: Execute query failed: %s", SQLString.c_str()));
         return false;
     }
 
-    int Section = 0;
+    if (DataSet.GetRecordCount() <= 0)
+    {
+        g_Log.WriteError("Config: server config table is empty.");
+        return true;
+    }
+
+    int Section = 0; //not use yet
     std::string ConfigName, ConfigValue;
 
     do
@@ -148,24 +195,17 @@ bool Config::LoadDatabaseConfig()
             !DataSet.GetValue("config_value", ConfigValue) ||
             !DataSet.GetValue("section", Section))
         {
-            g_Log.WriteError("Config: Data set get value error.");
             continue;
         }
 
-        switch(Section)
-        {
-        case 0:             ParseServerSection(ConfigName, ConfigValue);    break;
-        case 1:             ParseSystemSection(ConfigName, ConfigValue);     break;
-        default:            break;
-        }
+        ParseConfiguration(ConfigName, ConfigValue);
 
     } while (DataSet.MoveNext());
 
-    MySQL.Disconnect();
     return true;
 }
 
-bool Config::ParseSystemSection(const std::string &ConfigName, const std::string &ConfigValue)
+bool Config::ParseConfiguration(const std::string &ConfigName, const std::string &ConfigValue)
 {
     if (ConfigName == "log_severity")
     {
@@ -185,59 +225,17 @@ bool Config::ParseSystemSection(const std::string &ConfigName, const std::string
         g_Log.SetFilter(static_cast<LogLevel>(m_LogSeverity));
         return true;
     }
+
     if (ConfigName == "enable_https")
     {
-        if (ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0)
-        {
-            m_IsEnableHTTPS = false;
-            return true;
-        }
+        m_IsEnableHTTPS = !(ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0);
+        return true;
     }
+
     if (ConfigName == "enable_log")
     {
-        if (ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0)
-        {
-            m_IsEnableLog = false;
-            g_Log.SetIsOkToWrite(m_IsEnableLog);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool Config::ParseServerSection(const std::string &ConfigName, const std::string &ConfigValue)
-{
-    if (ConfigName == "server_ip")
-    {
-        if (!ConfigValue.empty())
-        {
-            m_ServerIP = ConfigValue;
-            return true;
-        }
-
-        std::vector<std::string> IPVector;
-        if (!GetHostIPv4(IPVector))
-        {
-            g_Log.WriteError("Config: Can not get host IPv4 address.");
-            return false;
-        }
-
-        for (std::vector<std::string>::size_type Index = 0; Index < IPVector.size(); Index++)
-        {
-            if (IPVector[Index].find("127") == std::string::npos)
-            {
-                m_ServerIP = IPVector[Index];
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    if (ConfigName == "smib_port")
-    {
-        m_SMIBPort = atoi(ConfigValue.c_str());
+        m_IsEnableLog = !(ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0);
+        g_Log.SetIsOkToWrite(m_IsEnableLog);
         return true;
     }
 
