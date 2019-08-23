@@ -29,9 +29,9 @@ bool SingleServer::ProcessCheckout()
     }
 
     //step 2: load configuration information
-    if (!g_Config.IsLoadSucceed())
+    if (!g_Config.IsLoadDBSucceed())
     {
-        if (!g_Config.LoadConfig())
+        if (!g_Config.LoadDatabaseConfig())
         {
             return false;
         }

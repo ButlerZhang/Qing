@@ -23,6 +23,7 @@ public:
 
     void PrintRequest(struct evhttp_request* Request);
     void PrintHeaders(struct evkeyvalq *Headers, bool IsRequest);
+    void AddCommonHeaders(struct evhttp_request* Request, const std::string &FileType, unsigned long FileSize) const;
 
 protected:
 

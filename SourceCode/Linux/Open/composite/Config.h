@@ -9,22 +9,16 @@ public:
 
     void GenerateConfigFile();
 
-    bool LoadConfig();
-    bool IsLoadSucceed() const { return m_IsLoadSucceed; }
+    bool LoadFileConfig();
+    bool LoadDatabaseConfig();
 
+    bool IsLoadDBSucceed() const { return m_IsLoadDBSucceed; }
     static Config& GetInstance() { static Config g_Instance; return g_Instance; }
 
 private:
 
     Config();
     ~Config();
-
-    bool LoadFileConfig();
-    bool LoadDatabaseConfig();
-    bool LoadDeviceJPCTable();
-    bool LoadServerConfigTable();
-
-    bool ParseConfiguration(const std::string &ConfigName, const std::string &ConfigValue);
 
 public:
 
@@ -35,9 +29,10 @@ public:
     std::string                     m_DBName;
     std::string                     m_DBPassword;
 
-    //server
+    //system
     bool                            m_IsEnableHTTPS;
     bool                            m_IsEnableLog;
+    bool                            m_IsEnableDaemon;
     int                             m_LogSeverity;
     int                             m_SMIBPort;
     int                             m_HTTPPort;
@@ -45,7 +40,7 @@ public:
 
 private:
 
-    bool                            m_IsLoadSucceed;
+    bool                            m_IsLoadDBSucceed;
     std::string                     m_ConfigFileName;
 };
 

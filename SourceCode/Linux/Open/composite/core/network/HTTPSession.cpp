@@ -106,7 +106,7 @@ const std::string & HTTPSession::GetUserName(const std::string & SessionID) cons
     std::map<std::string, SessionNode>::const_iterator it = m_SessionMap.find(SessionID);
     if (it == m_SessionMap.end())
     {
-        g_Log.WriteError(BoostFormat("HTTP session get authority, can not find id = %s.", SessionID.c_str()));
+        g_Log.WriteError(BoostFormat("HTTP session get user name, can not find id = %s.", SessionID.c_str()));
         return m_SessionMap.find(m_InvalidSessionID)->second.m_UserName;
     }
 

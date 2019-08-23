@@ -12,6 +12,20 @@
 const int HTTP_DEFAULT_PORT = 8000;
 const int SMIB_DEFAULT_PORT = 9000;
 
+const std::string SECTION_DATABASE("Database");
+const std::string DATABASE_HOST("Host");
+const std::string DATABASE_PORT("Port");
+const std::string DATABASE_USER("User");
+const std::string DATABASE_NAME("DBName");
+const std::string DATABASE_PASSWORD("Password");
+
+const std::string SECTION_SYSTEM("System");
+const std::string SYSTEM_ENABLE_LOG("EnableLog");
+const std::string SYSTEM_ENABLE_HTTPS("EnableHTTPS");
+const std::string SYSTEM_ENABLE_DAEMON("EanbleDaemon");
+const std::string SYSTEM_LOG_SEVERITY("LogSeverity");
+const std::string SYSTEM_HTTP_PORT("HTTPPort");
+
 void CallBack_LibEventLog(int Severity, const char *LogMsg)
 {
     switch (Severity)
@@ -26,16 +40,10 @@ void CallBack_LibEventLog(int Severity, const char *LogMsg)
 
 
 
-Config::Config() : m_ConfigFileName("project.ini")
+Config::Config() : m_ConfigFileName("jpc.ini")
 {
-    m_IsEnableLog = true;
-    m_IsEnableHTTPS = true;
-    m_IsLoadSucceed = false;
-    m_LogSeverity = LL_DEBUG;
+    m_IsLoadDBSucceed = false;
     m_SMIBPort = SMIB_DEFAULT_PORT;
-    m_HTTPPort = HTTP_DEFAULT_PORT;
-
-    g_Log.SetIsOkToWrite(m_IsEnableLog);
     event_set_log_callback(CallBack_LibEventLog);
 }
 
@@ -53,47 +61,37 @@ void Config::GenerateConfigFile()
 
     std::cout << std::endl << "Input database host IP:" << std::endl;
     std::cin >> InputString;
-    DBTree.put("Host", InputString);
+    DBTree.put(DATABASE_HOST, InputString);
 
     std::cout << "Input database port:" << std::endl;
     std::cin >> InputString;
-    DBTree.put("Port", InputString);
+    DBTree.put(DATABASE_PORT, InputString);
 
     std::cout << "Input database user:" << std::endl;
     std::cin >> InputString;
-    DBTree.put("User", InputString);
+    DBTree.put(DATABASE_USER, InputString);
 
     std::cout << "Input database password:" << std::endl;
     std::cin >> InputString;
-    DBTree.put("Password", AESEncrypt(InputString, MY_AES_KEY));
+    DBTree.put(DATABASE_PASSWORD, AESEncrypt(InputString, MY_AES_KEY));
 
     std::cout << "Input database name:" << std::endl;
     std::cin >> InputString;
-    DBTree.put("DBName", InputString);
+    DBTree.put(DATABASE_NAME, InputString);
+
+    boost::property_tree::ptree SystemTree;
+    SystemTree.put(SYSTEM_ENABLE_LOG, 1);
+    SystemTree.put(SYSTEM_ENABLE_HTTPS, 1);
+    SystemTree.put(SYSTEM_ENABLE_DAEMON, 0);
+    SystemTree.put(SYSTEM_LOG_SEVERITY, LL_DEBUG);
+    SystemTree.put(SYSTEM_HTTP_PORT, HTTP_DEFAULT_PORT);
 
     boost::property_tree::ptree IniFileTree;
-    IniFileTree.push_back(std::make_pair("Database", DBTree));
+    IniFileTree.push_back(std::make_pair(SECTION_DATABASE, DBTree));
+    IniFileTree.push_back(std::make_pair(SECTION_SYSTEM, SystemTree));
+
     boost::property_tree::write_ini(m_ConfigFileName, IniFileTree);
-
     std::cout << std::endl;
-}
-
-bool Config::LoadConfig()
-{
-    if (!LoadFileConfig())
-    {
-        g_Log.WriteError("Config: Read config file failed.");
-        return false;
-    }
-
-    if (!LoadDatabaseConfig())
-    {
-        g_Log.WriteError("Config: Read database failed.");
-        return false;
-    }
-
-    m_IsLoadSucceed = true;
-    return m_IsLoadSucceed;
 }
 
 bool Config::LoadFileConfig()
@@ -103,17 +101,28 @@ bool Config::LoadFileConfig()
         boost::property_tree::ptree IniFileTree;
         boost::property_tree::read_ini(m_ConfigFileName, IniFileTree);
 
-        const boost::property_tree::ptree &DBTree = IniFileTree.get_child("Database");
-        m_DBPort = DBTree.get<int>("Port", 3306);
-        m_DBHost = DBTree.get<std::string>("Host", "localhost");
-        m_DBUser = DBTree.get<std::string>("User", "root");
-        m_DBName = DBTree.get<std::string>("DBName", "jpc");
+        const boost::property_tree::ptree &SystemTree = IniFileTree.get_child(SECTION_SYSTEM);
+        m_IsEnableLog = SystemTree.get<bool>(SYSTEM_ENABLE_LOG, true);
+        m_IsEnableHTTPS = SystemTree.get<bool>(SYSTEM_ENABLE_HTTPS, true);
+        m_IsEnableDaemon = SystemTree.get<bool>(SYSTEM_ENABLE_DAEMON, false);
+        m_HTTPPort = SystemTree.get<int>(SYSTEM_HTTP_PORT, HTTP_DEFAULT_PORT);
+        m_LogSeverity = SystemTree.get<int>(SYSTEM_LOG_SEVERITY, LL_DEBUG);
 
-        const std::string &Password = DBTree.get<std::string>("Password", "root");
-        m_DBPassword = AESDecrypt(Password, MY_AES_KEY);
+        if (m_LogSeverity < LL_TEMP || m_LogSeverity > LL_ERROR)
+        {
+            m_LogSeverity = LL_DEBUG;
+        }
+        g_Log.SetFilter(static_cast<LogLevel>(m_LogSeverity));
+        g_Log.SetIsOkToWrite(m_IsEnableLog);
+
+        const boost::property_tree::ptree &DBTree = IniFileTree.get_child("Database");
+        m_DBPort = DBTree.get<int>(DATABASE_PORT, 3306);
+        m_DBHost = DBTree.get<std::string>(DATABASE_HOST, "localhost");
+        m_DBUser = DBTree.get<std::string>(DATABASE_USER, "root");
+        m_DBName = DBTree.get<std::string>(DATABASE_NAME, "jpc");
+        m_DBPassword = AESDecrypt(DBTree.get<std::string>(DATABASE_PASSWORD, "root"), MY_AES_KEY);
 
         return true;
-
     }
     catch (...)
     {
@@ -132,11 +141,6 @@ bool Config::LoadDatabaseConfig()
         return false;
     }
 
-    return LoadServerConfigTable() && LoadDeviceJPCTable();
-}
-
-bool Config::LoadDeviceJPCTable()
-{
     const std::vector<Ethernet::EthernetNode>& NodeVector = g_SingleServer.GetEthernet().GetNodeVector();
     for (std::vector<Ethernet::EthernetNode>::const_iterator it = NodeVector.begin(); it != NodeVector.end(); it++)
     {
@@ -151,6 +155,7 @@ bool Config::LoadDeviceJPCTable()
         if (DataSet.GetRecordCount() > 0 && DataSet.GetValue("port", m_SMIBPort))
         {
             g_Log.WriteDebug(BoostFormat("Config: load server ip = %s and port = %d succeed.", it->m_IP.c_str(), m_SMIBPort));
+            m_IsLoadDBSucceed = true;
             m_ServerIP = it->m_IP;
             return true;
         }
@@ -167,83 +172,6 @@ bool Config::LoadDeviceJPCTable()
         return false;
     }
 
+    m_IsLoadDBSucceed = true;
     return true;
-}
-
-bool Config::LoadServerConfigTable()
-{
-    MySQLDataSet DataSet;
-    std::string SQLString("SELECT * FROM server_config");
-    if (!g_SingleServer.GetDB().ExecuteQuery(SQLString.c_str(), &DataSet))
-    {
-        g_Log.WriteError(BoostFormat("Config: Execute query failed: %s", SQLString.c_str()));
-        return false;
-    }
-
-    if (DataSet.GetRecordCount() <= 0)
-    {
-        g_Log.WriteError("Config: server config table is empty.");
-        return true;
-    }
-
-    int Section = 0; //not use yet
-    std::string ConfigName, ConfigValue;
-
-    do
-    {
-        if (!DataSet.GetValue("config_name", ConfigName) ||
-            !DataSet.GetValue("config_value", ConfigValue) ||
-            !DataSet.GetValue("section", Section))
-        {
-            continue;
-        }
-
-        ParseConfiguration(ConfigName, ConfigValue);
-
-    } while (DataSet.MoveNext());
-
-    return true;
-}
-
-bool Config::ParseConfiguration(const std::string &ConfigName, const std::string &ConfigValue)
-{
-    if (ConfigName == "log_severity")
-    {
-        if (ConfigValue.size() != 1 || !std::isdigit(ConfigValue[0]))
-        {
-            g_Log.WriteError(BoostFormat("Config: log severity value = %s error.", ConfigValue.c_str()));
-            return false;
-        }
-
-        m_LogSeverity = atoi(ConfigValue.c_str());
-        if (m_LogSeverity < LL_TEMP || m_LogSeverity > LL_ERROR)
-        {
-            g_Log.WriteError(BoostFormat("Config: log severity value = %s error.", ConfigValue.c_str()));
-            return false;
-        }
-
-        g_Log.SetFilter(static_cast<LogLevel>(m_LogSeverity));
-        return true;
-    }
-
-    if (ConfigName == "enable_https")
-    {
-        m_IsEnableHTTPS = !(ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0);
-        return true;
-    }
-
-    if (ConfigName == "enable_log")
-    {
-        m_IsEnableLog = !(ConfigValue.size() == 1 && std::isdigit(ConfigValue[0]) && atoi(ConfigValue.c_str()) == 0);
-        g_Log.SetIsOkToWrite(m_IsEnableLog);
-        return true;
-    }
-
-    if (ConfigName == "http_port")
-    {
-        m_HTTPPort = atoi(ConfigValue.c_str());
-        return true;
-    }
-
-    return false;
 }

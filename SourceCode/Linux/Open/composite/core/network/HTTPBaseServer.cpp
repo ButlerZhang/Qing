@@ -247,6 +247,21 @@ bool HTTPBaseServer::GetRequestIPandPort(evhttp_connection *Connection, std::str
     return false;
 }
 
+void HTTPBaseServer::AddCommonHeaders(evhttp_request *Request, const std::string &FileType, unsigned long FileSize) const
+{
+    struct evkeyvalq *ResponseHeader = evhttp_request_get_output_headers(Request);
+    evhttp_add_header(ResponseHeader, "Access-Control-Allow-Origin", "*");
+    evhttp_add_header(ResponseHeader, "Access-Control-Allow-Headers", "Origin, Cookie, Content-Type, Accept");
+    const char *ConnectionHeader = evhttp_find_header(evhttp_request_get_input_headers(Request), "Connection");
+    if (ConnectionHeader != NULL && strstr(ConnectionHeader, "keep-alive"))
+    {
+        evhttp_add_header(ResponseHeader, "Connection", "keep-alive");
+    }
+
+    evhttp_add_header(ResponseHeader, "Content-Type", FileType.c_str());
+    evhttp_add_header(ResponseHeader, "Content-Length", std::to_string(FileSize).c_str());
+}
+
 bool HTTPBaseServer::ParseRequestPath(evhttp_request *Request, std::string &ActualllyPath)
 {
     const char *OriginalURI = evhttp_request_get_uri(Request);
@@ -356,12 +371,9 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
     evbuffer_add_printf(DataBuffer.m_evbuffer, "</ul></body></html>\n");
     size_t DataBufferLength = evbuffer_get_length(DataBuffer.m_evbuffer);
 
-    struct evkeyvalq *ResponseHeader = evhttp_request_get_output_headers(Request);
-    evhttp_add_header(ResponseHeader, "Content-Type", "text/html");
-    evhttp_add_header(ResponseHeader, "Content-Length", std::to_string(DataBufferLength).c_str());
-
+    AddCommonHeaders(Request, "text/html", evbuffer_get_length(DataBuffer.m_evbuffer));
     evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
-    PrintHeaders(ResponseHeader, false);
+    PrintHeaders(evhttp_request_get_output_headers(Request), false);
     g_Log.WriteDebug(LogString);
     return true;
 }
@@ -387,15 +399,14 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     const char *FileExtension = strrchr(ActualllyPath.c_str(), '.') + 1;
     std::map<std::string, std::string>::iterator it = m_ContentTypeMap.find(FileExtension);
     const char *FileType = (it != m_ContentTypeMap.end()) ? it->second.c_str() : m_ContentTypeMap["misc"].c_str();
-
-    struct evkeyvalq *ResponseHeader = evhttp_request_get_output_headers(Request);
-    evhttp_add_header(ResponseHeader, "Content-Type", FileType);
-    evhttp_add_header(ResponseHeader, "Content-Length", std::to_string(FileStat.st_size).c_str());
+    g_Log.WriteDebug(BoostFormat("HTTP base server process file: extension = %s, type = %s", FileExtension, FileType));
 
     EventDataBuffer DataBuffer;
     evbuffer_add_file(DataBuffer.m_evbuffer, FileDescriptor, 0, FileStat.st_size); //evbuffer_add_file will close file descriptor after succeed
+    AddCommonHeaders(Request, FileType, FileStat.st_size);
     evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
-    PrintHeaders(ResponseHeader, false);
+    PrintHeaders(evhttp_request_get_output_headers(Request), false);
+
     return true;
 }
 

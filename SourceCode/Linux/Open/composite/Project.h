@@ -10,9 +10,12 @@ int project(int argc, char *argv[])
 {
     if (argc <= 1)                               //server
     {
-        g_Log.WriteInfo("Program start.");
-        g_SingleServer.Start();
-        g_Log.WriteInfo("Program stop.");
+        if (g_Config.LoadFileConfig())
+        {
+            g_Log.WriteInfo("Program start.");
+            g_SingleServer.Start();
+            g_Log.WriteInfo("Program stop.");
+        }
     }
     else if (argc == 2)
     {
