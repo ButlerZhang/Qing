@@ -47,7 +47,8 @@ message RandomMessage
     MessageHeader header = 1;
     int64 ClientSequence = 2;
     int64 ServerSequence = 3;
-    string RandomDescriptor = 4;
+    int64 SenderProcessID = 4;
+    string RandomDescriptor = 5;
 }
 
 message ServerError

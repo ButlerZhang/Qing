@@ -21,21 +21,9 @@ HTTPBaseServer::HTTPBaseServer()
     m_ContentTypeMap["jpg"] = "image/jpeg";
     m_ContentTypeMap["jpeg"] = "image/jpeg";
     m_ContentTypeMap["png"] = "image/png";
-    m_ContentTypeMap["ogg"] = "application/ogg";
-    m_ContentTypeMap["pdf"] = "application/pdf";
-    m_ContentTypeMap["ps"] = "application/postscript";
     m_ContentTypeMap["js"] = "application/x-javascript";
-    m_ContentTypeMap["au"] = "audio/basic";
-    m_ContentTypeMap["wav"] = "audio/wav";
-    m_ContentTypeMap["mid"] = "audio/midi";
-    m_ContentTypeMap["midi"] = "audio/midi";
-    m_ContentTypeMap["mp3"] = "audio/mpeg";
-    m_ContentTypeMap["avi"] = "video/x-msvideo";
-    m_ContentTypeMap["qt"] = "video/quicktime";
-    m_ContentTypeMap["mov"] = "video/quicktime";
-    m_ContentTypeMap["mpeg"] = "video/mpeg";
-    m_ContentTypeMap["mpe"] = "video/mpeg";
-    m_ContentTypeMap["vrml"] = "model/vrml";
+    m_ContentTypeMap["map"] = "application/json";
+    m_ContentTypeMap["ico"] = "image/x-icon";
     m_ContentTypeMap["misc"] = "application/misc";
 }
 
@@ -85,7 +73,8 @@ bool HTTPBaseServer::Start(const std::string &ServerIP, int Port, bool IsEnableH
         evhttp_set_bevcb(m_EventHTTP.m_evhttp, CallBack_CreateSSLBufferevent, SSLContext);
     }
 
-    evhttp_set_timeout(m_EventHTTP.m_evhttp, 5);
+    evhttp_set_timeout(m_EventHTTP.m_evhttp, 10);
+    evhttp_set_allowed_methods(m_EventHTTP.m_evhttp, EVHTTP_REQ_GET | EVHTTP_REQ_POST | EVHTTP_REQ_OPTIONS);
     evhttp_set_gencb(m_EventHTTP.m_evhttp, CallBack_GenericRequest, this);
 
     g_Log.WriteInfo(BoostFormat("HTTP Server(%s:%d) start dispatch...", ServerIP.c_str(), Port));
@@ -99,9 +88,10 @@ bool HTTPBaseServer::ProcessRequest(evhttp_request *Request)
 
     switch (evhttp_request_get_command(Request))
     {
-    case EVHTTP_REQ_GET:    return ProcessGet(Request);
-    case EVHTTP_REQ_POST:   return ProcessPost(Request);
-    default:                break;
+    case EVHTTP_REQ_GET:            return ProcessGet(Request);
+    case EVHTTP_REQ_POST:           return ProcessPost(Request);
+    case EVHTTP_REQ_OPTIONS:        return ProcessOptions(Request);
+    default:                        break;
     }
 
     evhttp_send_error(Request, HTTP_BADMETHOD, "method not allowed for this uri.");
@@ -142,6 +132,13 @@ bool HTTPBaseServer::ProcessPost(evhttp_request * Request)
     return false;
 }
 
+bool HTTPBaseServer::ProcessOptions(evhttp_request *Request)
+{
+    AddCommonHeaders(Request, std::string(), 0);
+    evhttp_send_reply(Request, HTTP_OK, "OK", NULL);
+    PrintHeaders(evhttp_request_get_output_headers(Request), false);
+    return true;
+}
 bool HTTPBaseServer::AddCheckoutTimer(int TimerInternal)
 {
     if (m_CheckoutTimer.m_event != NULL)
@@ -177,6 +174,7 @@ void HTTPBaseServer::PrintHeaders(evkeyvalq *Headers, bool IsRequest)
     {
         LogString.append(BoostFormat("\t%s: %s\n", header->key, header->value));
     }
+
     LogString.erase(LogString.end() - 1);
     g_Log.WriteDebug(LogString);
 }
@@ -250,15 +248,24 @@ bool HTTPBaseServer::GetRequestIPandPort(evhttp_connection *Connection, std::str
 void HTTPBaseServer::AddCommonHeaders(evhttp_request *Request, const std::string &FileType, unsigned long FileSize) const
 {
     struct evkeyvalq *ResponseHeader = evhttp_request_get_output_headers(Request);
+
     evhttp_add_header(ResponseHeader, "Access-Control-Allow-Origin", "*");
+    evhttp_add_header(ResponseHeader, "Access-Control-Allow-Credentials", "true");
+    evhttp_add_header(ResponseHeader, "Access-Control-Allow-Methods", "Get, Post, Options");
     evhttp_add_header(ResponseHeader, "Access-Control-Allow-Headers", "Origin, Cookie, Content-Type, Accept");
+    evhttp_add_header(ResponseHeader, "Access-Control-Max-Age", "600");
+
     const char *ConnectionHeader = evhttp_find_header(evhttp_request_get_input_headers(Request), "Connection");
     if (ConnectionHeader != NULL && strstr(ConnectionHeader, "keep-alive"))
     {
         evhttp_add_header(ResponseHeader, "Connection", "keep-alive");
     }
 
-    evhttp_add_header(ResponseHeader, "Content-Type", FileType.c_str());
+    if (!FileType.empty())
+    {
+        evhttp_add_header(ResponseHeader, "Content-Type", FileType.c_str());
+    }
+
     evhttp_add_header(ResponseHeader, "Content-Length", std::to_string(FileSize).c_str());
 }
 
@@ -369,7 +376,6 @@ bool HTTPBaseServer::ProcessDirectory(evhttp_request *Request, const std::string
     }
 
     evbuffer_add_printf(DataBuffer.m_evbuffer, "</ul></body></html>\n");
-    size_t DataBufferLength = evbuffer_get_length(DataBuffer.m_evbuffer);
 
     AddCommonHeaders(Request, "text/html", evbuffer_get_length(DataBuffer.m_evbuffer));
     evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
@@ -406,7 +412,6 @@ bool HTTPBaseServer::ProcessFile(evhttp_request *Request, struct stat &FileStat,
     AddCommonHeaders(Request, FileType, FileStat.st_size);
     evhttp_send_reply(Request, HTTP_OK, "OK", DataBuffer.m_evbuffer);
     PrintHeaders(evhttp_request_get_output_headers(Request), false);
-
     return true;
 }
 
@@ -430,10 +435,13 @@ void HTTPBaseServer::CallBack_GenericRequest(evhttp_request * Request, void * ar
     int RequestPort = 0;
     std::string RequestIP;
     HTTPBaseServer *Server = (HTTPBaseServer*)arg;
+
     evhttp_connection *NewConnection = evhttp_request_get_connection(Request);
     evhttp_connection_set_closecb(NewConnection, CallBack_ConnectionClose, arg);
+
     Server->GetRequestIPandPort(NewConnection, RequestIP, RequestPort);
     g_Log.WriteDebug(BoostFormat("HTTP base server new request, client ip = %s, port = %d", RequestIP.c_str(), RequestPort));
+
     Server->ProcessRequest(Request);
 }
 
@@ -451,15 +459,18 @@ void HTTPBaseServer::CallBack_Checkout(int Socket, short Events, void * UserData
 bufferevent* HTTPBaseServer::CallBack_CreateSSLBufferevent(event_base *base, void *arg)
 {
     SSL_CTX *ctx = (SSL_CTX *)arg;
+
     struct bufferevent* SSLbev = bufferevent_openssl_socket_new(
         base,
         -1,
         SSL_new(ctx),
         BUFFEREVENT_SSL_ACCEPTING,
         BEV_OPT_CLOSE_ON_FREE);
+
     if (SSLbev == NULL)
     {
         g_Log.WriteError("HTTP base server create SSL bufferevent failed.");
     }
+
     return SSLbev;
 }

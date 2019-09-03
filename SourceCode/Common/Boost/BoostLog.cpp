@@ -1,8 +1,5 @@
 #include "BoostLog.h"
 #include "../CrossPlatform.h"
-
-#include <boost/format.hpp>
-#include <boost/thread.hpp>
 #include <boost/log/common.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
@@ -32,18 +29,13 @@ inline std::basic_ostream< CharT, TraitsT >& operator<< (std::basic_ostream< Cha
 
 
 
-BoostLog::BoostLog()
+BoostLog::BoostLog() : m_RotationSize(5 * 1024 * 1024), m_MinFreeSpaceSize(100 * 1024 * 1024)
 {
-    SetIsOkToWrite(true);
-    SetLogDirectory(GetWorkDirectory());
-
-    InitBaseSink(GetProgramName());
-    InitTemporarySink(GetProgramName() + "_Temp");
 }
 
 BoostLog::~BoostLog()
 {
-    boost::log::core::get()->remove_all_sinks();
+    //boost::log::core::get()->remove_all_sinks();
 }
 
 void BoostLog::Flush()
@@ -58,14 +50,11 @@ void BoostLog::SetFilter(LogLevel Level)
 
 boost::shared_ptr<TextSink> BoostLog::CreateSink(const std::string & FileName)
 {
-    const size_t ONE_MB = 1024 * 1024;
-    long ProcessID = GetProgramID();
-
     boost::shared_ptr<boost::log::sinks::text_file_backend> Backend = boost::make_shared<boost::log::sinks::text_file_backend>(
-        boost::log::keywords::file_name = m_LogDirectory + FileName + "_%Y%m%d_%H%M%S_" + std::to_string(ProcessID) + ".log",
-        boost::log::keywords::rotation_size = 50 * ONE_MB,
+        boost::log::keywords::file_name = m_LogDirectory + FileName + "_%Y%m%d_%H%M%S_" + std::to_string(GetProgramID()) + ".log",
+        boost::log::keywords::rotation_size = m_RotationSize,
         boost::log::keywords::time_based_rotation = boost::log::sinks::file::rotation_at_time_point(0, 0, 0),
-        boost::log::keywords::min_free_space = 500 * ONE_MB);
+        boost::log::keywords::min_free_space = m_MinFreeSpaceSize);
 
     Backend->auto_flush(true);
     boost::shared_ptr<TextSink> NewSink(new TextSink(Backend));
@@ -86,11 +75,11 @@ void BoostLog::InitBaseSink(const std::string &LogFileName)
     boost::shared_ptr<TextSink> BaseSink = CreateSink(LogFileName);
     BaseSink->set_filter(boost::log::expressions::attr<LogLevel>("Severity") >= LL_DEBUG);
 
-    auto ConsoleSink = boost::log::add_console_log();
-    ConsoleSink->set_filter(boost::log::expressions::attr<LogLevel>("Severity") >= LL_INFO);
+    boost::shared_ptr<ConsoleSink> Console = boost::log::add_console_log();
+    Console->set_filter(boost::log::expressions::attr<LogLevel>("Severity") >= LL_INFO);
 
     boost::log::core::get()->add_sink(BaseSink);
-    boost::log::core::get()->add_sink(ConsoleSink);
+    boost::log::core::get()->add_sink(Console);
 
     boost::log::add_common_attributes();
 }
@@ -102,6 +91,19 @@ void BoostLog::InitTemporarySink(const std::string & LogFileName)
 
     boost::log::core::get()->add_sink(TempSink);
     boost::log::add_common_attributes();
+}
+
+void BoostLog::Initialize(const std::string &ProgramName, const std::string &WorkDirectory, bool IsOkToWrite)
+{
+    SetIsOkToWrite(IsOkToWrite);
+    if (m_IsOkToWrite)
+    {
+        SetLogDirectory(WorkDirectory.empty() ? GetWorkDirectory() : WorkDirectory);
+
+        const std::string &LogFileName = ProgramName.empty() ? GetProgramName(false) : ProgramName;
+        InitBaseSink(LogFileName);
+        InitTemporarySink(LogFileName + "_Temp");
+    }
 }
 
 void BoostLog::WriteLog(LogLevel Level, const std::string &LogString)

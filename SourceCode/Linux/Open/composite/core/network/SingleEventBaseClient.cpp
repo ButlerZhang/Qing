@@ -21,7 +21,7 @@ SingleEventBaseClient::~SingleEventBaseClient()
     g_Log.WriteDebug(BoostFormat("Single base client = %ld was destructored.", GetClientID()));
 }
 
-bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
+bool SingleEventBaseClient::Start(const std::string &ServerIP, int Port)
 {
     if (m_EventBase.m_eventbase == NULL)
     {
@@ -43,8 +43,7 @@ bool SingleEventBaseClient::Start(const std::string & ServerIP, int Port)
 
     m_ServerPort = Port;
     m_ServerIP = ServerIP;
-
-    if (!AddEventInputFromCMD() || !AddCheckoutTimer(1))
+    if (!AddEventInputFromCMD() || !AddCheckoutTimer(1) || !AddSignal())
     {
         return false;
     }
@@ -98,6 +97,7 @@ bool SingleEventBaseClient::Send(const void * Data, size_t Size)
         g_Log.WriteError("Single base client can not send data, IO buffer is NULL.");
         return false;
     }
+
     if (bufferevent_write(m_IOBuffer->m_bufferevent, Data, Size) != 0)
     {
         g_Log.WriteError(BoostFormat("Single base client send data failed, size = %d.", Size));
@@ -134,6 +134,7 @@ bool SingleEventBaseClient::ProcessCheckout()
         return false;
     }
 
+    //TODO
     return false;
 }
 
@@ -183,11 +184,7 @@ bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
         return false;
     }
 
-    bzero(&m_BroadcastAddress, sizeof(sockaddr_in));
-    m_BroadcastAddress.sin_family = AF_INET;
-    m_BroadcastAddress.sin_addr.s_addr = INADDR_ANY;
-    m_BroadcastAddress.sin_port = htons(static_cast<uint16_t>(m_BroadcastPort));
-
+    InitializeSocketAddress(m_BroadcastAddress, std::string(), m_BroadcastPort);
     if (bind(m_UDPSocket, (struct sockaddr *)&m_BroadcastAddress, sizeof(m_BroadcastAddress)) == -1)
     {
         g_Log.WriteError(BoostFormat("Single base client bind udp socket error = %s.", strerror(errno)));
@@ -211,33 +208,6 @@ bool SingleEventBaseClient::AddEventRecvUDPBroadcast()
     return true;
 }
 
-bool SingleEventBaseClient::AddCheckoutTimer(int TimerInternal)
-{
-    if (m_CheckoutTimer.m_event != NULL)
-    {
-        g_Log.WriteError("Single base client re-create checkout timer.");
-        return true;
-    }
-
-    m_CheckoutTimer.m_event = event_new(m_EventBase.m_eventbase, -1, EV_PERSIST, CallBack_Checkout, this);
-    if (m_CheckoutTimer.m_event == NULL)
-    {
-        g_Log.WriteError("Single base client create chekcout timer failed.");
-        return false;
-    }
-
-    struct timeval tv;
-    evutil_timerclear(&tv);
-    tv.tv_sec = TimerInternal;
-    if (event_add(m_CheckoutTimer.m_event, &tv) != 0)
-    {
-        g_Log.WriteError("Single base client add checkout timer failed.");
-        return false;
-    }
-
-    return true;
-}
-
 bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
 {
     if (m_IsConnected)
@@ -247,10 +217,7 @@ bool SingleEventBaseClient::ConnectServer(const std::string &ServerIP, int Port)
     }
 
     struct sockaddr_in ServerAddress;
-    bzero(&ServerAddress, sizeof(sockaddr_in));
-    ServerAddress.sin_family = AF_INET;
-    inet_pton(AF_INET, ServerIP.c_str(), &(ServerAddress.sin_addr));
-    ServerAddress.sin_port = htons(static_cast<uint16_t>(Port));
+    InitializeSocketAddress(ServerAddress, ServerIP, Port);
 
     m_IOBuffer = std::make_shared<EventIOBuffer>();
     m_IOBuffer->m_bufferevent = bufferevent_socket_new(m_EventBase.m_eventbase, -1, BEV_OPT_CLOSE_ON_FREE);
@@ -347,18 +314,17 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
     if (Events & BEV_EVENT_READING)
     {
         Client->m_IsConnected = false;
-        g_Log.WriteError("Single base client error encountered while reading");
+        g_Log.WriteError("Single base client error encountered while reading.");
     }
     else if (Events & BEV_EVENT_WRITING)
     {
         Client->m_IsConnected = false;
-        g_Log.WriteError("Single base client error encountered while writing");
+        g_Log.WriteError("Single base client error encountered while writing.");
     }
     else if (Events & BEV_EVENT_EOF)
     {
         Client->m_IsConnected = false;
-        int ClientSocket = bufferevent_getfd(bev);
-        g_Log.WriteInfo(BoostFormat("Single base client socket = %d connection closed.", ClientSocket));
+        g_Log.WriteInfo("Single base client connection closed.");
     }
     else if (Events & BEV_EVENT_TIMEOUT)
     {
@@ -368,6 +334,7 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
     {
         Client->m_IsConnected = true;
         g_Log.WriteInfo("Single base client connected server succeed.");
+
         if (Client->m_UDPBroadcastEvent != NULL && Client->m_UDPBroadcastEvent->m_event != NULL)
         {
             Client->m_UDPBroadcastEvent = NULL;
@@ -376,10 +343,10 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
 
         Client->ProcessConnected();
     }
-    else if(Events & BEV_EVENT_ERROR)
+    else if (Events & BEV_EVENT_ERROR)
     {
         Client->m_IsConnected = false;
-        g_Log.WriteError("Single base client unrecoverable error encountered");
+        g_Log.WriteError("Single base client unrecoverable error encountered.");
     }
     else
     {
@@ -401,77 +368,7 @@ void SingleEventBaseClient::CallBack_ClientEvent(struct bufferevent *bev, short 
 
 void SingleEventBaseClient::CallBack_RecvFromServer(bufferevent *bev, void *UserData)
 {
-    SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
     g_Log.WriteDebug("Process recv data from server call back.");
-
-    const size_t MESSAGE_HEADER_LENGTH_SIZE = 4;
-    std::vector<char> MessageHeaderLengthBuffer(MESSAGE_HEADER_LENGTH_SIZE, 0);
-
-    std::vector<char> RecvBuffer(NETWORK_BUFFER_SIZE, 0);
-    struct evbuffer *EventBuffer = Client->m_RecvDataBuffer->m_evbuffer;
-
-    size_t RecvSize = 0, EventBufferLength = 0;
-    while (RecvSize = bufferevent_read(bev, &RecvBuffer[0], RecvBuffer.size()), RecvSize > 0)
-    {
-        g_Log.WriteDebug(BoostFormat("Recv message size = %llu", RecvSize));
-
-        if (evbuffer_add(EventBuffer, &RecvBuffer[0], RecvSize) != 0)
-        {
-            g_Log.WriteError("Recv message can not add to evbuffer.");
-            continue;
-        }
-
-        while (EventBufferLength = evbuffer_get_length(EventBuffer), EventBufferLength > 0)
-        {
-            if (EventBufferLength <= MESSAGE_HEADER_LENGTH_SIZE)
-            {
-                g_Log.WriteError(BoostFormat("Recv message length is only %llu bytes.", EventBufferLength));
-                break;
-            }
-
-            if (evbuffer_copyout(EventBuffer, &MessageHeaderLengthBuffer[0], MESSAGE_HEADER_LENGTH_SIZE) != MESSAGE_HEADER_LENGTH_SIZE)
-            {
-                g_Log.WriteError("evbuffer_copyout can not read message length.");
-                break;
-            }
-
-            int MessageBodyLength = 0;
-            ::memcpy(&MessageBodyLength, &MessageHeaderLengthBuffer[0], sizeof(int));
-            size_t MessageTotalLength = ::ntohl(MessageBodyLength) + MESSAGE_HEADER_LENGTH_SIZE;
-
-            g_Log.WriteDebug(BoostFormat("Recv message total length = %llu, event buffer length = %llu.", MessageTotalLength, EventBufferLength));
-            if (EventBufferLength < MessageTotalLength)
-            {
-                g_Log.WriteError("Event buffer length is less than message total length, break while.");
-                break;
-            }
-
-            if (MessageTotalLength > RecvBuffer.size())
-            {
-                g_Log.WriteDebug(BoostFormat("Recv buffer old size = %llu, new size = %llu.", RecvBuffer.size(), MessageTotalLength));
-                RecvBuffer.resize(MessageTotalLength, 0);
-            }
-
-            if (evbuffer_remove(EventBuffer, &RecvBuffer[0], MessageTotalLength) != static_cast<int>(MessageTotalLength))
-            {
-                g_Log.WriteError(BoostFormat("evbuffer_remove can not remove size = %llu data.", MessageTotalLength));
-                break;
-            }
-
-            NetworkMessage NetworkMsg;
-            NetworkMsg.m_IOBuffer = Client->m_IOBuffer;
-            NetworkMsg.m_Message.assign(RecvBuffer.begin(), RecvBuffer.begin() + MessageTotalLength);
-            Client->ProcessMessage(NetworkMsg);
-        }
-    }
-}
-
-void SingleEventBaseClient::CallBack_Checkout(int Socket, short Events, void * UserData)
-{
     SingleEventBaseClient *Client = (SingleEventBaseClient*)UserData;
-    Client->ProcessCheckout();
-    struct timeval tv;
-    evutil_timerclear(&tv);
-    tv.tv_sec = GetRandomUIntInRange(1, 6);
-    event_add(Client->m_CheckoutTimer.m_event, &tv);
+    Client->RecvData(0, Client->m_IOBuffer, Client->m_RecvDataBuffer);
 }

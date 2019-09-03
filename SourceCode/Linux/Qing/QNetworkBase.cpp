@@ -1,4 +1,4 @@
-#include "NetworkBase.h"
+#include "QNetworkBase.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -9,17 +9,17 @@
 
 
 
-NetworkBase::NetworkBase()
+QNetworkBase::QNetworkBase()
 {
     m_Socket = -1;
 }
 
-NetworkBase::~NetworkBase()
+QNetworkBase::~QNetworkBase()
 {
     close(m_Socket);
 }
 
-int NetworkBase::SetNonBlocking(int fd)
+int QNetworkBase::SetNonBlocking(int fd)
 {
     int old_option = fcntl(fd, F_GETFL);                //获取文件描述符旧的状态标志
     int new_option = old_option | O_NONBLOCK;           //设置非阻塞状态
@@ -27,7 +27,7 @@ int NetworkBase::SetNonBlocking(int fd)
     return old_option;                                  //返回旧的状态标志，以便后续恢复使用
 }
 
-bool NetworkBase::CreateSocket(int Domain, int Type)
+bool QNetworkBase::CreateSocket(int Domain, int Type)
 {
     m_Socket = socket(                                  //创建socket
         Domain,                                         //底层协议族，PF_INET表示IPv4，PF_INET6表示IPv6，PF_UNIX表示UNIX本地域协议
@@ -38,7 +38,7 @@ bool NetworkBase::CreateSocket(int Domain, int Type)
     return m_Socket > 0;
 }
 
-void NetworkBase::InitSockAddress(void *Address, const std::string & IP, int Port)
+void QNetworkBase::InitSockAddress(void *Address, const std::string & IP, int Port)
 {
     uint16_t TempPort = static_cast<uint16_t>(Port);
     struct sockaddr_in *TempAddress = (sockaddr_in*)Address;

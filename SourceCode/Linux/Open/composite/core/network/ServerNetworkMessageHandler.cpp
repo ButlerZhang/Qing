@@ -92,9 +92,9 @@ void ServerNetworkMessageHandler::WorkThread_Process(void *Object)
             std::unique_lock<std::mutex> Locker(Handler->m_QueueLock);
 
             //my work is sleep.
-            //std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-            Handler->m_SingleServer->ProcessMessage(Handler->m_NetworkMsgQueue.front());
+            //Handler->m_SingleServer->ProcessMessage(Handler->m_NetworkMsgQueue.front());
             Handler->m_NetworkMsgQueue.pop();
         }
     }

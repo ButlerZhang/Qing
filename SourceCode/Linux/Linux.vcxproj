@@ -98,10 +98,13 @@
     <ClCompile Include="Open\composite\controller\Client.cpp" />
     <ClCompile Include="Open\composite\controller\HTTPServer.cpp" />
     <ClCompile Include="Open\composite\controller\MultiServer.cpp" />
+    <ClCompile Include="Open\composite\controller\RestartManager.cpp" />
     <ClCompile Include="Open\composite\controller\SingleServer.cpp" />
+    <ClCompile Include="Open\composite\controller\WatchDog.cpp" />
     <ClCompile Include="Open\composite\core\network\HTTPBaseServer.cpp" />
     <ClCompile Include="Open\composite\core\network\HTTPSession.cpp" />
     <ClCompile Include="Open\composite\core\network\MultiEventBaseServer.cpp" />
+    <ClCompile Include="Open\composite\core\network\NetworkBase.cpp" />
     <ClCompile Include="Open\composite\core\network\ServerNetworkMessageHandler.cpp" />
     <ClCompile Include="Open\composite\core\network\SignalEventMap.cpp" />
     <ClCompile Include="Open\composite\core\network\SingleEventBaseClient.cpp" />
@@ -114,7 +117,7 @@
     <ClCompile Include="Open\composite\message\project.pb.cc" />
     <ClCompile Include="Open\protobuf\base.pb.cc" />
     <ClCompile Include="Open\protobuf\user.pb.cc" />
-    <ClCompile Include="Qing\NetworkBase.cpp" />
+    <ClCompile Include="Qing\QNetworkBase.cpp" />
     <ClCompile Include="Qing\NetworkClient.cpp" />
     <ClCompile Include="Qing\NetworkServer.cpp" />
   </ItemGroup>
@@ -154,9 +157,12 @@
     <ClInclude Include="Open\composite\controller\Client.h" />
     <ClInclude Include="Open\composite\controller\HTTPServer.h" />
     <ClInclude Include="Open\composite\controller\MultiServer.h" />
+    <ClInclude Include="Open\composite\controller\RestartManager.h" />
     <ClInclude Include="Open\composite\controller\SingleServer.h" />
+    <ClInclude Include="Open\composite\controller\WatchDog.h" />
     <ClInclude Include="Open\composite\core\network\HTTPBaseServer.h" />
     <ClInclude Include="Open\composite\core\network\HTTPSession.h" />
+    <ClInclude Include="Open\composite\core\network\LibeventInterface.h" />
     <ClInclude Include="Open\composite\core\network\MultiEventBaseServer.h" />
     <ClInclude Include="Open\composite\core\network\NetworkBase.h" />
     <ClInclude Include="Open\composite\core\network\ServerNetworkMessageHandler.h" />
@@ -168,7 +174,6 @@
     <ClInclude Include="Open\composite\core\tools\Ethernet.h" />
     <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h" />
     <ClInclude Include="Open\composite\core\tools\OpenSSLContext.h" />
-    <ClInclude Include="Open\composite\core\tools\RestartManager.h" />
     <ClInclude Include="Open\composite\handler\httphandler\HTTPHandler.h" />
     <ClInclude Include="Open\composite\handler\tcphandler\TCPHandler.h" />
     <ClInclude Include="Open\composite\message\CodedMessage.h" />
@@ -197,7 +202,7 @@
     <ClInclude Include="Open\protobuf\base.pb.h" />
     <ClInclude Include="Open\protobuf\demo_protobuf.h" />
     <ClInclude Include="Open\protobuf\user.pb.h" />
-    <ClInclude Include="Qing\NetworkBase.h" />
+    <ClInclude Include="Qing\QNetworkBase.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
     <ClInclude Include="Qing\NetworkServer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
@@ -249,6 +254,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)/%(filename).o</ObjectFileName>
     </ClCompile>
     <Link>
       <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;mysqlclient;%(LibraryDependencies)</LibraryDependencies>

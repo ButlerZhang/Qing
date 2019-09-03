@@ -1,7 +1,6 @@
 #pragma once
-#include "NetworkBase.h"
+#include "LibeventInterface.h"
 #include "UDPBroadcast.h"
-#include <event2/listener.h>
 
 
 

@@ -1,7 +1,6 @@
 #pragma once
 #include "HTTPSession.h"
-#include "NetworkBase.h"
-#include <map>
+#include "LibeventInterface.h"
 #include <sys/stat.h>
 
 
@@ -17,6 +16,7 @@ public:
     virtual bool ProcessCheckout() { return false; }
     virtual bool ProcessGet(struct evhttp_request *Request);
     virtual bool ProcessPost(struct evhttp_request *Request);
+    virtual bool ProcessOptions(struct evhttp_request *Request);
     virtual bool ProcessRequest(struct evhttp_request *Request);
 
     HTTPSession& GetHTTPSession() { return m_HTTPSession; }

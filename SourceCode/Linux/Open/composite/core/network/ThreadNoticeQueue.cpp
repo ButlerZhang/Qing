@@ -14,8 +14,8 @@ ThreadNoticeQueue::ThreadNoticeQueue()
 
     if (pipe(ThreadPipe) == 0)
     {
-    m_RecvDescriptor = ThreadPipe[0];
-    m_SendDescriptor = ThreadPipe[1];
+        m_RecvDescriptor = ThreadPipe[0];
+        m_SendDescriptor = ThreadPipe[1];
     }
     else
     {
@@ -26,7 +26,7 @@ ThreadNoticeQueue::ThreadNoticeQueue()
 
 ThreadNoticeQueue::~ThreadNoticeQueue()
 {
-    while(!m_Queue.empty())
+    while (!m_Queue.empty())
     {
         m_Queue.pop();
     }
@@ -38,9 +38,11 @@ bool ThreadNoticeQueue::PopMessage(std::string &JsonString)
 {
     std::unique_lock<std::mutex> Locker(m_QueueLock);
 
-    int NoticeType = 1; //TODO
+    int NoticeType = 1;
     if (read(m_RecvDescriptor, &NoticeType, sizeof(NoticeType)) != sizeof(NoticeType))
     {
+        //TODO
+        //Now, the if statement is added to avoid compile warnings.
     }
 
     if (m_Queue.empty())

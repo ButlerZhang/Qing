@@ -8,7 +8,6 @@
 UDPBroadcast::UDPBroadcast()
 {
     m_IsDisplayLog = false;
-
     m_TimeInternal = 60;
     m_BroadcastPort = 0;
     m_BroadcastSocket = -1;
@@ -16,7 +15,6 @@ UDPBroadcast::UDPBroadcast()
 
 UDPBroadcast::~UDPBroadcast()
 {
-
     if (m_BroadcastSocket > 0)
     {
         close(m_BroadcastSocket);
@@ -25,7 +23,6 @@ UDPBroadcast::~UDPBroadcast()
 
     g_Log.WriteDebug("UDPBroadcast was destructored.");
 }
-
 
 bool UDPBroadcast::StartTimer(event_base *EventBase, const std::string &ServerIP, int Port, int TimeInternal)
 {

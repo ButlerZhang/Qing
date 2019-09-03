@@ -1,10 +1,8 @@
 #pragma once
-#include <string>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <openssl/aes.h>
-
 #include "../../../../../Common/Boost/BoostLog.h"
 #include "../../../../../Common/Tool/HexString.h"
 

@@ -3,12 +3,12 @@
 
 
 
-class NetworkBase
+class QNetworkBase
 {
 public:
 
-    NetworkBase();
-    virtual ~NetworkBase();
+    QNetworkBase();
+    virtual ~QNetworkBase();
 
     int  SetNonBlocking(int fd);
     int  GetSocket() const { return m_Socket; }

@@ -160,9 +160,6 @@
     <ClCompile Include="..\Common\Database\MySQLDatabase.cpp">
       <Filter>Common\Database</Filter>
     </ClCompile>
-    <ClCompile Include="Qing\NetworkBase.cpp">
-      <Filter>Project\Qing</Filter>
-    </ClCompile>
     <ClCompile Include="Qing\NetworkClient.cpp">
       <Filter>Project\Qing</Filter>
     </ClCompile>
@@ -228,6 +225,18 @@
     </ClCompile>
     <ClCompile Include="Open\composite\core\tools\Ethernet.cpp">
       <Filter>Project\Open\composite\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\composite\controller\RestartManager.cpp">
+      <Filter>Project\Open\composite\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\composite\controller\WatchDog.cpp">
+      <Filter>Project\Open\composite\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Open\composite\core\network\NetworkBase.cpp">
+      <Filter>Project\Open\composite\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\QNetworkBase.cpp">
+      <Filter>Project\Qing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -399,9 +408,6 @@
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>Project\UNIX</Filter>
     </ClInclude>
-    <ClInclude Include="Qing\NetworkBase.h">
-      <Filter>Project\Qing</Filter>
-    </ClInclude>
     <ClInclude Include="Qing\NetworkClient.h">
       <Filter>Project\Qing</Filter>
     </ClInclude>
@@ -550,8 +556,17 @@
     <ClInclude Include="Open\composite\core\tools\Ethernet.h">
       <Filter>Project\Open\composite\core\tools</Filter>
     </ClInclude>
-    <ClInclude Include="Open\composite\core\tools\RestartManager.h">
-      <Filter>Project\Open\composite\core\tools</Filter>
+    <ClInclude Include="Open\composite\controller\RestartManager.h">
+      <Filter>Project\Open\composite\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\composite\controller\WatchDog.h">
+      <Filter>Project\Open\composite\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Open\composite\core\network\LibeventInterface.h">
+      <Filter>Project\Open\composite\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\QNetworkBase.h">
+      <Filter>Project\Qing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

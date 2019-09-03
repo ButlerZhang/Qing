@@ -37,6 +37,7 @@ bool SignalEventMap::AddSignalEvent(event_base *EventBase, int Signal, void(*Cal
 
     DeleteSignalEvent(Signal);
     m_SignalMap[Signal].m_event = SignalEvent.m_event;
+
     SignalEvent.m_event = NULL;
     return true;
 }

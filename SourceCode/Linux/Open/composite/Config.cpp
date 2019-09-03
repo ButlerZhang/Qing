@@ -11,6 +11,7 @@
 
 const int HTTP_DEFAULT_PORT = 8000;
 const int SMIB_DEFAULT_PORT = 9000;
+const int HEARTBEAT_INTERNAL = 10;
 
 const std::string SECTION_DATABASE("Database");
 const std::string DATABASE_HOST("Host");
@@ -26,6 +27,11 @@ const std::string SYSTEM_ENABLE_DAEMON("EanbleDaemon");
 const std::string SYSTEM_LOG_SEVERITY("LogSeverity");
 const std::string SYSTEM_HTTP_PORT("HTTPPort");
 
+const std::string SECTION_WATCHDOG("WatchDog");
+const std::string WATCHDOG_ENABLE("EnableWatchDog");
+const std::string WATCHDOG_DELETELOG("EnableDeleteLog");
+const std::string WATCHDOG_HEARTBEAT("HeartbeatInternal");
+
 void CallBack_LibEventLog(int Severity, const char *LogMsg)
 {
     switch (Severity)
@@ -40,15 +46,67 @@ void CallBack_LibEventLog(int Severity, const char *LogMsg)
 
 
 
-Config::Config() : m_ConfigFileName("jpc.ini")
+Config::Config() : JPC_WATCHDOG("Qwatchdog"), JPC_SERVER("Qserver"), JPC_SMIB("Qclient"), m_IsLoadDBSucceed(false), m_ConfigFileName("project.ini")
 {
-    m_IsLoadDBSucceed = false;
-    m_SMIBPort = SMIB_DEFAULT_PORT;
     event_set_log_callback(CallBack_LibEventLog);
+
+    //system
+    m_IsEnableLog = true;
+    m_IsEnableHTTPS = true;
+    m_IsEnableDaemon = false;
+    m_LogSeverity = LL_DEBUG;
+    m_HTTPPort = HTTP_DEFAULT_PORT;
+    m_SMIBPort = SMIB_DEFAULT_PORT;
+
+    //watch dog
+    m_IsEnableWatchDog = false;
+    m_IsEnableDeleteLog = false;
+    m_HeartbeatInternal = 0;
 }
 
 Config::~Config()
 {
+}
+
+bool Config::CheckConfiguration()
+{
+    if (m_DBHost.empty())
+    {
+        g_Log.WriteError("Database host is empty.");
+        return false;
+    }
+
+    if (m_DBUser.empty())
+    {
+        g_Log.WriteError("Database user is empty.");
+        return false;
+    }
+
+    if (m_DBPassword.empty())
+    {
+        g_Log.WriteError("Database password is empty.");
+        return false;
+    }
+
+    if (m_DBName.empty())
+    {
+        g_Log.WriteError("Database name is empty.");
+        return false;
+    }
+
+    if (m_HTTPPort < 0 || m_HTTPPort > 65535)
+    {
+        g_Log.WriteError(BoostFormat("HTTP port = %d is wrong, reset it to %d", m_HTTPPort, HTTP_DEFAULT_PORT));
+        m_HTTPPort = HTTP_DEFAULT_PORT;
+    }
+
+    if (m_HeartbeatInternal < 0 || m_HeartbeatInternal >(2 * 60 * 60)) //2 hour
+    {
+        g_Log.WriteError(BoostFormat("Heartbeat range is 1 to 7200 seconds, reset it to %d seconds.", HEARTBEAT_INTERNAL));
+        m_HeartbeatInternal = HEARTBEAT_INTERNAL;
+    }
+
+    return true;
 }
 
 void Config::GenerateConfigFile()
@@ -86,9 +144,15 @@ void Config::GenerateConfigFile()
     SystemTree.put(SYSTEM_LOG_SEVERITY, LL_DEBUG);
     SystemTree.put(SYSTEM_HTTP_PORT, HTTP_DEFAULT_PORT);
 
+    boost::property_tree::ptree WatchDogTree;
+    WatchDogTree.put(WATCHDOG_ENABLE, 0);
+    WatchDogTree.put(WATCHDOG_DELETELOG, 0);
+    WatchDogTree.put(WATCHDOG_HEARTBEAT, HEARTBEAT_INTERNAL);
+
     boost::property_tree::ptree IniFileTree;
     IniFileTree.push_back(std::make_pair(SECTION_DATABASE, DBTree));
     IniFileTree.push_back(std::make_pair(SECTION_SYSTEM, SystemTree));
+    IniFileTree.push_back(std::make_pair(SECTION_WATCHDOG, WatchDogTree));
 
     boost::property_tree::write_ini(m_ConfigFileName, IniFileTree);
     std::cout << std::endl;
@@ -96,39 +160,79 @@ void Config::GenerateConfigFile()
 
 bool Config::LoadFileConfig()
 {
+    boost::property_tree::ptree IniFileTree;
+
+    //step 1: read file
     try
     {
-        boost::property_tree::ptree IniFileTree;
         boost::property_tree::read_ini(m_ConfigFileName, IniFileTree);
+    }
+    catch (...)
+    {
+        printf("Config: Can not read configuration file.\n");
+        return false;
+    }
 
+    //step 2: system section
+    try
+    {
         const boost::property_tree::ptree &SystemTree = IniFileTree.get_child(SECTION_SYSTEM);
         m_IsEnableLog = SystemTree.get<bool>(SYSTEM_ENABLE_LOG, true);
         m_IsEnableHTTPS = SystemTree.get<bool>(SYSTEM_ENABLE_HTTPS, true);
         m_IsEnableDaemon = SystemTree.get<bool>(SYSTEM_ENABLE_DAEMON, false);
         m_HTTPPort = SystemTree.get<int>(SYSTEM_HTTP_PORT, HTTP_DEFAULT_PORT);
         m_LogSeverity = SystemTree.get<int>(SYSTEM_LOG_SEVERITY, LL_DEBUG);
+        m_HeartbeatInternal = SystemTree.get<int>(WATCHDOG_HEARTBEAT, 30);
 
+        g_Log.Initialize(m_ProcessName, std::string(), m_IsEnableLog);
         if (m_LogSeverity < LL_TEMP || m_LogSeverity > LL_ERROR)
         {
             m_LogSeverity = LL_DEBUG;
         }
         g_Log.SetFilter(static_cast<LogLevel>(m_LogSeverity));
-        g_Log.SetIsOkToWrite(m_IsEnableLog);
+    }
+    catch (...)
+    {
+        if (!g_Log.IsInitialize())
+        {
+            g_Log.Initialize(Config::JPC_SERVER, std::string(), true);
+        }
 
-        const boost::property_tree::ptree &DBTree = IniFileTree.get_child("Database");
+        g_Log.WriteDebug("Config: Read system section failed, use default configuration.");
+        //allow continue
+    }
+
+    //step 3: database section
+    try
+    {
+        const boost::property_tree::ptree &DBTree = IniFileTree.get_child(SECTION_DATABASE);
         m_DBPort = DBTree.get<int>(DATABASE_PORT, 3306);
         m_DBHost = DBTree.get<std::string>(DATABASE_HOST, "localhost");
         m_DBUser = DBTree.get<std::string>(DATABASE_USER, "root");
         m_DBName = DBTree.get<std::string>(DATABASE_NAME, "jpc");
         m_DBPassword = AESDecrypt(DBTree.get<std::string>(DATABASE_PASSWORD, "root"), MY_AES_KEY);
-
-        return true;
     }
     catch (...)
     {
-        g_Log.WriteError("Config: Read ini file throw error.");
-        return false;
+        g_Log.WriteError("Config: Read database section failed.");
+        return false; //Database information must correct.
     }
+
+    //step 4: watch dog section
+    try
+    {
+        const boost::property_tree::ptree &WatchDogTree = IniFileTree.get_child(SECTION_WATCHDOG);
+        m_IsEnableWatchDog = WatchDogTree.get<bool>(WATCHDOG_ENABLE, false);
+        m_IsEnableDeleteLog = WatchDogTree.get<bool>(WATCHDOG_DELETELOG, false);
+        m_HeartbeatInternal = WatchDogTree.get<int>(WATCHDOG_HEARTBEAT, 30);
+    }
+    catch (...)
+    {
+        g_Log.WriteDebug("Config: Read watch dog section failed, use default configuration.");
+        //allow continue
+    }
+
+    return CheckConfiguration();
 }
 
 bool Config::LoadDatabaseConfig()

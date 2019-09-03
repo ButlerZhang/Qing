@@ -1,9 +1,9 @@
 #pragma once
-#include "NetworkBase.h"
+#include "QNetworkBase.h"
 
 
 
-class NetworkClient : public NetworkBase
+class NetworkClient : public QNetworkBase
 {
 public:
 

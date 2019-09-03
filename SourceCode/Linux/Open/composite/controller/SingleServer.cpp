@@ -3,8 +3,8 @@
 #include "../../../LinuxTools.h"
 #include "../core/network/ThreadNoticeQueue.h"
 #include "../handler/tcphandler/TCPHandler.h"
-#include "../message/project.pb.h"
 #include "../message/CodedMessage.h"
+#include "../message/project.pb.h"
 #include "HTTPServer.h"
 #include "../Config.h"
 
@@ -18,6 +18,13 @@ SingleServer::SingleServer()
 SingleServer::~SingleServer()
 {
     m_HandlerVector.clear();
+}
+
+bool SingleServer::Start(long WatchDogPID)
+{
+    m_RestartManager.Initialize(g_Config.m_HeartbeatInternal, WatchDogPID);
+    g_Log.WriteDebug(BoostFormat("Single Server watch dog pid = %ld", WatchDogPID));
+    return SingleEventBaseServer::Start();
 }
 
 bool SingleServer::ProcessCheckout()
@@ -38,6 +45,11 @@ bool SingleServer::ProcessCheckout()
 
         if (!CreateListener(g_Config.m_ServerIP, g_Config.m_SMIBPort))
         {
+            if (m_Listener.m_listener == NULL)
+            {
+                m_RestartManager.KillProcess(getpid());
+            }
+
             return false;
         }
 
@@ -45,7 +57,13 @@ bool SingleServer::ProcessCheckout()
         return true;
     }
 
-    //step 3: check database connection
+    //step 3: check watchdog
+    if (g_Config.m_IsEnableWatchDog && g_Config.m_HeartbeatInternal > 0)
+    {
+        m_RestartManager.CheckRestart();
+    }
+
+    //step 4: check database connection
     if (!m_SMIBDB.Isconnected())
     {
         g_Log.WriteError("Single Server SMIB database is disconnected.");
@@ -60,7 +78,7 @@ bool SingleServer::ProcessCheckout()
         }
     }
 
-    //step 4: flush log file.
+    //step 5: flush log file.
     g_Log.Flush();
     return true;
 }

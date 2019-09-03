@@ -151,6 +151,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_project_2eproto::offsets[] PRO
   PROTOBUF_FIELD_OFFSET(::Project::RandomMessage, header_),
   PROTOBUF_FIELD_OFFSET(::Project::RandomMessage, clientsequence_),
   PROTOBUF_FIELD_OFFSET(::Project::RandomMessage, serversequence_),
+  PROTOBUF_FIELD_OFFSET(::Project::RandomMessage, senderprocessid_),
   PROTOBUF_FIELD_OFFSET(::Project::RandomMessage, randomdescriptor_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Project::ServerError, _internal_metadata_),
@@ -166,7 +167,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 7, -1, sizeof(::Project::UserLogin)},
   { 18, -1, sizeof(::Project::UserLogout)},
   { 26, -1, sizeof(::Project::RandomMessage)},
-  { 35, -1, sizeof(::Project::ServerError)},
+  { 36, -1, sizeof(::Project::ServerError)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -185,17 +186,18 @@ const char descriptor_table_protodef_project_2eproto[] =
   "D\030\002 \001(\005\022\014\n\004Name\030\003 \001(\t\022\020\n\010Password\030\004 \001(\t\022"
   "\021\n\tAuthority\030\005 \001(\t\022\020\n\010Nickname\030\006 \003(\t\"N\n\n"
   "UserLogout\022&\n\006header\030\001 \001(\0132\026.Project.Mes"
-  "sageHeader\022\n\n\002ID\030\002 \001(\005\022\014\n\004Name\030\003 \001(\t\"\201\001\n"
+  "sageHeader\022\n\n\002ID\030\002 \001(\005\022\014\n\004Name\030\003 \001(\t\"\232\001\n"
   "\rRandomMessage\022&\n\006header\030\001 \001(\0132\026.Project"
   ".MessageHeader\022\026\n\016ClientSequence\030\002 \001(\003\022\026"
-  "\n\016ServerSequence\030\003 \001(\003\022\030\n\020RandomDescript"
-  "or\030\004 \001(\t\"a\n\013ServerError\022&\n\006header\030\001 \001(\0132"
-  "\026.Project.MessageHeader\022\021\n\tErrorType\030\002 \001"
-  "(\005\022\027\n\017ErrorDescriptor\030\003 \001(\t*\213\001\n\013MessageT"
-  "ype\022\r\n\tMT_UNKNOW\020\000\022\r\n\010MT_ERROR\020\350\007\022\016\n\tMT_"
-  "RANDOM\020\351\007\022\r\n\010MT_LOGIN\020\352\007\022\026\n\021MT_LOGIN_RES"
-  "PONSE\020\353\007\022\016\n\tMT_LOGOUT\020\354\007\022\027\n\022MT_LOGOUT_RE"
-  "SPONSE\020\355\007b\006proto3"
+  "\n\016ServerSequence\030\003 \001(\003\022\027\n\017SenderProcessI"
+  "D\030\004 \001(\003\022\030\n\020RandomDescriptor\030\005 \001(\t\"a\n\013Ser"
+  "verError\022&\n\006header\030\001 \001(\0132\026.Project.Messa"
+  "geHeader\022\021\n\tErrorType\030\002 \001(\005\022\027\n\017ErrorDesc"
+  "riptor\030\003 \001(\t*\213\001\n\013MessageType\022\r\n\tMT_UNKNO"
+  "W\020\000\022\r\n\010MT_ERROR\020\350\007\022\016\n\tMT_RANDOM\020\351\007\022\r\n\010MT"
+  "_LOGIN\020\352\007\022\026\n\021MT_LOGIN_RESPONSE\020\353\007\022\016\n\tMT_"
+  "LOGOUT\020\354\007\022\027\n\022MT_LOGOUT_RESPONSE\020\355\007b\006prot"
+  "o3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_project_2eproto_deps[1] = {
 };
@@ -209,7 +211,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pro
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_project_2eproto_once;
 static bool descriptor_table_project_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_project_2eproto = {
-  &descriptor_table_project_2eproto_initialized, descriptor_table_protodef_project_2eproto, "project.proto", 697,
+  &descriptor_table_project_2eproto_initialized, descriptor_table_protodef_project_2eproto, "project.proto", 722,
   &descriptor_table_project_2eproto_once, descriptor_table_project_2eproto_sccs, descriptor_table_project_2eproto_deps, 5, 0,
   schemas, file_default_instances, TableStruct_project_2eproto::offsets,
   file_level_metadata_project_2eproto, 5, file_level_enum_descriptors_project_2eproto, file_level_service_descriptors_project_2eproto,
@@ -1539,6 +1541,7 @@ RandomMessage::HasBitSetters::header(const RandomMessage* msg) {
 const int RandomMessage::kHeaderFieldNumber;
 const int RandomMessage::kClientSequenceFieldNumber;
 const int RandomMessage::kServerSequenceFieldNumber;
+const int RandomMessage::kSenderProcessIDFieldNumber;
 const int RandomMessage::kRandomDescriptorFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1561,8 +1564,8 @@ RandomMessage::RandomMessage(const RandomMessage& from)
     header_ = nullptr;
   }
   ::memcpy(&clientsequence_, &from.clientsequence_,
-    static_cast<size_t>(reinterpret_cast<char*>(&serversequence_) -
-    reinterpret_cast<char*>(&clientsequence_)) + sizeof(serversequence_));
+    static_cast<size_t>(reinterpret_cast<char*>(&senderprocessid_) -
+    reinterpret_cast<char*>(&clientsequence_)) + sizeof(senderprocessid_));
   // @@protoc_insertion_point(copy_constructor:Project.RandomMessage)
 }
 
@@ -1570,8 +1573,8 @@ void RandomMessage::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_RandomMessage_project_2eproto.base);
   randomdescriptor_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&header_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&serversequence_) -
-      reinterpret_cast<char*>(&header_)) + sizeof(serversequence_));
+      reinterpret_cast<char*>(&senderprocessid_) -
+      reinterpret_cast<char*>(&header_)) + sizeof(senderprocessid_));
 }
 
 RandomMessage::~RandomMessage() {
@@ -1605,8 +1608,8 @@ void RandomMessage::Clear() {
   }
   header_ = nullptr;
   ::memset(&clientsequence_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&serversequence_) -
-      reinterpret_cast<char*>(&clientsequence_)) + sizeof(serversequence_));
+      reinterpret_cast<char*>(&senderprocessid_) -
+      reinterpret_cast<char*>(&clientsequence_)) + sizeof(senderprocessid_));
   _internal_metadata_.Clear();
 }
 
@@ -1639,9 +1642,16 @@ const char* RandomMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string RandomDescriptor = 4;
+      // int64 SenderProcessID = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          senderprocessid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string RandomDescriptor = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_randomdescriptor(), ptr, ctx, "Project.RandomMessage.RandomDescriptor");
           CHK_(ptr);
         } else goto handle_unusual;
@@ -1713,9 +1723,22 @@ bool RandomMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // string RandomDescriptor = 4;
+      // int64 SenderProcessID = 4;
       case 4: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (32 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
+                 input, &senderprocessid_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string RandomDescriptor = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
                 input, this->mutable_randomdescriptor()));
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -1771,14 +1794,19 @@ void RandomMessage::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(3, this->serversequence(), output);
   }
 
-  // string RandomDescriptor = 4;
+  // int64 SenderProcessID = 4;
+  if (this->senderprocessid() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(4, this->senderprocessid(), output);
+  }
+
+  // string RandomDescriptor = 5;
   if (this->randomdescriptor().size() > 0) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->randomdescriptor().data(), static_cast<int>(this->randomdescriptor().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "Project.RandomMessage.RandomDescriptor");
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
-      4, this->randomdescriptor(), output);
+      5, this->randomdescriptor(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1811,7 +1839,12 @@ void RandomMessage::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(3, this->serversequence(), target);
   }
 
-  // string RandomDescriptor = 4;
+  // int64 SenderProcessID = 4;
+  if (this->senderprocessid() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(4, this->senderprocessid(), target);
+  }
+
+  // string RandomDescriptor = 5;
   if (this->randomdescriptor().size() > 0) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->randomdescriptor().data(), static_cast<int>(this->randomdescriptor().length()),
@@ -1819,7 +1852,7 @@ void RandomMessage::SerializeWithCachedSizes(
       "Project.RandomMessage.RandomDescriptor");
     target =
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
-        4, this->randomdescriptor(), target);
+        5, this->randomdescriptor(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1843,7 +1876,7 @@ size_t RandomMessage::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string RandomDescriptor = 4;
+  // string RandomDescriptor = 5;
   if (this->randomdescriptor().size() > 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -1869,6 +1902,13 @@ size_t RandomMessage::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
         this->serversequence());
+  }
+
+  // int64 SenderProcessID = 4;
+  if (this->senderprocessid() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->senderprocessid());
   }
 
   int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
@@ -1911,6 +1951,9 @@ void RandomMessage::MergeFrom(const RandomMessage& from) {
   if (from.serversequence() != 0) {
     set_serversequence(from.serversequence());
   }
+  if (from.senderprocessid() != 0) {
+    set_senderprocessid(from.senderprocessid());
+  }
 }
 
 void RandomMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -1943,6 +1986,7 @@ void RandomMessage::InternalSwap(RandomMessage* other) {
   swap(header_, other->header_);
   swap(clientsequence_, other->clientsequence_);
   swap(serversequence_, other->serversequence_);
+  swap(senderprocessid_, other->senderprocessid_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata RandomMessage::GetMetadata() const {

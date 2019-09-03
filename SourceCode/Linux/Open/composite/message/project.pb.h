@@ -704,9 +704,9 @@ class RandomMessage :
 
   // accessors -------------------------------------------------------
 
-  // string RandomDescriptor = 4;
+  // string RandomDescriptor = 5;
   void clear_randomdescriptor();
-  static const int kRandomDescriptorFieldNumber = 4;
+  static const int kRandomDescriptorFieldNumber = 5;
   const std::string& randomdescriptor() const;
   void set_randomdescriptor(const std::string& value);
   void set_randomdescriptor(std::string&& value);
@@ -737,6 +737,12 @@ class RandomMessage :
   ::PROTOBUF_NAMESPACE_ID::int64 serversequence() const;
   void set_serversequence(::PROTOBUF_NAMESPACE_ID::int64 value);
 
+  // int64 SenderProcessID = 4;
+  void clear_senderprocessid();
+  static const int kSenderProcessIDFieldNumber = 4;
+  ::PROTOBUF_NAMESPACE_ID::int64 senderprocessid() const;
+  void set_senderprocessid(::PROTOBUF_NAMESPACE_ID::int64 value);
+
   // @@protoc_insertion_point(class_scope:Project.RandomMessage)
  private:
   class HasBitSetters;
@@ -746,6 +752,7 @@ class RandomMessage :
   ::Project::MessageHeader* header_;
   ::PROTOBUF_NAMESPACE_ID::int64 clientsequence_;
   ::PROTOBUF_NAMESPACE_ID::int64 serversequence_;
+  ::PROTOBUF_NAMESPACE_ID::int64 senderprocessid_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_project_2eproto;
 };
@@ -1464,7 +1471,21 @@ inline void RandomMessage::set_serversequence(::PROTOBUF_NAMESPACE_ID::int64 val
   // @@protoc_insertion_point(field_set:Project.RandomMessage.ServerSequence)
 }
 
-// string RandomDescriptor = 4;
+// int64 SenderProcessID = 4;
+inline void RandomMessage::clear_senderprocessid() {
+  senderprocessid_ = PROTOBUF_LONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 RandomMessage::senderprocessid() const {
+  // @@protoc_insertion_point(field_get:Project.RandomMessage.SenderProcessID)
+  return senderprocessid_;
+}
+inline void RandomMessage::set_senderprocessid(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  senderprocessid_ = value;
+  // @@protoc_insertion_point(field_set:Project.RandomMessage.SenderProcessID)
+}
+
+// string RandomDescriptor = 5;
 inline void RandomMessage::clear_randomdescriptor() {
   randomdescriptor_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }

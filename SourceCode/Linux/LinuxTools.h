@@ -3,7 +3,9 @@
 #include <vector>
 #include <random>
 #include <netdb.h>
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <ifaddrs.h>
@@ -90,6 +92,7 @@ inline bool SplitString(const std::string &SourceString, std::vector<std::string
     std::string::size_type pos1 = 0;
     std::string::size_type pos2 = SourceString.find(Seperator);
 
+    StringVector.clear();
     while (std::string::npos != pos2)
     {
         const std::string &TempString = SourceString.substr(pos1, pos2 - pos1);
@@ -108,4 +111,35 @@ inline bool SplitString(const std::string &SourceString, std::vector<std::string
     }
 
     return !StringVector.empty();
+}
+
+inline bool GetShellResult(const std::string &Command, std::vector<std::string> &ResultVector)
+{
+    ResultVector.clear();
+    if (Command.empty())
+    {
+        return false;
+    }
+
+    FILE *fp = popen(Command.c_str(), "r");
+    if (fp == NULL)
+    {
+        return false;
+    }
+
+    std::vector<char> LineBuffer(1024, 0);
+    while (fgets(&LineBuffer[0], static_cast<int>(LineBuffer.size()), fp) != NULL)
+    {
+        ResultVector.push_back(std::string(LineBuffer.begin(), LineBuffer.begin() + strlen(&LineBuffer[0])));
+    }
+
+    pclose(fp);
+    return !ResultVector.empty();
+}
+
+inline pid_t GetProcessIDByProcessName(const std::string &ProcessName) //only use in the same section
+{
+    std::vector<std::string> ResultVector;
+    std::string Command("pidof " + ProcessName);
+    return GetShellResult(Command, ResultVector) ? atoi(ResultVector[0].c_str()) : 0;
 }

@@ -46,7 +46,7 @@ inline std::string GetWorkDirectory()
     return std::string();
 }
 
-inline std::string GetProgramName()
+inline std::string GetProgramName(bool IsIncludeExtension)
 {
 #ifdef _WIN32
 

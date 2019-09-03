@@ -1,5 +1,5 @@
 #pragma once
-#include "NetworkBase.h"
+#include "LibeventInterface.h"
 #include <map>
 
 
@@ -18,3 +18,4 @@ private:
 
     std::map<int, EventNormal>                m_SignalMap;
 };
+
