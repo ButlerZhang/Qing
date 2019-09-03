@@ -1,4 +1,5 @@
 #pragma once
+#include "LibeventInterface.h"
 #include <mutex>
 #include <queue>
 #include <condition_variable>
@@ -9,8 +10,8 @@ class ThreadNoticeQueue
 {
 public:
 
-    bool PopMessage(std::string &JsonString);
-    bool PushMessage(const std::string &JsonString);
+    bool PopMessage(NetworkMessage &NetworkMsg);
+    bool PushMessage(int NoticeType, const std::string &JsonString);
 
     int  GetRecvDescriptor() const { return m_RecvDescriptor; }
     int  GetSendDescriptor() const { return m_SendDescriptor; }
@@ -27,7 +28,7 @@ private:
     int                                  m_RecvDescriptor;
     int                                  m_SendDescriptor;
     std::mutex                           m_QueueLock;
-    std::queue<std::string>              m_Queue;
+    std::queue<NetworkMessage>           m_Queue;
 };
 
 #define g_ThreadNoticeQueue ThreadNoticeQueue::GetInstance()

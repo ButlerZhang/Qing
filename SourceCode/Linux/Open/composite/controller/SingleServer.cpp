@@ -97,8 +97,8 @@ bool SingleServer::ProcessDisconnected()
 
 bool SingleServer::ProcessThreadNoticeQueue()
 {
-    std::string JsonString;
-    if (!g_ThreadNoticeQueue.PopMessage(JsonString))
+    NetworkMessage NetworkMsg;
+    if (!g_ThreadNoticeQueue.PopMessage(NetworkMsg))
     {
         g_Log.WriteDebug("Single Server process notice queue, pop message failed.");
         return false;
@@ -110,31 +110,16 @@ bool SingleServer::ProcessThreadNoticeQueue()
         return false;
     }
 
-    g_Log.WriteDebug(BoostFormat("Single Server process notice queue: %s", JsonString.c_str()));
+    g_Log.WriteDebug(BoostFormat("Single Server process notice queue: %s", NetworkMsg.m_Message.c_str()));
+    return DispatchMessage(NetworkMsg);
 
-    Project::ServerError ServerPublic;
-    ServerPublic.set_errortype(12341234);
-    ServerPublic.set_errordescriptor("Http server: " + JsonString);
 
-    Project::MessageHeader *Header = ServerPublic.mutable_header();
-    Header->set_type(Project::MessageType::MT_ERROR);
-    Header->set_transmissionid(GetUUID());
-
-    return SendMessage(Project::MessageType::MT_ERROR, ServerPublic);
 }
 
 bool SingleServer::ProcessMessage(NetworkMessage &NetworkMsg)
 {
     NetworkMsg.m_MessageType = DecodeMessage(NetworkMsg.m_Message);
-    for (std::vector<std::shared_ptr<TCPHandler>>::size_type Index = 0; Index < m_HandlerVector.size(); Index++)
-    {
-        if (m_HandlerVector[Index]->ProcessMessage(NetworkMsg))
-        {
-            return true;
-        }
-    }
-
-    return false;
+    return DispatchMessage(NetworkMsg);
 }
 
 bool SingleServer::SendMessage(int MessageType, const google::protobuf::Message & ProtobufMsg)
@@ -147,4 +132,15 @@ bool SingleServer::SendMessage(int MessageType, NetworkMessage &NetworkMsg, cons
 {
     const std::string &DataString = EncodeMessage(ProtobufMsg, MessageType);
     return Send(NetworkMsg, DataString.c_str(), DataString.size());
+}
+bool SingleServer::DispatchMessage(NetworkMessage &NetworkMsg)
+{
+    for (std::vector<std::shared_ptr<TCPHandler>>::size_type Index = 0; Index < m_HandlerVector.size(); Index++)
+    {
+        if (m_HandlerVector[Index]->ProcessMessage(NetworkMsg))
+        {
+            return true;
+        }
+    }
+    return false;
 }

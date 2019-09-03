@@ -33,6 +33,7 @@ private:
 
     SingleServer();
     virtual ~SingleServer();
+    bool DispatchMessage(NetworkMessage &NetworkMsg);
 
 private:
 

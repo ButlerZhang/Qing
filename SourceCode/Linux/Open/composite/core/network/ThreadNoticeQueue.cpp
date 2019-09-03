@@ -31,32 +31,34 @@ ThreadNoticeQueue::~ThreadNoticeQueue()
         m_Queue.pop();
     }
 
-    g_Log.WriteDebug(BoostFormat("Thread notice queue was destructored, size = %d.", m_Queue.size()));
+    g_Log.WriteDebug(BoostFormat("Thread notice queue was destructored, queue size = %d.", m_Queue.size()));
 }
 
-bool ThreadNoticeQueue::PopMessage(std::string &JsonString)
+bool ThreadNoticeQueue::PopMessage(NetworkMessage &NetworkMsg)
 {
     std::unique_lock<std::mutex> Locker(m_QueueLock);
 
-    int NoticeType = 1;
+    int NoticeType = -1;
     if (read(m_RecvDescriptor, &NoticeType, sizeof(NoticeType)) != sizeof(NoticeType))
     {
-        //TODO
-        //Now, the if statement is added to avoid compile warnings.
+        g_Log.WriteError(BoostFormat("Thread notice queue read descriptor wrong, message type = %d.", NoticeType));
+        return false;
     }
 
     if (m_Queue.empty())
     {
-        g_Log.WriteError("Thread notice queue no data, can not pop.");
+        g_Log.WriteError(BoostFormat("Thread notice queue no data, can not pop, message type = %d.", NoticeType));
         return false;
     }
 
-    JsonString = m_Queue.front();
+    NetworkMsg = m_Queue.front();
     m_Queue.pop();
+
+    g_Log.WriteDebug(BoostFormat("Thread notice queue pop type = %d, read type = %d", NetworkMsg.m_MessageType, NoticeType));
     return true;
 }
 
-bool ThreadNoticeQueue::PushMessage(const std::string &JsonString)
+bool ThreadNoticeQueue::PushMessage(int NoticeType, const std::string &JsonString)
 {
     std::unique_lock<std::mutex> Locker(m_QueueLock);
     if (m_RecvDescriptor <= 0 || m_SendDescriptor <= 0)
@@ -65,13 +67,16 @@ bool ThreadNoticeQueue::PushMessage(const std::string &JsonString)
         return false;
     }
 
-    m_Queue.push(JsonString);
-    g_Log.WriteDebug(BoostFormat("Thread notice queue push message, current size = %d", m_Queue.size()));
+    NetworkMessage NewMsg;
+    NewMsg.m_Message = JsonString;
+    NewMsg.m_MessageType = NoticeType;
 
-    int NoticeType = 1; //TODO
+    m_Queue.push(NewMsg);
+    g_Log.WriteDebug(BoostFormat("Thread notice queue push message type = %d, queue size = %d", NoticeType, m_Queue.size()));
+
     if (write(m_SendDescriptor, &NoticeType, sizeof(NoticeType)) != sizeof(int))
     {
-        g_Log.WriteError("Thread notice queue write descriptor wrong.");
+        g_Log.WriteError(BoostFormat("Thread notice queue write descriptor wrong, message type = %d.", NoticeType));
         return false;
     }
 

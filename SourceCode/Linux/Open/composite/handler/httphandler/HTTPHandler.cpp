@@ -194,5 +194,5 @@ bool HTTPHandler::SendLoginReply(struct evhttp_request *Request, boost::property
     evhttp_send_reply(Request, ReplyModel.m_ErrorCode, ReplyModel.m_ReplayMessage.c_str(), DataBuffer.m_evbuffer);
     g_HTTPServer.PrintHeaders(evhttp_request_get_output_headers(Request), false);
 
-    return g_ThreadNoticeQueue.PushMessage(JsonString);
+    return g_ThreadNoticeQueue.PushMessage(1, JsonString);
 }
