@@ -27,9 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{fac7839e-3803-41f2-9d5d-2549236fa07e}</ProjectGuid>
+    <ProjectGuid>{325d2ba4-e323-4cce-ac9c-fc0d96ee7d86}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>BoostLinux</RootNamespace>
+    <RootNamespace>DatabaseLinux</RootNamespace>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -60,47 +60,20 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>/usr/local/bin/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/</LibraryPath>
-  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\BoostFileSystem.cpp" />
-    <ClCompile Include="src\BoostLog.cpp" />
-    <ClCompile Include="src\BoostShare.cpp" />
-    <ClCompile Include="src\BoostTime.cpp" />
+    <ClCompile Include="src\Database.cpp" />
+    <ClCompile Include="src\MSSQLDatabase.cpp" />
+    <ClCompile Include="src\MySQLDatabase.cpp" />
+    <ClCompile Include="src\SQLiteDatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\BoostFileSystem.h" />
-    <ClInclude Include="src\BoostFormat.h" />
-    <ClInclude Include="src\BoostLog.h" />
-    <ClInclude Include="src\BoostShare.h" />
-    <ClInclude Include="src\BoostTime.h" />
-    <ClInclude Include="src\BoostTools.h" />
+    <ClInclude Include="src\Database.h" />
+    <ClInclude Include="src\MSSQLDatabase.h" />
+    <ClInclude Include="src\MySQLDatabase.h" />
+    <ClInclude Include="src\SQLiteDatabase.h" />
   </ItemGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;%(LibraryDependencies)</LibraryDependencies>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;%(LibraryDependencies)</LibraryDependencies>
-    </Link>
-  </ItemDefinitionGroup>
+  <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

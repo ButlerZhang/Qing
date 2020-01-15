@@ -97,12 +97,6 @@
     <ClCompile Include="..\Common\Standard\RandomGenerator.cpp">
       <Filter>Common\Standard</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Boost\BoostLog.cpp">
-      <Filter>Common\Boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Boost\BoostShare.cpp">
-      <Filter>Common\Boost</Filter>
-    </ClCompile>
     <ClCompile Include="..\Common\Database\Database.cpp">
       <Filter>Common\Database</Filter>
     </ClCompile>
@@ -187,6 +181,15 @@
     <ClCompile Include="Qing\QNetworkBase.cpp">
       <Filter>Project\Qing</Filter>
     </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
+      <Filter>Common\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
+      <Filter>Common\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostShare.cpp">
+      <Filter>Common\Boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Example\Effective.h">
@@ -215,15 +218,6 @@
     </ClInclude>
     <ClInclude Include="..\Common\Standard\StandardShare.h">
       <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostFormat.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostLog.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostShare.h">
-      <Filter>Common\Boost</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\CrossPlatform.h">
       <Filter>Common</Filter>
@@ -418,9 +412,6 @@
     <ClInclude Include="Open\composite\handler\tcphandler\TCPHandler.h">
       <Filter>Project\Open\composite\handler\tcphandler</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostTools.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
     <ClInclude Include="Open\composite\core\tools\Ethernet.h">
       <Filter>Project\Open\composite\core\tools</Filter>
     </ClInclude>
@@ -435,6 +426,18 @@
     </ClInclude>
     <ClInclude Include="Qing\QNetworkBase.h">
       <Filter>Project\Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
+      <Filter>Common\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
+      <Filter>Common\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
+      <Filter>Common\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostShare.h">
+      <Filter>Common\Boost</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

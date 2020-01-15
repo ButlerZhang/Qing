@@ -73,8 +73,9 @@
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\Common\Boost\BoostLog.cpp" />
-    <ClCompile Include="..\Common\Boost\BoostShare.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostShare.cpp" />
     <ClCompile Include="..\Common\Database\Database.cpp" />
     <ClCompile Include="..\Common\Database\MySQLDatabase.cpp" />
     <ClCompile Include="..\Common\Standard\NumericalConversion.cpp" />
@@ -108,10 +109,10 @@
     <ClCompile Include="Qing\NetworkServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\Boost\BoostFormat.h" />
-    <ClInclude Include="..\Common\Boost\BoostLog.h" />
-    <ClInclude Include="..\Common\Boost\BoostShare.h" />
-    <ClInclude Include="..\Common\Boost\BoostTools.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostShare.h" />
     <ClInclude Include="..\Common\CrossPlatform.h" />
     <ClInclude Include="..\Common\Database\Database.h" />
     <ClInclude Include="..\Common\Database\MySQLDatabase.h" />

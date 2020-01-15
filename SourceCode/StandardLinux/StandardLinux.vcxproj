@@ -27,9 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{fac7839e-3803-41f2-9d5d-2549236fa07e}</ProjectGuid>
+    <ProjectGuid>{25326e16-a276-48e3-bf4b-9bed3632c68b}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>BoostLinux</RootNamespace>
+    <RootNamespace>StandardLinux</RootNamespace>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -60,47 +60,23 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>/usr/local/bin/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/</LibraryPath>
-  </PropertyGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\Example\Effective.h" />
+    <ClInclude Include="src\Example\IOExample.h" />
+    <ClInclude Include="src\Example\StringVector.h" />
+    <ClInclude Include="src\HexString.h" />
+    <ClInclude Include="src\NumericalConversion.h" />
+    <ClInclude Include="src\PermutationCombination.h" />
+    <ClInclude Include="src\RandomGenerator.h" />
+    <ClInclude Include="src\StandardShare.h" />
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\BoostFileSystem.cpp" />
-    <ClCompile Include="src\BoostLog.cpp" />
-    <ClCompile Include="src\BoostShare.cpp" />
-    <ClCompile Include="src\BoostTime.cpp" />
+    <ClCompile Include="src\NumericalConversion.cpp" />
+    <ClCompile Include="src\RandomGenerator.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\BoostFileSystem.h" />
-    <ClInclude Include="src\BoostFormat.h" />
-    <ClInclude Include="src\BoostLog.h" />
-    <ClInclude Include="src\BoostShare.h" />
-    <ClInclude Include="src\BoostTime.h" />
-    <ClInclude Include="src\BoostTools.h" />
-  </ItemGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;%(LibraryDependencies)</LibraryDependencies>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;%(LibraryDependencies)</LibraryDependencies>
-    </Link>
-  </ItemDefinitionGroup>
+  <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
