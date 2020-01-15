@@ -52,9 +52,6 @@
     <Filter Include="Project\Open">
       <UniqueIdentifier>{e768f56b-1ee0-4439-9c53-c05ac884d55d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\Open\libevent">
-      <UniqueIdentifier>{e5b260c3-ff17-4c11-8ba4-6cbb1a9761ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Project\Open\openssl">
       <UniqueIdentifier>{48e920a1-e40f-4c51-81ab-cd3e48b800e2}</UniqueIdentifier>
     </Filter>
@@ -325,45 +322,6 @@
       <Filter>Project\Qing</Filter>
     </ClInclude>
     <ClInclude Include="LinuxTools.h" />
-    <ClInclude Include="Open\libevent\demo1_client_read_write.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo1_server_read_write.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo2_client_bufferevent.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo2_server_bufferevent.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo3_client_evconnlistener.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo3_server_evconnlistener.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo4_client_udp_timer.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo4_server_udp_timer.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo5_client_evhttp.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo5_server_evconnlistener_http.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo5_server_evhttp.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo6_client_bufferevent_openssl.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\libevent\demo6_server_bufferevent_openssl.h">
-      <Filter>Project\Open\libevent</Filter>
-    </ClInclude>
     <ClInclude Include="Open\openssl\demo_AES.h">
       <Filter>Project\Open\openssl</Filter>
     </ClInclude>

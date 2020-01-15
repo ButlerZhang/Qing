@@ -19,6 +19,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BoostWindows", "BoostWindow
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BoostLinux", "BoostLinux\BoostLinux.vcxproj", "{FAC7839E-3803-41F2-9D5D-2549236FA07E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibeventLinux", "LibeventLinux\LibeventLinux.vcxproj", "{BA0DC00F-3A72-4493-953E-55DC31BC273E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibeventWindows", "LibeventWindows\LibeventWindows.vcxproj", "{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -115,6 +119,28 @@ Global
 		{FAC7839E-3803-41F2-9D5D-2549236FA07E}.Release|x64.Build.0 = Release|x64
 		{FAC7839E-3803-41F2-9D5D-2549236FA07E}.Release|x86.ActiveCfg = Release|x86
 		{FAC7839E-3803-41F2-9D5D-2549236FA07E}.Release|x86.Build.0 = Release|x86
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Debug|ARM.ActiveCfg = Debug|ARM
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Debug|ARM.Build.0 = Debug|ARM
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Debug|x64.ActiveCfg = Debug|x64
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Debug|x64.Build.0 = Debug|x64
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Debug|x86.ActiveCfg = Debug|x86
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Debug|x86.Build.0 = Debug|x86
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Release|ARM.ActiveCfg = Release|ARM
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Release|ARM.Build.0 = Release|ARM
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Release|x64.ActiveCfg = Release|x64
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Release|x64.Build.0 = Release|x64
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Release|x86.ActiveCfg = Release|x86
+		{BA0DC00F-3A72-4493-953E-55DC31BC273E}.Release|x86.Build.0 = Release|x86
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Debug|ARM.ActiveCfg = Debug|Win32
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Debug|x64.ActiveCfg = Debug|x64
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Debug|x64.Build.0 = Debug|x64
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Debug|x86.ActiveCfg = Debug|Win32
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Debug|x86.Build.0 = Debug|Win32
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Release|ARM.ActiveCfg = Release|Win32
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Release|x64.ActiveCfg = Release|x64
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Release|x64.Build.0 = Release|x64
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Release|x86.ActiveCfg = Release|Win32
+		{2BC04BAA-07A3-4F5A-B4F1-F13A03210C33}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

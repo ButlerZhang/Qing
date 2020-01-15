@@ -258,6 +258,9 @@ SourceCode/BoostLinux/bin/*
 SourceCode/BoostLinux/obj/*
 SourceCode/BoostWindows/x64/*
 SourceCode/DesignPattern/x64/*
+SourceCode/LibeventLinux/bin/*
+SourceCode/LibeventLinux/obj/*
+SourceCode/LibeventWindows/x64/*
 
 SourceCode/x64/*
 SourceCode/Windows/x64/*
