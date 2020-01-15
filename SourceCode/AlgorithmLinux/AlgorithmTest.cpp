@@ -1,8 +1,8 @@
 #include "AlgorithmTest.h"
-#include "001_MaxSubSum.h"
-#include "002_BinarySearch.h"
-#include "003_CommonMath.h"
-#include "004_VectorLite.h"
+#include "src/001_MaxSubSum.h"
+#include "src/002_BinarySearch.h"
+#include "src/003_CommonMath.h"
+#include "src/004_VectorLite.h"
 
 #include <iostream>
 #include <string>
