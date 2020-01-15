@@ -257,16 +257,31 @@ SourceCode/AlgorithmWindows/x64/*
 SourceCode/BoostLinux/bin/*
 SourceCode/BoostLinux/obj/*
 SourceCode/BoostWindows/x64/*
+SourceCode/DatabaseLinux/bin/*
+SourceCode/DatabaseLinux/obj/*
+SourceCode/DatabaseWindows/x64/*
 SourceCode/DesignPattern/x64/*
 SourceCode/LibeventLinux/bin/*
 SourceCode/LibeventLinux/obj/*
 SourceCode/LibeventWindows/x64/*
-
-SourceCode/x64/*
+SourceCode/OpenSSLLinux/bin/*
+SourceCode/OpenSSLLinux/obj/*
+SourceCode/OpenSSLWindows/x64/*
+SourceCode/ProtobufLinux/bin/*
+SourceCode/ProtobufLinux/obj/*
+SourceCode/ProtobufWindows/x64/*
+SourceCode/StandardLinux/bin/*
+SourceCode/StandardLinux/obj/*
+SourceCode/StandardWindows/x64/*
 SourceCode/Windows/x64/*
 SourceCode/Linux/bin/*
 SourceCode/Linux/obj/*
+SourceCode/x64/*
 
 Deployment/Debug/*
 Deployment/Release/*
+
+
+
+
 

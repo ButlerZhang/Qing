@@ -13,29 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Common">
-      <UniqueIdentifier>{4a1d60ad-1eb2-4040-b34d-9d1559633bf1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Example">
-      <UniqueIdentifier>{2f0a4d75-559e-4ba7-ade7-a151eb189fc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Tool">
-      <UniqueIdentifier>{0e588593-5a0a-407c-86bc-23da72dd78f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Standard">
-      <UniqueIdentifier>{625500b0-3f8f-4c97-aa51-eea522a2d03c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Boost">
-      <UniqueIdentifier>{ed65ca2b-8a72-472d-92de-cc269162d8d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{7fc11232-18f1-433f-80f6-a0ec80d767d3}</UniqueIdentifier>
     </Filter>
     <Filter Include="System\Network">
       <UniqueIdentifier>{8dc47fa0-4805-4e15-8da9-f1a809262b4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Database">
-      <UniqueIdentifier>{fdac8e7b-ff81-4ae1-8548-de460832857a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Reference">
       <UniqueIdentifier>{da998396-6123-415a-aed0-c6a5b455dd99}</UniqueIdentifier>
@@ -47,18 +29,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Standard\NumericalConversion.cpp">
-      <Filter>Common\Standard</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Standard\RandomGenerator.cpp">
-      <Filter>Common\Standard</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Boost\BoostLog.cpp">
-      <Filter>Common\Boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Boost\BoostShare.cpp">
-      <Filter>Common\Boost</Filter>
     </ClCompile>
     <ClCompile Include="System\FileManager.cpp">
       <Filter>System</Filter>
@@ -99,18 +69,6 @@
     <ClCompile Include="System\Network\NetworkServer.cpp">
       <Filter>System\Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Database\Database.cpp">
-      <Filter>Common\Database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Database\MSSQLDatabase.cpp">
-      <Filter>Common\Database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Database\MySQLDatabase.cpp">
-      <Filter>Common\Database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Database\SQLiteDatabase.cpp">
-      <Filter>Common\Database</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\OpenSource\sqlite_3250200\shell.c">
       <Filter>Reference\sqlite_3250200</Filter>
     </ClCompile>
@@ -122,45 +80,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\Example\Effective.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Example\IOExample.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Example\StringVector.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Tool\Common.h">
-      <Filter>Common\Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Tool\HexString.h">
-      <Filter>Common\Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\NumericalConversion.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\PermutationCombination.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\RandomGenerator.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\StandardShare.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostFormat.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostLog.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostShare.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\CrossPlatform.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="System\FileManager.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -202,18 +121,6 @@
     </ClInclude>
     <ClInclude Include="System\Network\NetworkServer.h">
       <Filter>System\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Database\Database.h">
-      <Filter>Common\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Database\MSSQLDatabase.h">
-      <Filter>Common\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Database\MySQLDatabase.h">
-      <Filter>Common\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Database\SQLiteDatabase.h">
-      <Filter>Common\Database</Filter>
     </ClInclude>
     <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3.h">
       <Filter>Reference\sqlite_3250200</Filter>

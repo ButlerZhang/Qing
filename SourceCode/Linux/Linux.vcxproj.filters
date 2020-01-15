@@ -1,24 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Common">
-      <UniqueIdentifier>{e6102fe4-204e-4c16-b20d-c7e40a17a0a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Example">
-      <UniqueIdentifier>{bb72dac2-3fac-4427-9a91-ff53b6f94325}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Tool">
-      <UniqueIdentifier>{77d452bf-f3e6-4c5c-91fe-3571158bd71d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Standard">
-      <UniqueIdentifier>{a1784aee-9361-402c-ab22-ad4f00135ee3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Boost">
-      <UniqueIdentifier>{b61b2d44-9e3c-4bdd-b401-33b056d0bf9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Database">
-      <UniqueIdentifier>{c34daae1-8e17-4317-b78e-09a1599cde1b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Project">
       <UniqueIdentifier>{f17f4d50-cd1d-4ab1-9126-4376c14c05fa}</UniqueIdentifier>
     </Filter>
@@ -45,9 +27,6 @@
     </Filter>
     <Filter Include="Project\UNIX\Chapter1">
       <UniqueIdentifier>{e8830498-27c5-4a33-bab4-fb958fa8db0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Qing">
-      <UniqueIdentifier>{66ee867a-f9b0-46bc-8b51-92c74ed93c9a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Project\Open">
       <UniqueIdentifier>{e768f56b-1ee0-4439-9c53-c05ac884d55d}</UniqueIdentifier>
@@ -91,24 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\Common\Standard\NumericalConversion.cpp">
-      <Filter>Common\Standard</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Standard\RandomGenerator.cpp">
-      <Filter>Common\Standard</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Database\Database.cpp">
-      <Filter>Common\Database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Database\MySQLDatabase.cpp">
-      <Filter>Common\Database</Filter>
-    </ClCompile>
-    <ClCompile Include="Qing\NetworkClient.cpp">
-      <Filter>Project\Qing</Filter>
-    </ClCompile>
-    <ClCompile Include="Qing\NetworkServer.cpp">
-      <Filter>Project\Qing</Filter>
-    </ClCompile>
     <ClCompile Include="Open\protobuf\base.pb.cc">
       <Filter>Project\Open\protobuf</Filter>
     </ClCompile>
@@ -178,56 +139,8 @@
     <ClCompile Include="Open\composite\core\network\NetworkBase.cpp">
       <Filter>Project\Open\composite\core\network</Filter>
     </ClCompile>
-    <ClCompile Include="Qing\QNetworkBase.cpp">
-      <Filter>Project\Qing</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
-      <Filter>Common\Boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
-      <Filter>Common\Boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostShare.cpp">
-      <Filter>Common\Boost</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\Example\Effective.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Example\IOExample.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Example\StringVector.h">
-      <Filter>Common\Example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Tool\Common.h">
-      <Filter>Common\Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Tool\HexString.h">
-      <Filter>Common\Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\NumericalConversion.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\PermutationCombination.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\RandomGenerator.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Standard\StandardShare.h">
-      <Filter>Common\Standard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\CrossPlatform.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Database\Database.h">
-      <Filter>Common\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Database\MySQLDatabase.h">
-      <Filter>Common\Database</Filter>
-    </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h">
       <Filter>Project\YouShuang\Chapter5</Filter>
     </ClInclude>
@@ -308,12 +221,6 @@
     </ClInclude>
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>Project\UNIX</Filter>
-    </ClInclude>
-    <ClInclude Include="Qing\NetworkClient.h">
-      <Filter>Project\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="Qing\NetworkServer.h">
-      <Filter>Project\Qing</Filter>
     </ClInclude>
     <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="Open\openssl\demo_AES.h">
@@ -423,21 +330,6 @@
     </ClInclude>
     <ClInclude Include="Open\composite\core\network\LibeventInterface.h">
       <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Qing\QNetworkBase.h">
-      <Filter>Project\Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
-      <Filter>Common\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostShare.h">
-      <Filter>Common\Boost</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

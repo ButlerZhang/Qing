@@ -73,13 +73,6 @@
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp" />
-    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp" />
-    <ClCompile Include="..\BoostLinux\src\BoostShare.cpp" />
-    <ClCompile Include="..\Common\Database\Database.cpp" />
-    <ClCompile Include="..\Common\Database\MySQLDatabase.cpp" />
-    <ClCompile Include="..\Common\Standard\NumericalConversion.cpp" />
-    <ClCompile Include="..\Common\Standard\RandomGenerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Open\composite\Config.cpp" />
     <ClCompile Include="Open\composite\controller\Client.cpp" />
@@ -104,27 +97,8 @@
     <ClCompile Include="Open\composite\message\project.pb.cc" />
     <ClCompile Include="Open\protobuf\base.pb.cc" />
     <ClCompile Include="Open\protobuf\user.pb.cc" />
-    <ClCompile Include="Qing\QNetworkBase.cpp" />
-    <ClCompile Include="Qing\NetworkClient.cpp" />
-    <ClCompile Include="Qing\NetworkServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostFormat.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostLog.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostShare.h" />
-    <ClInclude Include="..\Common\CrossPlatform.h" />
-    <ClInclude Include="..\Common\Database\Database.h" />
-    <ClInclude Include="..\Common\Database\MySQLDatabase.h" />
-    <ClInclude Include="..\Common\Example\Effective.h" />
-    <ClInclude Include="..\Common\Example\IOExample.h" />
-    <ClInclude Include="..\Common\Example\StringVector.h" />
-    <ClInclude Include="..\Common\Standard\NumericalConversion.h" />
-    <ClInclude Include="..\Common\Standard\PermutationCombination.h" />
-    <ClInclude Include="..\Common\Standard\RandomGenerator.h" />
-    <ClInclude Include="..\Common\Standard\StandardShare.h" />
-    <ClInclude Include="..\Common\Tool\Common.h" />
-    <ClInclude Include="..\Common\Tool\HexString.h" />
     <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="Open\composite\Config.h" />
     <ClInclude Include="Open\composite\controller\Client.h" />
@@ -162,9 +136,6 @@
     <ClInclude Include="Open\protobuf\base.pb.h" />
     <ClInclude Include="Open\protobuf\demo_protobuf.h" />
     <ClInclude Include="Open\protobuf\user.pb.h" />
-    <ClInclude Include="Qing\QNetworkBase.h" />
-    <ClInclude Include="Qing\NetworkClient.h" />
-    <ClInclude Include="Qing\NetworkServer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
     <ClInclude Include="UNIX\Chapter1\display_process_information.h" />
