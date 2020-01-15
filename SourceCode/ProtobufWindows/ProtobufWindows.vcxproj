@@ -110,6 +110,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\ProtobufLinux\src\base.pb.h" />
+    <ClInclude Include="..\ProtobufLinux\src\demo_protobuf.h" />
+    <ClInclude Include="..\ProtobufLinux\src\user.pb.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ProtobufLinux\main.cpp" />
+    <ClCompile Include="..\ProtobufLinux\src\base.pb.cc" />
+    <ClCompile Include="..\ProtobufLinux\src\user.pb.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ProtobufLinux\src\base.proto" />
+    <None Include="..\ProtobufLinux\src\user.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

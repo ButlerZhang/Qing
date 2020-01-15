@@ -95,8 +95,6 @@
     <ClCompile Include="Open\composite\handler\httphandler\HTTPHandler.cpp" />
     <ClCompile Include="Open\composite\handler\tcphandler\TCPHandler.cpp" />
     <ClCompile Include="Open\composite\message\project.pb.cc" />
-    <ClCompile Include="Open\protobuf\base.pb.cc" />
-    <ClCompile Include="Open\protobuf\user.pb.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LinuxTools.h" />
@@ -127,15 +125,6 @@
     <ClInclude Include="Open\composite\message\project.pb.h" />
     <ClInclude Include="Open\composite\model\Model.h" />
     <ClInclude Include="Open\composite\Project.h" />
-    <ClInclude Include="Open\openssl\demo_AES.h" />
-    <ClInclude Include="Open\openssl\demo_DES.h" />
-    <ClInclude Include="Open\openssl\demo_MD5.h" />
-    <ClInclude Include="Open\openssl\demo_RSA.h" />
-    <ClInclude Include="Open\openssl\demo_SHA256.h" />
-    <ClInclude Include="Open\openssl\demo_test.h" />
-    <ClInclude Include="Open\protobuf\base.pb.h" />
-    <ClInclude Include="Open\protobuf\demo_protobuf.h" />
-    <ClInclude Include="Open\protobuf\user.pb.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
     <ClInclude Include="UNIX\Chapter1\display_process_information.h" />
@@ -167,8 +156,6 @@
   <ItemGroup>
     <None Include="Open\composite\message\project.proto" />
     <None Include="Open\composite\project.ini" />
-    <None Include="Open\protobuf\base.proto" />
-    <None Include="Open\protobuf\user.proto" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

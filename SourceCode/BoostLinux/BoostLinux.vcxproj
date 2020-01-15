@@ -70,14 +70,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\BoostFileSystem.cpp" />
     <ClCompile Include="src\BoostLog.cpp" />
-    <ClCompile Include="src\BoostShare.cpp" />
     <ClCompile Include="src\BoostTime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BoostFileSystem.h" />
     <ClInclude Include="src\BoostFormat.h" />
     <ClInclude Include="src\BoostLog.h" />
-    <ClInclude Include="src\BoostShare.h" />
     <ClInclude Include="src\BoostTime.h" />
     <ClInclude Include="src\BoostTools.h" />
   </ItemGroup>
@@ -89,7 +87,7 @@
     <Link>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;pthread;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -98,7 +96,7 @@
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;pthread;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

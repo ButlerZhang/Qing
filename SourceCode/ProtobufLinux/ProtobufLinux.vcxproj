@@ -61,6 +61,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="src\base.pb.cc" />
     <ClCompile Include="src\user.pb.cc" />
   </ItemGroup>

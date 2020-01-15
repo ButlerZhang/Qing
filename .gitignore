@@ -250,6 +250,7 @@ OpenSource/boost_1_68_0/boost/chrono/stopwatches
 OpenSource/boost_1_68_0/b2.exe
 OpenSource/boost_1_68_0/bjam.exe
 OpenSource/boost_1_68_0/project-config.jam
+OpenSource/boost_1_68_0/boost/chrono/stopwatches.hpp
 
 SourceCode/AlgorithmLinux/bin/*
 SourceCode/AlgorithmLinux/obj/*
