@@ -19,9 +19,6 @@
     <Filter Include="Common\Algorithm">
       <UniqueIdentifier>{0c5734fc-5624-4f56-9ad3-0d4a5663ccb7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common\DesignPatterns">
-      <UniqueIdentifier>{fa399cb3-6b04-448b-a615-31bb12f46453}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common\Example">
       <UniqueIdentifier>{2f0a4d75-559e-4ba7-ade7-a151eb189fc6}</UniqueIdentifier>
     </Filter>
@@ -68,33 +65,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\AbstractFactory.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\Adapter.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\Bridge.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\Builder.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\Decorator.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\FactoryMethod.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\Prototype.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\SimpleFactory.cpp">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\DesignPatterns\Singleton.cpp">
-      <Filter>Common\DesignPatterns</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\Standard\NumericalConversion.cpp">
       <Filter>Common\Standard</Filter>
@@ -184,33 +154,6 @@
     </ClInclude>
     <ClInclude Include="..\Common\Algorithm\AlgorithmTest.h">
       <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\AbstractFactory.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\Adapter.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\Bridge.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\Builder.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\Decorator.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\FactoryMethod.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\Prototype.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\SimpleFactory.h">
-      <Filter>Common\DesignPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\DesignPatterns\Singleton.h">
-      <Filter>Common\DesignPatterns</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Example\Effective.h">
       <Filter>Common\Example</Filter>

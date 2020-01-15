@@ -263,6 +263,7 @@ Qing/SourceCode/x64/*
 Qing/SourceCode/Windows/x64/*
 Qing/SourceCode/Linux/bin/*
 Qing/SourceCode/Linux/obj/*
+Qing/SourceCode/DesignPattern/x64/*
 
 OpenSource/boost_1_68_0/b2.exe
 OpenSource/boost_1_68_0/bjam.exe
