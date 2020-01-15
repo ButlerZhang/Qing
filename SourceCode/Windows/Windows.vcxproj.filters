@@ -16,9 +16,6 @@
     <Filter Include="Common">
       <UniqueIdentifier>{4a1d60ad-1eb2-4040-b34d-9d1559633bf1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common\Algorithm">
-      <UniqueIdentifier>{0c5734fc-5624-4f56-9ad3-0d4a5663ccb7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common\Example">
       <UniqueIdentifier>{2f0a4d75-559e-4ba7-ade7-a151eb189fc6}</UniqueIdentifier>
     </Filter>
@@ -48,21 +45,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Algorithm\002_BinarySearch.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Algorithm\003_CommonMath.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Algorithm\004_VectorLite.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Algorithm\AlgorithmTest.cpp">
-      <Filter>Common\Algorithm</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -140,21 +122,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\Algorithm\001_MaxSubSum.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Algorithm\002_BinarySearch.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Algorithm\003_CommonMath.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Algorithm\004_VectorLite.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Algorithm\AlgorithmTest.h">
-      <Filter>Common\Algorithm</Filter>
-    </ClInclude>
     <ClInclude Include="..\Common\Example\Effective.h">
       <Filter>Common\Example</Filter>
     </ClInclude>

@@ -73,11 +73,6 @@
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\Common\Algorithm\001_MaxSubSum.cpp" />
-    <ClCompile Include="..\Common\Algorithm\002_BinarySearch.cpp" />
-    <ClCompile Include="..\Common\Algorithm\003_CommonMath.cpp" />
-    <ClCompile Include="..\Common\Algorithm\004_VectorLite.cpp" />
-    <ClCompile Include="..\Common\Algorithm\AlgorithmTest.cpp" />
     <ClCompile Include="..\Common\Boost\BoostLog.cpp" />
     <ClCompile Include="..\Common\Boost\BoostShare.cpp" />
     <ClCompile Include="..\Common\Database\Database.cpp" />
@@ -113,11 +108,6 @@
     <ClCompile Include="Qing\NetworkServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\Algorithm\001_MaxSubSum.h" />
-    <ClInclude Include="..\Common\Algorithm\002_BinarySearch.h" />
-    <ClInclude Include="..\Common\Algorithm\003_CommonMath.h" />
-    <ClInclude Include="..\Common\Algorithm\004_VectorLite.h" />
-    <ClInclude Include="..\Common\Algorithm\AlgorithmTest.h" />
     <ClInclude Include="..\Common\Boost\BoostFormat.h" />
     <ClInclude Include="..\Common\Boost\BoostLog.h" />
     <ClInclude Include="..\Common\Boost\BoostShare.h" />
