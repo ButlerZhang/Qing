@@ -60,20 +60,49 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>/usr/local/mysql/include/;/usr/include/mysql/;$(IncludePath)</IncludePath>
+    <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>/usr/local/mysql/include/;/usr/include/mysql/;$(IncludePath)</IncludePath>
+    <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Database.cpp" />
-    <ClCompile Include="src\MSSQLDatabase.cpp" />
     <ClCompile Include="src\MySQLDatabase.cpp" />
-    <ClCompile Include="src\SQLiteDatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostTime.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostTools.h" />
     <ClInclude Include="src\Database.h" />
-    <ClInclude Include="src\MSSQLDatabase.h" />
     <ClInclude Include="src\MySQLDatabase.h" />
-    <ClInclude Include="src\SQLiteDatabase.h" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;pthread;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;pthread;mysqlclient</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

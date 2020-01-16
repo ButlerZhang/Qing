@@ -1,5 +1,5 @@
 #include "SQLiteDatabase.h"
-#include "../Boost/BoostLog.h"
+#include "../../BoostLinux/src/BoostLog.h"
 #include "../../OpenSource/sqlite_3250200/sqlite3.h"
 
 

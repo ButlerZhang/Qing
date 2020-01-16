@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Database.cpp" />
+    <ClCompile Include="src\MySQLDatabase.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
+      <Filter>Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
+      <Filter>Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp">
+      <Filter>Boost</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Database.h" />
+    <ClInclude Include="src\MySQLDatabase.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
+      <Filter>Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
+      <Filter>Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
+      <Filter>Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostTime.h">
+      <Filter>Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostTools.h">
+      <Filter>Boost</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Boost">
+      <UniqueIdentifier>{d31e8334-1fa9-436e-b269-f4442933d539}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,5 +1,5 @@
 #include "MySQLDatabase.h"
-#include "../Boost/BoostLog.h"
+#include "../../BoostLinux/src/BoostLog.h"
 
 #ifdef _WIN32
 #include <Windows.h>
