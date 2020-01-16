@@ -63,13 +63,13 @@ public:
         }
     }
 
-    std::string ASCIIStringToHexString(const char *ASCIIString, ssize_t ASCIISize, bool IsLowerCase) const
+    std::string ASCIIStringToHexString(const char *ASCIIString, size_t ASCIISize, bool IsLowerCase) const
     {
         std::string HexStringResult;
         std::string FlagString(IsLowerCase ? "0123456789abcdef" : "0123456789ABCDEF");
 
         int b = 0;
-        for (ssize_t i = 0; i < ASCIISize; i++)
+        for (size_t i = 0; i < ASCIISize; i++)
         {
             b = 0x0f & (ASCIIString[i] >> 4);
             HexStringResult.append(1, FlagString.at(b));

@@ -1,7 +1,7 @@
 #pragma once
 #include <string.h>
 #include <openssl/sha.h>
-#include "../../../../Common/Tool/HexString.h"
+#include "../../StandardLinux/src/HexString.h"
 
 
 
