@@ -15,8 +15,16 @@
     <ClInclude Include="src\Example\StringVector.h">
       <Filter>Example</Filter>
     </ClInclude>
+    <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\HexString.h" />
+    <ClInclude Include="src\NumericalConversion.h" />
+    <ClInclude Include="src\PermutationCombination.h" />
+    <ClInclude Include="src\RandomGenerator.h" />
+    <ClInclude Include="src\StandardShare.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\NumericalConversion.cpp" />
+    <ClCompile Include="src\RandomGenerator.cpp" />
   </ItemGroup>
 </Project>
