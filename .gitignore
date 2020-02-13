@@ -244,13 +244,13 @@ ModelManifest.xml
 
 # user define
 
-OpenSource/boost_1_68_0/bin.v2/*
-OpenSource/boost_1_68_0/stage/*
-OpenSource/boost_1_68_0/boost/chrono/stopwatches
-OpenSource/boost_1_68_0/b2.exe
-OpenSource/boost_1_68_0/bjam.exe
-OpenSource/boost_1_68_0/project-config.jam
-OpenSource/boost_1_68_0/boost/chrono/stopwatches.hpp
+OpenSource/boost_1_72_0/bin.v2/*
+OpenSource/boost_1_72_0/stage/*
+OpenSource/boost_1_72_0/boost/chrono/stopwatches
+OpenSource/boost_1_72_0/b2.exe
+OpenSource/boost_1_72_0/bjam.exe
+OpenSource/boost_1_72_0/project-config.jam
+OpenSource/boost_1_72_0/boost/chrono/stopwatches.hpp
 OpenSource/openssl-1.1.1b/ms/*
 OpenSource/openssl-1.1.1b/ssl/*
 OpenSource/openssl-1.1.1b/apps/*
