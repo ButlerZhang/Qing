@@ -14,31 +14,31 @@
 #include <functional>
 
 
-bool Base64Encode(const std::string &Input, std::string &Output)
+inline bool Base64Encode(const std::string &Input, std::string &Output)
 {
     //TODO
     //Output = boost::beast::detail::base64_encode(Input);
     return !Output.empty();
 }
 
-bool Base64Decode(const std::string &Input, std::string &Output)
+inline bool Base64Decode(const std::string &Input, std::string &Output)
 {
     //TODO
     //Output = boost::beast::detail::base64_decode(Input);
     return !Output.empty();
 }
 
-bool Base64Encode(const std::wstring &Input, std::wstring &Output)
+inline bool Base64Encode(const std::wstring &Input, std::wstring &Output)
 {
     return false;
 }
 
-bool Base64Decode(const std::wstring &Input, std::wstring &Output)
+inline bool Base64Decode(const std::wstring &Input, std::wstring &Output)
 {
     return false;
 }
 
-std::string GetSHA1(const std::string &DataString, bool IsUpper)
+inline std::string GetSHA1(const std::string &DataString, bool IsUpper)
 {
     //boost::uuids::detail::sha1 sha;
     //sha.process_bytes(DataString.c_str(), DataString.size());
@@ -63,7 +63,7 @@ std::string GetSHA1(const std::string &DataString, bool IsUpper)
     return std::string(ConvertBuffer.str());
 }
 
-std::wstring GetSHA1(const std::wstring & DataString, bool IsUpper)
+inline std::wstring GetSHA1(const std::wstring & DataString, bool IsUpper)
 {
     //boost::uuids::detail::sha1 sha;
     //sha.process_bytes(DataString.c_str(), DataString.size());
@@ -141,8 +141,8 @@ inline std::string GetJsonString(boost::property_tree::ptree &JsonTree)
     return JsonString;
 }
 
-inline std::string GetUUID()
-{
-    boost::uuids::uuid NewUUID = boost::uuids::random_generator()();
-    return boost::uuids::to_string(NewUUID);
-}
+//inline std::string GetUUID()
+//{
+//    boost::uuids::uuid NewUUID = boost::uuids::random_generator()();
+//    return boost::uuids::to_string(NewUUID);
+//}

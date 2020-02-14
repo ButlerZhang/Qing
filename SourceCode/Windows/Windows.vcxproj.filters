@@ -22,8 +22,8 @@
     <Filter Include="Reference">
       <UniqueIdentifier>{da998396-6123-415a-aed0-c6a5b455dd99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\sqlite_3250200">
-      <UniqueIdentifier>{8ce5ab4d-e866-47e6-9d91-d9ae3e1e4fcf}</UniqueIdentifier>
+    <Filter Include="Reference\boost">
+      <UniqueIdentifier>{d526a3f6-6d68-4c9c-b47e-84aaf376a648}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,14 +69,17 @@
     <ClCompile Include="System\Network\NetworkServer.cpp">
       <Filter>System\Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\OpenSource\sqlite_3250200\shell.c">
-      <Filter>Reference\sqlite_3250200</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\OpenSource\sqlite_3250200\sqlite3.c">
-      <Filter>Reference\sqlite_3250200</Filter>
-    </ClCompile>
     <ClCompile Include="System\SimpleEncrypt.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
+      <Filter>Reference\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
+      <Filter>Reference\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp">
+      <Filter>Reference\boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,17 +125,26 @@
     <ClInclude Include="System\Network\NetworkServer.h">
       <Filter>System\Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3.h">
-      <Filter>Reference\sqlite_3250200</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\OpenSource\sqlite_3250200\sqlite3ext.h">
-      <Filter>Reference\sqlite_3250200</Filter>
-    </ClInclude>
     <ClInclude Include="System\SimpleEncrypt.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="WindowsCoreProgramming.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostTime.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostTools.h">
+      <Filter>Reference\boost</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

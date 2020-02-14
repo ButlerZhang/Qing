@@ -1,6 +1,6 @@
 #include "Config.h"
 #include "../../LinuxTools.h"
-#include "../../../Common/Boost/BoostLog.h"
+#include "../../../BoostLinux/src/BoostLog.h"
 #include "controller/SingleServer.h"
 #include "core/tools/OpenSSLAES.h"
 #include <boost/property_tree/ptree.hpp>
@@ -185,7 +185,7 @@ bool Config::LoadFileConfig()
         m_HeartbeatInternal = SystemTree.get<int>(WATCHDOG_HEARTBEAT, 30);
 
         g_Log.Initialize(m_ProcessName, std::string(), m_IsEnableLog);
-        if (m_LogSeverity < LL_TEMP || m_LogSeverity > LL_ERROR)
+        if (m_LogSeverity < LL_CORE || m_LogSeverity > LL_ERROR)
         {
             m_LogSeverity = LL_DEBUG;
         }

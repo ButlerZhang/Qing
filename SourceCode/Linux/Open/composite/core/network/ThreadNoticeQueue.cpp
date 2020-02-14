@@ -1,5 +1,5 @@
 #include "ThreadNoticeQueue.h"
-#include "../../../../../Common/Boost/BoostLog.h"
+#include "../../../../../BoostLinux/src/BoostLog.h"
 #include<sys/types.h>
 #include<sys/stat.h>
 #include<fcntl.h>

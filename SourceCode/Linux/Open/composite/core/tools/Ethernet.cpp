@@ -1,5 +1,5 @@
 #include "Ethernet.h"
-#include "../../../../../Common/Boost/BoostLog.h"
+#include "../../../../../BoostLinux/src/BoostLog.h"
 #include <net/if.h>
 #include <ifaddrs.h>
 #include <arpa/inet.h>

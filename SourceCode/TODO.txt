@@ -9,14 +9,14 @@
 (08)EncryptDecrypt: pass
 (09)LibeventLinux: pass
 (10)LibeventWindows: pass
-(11)Linux: error
+(11)Linux: pass
 (12)OpenSSLLinux: pass
 (13)OpenSSLWindows: pass
 (14)ProtobufLinux: pass
-(15)ProtobufWindows: error
+(15)ProtobufWindows: pass
 (16)StandardLinux: pass
 (17)StandardWindows: pass
-(18)Windows: error
+(18)Windows: pass
 
 2.build error or waring:
 (01)BoostLinux builds many waring.

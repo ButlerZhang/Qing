@@ -4,7 +4,7 @@
 #include "controller/WatchDog.h"
 #include "controller/SingleServer.h"
 #include "controller/RestartManager.h"
-#include "../../../Common/Boost/BoostLog.h"
+#include "../../../BoostLinux/src/BoostLog.h"
 #include <sys/prctl.h>
 
 

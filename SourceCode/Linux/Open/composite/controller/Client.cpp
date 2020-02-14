@@ -133,7 +133,7 @@ bool Client::SendLogin()
 
     Project::MessageHeader *Header = Login.mutable_header();
     Header->set_type(Project::MessageType::MT_LOGIN);
-    Header->set_transmissionid(GetUUID());
+    //Header->set_transmissionid(GetUUID());
 
     g_Log.WriteDebug("Client send login message:\n" + Login.DebugString());
     return SendMessage(Header->type(), Login);

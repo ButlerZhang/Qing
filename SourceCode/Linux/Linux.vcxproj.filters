@@ -61,6 +61,18 @@
     <Filter Include="Project\Open\composite\handler\tcphandler">
       <UniqueIdentifier>{e318ebc6-6d79-4d76-92e6-2f04bafff816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{43c915e0-0920-4991-97b6-d8282a730398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\boost">
+      <UniqueIdentifier>{7ee21bac-3a15-439f-8020-bab1cdaf9707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\database">
+      <UniqueIdentifier>{5f37ef54-787f-4007-b343-95e90f73676d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\standard">
+      <UniqueIdentifier>{2bfbb87f-ec3f-4088-b736-0274acf00cd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -126,6 +138,21 @@
     </ClCompile>
     <ClCompile Include="Open\composite\core\network\NetworkBase.cpp">
       <Filter>Project\Open\composite\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
+      <Filter>Reference\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
+      <Filter>Reference\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp">
+      <Filter>Reference\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DatabaseLinux\src\Database.cpp">
+      <Filter>Reference\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DatabaseLinux\src\MySQLDatabase.cpp">
+      <Filter>Reference\database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +318,30 @@
     </ClInclude>
     <ClInclude Include="Open\composite\core\network\LibeventInterface.h">
       <Filter>Project\Open\composite\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostTime.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostTools.h">
+      <Filter>Reference\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DatabaseLinux\src\Database.h">
+      <Filter>Reference\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DatabaseLinux\src\MySQLDatabase.h">
+      <Filter>Reference\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StandardLinux\src\HexString.h">
+      <Filter>Reference\standard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

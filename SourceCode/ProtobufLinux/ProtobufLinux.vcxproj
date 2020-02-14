@@ -74,6 +74,7 @@
     <ClCompile Include="src\user.pb.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Linux\LinuxTools.h" />
     <ClInclude Include="src\base.pb.h" />
     <ClInclude Include="src\demo_protobuf.h" />
     <ClInclude Include="src\user.pb.h" />

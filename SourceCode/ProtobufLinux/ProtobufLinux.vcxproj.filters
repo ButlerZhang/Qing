@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\base.pb.cc" />
+    <ClCompile Include="src\user.pb.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\base.pb.h" />
+    <ClInclude Include="src\demo_protobuf.h" />
+    <ClInclude Include="src\user.pb.h" />
+    <ClInclude Include="..\Linux\LinuxTools.h">
+      <Filter>Reference\Linux</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\base.proto" />
+    <None Include="src\user.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{5abae60d-83f1-482d-b6e4-219f6169c18c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Linux">
+      <UniqueIdentifier>{0ef3e295-2a0a-4d5f-bc81-c6130510d51c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

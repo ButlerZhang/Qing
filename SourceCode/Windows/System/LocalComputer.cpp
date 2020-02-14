@@ -1,6 +1,6 @@
 #include "LocalComputer.h"
 #include "../System/SystemShare.h"
-#include "../../SourceCode/Common/Boost/BoostLog.h"
+#include "../../BoostLinux/src/BoostLog.h"
 
 #include <memory>
 #include <stdio.h>

@@ -1,7 +1,7 @@
 #include "SingleEventBaseClient.h"
 #include "../../../../LinuxTools.h"
-#include "../../../../../Common/Boost/BoostLog.h"
-#include "../../../../../Common/Boost/BoostTools.h"
+#include "../../../../../BoostLinux/src/BoostLog.h"
+#include "../../../../../BoostLinux/src/BoostTools.h"
 
 
 

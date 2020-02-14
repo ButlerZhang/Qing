@@ -2,7 +2,7 @@
 #include "RestartManager.h"
 #include "../core/tools/Ethernet.h"
 #include "../core/network/SingleEventBaseServer.h"
-#include "../../../../Common/Database/MySQLDatabase.h"
+#include "../../../../DatabaseLinux/src/MySQLDatabase.h"
 #include <google/protobuf/message.h>
 
 class TCPHandler;

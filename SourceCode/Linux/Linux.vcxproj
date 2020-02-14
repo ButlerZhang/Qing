@@ -73,6 +73,11 @@
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp" />
+    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp" />
+    <ClCompile Include="..\DatabaseLinux\src\Database.cpp" />
+    <ClCompile Include="..\DatabaseLinux\src\MySQLDatabase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Open\composite\Config.cpp" />
     <ClCompile Include="Open\composite\controller\Client.cpp" />
@@ -97,6 +102,14 @@
     <ClCompile Include="Open\composite\message\project.pb.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostTime.h" />
+    <ClInclude Include="..\BoostLinux\src\BoostTools.h" />
+    <ClInclude Include="..\DatabaseLinux\src\Database.h" />
+    <ClInclude Include="..\DatabaseLinux\src\MySQLDatabase.h" />
+    <ClInclude Include="..\StandardLinux\src\HexString.h" />
     <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="Open\composite\Config.h" />
     <ClInclude Include="Open\composite\controller\Client.h" />
@@ -159,23 +172,23 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_68_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)/%(filename).o</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(filename).o</ObjectFileName>
     </ClCompile>
     <Link>
-      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,6 @@
 #include "RestartManager.h"
-#include "../../../../Common/Boost/BoostLog.h"
-#include "../../../../Common/Boost/BoostTools.h"
+#include "../../../../../BoostLinux/src/BoostLog.h"
+#include "../../../../../BoostLinux/src/BoostTools.h"
 #include "../../../LinuxTools.h"
 #include "../core/tools/Ethernet.h"
 #include "../Config.h"
