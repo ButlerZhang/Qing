@@ -48,13 +48,13 @@
     <ClInclude Include="FileRecoveryDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostShare.h">
+    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
       <Filter>Reference</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostLog.h">
+    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
       <Filter>Reference</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Boost\BoostFormat.h">
+    <ClInclude Include="..\BoostLinux\src\BoostTools.h">
       <Filter>Reference</Filter>
     </ClInclude>
     <ClInclude Include="..\Windows\System\FileManager.h">
@@ -64,6 +64,9 @@
       <Filter>Reference</Filter>
     </ClInclude>
     <ClInclude Include="..\Windows\System\SystemShare.h">
+      <Filter>Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
       <Filter>Reference</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,19 +92,19 @@
     <ClCompile Include="FileRecoveryDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Boost\BoostShare.cpp">
+    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
       <Filter>Reference</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Boost\BoostLog.cpp">
-      <Filter>Reference</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Windows\System\SystemShare.cpp">
+    <ClCompile Include="..\Windows\System\FileManager.cpp">
       <Filter>Reference</Filter>
     </ClCompile>
     <ClCompile Include="..\Windows\System\SimpleEncrypt.cpp">
       <Filter>Reference</Filter>
     </ClCompile>
-    <ClCompile Include="..\Windows\System\FileManager.cpp">
+    <ClCompile Include="..\Windows\System\SystemShare.cpp">
+      <Filter>Reference</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
       <Filter>Reference</Filter>
     </ClCompile>
   </ItemGroup>

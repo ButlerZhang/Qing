@@ -1,7 +1,6 @@
 #include "SystemShare.h"
-#include "../../SourceCode/Common/Boost/BoostLog.h"
-#include "../../SourceCode/Common/Standard/StandardShare.h"
-
+#include "../../BoostLinux/src/BoostLog.h"
+#include "../../StandardLinux/src/StandardShare.h"
 #include <cctype>
 #include <sstream>
 #include <iomanip>

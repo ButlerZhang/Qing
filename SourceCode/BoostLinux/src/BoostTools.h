@@ -16,13 +16,15 @@
 
 bool Base64Encode(const std::string &Input, std::string &Output)
 {
-    Output = boost::beast::detail::base64_encode(Input);
+    //TODO
+    //Output = boost::beast::detail::base64_encode(Input);
     return !Output.empty();
 }
 
 bool Base64Decode(const std::string &Input, std::string &Output)
 {
-    Output = boost::beast::detail::base64_decode(Input);
+    //TODO
+    //Output = boost::beast::detail::base64_decode(Input);
     return !Output.empty();
 }
 

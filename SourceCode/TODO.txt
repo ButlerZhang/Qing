@@ -1,0 +1,29 @@
+1.build status:
+(01)AlgorithmLinux: pass
+(02)AlgorithmWindows: pass
+(03)BoostLinux: pass
+(04)BoostWindows: pass
+(05)DatabaseLinux: pass
+(06)DatabaseWindows: pass
+(07)DesignPattern: pass
+(08)EncryptDecrypt: pass
+(09)LibeventLinux: pass
+(10)LibeventWindows: error
+(11)Linux: error
+(12)OpenSSLLinux: error
+(13)OpenSSLWindows: error
+(14)ProtobufLinux: error
+(15)ProtobufWindows: error
+(16)StandardLinux: error
+(17)StandardWindows: error
+(18)Windows: error
+
+2.build error or waring:
+(01)BoostLinux builds many waring.
+(02)DatabaseWindows: warning LNK4067: ambiguous entry point; selected 'mainCRTStartup'
+(03)
+
+
+
+
+

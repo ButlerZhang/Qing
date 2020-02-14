@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows", "Windows\Windows.vcxproj", "{D11678C8-7E61-4270-9390-E8237742A61C}"
 EndProject
@@ -38,6 +38,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtobufLinux", "ProtobufLinux\ProtobufLinux.vcxproj", "{FE77790E-9B6D-4BE6-83C7-80429CD8AB77}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtobufWindows", "ProtobufWindows\ProtobufWindows.vcxproj", "{8B64A6E2-BDAC-4DE9-B1FF-64F2D16965E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{79A175B5-3949-4351-8B10-53E6396DD372}"
+	ProjectSection(SolutionItems) = preProject
+		TODO.txt = TODO.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -248,5 +253,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82C78608-6D2B-42F9-AFF1-0CB1F752C385}
 	EndGlobalSection
 EndGlobal
