@@ -15,47 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\LibeventLinux\src\demo1_client_read_write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo1_server_read_write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo2_client_bufferevent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo2_server_bufferevent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo3_client_evconnlistener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo3_server_evconnlistener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo4_client_udp_timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo4_server_udp_timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo5_client_evhttp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo5_server_evconnlistener_http.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo5_server_evhttp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo6_client_bufferevent_openssl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo6_server_bufferevent_openssl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\LibeventLinux\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

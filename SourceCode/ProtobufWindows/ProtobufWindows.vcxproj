@@ -18,6 +18,20 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ProtobufLinux\main.cpp" />
+    <ClCompile Include="..\ProtobufLinux\src\base.pb.cc" />
+    <ClCompile Include="..\ProtobufLinux\src\user.pb.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ProtobufLinux\src\base.pb.h" />
+    <ClInclude Include="..\ProtobufLinux\src\demo_protobuf.h" />
+    <ClInclude Include="..\ProtobufLinux\src\user.pb.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ProtobufLinux\src\base.proto" />
+    <None Include="..\ProtobufLinux\src\user.proto" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8B64A6E2-BDAC-4DE9-B1FF-64F2D16965E1}</ProjectGuid>
     <RootNamespace>ProtobufWindows</RootNamespace>
@@ -41,14 +55,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -86,7 +100,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\protobuf-3.8.0\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\OpenSource\protobuf-3.8.0\windows\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libprotobufd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -108,26 +128,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\OpenSource\protobuf-3.8.0\src</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\OpenSource\protobuf-3.8.0\windows\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\ProtobufLinux\src\base.pb.h" />
-    <ClInclude Include="..\ProtobufLinux\src\demo_protobuf.h" />
-    <ClInclude Include="..\ProtobufLinux\src\user.pb.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\ProtobufLinux\main.cpp" />
-    <ClCompile Include="..\ProtobufLinux\src\base.pb.cc" />
-    <ClCompile Include="..\ProtobufLinux\src\user.pb.cc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\ProtobufLinux\src\base.proto" />
-    <None Include="..\ProtobufLinux\src\user.proto" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

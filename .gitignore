@@ -273,6 +273,13 @@ OpenSource/openssl-1.1.1b/libssl.exp
 OpenSource/openssl-1.1.1b/libssl.lib
 OpenSource/openssl-1.1.1b/libssl.rc
 OpenSource/openssl-1.1.1b/libssl.res
+OpenSource/protobuf-3.8.0/windows/CMakeFiles
+OpenSource/protobuf-3.8.0/windows/libprotobuf.dir
+OpenSource/protobuf-3.8.0/windows/libprotoc.dir
+OpenSource/protobuf-3.8.0/windows/protoc.dir
+OpenSource/protobuf-3.8.0/windows/x64
+
+
 
 SourceCode/AlgorithmLinux/bin/*
 SourceCode/AlgorithmLinux/obj/*

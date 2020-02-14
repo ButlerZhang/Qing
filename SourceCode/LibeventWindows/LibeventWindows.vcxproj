@@ -48,7 +48,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -87,6 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\OpenSource\libevent-2.1.8-stable\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\OpenSource\libevent-2.1.8-stable;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -119,21 +120,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\LibeventLinux\src\demo1_client_read_write.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo1_server_read_write.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo2_client_bufferevent.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo2_server_bufferevent.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo3_client_evconnlistener.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo3_server_evconnlistener.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo4_client_udp_timer.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo4_server_udp_timer.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo5_client_evhttp.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo5_server_evconnlistener_http.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo5_server_evhttp.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo6_client_bufferevent_openssl.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo6_server_bufferevent_openssl.h" />
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\LibeventLinux\main.cpp" />
   </ItemGroup>

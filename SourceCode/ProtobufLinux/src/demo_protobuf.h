@@ -1,5 +1,10 @@
 #pragma once
-#include "../../LinuxTools.h"
+
+#ifdef _WIN32
+#else
+#include "../../Linux/LinuxTools.h"
+#endif
+
 #include "user.pb.h"
 #include <fstream>
 
@@ -17,7 +22,7 @@ void demo_protobuf()
 
     Open::MessageHeader *Header = LoginUser.mutable_header();
     Header->set_type(Open::MessageType::MT_LOGIN);
-    Header->set_transmissionid(GetUUID());
+    //Header->set_transmissionid(GetUUID());
 
     printf("Login user information:\n");
     LoginUser.PrintDebugString();

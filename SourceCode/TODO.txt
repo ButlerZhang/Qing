@@ -8,20 +8,21 @@
 (07)DesignPattern: pass
 (08)EncryptDecrypt: pass
 (09)LibeventLinux: pass
-(10)LibeventWindows: error
+(10)LibeventWindows: pass
 (11)Linux: error
-(12)OpenSSLLinux: error
-(13)OpenSSLWindows: error
-(14)ProtobufLinux: error
+(12)OpenSSLLinux: pass
+(13)OpenSSLWindows: pass
+(14)ProtobufLinux: pass
 (15)ProtobufWindows: error
-(16)StandardLinux: error
-(17)StandardWindows: error
+(16)StandardLinux: pass
+(17)StandardWindows: pass
 (18)Windows: error
 
 2.build error or waring:
 (01)BoostLinux builds many waring.
 (02)DatabaseWindows: warning LNK4067: ambiguous entry point; selected 'mainCRTStartup'
-(03)
+(03)ProtobufLinux warnings.
+(04)
 
 
 

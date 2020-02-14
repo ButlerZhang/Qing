@@ -28,7 +28,7 @@ our %config = (
   LDLIBS => [  ],
   MT => "mt",
   MTFLAGS => [ "-nologo" ],
-  PERL => "D:\\Program\\Strawberry\\perl\\bin\\perl.exe",
+  PERL => "C:\\Developer\\Strawberry\\perl\\bin\\perl.exe",
   RANLIB => "ranlib",
   RC => "rc",
   afalgeng => "",
@@ -65,7 +65,7 @@ our %config = (
   openssldir => "",
   options => " no-asan no-asm no-crypto-mdebug no-crypto-mdebug-backtrace no-devcryptoeng no-ec_nistp_64_gcc_128 no-egd no-external-tests no-fuzz-afl no-fuzz-libfuzzer no-heartbeats no-md2 no-msan no-rc5 no-sctp no-ssl-trace no-ssl3 no-ssl3-method no-ubsan no-unit-test no-weak-ssl-ciphers no-zlib no-zlib-dynamic",
   perl_archname => "MSWin32-x64-multi-thread",
-  perl_cmd => "D:\\Program\\Strawberry\\perl\\bin\\perl.exe",
+  perl_cmd => "C:\\Developer\\Strawberry\\perl\\bin\\perl.exe",
   perl_version => "5.28.1",
   perlargv => [ "VC-WIN64A", "no-asm" ],
   perlenv => {
@@ -132,7 +132,7 @@ our %target = (
   LDFLAGS => "/nologo /debug",
   MT => "mt",
   MTFLAGS => "-nologo",
-  RANLIB => "CODE(0x664da0)",
+  RANLIB => "CODE(0x25c6240)",
   RC => "rc",
   _conf_fname_int => [ "Configurations\\00-base-templates.conf", "Configurations\\00-base-templates.conf", "Configurations\\10-main.conf", "Configurations\\10-main.conf", "Configurations\\10-main.conf", "Configurations\\00-base-templates.conf", "Configurations\\00-base-templates.conf", "Configurations\\10-main.conf", "Configurations\\shared-info.pl" ],
   aes_asm_src => "aes_core.c aes_cbc.c",
@@ -9086,9 +9086,9 @@ our %unified_info = (
                 ],
             "ms\\applink.o" =>
                 [
-                    "apps",
                     ".",
                     "include",
+                    "apps",
                 ],
             "ms\\uplink.o" =>
                 [

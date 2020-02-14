@@ -11,7 +11,7 @@
 #   nmake OPENSSL_DIR=C:\openssl -f Makefile.nmake
 # Or by uncommenting the following line here in the makefile...
 
-# OPENSSL_DIR=c:\openssl
+OPENSSL_DIR=C:\Developer\OpenSSL
 
 !IFDEF OPENSSL_DIR
 SSL_CFLAGS=/I$(OPENSSL_DIR)\include /DEVENT__HAVE_OPENSSL
@@ -27,7 +27,7 @@ CFLAGS=$(CFLAGS) /Ox /W3 /wd4996 /nologo
 
 # XXXX have a debug mode
 
-LIBFLAGS=/nologo
+LIBFLAGS=/nologo /MACHINE:X64
 
 CORE_OBJS=event.obj buffer.obj bufferevent.obj bufferevent_sock.obj \
 	bufferevent_pair.obj listener.obj evmap.obj log.obj evutil.obj \
