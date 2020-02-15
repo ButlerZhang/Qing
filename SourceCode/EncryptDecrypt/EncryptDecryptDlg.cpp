@@ -212,31 +212,32 @@ void CEncryptDecryptDlg::OnBnClickedExit()
     {
         m_ButtonExit.EnableWindow(FALSE);
         OnBnClickedStop();
-        //OnCancel();
     }
+
+    OnCancel();
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileEncrypt()
 {
-    m_DialogVector[OT_ENCRYPT]->UserDefinedShow();
+    m_DialogVector[OT_ENCRYPT]->ShowChildWindowMiddle();
     this->EnableWindow(FALSE);
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileDecrypt()
 {
-    m_DialogVector[OT_DECRYPT]->UserDefinedShow();
+    m_DialogVector[OT_DECRYPT]->ShowChildWindowMiddle();
     this->EnableWindow(FALSE);
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileDisguise()
 {
-    m_DialogVector[OT_DISGUISE]->UserDefinedShow();
+    m_DialogVector[OT_DISGUISE]->ShowChildWindowMiddle();
     this->EnableWindow(FALSE);
 }
 
 void CEncryptDecryptDlg::OnBnClickedButtonFileRecovery()
 {
-    m_DialogVector[OT_RECOVERY]->UserDefinedShow();
+    m_DialogVector[OT_RECOVERY]->ShowChildWindowMiddle();
     this->EnableWindow(FALSE);
 }
 

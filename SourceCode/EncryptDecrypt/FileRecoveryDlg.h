@@ -7,21 +7,22 @@ class FileRecoveryDlg : public BaseDialog
 {
     DECLARE_DYNAMIC(FileRecoveryDlg)
 
-public:
-    FileRecoveryDlg(CWnd* pParent = NULL);   // standard constructor
-    virtual ~FileRecoveryDlg();
-
     // Dialog Data
 #ifdef AFX_DESIGN_TIME
     enum { IDD = IDD_DIALOG_UN_CAMOUFLAGE };
 #endif
 
-    void ProcessWork(void *Parent);
-    std::wstring GetSourcePath() const;
+public:
+
+    FileRecoveryDlg(CWnd* pParent = NULL);
+    virtual ~FileRecoveryDlg();
+
+    virtual void ProcessWork(void *Parent);
+    virtual std::wstring GetSourcePath() const;
 
 protected:
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);
     DECLARE_MESSAGE_MAP()
 
     afx_msg void OnBnClickedOk();
@@ -30,5 +31,5 @@ protected:
 
 private:
 
-    CEdit           m_EditSourcePath;
+    CEdit                   m_EditSourcePath;
 };

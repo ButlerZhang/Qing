@@ -24,7 +24,15 @@
 (03)ProtobufLinux warnings.
 (04)
 
+3.TODO list:
+(01)EncryptDecrypt fixs bugs.
+(02)LibeventWindows adds demo.
 
-
+4.EncryptDecrypt:
+(01)根据目标路径是否为空来判断是否启用。
+(02)加密解密功能只需要一个密码框。
+(03)解密功能也需要目标路径。
+(04)退出按钮无效。
+(05)使用OpenSSL提供的加解密功能。
 
 

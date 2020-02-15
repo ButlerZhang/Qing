@@ -17,7 +17,7 @@ FileDecryptDlg::~FileDecryptDlg()
 {
 }
 
-BOOL FileDecryptDlg::UserDefinedShow()
+BOOL FileDecryptDlg::ShowChildWindowMiddle()
 {
     m_CheckInputPassword.SetCheck(BST_UNCHECKED);
     m_CheckDefaultPassword.SetCheck(BST_CHECKED);
@@ -25,7 +25,7 @@ BOOL FileDecryptDlg::UserDefinedShow()
     m_EditInputPassword.SetWindowTextW(L"");
     m_EditDefaultPassword.SetWindowTextW(L"************");
 
-    return BaseDialog::UserDefinedShow();
+    return BaseDialog::ShowChildWindowMiddle();
 }
 
 void FileDecryptDlg::ProcessWork(void *Parent)

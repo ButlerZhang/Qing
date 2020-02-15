@@ -30,9 +30,9 @@ class BaseDialog : public CDialogEx
 public:
 
     BaseDialog(UINT nIDTemplate, CWnd *pParent = NULL) : CDialogEx(nIDTemplate, pParent) {}
-    ~BaseDialog() {}
+    virtual ~BaseDialog() {}
 
-    virtual BOOL UserDefinedShow();
+    virtual BOOL ShowChildWindowMiddle();
     virtual void ProcessWork(void *Parent) = 0;
     virtual std::wstring GetSourcePath() const { return std::wstring(); }
     virtual std::wstring GetTargetPath() const { return std::wstring(); }

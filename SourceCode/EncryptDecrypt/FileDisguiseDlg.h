@@ -7,21 +7,22 @@ class FileDisguiseDlg : public BaseDialog
 {
     DECLARE_DYNAMIC(FileDisguiseDlg)
 
-public:
-    FileDisguiseDlg(CWnd* pParent = NULL);   // standard constructor
-    virtual ~FileDisguiseDlg();
-
     // Dialog Data
 #ifdef AFX_DESIGN_TIME
     enum { IDD = IDD_DIALOG_CAMOUFLAGE };
 #endif
 
-    void ProcessWork(void *Parent);
-    std::wstring GetSourcePath() const;
+public:
+
+    FileDisguiseDlg(CWnd* pParent = NULL);
+    virtual ~FileDisguiseDlg();
+
+    virtual void ProcessWork(void *Parent);
+    virtual std::wstring GetSourcePath() const;
 
 protected:
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);
     DECLARE_MESSAGE_MAP()
 
     afx_msg void OnBnClickedOk();
@@ -30,5 +31,5 @@ protected:
 
 private:
 
-    CEdit            m_EditSourcePath;
+    CEdit                   m_EditSourcePath;
 };

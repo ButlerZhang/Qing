@@ -100,7 +100,7 @@ BOOL CEncryptDecryptApp::InitInstance()
 	return FALSE;
 }
 
-bool CEncryptDecryptApp::Validate(CEdit & EditControl)
+bool CEncryptDecryptApp::Validate(CEdit &EditControl)
 {
     CString SourcePath;
     EditControl.GetWindowTextW(SourcePath);
@@ -146,6 +146,16 @@ std::wstring CEncryptDecryptApp::GetSelectPath() const
     return std::wstring();
 }
 
+std::wstring CEncryptDecryptApp::GetProcessString(ProcessType Type) const
+{
+    switch (Type)
+    {
+    case PT_PROCEING:           return L"正在处理";
+    case PT_SUCCEEDED:          return L"执行成功";
+    case PT_FAILED:             return L"执行失败";
+    default:                    return L"未知错误";
+    }
+}
 
 std::wstring CEncryptDecryptApp::GetOperationString(OperationType Type) const
 {
@@ -160,18 +170,9 @@ std::wstring CEncryptDecryptApp::GetOperationString(OperationType Type) const
     }
 }
 
-std::wstring CEncryptDecryptApp::GetProcessString(ProcessType Type) const
-{
-    switch (Type)
-    {
-    case PT_PROCEING:           return L"正在处理";
-    case PT_SUCCEEDED:          return L"执行成功";
-    case PT_FAILED:             return L"执行失败";
-    default:                    return L"未知错误";
-    }
-}
 
-BOOL BaseDialog::UserDefinedShow()
+
+BOOL BaseDialog::ShowChildWindowMiddle()
 {
     CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
     if (ParentDlg != NULL)

@@ -4,9 +4,9 @@
 #include "EncryptDecryptDlg.h"
 #include "afxdialogex.h"
 
+
+
 IMPLEMENT_DYNAMIC(FileEncryptDlg, CDialogEx)
-
-
 
 FileEncryptDlg::FileEncryptDlg(CWnd* pParent /*=NULL*/)
     : BaseDialog(IDD_DIALOG_ENCRYPT, pParent)
@@ -17,7 +17,7 @@ FileEncryptDlg::~FileEncryptDlg()
 {
 }
 
-BOOL FileEncryptDlg::UserDefinedShow()
+BOOL FileEncryptDlg::ShowChildWindowMiddle()
 {
     m_CheckEncryptFileName.SetCheck(BST_CHECKED);
     m_CheckDeleteFile.SetCheck(BST_CHECKED);
@@ -28,7 +28,7 @@ BOOL FileEncryptDlg::UserDefinedShow()
     m_EditInputPassword.SetWindowTextW(L"");
     m_EditDefaultPassword.SetWindowTextW(L"************");
 
-    return BaseDialog::UserDefinedShow();
+    return BaseDialog::ShowChildWindowMiddle();
 }
 
 void FileEncryptDlg::ProcessWork(void *Parent)

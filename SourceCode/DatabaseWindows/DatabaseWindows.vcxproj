@@ -92,6 +92,9 @@
     <Link>
       <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_72_0\stage\lib_static\;C:\Program Files\MySQL\MySQL Server 5.5\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libmysql.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>
+      </SubSystem>
+      <NoEntryPoint>true</NoEntryPoint>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

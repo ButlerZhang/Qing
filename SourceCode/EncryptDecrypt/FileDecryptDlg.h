@@ -7,23 +7,23 @@ class FileDecryptDlg : public BaseDialog
 {
     DECLARE_DYNAMIC(FileDecryptDlg)
 
-public:
-
-    FileDecryptDlg(CWnd* pParent = NULL);   // standard constructor
-    virtual ~FileDecryptDlg();
-
     // Dialog Data
 #ifdef AFX_DESIGN_TIME
     enum { IDD = IDD_DIALOG_DECRYPT };
 #endif
 
-    BOOL UserDefinedShow();
-    void ProcessWork(void *Parent);
-    std::wstring GetSourcePath() const;
+public:
+
+    FileDecryptDlg(CWnd* pParent = NULL);
+    virtual ~FileDecryptDlg();
+
+    virtual BOOL ShowChildWindowMiddle();
+    virtual void ProcessWork(void *Parent);
+    virtual std::wstring GetSourcePath() const;
 
 protected:
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);
     DECLARE_MESSAGE_MAP()
 
     afx_msg void OnBnClickedButtonSelectSourcePath();
@@ -37,9 +37,9 @@ protected:
 
 private:
 
-    CEdit           m_EditSourcePath;
-    CButton         m_CheckDefaultPassword;
-    CButton         m_CheckInputPassword;
-    CEdit           m_EditDefaultPassword;
-    CEdit           m_EditInputPassword;
+    CEdit                   m_EditSourcePath;
+    CEdit                   m_EditDefaultPassword;
+    CEdit                   m_EditInputPassword;
+    CButton                 m_CheckDefaultPassword;
+    CButton                 m_CheckInputPassword;
 };
