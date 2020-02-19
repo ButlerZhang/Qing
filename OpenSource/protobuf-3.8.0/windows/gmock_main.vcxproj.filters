@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\src\gmock_main.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\src\gmock_main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\cmake\CMakeLists.txt" />
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\cmake\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{373B7241-97A1-3AA1-82D4-490563E0709B}</UniqueIdentifier>
+      <UniqueIdentifier>{D9100B7A-4204-3C95-B344-BB6AE8E71C6F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

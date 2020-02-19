@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\4583bd1c4c33db9e6359d8485f3ab166\INSTALL_force.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\a53814fa263b02d6f786b0dcb3cbc7a7\INSTALL_force.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{A5C923CD-5E32-3B7E-8980-7752B81177B9}</UniqueIdentifier>
+      <UniqueIdentifier>{4C95AE13-5093-3E39-8922-03D8E61497FA}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

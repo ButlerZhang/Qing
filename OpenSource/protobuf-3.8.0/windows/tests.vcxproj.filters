@@ -1,547 +1,547 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\any_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\any_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\arena_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\arena_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\arenastring_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\arenastring_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\annotation_test_util.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\annotation_test_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\command_line_interface_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\command_line_interface_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_bootstrap_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_bootstrap_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_move_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_move_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_plugin_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_plugin_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\metadata_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\metadata_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\csharp\csharp_bootstrap_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\csharp\csharp_bootstrap_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\csharp\csharp_generator_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\csharp\csharp_generator_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\importer_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\importer_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\java\java_doc_comment_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\java\java_doc_comment_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\java\java_plugin_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\java\java_plugin_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\mock_code_generator.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\mock_code_generator.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\objectivec\objectivec_helpers_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\objectivec\objectivec_helpers_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\parser_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\parser_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\python\python_plugin_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\python\python_plugin_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\ruby\ruby_generator_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\ruby\ruby_generator_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\descriptor_database_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\descriptor_database_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\descriptor_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\descriptor_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\drop_unknown_fields_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\drop_unknown_fields_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\dynamic_message_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\dynamic_message_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\extension_set_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\extension_set_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\generated_message_reflection_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\generated_message_reflection_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\coded_stream_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\coded_stream_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\io_win32_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\io_win32_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\printer_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\printer_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\tokenizer_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\tokenizer_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\zero_copy_stream_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\io\zero_copy_stream_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_field_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_field_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\message_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\message_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\no_field_presence_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\no_field_presence_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\preserve_unknown_enum_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\preserve_unknown_enum_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_arena_lite_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_arena_lite_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_arena_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_arena_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_lite_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_lite_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\reflection_ops_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\reflection_ops_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\repeated_field_reflection_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\repeated_field_reflection_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\repeated_field_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\repeated_field_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\bytestream_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\bytestream_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\common_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\common_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\int128_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\int128_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\status_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\status_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\statusor_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\statusor_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\stringpiece_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\stringpiece_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\stringprintf_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\stringprintf_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\structurally_valid_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\structurally_valid_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\strutil_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\strutil_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\template_util_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\template_util_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\time_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\stubs\time_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\text_format_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\text_format_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unknown_field_set_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unknown_field_set_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\delimited_message_util_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\delimited_message_util_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\field_comparator_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\field_comparator_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\field_mask_util_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\field_mask_util_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\default_value_objectwriter_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\default_value_objectwriter_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\json_objectwriter_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\json_objectwriter_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\json_stream_parser_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\json_stream_parser_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\protostream_objectsource_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\protostream_objectsource_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\protostream_objectwriter_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\protostream_objectwriter_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\type_info_test_helper.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\type_info_test_helper.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\json_util_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\json_util_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\message_differencer_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\message_differencer_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\time_util_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\time_util_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\type_resolver_util_test.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\type_resolver_util_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\well_known_types_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\well_known_types_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\wire_format_unittest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\wire_format_unittest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\arena_test_util.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\arena_test_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_test_util.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_test_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\test_util.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\test_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\testing\file.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\testing\file.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\testing\googletest.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\testing\googletest.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\any_test.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\any_test.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_test_bad_identifiers.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_test_bad_identifiers.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_test_large_enum_value.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_test_large_enum_value.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_proto2_unittest.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_proto2_unittest.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_unittest.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_unittest.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_arena.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_arena.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_custom_options.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_custom_options.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_drop_unknown_fields.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_drop_unknown_fields.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_embed_optimize_for.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_embed_optimize_for.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_empty.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_empty.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import_public.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import_public.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lazy_dependencies.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lazy_dependencies.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lazy_dependencies_custom_option.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lazy_dependencies_custom_option.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lazy_dependencies_enum.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lazy_dependencies_enum.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lite_imports_nonlite.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lite_imports_nonlite.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_mset.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_mset.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_mset_wire_format.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_mset_wire_format.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_arena.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_arena.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_arena_import.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_arena_import.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_field_presence.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_field_presence.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_generic_services.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_generic_services.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_optimize_for.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_optimize_for.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_preserve_unknown_enum.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_preserve_unknown_enum.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_preserve_unknown_enum2.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_preserve_unknown_enum2.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3_arena.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3_arena.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3_arena_lite.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3_arena_lite.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3_lite.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_proto3_lite.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_well_known_types.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_well_known_types.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\anys.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\anys.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\books.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\books.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\default_value.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\default_value.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\default_value_test.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\default_value_test.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\field_mask.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\field_mask.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\maps.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\maps.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\oneofs.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\oneofs.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\proto3.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\proto3.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\struct.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\struct.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\timestamp_duration.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\timestamp_duration.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\wrappers.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\internal\testdata\wrappers.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\json_format.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\json_format.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\json_format_proto3.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\json_format_proto3.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\message_differencer_unittest.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\util\message_differencer_unittest.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_lite_unittest.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\map_lite_unittest.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import_lite.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import_lite.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import_public_lite.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_import_public_lite.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lite.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_lite.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_arena_lite.pb.cc">
+    <ClCompile Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\unittest_no_arena_lite.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\any_test.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\any_test.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\3a93a4be88d6168dbbcda9ec2a557757\cpp_test_bad_identifiers.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\664cb268dd400fac58e0d0239758fedd\cpp_test_bad_identifiers.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\3a93a4be88d6168dbbcda9ec2a557757\cpp_test_large_enum_value.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\664cb268dd400fac58e0d0239758fedd\cpp_test_large_enum_value.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\map_proto2_unittest.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\map_proto2_unittest.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\map_unittest.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\map_unittest.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_arena.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_arena.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_custom_options.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_custom_options.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_drop_unknown_fields.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_drop_unknown_fields.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_embed_optimize_for.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_embed_optimize_for.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_empty.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_empty.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_import.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_import.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_import_public.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_import_public.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_lazy_dependencies.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_lazy_dependencies.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_lazy_dependencies_custom_option.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_lazy_dependencies_custom_option.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_lazy_dependencies_enum.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_lazy_dependencies_enum.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_lite_imports_nonlite.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_lite_imports_nonlite.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_mset.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_mset.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_mset_wire_format.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_mset_wire_format.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_no_arena.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_no_arena.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_no_arena_import.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_no_arena_import.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_no_field_presence.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_no_field_presence.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_no_generic_services.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_no_generic_services.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_optimize_for.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_optimize_for.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_preserve_unknown_enum.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_preserve_unknown_enum.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_preserve_unknown_enum2.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_preserve_unknown_enum2.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_proto3.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_proto3.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_proto3_arena.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_proto3_arena.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_proto3_arena_lite.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_proto3_arena_lite.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_proto3_lite.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_proto3_lite.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_well_known_types.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_well_known_types.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\anys.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\anys.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\books.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\books.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\default_value.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\default_value.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\default_value_test.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\default_value_test.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\field_mask.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\field_mask.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\maps.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\maps.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\oneofs.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\oneofs.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\proto3.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\proto3.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\struct.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\struct.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\timestamp_duration.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\timestamp_duration.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\508750f825194fe5c0e83763e4b3c06d\wrappers.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\c0d74702c5b64d5e576a9f15bc9fb699\wrappers.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\4fe9c809803d581ed664c7aeb27a1d10\json_format.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\058ce02150e7f35a49bbaa36e02f0dd4\json_format.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\4fe9c809803d581ed664c7aeb27a1d10\json_format_proto3.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\058ce02150e7f35a49bbaa36e02f0dd4\json_format_proto3.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\4fe9c809803d581ed664c7aeb27a1d10\message_differencer_unittest.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\058ce02150e7f35a49bbaa36e02f0dd4\message_differencer_unittest.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\map_lite_unittest.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\map_lite_unittest.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_import_lite.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_import_lite.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_import_public_lite.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_import_public_lite.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_lite.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_lite.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\0855fc188313d7f226374f5c1a58f4ad\unittest_no_arena_lite.pb.cc.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\49cb96da56774edc1284094ea30d23d4\unittest_no_arena_lite.pb.cc.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\cmake\CMakeLists.txt" />
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\cmake\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_unittest.inc" />
-    <None Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\message_unittest.inc" />
-    <None Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_lite_unittest.inc" />
-    <None Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\test_util.inc" />
+    <None Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\compiler\cpp\cpp_unittest.inc" />
+    <None Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\message_unittest.inc" />
+    <None Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\proto3_lite_unittest.inc" />
+    <None Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src\google\protobuf\test_util.inc" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{A5C923CD-5E32-3B7E-8980-7752B81177B9}</UniqueIdentifier>
+      <UniqueIdentifier>{4C95AE13-5093-3E39-8922-03D8E61497FA}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{373B7241-97A1-3AA1-82D4-490563E0709B}</UniqueIdentifier>
+      <UniqueIdentifier>{D9100B7A-4204-3C95-B344-BB6AE8E71C6F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

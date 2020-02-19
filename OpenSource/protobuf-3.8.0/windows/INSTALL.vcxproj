@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
-  </PropertyGroup>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -22,8 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E097A273-7681-3E99-9AD4-277CA644C3D8}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{BC28FA3C-C2E3-305D-A92B-72EDF8B10D1C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>INSTALL</ProjectName>
@@ -33,22 +29,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -66,7 +62,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -76,7 +72,7 @@
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Developer\CMake\bin\cmake.exe -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
+"D:\Program Files\CMake\bin\cmake.exe" -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -88,7 +84,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -98,7 +94,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Developer\CMake\bin\cmake.exe -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
+"D:\Program Files\CMake\bin\cmake.exe" -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -110,7 +106,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -120,7 +116,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Developer\CMake\bin\cmake.exe -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
+"D:\Program Files\CMake\bin\cmake.exe" -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -132,7 +128,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\src;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\9.Code\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\src;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googletest\include;D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\third_party\googletest\googlemock\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -142,7 +138,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message></Message>
       <Command>setlocal
-C:\Developer\CMake\bin\cmake.exe -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
+"D:\Program Files\CMake\bin\cmake.exe" -DBUILD_TYPE=$(Configuration) -P cmake_install.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -153,7 +149,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\4583bd1c4c33db9e6359d8485f3ab166\INSTALL_force.rule">
+    <CustomBuild Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\a53814fa263b02d6f786b0dcb3cbc7a7\INSTALL_force.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 cd .
@@ -164,10 +160,9 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/Butler/9.Code/GitHub/Qing/OpenSource/protobuf-3.8.0/windows/CMakeFiles/a53814fa263b02d6f786b0dcb3cbc7a7/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 cd .
@@ -178,10 +173,9 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/Butler/9.Code/GitHub/Qing/OpenSource/protobuf-3.8.0/windows/CMakeFiles/a53814fa263b02d6f786b0dcb3cbc7a7/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
 cd .
@@ -192,10 +186,9 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:/Butler/9.Code/GitHub/Qing/OpenSource/protobuf-3.8.0/windows/CMakeFiles/a53814fa263b02d6f786b0dcb3cbc7a7/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</VerifyInputsAndOutputsExist>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
 cd .
@@ -206,24 +199,19 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:/Butler/9.Code/GitHub/Qing/OpenSource/protobuf-3.8.0/windows/CMakeFiles/a53814fa263b02d6f786b0dcb3cbc7a7/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
-      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</VerifyInputsAndOutputsExist>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\ZERO_CHECK.vcxproj">
-      <Project>{242711CC-3AE0-3086-87C9-21DDF0EC31A9}</Project>
+    <ProjectReference Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\ZERO_CHECK.vcxproj">
+      <Project>{07C8EF90-2429-396C-96B2-2B3B6CCE9316}</Project>
       <Name>ZERO_CHECK</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="D:\9.Code\Qing\OpenSource\protobuf-3.8.0\windows\ALL_BUILD.vcxproj">
-      <Project>{C933CEC1-AFDA-3D84-B3F9-58A0B4F8E175}</Project>
+    <ProjectReference Include="D:\Butler\9.Code\GitHub\Qing\OpenSource\protobuf-3.8.0\windows\ALL_BUILD.vcxproj">
+      <Project>{6209565A-97EA-3442-9F96-CEB453DDD791}</Project>
       <Name>ALL_BUILD</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
