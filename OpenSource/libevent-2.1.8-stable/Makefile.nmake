@@ -11,7 +11,7 @@
 #   nmake OPENSSL_DIR=C:\openssl -f Makefile.nmake
 # Or by uncommenting the following line here in the makefile...
 
-OPENSSL_DIR=C:\Developer\OpenSSL
+# OPENSSL_DIR=C:\Developer\OpenSSL  #debug mode can not find libeay32.lib
 
 !IFDEF OPENSSL_DIR
 SSL_CFLAGS=/I$(OPENSSL_DIR)\include /DEVENT__HAVE_OPENSSL
@@ -23,7 +23,8 @@ SSL_CFLAGS=
 CFLAGS=/IWIN32-Code /IWIN32-Code/nmake /Iinclude /Icompat /DHAVE_CONFIG_H /I. $(SSL_CFLAGS)
 
 # For optimization and warnings
-CFLAGS=$(CFLAGS) /Ox /W3 /wd4996 /nologo
+# CFLAGS=$(CFLAGS) /Ox /W3 /wd4996 /nologo
+CFLAGS=$(CFLAGS) /Od /MTd /Zi /W3 /wd4996 /nologo
 
 # XXXX have a debug mode
 

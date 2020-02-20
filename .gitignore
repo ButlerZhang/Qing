@@ -280,7 +280,7 @@ OpenSource/protobuf-3.8.0/windows/protoc.dir
 OpenSource/protobuf-3.8.0/windows/x64
 OpenSource/protobuf-3.8.0/windows/Debug
 OpenSource/protobuf-3.8.0/windows/Release
-
+OpenSource/libevent-2.1.8-stable/test/*
 
 
 SourceCode/AlgorithmLinux/bin/*
