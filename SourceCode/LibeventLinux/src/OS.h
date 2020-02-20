@@ -12,9 +12,13 @@
 #include <arpa/inet.h>                  //sockaddr_in
 #include <unistd.h>
 #include <string.h>                     //memset
+#include <fcntl.h>                      //O_RDONLY
 #endif
 
 #include <string>
+
+
+const int BUFFER_SIZE = 2048;
 
 
 inline void InitializeSocketAddress(sockaddr_in &SocketAddress, const std::string &IP, int Port)

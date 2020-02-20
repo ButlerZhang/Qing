@@ -4,12 +4,12 @@
 
 
 
-static void CallBack1_InputFromCMD(evutil_socket_t Input, short events, void *arg)
+void CallBack1_InputFromCMD(evutil_socket_t Input, short events, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[BUFFER_SIZE];
+    memset(Message, 0, BUFFER_SIZE);
 
-    int ReadSize = static_cast<int>(read(static_cast<int>(Input), Message, static_cast<int>(sizeof(Message))));
+    int ReadSize = static_cast<int>(read(static_cast<int>(Input), Message, BUFFER_SIZE));
     if (ReadSize <= 0)
     {
         printf("ERROR: Can not read from cmd.\n\n");
@@ -27,12 +27,12 @@ static void CallBack1_InputFromCMD(evutil_socket_t Input, short events, void *ar
     printf("Send message = %s, size = %d.\n", Message, WriteSize);
 }
 
-static void CallBack1_RecvFromServer(evutil_socket_t ServerSocket, short events, void *arg)
+void CallBack1_RecvFromServer(evutil_socket_t ServerSocket, short events, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[BUFFER_SIZE];
+    memset(Message, 0, BUFFER_SIZE);
 
-    int ReadSize = static_cast<int>(read(static_cast<int>(ServerSocket), Message, static_cast<int>(sizeof(Message))));
+    int ReadSize = static_cast<int>(read(static_cast<int>(ServerSocket), Message, BUFFER_SIZE));
     if (ReadSize <= 0)
     {
         printf("ERROR: Recv form server failed.\n\n");
@@ -43,7 +43,7 @@ static void CallBack1_RecvFromServer(evutil_socket_t ServerSocket, short events,
     }
 }
 
-static void demo1_client_read_write(const char *ServerIP, int Port)
+void demo1_client_read_write(const char *ServerIP, int Port)
 {
     evutil_socket_t ClientSocket = socket(PF_INET, SOCK_STREAM, 0);
     if (ClientSocket <= -1)

@@ -4,12 +4,12 @@
 
 
 
-static void CallBack1_RecvClient(evutil_socket_t ClientSocket, short events, void *arg)
+void CallBack1_RecvClient(evutil_socket_t ClientSocket, short events, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[BUFFER_SIZE];
+    memset(Message, 0, BUFFER_SIZE);
 
-    int ReadSize = static_cast<int>(read(static_cast<int>(ClientSocket), Message, sizeof(Message)));
+    int ReadSize = static_cast<int>(read(static_cast<int>(ClientSocket), Message, BUFFER_SIZE));
     if (ReadSize <= 0)
     {
         printf("ERROR: Recv client message error.\n\n");
@@ -26,7 +26,7 @@ static void CallBack1_RecvClient(evutil_socket_t ClientSocket, short events, voi
     }
 }
 
-static void CallBack1_AcceptClient(evutil_socket_t ListenSocket, short events, void *arg)
+void CallBack1_AcceptClient(evutil_socket_t ListenSocket, short events, void *arg)
 {
     struct sockaddr_in ClientAddress;
     socklen_t AddressLength = sizeof(ClientAddress);
@@ -43,7 +43,7 @@ static void CallBack1_AcceptClient(evutil_socket_t ListenSocket, short events, v
     event_add(ev, NULL);
 }
 
-static void demo1_server_read_write(const char *ServerIP, int Port)
+void demo1_server_read_write(const char *ServerIP, int Port)
 {
     evutil_socket_t ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (ListenSocket <= -1)

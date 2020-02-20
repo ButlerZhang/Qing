@@ -1,18 +1,15 @@
 #pragma once
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <string.h>
+#include "OS.h"
 #include <event.h>
 
 
 
-void CallBack3_InputFromCMD(int Input, short events, void *arg)
+void CallBack3_InputFromCMD(evutil_socket_t Input, short events, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[BUFFER_SIZE];
+    memset(Message, 0, BUFFER_SIZE);
 
-    ssize_t ReadSize = read(Input, Message, sizeof(Message));
+    int ReadSize = static_cast<int>(read(static_cast<int>(Input), Message, BUFFER_SIZE));
     if (ReadSize <= 0)
     {
         printf("ERROR: Can not read from cmd.\n\n");
@@ -33,13 +30,13 @@ void CallBack3_InputFromCMD(int Input, short events, void *arg)
 
 void CallBack3_RecvFromServer(struct bufferevent *bev, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[BUFFER_SIZE];
+    memset(Message, 0, BUFFER_SIZE);
 
-    size_t RecvSize = bufferevent_read(bev, Message, sizeof(Message));
+    size_t RecvSize = bufferevent_read(bev, Message, BUFFER_SIZE);
     Message[RecvSize] = '\0';
 
-    printf("Recv message = %s, size = %d.\n\n", Message, RecvSize);
+    printf("Recv message = %s, size = %d.\n\n", Message, (int)RecvSize);
 }
 
 void CallBack3_ClientEvent(struct bufferevent *bev, short event, void *arg)
@@ -71,10 +68,7 @@ void demo3_client_evconnlistener(const char *ServerIP, int Port)
     event_add(ev_cmd, NULL);
 
     struct sockaddr_in ServerAddress;
-    bzero(&ServerAddress, sizeof(sockaddr_in));
-    ServerAddress.sin_family = AF_INET;
-    inet_pton(AF_INET, ServerIP, &(ServerAddress.sin_addr));
-    ServerAddress.sin_port = htons(static_cast<uint16_t>(Port));
+    InitializeSocketAddress(ServerAddress, ServerIP, Port);
     bufferevent_socket_connect(bev, (struct sockaddr*)&ServerAddress, sizeof(ServerAddress));
 
     bufferevent_setcb(bev, CallBack3_RecvFromServer, NULL, CallBack3_ClientEvent, (void*)ev_cmd);

@@ -1,54 +1,49 @@
 #pragma once
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <string.h>
+#include "OS.h"
 #include <event.h>
-#include <string>
 
 
 
 void CallBack2_RecvClient(bufferevent *bev, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[BUFFER_SIZE];
+    memset(Message, 0, BUFFER_SIZE);
 
-    size_t RecvSize = bufferevent_read(bev, Message, sizeof(Message));
+    size_t RecvSize = bufferevent_read(bev, Message, BUFFER_SIZE);
     Message[RecvSize] = '\0';
 
-    int ClientSocket = bufferevent_getfd(bev);
-    printf("Client = %d recv message = %s, size = %d.\n", ClientSocket, Message, RecvSize);
+    evutil_socket_t ClientSocket = bufferevent_getfd(bev);
+    printf("Client = %d recv message = %s, size = %I64d.\n", (int)ClientSocket, Message, RecvSize);
 
     const std::string ACK("ACK");
     bufferevent_write(bev, ACK.c_str(), ACK.length());
-    printf("Client = %d send ack, size = %d.\n\n", ClientSocket, ACK.length());
+    printf("Client = %d send ack, size = %d.\n\n", (int)ClientSocket, (int)ACK.length());
 }
 
 void CallBack2_ServerEvent(struct bufferevent *bev, short event, void *arg)
 {
-    int ClientSocket = bufferevent_getfd(bev);
+    evutil_socket_t ClientSocket = bufferevent_getfd(bev);
     if (event & BEV_EVENT_EOF)
     {
-        printf("Client = %d connection closed.\n\n", ClientSocket);
+        printf("Client = %d connection closed.\n\n", (int)ClientSocket);
     }
     else if (event & BEV_EVENT_ERROR)
     {
-        printf("Client = %d unknow error.\n\n", ClientSocket);
+        printf("Client = %d unknow error.\n\n", (int)ClientSocket);
     }
 
     bufferevent_free(bev);
 }
 
-void CallBack2_AcceptClient(int ListenSocket, short events, void *arg)
+void CallBack2_AcceptClient(evutil_socket_t ListenSocket, short events, void *arg)
 {
     struct sockaddr_in ClientAddress;
     socklen_t AddressLength = sizeof(ClientAddress);
 
-    int ClientSocket = accept(ListenSocket, (struct sockaddr*)&ClientAddress, &AddressLength);
+    evutil_socket_t ClientSocket = accept(ListenSocket, (struct sockaddr*)&ClientAddress, &AddressLength);
     evutil_make_socket_nonblocking(ClientSocket);
 
-    printf("Accept client socket = %d.\n\n", ClientSocket);
+    printf("Accept client socket = %d.\n\n", (int)ClientSocket);
 
     struct event_base *base = (event_base*)arg;
     bufferevent *bev = bufferevent_socket_new(base, ClientSocket, BEV_OPT_CLOSE_ON_FREE);
@@ -58,7 +53,7 @@ void CallBack2_AcceptClient(int ListenSocket, short events, void *arg)
 
 void demo2_server_bufferevent(const char *ServerIP, int Port)
 {
-    int ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
+    evutil_socket_t ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (ListenSocket <= -1)
     {
         printf("ERROR: Create socket failed.\n\n");
@@ -68,11 +63,7 @@ void demo2_server_bufferevent(const char *ServerIP, int Port)
     evutil_make_listen_socket_reuseable(ListenSocket);
 
     struct sockaddr_in BindAddress;
-    bzero(&BindAddress, sizeof(sockaddr_in));
-    BindAddress.sin_family = AF_INET;
-    inet_pton(AF_INET, ServerIP, &(BindAddress.sin_addr));
-    BindAddress.sin_port = htons(static_cast<uint16_t>(Port));
-
+    InitializeSocketAddress(BindAddress, ServerIP, Port);
     if (bind(ListenSocket, (sockaddr*)&BindAddress, sizeof(BindAddress)) < 0)
     {
         evutil_closesocket(ListenSocket);

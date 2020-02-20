@@ -1,11 +1,5 @@
 #pragma once
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
-#include <string>
+#include "OS.h"
 #include <event.h>
 #include <event2/listener.h>
 
@@ -13,30 +7,30 @@
 
 void CallBack3_RecvClient(bufferevent *bev, void *arg)
 {
-    char Message[1024];
-    memset(Message, 0, sizeof(Message));
+    char Message[BUFFER_SIZE];
+    memset(Message, 0, BUFFER_SIZE);
 
-    size_t RecvSize = bufferevent_read(bev, Message, sizeof(Message));
+    size_t RecvSize = bufferevent_read(bev, Message, BUFFER_SIZE);
     Message[RecvSize] = '\0';
 
-    int ClientSocket = bufferevent_getfd(bev);
-    printf("Client = %d recv message = %s, size = %d.\n", ClientSocket, Message, RecvSize);
+    evutil_socket_t ClientSocket = bufferevent_getfd(bev);
+    printf("Client = %d recv message = %s, size = %d.\n", (int)ClientSocket, Message, (int)RecvSize);
 
     const std::string ACK("ACK");
     bufferevent_write(bev, ACK.c_str(), ACK.length());
-    printf("Client = %d send ack, size = %d.\n\n", ClientSocket, ACK.length());
+    printf("Client = %d send ack, size = %d.\n\n", (int)ClientSocket, (int)ACK.length());
 }
 
 void CallBack3_ServerEvent(struct bufferevent *bev, short event, void *arg)
 {
-    int ClientSocket = bufferevent_getfd(bev);
+    evutil_socket_t ClientSocket = bufferevent_getfd(bev);
     if (event & BEV_EVENT_EOF)
     {
-        printf("Client = %d connection closed.\n\n", ClientSocket);
+        printf("Client = %d connection closed.\n\n", (int)ClientSocket);
     }
     else if (event & BEV_EVENT_ERROR)
     {
-        printf("Client = %d unknow error.\n\n", ClientSocket);
+        printf("Client = %d unknow error.\n\n", (int)ClientSocket);
     }
 
     bufferevent_free(bev);
@@ -44,7 +38,7 @@ void CallBack3_ServerEvent(struct bufferevent *bev, short event, void *arg)
 
 void CallBack3_Listen(evconnlistener *listener, evutil_socket_t fd, struct sockaddr *sock, int socklen, void *arg)
 {
-    printf("Accept client socket = %d.\n\n", fd);
+    printf("Accept client socket = %d.\n\n", (int)fd);
 
     event_base *base = (event_base*)arg;
     bufferevent *bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);
@@ -55,10 +49,7 @@ void CallBack3_Listen(evconnlistener *listener, evutil_socket_t fd, struct socka
 void demo3_server_evconnlistener(const char *ServerIP, int Port)
 {
     struct sockaddr_in BindAddress;
-    bzero(&BindAddress, sizeof(sockaddr_in));
-    BindAddress.sin_family = AF_INET;
-    inet_pton(AF_INET, ServerIP, &(BindAddress.sin_addr));
-    BindAddress.sin_port = htons(static_cast<uint16_t>(Port));
+    InitializeSocketAddress(BindAddress, ServerIP, Port);
 
     event_base *base = event_base_new();
     evconnlistener *listener = evconnlistener_new_bind(
