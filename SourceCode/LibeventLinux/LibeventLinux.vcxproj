@@ -40,7 +40,10 @@
     <ClInclude Include="src\demo\demo5_server_evhttp.h" />
     <ClInclude Include="src\demo\demo6_client_bufferevent_openssl.h" />
     <ClInclude Include="src\demo\demo6_server_bufferevent_openssl.h" />
+    <ClInclude Include="src\demo\demo_main.h" />
     <ClInclude Include="src\OS.h" />
+    <ClInclude Include="src\study\study1_timer.h" />
+    <ClInclude Include="src\study\study_main.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

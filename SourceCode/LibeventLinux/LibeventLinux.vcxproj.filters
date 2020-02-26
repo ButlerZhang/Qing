@@ -44,6 +44,15 @@
     <ClInclude Include="src\demo\demo6_server_bufferevent_openssl.h">
       <Filter>demo</Filter>
     </ClInclude>
+    <ClInclude Include="src\demo\demo_main.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\study\study_main.h">
+      <Filter>study</Filter>
+    </ClInclude>
+    <ClInclude Include="src\study\study1_timer.h">
+      <Filter>study</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="demo">

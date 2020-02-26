@@ -139,7 +139,9 @@
     <ClInclude Include="..\LibeventLinux\src\demo\demo3_server_evconnlistener.h" />
     <ClInclude Include="..\LibeventLinux\src\demo\demo4_client_udp_timer.h" />
     <ClInclude Include="..\LibeventLinux\src\demo\demo4_server_udp_timer.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo_main.h" />
     <ClInclude Include="..\LibeventLinux\src\OS.h" />
+    <ClInclude Include="..\LibeventLinux\src\study\study_main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
