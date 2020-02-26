@@ -27,19 +27,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\demo1_client_read_write.h" />
-    <ClInclude Include="src\demo1_server_read_write.h" />
-    <ClInclude Include="src\demo2_client_bufferevent.h" />
-    <ClInclude Include="src\demo2_server_bufferevent.h" />
-    <ClInclude Include="src\demo3_client_evconnlistener.h" />
-    <ClInclude Include="src\demo3_server_evconnlistener.h" />
-    <ClInclude Include="src\demo4_client_udp_timer.h" />
-    <ClInclude Include="src\demo4_server_udp_timer.h" />
-    <ClInclude Include="src\demo5_client_evhttp.h" />
-    <ClInclude Include="src\demo5_server_evconnlistener_http.h" />
-    <ClInclude Include="src\demo5_server_evhttp.h" />
-    <ClInclude Include="src\demo6_client_bufferevent_openssl.h" />
-    <ClInclude Include="src\demo6_server_bufferevent_openssl.h" />
+    <ClInclude Include="src\demo\demo1_client_read_write.h" />
+    <ClInclude Include="src\demo\demo1_server_read_write.h" />
+    <ClInclude Include="src\demo\demo2_client_bufferevent.h" />
+    <ClInclude Include="src\demo\demo2_server_bufferevent.h" />
+    <ClInclude Include="src\demo\demo3_client_evconnlistener.h" />
+    <ClInclude Include="src\demo\demo3_server_evconnlistener.h" />
+    <ClInclude Include="src\demo\demo4_client_udp_timer.h" />
+    <ClInclude Include="src\demo\demo4_server_udp_timer.h" />
+    <ClInclude Include="src\demo\demo5_client_evhttp.h" />
+    <ClInclude Include="src\demo\demo5_server_evconnlistener_http.h" />
+    <ClInclude Include="src\demo\demo5_server_evhttp.h" />
+    <ClInclude Include="src\demo\demo6_client_bufferevent_openssl.h" />
+    <ClInclude Include="src\demo\demo6_server_bufferevent_openssl.h" />
     <ClInclude Include="src\OS.h" />
   </ItemGroup>
   <ItemGroup>

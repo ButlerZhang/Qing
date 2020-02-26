@@ -118,24 +118,27 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\OpenSource\libevent-2.1.8-stable\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libevent.lib;libevent_core.lib;libevent_extras.lib;libevent_openssl.lib;ws2_32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\OpenSource\libevent-2.1.8-stable</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\LibeventLinux\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\LibeventLinux\src\demo1_client_read_write.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo1_server_read_write.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo2_client_bufferevent.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo2_server_bufferevent.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo3_client_evconnlistener.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo3_server_evconnlistener.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo4_client_udp_timer.h" />
-    <ClInclude Include="..\LibeventLinux\src\demo4_server_udp_timer.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo1_client_read_write.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo1_server_read_write.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo2_client_bufferevent.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo2_server_bufferevent.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo3_client_evconnlistener.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo3_server_evconnlistener.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo4_client_udp_timer.h" />
+    <ClInclude Include="..\LibeventLinux\src\demo\demo4_server_udp_timer.h" />
     <ClInclude Include="..\LibeventLinux\src\OS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

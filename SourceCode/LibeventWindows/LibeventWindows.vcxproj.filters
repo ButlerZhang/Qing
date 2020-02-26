@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="demo">
+      <UniqueIdentifier>{5f4be65a-083c-4cd0-b5ce-9fe62ad57762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="study">
+      <UniqueIdentifier>{0d281714-168f-4d62-af18-708e5f860c2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\LibeventLinux\main.cpp">
@@ -20,32 +26,32 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\LibeventLinux\src\demo1_client_read_write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo1_server_read_write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\LibeventLinux\src\OS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo2_client_bufferevent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo1_client_read_write.h">
+      <Filter>demo</Filter>
     </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo2_server_bufferevent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo1_server_read_write.h">
+      <Filter>demo</Filter>
     </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo3_client_evconnlistener.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo2_client_bufferevent.h">
+      <Filter>demo</Filter>
     </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo3_server_evconnlistener.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo2_server_bufferevent.h">
+      <Filter>demo</Filter>
     </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo4_client_udp_timer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo3_client_evconnlistener.h">
+      <Filter>demo</Filter>
     </ClInclude>
-    <ClInclude Include="..\LibeventLinux\src\demo4_server_udp_timer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo3_server_evconnlistener.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo4_client_udp_timer.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibeventLinux\src\demo\demo4_server_udp_timer.h">
+      <Filter>demo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
