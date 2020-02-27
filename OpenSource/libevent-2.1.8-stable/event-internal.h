@@ -351,19 +351,31 @@ struct event_base {
 struct event_config_entry {
 	TAILQ_ENTRY(event_config_entry) next;
 
+    //存储不想使用的后端，例如avoid_method="poll"表示不想使用poll函数。
 	const char *avoid_method;
 };
 
 /** Internal structure: describes the configuration we want for an event_base
  * that we're about to allocate. */
 struct event_config {
+
+    //队列，队列结构体名称是event_configq，成员是event_config_entry。
 	TAILQ_HEAD(event_configq, event_config_entry) entries;
 
+    //CPU数量，目前仅用于Windows系统的IOCP。
+    //hint表示这是一个提示，event_base使用的CPU个数不一定等于提示个数。
 	int n_cpus_hint;
+
+    //???
 	struct timeval max_dispatch_interval;
 	int max_dispatch_callbacks;
 	int limit_callbacks_after_prio;
+
+    //指定后端函数需要满足哪些特征，例如EV_FEATURE_ET表示边缘触发。
+    //可以从各个后端函数的源文件查看各自支持的特征。
 	enum event_method_feature require_features;
+
+    //一些常用标志，例如是否分配锁，是否启用IOCP
 	enum event_base_config_flag flags;
 };
 

@@ -1,5 +1,5 @@
 #include "study1_timer.h"
-
+#include <event2/event.h>
 
 
 int study_main(int argc, char *argv[])
@@ -13,6 +13,16 @@ int study_main(int argc, char *argv[])
     }
 #endif
 
+    printf("=======================================\n");
+    printf("display system supported backend method\n");
+    const char** SystemSupportedMethod = event_get_supported_methods();
+    while (SystemSupportedMethod && *SystemSupportedMethod)
+    {
+        printf("%s\t", *SystemSupportedMethod++);
+    }
+    printf("\n=======================================\n");
+
+    //study
     study1_timer(argc, argv);
 
 

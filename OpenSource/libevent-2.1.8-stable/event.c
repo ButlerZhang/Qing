@@ -480,6 +480,8 @@ struct event_base *
 event_base_new(void)
 {
 	struct event_base *base = NULL;
+
+    //使用默认配置
 	struct event_config *cfg = event_config_new();
 	if (cfg) {
 		base = event_base_new_with_config(cfg);
@@ -490,7 +492,7 @@ event_base_new(void)
 
 /** Return true iff 'method' is the name of a method that 'cfg' tells us to
  * avoid. */
-static int
+static int //判断cfg是否避免使用method后端函数
 event_config_is_avoided_method(const struct event_config *cfg,
     const char *method)
 {
@@ -520,7 +522,7 @@ event_is_method_disabled(const char *name)
 	return (evutil_getenv_(environment) != NULL);
 }
 
-int
+int //获取当前event_base后端函数的特征值
 event_base_get_features(const struct event_base *base)
 {
 	return base->evsel->features;
@@ -1057,7 +1059,7 @@ event_gettime_monotonic(struct event_base *base, struct timeval *tv)
   return rv;
 }
 
-const char **
+const char ** //获取当前系统支持的后端函数有哪些
 event_get_supported_methods(void)
 {
 	static const char **methods = NULL;
@@ -1105,7 +1107,7 @@ event_config_new(void)
 	return (cfg);
 }
 
-static void
+static void //释放队列元素里的字符串空间
 event_config_entry_free(struct event_config_entry *entry)
 {
 	if (entry->avoid_method != NULL)
@@ -1113,7 +1115,7 @@ event_config_entry_free(struct event_config_entry *entry)
 	mm_free(entry);
 }
 
-void
+void       //释放队列里的每个元素
 event_config_free(struct event_config *cfg)
 {
 	struct event_config_entry *entry;
@@ -1125,7 +1127,7 @@ event_config_free(struct event_config *cfg)
 	mm_free(cfg);
 }
 
-int
+int //设置标志，例如是否分配锁，是否启用IOCP，是否缓存时间，等等。
 event_config_set_flag(struct event_config *cfg, int flag)
 {
 	if (!cfg)
@@ -1134,26 +1136,28 @@ event_config_set_flag(struct event_config *cfg, int flag)
 	return 0;
 }
 
-int
+int //避免使用指定的多路IO复用函数
 event_config_avoid_method(struct event_config *cfg, const char *method)
 {
+    //创建一个队列元素
 	struct event_config_entry *entry = mm_malloc(sizeof(*entry));
 	if (entry == NULL)
 		return (-1);
 
+    //分配字符串空间，存储method
 	if ((entry->avoid_method = mm_strdup(method)) == NULL) {
 		mm_free(entry);
 		return (-1);
 	}
 
+    //把新创建的队列元素加入到队列
 	TAILQ_INSERT_TAIL(&cfg->entries, entry, next);
 
 	return (0);
 }
 
-int
-event_config_require_features(struct event_config *cfg,
-    int features)
+int //设置后端函数需要满足哪种特征，例如边缘触发还是水平触发
+event_config_require_features(struct event_config *cfg, int features)
 {
 	if (!cfg)
 		return (-1);
@@ -1161,7 +1165,7 @@ event_config_require_features(struct event_config *cfg,
 	return (0);
 }
 
-int
+int  //设置CPU数量，用于Windows的IOCP
 event_config_set_num_cpus_hint(struct event_config *cfg, int cpus)
 {
 	if (!cfg)
@@ -1772,7 +1776,7 @@ event_base_dispatch(struct event_base *event_base)
 	return (event_base_loop(event_base, 0));
 }
 
-const char *
+const char * //获取当前event_base使用的后端函数
 event_base_get_method(const struct event_base *base)
 {
 	EVUTIL_ASSERT(base);

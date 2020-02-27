@@ -17,6 +17,8 @@ int study1_timer(int argc, char *argv[])
 {
     struct event_base *base = event_base_new();
 
+    printf("Current event base uses %s method.\n", event_base_get_method(base));
+
     struct event TimerEvent;
     event_assign(&TimerEvent, base, -1, EV_PERSIST, CallBack_Timer, (void*)&TimerEvent);
 

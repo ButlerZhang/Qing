@@ -533,20 +533,27 @@ enum event_base_config_flag {
 	    Setting this option will make it unsafe and nonfunctional to call
 	    functions on the base concurrently from multiple threads.
 	*/
+    //不要为event_base分配锁，多线程下可能会不安全。
 	EVENT_BASE_FLAG_NOLOCK = 0x01,
+
 	/** Do not check the EVENT_* environment variables when configuring
 	    an event_base  */
+    //不要检测环境变量，还不明白为什么要有这个标志。
 	EVENT_BASE_FLAG_IGNORE_ENV = 0x02,
+
 	/** Windows only: enable the IOCP dispatcher at startup
 
 	    If this flag is set then bufferevent_socket_new() and
 	    evconn_listener_new() will use IOCP-backed implementations
 	    instead of the usual select-based one on Windows.
 	 */
+    //启动IOCP所需要的分发逻辑，只用于Windows系统。
 	EVENT_BASE_FLAG_STARTUP_IOCP = 0x04,
+
 	/** Instead of checking the current time every time the event loop is
 	    ready to run timeout callbacks, check after each timeout callback.
 	 */
+    //不要缓存时间，这使得事件循环里每次都获取系统时间。
 	EVENT_BASE_FLAG_NO_CACHE_TIME = 0x08,
 
 	/** If we are using the epoll backend, this flag says that it is
@@ -563,6 +570,7 @@ enum event_base_config_flag {
 	    This flag has no effect if you wind up using a backend other than
 	    epoll.
 	 */
+    //需要了解什么是change-list
 	EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST = 0x10,
 
 	/** Ordinarily, Libevent implements its time and timeout code using
@@ -570,6 +578,7 @@ enum event_base_config_flag {
 	    however, we use less efficient more precise timer, assuming one is
 	    present.
 	 */
+    //需要了解monotonic timer
 	EVENT_BASE_FLAG_PRECISE_TIMER = 0x20
 };
 
