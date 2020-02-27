@@ -85,13 +85,17 @@ extern "C" {
 /** Structure to define the backend of a given event_base. */
 struct eventop {
 	/** The name of this backend. */
+    //backend名称，例如select, poll, epoll, win32
 	const char *name;
+
 	/** Function to set up an event_base to use this backend.  It should
 	 * create a new structure holding whatever information is needed to
 	 * run the backend, and return it.  The returned pointer will get
 	 * stored by event_init into the event_base.evbase field.  On failure,
 	 * this function should return NULL. */
+    //初始化backend，返回backend具体的数据。
 	void *(*init)(struct event_base *);
+
 	/** Enable reading/writing on a given fd or signal.  'events' will be
 	 * the events that we're trying to enable: one or more of EV_READ,
 	 * EV_WRITE, EV_SIGNAL, and EV_ET.  'old' will be those events that
@@ -100,28 +104,41 @@ struct eventop {
 	 * fdinfo field below.  It will be set to 0 the first time the fd is
 	 * added.  The function should return 0 on success and -1 on error.
 	 */
+    //注册事件。
 	int (*add)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);
+
 	/** As "add", except 'events' contains the events we mean to disable. */
+    //删除事件。
 	int (*del)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);
+
 	/** Function to implement the core of an event loop.  It must see which
 	    added events are ready, and cause event_active to be called for each
 	    active event (usually via event_io_active or such).  It should
 	    return 0 on success and -1 on error.
 	 */
+    //分发事件，事件循环。
 	int (*dispatch)(struct event_base *, struct timeval *);
+
 	/** Function to clean up and free our data from the event_base. */
+    //清空数据。
 	void (*dealloc)(struct event_base *);
+
 	/** Flag: set if we need to reinitialize the event base after we fork.
 	 */
+    //是否需要重新初始化。
 	int need_reinit;
+
 	/** Bit-array of supported event_method_features that this backend can
 	 * provide. */
+    //backend提供的特征值。
 	enum event_method_feature features;
+
 	/** Length of the extra information we should record for each fd that
 	    has one or more active events.  This information is recorded
 	    as part of the evmap entry for each fd, and passed as an argument
 	    to the add and del functions above.
 	 */
+    //额外信息的长度，有些backend需要用到额外的信息。
 	size_t fdinfo_len;
 };
 
@@ -208,8 +225,11 @@ struct event_once {
 struct event_base {
 	/** Function pointers and other data to describe this event_base's
 	 * backend. */
+    //event_base要使用的backend。可以理解为基类。
 	const struct eventop *evsel;
+
 	/** Pointer to backend-specific data. */
+    //指向backend需要用到的结构体，例如selectop/epollop，可以理解为具体的子类。
 	void *evbase;
 
 	/** List of changes to tell backend about at next dispatch.  Only used
@@ -349,10 +369,10 @@ struct event_base {
 };
 
 struct event_config_entry {
-	TAILQ_ENTRY(event_config_entry) next;
+    TAILQ_ENTRY(event_config_entry) next;
 
-    //存储不想使用的后端，例如avoid_method="poll"表示不想使用poll函数。
-	const char *avoid_method;
+    //存储不想使用的backend，例如avoid_method="poll"表示不想使用poll函数。
+    const char *avoid_method;
 };
 
 /** Internal structure: describes the configuration we want for an event_base
@@ -360,23 +380,23 @@ struct event_config_entry {
 struct event_config {
 
     //队列，队列结构体名称是event_configq，成员是event_config_entry。
-	TAILQ_HEAD(event_configq, event_config_entry) entries;
+    TAILQ_HEAD(event_configq, event_config_entry) entries;
 
     //CPU数量，目前仅用于Windows系统的IOCP。
     //hint表示这是一个提示，event_base使用的CPU个数不一定等于提示个数。
-	int n_cpus_hint;
+    int n_cpus_hint;
 
     //???
-	struct timeval max_dispatch_interval;
-	int max_dispatch_callbacks;
-	int limit_callbacks_after_prio;
+    struct timeval max_dispatch_interval;
+    int max_dispatch_callbacks;
+    int limit_callbacks_after_prio;
 
-    //指定后端函数需要满足哪些特征，例如EV_FEATURE_ET表示边缘触发。
-    //可以从各个后端函数的源文件查看各自支持的特征。
-	enum event_method_feature require_features;
+    //指定backend需要满足哪些特征，例如EV_FEATURE_ET表示边缘触发。
+    //可以从各个backend的源文件查看各自支持的特征。
+    enum event_method_feature require_features;
 
     //一些常用标志，例如是否分配锁，是否启用IOCP
-	enum event_base_config_flag flags;
+    enum event_base_config_flag flags;
 };
 
 /* Internal use only: Functions that might be missing from <sys/queue.h> */

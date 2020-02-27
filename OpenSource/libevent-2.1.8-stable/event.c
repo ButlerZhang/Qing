@@ -476,56 +476,55 @@ event_init(void)
 	return (base);
 }
 
-struct event_base *
+struct event_base * //创建默认配置的Reactor
 event_base_new(void)
 {
-	struct event_base *base = NULL;
-
-    //使用默认配置
-	struct event_config *cfg = event_config_new();
-	if (cfg) {
-		base = event_base_new_with_config(cfg);
-		event_config_free(cfg);
-	}
-	return base;
+    struct event_base *base = NULL;
+    struct event_config *cfg = event_config_new();
+    if (cfg) {
+        base = event_base_new_with_config(cfg);
+        event_config_free(cfg);
+    }
+    return base;
 }
 
 /** Return true iff 'method' is the name of a method that 'cfg' tells us to
  * avoid. */
-static int //判断cfg是否避免使用method后端函数
+static int //判断cfg是否避免使用某个backend
 event_config_is_avoided_method(const struct event_config *cfg,
     const char *method)
 {
-	struct event_config_entry *entry;
+    struct event_config_entry *entry;
 
-	TAILQ_FOREACH(entry, &cfg->entries, next) {
-		if (entry->avoid_method != NULL &&
-		    strcmp(entry->avoid_method, method) == 0)
-			return (1);
-	}
+    //遍历队列进行字符串比较
+    TAILQ_FOREACH(entry, &cfg->entries, next) {
+        if (entry->avoid_method != NULL &&
+            strcmp(entry->avoid_method, method) == 0)
+            return (1);
+    }
 
-	return (0);
+    return (0);
 }
 
 /** Return true iff 'method' is disabled according to the environment. */
-static int
+static int //判断环境变量里是否禁用了某个backend
 event_is_method_disabled(const char *name)
 {
-	char environment[64];
-	int i;
+    char environment[64];
+    int i;
 
-	evutil_snprintf(environment, sizeof(environment), "EVENT_NO%s", name);
-	for (i = 8; environment[i] != '\0'; ++i)
-		environment[i] = EVUTIL_TOUPPER_(environment[i]);
-	/* Note that evutil_getenv_() ignores the environment entirely if
-	 * we're setuid */
-	return (evutil_getenv_(environment) != NULL);
+    evutil_snprintf(environment, sizeof(environment), "EVENT_NO%s", name);
+    for (i = 8; environment[i] != '\0'; ++i)
+        environment[i] = EVUTIL_TOUPPER_(environment[i]);
+    /* Note that evutil_getenv_() ignores the environment entirely if
+     * we're setuid */
+    return (evutil_getenv_(environment) != NULL);
 }
 
-int //获取当前event_base后端函数的特征值
+int //获取当前event_base的backend的特征值
 event_base_get_features(const struct event_base *base)
 {
-	return base->evsel->features;
+    return base->evsel->features;
 }
 
 void
@@ -563,141 +562,154 @@ event_disable_debug_mode(void)
 #endif
 }
 
-struct event_base *
+struct event_base * //根据配置创建Reactor
 event_base_new_with_config(const struct event_config *cfg)
 {
-	int i;
-	struct event_base *base;
-	int should_check_environment;
+    int i;
+    struct event_base *base;
+    int should_check_environment;
 
 #ifndef EVENT__DISABLE_DEBUG_MODE
-	event_debug_mode_too_late = 1;
+    event_debug_mode_too_late = 1;
 #endif
 
-	if ((base = mm_calloc(1, sizeof(struct event_base))) == NULL) {
-		event_warn("%s: calloc", __func__);
-		return NULL;
-	}
+    //为event_base分配空间，mm_calloc会清零base内存，相当于初始化。
+    if ((base = mm_calloc(1, sizeof(struct event_base))) == NULL) {
+        event_warn("%s: calloc", __func__);
+        return NULL;
+    }
 
-	if (cfg)
-		base->flags = cfg->flags;
+    //接下来会将cfg的不少值都拷贝到base。
+    //我觉得将cfg改成全局变量就好了，base需要使用时直接获取。
+    if (cfg)
+        base->flags = cfg->flags;
 
-	should_check_environment =
-	    !(cfg && (cfg->flags & EVENT_BASE_FLAG_IGNORE_ENV));
+    should_check_environment =
+        !(cfg && (cfg->flags & EVENT_BASE_FLAG_IGNORE_ENV));
 
-	{
-		struct timeval tmp;
-		int precise_time =
-		    cfg && (cfg->flags & EVENT_BASE_FLAG_PRECISE_TIMER);
-		int flags;
-		if (should_check_environment && !precise_time) {
-			precise_time = evutil_getenv_("EVENT_PRECISE_TIMER") != NULL;
-			base->flags |= EVENT_BASE_FLAG_PRECISE_TIMER;
-		}
-		flags = precise_time ? EV_MONOT_PRECISE : 0;
-		evutil_configure_monotonic_time_(&base->monotonic_timer, flags);
+    //???
+    {
+        struct timeval tmp;
+        int precise_time =
+            cfg && (cfg->flags & EVENT_BASE_FLAG_PRECISE_TIMER);
+        int flags;
+        if (should_check_environment && !precise_time) {
+            precise_time = evutil_getenv_("EVENT_PRECISE_TIMER") != NULL;
+            base->flags |= EVENT_BASE_FLAG_PRECISE_TIMER;
+        }
+        flags = precise_time ? EV_MONOT_PRECISE : 0;
+        evutil_configure_monotonic_time_(&base->monotonic_timer, flags);
 
-		gettime(base, &tmp);
-	}
+        gettime(base, &tmp);
+    }
 
-	min_heap_ctor_(&base->timeheap);
+    //创建小根堆
+    min_heap_ctor_(&base->timeheap);
 
-	base->sig.ev_signal_pair[0] = -1;
-	base->sig.ev_signal_pair[1] = -1;
-	base->th_notify_fd[0] = -1;
-	base->th_notify_fd[1] = -1;
+    base->sig.ev_signal_pair[0] = -1;
+    base->sig.ev_signal_pair[1] = -1;
+    base->th_notify_fd[0] = -1;
+    base->th_notify_fd[1] = -1;
 
-	TAILQ_INIT(&base->active_later_queue);
+    TAILQ_INIT(&base->active_later_queue);
 
-	evmap_io_initmap_(&base->io);
-	evmap_signal_initmap_(&base->sigmap);
-	event_changelist_init_(&base->changelist);
+    evmap_io_initmap_(&base->io);
+    evmap_signal_initmap_(&base->sigmap);
+    event_changelist_init_(&base->changelist);
 
-	base->evbase = NULL;
+    base->evbase = NULL;
 
-	if (cfg) {
-		memcpy(&base->max_dispatch_time,
-		    &cfg->max_dispatch_interval, sizeof(struct timeval));
-		base->limit_callbacks_after_prio =
-		    cfg->limit_callbacks_after_prio;
-	} else {
-		base->max_dispatch_time.tv_sec = -1;
-		base->limit_callbacks_after_prio = 1;
-	}
-	if (cfg && cfg->max_dispatch_callbacks >= 0) {
-		base->max_dispatch_callbacks = cfg->max_dispatch_callbacks;
-	} else {
-		base->max_dispatch_callbacks = INT_MAX;
-	}
-	if (base->max_dispatch_callbacks == INT_MAX &&
-	    base->max_dispatch_time.tv_sec == -1)
-		base->limit_callbacks_after_prio = INT_MAX;
+    if (cfg) {
+        memcpy(&base->max_dispatch_time,
+            &cfg->max_dispatch_interval, sizeof(struct timeval));
+        base->limit_callbacks_after_prio =
+            cfg->limit_callbacks_after_prio;
+    } else {
+        base->max_dispatch_time.tv_sec = -1;
+        base->limit_callbacks_after_prio = 1;
+    }
+    if (cfg && cfg->max_dispatch_callbacks >= 0) {
+        base->max_dispatch_callbacks = cfg->max_dispatch_callbacks;
+    } else {
+        base->max_dispatch_callbacks = INT_MAX;
+    }
+    if (base->max_dispatch_callbacks == INT_MAX &&
+        base->max_dispatch_time.tv_sec == -1)
+        base->limit_callbacks_after_prio = INT_MAX;
 
-	for (i = 0; eventops[i] && !base->evbase; i++) {
-		if (cfg != NULL) {
-			/* determine if this backend should be avoided */
-			if (event_config_is_avoided_method(cfg,
-				eventops[i]->name))
-				continue;
-			if ((eventops[i]->features & cfg->require_features)
-			    != cfg->require_features)
-				continue;
-		}
+    //遍历全局数组eventops，选择使用哪个backend。
+    for (i = 0; eventops[i] && !base->evbase; i++) {
+        if (cfg != NULL) {
+            /* determine if this backend should be avoided */
+            //这个backend是否被配置为禁用。
+            if (event_config_is_avoided_method(cfg,
+                eventops[i]->name))
+                continue;
 
-		/* also obey the environment variables */
-		if (should_check_environment &&
-		    event_is_method_disabled(eventops[i]->name))
-			continue;
+            //这个backend的特征是否与系统提供的特征相符合。
+            if ((eventops[i]->features & cfg->require_features)
+                != cfg->require_features)
+                continue;
+        }
 
-		base->evsel = eventops[i];
+        /* also obey the environment variables */
+        //还要遵守环境变量的要求。
+        if (should_check_environment &&
+            event_is_method_disabled(eventops[i]->name))
+            continue;
 
-		base->evbase = base->evsel->init(base);
-	}
+        //选择这个backend。
+        base->evsel = eventops[i];
 
-	if (base->evbase == NULL) {
-		event_warnx("%s: no event mechanism available",
-		    __func__);
-		base->evsel = NULL;
-		event_base_free(base);
-		return NULL;
-	}
+        //初始化这个backend。返回指向eventop子类的指针。
+        base->evbase = base->evsel->init(base);
+    }
 
-	if (evutil_getenv_("EVENT_SHOW_METHOD"))
-		event_msgx("libevent using: %s", base->evsel->name);
+    if (base->evbase == NULL) {
+        event_warnx("%s: no event mechanism available",
+            __func__);
+        base->evsel = NULL;
+        event_base_free(base);
+        return NULL;
+    }
 
-	/* allocate a single active event queue */
-	if (event_base_priority_init(base, 1) < 0) {
-		event_base_free(base);
-		return NULL;
-	}
+    if (evutil_getenv_("EVENT_SHOW_METHOD"))
+        event_msgx("libevent using: %s", base->evsel->name);
+    
+    /* allocate a single active event queue */
+    //设置优先级。
+    if (event_base_priority_init(base, 1) < 0) {
+        event_base_free(base);
+        return NULL;
+    }
 
-	/* prepare for threading */
+    /* prepare for threading */
 
 #if !defined(EVENT__DISABLE_THREAD_SUPPORT) && !defined(EVENT__DISABLE_DEBUG_MODE)
-	event_debug_created_threadable_ctx_ = 1;
+    event_debug_created_threadable_ctx_ = 1;
 #endif
 
 #ifndef EVENT__DISABLE_THREAD_SUPPORT
-	if (EVTHREAD_LOCKING_ENABLED() &&
-	    (!cfg || !(cfg->flags & EVENT_BASE_FLAG_NOLOCK))) {
-		int r;
-		EVTHREAD_ALLOC_LOCK(base->th_base_lock, 0);
-		EVTHREAD_ALLOC_COND(base->current_event_cond);
-		r = evthread_make_base_notifiable(base);
-		if (r<0) {
-			event_warnx("%s: Unable to make base notifiable.", __func__);
-			event_base_free(base);
-			return NULL;
-		}
-	}
+    if (EVTHREAD_LOCKING_ENABLED() &&
+        (!cfg || !(cfg->flags & EVENT_BASE_FLAG_NOLOCK))) {
+        int r;
+        EVTHREAD_ALLOC_LOCK(base->th_base_lock, 0);
+        EVTHREAD_ALLOC_COND(base->current_event_cond);
+        r = evthread_make_base_notifiable(base);
+        if (r<0) {
+            event_warnx("%s: Unable to make base notifiable.", __func__);
+            event_base_free(base);
+            return NULL;
+        }
+    }
 #endif
 
 #ifdef _WIN32
-	if (cfg && (cfg->flags & EVENT_BASE_FLAG_STARTUP_IOCP))
-		event_base_start_iocp_(base, cfg->n_cpus_hint);
+    if (cfg && (cfg->flags & EVENT_BASE_FLAG_STARTUP_IOCP))
+        event_base_start_iocp_(base, cfg->n_cpus_hint);
 #endif
 
-	return (base);
+    return (base);
 }
 
 int
@@ -1059,119 +1071,121 @@ event_gettime_monotonic(struct event_base *base, struct timeval *tv)
   return rv;
 }
 
-const char ** //获取当前系统支持的后端函数有哪些
+const char ** //获取当前系统支持的backend有哪些
 event_get_supported_methods(void)
 {
-	static const char **methods = NULL;
-	const struct eventop **method;
-	const char **tmp;
-	int i = 0, k;
+    static const char **methods = NULL;
+    const struct eventop **method;
+    const char **tmp;
+    int i = 0, k;
 
-	/* count all methods */
-	for (method = &eventops[0]; *method != NULL; ++method) {
-		++i;
-	}
+    /* count all methods */
+    for (method = &eventops[0]; *method != NULL; ++method) {
+        ++i;
+    }
 
-	/* allocate one more than we need for the NULL pointer */
-	tmp = mm_calloc((i + 1), sizeof(char *));
-	if (tmp == NULL)
-		return (NULL);
+    /* allocate one more than we need for the NULL pointer */
+    tmp = mm_calloc((i + 1), sizeof(char *));
+    if (tmp == NULL)
+        return (NULL);
 
-	/* populate the array with the supported methods */
-	for (k = 0, i = 0; eventops[k] != NULL; ++k) {
-		tmp[i++] = eventops[k]->name;
-	}
-	tmp[i] = NULL;
+    /* populate the array with the supported methods */
+    for (k = 0, i = 0; eventops[k] != NULL; ++k) {
+        tmp[i++] = eventops[k]->name;
+    }
+    tmp[i] = NULL;
 
-	if (methods != NULL)
-		mm_free((char**)methods);
+    if (methods != NULL)
+        mm_free((char**)methods);
 
-	methods = tmp;
+    methods = tmp;
 
-	return (methods);
+    return (methods);
 }
 
-struct event_config *
+struct event_config * //创建默认配置
 event_config_new(void)
 {
-	struct event_config *cfg = mm_calloc(1, sizeof(*cfg));
+    struct event_config *cfg = mm_calloc(1, sizeof(*cfg));
 
-	if (cfg == NULL)
-		return (NULL);
+    if (cfg == NULL)
+        return (NULL);
 
-	TAILQ_INIT(&cfg->entries);
-	cfg->max_dispatch_interval.tv_sec = -1;
-	cfg->max_dispatch_callbacks = INT_MAX;
-	cfg->limit_callbacks_after_prio = 1;
+    //初始化队列，里面保存了要避免使用的backend名称
+    TAILQ_INIT(&cfg->entries);
 
-	return (cfg);
+    cfg->max_dispatch_interval.tv_sec = -1;
+    cfg->max_dispatch_callbacks = INT_MAX;
+    cfg->limit_callbacks_after_prio = 1;
+
+    return (cfg);
 }
 
 static void //释放队列元素里的字符串空间
 event_config_entry_free(struct event_config_entry *entry)
 {
-	if (entry->avoid_method != NULL)
-		mm_free((char *)entry->avoid_method);
-	mm_free(entry);
+    if (entry->avoid_method != NULL)
+        mm_free((char *)entry->avoid_method);
+    mm_free(entry);
 }
 
-void       //释放队列里的每个元素
+void //释放队列里的每个元素
 event_config_free(struct event_config *cfg)
 {
-	struct event_config_entry *entry;
+    struct event_config_entry *entry;
 
-	while ((entry = TAILQ_FIRST(&cfg->entries)) != NULL) {
-		TAILQ_REMOVE(&cfg->entries, entry, next);
-		event_config_entry_free(entry);
-	}
-	mm_free(cfg);
+    while ((entry = TAILQ_FIRST(&cfg->entries)) != NULL) {
+        TAILQ_REMOVE(&cfg->entries, entry, next);
+        event_config_entry_free(entry);
+    }
+    mm_free(cfg);
 }
 
 int //设置标志，例如是否分配锁，是否启用IOCP，是否缓存时间，等等。
 event_config_set_flag(struct event_config *cfg, int flag)
 {
-	if (!cfg)
-		return -1;
-	cfg->flags |= flag;
-	return 0;
+    if (!cfg)
+        return -1;
+    cfg->flags |= flag; //注意这里使用或运算符
+    return 0;
 }
 
-int //避免使用指定的多路IO复用函数
+int //避免使用指定的backend
 event_config_avoid_method(struct event_config *cfg, const char *method)
 {
     //创建一个队列元素
-	struct event_config_entry *entry = mm_malloc(sizeof(*entry));
-	if (entry == NULL)
-		return (-1);
+    struct event_config_entry *entry = mm_malloc(sizeof(*entry));
+    if (entry == NULL)
+        return (-1);
 
-    //分配字符串空间，存储method
-	if ((entry->avoid_method = mm_strdup(method)) == NULL) {
-		mm_free(entry);
-		return (-1);
-	}
+    //分配字符串空间，存储method名称
+    if ((entry->avoid_method = mm_strdup(method)) == NULL) {
+        mm_free(entry);
+        return (-1);
+    }
 
     //把新创建的队列元素加入到队列
-	TAILQ_INSERT_TAIL(&cfg->entries, entry, next);
+    TAILQ_INSERT_TAIL(&cfg->entries, entry, next);
 
-	return (0);
+    return (0);
 }
 
-int //设置后端函数需要满足哪种特征，例如边缘触发还是水平触发
+int //设置backend需要满足哪种特征，例如边缘触发还是水平触发
 event_config_require_features(struct event_config *cfg, int features)
 {
-	if (!cfg)
-		return (-1);
-	cfg->require_features = features;
-	return (0);
+    if (!cfg)
+        return (-1);
+    cfg->require_features = features;
+    return (0);
 }
 
 int  //设置CPU数量，用于Windows的IOCP
 event_config_set_num_cpus_hint(struct event_config *cfg, int cpus)
 {
-	if (!cfg)
-		return (-1);
-	cfg->n_cpus_hint = cpus;
-	return (0);
+    if (!cfg)
+        return (-1);
+    cfg->n_cpus_hint = cpus;
+    return (0);
 }
 
 int
