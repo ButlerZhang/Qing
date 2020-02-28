@@ -500,22 +500,22 @@ int event_config_avoid_method(struct event_config *cfg, const char *method);
 */
 enum event_method_feature {
     /** Require an event method that allows edge-triggered events with EV_ET. */
-    EV_FEATURE_ET = 0x01,
+    EV_FEATURE_ET = 0x01,   //要求使用边缘触发
     /** Require an event method where having one event triggered among
      * many is [approximately] an O(1) operation. This excludes (for
      * example) select and poll, which are approximately O(N) for N
      * equal to the total number of possible events. */
-    EV_FEATURE_O1 = 0x02,
+    EV_FEATURE_O1 = 0x02,   //需要O(1)时间复杂度的backend，因此排除了select和poll，epoll满足。
     /** Require an event method that allows file descriptors as well as
      * sockets. */
-    EV_FEATURE_FDS = 0x04,
+    EV_FEATURE_FDS = 0x04,  //能够像支持套接字一样支持文件描述符。
     /** Require an event method that allows you to use EV_CLOSED to detect
      * connection close without the necessity of reading all the pending data.
      *
      * Methods that do support EV_CLOSED may not be able to provide support on
      * all kernel versions.
      **/
-    EV_FEATURE_EARLY_CLOSE = 0x08
+    EV_FEATURE_EARLY_CLOSE = 0x08 //不需要读取所有味觉数据就能用EV_CLOSED检测连接是否关闭
 };
 
 /**
@@ -527,59 +527,59 @@ enum event_method_feature {
        event_method_feature
  */
 enum event_base_config_flag {
-	/** Do not allocate a lock for the event base, even if we have
-	    locking set up.
+    /** Do not allocate a lock for the event base, even if we have
+        locking set up.
 
-	    Setting this option will make it unsafe and nonfunctional to call
-	    functions on the base concurrently from multiple threads.
-	*/
+        Setting this option will make it unsafe and nonfunctional to call
+        functions on the base concurrently from multiple threads.
+    */
     //不要为event_base分配锁，多线程下可能会不安全。
-	EVENT_BASE_FLAG_NOLOCK = 0x01,
+    EVENT_BASE_FLAG_NOLOCK = 0x01,
 
-	/** Do not check the EVENT_* environment variables when configuring
-	    an event_base  */
+    /** Do not check the EVENT_* environment variables when configuring
+        an event_base  */
     //不要检测环境变量，还不明白为什么要有这个标志。
-	EVENT_BASE_FLAG_IGNORE_ENV = 0x02,
+    EVENT_BASE_FLAG_IGNORE_ENV = 0x02,
 
-	/** Windows only: enable the IOCP dispatcher at startup
+    /** Windows only: enable the IOCP dispatcher at startup
 
-	    If this flag is set then bufferevent_socket_new() and
-	    evconn_listener_new() will use IOCP-backed implementations
-	    instead of the usual select-based one on Windows.
-	 */
+        If this flag is set then bufferevent_socket_new() and
+        evconn_listener_new() will use IOCP-backed implementations
+        instead of the usual select-based one on Windows.
+     */
     //启动IOCP所需要的分发逻辑，只用于Windows系统。
-	EVENT_BASE_FLAG_STARTUP_IOCP = 0x04,
+    EVENT_BASE_FLAG_STARTUP_IOCP = 0x04,
 
-	/** Instead of checking the current time every time the event loop is
-	    ready to run timeout callbacks, check after each timeout callback.
-	 */
+    /** Instead of checking the current time every time the event loop is
+        ready to run timeout callbacks, check after each timeout callback.
+     */
     //不要缓存时间，这使得事件循环里每次都获取系统时间。
-	EVENT_BASE_FLAG_NO_CACHE_TIME = 0x08,
+    EVENT_BASE_FLAG_NO_CACHE_TIME = 0x08,
 
-	/** If we are using the epoll backend, this flag says that it is
-	    safe to use Libevent's internal change-list code to batch up
-	    adds and deletes in order to try to do as few syscalls as
-	    possible.  Setting this flag can make your code run faster, but
-	    it may trigger a Linux bug: it is not safe to use this flag
-	    if you have any fds cloned by dup() or its variants.  Doing so
-	    will produce strange and hard-to-diagnose bugs.
+    /** If we are using the epoll backend, this flag says that it is
+        safe to use Libevent's internal change-list code to batch up
+        adds and deletes in order to try to do as few syscalls as
+        possible.  Setting this flag can make your code run faster, but
+        it may trigger a Linux bug: it is not safe to use this flag
+        if you have any fds cloned by dup() or its variants.  Doing so
+        will produce strange and hard-to-diagnose bugs.
 
-	    This flag can also be activated by setting the
-	    EVENT_EPOLL_USE_CHANGELIST environment variable.
+        This flag can also be activated by setting the
+        EVENT_EPOLL_USE_CHANGELIST environment variable.
 
-	    This flag has no effect if you wind up using a backend other than
-	    epoll.
-	 */
+        This flag has no effect if you wind up using a backend other than
+        epoll.
+     */
     //需要了解什么是change-list
-	EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST = 0x10,
+    EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST = 0x10,
 
-	/** Ordinarily, Libevent implements its time and timeout code using
-	    the fastest monotonic timer that we have.  If this flag is set,
-	    however, we use less efficient more precise timer, assuming one is
-	    present.
-	 */
-    //需要了解monotonic timer
-	EVENT_BASE_FLAG_PRECISE_TIMER = 0x20
+    /** Ordinarily, Libevent implements its time and timeout code using
+        the fastest monotonic timer that we have.  If this flag is set,
+        however, we use less efficient more precise timer, assuming one is
+        present.
+     */
+    //设置此标志，表示不使用monotonic timer。最好使用monotonic timer。
+    EVENT_BASE_FLAG_PRECISE_TIMER = 0x20
 };
 
 /**
@@ -930,22 +930,22 @@ int event_base_got_break(struct event_base *);
 /**@{*/
 /** Indicates that a timeout has occurred.  It's not necessary to pass
  * this flag to event_for new()/event_assign() to get a timeout. */
-#define EV_TIMEOUT	0x01
+#define EV_TIMEOUT	0x01        //超时事件
 /** Wait for a socket or FD to become readable */
-#define EV_READ		0x02
+#define EV_READ		0x02        //可读事件
 /** Wait for a socket or FD to become writeable */
-#define EV_WRITE	0x04
+#define EV_WRITE	0x04        //可写事件
 /** Wait for a POSIX signal to be raised*/
-#define EV_SIGNAL	0x08
+#define EV_SIGNAL	0x08        //信号
 /**
  * Persistent event: won't get removed automatically when activated.
  *
  * When a persistent event with a timeout becomes activated, its timeout
  * is reset to 0.
  */
-#define EV_PERSIST	0x10
+#define EV_PERSIST	0x10        //持续事件，激活后不会移除，并且超时值重置为0
 /** Select edge-triggered behavior, if supported by the backend. */
-#define EV_ET		0x20
+#define EV_ET		0x20        //边缘触发
 /**
  * If this option is provided, then event_del() will not block in one thread
  * while waiting for the event callback to complete in another thread.
@@ -957,7 +957,7 @@ int event_base_got_break(struct event_base *);
  * THIS IS AN EXPERIMENTAL API. IT MIGHT CHANGE BEFORE THE LIBEVENT 2.1 SERIES
  * BECOMES STABLE.
  **/
-#define EV_FINALIZE     0x40
+#define EV_FINALIZE     0x40    //实验性API，用于多线程中。
 /**
  * Detects connection close events.  You can use this to detect when a
  * connection has been closed, without having to read all the pending data
@@ -966,7 +966,7 @@ int event_base_got_break(struct event_base *);
  * Not all backends support EV_CLOSED.  To detect or require it, use the
  * feature flag EV_FEATURE_EARLY_CLOSE.
  **/
-#define EV_CLOSED	0x80
+#define EV_CLOSED	0x80        //检测连接关闭事件，不是所有backend都支持。
 /**@}*/
 
 /**

@@ -54,16 +54,16 @@ extern "C" {
 /* For evkeyvalq */
 #include <event2/keyvalq_struct.h>
 
-#define EVLIST_TIMEOUT	    0x01
-#define EVLIST_INSERTED	    0x02
-#define EVLIST_SIGNAL	    0x04
-#define EVLIST_ACTIVE	    0x08
-#define EVLIST_INTERNAL	    0x10
-#define EVLIST_ACTIVE_LATER 0x20
-#define EVLIST_FINALIZING   0x40
-#define EVLIST_INIT	    0x80
+#define EVLIST_TIMEOUT	    0x01            //event从属于定时器队列或者时间堆
+#define EVLIST_INSERTED	    0x02            //event从属于注册队列
+#define EVLIST_SIGNAL	    0x04            //没有使用
+#define EVLIST_ACTIVE	    0x08            //event从属于活动队列
+#define EVLIST_INTERNAL	    0x10            //内部使用的event
+#define EVLIST_ACTIVE_LATER 0x20            //???
+#define EVLIST_FINALIZING   0x40            //???
+#define EVLIST_INIT         0x80            //event已经初始化
 
-#define EVLIST_ALL          0xff
+#define EVLIST_ALL          0xff            //所有标记，不要赋值
 
 /* Fix so that people don't have to run with <sys/queue.h> */
 #ifndef TAILQ_ENTRY
@@ -105,52 +105,81 @@ struct name {								\
 struct event;
 
 struct event_callback {
-	TAILQ_ENTRY(event_callback) evcb_active_next;
-	short evcb_flags;
-	ev_uint8_t evcb_pri;	/* smaller numbers are higher priority */
-	ev_uint8_t evcb_closure;
-	/* allows us to adopt for different types of events */
-        union {
-		void (*evcb_callback)(evutil_socket_t, short, void *);
-		void (*evcb_selfcb)(struct event_callback *, void *);
-		void (*evcb_evfinalize)(struct event *, void *);
-		void (*evcb_cbfinalize)(struct event_callback *, void *);
-	} evcb_cb_union;
-	void *evcb_arg;
+
+    //激活队列。
+    TAILQ_ENTRY(event_callback) evcb_active_next;
+
+    //EVLIST_*标记，是否初始化，是否激活，实际上就是判断在哪个队列。
+    short evcb_flags;
+
+    //优先级，值越小，优先级越高。
+    ev_uint8_t evcb_pri;    /* smaller numbers are higher priority */
+
+    //Event closure codes，用于判断调用哪个回调函数。
+    ev_uint8_t evcb_closure;
+
+    /* allows us to adopt for different types of events */
+    // 不同类型的回调函数。
+    union {
+        void (*evcb_callback)(evutil_socket_t, short, void *);
+        void (*evcb_selfcb)(struct event_callback *, void *);
+        void (*evcb_evfinalize)(struct event *, void *);
+        void (*evcb_cbfinalize)(struct event_callback *, void *);
+    } evcb_cb_union;
+    void *evcb_arg;//回调参数
 };
 
 struct event_base;
-struct event {
-	struct event_callback ev_evcallback;
+struct event {          //Event Handler
 
-	/* for managing timeouts */
-	union {
-		TAILQ_ENTRY(event) ev_next_with_common_timeout;
-		int min_heap_idx;
-	} ev_timeout_pos;
-	evutil_socket_t ev_fd;
+    //用于回调的信息。
+    struct event_callback ev_evcallback;
 
-	struct event_base *ev_base;
+    /* for managing timeouts */
+    union {
+        TAILQ_ENTRY(event) ev_next_with_common_timeout;
+        int min_heap_idx;       //event在小根堆的下标
+    } ev_timeout_pos;           //仅用于定时器
 
-	union {
-		/* used for io events */
-		struct {
-			LIST_ENTRY (event) ev_io_next;
-			struct timeval ev_timeout;
-		} ev_io;
+    //对于IO事件表示文件描述符，对于信号表示信号值。
+    evutil_socket_t ev_fd;
 
-		/* used by signal events */
-		struct {
-			LIST_ENTRY (event) ev_signal_next;
-			short ev_ncalls;
-			/* Allows deletes in callback */
-			short *ev_pncalls;
-		} ev_signal;
-	} ev_;
+    //属于哪个Reactor
+    struct event_base *ev_base;
 
-	short ev_events;
-	short ev_res;		/* result passed to event callback */
-	struct timeval ev_timeout;
+    //IO和信号不能同时设置，所以使用联合体节省内存。
+    union {
+        //无论是IO还是信号，都有一个链表，用于用户对同一个fd调用event_new多次，
+        //并且都使用了不同的回调函数。每次调用event_new都会产生一个event*，这个
+        //xxx_next成员就是把这些event连接起来的。
+
+        /* used for io events */
+        struct {
+            LIST_ENTRY (event) ev_io_next;
+            struct timeval ev_timeout;
+        } ev_io;
+
+        /* used by signal events */
+        struct {
+            LIST_ENTRY (event) ev_signal_next;
+
+            //事件就绪时，调用ev_callback的次数。
+            short ev_ncalls;
+
+            /* Allows deletes in callback */
+            //指针，指向ev_ncalls。
+            short *ev_pncalls;
+        } ev_signal;
+    } ev_;
+
+    //监听事件的类型，即enum event flags。
+    short ev_events;
+
+    //???
+    short ev_res;       /* result passed to event callback */
+
+    //用于定时器，超时值
+    struct timeval ev_timeout;
 };
 
 TAILQ_HEAD (event_list, event);

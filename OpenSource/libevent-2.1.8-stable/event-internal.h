@@ -66,20 +66,20 @@ extern "C" {
     @{
  */
 /** A regular event. Uses the evcb_callback callback */
-#define EV_CLOSURE_EVENT 0
+#define EV_CLOSURE_EVENT 0      //定期事件，使用evcb_callback。
 /** A signal event. Uses the evcb_callback callback */
-#define EV_CLOSURE_EVENT_SIGNAL 1
+#define EV_CLOSURE_EVENT_SIGNAL 1 //信号事件，使用evcb_callback。
 /** A persistent non-signal event. Uses the evcb_callback callback */
-#define EV_CLOSURE_EVENT_PERSIST 2
+#define EV_CLOSURE_EVENT_PERSIST 2 //持续的非信号事件，使用evcb_callback。
 /** A simple callback. Uses the evcb_selfcb callback. */
-#define EV_CLOSURE_CB_SELF 3
+#define EV_CLOSURE_CB_SELF 3 //简单回调，使用evcb_selfcb。
 /** A finalizing callback. Uses the evcb_cbfinalize callback. */
-#define EV_CLOSURE_CB_FINALIZE 4
+#define EV_CLOSURE_CB_FINALIZE 4 //最终回调，使用evcb_cbfinalize。
 /** A finalizing event. Uses the evcb_evfinalize callback. */
-#define EV_CLOSURE_EVENT_FINALIZE 5
+#define EV_CLOSURE_EVENT_FINALIZE 5 //结束事件，使用evcb_evfinalize。
 /** A finalizing event that should get freed after. Uses the evcb_evfinalize
  * callback. */
-#define EV_CLOSURE_EVENT_FINALIZE_FREE 6
+#define EV_CLOSURE_EVENT_FINALIZE_FREE 6 //稍后就要释放的结束事件，使用evcb_evfinalize。
 /** @} */
 
 /** Structure to define the backend of a given event_base. */
@@ -281,11 +281,14 @@ struct event_base {
 	 * that have triggered, and whose callbacks need to be called).  Low
 	 * priority numbers are more important, and stall higher ones.
 	 */
+     //存储优先级队列的数组。
 	struct evcallback_list *activequeues;
 	/** The length of the activequeues array */
+    //优先级大小，也是数组大小，等于队列个数。
 	int nactivequeues;
 	/** A list of event_callbacks that should become active the next time
 	 * we process events, but not this time. */
+    //下一次要激活处理的事件队列。
 	struct evcallback_list active_later_queue;
 
 	/* common timeout logic */
@@ -340,11 +343,12 @@ struct event_base {
 #endif
 
 	/** Flags that this base was configured with */
+    //从event_config中拷贝，例如是否要分配锁、是否启用IOCP等。
 	enum event_base_config_flag flags;
 
-	struct timeval max_dispatch_time;
-	int max_dispatch_callbacks;
-	int limit_callbacks_after_prio;
+	struct timeval max_dispatch_time;   //从event_config中拷贝
+	int max_dispatch_callbacks;         //从event_config中拷贝
+	int limit_callbacks_after_prio;     //从event_config中拷贝
 
 	/* Notify main thread to wake up break, etc. */
 	/** True if the base already has a pending notify, and we don't need
