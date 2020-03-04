@@ -515,7 +515,7 @@ enum event_method_feature {
      * Methods that do support EV_CLOSED may not be able to provide support on
      * all kernel versions.
      **/
-    EV_FEATURE_EARLY_CLOSE = 0x08 //不需要读取所有味觉数据就能用EV_CLOSED检测连接是否关闭
+    EV_FEATURE_EARLY_CLOSE = 0x08 //不需要读取所有未决数据就能用EV_CLOSED检测连接是否关闭
 };
 
 /**

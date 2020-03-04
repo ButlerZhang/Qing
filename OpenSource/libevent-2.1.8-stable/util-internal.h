@@ -249,6 +249,8 @@ void evutil_rtrim_lws_(char *);
 	struct subtype *sub = EVUTIL_UPCAST(super, struct subtype, common);
 	...
     }
+
+    通过成员变量的地址获取其所在的结构体变量的地址。
  */
 #define EVUTIL_UPCAST(ptr, type, field)				\
 	((type *)(((char*)(ptr)) - evutil_offsetof(type, field)))
