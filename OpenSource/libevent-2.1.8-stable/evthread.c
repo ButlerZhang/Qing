@@ -308,37 +308,41 @@ debug_cond_wait(void *cond_, void *lock_, const struct timeval *tv)
 }
 
 /* misspelled version for backward compatibility */
-void
+void //开启调试锁功能。
 evthread_enable_lock_debuging(void)
 {
-	evthread_enable_lock_debugging();
+    evthread_enable_lock_debugging();
 }
 
-void
+void //开启调试锁功能。
 evthread_enable_lock_debugging(void)
 {
-	struct evthread_lock_callbacks cbs = {
-		EVTHREAD_LOCK_API_VERSION,
-		EVTHREAD_LOCKTYPE_RECURSIVE,
-		debug_lock_alloc,
-		debug_lock_free,
-		debug_lock_lock,
-		debug_lock_unlock
-	};
-	if (evthread_lock_debugging_enabled_)
-		return;
-	memcpy(&original_lock_fns_, &evthread_lock_fns_,
-	    sizeof(struct evthread_lock_callbacks));
-	memcpy(&evthread_lock_fns_, &cbs,
-	    sizeof(struct evthread_lock_callbacks));
+    struct evthread_lock_callbacks cbs = {
+        EVTHREAD_LOCK_API_VERSION,
+        EVTHREAD_LOCKTYPE_RECURSIVE,
+        debug_lock_alloc,
+        debug_lock_free,
+        debug_lock_lock,
+        debug_lock_unlock
+    };
+    if (evthread_lock_debugging_enabled_)
+        return;
 
-	memcpy(&original_cond_fns_, &evthread_cond_fns_,
-	    sizeof(struct evthread_condition_callbacks));
-	evthread_cond_fns_.wait_condition = debug_cond_wait;
-	evthread_lock_debugging_enabled_ = 1;
+    //把当前用户定制的锁操作复制到original_lock_fns_中。
+    memcpy(&original_lock_fns_, &evthread_lock_fns_,
+        sizeof(struct evthread_lock_callbacks));
 
-	/* XXX return value should get checked. */
-	event_global_setup_locks_(0);
+    //将当前的锁操作设置成调试锁操作，但调试锁操作函数内部
+    //还是使用original_lock_fns_的锁操作函数。
+    memcpy(&evthread_lock_fns_, &cbs,
+        sizeof(struct evthread_lock_callbacks));
+    memcpy(&original_cond_fns_, &evthread_cond_fns_,
+        sizeof(struct evthread_condition_callbacks));
+    evthread_cond_fns_.wait_condition = debug_cond_wait;
+    evthread_lock_debugging_enabled_ = 1;
+
+    /* XXX return value should get checked. */
+    event_global_setup_locks_(0);
 }
 
 int

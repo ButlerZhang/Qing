@@ -163,29 +163,33 @@ evthread_posix_cond_wait(void *cond_, void *lock_, const struct timeval *tv)
 int
 evthread_use_pthreads(void)
 {
-	struct evthread_lock_callbacks cbs = {
-		EVTHREAD_LOCK_API_VERSION,
-		EVTHREAD_LOCKTYPE_RECURSIVE,
-		evthread_posix_lock_alloc,
-		evthread_posix_lock_free,
-		evthread_posix_lock,
-		evthread_posix_unlock
-	};
-	struct evthread_condition_callbacks cond_cbs = {
-		EVTHREAD_CONDITION_API_VERSION,
-		evthread_posix_cond_alloc,
-		evthread_posix_cond_free,
-		evthread_posix_cond_signal,
-		evthread_posix_cond_wait
-	};
-	/* Set ourselves up to get recursive locks. */
-	if (pthread_mutexattr_init(&attr_recursive))
-		return -1;
-	if (pthread_mutexattr_settype(&attr_recursive, PTHREAD_MUTEX_RECURSIVE))
-		return -1;
+    //锁
+    struct evthread_lock_callbacks cbs = {
+        EVTHREAD_LOCK_API_VERSION,
+        EVTHREAD_LOCKTYPE_RECURSIVE,
+        evthread_posix_lock_alloc,
+        evthread_posix_lock_free,
+        evthread_posix_lock,
+        evthread_posix_unlock
+    };
 
-	evthread_set_lock_callbacks(&cbs);
-	evthread_set_condition_callbacks(&cond_cbs);
-	evthread_set_id_callback(evthread_posix_get_id);
-	return 0;
+    //条件变量
+    struct evthread_condition_callbacks cond_cbs = {
+        EVTHREAD_CONDITION_API_VERSION,
+        evthread_posix_cond_alloc,
+        evthread_posix_cond_free,
+        evthread_posix_cond_signal,
+        evthread_posix_cond_wait
+    };
+
+    /* Set ourselves up to get recursive locks. */
+    if (pthread_mutexattr_init(&attr_recursive))
+        return -1;
+    if (pthread_mutexattr_settype(&attr_recursive, PTHREAD_MUTEX_RECURSIVE))
+        return -1;
+
+    evthread_set_lock_callbacks(&cbs);
+    evthread_set_condition_callbacks(&cond_cbs);
+    evthread_set_id_callback(evthread_posix_get_id);
+    return 0;
 }

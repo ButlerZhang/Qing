@@ -44,6 +44,10 @@
   library, you'll need to configure threading functions manually using
   evthread_set_lock_callbacks() and evthread_set_condition_callbacks().
 
+  通常情况下，使用event_use_windows_threads()或event_use_pthreads()开启libevent线
+  程安全。如果使用了其它线程库，需要手动调用evthread_set_lock_callbacks()函数和
+  evthread_set_condition_callbacks()函数。
+
  */
 
 #include <event2/visibility.h>
@@ -82,15 +86,17 @@ extern "C" {
 /** A recursive lock is one that can be acquired multiple times at once by the
  * same thread.  No other process can allocate the lock until the thread that
  * has been holding it has unlocked it as many times as it locked it. */
-#define EVTHREAD_LOCKTYPE_RECURSIVE 1
+#define EVTHREAD_LOCKTYPE_RECURSIVE 1   //递归锁
 /* A read-write lock is one that allows multiple simultaneous readers, but
  * where any one writer excludes all other writers and readers. */
-#define EVTHREAD_LOCKTYPE_READWRITE 2
+#define EVTHREAD_LOCKTYPE_READWRITE 2   //读写锁
 /**@}*/
 
 /** This structure describes the interface a threading library uses for
  * locking.   It's used to tell evthread_set_lock_callbacks() how to use
  * locking on this platform.
+
+   //锁结构。用于定制自己的锁。
  */
 struct evthread_lock_callbacks {
 	/** The current version of the locking API.  Set this to
@@ -103,6 +109,7 @@ struct evthread_lock_callbacks {
 	 * (Note that RECURSIVE locks are currently mandatory, and
 	 * READWRITE locks are not currently used.)
 	 **/
+    //锁类型，0表示普通锁，1表示递归锁，2表示读写锁。
 	unsigned supported_locktypes;
 	/** Function to allocate and initialize new lock of type 'locktype'.
 	 * Returns NULL on failure. */
@@ -112,6 +119,11 @@ struct evthread_lock_callbacks {
 	void (*free)(void *lock, unsigned locktype);
 	/** Acquire an already-allocated lock at 'lock' with mode 'mode'.
 	 * Returns 0 on success, and nonzero on failure. */
+
+    //参数mode的含义：
+    //EVTHREAD_READ：仅用于读写锁，为读操作请求或者释放锁。
+    //EVTHREAD_WRITE：仅用于读写锁，为写操作请求或者释放锁。
+    //EVTHREAD_TRY：仅用于锁定，仅在可以立刻锁定的时候才请求锁定。
 	int (*lock)(unsigned mode, void *lock);
 	/** Release a lock at 'lock' using mode 'mode'.  Returns 0 on success,
 	 * and nonzero on failure. */
@@ -136,6 +148,8 @@ struct timeval;
 /** This structure describes the interface a threading library uses for
  * condition variables.  It's used to tell evthread_set_condition_callbacks
  * how to use locking on this platform.
+
+   //条件变量结构。
  */
 struct evthread_condition_callbacks {
 	/** The current version of the conditions API.  Set this to
@@ -223,6 +237,8 @@ int evthread_use_pthreads(void);
  *
  * If you're going to call this function, you must do so before any locks are
  * allocated.
+
+   //开启调试锁功能。
  **/
 EVENT2_EXPORT_SYMBOL
 void evthread_enable_lock_debugging(void);
@@ -242,6 +258,9 @@ struct event_base;
     support should be necessary and sufficient.
 
     @return 0 on success, -1 on failure.
+
+    另一条线程或信号，可以通过调用此函数安全地唤醒event_base。
+    不需要自己手动调用。启用线程安全即可。
  */
 EVENT2_EXPORT_SYMBOL
 int evthread_make_base_notifiable(struct event_base *base);

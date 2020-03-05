@@ -37,12 +37,15 @@ extern "C" {
  * mm_names for our own use, but make sure that the symbols have longer names
  * so they don't conflict with other libraries (like, say, libmm). */
 
+   //下面这些函数仅供libevent内部使用。
+
 /** Allocate uninitialized memory.
  *
  * @return On success, return a pointer to sz newly allocated bytes.
  *     On failure, set errno to ENOMEM and return NULL.
  *     If the argument sz is 0, simply return NULL.
  */
+//分配未初始化的内存，成功返回地址，否则返回NULL。
 void *event_mm_malloc_(size_t sz);
 
 /** Allocate memory initialized to zero.
@@ -53,6 +56,7 @@ void *event_mm_malloc_(size_t sz);
  *     set errno to ENOMEM and return NULL.
  *     If either arguments are 0, simply return NULL.
  */
+//分配内存，并初始化为0。
 void *event_mm_calloc_(size_t count, size_t size);
 
 /** Duplicate a string.
@@ -63,10 +67,16 @@ void *event_mm_calloc_(size_t count, size_t size);
  *     occurs (or would occur) in the process.
  *     If the argument str is NULL, set errno to EINVAL and return NULL.
  */
+//复制字符串。
 char *event_mm_strdup_(const char *str);
 
+//重新分配内存。
 void *event_mm_realloc_(void *p, size_t sz);
+
+//释放内存。
 void event_mm_free_(void *p);
+
+//用更简短的名称替换上面的函数。
 #define mm_malloc(sz) event_mm_malloc_(sz)
 #define mm_calloc(count, size) event_mm_calloc_((count), (size))
 #define mm_strdup(s) event_mm_strdup_(s)

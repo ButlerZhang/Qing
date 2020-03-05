@@ -299,43 +299,47 @@ evthread_win32_cond_wait(void *cond_, void *lock_, const struct timeval *tv)
 int
 evthread_use_windows_threads(void)
 {
-	struct evthread_lock_callbacks cbs = {
-		EVTHREAD_LOCK_API_VERSION,
-		EVTHREAD_LOCKTYPE_RECURSIVE,
-		evthread_win32_lock_create,
-		evthread_win32_lock_free,
-		evthread_win32_lock,
-		evthread_win32_unlock
-	};
+    //锁
+    struct evthread_lock_callbacks cbs = {
+        EVTHREAD_LOCK_API_VERSION,
+        EVTHREAD_LOCKTYPE_RECURSIVE,
+        evthread_win32_lock_create,
+        evthread_win32_lock_free,
+        evthread_win32_lock,
+        evthread_win32_unlock
+    };
 
+    //条件变量
+    struct evthread_condition_callbacks cond_cbs = {
+        EVTHREAD_CONDITION_API_VERSION,
+        evthread_win32_cond_alloc,
+        evthread_win32_cond_free,
+        evthread_win32_cond_signal,
+        evthread_win32_cond_wait
+    };
 
-	struct evthread_condition_callbacks cond_cbs = {
-		EVTHREAD_CONDITION_API_VERSION,
-		evthread_win32_cond_alloc,
-		evthread_win32_cond_free,
-		evthread_win32_cond_signal,
-		evthread_win32_cond_wait
-	};
+    //旧版本的Windows不支持条件变量，因此需要单独封装。
+    //新版本的Windows支持条件变量，因此可以直接使用。
 #ifdef WIN32_HAVE_CONDITION_VARIABLES
-	struct evthread_condition_callbacks condvar_cbs = {
-		EVTHREAD_CONDITION_API_VERSION,
-		evthread_win32_condvar_alloc,
-		evthread_win32_condvar_free,
-		evthread_win32_condvar_signal,
-		evthread_win32_condvar_wait
-	};
+    struct evthread_condition_callbacks condvar_cbs = {
+        EVTHREAD_CONDITION_API_VERSION,
+        evthread_win32_condvar_alloc,
+        evthread_win32_condvar_free,
+        evthread_win32_condvar_signal,
+        evthread_win32_condvar_wait
+    };
 #endif
 
-	evthread_set_lock_callbacks(&cbs);
-	evthread_set_id_callback(evthread_win32_get_id);
-#ifdef WIN32_HAVE_CONDITION_VARIABLES
-	if (evthread_win32_condvar_init()) {
-		evthread_set_condition_callbacks(&condvar_cbs);
-		return 0;
-	}
-#endif
-	evthread_set_condition_callbacks(&cond_cbs);
+    evthread_set_lock_callbacks(&cbs);
+    evthread_set_id_callback(evthread_win32_get_id);
 
-	return 0;
+#ifdef WIN32_HAVE_CONDITION_VARIABLES
+    if (evthread_win32_condvar_init()) {
+        evthread_set_condition_callbacks(&condvar_cbs);
+        return 0;
+    }
+#endif
+
+    evthread_set_condition_callbacks(&cond_cbs);
+    return 0;
 }
-

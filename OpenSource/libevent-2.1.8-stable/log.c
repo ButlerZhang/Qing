@@ -60,6 +60,7 @@
 static void event_log(int severity, const char *msg);
 static void event_exit(int errcode) EV_NORETURN;
 
+//出现致命错误时的回调函数。
 static event_fatal_cb fatal_fn = NULL;
 
 #ifdef EVENT_DEBUG_LOGGING_ENABLED
@@ -89,87 +90,87 @@ event_enable_debug_logging(ev_uint32_t which)
 #endif
 }
 
-void
+void //设置致命错误的处理函数。
 event_set_fatal_callback(event_fatal_cb cb)
 {
-	fatal_fn = cb;
+    fatal_fn = cb;
 }
 
-static void
+static void //默认情况下，直接退出。
 event_exit(int errcode)
 {
-	if (fatal_fn) {
-		fatal_fn(errcode);
-		exit(errcode); /* should never be reached */
-	} else if (errcode == EVENT_ERR_ABORT_)
-		abort();
-	else
-		exit(errcode);
+    if (fatal_fn) {
+        fatal_fn(errcode);
+        exit(errcode); /* should never be reached */
+    } else if (errcode == EVENT_ERR_ABORT_)
+        abort();
+    else
+        exit(errcode);
 }
 
-void
+void //打印错误信息。
 event_err(int eval, const char *fmt, ...)
 {
-	va_list ap;
+    va_list ap;
 
-	va_start(ap, fmt);
-	event_logv_(EVENT_LOG_ERR, strerror(errno), fmt, ap);
-	va_end(ap);
-	event_exit(eval);
+    va_start(ap, fmt);
+    event_logv_(EVENT_LOG_ERR, strerror(errno), fmt, ap);
+    va_end(ap);
+    event_exit(eval);
 }
 
-void
+void //打印警告信息。
 event_warn(const char *fmt, ...)
 {
-	va_list ap;
+    va_list ap;
 
-	va_start(ap, fmt);
-	event_logv_(EVENT_LOG_WARN, strerror(errno), fmt, ap);
-	va_end(ap);
+    va_start(ap, fmt);
+    event_logv_(EVENT_LOG_WARN, strerror(errno), fmt, ap);
+    va_end(ap);
 }
 
-void
+void //打印socket错误信息。
 event_sock_err(int eval, evutil_socket_t sock, const char *fmt, ...)
 {
-	va_list ap;
-	int err = evutil_socket_geterror(sock);
+    va_list ap;
+    int err = evutil_socket_geterror(sock);
 
-	va_start(ap, fmt);
-	event_logv_(EVENT_LOG_ERR, evutil_socket_error_to_string(err), fmt, ap);
-	va_end(ap);
-	event_exit(eval);
+    va_start(ap, fmt);
+    event_logv_(EVENT_LOG_ERR, evutil_socket_error_to_string(err), fmt, ap);
+    va_end(ap);
+    event_exit(eval);
 }
 
-void
+void //打印socket警告信息。
 event_sock_warn(evutil_socket_t sock, const char *fmt, ...)
 {
-	va_list ap;
-	int err = evutil_socket_geterror(sock);
+    va_list ap;
+    int err = evutil_socket_geterror(sock);
 
-	va_start(ap, fmt);
-	event_logv_(EVENT_LOG_WARN, evutil_socket_error_to_string(err), fmt, ap);
-	va_end(ap);
+    va_start(ap, fmt);
+    event_logv_(EVENT_LOG_WARN, evutil_socket_error_to_string(err), fmt, ap);
+    va_end(ap);
 }
 
-void
+void //打印错误信息。
 event_errx(int eval, const char *fmt, ...)
 {
-	va_list ap;
+    va_list ap;
 
-	va_start(ap, fmt);
-	event_logv_(EVENT_LOG_ERR, NULL, fmt, ap);
-	va_end(ap);
-	event_exit(eval);
+    va_start(ap, fmt);
+    event_logv_(EVENT_LOG_ERR, NULL, fmt, ap);
+    va_end(ap);
+    event_exit(eval);
 }
 
-void
+void //打印警告信息。
 event_warnx(const char *fmt, ...)
 {
-	va_list ap;
+    va_list ap;
 
-	va_start(ap, fmt);
-	event_logv_(EVENT_LOG_WARN, NULL, fmt, ap);
-	va_end(ap);
+    va_start(ap, fmt);
+    event_logv_(EVENT_LOG_WARN, NULL, fmt, ap);
+    va_end(ap);
 }
 
 void
@@ -192,62 +193,65 @@ event_debugx_(const char *fmt, ...)
 	va_end(ap);
 }
 
-void
+void //组装日志信息。
 event_logv_(int severity, const char *errstr, const char *fmt, va_list ap)
 {
-	char buf[1024];
-	size_t len;
+    char buf[1024];
+    size_t len;
 
-	if (severity == EVENT_LOG_DEBUG && !event_debug_get_logging_mask_())
-		return;
+    if (severity == EVENT_LOG_DEBUG && !event_debug_get_logging_mask_())
+        return;
 
-	if (fmt != NULL)
-		evutil_vsnprintf(buf, sizeof(buf), fmt, ap);
-	else
-		buf[0] = '\0';
+    if (fmt != NULL)
+        //格式化日志信息，填充到buf。
+        evutil_vsnprintf(buf, sizeof(buf), fmt, ap);
+    else
+        buf[0] = '\0';
 
-	if (errstr) {
-		len = strlen(buf);
-		if (len < sizeof(buf) - 3) {
-			evutil_snprintf(buf + len, sizeof(buf) - len, ": %s", errstr);
-		}
-	}
+    //存在额外的信息。
+    if (errstr) {
+        len = strlen(buf);
+        if (len < sizeof(buf) - 3) { //减去冒号、空格、\0
+            evutil_snprintf(buf + len, sizeof(buf) - len, ": %s", errstr);
+        }
+    }
 
-	event_log(severity, buf);
+    //写日志信息。
+    event_log(severity, buf);
 }
 
 static event_log_cb log_fn = NULL;
 
-void
+void //设置写日志的回调函数。
 event_set_log_callback(event_log_cb cb)
 {
-	log_fn = cb;
+    log_fn = cb;
 }
 
-static void
+static void //根据日志等级写日志，默认输出到stderr。
 event_log(int severity, const char *msg)
 {
-	if (log_fn)
-		log_fn(severity, msg);
-	else {
-		const char *severity_str;
-		switch (severity) {
-		case EVENT_LOG_DEBUG:
-			severity_str = "debug";
-			break;
-		case EVENT_LOG_MSG:
-			severity_str = "msg";
-			break;
-		case EVENT_LOG_WARN:
-			severity_str = "warn";
-			break;
-		case EVENT_LOG_ERR:
-			severity_str = "err";
-			break;
-		default:
-			severity_str = "???";
-			break;
-		}
-		(void)fprintf(stderr, "[%s] %s\n", severity_str, msg);
-	}
+    if (log_fn)
+        log_fn(severity, msg);
+    else {
+        const char *severity_str;
+        switch (severity) {
+        case EVENT_LOG_DEBUG:
+            severity_str = "debug";
+            break;
+        case EVENT_LOG_MSG:
+            severity_str = "msg";
+            break;
+        case EVENT_LOG_WARN:
+            severity_str = "warn";
+            break;
+        case EVENT_LOG_ERR:
+            severity_str = "err";
+            break;
+        default:
+            severity_str = "???";
+            break;
+        }
+        (void)fprintf(stderr, "[%s] %s\n", severity_str, msg);
+    }
 }

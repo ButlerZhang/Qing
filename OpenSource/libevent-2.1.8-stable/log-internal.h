@@ -29,6 +29,8 @@
 
 #include "event2/util.h"
 
+//EV_CHECK_FMT用来检查可变参数是否与第一个参数要求的格式相同。
+//EV_NORETURN表示没有返回值。这两个宏仅用于GNU编译器。
 #ifdef __GNUC__
 #define EV_CHECK_FMT(a,b) __attribute__((format(printf, a, b)))
 #define EV_NORETURN __attribute__((noreturn))

@@ -3556,101 +3556,101 @@ static void *(*mm_malloc_fn_)(size_t sz) = NULL;
 static void *(*mm_realloc_fn_)(void *p, size_t sz) = NULL;
 static void (*mm_free_fn_)(void *p) = NULL;
 
-void *
+void *//分配未初始化的内存，成功返回地址，否则返回NULL。
 event_mm_malloc_(size_t sz)
 {
-	if (sz == 0)
-		return NULL;
+    if (sz == 0)
+        return NULL;
 
-	if (mm_malloc_fn_)
-		return mm_malloc_fn_(sz);
-	else
-		return malloc(sz);
+    if (mm_malloc_fn_)
+        return mm_malloc_fn_(sz);
+    else
+        return malloc(sz);
 }
 
-void *
+void *//分配内存，并初始化为0。
 event_mm_calloc_(size_t count, size_t size)
 {
-	if (count == 0 || size == 0)
-		return NULL;
+    if (count == 0 || size == 0)
+        return NULL;
 
-	if (mm_malloc_fn_) {
-		size_t sz = count * size;
-		void *p = NULL;
-		if (count > EV_SIZE_MAX / size)
-			goto error;
-		p = mm_malloc_fn_(sz);
-		if (p)
-			return memset(p, 0, sz);
-	} else {
-		void *p = calloc(count, size);
+    if (mm_malloc_fn_) {
+        size_t sz = count * size;
+        void *p = NULL;
+        if (count > EV_SIZE_MAX / size)
+            goto error;
+        p = mm_malloc_fn_(sz);
+        if (p)
+            return memset(p, 0, sz);
+    } else {
+        void *p = calloc(count, size);
 #ifdef _WIN32
-		/* Windows calloc doesn't reliably set ENOMEM */
-		if (p == NULL)
-			goto error;
+        /* Windows calloc doesn't reliably set ENOMEM */
+        if (p == NULL)
+            goto error;
 #endif
-		return p;
-	}
+        return p;
+    }
 
 error:
-	errno = ENOMEM;
-	return NULL;
+    errno = ENOMEM;
+    return NULL;
 }
 
-char *
+char *//复制字符串。
 event_mm_strdup_(const char *str)
 {
-	if (!str) {
-		errno = EINVAL;
-		return NULL;
-	}
+    if (!str) {
+        errno = EINVAL;
+        return NULL;
+    }
 
-	if (mm_malloc_fn_) {
-		size_t ln = strlen(str);
-		void *p = NULL;
-		if (ln == EV_SIZE_MAX)
-			goto error;
-		p = mm_malloc_fn_(ln+1);
-		if (p)
-			return memcpy(p, str, ln+1);
-	} else
+    if (mm_malloc_fn_) {
+        size_t ln = strlen(str);
+        void *p = NULL;
+        if (ln == EV_SIZE_MAX)
+            goto error;
+        p = mm_malloc_fn_(ln+1);
+        if (p)
+            return memcpy(p, str, ln+1);
+    } else
 #ifdef _WIN32
-		return _strdup(str);
+        return _strdup(str);
 #else
-		return strdup(str);
+        return strdup(str);
 #endif
 
 error:
-	errno = ENOMEM;
-	return NULL;
+    errno = ENOMEM;
+    return NULL;
 }
 
-void *
+void *//重新分配内存。
 event_mm_realloc_(void *ptr, size_t sz)
 {
-	if (mm_realloc_fn_)
-		return mm_realloc_fn_(ptr, sz);
-	else
-		return realloc(ptr, sz);
+    if (mm_realloc_fn_)
+        return mm_realloc_fn_(ptr, sz);
+    else
+        return realloc(ptr, sz);
 }
 
-void
+void //释放内存。
 event_mm_free_(void *ptr)
 {
-	if (mm_free_fn_)
-		mm_free_fn_(ptr);
-	else
-		free(ptr);
+    if (mm_free_fn_)
+        mm_free_fn_(ptr);
+    else
+        free(ptr);
 }
 
-void
+void //设置用户自定义的内存分配函数。
 event_set_mem_functions(void *(*malloc_fn)(size_t sz),
-			void *(*realloc_fn)(void *ptr, size_t sz),
-			void (*free_fn)(void *ptr))
+            void *(*realloc_fn)(void *ptr, size_t sz),
+            void (*free_fn)(void *ptr))
 {
-	mm_malloc_fn_ = malloc_fn;
-	mm_realloc_fn_ = realloc_fn;
-	mm_free_fn_ = free_fn;
+    mm_malloc_fn_ = malloc_fn;
+    mm_realloc_fn_ = realloc_fn;
+    mm_free_fn_ = free_fn;
 }
 #endif
 
@@ -3690,17 +3690,17 @@ evthread_notify_drain_default(evutil_socket_t fd, short what, void *arg)
 	EVBASE_RELEASE_LOCK(base, th_base_lock);
 }
 
-int
+int //另一条线程或信号可以安全地唤醒event_base。不需要手动调用。
 evthread_make_base_notifiable(struct event_base *base)
 {
-	int r;
-	if (!base)
-		return -1;
+    int r;
+    if (!base)
+        return -1;
 
-	EVBASE_ACQUIRE_LOCK(base, th_base_lock);
-	r = evthread_make_base_notifiable_nolock_(base);
-	EVBASE_RELEASE_LOCK(base, th_base_lock);
-	return r;
+    EVBASE_ACQUIRE_LOCK(base, th_base_lock);
+    r = evthread_make_base_notifiable_nolock_(base);
+    EVBASE_RELEASE_LOCK(base, th_base_lock);
+    return r;
 }
 
 static int
