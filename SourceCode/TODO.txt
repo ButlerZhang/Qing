@@ -26,7 +26,6 @@
 
 3.TODO list:
 (01)EncryptDecrypt fixs bugs.
-(02)LibeventWindows adds demo.
 
 4.EncryptDecrypt:
 (01)根据目标路径是否为空来判断是否启用。
