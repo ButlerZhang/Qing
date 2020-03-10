@@ -100,6 +100,9 @@
     <ClCompile Include="Open\composite\handler\httphandler\HTTPHandler.cpp" />
     <ClCompile Include="Open\composite\handler\tcphandler\TCPHandler.cpp" />
     <ClCompile Include="Open\composite\message\project.pb.cc" />
+    <ClCompile Include="Qing\NetworkClient.cpp" />
+    <ClCompile Include="Qing\NetworkServer.cpp" />
+    <ClCompile Include="Qing\QNetworkBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h" />
@@ -138,6 +141,9 @@
     <ClInclude Include="Open\composite\message\project.pb.h" />
     <ClInclude Include="Open\composite\model\Model.h" />
     <ClInclude Include="Open\composite\Project.h" />
+    <ClInclude Include="Qing\NetworkClient.h" />
+    <ClInclude Include="Qing\NetworkServer.h" />
+    <ClInclude Include="Qing\QNetworkBase.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h" />
     <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
     <ClInclude Include="UNIX\Chapter1\display_process_information.h" />

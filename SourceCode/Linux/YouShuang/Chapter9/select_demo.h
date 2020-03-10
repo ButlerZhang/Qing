@@ -13,12 +13,12 @@
 
 
 
-void select_demo(int argc, char* argv[])
+int select_demo(int argc, char* argv[])
 {
     if (argc <= 2) {
         printf("usage: %s ip_address port_number\n",
             basename(argv[0]));                 //basename的头文件是<string.h>，获取路径中最后一个/后面的内容
-        return;
+        return -1;
     }
 
     const char *ip = argv[1];
@@ -114,4 +114,6 @@ void select_demo(int argc, char* argv[])
 
     close(listenfd);                            //关闭socket，不是立即关闭，而是减少引用计数
                                                 //如果想要立即关闭，可以调用shutdown函数
+
+    return 0;
 }

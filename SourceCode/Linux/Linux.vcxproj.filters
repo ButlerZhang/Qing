@@ -73,6 +73,9 @@
     <Filter Include="Reference\standard">
       <UniqueIdentifier>{2bfbb87f-ec3f-4088-b736-0274acf00cd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Qing">
+      <UniqueIdentifier>{580ae79a-21dc-4c95-996d-440c89fafa12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -153,6 +156,15 @@
     </ClCompile>
     <ClCompile Include="..\DatabaseLinux\src\MySQLDatabase.cpp">
       <Filter>Reference\database</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\NetworkClient.cpp">
+      <Filter>Project\Qing</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\NetworkServer.cpp">
+      <Filter>Project\Qing</Filter>
+    </ClCompile>
+    <ClCompile Include="Qing\QNetworkBase.cpp">
+      <Filter>Project\Qing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -342,6 +354,15 @@
     </ClInclude>
     <ClInclude Include="..\StandardLinux\src\HexString.h">
       <Filter>Reference\standard</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkClient.h">
+      <Filter>Project\Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\NetworkServer.h">
+      <Filter>Project\Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="Qing\QNetworkBase.h">
+      <Filter>Project\Qing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
