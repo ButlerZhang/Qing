@@ -54,16 +54,25 @@
 #include "time-internal.h"
 
 struct pollidx {
-	int idxplus1;
+    int idxplus1;
 };
 
 struct pollop {
-	int event_count;		/* Highest number alloc */
-	int nfds;			/* Highest number used */
-	int realloc_copy;		/* True iff we must realloc
-					 * event_set_copy */
-	struct pollfd *event_set;
-	struct pollfd *event_set_copy;
+
+    //当前pollfd集合的大小。
+    int event_count;        /* Highest number alloc */
+
+    //当前文件描述符的个数。
+    int nfds;               /* Highest number used */
+
+    //判断是否需要重新分配event_set_copy集合。
+    int realloc_copy;       /* True iff we must realloc event_set_copy */
+
+    //单线程中传入poll的集合。
+    struct pollfd *event_set;
+
+    //如果启用多线程，则传入copy集合。
+    struct pollfd *event_set_copy;
 };
 
 static void *poll_init(struct event_base *);
@@ -73,30 +82,32 @@ static int poll_dispatch(struct event_base *, struct timeval *);
 static void poll_dealloc(struct event_base *);
 
 const struct eventop pollops = {
-	"poll",
-	poll_init,
-	poll_add,
-	poll_del,
-	poll_dispatch,
-	poll_dealloc,
-	0, /* doesn't need_reinit */
-	EV_FEATURE_FDS,
-	sizeof(struct pollidx),
+    "poll",
+    poll_init,
+    poll_add,
+    poll_del,
+    poll_dispatch,
+    poll_dealloc,
+    0, /* doesn't need_reinit */
+    EV_FEATURE_FDS,
+    sizeof(struct pollidx),         //有额外数据！
 };
 
 static void *
 poll_init(struct event_base *base)
 {
-	struct pollop *pollop;
+    struct pollop *pollop;
 
-	if (!(pollop = mm_calloc(1, sizeof(struct pollop))))
-		return (NULL);
+    //创建pollop，并清零。
+    if (!(pollop = mm_calloc(1, sizeof(struct pollop))))
+        return (NULL);
 
-	evsig_init_(base);
+    //初始化信号事件。
+    evsig_init_(base);
 
-	evutil_weakrand_seed_(&base->weakrand_seed, 0);
+    evutil_weakrand_seed_(&base->weakrand_seed, 0);
 
-	return (pollop);
+    return (pollop);
 }
 
 #ifdef CHECK_INVARIANTS
@@ -124,150 +135,162 @@ poll_check_ok(struct pollop *pop)
 static int
 poll_dispatch(struct event_base *base, struct timeval *tv)
 {
-	int res, i, j, nfds;
-	long msec = -1;
-	struct pollop *pop = base->evbase;
-	struct pollfd *event_set;
+    int res, i, j, nfds;
+    long msec = -1;
+    struct pollop *pop = base->evbase;
+    struct pollfd *event_set;
 
-	poll_check_ok(pop);
+    poll_check_ok(pop);
 
-	nfds = pop->nfds;
+    nfds = pop->nfds;
 
 #ifndef EVENT__DISABLE_THREAD_SUPPORT
-	if (base->th_base_lock) {
-		/* If we're using this backend in a multithreaded setting,
-		 * then we need to work on a copy of event_set, so that we can
-		 * let other threads modify the main event_set while we're
-		 * polling. If we're not multithreaded, then we'll skip the
-		 * copy step here to save memory and time. */
-		if (pop->realloc_copy) {
-			struct pollfd *tmp = mm_realloc(pop->event_set_copy,
-			    pop->event_count * sizeof(struct pollfd));
-			if (tmp == NULL) {
-				event_warn("realloc");
-				return -1;
-			}
-			pop->event_set_copy = tmp;
-			pop->realloc_copy = 0;
-		}
-		memcpy(pop->event_set_copy, pop->event_set,
-		    sizeof(struct pollfd)*nfds);
-		event_set = pop->event_set_copy;
-	} else {
-		event_set = pop->event_set;
-	}
+    if (base->th_base_lock) {
+        /* If we're using this backend in a multithreaded setting,
+         * then we need to work on a copy of event_set, so that we can
+         * let other threads modify the main event_set while we're
+         * polling. If we're not multithreaded, then we'll skip the
+         * copy step here to save memory and time.
+         *
+         * 如果启用了多线程，那么我们需要使用event_set的副本，这样当我们阻塞在poll时，
+         * 其它线程就可以修改主event_set。如果没有启用多线程，则跳过此步骤。
+         */
+
+        if (pop->realloc_copy) {
+            struct pollfd *tmp = mm_realloc(pop->event_set_copy,
+                pop->event_count * sizeof(struct pollfd));
+            if (tmp == NULL) {
+                event_warn("realloc");
+                return -1;
+            }
+            pop->event_set_copy = tmp;
+            pop->realloc_copy = 0;
+        }
+        memcpy(pop->event_set_copy, pop->event_set,
+            sizeof(struct pollfd)*nfds);
+        event_set = pop->event_set_copy;
+    } else {
+        event_set = pop->event_set;
+    }
 #else
-	event_set = pop->event_set;
+    event_set = pop->event_set;
 #endif
 
-	if (tv != NULL) {
-		msec = evutil_tv_to_msec_(tv);
-		if (msec < 0 || msec > INT_MAX)
-			msec = INT_MAX;
-	}
+    //这里使用evutil_tv_to_msec_转换时间。
+    if (tv != NULL) {
+        msec = evutil_tv_to_msec_(tv);
+        if (msec < 0 || msec > INT_MAX)
+            msec = INT_MAX;
+    }
 
-	EVBASE_RELEASE_LOCK(base, th_base_lock);
+    EVBASE_RELEASE_LOCK(base, th_base_lock);
 
-	res = poll(event_set, nfds, msec);
+    res = poll(event_set, nfds, msec);
 
-	EVBASE_ACQUIRE_LOCK(base, th_base_lock);
+    EVBASE_ACQUIRE_LOCK(base, th_base_lock);
 
-	if (res == -1) {
-		if (errno != EINTR) {
-			event_warn("poll");
-			return (-1);
-		}
+    //判断poll的返回值。要注意EINTR的情况。
+    if (res == -1) {
+        if (errno != EINTR) {
+            event_warn("poll");
+            return (-1);
+        }
 
-		return (0);
-	}
+        return (0);
+    }
 
-	event_debug(("%s: poll reports %d", __func__, res));
+    event_debug(("%s: poll reports %d", __func__, res));
 
-	if (res == 0 || nfds == 0)
-		return (0);
+    if (res == 0 || nfds == 0)
+        return (0);
 
-	i = evutil_weakrand_range_(&base->weakrand_seed, nfds);
-	for (j = 0; j < nfds; j++) {
-		int what;
-		if (++i == nfds)
-			i = 0;
-		what = event_set[i].revents;
-		if (!what)
-			continue;
+    i = evutil_weakrand_range_(&base->weakrand_seed, nfds);
+    for (j = 0; j < nfds; j++) {
+        int what;
+        if (++i == nfds)
+            i = 0;
+        what = event_set[i].revents;
+        if (!what)
+            continue;
 
-		res = 0;
+        res = 0;
+        //判断是什么事件处于就绪状态。
+        /* If the file gets closed notify */
+        if (what & (POLLHUP|POLLERR|POLLNVAL))
+            what |= POLLIN|POLLOUT;
+        if (what & POLLIN)
+            res |= EV_READ;
+        if (what & POLLOUT)
+            res |= EV_WRITE;
+        if (res == 0)
+            continue;
 
-		/* If the file gets closed notify */
-		if (what & (POLLHUP|POLLERR|POLLNVAL))
-			what |= POLLIN|POLLOUT;
-		if (what & POLLIN)
-			res |= EV_READ;
-		if (what & POLLOUT)
-			res |= EV_WRITE;
-		if (res == 0)
-			continue;
+        //激活对应事件的回调函数。
+        evmap_io_active_(base, event_set[i].fd, res);
+    }
 
-		evmap_io_active_(base, event_set[i].fd, res);
-	}
-
-	return (0);
+    return (0);
 }
 
 static int
 poll_add(struct event_base *base, int fd, short old, short events, void *idx_)
 {
-	struct pollop *pop = base->evbase;
-	struct pollfd *pfd = NULL;
-	struct pollidx *idx = idx_;
-	int i;
+    struct pollop *pop = base->evbase;
+    struct pollfd *pfd = NULL;
+    struct pollidx *idx = idx_;
+    int i;
 
-	EVUTIL_ASSERT((events & EV_SIGNAL) == 0);
-	if (!(events & (EV_READ|EV_WRITE)))
-		return (0);
+    EVUTIL_ASSERT((events & EV_SIGNAL) == 0);
+    if (!(events & (EV_READ|EV_WRITE)))
+        return (0);
 
-	poll_check_ok(pop);
-	if (pop->nfds + 1 >= pop->event_count) {
-		struct pollfd *tmp_event_set;
-		int tmp_event_count;
+    poll_check_ok(pop);
 
-		if (pop->event_count < 32)
-			tmp_event_count = 32;
-		else
-			tmp_event_count = pop->event_count * 2;
+    //判断是否需要重新分配集合。
+    if (pop->nfds + 1 >= pop->event_count) {
+        struct pollfd *tmp_event_set;
+        int tmp_event_count;
 
-		/* We need more file descriptors */
-		tmp_event_set = mm_realloc(pop->event_set,
-				 tmp_event_count * sizeof(struct pollfd));
-		if (tmp_event_set == NULL) {
-			event_warn("realloc");
-			return (-1);
-		}
-		pop->event_set = tmp_event_set;
+        if (pop->event_count < 32)
+            tmp_event_count = 32;
+        else
+            tmp_event_count = pop->event_count * 2;
 
-		pop->event_count = tmp_event_count;
-		pop->realloc_copy = 1;
-	}
+        /* We need more file descriptors */
+        tmp_event_set = mm_realloc(pop->event_set,
+                 tmp_event_count * sizeof(struct pollfd));
+        if (tmp_event_set == NULL) {
+            event_warn("realloc");
+            return (-1);
+        }
+        pop->event_set = tmp_event_set;
 
-	i = idx->idxplus1 - 1;
+        pop->event_count = tmp_event_count;
+        pop->realloc_copy = 1; //标记需要重新分配copy集合。
+    }
 
-	if (i >= 0) {
-		pfd = &pop->event_set[i];
-	} else {
-		i = pop->nfds++;
-		pfd = &pop->event_set[i];
-		pfd->events = 0;
-		pfd->fd = fd;
-		idx->idxplus1 = i + 1;
-	}
+    //这段代码要来干啥??
+    i = idx->idxplus1 - 1;
 
-	pfd->revents = 0;
-	if (events & EV_WRITE)
-		pfd->events |= POLLOUT;
-	if (events & EV_READ)
-		pfd->events |= POLLIN;
-	poll_check_ok(pop);
+    if (i >= 0) {
+        pfd = &pop->event_set[i];
+    } else {
+        i = pop->nfds++;
+        pfd = &pop->event_set[i];
+        pfd->events = 0;
+        pfd->fd = fd;
+        idx->idxplus1 = i + 1;
+    }
 
-	return (0);
+    //标记监听读写事件。
+    pfd->revents = 0;
+    if (events & EV_WRITE)
+        pfd->events |= POLLOUT;
+    if (events & EV_READ)
+        pfd->events |= POLLIN;
+    poll_check_ok(pop);
+
+    return (0);
 }
 
 /*
@@ -277,65 +300,68 @@ poll_add(struct event_base *base, int fd, short old, short events, void *idx_)
 static int
 poll_del(struct event_base *base, int fd, short old, short events, void *idx_)
 {
-	struct pollop *pop = base->evbase;
-	struct pollfd *pfd = NULL;
-	struct pollidx *idx = idx_;
-	int i;
+    struct pollop *pop = base->evbase;
+    struct pollfd *pfd = NULL;
+    struct pollidx *idx = idx_;
+    int i;
 
-	EVUTIL_ASSERT((events & EV_SIGNAL) == 0);
-	if (!(events & (EV_READ|EV_WRITE)))
-		return (0);
+    EVUTIL_ASSERT((events & EV_SIGNAL) == 0);
+    if (!(events & (EV_READ|EV_WRITE)))
+        return (0);
 
-	poll_check_ok(pop);
-	i = idx->idxplus1 - 1;
-	if (i < 0)
-		return (-1);
+    poll_check_ok(pop);
+    i = idx->idxplus1 - 1;
+    if (i < 0)
+        return (-1);
 
-	/* Do we still want to read or write? */
-	pfd = &pop->event_set[i];
-	if (events & EV_READ)
-		pfd->events &= ~POLLIN;
-	if (events & EV_WRITE)
-		pfd->events &= ~POLLOUT;
-	poll_check_ok(pop);
-	if (pfd->events)
-		/* Another event cares about that fd. */
-		return (0);
+    /* Do we still want to read or write? */
+    //判断是否还需要监听读或写事件，有可能只删除某事件。
+    pfd = &pop->event_set[i];
+    if (events & EV_READ)
+        pfd->events &= ~POLLIN;
+    if (events & EV_WRITE)
+        pfd->events &= ~POLLOUT;
+    poll_check_ok(pop);
+    if (pfd->events)
+        /* Another event cares about that fd. */
+        return (0);
 
-	/* Okay, so we aren't interested in that fd anymore. */
-	idx->idxplus1 = 0;
+    /* Okay, so we aren't interested in that fd anymore. */
+    idx->idxplus1 = 0;
 
-	--pop->nfds;
-	if (i != pop->nfds) {
-		/*
-		 * Shift the last pollfd down into the now-unoccupied
-		 * position.
-		 */
-		memcpy(&pop->event_set[i], &pop->event_set[pop->nfds],
-		       sizeof(struct pollfd));
-		idx = evmap_io_get_fdinfo_(&base->io, pop->event_set[i].fd);
-		EVUTIL_ASSERT(idx);
-		EVUTIL_ASSERT(idx->idxplus1 == pop->nfds + 1);
-		idx->idxplus1 = i + 1;
-	}
+    --pop->nfds;
+    if (i != pop->nfds) {
+        /*
+         * Shift the last pollfd down into the now-unoccupied
+         * position.
+         *
+         * 将最后一个pollfd向下移动到未占用的位置???
+         */
+        memcpy(&pop->event_set[i], &pop->event_set[pop->nfds],
+               sizeof(struct pollfd));
+        idx = evmap_io_get_fdinfo_(&base->io, pop->event_set[i].fd);
+        EVUTIL_ASSERT(idx);
+        EVUTIL_ASSERT(idx->idxplus1 == pop->nfds + 1);
+        idx->idxplus1 = i + 1;
+    }
 
-	poll_check_ok(pop);
-	return (0);
+    poll_check_ok(pop);
+    return (0);
 }
 
 static void
 poll_dealloc(struct event_base *base)
 {
-	struct pollop *pop = base->evbase;
+    struct pollop *pop = base->evbase;
 
-	evsig_dealloc_(base);
-	if (pop->event_set)
-		mm_free(pop->event_set);
-	if (pop->event_set_copy)
-		mm_free(pop->event_set_copy);
+    evsig_dealloc_(base);
+    if (pop->event_set)
+        mm_free(pop->event_set);
+    if (pop->event_set_copy)
+        mm_free(pop->event_set_copy);
 
-	memset(pop, 0, sizeof(struct pollop));
-	mm_free(pop);
+    memset(pop, 0, sizeof(struct pollop));
+    mm_free(pop);
 }
 
 #endif /* EVENT__HAVE_POLL */
