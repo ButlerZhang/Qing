@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    //return demo_main(argc, argv);
+    return demo_main(argc, argv);
 
-    return study_main(argc, argv);
+    //return study_main(argc, argv);
 }

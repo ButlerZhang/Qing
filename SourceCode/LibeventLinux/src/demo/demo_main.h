@@ -29,7 +29,11 @@ int demo_main(int argc, char *argv[])
 
 #else
 
-    int Choose = argc <= 1 ? 1 : 0;
+    //debug server
+    //int Choose = argc <= 1 ? 1 : 0;
+
+    //debug client
+    int Choose = argc > 1 ? 1 : 0;
 
 #endif
 
