@@ -25,7 +25,7 @@ int demo_main(int argc, char *argv[])
     std::cout << "2.Client" << std::endl;
 
     int Choose = 1;
-    //std::cin >> Choose;
+    std::cin >> Choose;
 
 #else
 
