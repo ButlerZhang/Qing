@@ -73,8 +73,8 @@ void demo1_server_read_write(const char *ServerIP, int Port)
     evutil_make_socket_nonblocking(ListenSocket);
 
     struct event_config *cfg = event_config_new();
-    //event_config_avoid_method(cfg, "poll");
-    event_config_avoid_method(cfg, "epoll");
+    event_config_avoid_method(cfg, "poll");
+    //event_config_avoid_method(cfg, "epoll");
     event_config_avoid_method(cfg, "select");
     struct event_base *base = event_base_new_with_config(cfg);
 

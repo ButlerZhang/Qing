@@ -73,9 +73,9 @@
 #include "epolltable-internal.h"
 
 #if defined(EVENT__HAVE_SYS_TIMERFD_H) &&			  \
-	defined(EVENT__HAVE_TIMERFD_CREATE) &&			  \
-	defined(HAVE_POSIX_MONOTONIC) && defined(TFD_NONBLOCK) && \
-	defined(TFD_CLOEXEC)
+    defined(EVENT__HAVE_TIMERFD_CREATE) &&			  \
+    defined(HAVE_POSIX_MONOTONIC) && defined(TFD_NONBLOCK) && \
+    defined(TFD_CLOEXEC)
 /* Note that we only use timerfd if TFD_NONBLOCK and TFD_CLOEXEC are available
    and working.  This means that we can't support it on 2.6.25 (where timerfd
    was introduced) or 2.6.26, since 2.6.27 introduced those flags.
@@ -84,11 +84,19 @@
 #endif
 
 struct epollop {
-	struct epoll_event *events;
-	int nevents;
-	int epfd;
+
+    //事件数组。
+    struct epoll_event *events;
+
+    //数组个数。
+    int nevents;
+
+    //epoll_create创建的epoll实例。
+    int epfd;
+
+    //系统定时器timerfd。-1表示不启用，否则是定时器的文件描述符值。
 #ifdef USING_TIMERFD
-	int timerfd;
+    int timerfd;
 #endif
 };
 
@@ -97,15 +105,15 @@ static int epoll_dispatch(struct event_base *, struct timeval *);
 static void epoll_dealloc(struct event_base *);
 
 static const struct eventop epollops_changelist = {
-	"epoll (with changelist)",
-	epoll_init,
-	event_changelist_add_,
-	event_changelist_del_,
-	epoll_dispatch,
-	epoll_dealloc,
-	1, /* need reinit */
-	EV_FEATURE_ET|EV_FEATURE_O1| EARLY_CLOSE_IF_HAVE_RDHUP,
-	EVENT_CHANGELIST_FDINFO_SIZE
+    "epoll (with changelist)",
+    epoll_init,
+    event_changelist_add_,
+    event_changelist_del_,
+    epoll_dispatch,
+    epoll_dealloc,
+    1, /* need reinit */
+    EV_FEATURE_ET|EV_FEATURE_O1| EARLY_CLOSE_IF_HAVE_RDHUP,
+    EVENT_CHANGELIST_FDINFO_SIZE
 };
 
 
@@ -115,15 +123,15 @@ static int epoll_nochangelist_del(struct event_base *base, evutil_socket_t fd,
     short old, short events, void *p);
 
 const struct eventop epollops = {
-	"epoll",
-	epoll_init,
-	epoll_nochangelist_add,
-	epoll_nochangelist_del,
-	epoll_dispatch,
-	epoll_dealloc,
-	1, /* need reinit */
-	EV_FEATURE_ET|EV_FEATURE_O1|EV_FEATURE_EARLY_CLOSE,
-	0
+    "epoll",
+    epoll_init,
+    epoll_nochangelist_add,
+    epoll_nochangelist_del,
+    epoll_dispatch,
+    epoll_dealloc,
+    1, /* need reinit */
+    EV_FEATURE_ET|EV_FEATURE_O1|EV_FEATURE_EARLY_CLOSE,
+    0
 };
 
 #define INITIAL_NEVENT 32
@@ -134,407 +142,424 @@ const struct eventop epollops = {
  * as big as 1000, and LONG_MAX can be as small as (1<<31)-1, so the
  * largest number of msec we can support here is 2147482.  Let's
  * round that down by 47 seconds.
+ *
+ * ??????
  */
 #define MAX_EPOLL_TIMEOUT_MSEC (35*60*1000)
 
 static void *
 epoll_init(struct event_base *base)
 {
-	int epfd = -1;
-	struct epollop *epollop;
+    int epfd = -1;
+    struct epollop *epollop;
 
 #ifdef EVENT__HAVE_EPOLL_CREATE1
-	/* First, try the shiny new epoll_create1 interface, if we have it. */
-	epfd = epoll_create1(EPOLL_CLOEXEC);
+    /* First, try the shiny new epoll_create1 interface, if we have it. */
+    //优先使用epoll_create1函数。
+    epfd = epoll_create1(EPOLL_CLOEXEC);
 #endif
-	if (epfd == -1) {
-		/* Initialize the kernel queue using the old interface.  (The
-		size field is ignored   since 2.6.8.) */
-		if ((epfd = epoll_create(32000)) == -1) {
-			if (errno != ENOSYS)
-				event_warn("epoll_create");
-			return (NULL);
-		}
-		evutil_make_socket_closeonexec(epfd);
-	}
+    if (epfd == -1) {
+        /* Initialize the kernel queue using the old interface.  (The
+        size field is ignored   since 2.6.8.) */
+        //否则使用epoll_create旧函数，参数size从2.6.8版本开始已经被忽略。
+        if ((epfd = epoll_create(32000)) == -1) {
+            if (errno != ENOSYS)
+                event_warn("epoll_create");
+            return (NULL);
+        }
+        evutil_make_socket_closeonexec(epfd);
+    }
 
-	if (!(epollop = mm_calloc(1, sizeof(struct epollop)))) {
-		close(epfd);
-		return (NULL);
-	}
+    //创建selectop，并清零。
+    if (!(epollop = mm_calloc(1, sizeof(struct epollop)))) {
+        close(epfd);
+        return (NULL);
+    }
 
-	epollop->epfd = epfd;
+    epollop->epfd = epfd;
 
-	/* Initialize fields */
-	epollop->events = mm_calloc(INITIAL_NEVENT, sizeof(struct epoll_event));
-	if (epollop->events == NULL) {
-		mm_free(epollop);
-		close(epfd);
-		return (NULL);
-	}
-	epollop->nevents = INITIAL_NEVENT;
+    /* Initialize fields */
+    //默认先创建INITIAL_NEVENT个数组元素。
+    epollop->events = mm_calloc(INITIAL_NEVENT, sizeof(struct epoll_event));
+    if (epollop->events == NULL) {
+        mm_free(epollop);
+        close(epfd);
+        return (NULL);
+    }
+    epollop->nevents = INITIAL_NEVENT;
 
-	if ((base->flags & EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST) != 0 ||
-	    ((base->flags & EVENT_BASE_FLAG_IGNORE_ENV) == 0 &&
-		evutil_getenv_("EVENT_EPOLL_USE_CHANGELIST") != NULL)) {
+    //是否启用changelist?
+    if ((base->flags & EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST) != 0 ||
+        ((base->flags & EVENT_BASE_FLAG_IGNORE_ENV) == 0 &&
+        evutil_getenv_("EVENT_EPOLL_USE_CHANGELIST") != NULL)) {
 
-		base->evsel = &epollops_changelist;
-	}
+        base->evsel = &epollops_changelist;
+    }
 
 #ifdef USING_TIMERFD
-	/*
-	  The epoll interface ordinarily gives us one-millisecond precision,
-	  so on Linux it makes perfect sense to use the CLOCK_MONOTONIC_COARSE
-	  timer.  But when the user has set the new PRECISE_TIMER flag for an
-	  event_base, we can try to use timerfd to give them finer granularity.
-	*/
-	if ((base->flags & EVENT_BASE_FLAG_PRECISE_TIMER) &&
-	    base->monotonic_timer.monotonic_clock == CLOCK_MONOTONIC) {
-		int fd;
-		fd = epollop->timerfd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK|TFD_CLOEXEC);
-		if (epollop->timerfd >= 0) {
-			struct epoll_event epev;
-			memset(&epev, 0, sizeof(epev));
-			epev.data.fd = epollop->timerfd;
-			epev.events = EPOLLIN;
-			if (epoll_ctl(epollop->epfd, EPOLL_CTL_ADD, fd, &epev) < 0) {
-				event_warn("epoll_ctl(timerfd)");
-				close(fd);
-				epollop->timerfd = -1;
-			}
-		} else {
-			if (errno != EINVAL && errno != ENOSYS) {
-				/* These errors probably mean that we were
-				 * compiled with timerfd/TFD_* support, but
-				 * we're running on a kernel that lacks those.
-				 */
-				event_warn("timerfd_create");
-			}
-			epollop->timerfd = -1;
-		}
-	} else {
-		epollop->timerfd = -1;
-	}
+    /*
+      The epoll interface ordinarily gives us one-millisecond precision,
+      so on Linux it makes perfect sense to use the CLOCK_MONOTONIC_COARSE
+      timer.  But when the user has set the new PRECISE_TIMER flag for an
+      event_base, we can try to use timerfd to give them finer granularity.
+
+      epoll接口通常为我们提供毫秒级别的精度，所以在linux系统上使用CLOCK_MONOTONIC_COARSE十分
+      合理。但是如果用户设置了PRECISE_TIMER标记，我们可以尝试使用timerfd为他们提供更精细的粒度。
+    */
+    if ((base->flags & EVENT_BASE_FLAG_PRECISE_TIMER) &&
+        base->monotonic_timer.monotonic_clock == CLOCK_MONOTONIC) {
+        int fd;
+
+        //调用timerfd_create创建一个定时器对象，返回定时器的文件描述符。
+        fd = epollop->timerfd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK|TFD_CLOEXEC);
+        if (epollop->timerfd >= 0) {
+            struct epoll_event epev;
+            memset(&epev, 0, sizeof(epev));
+            epev.data.fd = epollop->timerfd;
+            epev.events = EPOLLIN;
+            if (epoll_ctl(epollop->epfd, EPOLL_CTL_ADD, fd, &epev) < 0) {
+                event_warn("epoll_ctl(timerfd)");
+                close(fd);
+                epollop->timerfd = -1;
+            }
+        } else {
+            if (errno != EINVAL && errno != ENOSYS) {
+                /* These errors probably mean that we were
+                 * compiled with timerfd/TFD_* support, but
+                 * we're running on a kernel that lacks those.
+                 */
+                event_warn("timerfd_create");
+            }
+            epollop->timerfd = -1;
+        }
+    } else {
+        epollop->timerfd = -1;
+    }
 #endif
 
-	evsig_init_(base);
+    //初始化信号事件。
+    evsig_init_(base);
 
-	return (epollop);
+    return (epollop);
 }
 
 static const char *
 change_to_string(int change)
 {
-	change &= (EV_CHANGE_ADD|EV_CHANGE_DEL);
-	if (change == EV_CHANGE_ADD) {
-		return "add";
-	} else if (change == EV_CHANGE_DEL) {
-		return "del";
-	} else if (change == 0) {
-		return "none";
-	} else {
-		return "???";
-	}
+    change &= (EV_CHANGE_ADD|EV_CHANGE_DEL);
+    if (change == EV_CHANGE_ADD) {
+        return "add";
+    } else if (change == EV_CHANGE_DEL) {
+        return "del";
+    } else if (change == 0) {
+        return "none";
+    } else {
+        return "???";
+    }
 }
 
 static const char *
 epoll_op_to_string(int op)
 {
-	return op == EPOLL_CTL_ADD?"ADD":
-	    op == EPOLL_CTL_DEL?"DEL":
-	    op == EPOLL_CTL_MOD?"MOD":
-	    "???";
+    return op == EPOLL_CTL_ADD?"ADD":
+           op == EPOLL_CTL_DEL?"DEL":
+           op == EPOLL_CTL_MOD?"MOD":
+                               "???";
 }
 
 #define PRINT_CHANGES(op, events, ch, status)  \
-	"Epoll %s(%d) on fd %d " status ". "       \
-	"Old events were %d; "                     \
-	"read change was %d (%s); "                \
-	"write change was %d (%s); "               \
-	"close change was %d (%s)",                \
-	epoll_op_to_string(op),                    \
-	events,                                    \
-	ch->fd,                                    \
-	ch->old_events,                            \
-	ch->read_change,                           \
-	change_to_string(ch->read_change),         \
-	ch->write_change,                          \
-	change_to_string(ch->write_change),        \
-	ch->close_change,                          \
-	change_to_string(ch->close_change)
+    "Epoll %s(%d) on fd %d " status ". "       \
+    "Old events were %d; "                     \
+    "read change was %d (%s); "                \
+    "write change was %d (%s); "               \
+    "close change was %d (%s)",                \
+    epoll_op_to_string(op),                    \
+    events,                                    \
+    ch->fd,                                    \
+    ch->old_events,                            \
+    ch->read_change,                           \
+    change_to_string(ch->read_change),         \
+    ch->write_change,                          \
+    change_to_string(ch->write_change),        \
+    ch->close_change,                          \
+    change_to_string(ch->close_change)
 
 static int
 epoll_apply_one_change(struct event_base *base,
     struct epollop *epollop,
     const struct event_change *ch)
 {
-	struct epoll_event epev;
-	int op, events = 0;
-	int idx;
+    struct epoll_event epev;
+    int op, events = 0;
+    int idx;
 
-	idx = EPOLL_OP_TABLE_INDEX(ch);
-	op = epoll_op_table[idx].op;
-	events = epoll_op_table[idx].events;
+    idx = EPOLL_OP_TABLE_INDEX(ch);
+    op = epoll_op_table[idx].op;
+    events = epoll_op_table[idx].events;
 
-	if (!events) {
-		EVUTIL_ASSERT(op == 0);
-		return 0;
-	}
+    if (!events) {
+        EVUTIL_ASSERT(op == 0);
+        return 0;
+    }
 
-	if ((ch->read_change|ch->write_change) & EV_CHANGE_ET)
-		events |= EPOLLET;
+    if ((ch->read_change|ch->write_change) & EV_CHANGE_ET)
+        events |= EPOLLET;
 
-	memset(&epev, 0, sizeof(epev));
-	epev.data.fd = ch->fd;
-	epev.events = events;
-	if (epoll_ctl(epollop->epfd, op, ch->fd, &epev) == 0) {
-		event_debug((PRINT_CHANGES(op, epev.events, ch, "okay")));
-		return 0;
-	}
+    memset(&epev, 0, sizeof(epev));
+    epev.data.fd = ch->fd;
+    epev.events = events;
+    if (epoll_ctl(epollop->epfd, op, ch->fd, &epev) == 0) {
+        event_debug((PRINT_CHANGES(op, epev.events, ch, "okay")));
+        return 0;
+    }
 
-	switch (op) {
-	case EPOLL_CTL_MOD:
-		if (errno == ENOENT) {
-			/* If a MOD operation fails with ENOENT, the
-			 * fd was probably closed and re-opened.  We
-			 * should retry the operation as an ADD.
-			 */
-			if (epoll_ctl(epollop->epfd, EPOLL_CTL_ADD, ch->fd, &epev) == -1) {
-				event_warn("Epoll MOD(%d) on %d retried as ADD; that failed too",
-				    (int)epev.events, ch->fd);
-				return -1;
-			} else {
-				event_debug(("Epoll MOD(%d) on %d retried as ADD; succeeded.",
-					(int)epev.events,
-					ch->fd));
-				return 0;
-			}
-		}
-		break;
-	case EPOLL_CTL_ADD:
-		if (errno == EEXIST) {
-			/* If an ADD operation fails with EEXIST,
-			 * either the operation was redundant (as with a
-			 * precautionary add), or we ran into a fun
-			 * kernel bug where using dup*() to duplicate the
-			 * same file into the same fd gives you the same epitem
-			 * rather than a fresh one.  For the second case,
-			 * we must retry with MOD. */
-			if (epoll_ctl(epollop->epfd, EPOLL_CTL_MOD, ch->fd, &epev) == -1) {
-				event_warn("Epoll ADD(%d) on %d retried as MOD; that failed too",
-				    (int)epev.events, ch->fd);
-				return -1;
-			} else {
-				event_debug(("Epoll ADD(%d) on %d retried as MOD; succeeded.",
-					(int)epev.events,
-					ch->fd));
-				return 0;
-			}
-		}
-		break;
-	case EPOLL_CTL_DEL:
-		if (errno == ENOENT || errno == EBADF || errno == EPERM) {
-			/* If a delete fails with one of these errors,
-			 * that's fine too: we closed the fd before we
-			 * got around to calling epoll_dispatch. */
-			event_debug(("Epoll DEL(%d) on fd %d gave %s: DEL was unnecessary.",
-				(int)epev.events,
-				ch->fd,
-				strerror(errno)));
-			return 0;
-		}
-		break;
-	default:
-		break;
-	}
+    switch (op) {
+    case EPOLL_CTL_MOD:
+        if (errno == ENOENT) {
+            /* If a MOD operation fails with ENOENT, the
+             * fd was probably closed and re-opened.  We
+             * should retry the operation as an ADD.
+             */
+            if (epoll_ctl(epollop->epfd, EPOLL_CTL_ADD, ch->fd, &epev) == -1) {
+                event_warn("Epoll MOD(%d) on %d retried as ADD; that failed too",
+                    (int)epev.events, ch->fd);
+                return -1;
+            } else {
+                event_debug(("Epoll MOD(%d) on %d retried as ADD; succeeded.",
+                    (int)epev.events,
+                    ch->fd));
+                return 0;
+            }
+        }
+        break;
+    case EPOLL_CTL_ADD:
+        if (errno == EEXIST) {
+            /* If an ADD operation fails with EEXIST,
+             * either the operation was redundant (as with a
+             * precautionary add), or we ran into a fun
+             * kernel bug where using dup*() to duplicate the
+             * same file into the same fd gives you the same epitem
+             * rather than a fresh one.  For the second case,
+             * we must retry with MOD. */
+            if (epoll_ctl(epollop->epfd, EPOLL_CTL_MOD, ch->fd, &epev) == -1) {
+                event_warn("Epoll ADD(%d) on %d retried as MOD; that failed too",
+                    (int)epev.events, ch->fd);
+                return -1;
+            } else {
+                event_debug(("Epoll ADD(%d) on %d retried as MOD; succeeded.",
+                    (int)epev.events,
+                    ch->fd));
+                return 0;
+            }
+        }
+        break;
+    case EPOLL_CTL_DEL:
+        if (errno == ENOENT || errno == EBADF || errno == EPERM) {
+            /* If a delete fails with one of these errors,
+             * that's fine too: we closed the fd before we
+             * got around to calling epoll_dispatch. */
+            event_debug(("Epoll DEL(%d) on fd %d gave %s: DEL was unnecessary.",
+                (int)epev.events,
+                ch->fd,
+                strerror(errno)));
+            return 0;
+        }
+        break;
+    default:
+        break;
+    }
 
-	event_warn(PRINT_CHANGES(op, epev.events, ch, "failed"));
-	return -1;
+    event_warn(PRINT_CHANGES(op, epev.events, ch, "failed"));
+    return -1;
 }
 
 static int
 epoll_apply_changes(struct event_base *base)
 {
-	struct event_changelist *changelist = &base->changelist;
-	struct epollop *epollop = base->evbase;
-	struct event_change *ch;
+    struct event_changelist *changelist = &base->changelist;
+    struct epollop *epollop = base->evbase;
+    struct event_change *ch;
 
-	int r = 0;
-	int i;
+    int r = 0;
+    int i;
 
-	for (i = 0; i < changelist->n_changes; ++i) {
-		ch = &changelist->changes[i];
-		if (epoll_apply_one_change(base, epollop, ch) < 0)
-			r = -1;
-	}
+    for (i = 0; i < changelist->n_changes; ++i) {
+        ch = &changelist->changes[i];
+        if (epoll_apply_one_change(base, epollop, ch) < 0)
+            r = -1;
+    }
 
-	return (r);
+    return (r);
 }
 
 static int
 epoll_nochangelist_add(struct event_base *base, evutil_socket_t fd,
     short old, short events, void *p)
 {
-	struct event_change ch;
-	ch.fd = fd;
-	ch.old_events = old;
-	ch.read_change = ch.write_change = ch.close_change = 0;
-	if (events & EV_WRITE)
-		ch.write_change = EV_CHANGE_ADD |
-		    (events & EV_ET);
-	if (events & EV_READ)
-		ch.read_change = EV_CHANGE_ADD |
-		    (events & EV_ET);
-	if (events & EV_CLOSED)
-		ch.close_change = EV_CHANGE_ADD |
-		    (events & EV_ET);
+    struct event_change ch;
+    ch.fd = fd;
+    ch.old_events = old;
+    ch.read_change = ch.write_change = ch.close_change = 0;
+    if (events & EV_WRITE)
+        ch.write_change = EV_CHANGE_ADD |
+            (events & EV_ET);
+    if (events & EV_READ)
+        ch.read_change = EV_CHANGE_ADD |
+            (events & EV_ET);
+    if (events & EV_CLOSED)
+        ch.close_change = EV_CHANGE_ADD |
+            (events & EV_ET);
 
-	return epoll_apply_one_change(base, base->evbase, &ch);
+    return epoll_apply_one_change(base, base->evbase, &ch);
 }
 
 static int
 epoll_nochangelist_del(struct event_base *base, evutil_socket_t fd,
     short old, short events, void *p)
 {
-	struct event_change ch;
-	ch.fd = fd;
-	ch.old_events = old;
-	ch.read_change = ch.write_change = ch.close_change = 0;
-	if (events & EV_WRITE)
-		ch.write_change = EV_CHANGE_DEL;
-	if (events & EV_READ)
-		ch.read_change = EV_CHANGE_DEL;
-	if (events & EV_CLOSED)
-		ch.close_change = EV_CHANGE_DEL;
+    struct event_change ch;
+    ch.fd = fd;
+    ch.old_events = old;
+    ch.read_change = ch.write_change = ch.close_change = 0;
+    if (events & EV_WRITE)
+        ch.write_change = EV_CHANGE_DEL;
+    if (events & EV_READ)
+        ch.read_change = EV_CHANGE_DEL;
+    if (events & EV_CLOSED)
+        ch.close_change = EV_CHANGE_DEL;
 
-	return epoll_apply_one_change(base, base->evbase, &ch);
+    return epoll_apply_one_change(base, base->evbase, &ch);
 }
 
 static int
 epoll_dispatch(struct event_base *base, struct timeval *tv)
 {
-	struct epollop *epollop = base->evbase;
-	struct epoll_event *events = epollop->events;
-	int i, res;
-	long timeout = -1;
+    struct epollop *epollop = base->evbase;
+    struct epoll_event *events = epollop->events;
+    int i, res;
+    long timeout = -1;
 
 #ifdef USING_TIMERFD
-	if (epollop->timerfd >= 0) {
-		struct itimerspec is;
-		is.it_interval.tv_sec = 0;
-		is.it_interval.tv_nsec = 0;
-		if (tv == NULL) {
-			/* No timeout; disarm the timer. */
-			is.it_value.tv_sec = 0;
-			is.it_value.tv_nsec = 0;
-		} else {
-			if (tv->tv_sec == 0 && tv->tv_usec == 0) {
-				/* we need to exit immediately; timerfd can't
-				 * do that. */
-				timeout = 0;
-			}
-			is.it_value.tv_sec = tv->tv_sec;
-			is.it_value.tv_nsec = tv->tv_usec * 1000;
-		}
-		/* TODO: we could avoid unnecessary syscalls here by only
-		   calling timerfd_settime when the top timeout changes, or
-		   when we're called with a different timeval.
-		*/
-		if (timerfd_settime(epollop->timerfd, 0, &is, NULL) < 0) {
-			event_warn("timerfd_settime");
-		}
-	} else
+    if (epollop->timerfd >= 0) {
+        struct itimerspec is;
+        is.it_interval.tv_sec = 0;
+        is.it_interval.tv_nsec = 0;
+        if (tv == NULL) {
+            /* No timeout; disarm the timer. */
+            is.it_value.tv_sec = 0;
+            is.it_value.tv_nsec = 0;
+        } else {
+            if (tv->tv_sec == 0 && tv->tv_usec == 0) {
+                /* we need to exit immediately; timerfd can't
+                 * do that. */
+                timeout = 0;
+            }
+            is.it_value.tv_sec = tv->tv_sec;
+            is.it_value.tv_nsec = tv->tv_usec * 1000;
+        }
+        /* TODO: we could avoid unnecessary syscalls here by only
+           calling timerfd_settime when the top timeout changes, or
+           when we're called with a different timeval.
+        */
+        if (timerfd_settime(epollop->timerfd, 0, &is, NULL) < 0) {
+            event_warn("timerfd_settime");
+        }
+    } else
 #endif
-	if (tv != NULL) {
-		timeout = evutil_tv_to_msec_(tv);
-		if (timeout < 0 || timeout > MAX_EPOLL_TIMEOUT_MSEC) {
-			/* Linux kernels can wait forever if the timeout is
-			 * too big; see comment on MAX_EPOLL_TIMEOUT_MSEC. */
-			timeout = MAX_EPOLL_TIMEOUT_MSEC;
-		}
-	}
+    if (tv != NULL) {
+        timeout = evutil_tv_to_msec_(tv);
+        if (timeout < 0 || timeout > MAX_EPOLL_TIMEOUT_MSEC) {
+            /* Linux kernels can wait forever if the timeout is
+             * too big; see comment on MAX_EPOLL_TIMEOUT_MSEC. */
+            //如果timeout非常大，linux内核可以永远等待。
+            timeout = MAX_EPOLL_TIMEOUT_MSEC;
+        }
+    }
 
-	epoll_apply_changes(base);
-	event_changelist_remove_all_(&base->changelist, base);
+    epoll_apply_changes(base);
+    event_changelist_remove_all_(&base->changelist, base);
 
-	EVBASE_RELEASE_LOCK(base, th_base_lock);
+    EVBASE_RELEASE_LOCK(base, th_base_lock);
 
-	res = epoll_wait(epollop->epfd, events, epollop->nevents, timeout);
+    res = epoll_wait(epollop->epfd, events, epollop->nevents, timeout);
 
-	EVBASE_ACQUIRE_LOCK(base, th_base_lock);
+    EVBASE_ACQUIRE_LOCK(base, th_base_lock);
 
-	if (res == -1) {
-		if (errno != EINTR) {
-			event_warn("epoll_wait");
-			return (-1);
-		}
+    //判断epoll的返回值。要注意EINTR的情况。
+    if (res == -1) {
+        if (errno != EINTR) {
+            event_warn("epoll_wait");
+            return (-1);
+        }
 
-		return (0);
-	}
+        return (0);
+    }
 
-	event_debug(("%s: epoll_wait reports %d", __func__, res));
-	EVUTIL_ASSERT(res <= epollop->nevents);
+    event_debug(("%s: epoll_wait reports %d", __func__, res));
+    EVUTIL_ASSERT(res <= epollop->nevents);
 
-	for (i = 0; i < res; i++) {
-		int what = events[i].events;
-		short ev = 0;
+    for (i = 0; i < res; i++) {
+        int what = events[i].events;
+        short ev = 0;
 #ifdef USING_TIMERFD
-		if (events[i].data.fd == epollop->timerfd)
-			continue;
+        if (events[i].data.fd == epollop->timerfd)
+            continue;
 #endif
+        //判断是什么事件处于就绪状态。
+        if (what & (EPOLLHUP|EPOLLERR)) {
+            ev = EV_READ | EV_WRITE;
+        } else {
+            if (what & EPOLLIN)
+                ev |= EV_READ;
+            if (what & EPOLLOUT)
+                ev |= EV_WRITE;
+            if (what & EPOLLRDHUP)
+                ev |= EV_CLOSED;
+        }
 
-		if (what & (EPOLLHUP|EPOLLERR)) {
-			ev = EV_READ | EV_WRITE;
-		} else {
-			if (what & EPOLLIN)
-				ev |= EV_READ;
-			if (what & EPOLLOUT)
-				ev |= EV_WRITE;
-			if (what & EPOLLRDHUP)
-				ev |= EV_CLOSED;
-		}
+        if (!ev)
+            continue;
 
-		if (!ev)
-			continue;
+        //激活对应事件的回调函数。
+        evmap_io_active_(base, events[i].data.fd, ev | EV_ET);
+    }
 
-		evmap_io_active_(base, events[i].data.fd, ev | EV_ET);
-	}
+    //重新分配数组空间。
+    if (res == epollop->nevents && epollop->nevents < MAX_NEVENT) {
+        /* We used all of the event space this time.  We should
+           be ready for more events next time. */
+        int new_nevents = epollop->nevents * 2;
+        struct epoll_event *new_events;
 
-	if (res == epollop->nevents && epollop->nevents < MAX_NEVENT) {
-		/* We used all of the event space this time.  We should
-		   be ready for more events next time. */
-		int new_nevents = epollop->nevents * 2;
-		struct epoll_event *new_events;
+        new_events = mm_realloc(epollop->events,
+            new_nevents * sizeof(struct epoll_event));
+        if (new_events) {
+            epollop->events = new_events;
+            epollop->nevents = new_nevents;
+        }
+    }
 
-		new_events = mm_realloc(epollop->events,
-		    new_nevents * sizeof(struct epoll_event));
-		if (new_events) {
-			epollop->events = new_events;
-			epollop->nevents = new_nevents;
-		}
-	}
-
-	return (0);
+    return (0);
 }
 
 
 static void
 epoll_dealloc(struct event_base *base)
 {
-	struct epollop *epollop = base->evbase;
+    struct epollop *epollop = base->evbase;
 
-	evsig_dealloc_(base);
-	if (epollop->events)
-		mm_free(epollop->events);
-	if (epollop->epfd >= 0)
-		close(epollop->epfd);
+    evsig_dealloc_(base);
+    if (epollop->events)
+        mm_free(epollop->events);
+    if (epollop->epfd >= 0)
+        close(epollop->epfd);
 #ifdef USING_TIMERFD
-	if (epollop->timerfd >= 0)
-		close(epollop->timerfd);
+    if (epollop->timerfd >= 0)
+        close(epollop->timerfd);
 #endif
 
-	memset(epollop, 0, sizeof(struct epollop));
-	mm_free(epollop);
+    memset(epollop, 0, sizeof(struct epollop));
+    mm_free(epollop);
 }
 
 #endif /* EVENT__HAVE_EPOLL */
