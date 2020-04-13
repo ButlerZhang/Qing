@@ -38,29 +38,34 @@ void CallBack4_TimeOut(evutil_socket_t fd, short event, void *arg)
 
 void demo4_server_udp_timer(const char *ServerIP, int Port)
 {
-    g_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
-    if (g_UDPSocket == -1)
-    {
-        printf("ERROR: Create udp socket error.\n\n");
-        return;
-    }
+    //g_UDPSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    //if (g_UDPSocket == -1)
+    //{
+    //    printf("ERROR: Create udp socket error.\n\n");
+    //    return;
+    //}
 
-    int iOptval = 1;
-    if (setsockopt(g_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, (const char*)&iOptval, sizeof(int)) < 0)
-    {
-        printf("ERROR: setsockopt failed!");
-        return;
-    }
+    //int iOptval = 1;
+    //if (setsockopt(g_UDPSocket, SOL_SOCKET, SO_BROADCAST | SO_REUSEADDR, (const char*)&iOptval, sizeof(int)) < 0)
+    //{
+    //    printf("ERROR: setsockopt failed!");
+    //    return;
+    //}
 
-    InitializeSocketAddress(g_BroadcastAddress, "255.255.255.255", Port);
+    //InitializeSocketAddress(g_BroadcastAddress, "255.255.255.255", Port);
+
+    struct event_config *cfg = event_config_new();
+    //event_config_avoid_method(cfg, "poll");
+    //event_config_avoid_method(cfg, "epoll");
+    //event_config_avoid_method(cfg, "select");
+    struct event_base *base = event_base_new_with_config(cfg);
 
     struct event timeout;
-    struct event_base *base = event_base_new();
     event_assign(&timeout, base, -1, EV_PERSIST, CallBack4_TimeOut, (void*)&timeout);
 
     struct timeval tv;
     evutil_timerclear(&tv);
-    tv.tv_sec = 2;
+    tv.tv_sec = 20;
     event_add(&timeout, &tv);
 
     evutil_gettimeofday(&g_LastSendTime, NULL);

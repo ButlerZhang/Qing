@@ -30,10 +30,10 @@ int demo_main(int argc, char *argv[])
 #else
 
     //debug server
-    //int Choose = argc <= 1 ? 1 : 0;
+    int Choose = argc <= 1 ? 1 : 0;
 
     //debug client
-    int Choose = argc > 1 ? 1 : 0;
+    //int Choose = argc > 1 ? 1 : 0;
 
 #endif
 
@@ -42,17 +42,17 @@ int demo_main(int argc, char *argv[])
 
     if (Choose == 1)
     {
-        demo1_server_read_write(ServerIP, ServerPort);
+        //demo1_server_read_write(ServerIP, ServerPort);
         //demo2_server_bufferevent(ServerIP, ServerPort);
         //demo3_server_evconnlistener(ServerIP, ServerPort);
-        //demo4_server_udp_timer(ServerIP, ServerPort);
+        demo4_server_udp_timer(ServerIP, ServerPort);
     }
     else
     {
-        demo1_client_read_write(ServerIP, ServerPort);
+        //demo1_client_read_write(ServerIP, ServerPort);
         //demo2_client_bufferevent(ServerIP, ServerPort);
         //demo3_client_evconnlistener(ServerIP, ServerPort);
-        //demo4_client_udp_timer(ServerIP, ServerPort);
+        demo4_client_udp_timer(ServerIP, ServerPort);
     }
 
 #ifdef _WIN32
