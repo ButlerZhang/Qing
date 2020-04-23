@@ -64,6 +64,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\Example\C++11\NewFeatures.h" />
     <ClInclude Include="src\Example\Effective.h" />
     <ClInclude Include="src\Example\IOExample.h" />
     <ClInclude Include="src\Example\StringVector.h" />

@@ -4,6 +4,9 @@
     <Filter Include="Example">
       <UniqueIdentifier>{40139fbd-0aca-4683-912e-87b919f7e341}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\C++11">
+      <UniqueIdentifier>{7a07e085-85ac-4347-ba92-27496e8363fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Example\Effective.h">
@@ -21,6 +24,9 @@
     <ClInclude Include="src\PermutationCombination.h" />
     <ClInclude Include="src\RandomGenerator.h" />
     <ClInclude Include="src\StandardShare.h" />
+    <ClInclude Include="src\Example\C++11\NewFeatures.h">
+      <Filter>Example\C++11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

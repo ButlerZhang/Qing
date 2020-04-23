@@ -16,6 +16,9 @@
     <Filter Include="Example">
       <UniqueIdentifier>{1565ee10-3d47-42dd-8d45-95dc574ad6b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\C++111">
+      <UniqueIdentifier>{c5b16a83-caac-48df-8627-559a9a9ed241}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\StandardLinux\src\Common.h">
@@ -44,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="..\StandardLinux\src\Example\StringVector.h">
       <Filter>Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StandardLinux\src\Example\C++11\NewFeatures.h">
+      <Filter>Example\C++111</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
