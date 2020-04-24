@@ -4,6 +4,9 @@
 #include <string>
 #include <complex>
 #include <iostream>
+#include <array>
+#include <bitset>
+#include <map>
 
 
 
@@ -166,15 +169,133 @@ namespace C11_5
 //6.Move语义和Rvalue Reference
 namespace C11_6
 {
-
+    //std::move不是真正的搬迁内容，本质上是Rvalue Reference。
+    //被搬迁之后，原对象的内容应该为空，但有的编译器扔可能使用原对象。
 }
 
+//7.新式的字符串字面常量(String Literal)
+namespace C11_7
+{
+    //Raw String Literal,类似于python中r开头的字符串,这样可以避免转义。
+    //完整语法：R"delim(...)delim"
+    std::string test = R"(\\\\\n)";
+}
 
+//8.关键字noexcept
+namespace C11_8
+{
+    //指明某个函数不抛出异常。
+    void foo() noexcept {}
 
+    //noexcept(bool)
+    //如果x.swap(y)不抛出异常，swap_test就不抛出异常
+    template<class Type>
+    void swap_test(Type &x, Type &y) noexcept(noexcept(x.swap(y)))
+    {
+        x.swap(y);
+    }
+}
 
+//9.关键字constexpr
+namespace C11_9
+{
+    //constexpr将表达式核定于编译期
+    constexpr int square(int x) { return x*x; }
+    float a[square(9)];                     //OK, a has 81 elements
+}
 
+//10.崭新的Template特性
+namespace C11_10
+{
+    //Variadic Template
+    void Print() {}
 
+    template<typename T, typename ... Types>
+    void Print(const T& firstArg, const Types&& ...args)
+    {
+        std::cout << firstArg << std::endl; //print first argument
+        print(args...);                     //call print() for remaining arguments
+    }
 
+    void Test() { Print(7, "hello", std::bitset<16>(233), 3.0); }
 
+    //Alias Tempalte(带别名的模板,或称为Template Typedef)
 
+    //定义
+    template< typename T>
+    using Vec = std::vector<T, MyAlloc<T>>;
+
+    //声明
+    Vec<int> Coll;
+
+    //上式等价于
+    std::vector<int, MyAlloc<int>> Coll;
+}
+
+//11.Lambda
+namespace C11_11
+{
+    //lambda允许inline函数的定义式被用作一个参数，或是一个Local对象。
+
+    //最小型的lambda:
+    [] {std::cout << "Hello lambda" << std::endl; }();
+
+    //添加传入的参数
+    auto l1 = [](const std::string &s) {std::cout << s << std::endl; };
+    l1("hello lambda");
+
+    //可以不写返回类型，会自动推导
+    [] { return 32; };
+
+    //可以明确指出返回类型
+    []()->doubles { return 32; };
+
+    //Capture用以访问外部作用域
+    int x = 0;
+    int y = 42;
+    auto l2 = [x, &y] {
+        std::cout << x << std::endl;
+        std::cout << y++ << std::endl;
+    };
+
+    l2(x, y);
+
+    //lambda的类型
+    std::is_function<int(int, int)> ReturnLambda()
+    {
+        return [](int x, int y) {return x*y; };
+    }
+}
+
+//12.关键字decltype
+namespace C11_12
+{
+    //获取表达式的类型。可以替换缺乏一致性又不完全的typeof。
+    std::map<std::string, float> coll;
+    decltype(coll)::value_type elem;
+}
+
+//13.新的函数声明语法(New Function Declaration Syntax)
+namespace C11_13
+{
+    //可以将函数的返回类型声明于参数列之后
+    template<typename T1, typename T2>
+    auto add(T1 x, T2 y) -> decltype(x + y) {}
+}
+
+//14.带领域的(scoped)Enumeration
+namespace C11_14
+{
+    enum class Salutation : char { mr, ms, co, none };
+}
+
+//15.新的基础类型
+namespace C11_15
+{
+    char16_t c16;
+    char32_t c32;
+    long long ll;
+    unsigned long long ull;
+    std::nullptr_t t;
+}
 
