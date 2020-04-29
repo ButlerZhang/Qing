@@ -51,6 +51,9 @@
     <ClInclude Include="..\StandardLinux\src\Example\C++11\NewFeatures.h">
       <Filter>Example\C++111</Filter>
     </ClInclude>
+    <ClInclude Include="..\StandardLinux\src\Example\C++11\CommonTools.h">
+      <Filter>Example\C++111</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\StandardLinux\src\NumericalConversion.cpp">

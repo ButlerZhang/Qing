@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\StandardLinux\src\Common.h" />
+    <ClInclude Include="..\StandardLinux\src\Example\C++11\CommonTools.h" />
     <ClInclude Include="..\StandardLinux\src\Example\C++11\NewFeatures.h" />
     <ClInclude Include="..\StandardLinux\src\Example\Effective.h" />
     <ClInclude Include="..\StandardLinux\src\Example\IOExample.h" />

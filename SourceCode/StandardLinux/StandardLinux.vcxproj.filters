@@ -27,6 +27,9 @@
     <ClInclude Include="src\Example\C++11\NewFeatures.h">
       <Filter>Example\C++11</Filter>
     </ClInclude>
+    <ClInclude Include="src\Example\C++11\CommonTools.h">
+      <Filter>Example\C++11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
