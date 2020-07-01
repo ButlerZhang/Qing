@@ -41,6 +41,7 @@ namespace C11_3
     double f() { return 0.0; }
     auto d = f();                           //d has type double
 
+    //因为需要根据初值推导类型，所以必须初始化
     auto j;                                 //ERROR, must init
 
     static auto vat = 0.19;                 //can add static
@@ -169,8 +170,9 @@ namespace C11_5
 //6.Move语义和Rvalue Reference
 namespace C11_6
 {
+    //用以避免非必要的拷贝和临时对象。
     //std::move不是真正的搬迁内容，本质上是Rvalue Reference。
-    //被搬迁之后，原对象的内容应该为空，但有的编译器扔可能使用原对象。
+    //被搬迁之后，原对象的内容应该为空，但有的编译器仍可能使用原对象。
 }
 
 //7.新式的字符串字面常量(String Literal)
@@ -185,6 +187,7 @@ namespace C11_7
 namespace C11_8
 {
     //指明某个函数不抛出异常。
+    //如果foo最终抛出了异常，程序会被终止。
     void foo() noexcept {}
 
     //noexcept(bool)

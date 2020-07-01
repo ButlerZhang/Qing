@@ -1,5 +1,6 @@
 #include <iostream>
 #include "src/RandomGenerator.h"
+#include "src/Example/C++11/CommonTools.h"
 
 
 

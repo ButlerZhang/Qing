@@ -16,7 +16,7 @@ namespace C11_Pair
     void Test()
     {
         typedef std::pair<int, float> IntFloatPair;
-        IntFloatPair p(42, 3.14);
+        IntFloatPair p(42, 3.14f);
 
         std::cout << std::get<0>(p) << std::endl;                           //yields p.first
         std::cout << std::get<1>(p) << std::endl;                           //yields p.second
@@ -24,5 +24,3 @@ namespace C11_Pair
         std::tuple_element<0, IntFloatPair>::type vale = p.first;           //yields int, get element type
     }
 }
-
-
