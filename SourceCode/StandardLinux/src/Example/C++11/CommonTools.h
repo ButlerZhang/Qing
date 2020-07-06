@@ -3,6 +3,9 @@
 #include <ostream>
 #include <iostream>
 #include <complex>
+#include <memory>
+#include <vector>
+#include <string>
 
 
 
@@ -63,5 +66,118 @@ namespace C11_Tuple
 
         int n;
         auto t8 = std::tuple_cat(std::make_tuple(42, 7.7, "hello"), std::tie(n));   //将多个tuple串成一个
+    }
+}
+
+namespace C11_SmartPointer
+{
+    void SharedPointer()
+    {
+        //two shared pointers representing two persons by their name
+        std::shared_ptr<std::string> pNico(new std::string("nico"));
+        std::shared_ptr<std::string> pJutta(new std::string("jutta"));
+
+        //其它初始化方法
+        //std::shared_ptr<std::string> pNico1 = new std::string("nico");                //ERROR, explicit
+        //std::shared_ptr<std::string> pNico2{ new std::string("nico") }                //OK
+        //std::shared_ptr<std::string> pNico3 = std::make_shared<std::string>("Nico");  //OK
+
+        //std::shared_ptr<std::string> pNico4;
+        //pNico4 = new std::string("Nico");                                             //ERROR, explicit
+        //pNico4.reset(new std::string("Nico"));                                        //OK
+
+        //capitalize person names
+        (*pNico)[0] = 'N';
+        pJutta->replace(0, 1, "J");
+
+        //put them multiple times in a container
+        std::vector<std::shared_ptr<std::string>> whoMadeCoffee;
+        whoMadeCoffee.push_back(pJutta);
+        whoMadeCoffee.push_back(pJutta);
+        whoMadeCoffee.push_back(pNico);
+        whoMadeCoffee.push_back(pJutta);
+        whoMadeCoffee.push_back(pNico);
+
+        //print all elements
+        for (auto ptr : whoMadeCoffee)
+        {
+            std::cout << *ptr << " ";
+        }
+        std::cout << std::endl;
+
+        //overwrite a name agian
+        *pNico = "Nicolai";
+
+        //print all elements again
+        for (auto ptr : whoMadeCoffee)
+        {
+            std::cout << *ptr << " ";
+        }
+        std::cout << std::endl;
+
+        //print some internal data
+        std::cout << "use_count: " << whoMadeCoffee[0].use_count() << std::endl;
+
+        //Deleter
+        std::shared_ptr<std::string> pNico5(new std::string("nico"), 
+            [](std::string *p) {
+            std::cout << "delete " << "*p" << std::endl;
+            delete p;
+        });
+
+        pNico5 = nullptr;
+
+        //Array
+        std::shared_ptr<int> p1(new int[10],
+            [](int *p) {
+            delete[] p;
+        });
+
+        //可以将上面的改用这句完成
+        std::shared_ptr<int> p2(new int[10], std::default_delete<int[]>());
+    }
+
+    class Person
+    {
+    public:
+        std::string name;
+        std::shared_ptr<Person> mother;
+        std::shared_ptr<Person> father;
+
+        //std::vector<std::shared_ptr<Person>> kids;          //使用share_ptr不会释放资源
+        std::vector<std::weak_ptr<Person>> kids;              //使用weak_ptr才能释放资源
+
+        Person(const std::string &n,
+            std::shared_ptr<Person> m = nullptr,
+            std::shared_ptr<Person> f = nullptr) : name(n), mother(m), father(f) {
+            //nothing
+        }
+
+        ~Person()
+        {
+            std::cout << "delete " << name << std::endl;
+        }
+    };
+
+    std::shared_ptr<Person> initFamily(const std::string &name)
+    {
+        std::shared_ptr<Person> mom(new Person(name + "'s mom"));
+        std::shared_ptr<Person> dad(new Person(name + "'s dad"));
+        std::shared_ptr<Person> kid(new Person(name, mom, dad));
+        mom->kids.push_back(kid);
+        dad->kids.push_back(kid);
+        return kid;
+    }
+
+    void WeakPointer()
+    {
+        std::shared_ptr<Person> p = initFamily("nico");
+        std::cout << "nico's family exists" << std::endl;
+        std::cout << "- nico is shared " << p.use_count() << " times" << std::endl;
+        //std::cout << "- name of 1st kid of nico's mom: " << p->mother->kids[0]->name << std::endl;            //share_ptr
+        std::cout << "- name of 1st kid of nico's mom: " << p->mother->kids[0].lock()->name << std::endl;       //weak_ptr
+
+        p = initFamily("jim");
+        std::cout << "jim's family exists" << std::endl;
     }
 }
