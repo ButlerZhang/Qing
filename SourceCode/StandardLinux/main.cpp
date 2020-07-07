@@ -14,7 +14,12 @@ int main(int argc, char *argv[])
         //}
 
         //C11_SmartPointer::SharedPointer();
-        C11_SmartPointer::WeakPointer();
+        //C11_SmartPointer::WeakPointer();
+        //C11_NumericLimit::Test();
+        //C11_Ratio::Test();
+        //C11_Chrono::TestDuration();
+        //C11_Chrono::TestClock();
+        C11_Chrono::TestTimepoint();
     }
 
     int x = 0;
