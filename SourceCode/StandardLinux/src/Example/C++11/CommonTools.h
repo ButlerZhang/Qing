@@ -10,6 +10,8 @@
 #include <ratio>
 #include <chrono>
 #include <ctime>
+#include <iterator>
+#include <algorithm>
 
 
 
@@ -391,5 +393,37 @@ namespace C11_Chrono
 
         auto tp1 = makeTimePoint(2010, 01, 01, 0, 0);
         std::cout << asString(tp1) << std::endl;
+    }
+}
+
+namespace C11_IteratorAdapter
+{
+    void StreamIteratorAdapterTest()
+    {
+        std::vector<std::string> coll;
+
+        //read all words from the standard input
+        std::copy(std::istream_iterator<std::string>(std::cin),
+            std::istream_iterator<std::string>(),
+            std::back_inserter(coll));
+
+        //sort elements
+        std::sort(coll.begin(), coll.end());
+
+        //print all elements without duplicates
+        std::unique_copy(coll.begin(), 
+            coll.end(),
+            std::ostream_iterator<std::string>(std::cout, "\n"));
+    }
+
+    template<typename T>
+    inline void PRINT_ELEMENTS(const T& coll, const std::string &optstr = "")
+    {
+        std::cout << optstr;
+        for (const auto& elem : coll)
+        {
+            std::cout << elem << ' ';
+        }
+        std::cout << std::endl;
     }
 }
