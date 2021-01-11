@@ -115,19 +115,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\AlgorithmLinux\AlgorithmTest.h" />
-    <ClInclude Include="..\AlgorithmLinux\src\001_MaxSubSum.h" />
-    <ClInclude Include="..\AlgorithmLinux\src\002_BinarySearch.h" />
-    <ClInclude Include="..\AlgorithmLinux\src\003_CommonMath.h" />
-    <ClInclude Include="..\AlgorithmLinux\src\004_VectorLite.h" />
+    <ClCompile Include="..\AlgorithmLinux\main.cpp" />
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\001_MaxSubSum.cpp" />
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\002_BinarySearch.cpp" />
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\003_CommonMath.cpp" />
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\004_VectorLite.cpp" />
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\AlgorithmTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\AlgorithmLinux\AlgorithmTest.cpp" />
-    <ClCompile Include="..\AlgorithmLinux\main.cpp" />
-    <ClCompile Include="..\AlgorithmLinux\src\001_MaxSubSum.cpp" />
-    <ClCompile Include="..\AlgorithmLinux\src\002_BinarySearch.cpp" />
-    <ClCompile Include="..\AlgorithmLinux\src\003_CommonMath.cpp" />
-    <ClCompile Include="..\AlgorithmLinux\src\004_VectorLite.cpp" />
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\001_MaxSubSum.h" />
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\002_BinarySearch.h" />
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\003_CommonMath.h" />
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\004_VectorLite.h" />
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\AlgorithmTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

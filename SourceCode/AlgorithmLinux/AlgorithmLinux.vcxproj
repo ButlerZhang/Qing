@@ -63,19 +63,19 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClCompile Include="AlgorithmTest.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\001_MaxSubSum.cpp" />
-    <ClCompile Include="src\002_BinarySearch.cpp" />
-    <ClCompile Include="src\003_CommonMath.cpp" />
-    <ClCompile Include="src\004_VectorLite.cpp" />
+    <ClCompile Include="src\ITA\001_MaxSubSum.cpp" />
+    <ClCompile Include="src\ITA\002_BinarySearch.cpp" />
+    <ClCompile Include="src\ITA\003_CommonMath.cpp" />
+    <ClCompile Include="src\ITA\004_VectorLite.cpp" />
+    <ClCompile Include="src\ITA\AlgorithmTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AlgorithmTest.h" />
-    <ClInclude Include="src\001_MaxSubSum.h" />
-    <ClInclude Include="src\002_BinarySearch.h" />
-    <ClInclude Include="src\003_CommonMath.h" />
-    <ClInclude Include="src\004_VectorLite.h" />
+    <ClInclude Include="src\ITA\001_MaxSubSum.h" />
+    <ClInclude Include="src\ITA\002_BinarySearch.h" />
+    <ClInclude Include="src\ITA\003_CommonMath.h" />
+    <ClInclude Include="src\ITA\004_VectorLite.h" />
+    <ClInclude Include="src\ITA\AlgorithmTest.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

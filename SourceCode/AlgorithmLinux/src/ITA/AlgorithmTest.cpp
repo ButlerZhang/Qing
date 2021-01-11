@@ -1,8 +1,8 @@
 #include "AlgorithmTest.h"
-#include "src/001_MaxSubSum.h"
-#include "src/002_BinarySearch.h"
-#include "src/003_CommonMath.h"
-#include "src/004_VectorLite.h"
+#include "001_MaxSubSum.h"
+#include "002_BinarySearch.h"
+#include "003_CommonMath.h"
+#include "004_VectorLite.h"
 
 #include <iostream>
 #include <string>
@@ -22,6 +22,15 @@ public:
         std::cout << std::endl << "=====Test Stop.=====" << std::endl << std::endl;
     }
 };
+
+void TestITA()
+{
+    TestMaxSubSum();
+    TestBinarySearch();
+    TestGreatestCommonDivisor();
+    TestPowRecursive();
+    TestVectorLite();
+}
 
 
 

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\ITA\001_MaxSubSum.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ITA\002_BinarySearch.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ITA\003_CommonMath.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ITA\004_VectorLite.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ITA\AlgorithmTest.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="LeetCode">
+      <UniqueIdentifier>{f9ea5794-a2a5-4c77-93f1-ce83c0051e97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ITA">
+      <UniqueIdentifier>{875cb09a-b83c-46ab-ba81-7a41c89b8852}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ITA\001_MaxSubSum.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ITA\002_BinarySearch.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ITA\003_CommonMath.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ITA\004_VectorLite.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ITA\AlgorithmTest.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

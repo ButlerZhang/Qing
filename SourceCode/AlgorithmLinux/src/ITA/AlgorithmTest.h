@@ -2,6 +2,8 @@
 
 
 
+void TestITA();
+
 void TestMaxSubSum();
 void TestBinarySearch();
 void TestGreatestCommonDivisor();

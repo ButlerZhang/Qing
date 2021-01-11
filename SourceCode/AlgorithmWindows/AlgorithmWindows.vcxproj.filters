@@ -13,42 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ITA">
+      <UniqueIdentifier>{2b19381f-0837-42ee-8376-3ca1c08885f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LeetCode">
+      <UniqueIdentifier>{e2b5721c-e0f0-4356-ad17-295ea109341a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\AlgorithmLinux\src\001_MaxSubSum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AlgorithmLinux\src\002_BinarySearch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AlgorithmLinux\src\003_CommonMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AlgorithmLinux\src\004_VectorLite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AlgorithmLinux\AlgorithmTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\AlgorithmLinux\src\001_MaxSubSum.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\AlgorithmLinux\src\002_BinarySearch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\AlgorithmLinux\src\003_CommonMath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\AlgorithmLinux\src\004_VectorLite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\AlgorithmLinux\AlgorithmTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\AlgorithmLinux\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\001_MaxSubSum.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\002_BinarySearch.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\003_CommonMath.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\004_VectorLite.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AlgorithmLinux\src\ITA\AlgorithmTest.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\001_MaxSubSum.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\002_BinarySearch.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\003_CommonMath.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\004_VectorLite.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\ITA\AlgorithmTest.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

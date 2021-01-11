@@ -1,14 +1,9 @@
-#include "AlgorithmTest.h"
+#include "src/ITA/AlgorithmTest.h"
 
 
 
 int main(int argc, char *argv[])
 {
-    TestMaxSubSum();
-    TestBinarySearch();
-    TestGreatestCommonDivisor();
-    TestPowRecursive();
-    TestVectorLite();
-
+    TestITA();
     return 0;
 }
