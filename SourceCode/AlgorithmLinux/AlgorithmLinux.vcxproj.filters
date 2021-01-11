@@ -48,5 +48,8 @@
     <ClInclude Include="src\LeetCode\LeetCodeTest.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeetCode\0002_AddTwoNumbers.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

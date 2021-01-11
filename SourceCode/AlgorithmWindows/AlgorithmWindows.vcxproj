@@ -129,6 +129,7 @@
     <ClInclude Include="..\AlgorithmLinux\src\ITA\004_VectorLite.h" />
     <ClInclude Include="..\AlgorithmLinux\src\ITA\AlgorithmTest.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0001_TwoSum.h" />
+    <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0002_AddTwoNumbers.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
