@@ -42,5 +42,11 @@
     <ClInclude Include="src\ITA\AlgorithmTest.h">
       <Filter>ITA</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeetCode\0001_TwoSum.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LeetCode\LeetCodeTest.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

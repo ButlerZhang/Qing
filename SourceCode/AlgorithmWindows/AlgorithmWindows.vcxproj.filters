@@ -56,5 +56,11 @@
     <ClInclude Include="..\AlgorithmLinux\src\ITA\AlgorithmTest.h">
       <Filter>ITA</Filter>
     </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0001_TwoSum.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeTest.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

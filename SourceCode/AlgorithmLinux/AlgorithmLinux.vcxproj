@@ -76,6 +76,8 @@
     <ClInclude Include="src\ITA\003_CommonMath.h" />
     <ClInclude Include="src\ITA\004_VectorLite.h" />
     <ClInclude Include="src\ITA\AlgorithmTest.h" />
+    <ClInclude Include="src\LeetCode\0001_TwoSum.h" />
+    <ClInclude Include="src\LeetCode\LeetCodeTest.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
