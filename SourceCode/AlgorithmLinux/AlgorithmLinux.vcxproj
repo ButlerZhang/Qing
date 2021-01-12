@@ -78,6 +78,7 @@
     <ClInclude Include="src\ITA\AlgorithmTest.h" />
     <ClInclude Include="src\LeetCode\0001_TwoSum.h" />
     <ClInclude Include="src\LeetCode\0002_AddTwoNumbers.h" />
+    <ClInclude Include="src\LeetCode\0003_LongestSubstringWithoutRepeatingCharacters.h" />
     <ClInclude Include="src\LeetCode\LeetCodeTest.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
