@@ -1,41 +1,38 @@
 #pragma once
+#include "LeetCodeCommon.h"
+
 #include <string>
 #include <algorithm>
-#include <assert.h>
 
 
 
-namespace LC_LongestSubstringWithoutRepeatingCharacters {
-    using namespace std;
+class LongestSubstringWithoutRepeatingCharacters {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int result = 0;
+        const int stringLength = static_cast<int>(s.size());
 
-    class Solution {
-    public:
-        int lengthOfLongestSubstring(string s) {
-            int result = 0;
-            const int stringLength = static_cast<int>(s.size());
-
-            int start = 0, end = 0;
-            while (stringLength - start > result) {
-                for (int index = start; index < end; index++) {
-                    if (s[index] == s[end]) {
-                        result = std::max(result, end - start);
-                        start = index + 1;
-                        break;
-                    }
-                }
-
-                if (++end >= stringLength) {
+        int start = 0, end = 0;
+        while (stringLength - start > result) {
+            for (int index = start; index < end; index++) {
+                if (s[index] == s[end]) {
                     result = std::max(result, end - start);
+                    start = index + 1;
                     break;
                 }
             }
 
-            return result;
+            if (++end >= stringLength) {
+                result = std::max(result, end - start);
+                break;
+            }
         }
-    };
 
-    void testCase() {
-        Solution test;
+        return result;
+    }
+
+    static void testCase() {
+        LongestSubstringWithoutRepeatingCharacters test;
 
         assert(test.lengthOfLongestSubstring("abcabcbb") == 3);
         assert(test.lengthOfLongestSubstring("bbbbb") == 1);
@@ -49,4 +46,4 @@ namespace LC_LongestSubstringWithoutRepeatingCharacters {
         assert(test.lengthOfLongestSubstring("abc abc 123 45") == 7);
         assert(test.lengthOfLongestSubstring("abcdefgabcdefghijklmn") == 14);
     }
-}
+};

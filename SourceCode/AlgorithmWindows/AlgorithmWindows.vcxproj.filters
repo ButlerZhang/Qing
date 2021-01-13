@@ -68,5 +68,8 @@
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0003_LongestSubstringWithoutRepeatingCharacters.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeCommon.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,10 @@
 #pragma once
+#include "LeetCodeCommon.h"
 
 
 
-namespace LC_AddTwoNumbers {
+class AddTwoNumbers {
+public:
 
     //Definition for singly-linked list.
     struct ListNode {
@@ -13,58 +15,55 @@ namespace LC_AddTwoNumbers {
         ListNode(int x, ListNode *next) : val(x), next(next) {}
     };
 
-    class Solution {
-    public:
-        ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-            ListNode *resultHead = nullptr, *resultMove = nullptr;
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode *resultHead = nullptr, *resultMove = nullptr;
 
-            int carry = 0, base = 10;
-            int value1 = 0, value2 = 0, resultValue = 0;
+        int carry = 0, base = 10;
+        int value1 = 0, value2 = 0, resultValue = 0;
 
-            ListNode *move1 = l1, *move2 = l2;
-            while (move1 != nullptr || move2 != nullptr) {
-                value1 = 0;
-                if (move1 != nullptr) {
-                    value1 = move1->val;
-                    move1 = move1->next;
-                }
-
-                value2 = 0;
-                if (move2 != nullptr) {
-                    value2 = move2->val;
-                    move2 = move2->next;
-                }
-
-                resultValue = value1 + value2 + carry;
-                if (resultValue >= base) {
-                    resultValue -= base;
-                    carry = 1;
-                }
-                else {
-                    carry = 0;
-                }
-
-                ListNode *newNode = new ListNode(resultValue);
-                if (resultHead == nullptr) {
-                    resultHead = newNode;
-                    resultMove = resultHead;
-                }
-                else {
-                    resultMove->next = newNode;
-                    resultMove = resultMove->next;
-                }
+        ListNode *move1 = l1, *move2 = l2;
+        while (move1 != nullptr || move2 != nullptr) {
+            value1 = 0;
+            if (move1 != nullptr) {
+                value1 = move1->val;
+                move1 = move1->next;
             }
 
-            if (carry != 0) {
-                resultMove->next = new ListNode(carry);
+            value2 = 0;
+            if (move2 != nullptr) {
+                value2 = move2->val;
+                move2 = move2->next;
             }
 
-            return resultHead;
+            resultValue = value1 + value2 + carry;
+            if (resultValue >= base) {
+                resultValue -= base;
+                carry = 1;
+            }
+            else {
+                carry = 0;
+            }
+
+            ListNode *newNode = new ListNode(resultValue);
+            if (resultHead == nullptr) {
+                resultHead = newNode;
+                resultMove = resultHead;
+            }
+            else {
+                resultMove->next = newNode;
+                resultMove = resultMove->next;
+            }
         }
-    };
 
-    void testCase() {
-        Solution test;
+        if (carry != 0) {
+            resultMove->next = new ListNode(carry);
+        }
+
+        return resultHead;
+    }
+
+    static void testCase() {
+        AddTwoNumbers test;
 
         //l1 = [2,4,3], l2 = [5,6,4], out = [7,0,8]
         {
@@ -148,4 +147,4 @@ namespace LC_AddTwoNumbers {
             assert(result == nullptr);
         }
     }
-}
+};

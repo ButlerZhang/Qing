@@ -54,5 +54,8 @@
     <ClInclude Include="src\LeetCode\0003_LongestSubstringWithoutRepeatingCharacters.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeetCode\LeetCodeCommon.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

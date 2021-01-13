@@ -7,7 +7,7 @@
 
 void TestLeetCode()
 {
-    //LC_TwoSum::testCase();
-    //LC_AddTwoNumbers::testCase();
-    LC_LongestSubstringWithoutRepeatingCharacters::testCase();
+    //TwoSum::testCase();
+    //AddTwoNumbers::testCase();
+    LongestSubstringWithoutRepeatingCharacters::testCase();
 }

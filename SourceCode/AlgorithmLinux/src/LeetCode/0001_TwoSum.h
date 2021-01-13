@@ -1,43 +1,39 @@
 #pragma once
+#include "LeetCodeCommon.h"
+
 #include <vector>
-#include <assert.h>
 #include <unordered_map>
 
 
 
-namespace LC_TwoSum {
-
-    using namespace std;
-
-    class Solution {
-    public:
-        vector<int> twoSum(vector<int>& nums, int target) {
-            std::vector<int> result;
-            if (nums.size() < 2) {
-                return result;
-            }
-
-            std::unordered_map<int, int> minusMap;
-            for (std::vector<int>::size_type index = 0; index < nums.size(); index++) {
-                int difference = target - nums[index];
-
-                std::unordered_map<int, int>::const_iterator it = minusMap.find(difference);
-                if (it == minusMap.end()) {
-                    minusMap[nums[index]] = static_cast<int>(index);
-                    continue;
-                }
-
-                result.push_back(minusMap[difference]);
-                result.push_back(static_cast<int>(index));
-                break;
-            }
-
+class TwoSum {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        std::vector<int> result;
+        if (nums.size() < 2) {
             return result;
         }
-    };
 
-    void testCase() {
-        Solution test;
+        std::unordered_map<int, int> minusMap;
+        for (std::vector<int>::size_type index = 0; index < nums.size(); index++) {
+            int difference = target - nums[index];
+
+            std::unordered_map<int, int>::const_iterator it = minusMap.find(difference);
+            if (it == minusMap.end()) {
+                minusMap[nums[index]] = static_cast<int>(index);
+                continue;
+            }
+
+            result.push_back(minusMap[difference]);
+            result.push_back(static_cast<int>(index));
+            break;
+        }
+
+        return result;
+    }
+
+    static void testCase() {
+        TwoSum test;
 
         std::vector<int> case1 = { 2, 7, 11, 15 };
         const std::vector<int> &result1 = test.twoSum(case1, 9);
@@ -59,4 +55,4 @@ namespace LC_TwoSum {
         const std::vector<int> &result5 = test.twoSum(case5, 2);
         assert(result5.size() == 0);
     }
-}
+};
