@@ -57,5 +57,8 @@
     <ClInclude Include="src\LeetCode\LeetCodeCommon.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeetCode\0004_MedianOfTwoSortedArrays.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

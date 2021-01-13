@@ -1,7 +1,7 @@
 #pragma once
 #include "LeetCodeCommon.h"
 
-
+LEET_CODE_NS_BEGIN
 
 class AddTwoNumbers {
 public:
@@ -148,3 +148,5 @@ public:
         }
     }
 };
+
+LEET_CODE_NS_END

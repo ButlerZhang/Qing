@@ -1,13 +1,13 @@
 #pragma once
-#include "LeetCodeCommon.h"
-
 #include <vector>
 #include <unordered_map>
+#include "LeetCodeCommon.h"
 
-
+LEET_CODE_NS_BEGIN
 
 class TwoSum {
 public:
+
     vector<int> twoSum(vector<int>& nums, int target) {
         std::vector<int> result;
         if (nums.size() < 2) {
@@ -56,3 +56,5 @@ public:
         assert(result5.size() == 0);
     }
 };
+
+LEET_CODE_NS_END

@@ -1,13 +1,13 @@
 #pragma once
-#include "LeetCodeCommon.h"
-
 #include <string>
 #include <algorithm>
+#include "LeetCodeCommon.h"
 
-
+LEET_CODE_NS_BEGIN
 
 class LongestSubstringWithoutRepeatingCharacters {
 public:
+
     int lengthOfLongestSubstring(string s) {
         int result = 0;
         const int stringLength = static_cast<int>(s.size());
@@ -47,3 +47,5 @@ public:
         assert(test.lengthOfLongestSubstring("abcdefgabcdefghijklmn") == 14);
     }
 };
+
+LEET_CODE_NS_END

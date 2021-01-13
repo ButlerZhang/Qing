@@ -71,5 +71,8 @@
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeCommon.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0004_MedianOfTwoSortedArrays.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

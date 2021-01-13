@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
     //TestITA();
-    TestLeetCode();
+    LeetCode::Test();
     system("pause");
     return 0;
 }
