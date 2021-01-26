@@ -60,5 +60,8 @@
     <ClInclude Include="src\LeetCode\0004_MedianOfTwoSortedArrays.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeetCode\0005_LongestPalindromicSubstring.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
