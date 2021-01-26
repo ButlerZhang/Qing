@@ -10,10 +10,10 @@ LEET_CODE_NS_BEGIN
 
 void Test()
 {
-    TwoSum::testCase();
-    AddTwoNumbers::testCase();
-    LongestSubstringWithoutRepeatingCharacters::testCase();
-    //MedianOfTwoSortedArrays::testCase();
+    //TwoSum::testCase();
+    //AddTwoNumbers::testCase();
+    //LongestSubstringWithoutRepeatingCharacters::testCase();
+    MedianOfTwoSortedArrays::testCase();
 }
 
 LEET_CODE_NS_END
