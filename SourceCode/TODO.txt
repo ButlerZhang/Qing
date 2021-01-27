@@ -34,4 +34,7 @@
 (04)退出按钮无效。
 (05)使用OpenSSL提供的加解密功能。
 
+5.LeedCode:
+(1)0002_AddTwoNumbers
+(2)0005_LongestPalindromicSubstring:dynamicProgramming
 
