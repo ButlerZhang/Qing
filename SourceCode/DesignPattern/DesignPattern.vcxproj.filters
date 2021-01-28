@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="HeadFirst">
+      <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeadFirst\StrategyPattern">
+      <UniqueIdentifier>{4762b64a-185c-4623-96f0-8b2dc6887e69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -41,6 +47,18 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
+      <Filter>HeadFirst</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\StrategyPattern\Duck.h">
+      <Filter>HeadFirst\StrategyPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\StrategyPattern\FlyBehavior.h">
+      <Filter>HeadFirst\StrategyPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\StrategyPattern\QuackBehavior.h">
+      <Filter>HeadFirst\StrategyPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
