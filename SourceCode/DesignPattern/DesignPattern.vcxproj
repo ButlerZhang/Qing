@@ -122,9 +122,13 @@
     <ClInclude Include="Decorator.h" />
     <ClInclude Include="FactoryMethod.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
-    <ClInclude Include="HeadFirst\StrategyPattern\Duck.h" />
-    <ClInclude Include="HeadFirst\StrategyPattern\FlyBehavior.h" />
-    <ClInclude Include="HeadFirst\StrategyPattern\QuackBehavior.h" />
+    <ClInclude Include="HeadFirst\Observer\DisplayElement.h" />
+    <ClInclude Include="HeadFirst\Observer\Observer.h" />
+    <ClInclude Include="HeadFirst\Observer\Subject.h" />
+    <ClInclude Include="HeadFirst\Observer\WeatherData.h" />
+    <ClInclude Include="HeadFirst\Strategy\Duck.h" />
+    <ClInclude Include="HeadFirst\Strategy\FlyBehavior.h" />
+    <ClInclude Include="HeadFirst\Strategy\QuackBehavior.h" />
     <ClInclude Include="Prototype.h" />
     <ClInclude Include="SimpleFactory.h" />
     <ClInclude Include="Singleton.h" />

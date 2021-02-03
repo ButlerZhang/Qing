@@ -1,8 +1,9 @@
 #pragma once
-#include "StrategyPattern/Duck.h"
+#include "Strategy/Duck.h"
+#include "Observer/WeatherData.h"
+#include "Observer/DisplayElement.h"
 
-
-void headFirstTestMain() {
+void TestStrategy() {
     Duck* mallard = new MallardDuck();
     mallard->performQuack();
     mallard->performFly();
@@ -11,4 +12,20 @@ void headFirstTestMain() {
     model->performFly();
     model->setFlyBehavior(new FlyRocketPowered());
     model->performFly();
+}
+
+void TestObserver() {
+    WeatherData weatherData;
+    CurrentConfitionDisplay currentDiisplay(&weatherData);
+    StatisticsDisplay statisticsDisplay(&weatherData);
+    ForecastDisplay forecastDisplay(&weatherData);
+
+    weatherData.setMeasurements(80, 65, 30.4f);
+    weatherData.setMeasurements(82, 70, 29.2f);
+    weatherData.setMeasurements(78, 90, 29.2f);
+}
+
+void headFirstTestMain() {
+    //TestStrategy();
+    TestObserver();
 }
