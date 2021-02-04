@@ -13,6 +13,9 @@ public:
         m_quackBehavior = nullptr;
     }
 
+    virtual ~Duck() {
+    }
+
     virtual void display() = 0;
 
     void performFly() {

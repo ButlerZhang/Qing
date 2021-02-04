@@ -22,6 +22,9 @@
     <Filter Include="HeadFirst\Strategy">
       <UniqueIdentifier>{4762b64a-185c-4623-96f0-8b2dc6887e69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Decorator">
+      <UniqueIdentifier>{6cdc9dfe-4807-41cf-9881-4b23e07748e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -34,9 +37,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Builder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Decorator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FactoryMethod.h">
@@ -75,6 +75,15 @@
     <ClInclude Include="HeadFirst\Observer\DisplayElement.h">
       <Filter>HeadFirst\Observer</Filter>
     </ClInclude>
+    <ClInclude Include="HeadFirst\Decorator\Beverage.h">
+      <Filter>HeadFirst\Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Decorator\CondimentDecorator.h">
+      <Filter>HeadFirst\Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Decorator\CoffeeComponent.h">
+      <Filter>HeadFirst\Decorator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractFactory.cpp">
@@ -87,9 +96,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Builder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Decorator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FactoryMethod.cpp">

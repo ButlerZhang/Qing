@@ -119,8 +119,10 @@
     <ClInclude Include="Adapter.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
-    <ClInclude Include="Decorator.h" />
     <ClInclude Include="FactoryMethod.h" />
+    <ClInclude Include="HeadFirst\Decorator\Beverage.h" />
+    <ClInclude Include="HeadFirst\Decorator\CoffeeComponent.h" />
+    <ClInclude Include="HeadFirst\Decorator\CondimentDecorator.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
     <ClInclude Include="HeadFirst\Observer\DisplayElement.h" />
     <ClInclude Include="HeadFirst\Observer\Observer.h" />
@@ -138,7 +140,6 @@
     <ClCompile Include="Adapter.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Builder.cpp" />
-    <ClCompile Include="Decorator.cpp" />
     <ClCompile Include="FactoryMethod.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Prototype.cpp" />

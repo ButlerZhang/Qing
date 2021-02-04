@@ -31,15 +31,15 @@ public:
     }
 
     float getTemperature() {
-        return 0;
+        return m_temperature;
     }
 
     float getHumidity() {
-        return 0;
+        return m_humidity;
     }
 
     float getPressure() {
-        return 0;
+        return m_pressure;
     }
 
     void measurementsChanged() {
