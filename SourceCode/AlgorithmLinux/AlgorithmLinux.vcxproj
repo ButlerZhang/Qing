@@ -81,6 +81,7 @@
     <ClInclude Include="src\LeetCode\0003_LongestSubstringWithoutRepeatingCharacters.h" />
     <ClInclude Include="src\LeetCode\0004_MedianOfTwoSortedArrays.h" />
     <ClInclude Include="src\LeetCode\0005_LongestPalindromicSubstring.h" />
+    <ClInclude Include="src\LeetCode\0006_ZigZagConversion.h" />
     <ClInclude Include="src\LeetCode\LeetCodeCommon.h" />
     <ClInclude Include="src\LeetCode\LeetCodeTest.h" />
   </ItemGroup>
