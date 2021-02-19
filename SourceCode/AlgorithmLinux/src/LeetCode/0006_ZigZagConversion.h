@@ -9,7 +9,26 @@ class ZigZagConversion {
 public:
 
     string convert(string s, int numRows) {
-        return bruteForceSearch(s, numRows);
+        if (numRows <= 1 || s.size() <= numRows) {
+            return s;
+        }
+
+        int row = 0;
+        bool isDown = false;
+        std::vector<std::string> zigZag(std::min(numRows, (int)s.size()));
+
+        for (char &ch : s) {
+            zigZag[row] += ch;
+            if (row == 0 || row == numRows - 1) isDown = !isDown;
+            row += isDown ? 1 : -1;
+        }
+
+        std::string result;
+        for (std::string &row : zigZag) {
+            result += row;
+        }
+
+        return result;
     }
 
     string bruteForceSearch(string s, int numRows) {
