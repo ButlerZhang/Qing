@@ -5,6 +5,7 @@
 #include "0004_MedianOfTwoSortedArrays.h"
 #include "0005_LongestPalindromicSubstring.h"
 #include "0006_ZigZagConversion.h"
+#include "0007_ReverseInteger.h"
 
 LEET_CODE_NS_BEGIN
 
@@ -17,7 +18,8 @@ void Test()
     //LongestSubstringWithoutRepeatingCharacters::testCase();
     //MedianOfTwoSortedArrays::testCase();
     //LongestPalindromicSubstring::testCase();
-    ZigZagConversion::testCase();
+    //ZigZagConversion::testCase();
+    ReverseInteger::testCase();
 }
 
 LEET_CODE_NS_END

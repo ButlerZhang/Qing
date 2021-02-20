@@ -134,6 +134,7 @@
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0004_MedianOfTwoSortedArrays.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0005_LongestPalindromicSubstring.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0006_ZigZagConversion.h" />
+    <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0007_ReverseInteger.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeCommon.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeTest.h" />
   </ItemGroup>
