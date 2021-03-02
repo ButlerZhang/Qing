@@ -25,6 +25,9 @@
     <Filter Include="HeadFirst\Decorator">
       <UniqueIdentifier>{6cdc9dfe-4807-41cf-9881-4b23e07748e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Factory">
+      <UniqueIdentifier>{ce145291-0539-485d-895f-9b3380a2d91d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -83,6 +86,12 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\Decorator\CoffeeComponent.h">
       <Filter>HeadFirst\Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Factory\Pizza.h">
+      <Filter>HeadFirst\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Factory\PizzaStore.h">
+      <Filter>HeadFirst\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

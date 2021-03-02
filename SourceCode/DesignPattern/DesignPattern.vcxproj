@@ -123,6 +123,8 @@
     <ClInclude Include="HeadFirst\Decorator\Beverage.h" />
     <ClInclude Include="HeadFirst\Decorator\CoffeeComponent.h" />
     <ClInclude Include="HeadFirst\Decorator\CondimentDecorator.h" />
+    <ClInclude Include="HeadFirst\Factory\Pizza.h" />
+    <ClInclude Include="HeadFirst\Factory\PizzaStore.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
     <ClInclude Include="HeadFirst\Observer\DisplayElement.h" />
     <ClInclude Include="HeadFirst\Observer\Observer.h" />
