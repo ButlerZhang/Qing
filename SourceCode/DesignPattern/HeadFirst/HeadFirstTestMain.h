@@ -4,7 +4,7 @@
 #include "Observer/DisplayElement.h"
 #include "Decorator/CoffeeComponent.h"
 #include "Decorator/CondimentDecorator.h"
-#include "Factory/PizzaStore.h"
+#include "FactoryMethod/PizzaStore.h"
 
 void TestStrategy() {
     Duck* mallard = new MallardDuck();
@@ -48,7 +48,7 @@ void TestDecorator() {
     std::cout << beverage3->getDescription() << " $" << beverage3->cost() << std::endl;
 }
 
-void TestFactory() {
+void TestFactoryMethod() {
     PizzaStore* nyStore = new NYStylePizzaStore();
     PizzaStore* chicagoStore = new ChicagoPizzaStore();
 
@@ -63,5 +63,5 @@ void headFirstTestMain() {
     //TestStrategy();
     //TestObserver();
     //TestDecorator();
-    TestFactory();
+    TestFactoryMethod();
 }
