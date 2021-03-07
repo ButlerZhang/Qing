@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3F17E90C-EA77-4712-885D-D17A072F811C}</ProjectGuid>
     <RootNamespace>StandardWindows</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -40,7 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -121,6 +121,9 @@
     <ClInclude Include="..\StandardLinux\src\Example\C++11\NewFeatures.h" />
     <ClInclude Include="..\StandardLinux\src\Example\Effective.h" />
     <ClInclude Include="..\StandardLinux\src\Example\IOExample.h" />
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\Chapter1.h" />
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\PrimerMain.h" />
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\Sales_item.h" />
     <ClInclude Include="..\StandardLinux\src\Example\StringVector.h" />
     <ClInclude Include="..\StandardLinux\src\HexString.h" />
     <ClInclude Include="..\StandardLinux\src\NumericalConversion.h" />

@@ -19,6 +19,9 @@
     <Filter Include="Example\C++11">
       <UniqueIdentifier>{c5b16a83-caac-48df-8627-559a9a9ed241}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\Primer">
+      <UniqueIdentifier>{a33c955c-81c1-4bfd-9020-92afd2c2faaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\StandardLinux\src\Common.h">
@@ -53,6 +56,15 @@
     </ClInclude>
     <ClInclude Include="..\StandardLinux\src\Example\C++11\CommonTools.h">
       <Filter>Example\C++11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\Chapter1.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\PrimerMain.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\Sales_item.h">
+      <Filter>Example\Primer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,9 @@
     <Filter Include="Example\C++11">
       <UniqueIdentifier>{7a07e085-85ac-4347-ba92-27496e8363fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example\Primer">
+      <UniqueIdentifier>{788cabb3-1522-4b10-854e-63e81dc8451e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Example\Effective.h">
@@ -29,6 +32,12 @@
     </ClInclude>
     <ClInclude Include="src\Example\C++11\CommonTools.h">
       <Filter>Example\C++11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Example\Primer\Chapter1.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Example\Primer\PrimerMain.h">
+      <Filter>Example\Primer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

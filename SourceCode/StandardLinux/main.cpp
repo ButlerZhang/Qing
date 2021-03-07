@@ -1,4 +1,5 @@
 #include <iostream>
+#include "src/Example/Primer/PrimerMain.h"
 #include "src/RandomGenerator.h"
 #include "src/Example/C++11/CommonTools.h"
 
@@ -19,9 +20,10 @@ int main(int argc, char *argv[])
         //C11_Ratio::Test();
         //C11_Chrono::TestDuration();
         //C11_Chrono::TestClock();
-        C11_Chrono::TestTimepoint();
+        //C11_Chrono::TestTimepoint();
     }
 
+    primer_main();
     int x = 0;
     std::cin >> x;
 
