@@ -120,6 +120,9 @@
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="FactoryMethod.h" />
+    <ClInclude Include="HeadFirst\AbstractFactory\AFPizza.h" />
+    <ClInclude Include="HeadFirst\AbstractFactory\AFPizzaStore.h" />
+    <ClInclude Include="HeadFirst\AbstractFactory\PizzaIngredientFactory.h" />
     <ClInclude Include="HeadFirst\Decorator\Beverage.h" />
     <ClInclude Include="HeadFirst\Decorator\CoffeeComponent.h" />
     <ClInclude Include="HeadFirst\Decorator\CondimentDecorator.h" />

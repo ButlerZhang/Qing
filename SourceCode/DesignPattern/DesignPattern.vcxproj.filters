@@ -28,6 +28,9 @@
     <Filter Include="HeadFirst\FactoryMethod">
       <UniqueIdentifier>{ce145291-0539-485d-895f-9b3380a2d91d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\AbstractFactory">
+      <UniqueIdentifier>{cb5eab9f-b539-43d4-a104-ec20093446f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -92,6 +95,15 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\FactoryMethod\PizzaStore.h">
       <Filter>HeadFirst\FactoryMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\AbstractFactory\AFPizza.h">
+      <Filter>HeadFirst\AbstractFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\AbstractFactory\PizzaIngredientFactory.h">
+      <Filter>HeadFirst\AbstractFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\AbstractFactory\AFPizzaStore.h">
+      <Filter>HeadFirst\AbstractFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
