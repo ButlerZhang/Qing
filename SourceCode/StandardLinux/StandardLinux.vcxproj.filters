@@ -39,6 +39,10 @@
     <ClInclude Include="src\Example\Primer\PrimerMain.h">
       <Filter>Example\Primer</Filter>
     </ClInclude>
+    <ClInclude Include="StandardNamespace.h" />
+    <ClInclude Include="src\Example\Primer\Sales_item.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

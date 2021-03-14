@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
         //C11_Chrono::TestTimepoint();
     }
 
-    primer_main();
+    Primer::primer_main();
     int x = 0;
     std::cin >> x;
 

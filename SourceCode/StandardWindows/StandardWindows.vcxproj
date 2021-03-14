@@ -122,6 +122,7 @@
     <ClInclude Include="..\StandardLinux\src\Example\Effective.h" />
     <ClInclude Include="..\StandardLinux\src\Example\IOExample.h" />
     <ClInclude Include="..\StandardLinux\src\Example\Primer\Chapter1.h" />
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\Chapter2.h" />
     <ClInclude Include="..\StandardLinux\src\Example\Primer\PrimerMain.h" />
     <ClInclude Include="..\StandardLinux\src\Example\Primer\Sales_item.h" />
     <ClInclude Include="..\StandardLinux\src\Example\StringVector.h" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\StandardLinux\src\PermutationCombination.h" />
     <ClInclude Include="..\StandardLinux\src\RandomGenerator.h" />
     <ClInclude Include="..\StandardLinux\src\StandardShare.h" />
+    <ClInclude Include="..\StandardLinux\StandardNamespace.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\StandardLinux\main.cpp" />

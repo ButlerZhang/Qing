@@ -70,12 +70,14 @@
     <ClInclude Include="src\Example\IOExample.h" />
     <ClInclude Include="src\Example\Primer\Chapter1.h" />
     <ClInclude Include="src\Example\Primer\PrimerMain.h" />
+    <ClInclude Include="src\Example\Primer\Sales_item.h" />
     <ClInclude Include="src\Example\StringVector.h" />
     <ClInclude Include="src\HexString.h" />
     <ClInclude Include="src\NumericalConversion.h" />
     <ClInclude Include="src\PermutationCombination.h" />
     <ClInclude Include="src\RandomGenerator.h" />
     <ClInclude Include="src\StandardShare.h" />
+    <ClInclude Include="StandardNamespace.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

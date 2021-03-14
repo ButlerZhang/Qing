@@ -1,4 +1,7 @@
 #pragma once
+#include "../../../StandardNamespace.h"
+
+PRIMER_NS_BEGIN
 
 /*
  * #include指令和头文件的名字必须在同一行，
@@ -32,3 +35,5 @@ void chapter1_test() {
     //这个例子说明最后的注释跟else一样采用就近匹配
     std::cout << /* "*/" /* "/*" */;
 }
+
+PRIMER_NS_END

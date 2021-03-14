@@ -66,6 +66,12 @@
     <ClInclude Include="..\StandardLinux\src\Example\Primer\Sales_item.h">
       <Filter>Example\Primer</Filter>
     </ClInclude>
+    <ClInclude Include="..\StandardLinux\StandardNamespace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StandardLinux\src\Example\Primer\Chapter2.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\StandardLinux\src\NumericalConversion.cpp">
