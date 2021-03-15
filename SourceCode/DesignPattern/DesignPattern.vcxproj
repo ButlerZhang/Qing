@@ -133,12 +133,16 @@
     <ClInclude Include="HeadFirst\Observer\Observer.h" />
     <ClInclude Include="HeadFirst\Observer\Subject.h" />
     <ClInclude Include="HeadFirst\Observer\WeatherData.h" />
+    <ClInclude Include="HeadFirst\Singleton\NormalSingleton.h" />
+    <ClInclude Include="HeadFirst\Singleton\SimpleSingleton.h" />
+    <ClInclude Include="HeadFirst\Singleton\TemplateSingleton.h" />
+    <ClInclude Include="HeadFirst\Singleton\ThreadSafeSingleton.h" />
+    <ClInclude Include="HeadFirst\Singleton\UnlockSafeSingleton.h" />
     <ClInclude Include="HeadFirst\Strategy\Duck.h" />
     <ClInclude Include="HeadFirst\Strategy\FlyBehavior.h" />
     <ClInclude Include="HeadFirst\Strategy\QuackBehavior.h" />
     <ClInclude Include="Prototype.h" />
     <ClInclude Include="SimpleFactory.h" />
-    <ClInclude Include="Singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractFactory.cpp" />
@@ -149,7 +153,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Prototype.cpp" />
     <ClCompile Include="SimpleFactory.cpp" />
-    <ClCompile Include="Singleton.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

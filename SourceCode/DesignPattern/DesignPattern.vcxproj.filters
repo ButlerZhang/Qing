@@ -31,6 +31,9 @@
     <Filter Include="HeadFirst\AbstractFactory">
       <UniqueIdentifier>{cb5eab9f-b539-43d4-a104-ec20093446f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Singleton">
+      <UniqueIdentifier>{53446c9a-f0cf-4762-9b5f-39af1343d2cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -52,9 +55,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SimpleFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
@@ -105,6 +105,21 @@
     <ClInclude Include="HeadFirst\AbstractFactory\AFPizzaStore.h">
       <Filter>HeadFirst\AbstractFactory</Filter>
     </ClInclude>
+    <ClInclude Include="HeadFirst\Singleton\SimpleSingleton.h">
+      <Filter>HeadFirst\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Singleton\ThreadSafeSingleton.h">
+      <Filter>HeadFirst\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Singleton\UnlockSafeSingleton.h">
+      <Filter>HeadFirst\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Singleton\NormalSingleton.h">
+      <Filter>HeadFirst\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Singleton\TemplateSingleton.h">
+      <Filter>HeadFirst\Singleton</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractFactory.cpp">
@@ -126,9 +141,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SimpleFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Singleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
