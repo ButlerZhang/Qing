@@ -5,6 +5,8 @@
 #include "Decorator/CoffeeComponent.h"
 #include "Decorator/CondimentDecorator.h"
 #include "FactoryMethod/PizzaStore.h"
+#include "Command/Control.h"
+#include "Command/Tools.h"
 
 void TestStrategy() {
     Duck* mallard = new MallardDuck();
@@ -59,9 +61,25 @@ void TestFactoryMethod() {
     std::cout << "Joel ordered a " << pizza->getName() << std::endl << std::endl;
 }
 
+void TestCommand() {
+    SimpleRemoteControl* remote = new SimpleRemoteControl();
+    Light* light = new Light();
+    GarageDoor* garageDoor = new GarageDoor();
+
+    LightOnCommand* lightOn = new LightOnCommand(light);
+    GargeDoorOpenCommand* garageOpen = new GargeDoorOpenCommand(garageDoor);
+
+    remote->setCommand(lightOn);
+    remote->buttonWasPressed();
+
+    remote->setCommand(garageOpen);
+    remote->buttonWasPressed();
+}
+
 void headFirstTestMain() {
     //TestStrategy();
     //TestObserver();
     //TestDecorator();
-    TestFactoryMethod();
+    //TestFactoryMethod();
+    TestCommand();
 }

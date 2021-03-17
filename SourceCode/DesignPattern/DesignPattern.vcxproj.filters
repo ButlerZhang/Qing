@@ -34,6 +34,9 @@
     <Filter Include="HeadFirst\Singleton">
       <UniqueIdentifier>{53446c9a-f0cf-4762-9b5f-39af1343d2cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Command">
+      <UniqueIdentifier>{b4128de3-297d-4694-ac2a-98aee008bfa7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -119,6 +122,15 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\Singleton\TemplateSingleton.h">
       <Filter>HeadFirst\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Command\Command.h">
+      <Filter>HeadFirst\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Command\Control.h">
+      <Filter>HeadFirst\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Command\Tools.h">
+      <Filter>HeadFirst\Command</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

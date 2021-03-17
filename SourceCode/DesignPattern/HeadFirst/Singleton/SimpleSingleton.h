@@ -8,8 +8,7 @@ public:
     //多线程下无法保证唯一性
     //这种实现方式需要谨慎使用
     static SimpleSingleton* GetInstance() {
-        if (m_Instance == NULL)
-        {
+        if (m_Instance == NULL) {
             m_Instance = new SimpleSingleton();
         }
 

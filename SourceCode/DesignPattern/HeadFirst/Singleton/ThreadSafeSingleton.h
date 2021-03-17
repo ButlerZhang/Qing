@@ -8,14 +8,12 @@ class ThreadSafeSingleton
 {
 public:
 
-    //虽然能保证线程安全，但是性能不好，每次获取都要加锁解锁
+    //虽然能保证线程安全，但是多了加锁
     //锁的实现可以改为使用RAII方式，这里只是示例
     static ThreadSafeSingleton* GetInstance() {
-        if (m_Instance == NULL)
-        {
+        if (m_Instance == NULL) {
             g_Lock.lock();
-            if (m_Instance == NULL) //double check
-            {
+            if (m_Instance == NULL) { //double check
                 m_Instance = new ThreadSafeSingleton();
             }
             g_Lock.unlock();
