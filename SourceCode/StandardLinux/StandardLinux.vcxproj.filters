@@ -43,6 +43,9 @@
     <ClInclude Include="src\Example\Primer\Sales_item.h">
       <Filter>Example\Primer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Example\Primer\Chapter2.h">
+      <Filter>Example\Primer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
