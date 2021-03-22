@@ -22,12 +22,6 @@
     <Filter Include="Project\YouShuang\Chapter9">
       <UniqueIdentifier>{ac0eb52b-6c65-458b-838d-66bc8b6666a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\UNIX">
-      <UniqueIdentifier>{e5574d53-4e08-453d-8c81-db16b69bcba3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\UNIX\Chapter1">
-      <UniqueIdentifier>{e8830498-27c5-4a33-bab4-fb958fa8db0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Project\Open">
       <UniqueIdentifier>{e768f56b-1ee0-4439-9c53-c05ac884d55d}</UniqueIdentifier>
     </Filter>
@@ -75,6 +69,12 @@
     </Filter>
     <Filter Include="Project\Qing">
       <UniqueIdentifier>{580ae79a-21dc-4c95-996d-440c89fafa12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UNIX">
+      <UniqueIdentifier>{ad4183e3-e9b4-4259-a6d3-8c68fb10ab81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UNIX\Chapter1">
+      <UniqueIdentifier>{5a8adafb-4b6a-46e0-b099-8216a276aab3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -225,30 +225,6 @@
     <ClInclude Include="YouShuang\api_note.h">
       <Filter>Project\YouShuang</Filter>
     </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h">
-      <Filter>Project\UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h">
-      <Filter>Project\UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\display_process_information.h">
-      <Filter>Project\UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell.h">
-      <Filter>Project\UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h">
-      <Filter>Project\UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\list_file_name.h">
-      <Filter>Project\UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\print_errno_message.h">
-      <Filter>Project\UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\unix_main.h">
-      <Filter>Project\UNIX</Filter>
-    </ClInclude>
     <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="Open\composite\controller\Client.h">
       <Filter>Project\Open\composite\controller</Filter>
@@ -363,6 +339,30 @@
     </ClInclude>
     <ClInclude Include="Qing\QNetworkBase.h">
       <Filter>Project\Qing</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_nobuffer.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\display_process_information.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\list_file_name.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\print_errno_message.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\unix_main.h">
+      <Filter>UNIX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

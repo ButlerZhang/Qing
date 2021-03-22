@@ -6,8 +6,7 @@
  * 列出一个目录中所有文件的名字。
  * 可以认为是ls命令的简单实现。
 */
-void list_file_name(int argc, char *argv[])
-{
+void list_file_name(int argc, char *argv[]) {
     DIR *dp;
     struct dirent *dirp;
 
@@ -21,8 +20,9 @@ void list_file_name(int argc, char *argv[])
         return;
     }
 
-    while ((dirp = readdir(dp)) != NULL)
+    while ((dirp = readdir(dp)) != NULL) {
         printf("%s\n", dirp->d_name);
+    }
 
     closedir(dp);
 }

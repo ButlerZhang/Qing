@@ -37,12 +37,12 @@
     <Filter Include="HeadFirst\Command">
       <UniqueIdentifier>{b4128de3-297d-4694-ac2a-98aee008bfa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Adapter">
+      <UniqueIdentifier>{e287fd00-c066-470e-852e-b51174a34359}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Adapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bridge.h">
@@ -132,12 +132,12 @@
     <ClInclude Include="HeadFirst\Command\Tools.h">
       <Filter>HeadFirst\Command</Filter>
     </ClInclude>
+    <ClInclude Include="HeadFirst\Adapter\Adapter.h">
+      <Filter>HeadFirst\Adapter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Adapter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Bridge.cpp">
