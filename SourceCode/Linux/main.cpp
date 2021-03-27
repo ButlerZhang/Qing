@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     //TestMaxSubSum();
-    //return unix_chapter1_main(argc, argv);
+    return unix_main(argc, argv);
     //return project(argc, argv);
-    return select_demo(argc, argv);
+    //return select_demo(argc, argv);
 }
