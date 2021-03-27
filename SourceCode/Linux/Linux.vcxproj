@@ -145,7 +145,7 @@
     <ClInclude Include="Qing\NetworkServer.h" />
     <ClInclude Include="Qing\QNetworkBase.h" />
     <ClInclude Include="UNIX\Chapter1\02_copy_stdin_stdout_nobuffer.h" />
-    <ClInclude Include="UNIX\Chapter1\copy_stdin_stdout_standard.h" />
+    <ClInclude Include="UNIX\Chapter1\03_copy_stdin_stdout_standard.h" />
     <ClInclude Include="UNIX\Chapter1\display_process_information.h" />
     <ClInclude Include="UNIX\Chapter1\exec_command_like_shell.h" />
     <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h" />
