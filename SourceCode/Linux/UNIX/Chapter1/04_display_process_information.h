@@ -5,7 +5,6 @@
 /*
 * 打印进程信息。
 */
-
 void display_process_information(void) {
     printf("file name = %s\n", __FILE__);
     printf("current line = %d\n", __LINE__);

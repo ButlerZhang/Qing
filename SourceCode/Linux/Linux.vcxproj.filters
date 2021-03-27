@@ -340,12 +340,6 @@
     <ClInclude Include="Qing\QNetworkBase.h">
       <Filter>Project\Qing</Filter>
     </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\exec_command_like_shell_add_signal.h">
-      <Filter>UNIX\Chapter1</Filter>
-    </ClInclude>
-    <ClInclude Include="UNIX\Chapter1\print_errno_message.h">
-      <Filter>UNIX\Chapter1</Filter>
-    </ClInclude>
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>UNIX</Filter>
     </ClInclude>
@@ -362,6 +356,12 @@
       <Filter>UNIX\Chapter1</Filter>
     </ClInclude>
     <ClInclude Include="UNIX\Chapter1\05_exec_command_like_shell.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\06_print_errno_message.h">
+      <Filter>UNIX\Chapter1</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter1\07_exec_command_like_shell_add_signal.h">
       <Filter>UNIX\Chapter1</Filter>
     </ClInclude>
   </ItemGroup>

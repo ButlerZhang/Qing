@@ -12,7 +12,6 @@
 * 传递参数，但是足够用来说明UNIX系统的进程
 * 控制功能。可以理解为一个简化版的shell。
 */
-
 void exec_command_like_shell(void) {
     const int MAXLINE = 1024;
     char commandBuffer[MAXLINE];

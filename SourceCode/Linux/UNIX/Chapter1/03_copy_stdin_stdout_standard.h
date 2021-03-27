@@ -4,7 +4,6 @@
 /*
  * 标准IO，即自带缓冲的IO。
 */
-
 void copy_stdin_stdout_standard(void) {
     int c;
 
