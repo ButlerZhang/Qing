@@ -370,6 +370,9 @@
     <ClInclude Include="UNIX\Chapter3\01_test_stdin_is_allow_to_lseek.h">
       <Filter>UNIX\Chapter3</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter3\02_create_hole_file.h">
+      <Filter>UNIX\Chapter3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\composite\message\project.proto">

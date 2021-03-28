@@ -7,11 +7,11 @@
 #include "Chapter1/06_print_errno_message.h"
 #include "Chapter1/07_exec_command_like_shell_add_signal.h"
 #include "Chapter3/01_test_stdin_is_allow_to_lseek.h"
+#include "Chapter3/02_create_hole_file.h"
 
 
 
-int unix_chapter1_main(int argc, char *argv[])
-{
+int unix_chapter1_main(int argc, char *argv[]) {
     //list_file_name(argc, argv);
     //copy_stdin_stdout_nobuffer();
     //copy_stdin_stdout_standard();
@@ -24,7 +24,8 @@ int unix_chapter1_main(int argc, char *argv[])
 }
 
 int unix_chapter3_main(int argc, char *argv[]) {
-    test_stdin_is_allow_lseek();
+    //test_stdin_is_allow_lseek();
+    create_hole_file();
     return 0;
 }
 

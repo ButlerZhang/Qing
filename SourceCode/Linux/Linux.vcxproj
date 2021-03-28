@@ -152,6 +152,7 @@
     <ClInclude Include="UNIX\Chapter1\06_print_errno_message.h" />
     <ClInclude Include="UNIX\Chapter1\07_exec_command_like_shell_add_signal.h" />
     <ClInclude Include="UNIX\Chapter3\01_test_stdin_is_allow_to_lseek.h" />
+    <ClInclude Include="UNIX\Chapter3\02_create_hole_file.h" />
     <ClInclude Include="UNIX\unix_main.h" />
     <ClInclude Include="YouShuang\api_note.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />
