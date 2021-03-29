@@ -40,6 +40,12 @@
     <Filter Include="HeadFirst\Adapter">
       <UniqueIdentifier>{e287fd00-c066-470e-852e-b51174a34359}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Facade">
+      <UniqueIdentifier>{db480994-3c5d-4421-a6d6-a0c74c6aa909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeadFirst\TemplateMethod">
+      <UniqueIdentifier>{0be92d93-f012-4970-b819-39397eb6fab0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -134,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\Adapter\Adapter.h">
       <Filter>HeadFirst\Adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\TemplateMethod\CaffeineBeverage.h">
+      <Filter>HeadFirst\TemplateMethod</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
