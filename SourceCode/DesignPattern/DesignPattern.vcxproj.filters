@@ -46,6 +46,9 @@
     <Filter Include="HeadFirst\TemplateMethod">
       <UniqueIdentifier>{0be92d93-f012-4970-b819-39397eb6fab0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Iterator">
+      <UniqueIdentifier>{deb42dd3-24b9-4888-9997-9066d83f6fc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -143,6 +146,21 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\TemplateMethod\CaffeineBeverage.h">
       <Filter>HeadFirst\TemplateMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Iterator\DinerMenu.h">
+      <Filter>HeadFirst\Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Iterator\Iterator.h">
+      <Filter>HeadFirst\Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Iterator\MenuItem.h">
+      <Filter>HeadFirst\Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Iterator\PancakeHouseMenu.h">
+      <Filter>HeadFirst\Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\Iterator\Waitress.h">
+      <Filter>HeadFirst\Iterator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

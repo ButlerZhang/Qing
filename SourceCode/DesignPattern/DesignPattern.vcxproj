@@ -132,6 +132,11 @@
     <ClInclude Include="HeadFirst\FactoryMethod\Pizza.h" />
     <ClInclude Include="HeadFirst\FactoryMethod\PizzaStore.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
+    <ClInclude Include="HeadFirst\Iterator\DinerMenu.h" />
+    <ClInclude Include="HeadFirst\Iterator\Iterator.h" />
+    <ClInclude Include="HeadFirst\Iterator\MenuItem.h" />
+    <ClInclude Include="HeadFirst\Iterator\PancakeHouseMenu.h" />
+    <ClInclude Include="HeadFirst\Iterator\Waitress.h" />
     <ClInclude Include="HeadFirst\Observer\DisplayElement.h" />
     <ClInclude Include="HeadFirst\Observer\Observer.h" />
     <ClInclude Include="HeadFirst\Observer\Subject.h" />

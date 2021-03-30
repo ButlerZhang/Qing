@@ -7,13 +7,16 @@
 #include "FactoryMethod/PizzaStore.h"
 #include "Command/Control.h"
 #include "Command/Tools.h"
+#include "Iterator/PancakeHouseMenu.h"
+#include "Iterator/DinerMenu.h"
+#include "Iterator/Waitress.h"
 
 void TestStrategy() {
-    Duck* mallard = new MallardDuck();
+    Duck *mallard = new MallardDuck();
     mallard->performQuack();
     mallard->performFly();
 
-    Duck* model = new ModelDuck();
+    Duck *model = new ModelDuck();
     model->performFly();
     model->setFlyBehavior(new FlyRocketPowered());
     model->performFly();
@@ -32,18 +35,18 @@ void TestObserver() {
 
 void TestDecorator() {
     //只定一杯Espresso，不需要调料
-    Beverage* beverage = new Espresso();
+    Beverage *beverage = new Espresso();
     std::cout << beverage->getDescription() << " $" << beverage->cost() << std::endl;
 
     //制造一杯DarkRoast饮料，添加了两份Mocha
-    Beverage* beverage2 = new DarkRoast();
+    Beverage *beverage2 = new DarkRoast();
     beverage2 = new Mocha(beverage2);
     beverage2 = new Mocha(beverage2);
     beverage2 = new Whip(beverage2);
     std::cout << beverage2->getDescription() << " $" << beverage2->cost() << std::endl;
 
     //制造一杯HouseBlend，添加了豆浆、摩卡和奶泡
-    Beverage* beverage3 = new HouseBlend();
+    Beverage *beverage3 = new HouseBlend();
     beverage3 = new Soy(beverage3);
     beverage3 = new Mocha(beverage3);
     beverage3 = new Whip(beverage3);
@@ -51,10 +54,10 @@ void TestDecorator() {
 }
 
 void TestFactoryMethod() {
-    PizzaStore* nyStore = new NYStylePizzaStore();
-    PizzaStore* chicagoStore = new ChicagoPizzaStore();
+    PizzaStore *nyStore = new NYStylePizzaStore();
+    PizzaStore *chicagoStore = new ChicagoPizzaStore();
 
-    Pizza* pizza = nyStore->orderPizza("cheese");
+    Pizza *pizza = nyStore->orderPizza("cheese");
     std::cout << "Ethan ordered a " << pizza->getName() << std::endl << std::endl;
 
     pizza = chicagoStore->orderPizza("cheese");
@@ -62,12 +65,12 @@ void TestFactoryMethod() {
 }
 
 void TestCommand() {
-    SimpleRemoteControl* remote = new SimpleRemoteControl();
-    Light* light = new Light();
-    GarageDoor* garageDoor = new GarageDoor();
+    SimpleRemoteControl *remote = new SimpleRemoteControl();
+    Light *light = new Light();
+    GarageDoor *garageDoor = new GarageDoor();
 
-    LightOnCommand* lightOn = new LightOnCommand(light);
-    GargeDoorOpenCommand* garageOpen = new GargeDoorOpenCommand(garageDoor);
+    LightOnCommand *lightOn = new LightOnCommand(light);
+    GargeDoorOpenCommand *garageOpen = new GargeDoorOpenCommand(garageDoor);
 
     remote->setCommand(lightOn);
     remote->buttonWasPressed();
@@ -76,10 +79,16 @@ void TestCommand() {
     remote->buttonWasPressed();
 }
 
+void TestIterator() {
+    Waitress waitress;
+    waitress.printMenu();
+}
+
 void headFirstTestMain() {
     //TestStrategy();
     //TestObserver();
     //TestDecorator();
     //TestFactoryMethod();
-    TestCommand();
+    //TestCommand();
+    TestIterator();
 }
