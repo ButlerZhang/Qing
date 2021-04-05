@@ -373,6 +373,9 @@
     <ClInclude Include="UNIX\Chapter3\02_create_hole_file.h">
       <Filter>UNIX\Chapter3</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter3\03_print_file_flag.h">
+      <Filter>UNIX\Chapter3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\composite\message\project.proto">

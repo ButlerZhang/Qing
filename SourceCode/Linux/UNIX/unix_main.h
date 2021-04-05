@@ -8,6 +8,7 @@
 #include "Chapter1/07_exec_command_like_shell_add_signal.h"
 #include "Chapter3/01_test_stdin_is_allow_to_lseek.h"
 #include "Chapter3/02_create_hole_file.h"
+#include "Chapter3/03_print_file_flag.h"
 
 
 
@@ -25,7 +26,8 @@ int unix_chapter1_main(int argc, char *argv[]) {
 
 int unix_chapter3_main(int argc, char *argv[]) {
     //test_stdin_is_allow_lseek();
-    create_hole_file();
+    //create_hole_file();
+    print_file_flag(argc, argv);
     return 0;
 }
 
