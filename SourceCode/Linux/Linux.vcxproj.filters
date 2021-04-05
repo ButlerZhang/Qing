@@ -376,6 +376,9 @@
     <ClInclude Include="UNIX\Chapter3\03_print_file_flag.h">
       <Filter>UNIX\Chapter3</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter3\04_set_file_flags.h">
+      <Filter>UNIX\Chapter3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\composite\message\project.proto">

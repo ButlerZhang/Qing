@@ -154,6 +154,7 @@
     <ClInclude Include="UNIX\Chapter3\01_test_stdin_is_allow_to_lseek.h" />
     <ClInclude Include="UNIX\Chapter3\02_create_hole_file.h" />
     <ClInclude Include="UNIX\Chapter3\03_print_file_flag.h" />
+    <ClInclude Include="UNIX\Chapter3\04_set_file_flags.h" />
     <ClInclude Include="UNIX\unix_main.h" />
     <ClInclude Include="YouShuang\api_note.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />
