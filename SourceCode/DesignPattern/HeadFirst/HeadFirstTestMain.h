@@ -10,6 +10,9 @@
 #include "Iterator/PancakeHouseMenu.h"
 #include "Iterator/DinerMenu.h"
 #include "Iterator/Waitress.h"
+#include "State/GumballMachine.h"
+
+
 
 void TestStrategy() {
     Duck *mallard = new MallardDuck();
@@ -84,11 +87,23 @@ void TestIterator() {
     waitress.printMenu();
 }
 
+void TestState() {
+    GumballMachine gumballMachine(5);
+    gumballMachine.insertQuarter();
+    gumballMachine.turnCrank();
+
+    gumballMachine.insertQuarter();
+    gumballMachine.turnCrank();
+    gumballMachine.insertQuarter();
+    gumballMachine.turnCrank();
+}
+
 void headFirstTestMain() {
     //TestStrategy();
     //TestObserver();
     //TestDecorator();
     //TestFactoryMethod();
     //TestCommand();
-    TestIterator();
+    //TestIterator();
+    TestState();
 }

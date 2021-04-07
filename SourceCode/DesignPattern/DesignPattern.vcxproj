@@ -146,6 +146,8 @@
     <ClInclude Include="HeadFirst\Singleton\TemplateSingleton.h" />
     <ClInclude Include="HeadFirst\Singleton\ThreadSafeSingleton.h" />
     <ClInclude Include="HeadFirst\Singleton\UnlockSafeSingleton.h" />
+    <ClInclude Include="HeadFirst\State\GumballMachine.h" />
+    <ClInclude Include="HeadFirst\State\State.h" />
     <ClInclude Include="HeadFirst\Strategy\Duck.h" />
     <ClInclude Include="HeadFirst\Strategy\FlyBehavior.h" />
     <ClInclude Include="HeadFirst\Strategy\QuackBehavior.h" />
@@ -158,6 +160,7 @@
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Builder.cpp" />
     <ClCompile Include="FactoryMethod.cpp" />
+    <ClCompile Include="HeadFirst\State\GumballMachine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Prototype.cpp" />
     <ClCompile Include="SimpleFactory.cpp" />

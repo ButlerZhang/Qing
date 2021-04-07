@@ -49,6 +49,9 @@
     <Filter Include="HeadFirst\Iterator">
       <UniqueIdentifier>{deb42dd3-24b9-4888-9997-9066d83f6fc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\State">
+      <UniqueIdentifier>{03ed4b98-cc5e-46d0-955f-ff697446f8ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -162,6 +165,12 @@
     <ClInclude Include="HeadFirst\Iterator\Waitress.h">
       <Filter>HeadFirst\Iterator</Filter>
     </ClInclude>
+    <ClInclude Include="HeadFirst\State\State.h">
+      <Filter>HeadFirst\State</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFirst\State\GumballMachine.h">
+      <Filter>HeadFirst\State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractFactory.cpp">
@@ -184,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeadFirst\State\GumballMachine.cpp">
+      <Filter>HeadFirst\State</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
