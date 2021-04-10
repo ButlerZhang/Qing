@@ -388,6 +388,9 @@
     <ClInclude Include="UNIX\Chapter4\02_access_test.h">
       <Filter>UNIX\Chapter4</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter4\03_umask_test.h">
+      <Filter>UNIX\Chapter4</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\composite\message\project.proto">
