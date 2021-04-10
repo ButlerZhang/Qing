@@ -47,7 +47,7 @@ public:
         for (int i = 0; i < stringLength - resultLong; i++) {
             for (int j = i; j < stringLength; j++) {
                 int tempLong = j - i + 1;
-                if (tempLong > resultLong && isPalindrome(s, i, j)) {
+                if (tempLong > resultLong &&isPalindrome(s, i, j)) {
                     resultStartIndex = i;
                     resultLong = tempLong;
                 }

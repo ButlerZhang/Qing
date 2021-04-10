@@ -8,7 +8,7 @@ LEET_CODE_NS_BEGIN
 class TwoSum {
 public:
 
-    vector<int> twoSum(vector<int>& nums, int target) {
+    vector<int> twoSum(vector<int> &nums, int target) {
         std::vector<int> result;
         if (nums.size() < 2) {
             return result;

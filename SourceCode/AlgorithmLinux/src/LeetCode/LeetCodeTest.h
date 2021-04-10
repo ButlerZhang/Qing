@@ -9,17 +9,26 @@
 
 LEET_CODE_NS_BEGIN
 
+class Solution {
+public:
+    int myAtoi(string s) {
+        return 0;
+    }
+
+    static void testCase() {
+    }
+};
 
 
-void Test()
-{
+void Test() {
     //TwoSum::testCase();
     //AddTwoNumbers::testCase();
     //LongestSubstringWithoutRepeatingCharacters::testCase();
     //MedianOfTwoSortedArrays::testCase();
     //LongestPalindromicSubstring::testCase();
     //ZigZagConversion::testCase();
-    ReverseInteger::testCase();
+    //ReverseInteger::testCase();
+    Solution::testCase();
 }
 
 LEET_CODE_NS_END

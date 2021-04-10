@@ -79,6 +79,9 @@
     <Filter Include="UNIX\Chapter3">
       <UniqueIdentifier>{4c1fe99e-09c8-4451-a0a4-8d1e2b2a6402}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UNIX\Chapter4">
+      <UniqueIdentifier>{dfbcb811-a17f-4339-9cbc-a91c4e7ec9fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -378,6 +381,9 @@
     </ClInclude>
     <ClInclude Include="UNIX\Chapter3\04_set_file_flags.h">
       <Filter>UNIX\Chapter3</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter4\01_print_file_type.h">
+      <Filter>UNIX\Chapter4</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

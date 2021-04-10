@@ -7,7 +7,7 @@
 #endif
 
 #ifndef LEET_CODE_NS_END
-#define LEET_CODE_NS_END   }
+#define LEET_CODE_NS_END }
 #endif
 
 using namespace std;

@@ -7,7 +7,7 @@ LEET_CODE_NS_BEGIN
 class MedianOfTwoSortedArrays {
 public:
 
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+    double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2) {
         if (nums1.empty() && nums2.empty()) {
             return 0.0;
         }
@@ -94,7 +94,7 @@ public:
         //error
         {
             std::vector<int> nums1 = { 1, 2 };
-            std::vector<int> nums2 = {-1, 3 };
+            std::vector<int> nums2 = { -1, 3 };
             double result = test.findMedianSortedArrays(nums1, nums2);
             assert(result == 1.5);
         }

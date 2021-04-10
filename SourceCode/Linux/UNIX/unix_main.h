@@ -9,6 +9,7 @@
 #include "Chapter3/01_test_stdin_is_allow_to_lseek.h"
 #include "Chapter3/02_create_hole_file.h"
 #include "Chapter3/03_print_file_flag.h"
+#include "Chapter4/01_print_file_type.h"
 
 
 
@@ -31,7 +32,13 @@ int unix_chapter3_main(int argc, char *argv[]) {
     return 0;
 }
 
+int unix_chapter4_main(int argc, char *argv[]) {
+    print_file_type(argc, argv);
+    return 0;
+}
+
 int unix_main(int argc, char *argv[]) {
     //return unix_chapter1_main(argc, argv);
-    return unix_chapter3_main(argc, argv);
+    //return unix_chapter3_main(argc, argv);
+    return unix_chapter4_main(argc, argv);
 }

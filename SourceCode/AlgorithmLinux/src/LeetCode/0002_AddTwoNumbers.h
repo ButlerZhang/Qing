@@ -15,7 +15,7 @@ public:
         ListNode(int x, ListNode *next) : val(x), next(next) {}
     };
 
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
         ListNode *resultHead = nullptr, *resultMove = nullptr;
 
         int carry = 0, base = 10;
