@@ -156,6 +156,7 @@
     <ClInclude Include="UNIX\Chapter3\03_print_file_flag.h" />
     <ClInclude Include="UNIX\Chapter3\04_set_file_flags.h" />
     <ClInclude Include="UNIX\Chapter4\01_print_file_type.h" />
+    <ClInclude Include="UNIX\Chapter4\02_access_test.h" />
     <ClInclude Include="UNIX\unix_main.h" />
     <ClInclude Include="YouShuang\api_note.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />
