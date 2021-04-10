@@ -158,6 +158,7 @@
     <ClInclude Include="UNIX\Chapter4\01_print_file_type.h" />
     <ClInclude Include="UNIX\Chapter4\02_access_test.h" />
     <ClInclude Include="UNIX\Chapter4\03_umask_test.h" />
+    <ClInclude Include="UNIX\Chapter4\04_chmod_test.h" />
     <ClInclude Include="UNIX\unix_main.h" />
     <ClInclude Include="YouShuang\api_note.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />

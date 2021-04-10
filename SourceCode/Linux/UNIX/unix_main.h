@@ -12,6 +12,7 @@
 #include "Chapter4/01_print_file_type.h"
 #include "Chapter4/02_access_test.h"
 #include "Chapter4/03_umask_test.h"
+#include "Chapter4/04_chmod_test.h"
 
 
 
@@ -37,7 +38,8 @@ int unix_chapter3_main(int argc, char *argv[]) {
 int unix_chapter4_main(int argc, char *argv[]) {
     //print_file_type(argc, argv);
     //access_test(argc, argv);
-    umask_test();
+    //umask_test();
+    chmod_test();
     return 0;
 }
 
