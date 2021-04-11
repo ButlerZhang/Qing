@@ -13,6 +13,7 @@
 #include "Chapter4/02_access_test.h"
 #include "Chapter4/03_umask_test.h"
 #include "Chapter4/04_chmod_test.h"
+#include "Chapter4/05_unlink_test.h"
 
 
 
@@ -39,7 +40,8 @@ int unix_chapter4_main(int argc, char *argv[]) {
     //print_file_type(argc, argv);
     //access_test(argc, argv);
     //umask_test();
-    chmod_test();
+    //chmod_test();
+    unlink_test();
     return 0;
 }
 
