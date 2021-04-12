@@ -69,5 +69,8 @@
     <ClInclude Include="src\LeetCode\0007_ReverseInteger.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeetCode\0008_StringToInteger.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

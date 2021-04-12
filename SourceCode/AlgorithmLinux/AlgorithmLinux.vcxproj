@@ -83,6 +83,7 @@
     <ClInclude Include="src\LeetCode\0005_LongestPalindromicSubstring.h" />
     <ClInclude Include="src\LeetCode\0006_ZigZagConversion.h" />
     <ClInclude Include="src\LeetCode\0007_ReverseInteger.h" />
+    <ClInclude Include="src\LeetCode\0008_StringToInteger.h" />
     <ClInclude Include="src\LeetCode\LeetCodeCommon.h" />
     <ClInclude Include="src\LeetCode\LeetCodeTest.h" />
   </ItemGroup>

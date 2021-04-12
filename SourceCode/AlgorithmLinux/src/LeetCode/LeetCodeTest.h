@@ -6,14 +6,12 @@
 #include "0005_LongestPalindromicSubstring.h"
 #include "0006_ZigZagConversion.h"
 #include "0007_ReverseInteger.h"
+#include "0008_StringToInteger.h"
 
 LEET_CODE_NS_BEGIN
 
 class Solution {
 public:
-    int myAtoi(string s) {
-        return 0;
-    }
 
     static void testCase() {
     }
@@ -28,6 +26,7 @@ void Test() {
     //LongestPalindromicSubstring::testCase();
     //ZigZagConversion::testCase();
     //ReverseInteger::testCase();
+    StringToInteger::testCase();
     Solution::testCase();
 }
 

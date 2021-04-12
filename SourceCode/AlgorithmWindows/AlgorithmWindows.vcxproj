@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{35112BD0-08FE-47A0-9F00-D46814AC1426}</ProjectGuid>
     <RootNamespace>AlgorithmWindows</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -40,7 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -135,6 +135,7 @@
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0005_LongestPalindromicSubstring.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0006_ZigZagConversion.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0007_ReverseInteger.h" />
+    <ClInclude Include="..\AlgorithmLinux\src\LeetCode\0008_StringToInteger.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeCommon.h" />
     <ClInclude Include="..\AlgorithmLinux\src\LeetCode\LeetCodeTest.h" />
   </ItemGroup>
