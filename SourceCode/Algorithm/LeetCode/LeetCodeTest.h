@@ -26,7 +26,7 @@ void Test() {
     //LongestPalindromicSubstring::testCase();
     //ZigZagConversion::testCase();
     //ReverseInteger::testCase();
-    StringToInteger::testCase();
+    //StringToInteger::testCase();
     Solution::testCase();
 }
 

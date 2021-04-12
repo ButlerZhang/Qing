@@ -1,5 +1,5 @@
-#include "src/ITA/AlgorithmTest.h"
-#include "src/LeetCode/LeetCodeTest.h"
+#include "ITA/AlgorithmTest.h"
+#include "LeetCode/LeetCodeTest.h"
 
 
 

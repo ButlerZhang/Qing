@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="LeetCode">
+      <UniqueIdentifier>{d23016ab-788c-4161-a757-d2f72d812617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ITA">
+      <UniqueIdentifier>{92210fa0-007c-4a4c-bef8-efc7d107f328}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LeetCode\0001_TwoSum.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\0002_AddTwoNumbers.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\0003_LongestSubstringWithoutRepeatingCharacters.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\0004_MedianOfTwoSortedArrays.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\0005_LongestPalindromicSubstring.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\0006_ZigZagConversion.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\0007_ReverseInteger.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\0008_StringToInteger.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\LeetCodeCommon.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="LeetCode\LeetCodeTest.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
+    <ClInclude Include="ITA\001_MaxSubSum.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="ITA\002_BinarySearch.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="ITA\003_CommonMath.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="ITA\004_VectorLite.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="ITA\AlgorithmTest.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ITA\001_MaxSubSum.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="ITA\002_BinarySearch.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="ITA\003_CommonMath.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="ITA\004_VectorLite.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="ITA\AlgorithmTest.cpp">
+      <Filter>ITA</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+</Project>

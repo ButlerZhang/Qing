@@ -283,9 +283,7 @@ OpenSource/protobuf-3.8.0/windows/Release
 OpenSource/libevent-2.1.8-stable/test/*
 
 
-SourceCode/AlgorithmLinux/bin/*
-SourceCode/AlgorithmLinux/obj/*
-SourceCode/AlgorithmWindows/x64/*
+SourceCode/Algorithm/x64/*
 SourceCode/BoostLinux/bin/*
 SourceCode/BoostLinux/obj/*
 SourceCode/BoostWindows/x64/*
