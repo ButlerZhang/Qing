@@ -54,6 +54,9 @@
     <ClInclude Include="ITA\AlgorithmTest.h">
       <Filter>ITA</Filter>
     </ClInclude>
+    <ClInclude Include="LeetCode\0009_PalindromeNumber.h">
+      <Filter>LeetCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ITA\001_MaxSubSum.cpp">

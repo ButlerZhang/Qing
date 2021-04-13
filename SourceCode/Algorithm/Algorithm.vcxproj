@@ -153,6 +153,7 @@
     <ClInclude Include="LeetCode\0006_ZigZagConversion.h" />
     <ClInclude Include="LeetCode\0007_ReverseInteger.h" />
     <ClInclude Include="LeetCode\0008_StringToInteger.h" />
+    <ClInclude Include="LeetCode\0009_PalindromeNumber.h" />
     <ClInclude Include="LeetCode\LeetCodeCommon.h" />
     <ClInclude Include="LeetCode\LeetCodeTest.h" />
   </ItemGroup>

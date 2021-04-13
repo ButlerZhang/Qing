@@ -7,16 +7,9 @@
 #include "0006_ZigZagConversion.h"
 #include "0007_ReverseInteger.h"
 #include "0008_StringToInteger.h"
+#include "0009_PalindromeNumber.h"
 
 LEET_CODE_NS_BEGIN
-
-class Solution {
-public:
-
-    static void testCase() {
-    }
-};
-
 
 void Test() {
     //TwoSum::testCase();
@@ -26,8 +19,8 @@ void Test() {
     //LongestPalindromicSubstring::testCase();
     //ZigZagConversion::testCase();
     //ReverseInteger::testCase();
-    //StringToInteger::testCase();
-    Solution::testCase();
+    StringToInteger::testCase();
+    PalindromeNumber::testCase();
 }
 
 LEET_CODE_NS_END
