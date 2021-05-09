@@ -161,6 +161,7 @@
     <ClInclude Include="UNIX\Chapter4\04_chmod_test.h" />
     <ClInclude Include="UNIX\Chapter4\05_unlink_test.h" />
     <ClInclude Include="UNIX\Chapter4\06_futimens_test.h" />
+    <ClInclude Include="UNIX\Chapter4\07_chdir_test.h" />
     <ClInclude Include="UNIX\unix_main.h" />
     <ClInclude Include="YouShuang\api_note.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />

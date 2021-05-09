@@ -400,6 +400,9 @@
     <ClInclude Include="UNIX\Chapter4\06_futimens_test.h">
       <Filter>UNIX\Chapter4</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter4\07_chdir_test.h">
+      <Filter>UNIX\Chapter4</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\composite\message\project.proto">

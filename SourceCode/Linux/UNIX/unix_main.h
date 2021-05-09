@@ -15,6 +15,7 @@
 #include "Chapter4/04_chmod_test.h"
 #include "Chapter4/05_unlink_test.h"
 #include "Chapter4/06_futimens_test.h"
+#include "Chapter4/07_chdir_test.h"
 
 
 
@@ -43,7 +44,8 @@ int unix_chapter4_main(int argc, char *argv[]) {
     //umask_test();
     //chmod_test();
     //unlink_test();
-    futimens_test(argc, argv);
+    //futimens_test(argc, argv);
+    chdir_test();
     return 0;
 }
 
