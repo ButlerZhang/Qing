@@ -52,6 +52,24 @@
     <Filter Include="HeadFirst\State">
       <UniqueIdentifier>{03ed4b98-cc5e-46d0-955f-ff697446f8ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeadFirst\Bridge">
+      <UniqueIdentifier>{796ca652-da75-44b0-b23d-c10f60f83660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeadFirst\Builder">
+      <UniqueIdentifier>{a45b64d4-adb1-4dfd-b8d5-d20fa5ec8872}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeadFirst\Flyweight">
+      <UniqueIdentifier>{22530787-3644-4ab0-914b-73cdfc73e239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeadFirst\Mediator">
+      <UniqueIdentifier>{16a2bbc0-a048-4a14-8362-45b0626fd464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeadFirst\Prototype">
+      <UniqueIdentifier>{2a38e394-2e47-41bc-8ea0-f3234b53f828}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeadFirst\Visitor">
+      <UniqueIdentifier>{d508481a-3133-4b40-b629-479a88809bc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
