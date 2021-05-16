@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 /*
- * 标准IO，即自带缓冲的IO。
+ * 函数功能：标准IO，即自带缓冲的IO。
 */
 void copy_stdin_stdout_standard(void) {
     int c;

@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 /*
- * 测试标准输入能否设文件置偏移量。
+ * 函数功能：测试标准输入能否设文件置偏移量。
 */
 void test_stdin_is_allow_lseek(void) {
     //可以使用如下方法获取当前文件的偏移量

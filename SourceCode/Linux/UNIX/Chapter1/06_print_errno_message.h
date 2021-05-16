@@ -4,7 +4,7 @@
 #include <string.h> //strerror
 
 /*
-* errno两个常用的函数strerror，perror
+* 函数功能：errno两个常用的函数strerror，perror
 */
 void print_errno_message(int argc, char *argv[]) {
     //strerror返回指向消息字符串的指针

@@ -6,8 +6,8 @@
 #define FILE_MODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
 /*
- * 创建一个具有空洞的文件。
- * 可以使用ls -l file.hole查看文件大小。
+ * 函数功能：创建一个具有空洞的文件。
+ *          可以使用ls -l file.hole查看文件大小。
 */
 void create_hole_file(void) {
     char buf1[] = "abcdefghij";

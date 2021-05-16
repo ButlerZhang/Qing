@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 /*
-* 打印进程信息。
+* 函数功能：打印进程信息。
 */
 void display_process_information(void) {
     printf("file name = %s\n", __FILE__);

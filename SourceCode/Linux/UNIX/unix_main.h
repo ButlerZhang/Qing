@@ -20,6 +20,7 @@
 #include "Chapter4/07_chdir_test.h"
 
 #include "Chapter5/01_print_io_buffer_type.h"
+#include "Chapter5/02_temporary_file.h"
 
 
 
@@ -54,7 +55,8 @@ int unix_chapter4_main(int argc, char *argv[]) {
 }
 
 int unix_chapter5_main(int argc, char *argv[]) {
-    print_io_buffer_type();
+    //print_io_buffer_type();
+    temporary_file();
     return 0;
 }
 

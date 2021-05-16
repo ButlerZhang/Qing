@@ -1,6 +1,5 @@
 #pragma once
 #include <stdio.h>
-#include <sys/stat.h>
 
 /*
  * 函数功能：对各个标准IO流打印缓冲状态信息

@@ -3,9 +3,9 @@
 #include <sys/stat.h>
 
 /*
- * 根据命令行参数，打印文件类型。
+ * 函数功能：根据命令行参数，打印文件类型。
  *
- * 可以输入如下命令测试：
+ * 测试步骤：
  * ./a.out /etc/passwd /etc /dev/log /dev/tty \
  * /var/lib/oprofile/opd_pipe /dev/sr0 /dev/cdrom
 */
