@@ -412,6 +412,9 @@
     <ClInclude Include="UNIX\Chapter5\02_temporary_file.h">
       <Filter>UNIX\Chapter5</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter5\03_mkstemp_test.h">
+      <Filter>UNIX\Chapter5</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\composite\message\project.proto">

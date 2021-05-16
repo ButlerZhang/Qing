@@ -164,6 +164,7 @@
     <ClInclude Include="UNIX\Chapter4\07_chdir_test.h" />
     <ClInclude Include="UNIX\Chapter5\01_print_io_buffer_type.h" />
     <ClInclude Include="UNIX\Chapter5\02_temporary_file.h" />
+    <ClInclude Include="UNIX\Chapter5\03_mkstemp_test.h" />
     <ClInclude Include="UNIX\unix_main.h" />
     <ClInclude Include="YouShuang\api_note.h" />
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h" />
