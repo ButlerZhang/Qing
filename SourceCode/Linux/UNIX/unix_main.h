@@ -6,9 +6,11 @@
 #include "Chapter1/05_exec_command_like_shell.h"
 #include "Chapter1/06_print_errno_message.h"
 #include "Chapter1/07_exec_command_like_shell_add_signal.h"
+
 #include "Chapter3/01_test_stdin_is_allow_to_lseek.h"
 #include "Chapter3/02_create_hole_file.h"
 #include "Chapter3/03_print_file_flag.h"
+
 #include "Chapter4/01_print_file_type.h"
 #include "Chapter4/02_access_test.h"
 #include "Chapter4/03_umask_test.h"
@@ -16,6 +18,8 @@
 #include "Chapter4/05_unlink_test.h"
 #include "Chapter4/06_futimens_test.h"
 #include "Chapter4/07_chdir_test.h"
+
+#include "Chapter5/01_print_io_buffer_type.h"
 
 
 
@@ -49,8 +53,14 @@ int unix_chapter4_main(int argc, char *argv[]) {
     return 0;
 }
 
+int unix_chapter5_main(int argc, char *argv[]) {
+    print_io_buffer_type();
+    return 0;
+}
+
 int unix_main(int argc, char *argv[]) {
     //return unix_chapter1_main(argc, argv);
     //return unix_chapter3_main(argc, argv);
-    return unix_chapter4_main(argc, argv);
+    //return unix_chapter4_main(argc, argv);
+    return unix_chapter5_main(argc, argv);
 }

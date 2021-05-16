@@ -82,6 +82,9 @@
     <Filter Include="UNIX\Chapter4">
       <UniqueIdentifier>{dfbcb811-a17f-4339-9cbc-a91c4e7ec9fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UNIX\Chapter5">
+      <UniqueIdentifier>{97ac5bf7-c044-4847-9406-cce867738e71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -402,6 +405,9 @@
     </ClInclude>
     <ClInclude Include="UNIX\Chapter4\07_chdir_test.h">
       <Filter>UNIX\Chapter4</Filter>
+    </ClInclude>
+    <ClInclude Include="UNIX\Chapter5\01_print_io_buffer_type.h">
+      <Filter>UNIX\Chapter5</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
