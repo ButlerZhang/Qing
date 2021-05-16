@@ -415,6 +415,9 @@
     <ClInclude Include="UNIX\Chapter5\03_mkstemp_test.h">
       <Filter>UNIX\Chapter5</Filter>
     </ClInclude>
+    <ClInclude Include="UNIX\Chapter5\04_memory_stream.h">
+      <Filter>UNIX\Chapter5</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Open\composite\message\project.proto">

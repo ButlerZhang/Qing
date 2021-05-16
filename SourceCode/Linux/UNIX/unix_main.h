@@ -20,8 +20,9 @@
 #include "Chapter4/07_chdir_test.h"
 
 #include "Chapter5/01_print_io_buffer_type.h"
-#include "Chapter5/02_temporary_file.h"
-#include "Chapter5/03_mkstemp_test.h"
+//#include "Chapter5/02_temporary_file.h"
+//#include "Chapter5/03_mkstemp_test.h"
+#include "Chapter5/04_memory_stream.h"
 
 
 
@@ -58,7 +59,8 @@ int unix_chapter4_main(int argc, char *argv[]) {
 int unix_chapter5_main(int argc, char *argv[]) {
     //print_io_buffer_type();
     //temporary_file();
-    mkstemp_test();
+    //mkstemp_test();
+    memory_stream();
     return 0;
 }
 
