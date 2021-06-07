@@ -1,5 +1,4 @@
 #pragma once
-#include "Strategy/Duck.h"
 #include "Observer/WeatherData.h"
 #include "Observer/DisplayElement.h"
 #include "Decorator/CoffeeComponent.h"
@@ -13,17 +12,6 @@
 #include "State/GumballMachine.h"
 
 
-
-void TestStrategy() {
-    Duck *mallard = new MallardDuck();
-    mallard->performQuack();
-    mallard->performFly();
-
-    Duck *model = new ModelDuck();
-    model->performFly();
-    model->setFlyBehavior(new FlyRocketPowered());
-    model->performFly();
-}
 
 void TestObserver() {
     WeatherData weatherData;
@@ -99,11 +87,10 @@ void TestState() {
 }
 
 void headFirstTestMain() {
-    //TestStrategy();
     //TestObserver();
     //TestDecorator();
     //TestFactoryMethod();
     //TestCommand();
     //TestIterator();
-    TestState();
+    //TestState();
 }

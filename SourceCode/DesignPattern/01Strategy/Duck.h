@@ -5,8 +5,8 @@
 class Duck {
 public:
 
-    FlyBehavior* m_flyBehavior;
-    QuackBehavior* m_quackBehavior;
+    FlyBehavior *m_flyBehavior;
+    QuackBehavior *m_quackBehavior;
 
     Duck() {
         m_flyBehavior = nullptr;
@@ -30,11 +30,11 @@ public:
         std::cout << "All ducks float, even decoys!" << std::endl;
     }
 
-    void setFlyBehavior(FlyBehavior* fb) {
+    void setFlyBehavior(FlyBehavior *fb) {
         m_flyBehavior = fb;
     }
 
-    void setQuackBehavior(QuackBehavior* qb) {
+    void setQuackBehavior(QuackBehavior *qb) {
         m_quackBehavior = qb;
     }
 };
@@ -66,3 +66,16 @@ public:
         std::cout << "I am a model duck" << std::endl;
     }
 };
+
+
+
+void TestStrategy() {
+    Duck *mallard = new MallardDuck();
+    mallard->performQuack();
+    mallard->performFly();
+
+    Duck *model = new ModelDuck();
+    model->performFly();
+    model->setFlyBehavior(new FlyRocketPowered());
+    model->performFly();
+}

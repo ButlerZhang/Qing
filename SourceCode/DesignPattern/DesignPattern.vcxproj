@@ -115,6 +115,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="01Strategy\Duck.h" />
+    <ClInclude Include="01Strategy\FlyBehavior.h" />
+    <ClInclude Include="01Strategy\QuackBehavior.h" />
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
@@ -148,9 +151,6 @@
     <ClInclude Include="HeadFirst\Singleton\UnlockSafeSingleton.h" />
     <ClInclude Include="HeadFirst\State\GumballMachine.h" />
     <ClInclude Include="HeadFirst\State\State.h" />
-    <ClInclude Include="HeadFirst\Strategy\Duck.h" />
-    <ClInclude Include="HeadFirst\Strategy\FlyBehavior.h" />
-    <ClInclude Include="HeadFirst\Strategy\QuackBehavior.h" />
     <ClInclude Include="HeadFirst\TemplateMethod\CaffeineBeverage.h" />
     <ClInclude Include="Prototype.h" />
     <ClInclude Include="SimpleFactory.h" />

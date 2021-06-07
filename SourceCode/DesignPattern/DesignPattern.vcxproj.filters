@@ -19,9 +19,6 @@
     <Filter Include="HeadFirst\Observer">
       <UniqueIdentifier>{2b280cc0-987b-42c9-b341-19e816e83882}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\Strategy">
-      <UniqueIdentifier>{4762b64a-185c-4623-96f0-8b2dc6887e69}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\Decorator">
       <UniqueIdentifier>{6cdc9dfe-4807-41cf-9881-4b23e07748e6}</UniqueIdentifier>
     </Filter>
@@ -70,6 +67,9 @@
     <Filter Include="HeadFirst\Visitor">
       <UniqueIdentifier>{d508481a-3133-4b40-b629-479a88809bc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Strategy">
+      <UniqueIdentifier>{f45d0e94-b38a-4afd-aae7-f5646c13e77b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -95,15 +95,6 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\Observer\WeatherData.h">
       <Filter>HeadFirst\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Strategy\Duck.h">
-      <Filter>HeadFirst\Strategy</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Strategy\FlyBehavior.h">
-      <Filter>HeadFirst\Strategy</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Strategy\QuackBehavior.h">
-      <Filter>HeadFirst\Strategy</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\Observer\Subject.h">
       <Filter>HeadFirst\Observer</Filter>
@@ -188,6 +179,15 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\State\GumballMachine.h">
       <Filter>HeadFirst\State</Filter>
+    </ClInclude>
+    <ClInclude Include="01Strategy\Duck.h">
+      <Filter>01Strategy</Filter>
+    </ClInclude>
+    <ClInclude Include="01Strategy\FlyBehavior.h">
+      <Filter>01Strategy</Filter>
+    </ClInclude>
+    <ClInclude Include="01Strategy\QuackBehavior.h">
+      <Filter>01Strategy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

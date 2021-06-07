@@ -1,5 +1,4 @@
-#include "AbstractFactory.h"
-#include "HeadFirst/HeadFirstTestMain.h"
+#include "01Strategy/Duck.h"
 #include <Windows.h>
 
 
@@ -7,7 +6,7 @@
 int main()
 {
     //AbstractFactoryTest();
-    headFirstTestMain();
+    TestStrategy();
     system("pause");
     return 0;
 }
