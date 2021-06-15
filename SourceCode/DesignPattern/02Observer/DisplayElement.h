@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Subject.h"
-#include "Observer.h"
+#include "WeatherData.h"
 
 class DisplayElement {
 public:
@@ -101,3 +100,16 @@ private:
 
     Subject* m_Subject;
 };
+
+
+
+void TestObserver() {
+    WeatherData weatherData;
+    CurrentConfitionDisplay currentDiisplay(&weatherData);
+    StatisticsDisplay statisticsDisplay(&weatherData);
+    ForecastDisplay forecastDisplay(&weatherData);
+
+    weatherData.setMeasurements(80, 65, 30.4f);
+    weatherData.setMeasurements(82, 70, 29.2f);
+    weatherData.setMeasurements(78, 90, 29.2f);
+}

@@ -14,6 +14,8 @@ public:
     }
 
     virtual ~Duck() {
+        delete m_flyBehavior;
+        delete m_quackBehavior;
     }
 
     virtual void display() = 0;

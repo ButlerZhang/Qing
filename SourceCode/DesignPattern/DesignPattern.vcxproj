@@ -118,6 +118,10 @@
     <ClInclude Include="01Strategy\Duck.h" />
     <ClInclude Include="01Strategy\FlyBehavior.h" />
     <ClInclude Include="01Strategy\QuackBehavior.h" />
+    <ClInclude Include="02Observer\DisplayElement.h" />
+    <ClInclude Include="02Observer\Observer.h" />
+    <ClInclude Include="02Observer\Subject.h" />
+    <ClInclude Include="02Observer\WeatherData.h" />
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
@@ -140,10 +144,6 @@
     <ClInclude Include="HeadFirst\Iterator\MenuItem.h" />
     <ClInclude Include="HeadFirst\Iterator\PancakeHouseMenu.h" />
     <ClInclude Include="HeadFirst\Iterator\Waitress.h" />
-    <ClInclude Include="HeadFirst\Observer\DisplayElement.h" />
-    <ClInclude Include="HeadFirst\Observer\Observer.h" />
-    <ClInclude Include="HeadFirst\Observer\Subject.h" />
-    <ClInclude Include="HeadFirst\Observer\WeatherData.h" />
     <ClInclude Include="HeadFirst\Singleton\NormalSingleton.h" />
     <ClInclude Include="HeadFirst\Singleton\SimpleSingleton.h" />
     <ClInclude Include="HeadFirst\Singleton\TemplateSingleton.h" />

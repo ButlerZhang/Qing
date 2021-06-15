@@ -1,6 +1,4 @@
 #pragma once
-#include "Observer/WeatherData.h"
-#include "Observer/DisplayElement.h"
 #include "Decorator/CoffeeComponent.h"
 #include "Decorator/CondimentDecorator.h"
 #include "FactoryMethod/PizzaStore.h"
@@ -12,17 +10,6 @@
 #include "State/GumballMachine.h"
 
 
-
-void TestObserver() {
-    WeatherData weatherData;
-    CurrentConfitionDisplay currentDiisplay(&weatherData);
-    StatisticsDisplay statisticsDisplay(&weatherData);
-    ForecastDisplay forecastDisplay(&weatherData);
-
-    weatherData.setMeasurements(80, 65, 30.4f);
-    weatherData.setMeasurements(82, 70, 29.2f);
-    weatherData.setMeasurements(78, 90, 29.2f);
-}
 
 void TestDecorator() {
     //只定一杯Espresso，不需要调料

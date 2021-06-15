@@ -16,9 +16,6 @@
     <Filter Include="HeadFirst">
       <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\Observer">
-      <UniqueIdentifier>{2b280cc0-987b-42c9-b341-19e816e83882}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\Decorator">
       <UniqueIdentifier>{6cdc9dfe-4807-41cf-9881-4b23e07748e6}</UniqueIdentifier>
     </Filter>
@@ -70,6 +67,9 @@
     <Filter Include="01Strategy">
       <UniqueIdentifier>{f45d0e94-b38a-4afd-aae7-f5646c13e77b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02Observer">
+      <UniqueIdentifier>{fab2111d-9065-40fd-84c3-9984bfedcb05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -92,18 +92,6 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
       <Filter>HeadFirst</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Observer\WeatherData.h">
-      <Filter>HeadFirst\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Observer\Subject.h">
-      <Filter>HeadFirst\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Observer\Observer.h">
-      <Filter>HeadFirst\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Observer\DisplayElement.h">
-      <Filter>HeadFirst\Observer</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\Decorator\Beverage.h">
       <Filter>HeadFirst\Decorator</Filter>
@@ -188,6 +176,18 @@
     </ClInclude>
     <ClInclude Include="01Strategy\QuackBehavior.h">
       <Filter>01Strategy</Filter>
+    </ClInclude>
+    <ClInclude Include="02Observer\DisplayElement.h">
+      <Filter>02Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="02Observer\Observer.h">
+      <Filter>02Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="02Observer\Subject.h">
+      <Filter>02Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="02Observer\WeatherData.h">
+      <Filter>02Observer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
