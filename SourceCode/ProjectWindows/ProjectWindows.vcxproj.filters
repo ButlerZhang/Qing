@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="PaiGowGame">
+      <UniqueIdentifier>{26a7b557-f4e3-4465-9cd1-78e8d306e598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer">
+      <UniqueIdentifier>{15b1248d-8e96-47d6-8bbf-e60275b10477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay">
+      <UniqueIdentifier>{c04caf25-ab55-472f-8ac6-4975f6d785ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\Bally">
+      <UniqueIdentifier>{8b5380a9-20d7-4098-80b3-d44c17891ef5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\Barona">
+      <UniqueIdentifier>{b7980c98-57dd-47d5-b09b-950ba730a986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\BritishColumbia">
+      <UniqueIdentifier>{1f0e8f6c-542b-4ad0-9b26-bfd53912f702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\CanterburyPark">
+      <UniqueIdentifier>{d3a38f8e-586c-45a7-9545-31d85a1a0c0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\Claridge">
+      <UniqueIdentifier>{8fc9d61d-0d19-4a2f-b7e3-f827a24c50ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\FlamingoHilton">
+      <UniqueIdentifier>{5c66d731-15f4-44ea-8bbe-8b22f9dea1d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\FourQueens">
+      <UniqueIdentifier>{39035247-9e93-4856-b955-3da043a10c7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\GoldenNugget">
+      <UniqueIdentifier>{723d7c3b-f2a6-4eaf-ad9a-2af147ad2371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\SantaAnaStar">
+      <UniqueIdentifier>{7830bddb-6899-4617-9934-88edcc966e8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PaiGowGame\HouseWay\TrumpPlaza">
+      <UniqueIdentifier>{8975f3d7-2417-44e7-b9f2-9b48b3af8c1f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\CardSuit.cpp">
+      <Filter>PaiGowGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\CardValue.cpp">
+      <Filter>PaiGowGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\PokerHands.cpp">
+      <Filter>PaiGowGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\PokerHandsType.cpp">
+      <Filter>PaiGowGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\main.cpp" />
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\Bally\BallyPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\Bally</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\Barona\BaronaPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\Barona</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\BritishColumbia\BritishColumbiaPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\BritishColumbia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\CanterburyPark\CanterburyParkPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\CanterburyPark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\Claridge\ClaridgePokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\Claridge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\FlamingoHilton\FlamingoHiltonPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\FlamingoHilton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\FourQueens\FourQueensPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\FourQueens</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\GoldenNugget\GoldenNuggetPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\GoldenNugget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\TrumpPlaza</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarPokerHands.cpp">
+      <Filter>PaiGowGame\HouseWay\SantaAnaStar</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\CardSuit.h">
+      <Filter>PaiGowGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\CardValue.h">
+      <Filter>PaiGowGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWayFactory.h">
+      <Filter>PaiGowGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\PaiGowCommon.h">
+      <Filter>PaiGowGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHands.h">
+      <Filter>PaiGowGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHandsType.h">
+      <Filter>PaiGowGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHandsUnitTest.h">
+      <Filter>PaiGowGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\Bally\BallyPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\Bally</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\Bally\BallyUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\Bally</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\Barona\BaronaPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\Barona</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\Barona\BaronaUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\Barona</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\BritishColumbia\BritishColumbiaPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\BritishColumbia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\BritishColumbia\BritishColumbiaUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\BritishColumbia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\CanterburyPark\CanterburyParkPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\CanterburyPark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\CanterburyPark\CanterburyParkUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\CanterburyPark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\Claridge\ClaridgePokerHands.h">
+      <Filter>PaiGowGame\HouseWay\Claridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\Claridge\ClaridgeUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\Claridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\FlamingoHilton\FlamingoHiltonPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\FlamingoHilton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\FlamingoHilton\FlamingoHiltonUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\FlamingoHilton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\FourQueens\FourQueensPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\FourQueens</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\FourQueens\FourQueensUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\FourQueens</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\GoldenNugget\GoldenNuggetPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\GoldenNugget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\GoldenNugget\GoldenNuggetUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\GoldenNugget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\TrumpPlaza</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\TrumpPlaza</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarPokerHands.h">
+      <Filter>PaiGowGame\HouseWay\SantaAnaStar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarUnitTest.h">
+      <Filter>PaiGowGame\HouseWay\SantaAnaStar</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

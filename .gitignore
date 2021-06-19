@@ -300,6 +300,9 @@ SourceCode/OpenSSLWindows/x64/*
 SourceCode/ProtobufLinux/bin/*
 SourceCode/ProtobufLinux/obj/*
 SourceCode/ProtobufWindows/x64/*
+SourceCode/ProjectLinux/bin/*
+SourceCode/ProjectLinux/obj/*
+SourceCode/ProjectWindows/x64/*
 SourceCode/StandardLinux/bin/*
 SourceCode/StandardLinux/obj/*
 SourceCode/StandardWindows/x64/*

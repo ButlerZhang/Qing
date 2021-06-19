@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ea23f1e5-74e7-4da2-baf7-462bb5c6d7df}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>ProjectLinux</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{2238F9CD-F817-4ECC-BD14-2524D2669B35}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PaiGowGame\CardSuit.cpp" />
+    <ClCompile Include="PaiGowGame\CardValue.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\Bally\BallyPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\Barona\BaronaPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\BritishColumbia\BritishColumbiaPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\CanterburyPark\CanterburyParkPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\Claridge\ClaridgePokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\FlamingoHilton\FlamingoHiltonPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\FourQueens\FourQueensPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\GoldenNugget\GoldenNuggetPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaPokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\PokerHands.cpp" />
+    <ClCompile Include="PaiGowGame\PokerHandsType.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PaiGowGame\CardSuit.h" />
+    <ClInclude Include="PaiGowGame\CardValue.h" />
+    <ClInclude Include="PaiGowGame\HouseWayFactory.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\Bally\BallyPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\Bally\BallyUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\Barona\BaronaPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\Barona\BaronaUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\BritishColumbia\BritishColumbiaPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\BritishColumbia\BritishColumbiaUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\CanterburyPark\CanterburyParkPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\CanterburyPark\CanterburyParkUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\Claridge\ClaridgePokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\Claridge\ClaridgeUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\FlamingoHilton\FlamingoHiltonPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\FlamingoHilton\FlamingoHiltonUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\FourQueens\FourQueensPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\FourQueens\FourQueensUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\GoldenNugget\GoldenNuggetPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\GoldenNugget\GoldenNuggetUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarUnitTest.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaPokerHands.h" />
+    <ClInclude Include="PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaUnitTest.h" />
+    <ClInclude Include="PaiGowGame\PaiGowCommon.h" />
+    <ClInclude Include="PaiGowGame\PokerHands.h" />
+    <ClInclude Include="PaiGowGame\PokerHandsType.h" />
+    <ClInclude Include="PaiGowGame\PokerHandsUnitTest.h" />
+  </ItemGroup>
+  <ItemDefinitionGroup />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
