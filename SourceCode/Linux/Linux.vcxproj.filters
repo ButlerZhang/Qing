@@ -1,75 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Project">
-      <UniqueIdentifier>{f17f4d50-cd1d-4ab1-9126-4376c14c05fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\YouShuang">
-      <UniqueIdentifier>{6fb40273-8ed2-4d5f-ba67-ef3f4d1d83a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\YouShuang\Chapter5">
-      <UniqueIdentifier>{62e13bbd-69cd-4279-99bc-6f340aaccb03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\YouShuang\Chapter6">
-      <UniqueIdentifier>{92809bb5-6cda-4fea-8feb-684bcb9f13d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\YouShuang\Chapter7">
-      <UniqueIdentifier>{ed983155-ad60-4029-aae5-c762551aeb0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\YouShuang\Chapter8">
-      <UniqueIdentifier>{dcd937fb-83d2-4cef-aa09-c2a9e82dbda9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\YouShuang\Chapter9">
-      <UniqueIdentifier>{ac0eb52b-6c65-458b-838d-66bc8b6666a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open">
-      <UniqueIdentifier>{e768f56b-1ee0-4439-9c53-c05ac884d55d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite">
-      <UniqueIdentifier>{c54eefdb-737e-4c66-8703-99240bdc808d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\controller">
-      <UniqueIdentifier>{733c3da3-542e-4e15-837f-b71d1e070363}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\core">
-      <UniqueIdentifier>{84f5a9df-5bc4-45b3-910f-7f3b9f04fd6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\core\network">
-      <UniqueIdentifier>{e973a81d-1d49-4c71-a00d-be42e1e6cd7d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\core\tools">
-      <UniqueIdentifier>{28837c83-ce01-4a18-b8f2-56e59355ba4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\handler">
-      <UniqueIdentifier>{8a9b0867-d12e-4457-b834-8aa2efd08496}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\handler\httphandler">
-      <UniqueIdentifier>{0b8b847b-13f6-4aab-9fe5-9f7fcfa17300}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\message">
-      <UniqueIdentifier>{4e04c6f2-cc12-4a8e-8fe5-4f2ce23dac50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\model">
-      <UniqueIdentifier>{c4947c74-fd7b-414f-85ee-525afdefadf2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Open\composite\handler\tcphandler">
-      <UniqueIdentifier>{e318ebc6-6d79-4d76-92e6-2f04bafff816}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Reference">
-      <UniqueIdentifier>{43c915e0-0920-4991-97b6-d8282a730398}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Reference\boost">
-      <UniqueIdentifier>{7ee21bac-3a15-439f-8020-bab1cdaf9707}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Reference\database">
-      <UniqueIdentifier>{5f37ef54-787f-4007-b343-95e90f73676d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Reference\standard">
-      <UniqueIdentifier>{2bfbb87f-ec3f-4088-b736-0274acf00cd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project\Qing">
-      <UniqueIdentifier>{580ae79a-21dc-4c95-996d-440c89fafa12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UNIX">
       <UniqueIdentifier>{ad4183e3-e9b4-4259-a6d3-8c68fb10ab81}</UniqueIdentifier>
     </Filter>
@@ -85,269 +16,107 @@
     <Filter Include="UNIX\Chapter5">
       <UniqueIdentifier>{97ac5bf7-c044-4847-9406-cce867738e71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Qing">
+      <UniqueIdentifier>{580ae79a-21dc-4c95-996d-440c89fafa12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YouShuang">
+      <UniqueIdentifier>{6fb40273-8ed2-4d5f-ba67-ef3f4d1d83a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YouShuang\Chapter5">
+      <UniqueIdentifier>{62e13bbd-69cd-4279-99bc-6f340aaccb03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YouShuang\Chapter6">
+      <UniqueIdentifier>{92809bb5-6cda-4fea-8feb-684bcb9f13d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YouShuang\Chapter7">
+      <UniqueIdentifier>{ed983155-ad60-4029-aae5-c762551aeb0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YouShuang\Chapter8">
+      <UniqueIdentifier>{dcd937fb-83d2-4cef-aa09-c2a9e82dbda9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YouShuang\Chapter9">
+      <UniqueIdentifier>{ac0eb52b-6c65-458b-838d-66bc8b6666a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Open\composite\controller\Client.cpp">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\controller\HTTPServer.cpp">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\controller\MultiServer.cpp">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\controller\SingleServer.cpp">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\HTTPBaseServer.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\MultiEventBaseServer.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\ServerNetworkMessageHandler.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\SignalEventMap.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\SingleEventBaseClient.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\SingleEventBaseServer.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\ThreadNoticeQueue.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\UDPBroadcast.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\message\project.pb.cc">
-      <Filter>Project\Open\composite\message</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\Config.cpp">
-      <Filter>Project\Open\composite</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\HTTPSession.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\handler\httphandler\HTTPHandler.cpp">
-      <Filter>Project\Open\composite\handler\httphandler</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\handler\tcphandler\TCPHandler.cpp">
-      <Filter>Project\Open\composite\handler\tcphandler</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\tools\Ethernet.cpp">
-      <Filter>Project\Open\composite\core\tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\controller\RestartManager.cpp">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\controller\WatchDog.cpp">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Open\composite\core\network\NetworkBase.cpp">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
-      <Filter>Reference\boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
-      <Filter>Reference\boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp">
-      <Filter>Reference\boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DatabaseLinux\src\Database.cpp">
-      <Filter>Reference\database</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DatabaseLinux\src\MySQLDatabase.cpp">
-      <Filter>Reference\database</Filter>
-    </ClCompile>
     <ClCompile Include="Qing\NetworkClient.cpp">
-      <Filter>Project\Qing</Filter>
+      <Filter>Qing</Filter>
     </ClCompile>
     <ClCompile Include="Qing\NetworkServer.cpp">
-      <Filter>Project\Qing</Filter>
+      <Filter>Qing</Filter>
     </ClCompile>
     <ClCompile Include="Qing\QNetworkBase.cpp">
-      <Filter>Project\Qing</Filter>
+      <Filter>Qing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h">
-      <Filter>Project\YouShuang\Chapter5</Filter>
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\backlog_test.h">
-      <Filter>Project\YouShuang\Chapter5</Filter>
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_client.h">
-      <Filter>Project\YouShuang\Chapter5</Filter>
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\change_tcp_buffer_size_server.h">
-      <Filter>Project\YouShuang\Chapter5</Filter>
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\daytime.h">
-      <Filter>Project\YouShuang\Chapter5</Filter>
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\oob_data_client.h">
-      <Filter>Project\YouShuang\Chapter5</Filter>
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter5\oob_data_server.h">
-      <Filter>Project\YouShuang\Chapter5</Filter>
+      <Filter>YouShuang\Chapter5</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter6\cgi_server.h">
-      <Filter>Project\YouShuang\Chapter6</Filter>
+      <Filter>YouShuang\Chapter6</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter6\sendfile_server.h">
-      <Filter>Project\YouShuang\Chapter6</Filter>
+      <Filter>YouShuang\Chapter6</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter6\splice_server.h">
-      <Filter>Project\YouShuang\Chapter6</Filter>
+      <Filter>YouShuang\Chapter6</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter6\tee_server.h">
-      <Filter>Project\YouShuang\Chapter6</Filter>
+      <Filter>YouShuang\Chapter6</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter6\writev_server.h">
-      <Filter>Project\YouShuang\Chapter6</Filter>
+      <Filter>YouShuang\Chapter6</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter7\daemonize_demo.h">
-      <Filter>Project\YouShuang\Chapter7</Filter>
+      <Filter>YouShuang\Chapter7</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter7\switch_to_user.h">
-      <Filter>Project\YouShuang\Chapter7</Filter>
+      <Filter>YouShuang\Chapter7</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter8\http_demo.h">
-      <Filter>Project\YouShuang\Chapter8</Filter>
+      <Filter>YouShuang\Chapter8</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter9\select_client.h">
-      <Filter>Project\YouShuang\Chapter9</Filter>
+      <Filter>YouShuang\Chapter9</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter9\select_demo.h">
-      <Filter>Project\YouShuang\Chapter9</Filter>
+      <Filter>YouShuang\Chapter9</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\Chapter9\select_server.h">
-      <Filter>Project\YouShuang\Chapter9</Filter>
+      <Filter>YouShuang\Chapter9</Filter>
     </ClInclude>
     <ClInclude Include="YouShuang\api_note.h">
-      <Filter>Project\YouShuang</Filter>
+      <Filter>YouShuang</Filter>
     </ClInclude>
     <ClInclude Include="LinuxTools.h" />
-    <ClInclude Include="Open\composite\controller\Client.h">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\controller\HTTPServer.h">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\controller\MultiServer.h">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\controller\SingleServer.h">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\HTTPBaseServer.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\MultiEventBaseServer.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\NetworkBase.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\ServerNetworkMessageHandler.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\SignalEventMap.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\SingleEventBaseClient.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\SingleEventBaseServer.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\ThreadNoticeQueue.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\UDPBroadcast.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h">
-      <Filter>Project\Open\composite\core\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\message\CodedMessage.h">
-      <Filter>Project\Open\composite\message</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\message\project.pb.h">
-      <Filter>Project\Open\composite\message</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\model\Model.h">
-      <Filter>Project\Open\composite\model</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\Config.h">
-      <Filter>Project\Open\composite</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\Project.h">
-      <Filter>Project\Open\composite</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\HTTPSession.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\tools\OpenSSLContext.h">
-      <Filter>Project\Open\composite\core\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\handler\httphandler\HTTPHandler.h">
-      <Filter>Project\Open\composite\handler\httphandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\handler\tcphandler\TCPHandler.h">
-      <Filter>Project\Open\composite\handler\tcphandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\tools\Ethernet.h">
-      <Filter>Project\Open\composite\core\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\controller\RestartManager.h">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\controller\WatchDog.h">
-      <Filter>Project\Open\composite\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Open\composite\core\network\LibeventInterface.h">
-      <Filter>Project\Open\composite\core\network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
-      <Filter>Reference\boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
-      <Filter>Reference\boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
-      <Filter>Reference\boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostTime.h">
-      <Filter>Reference\boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostTools.h">
-      <Filter>Reference\boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\DatabaseLinux\src\Database.h">
-      <Filter>Reference\database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\DatabaseLinux\src\MySQLDatabase.h">
-      <Filter>Reference\database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\StandardLinux\src\HexString.h">
-      <Filter>Reference\standard</Filter>
-    </ClInclude>
     <ClInclude Include="Qing\NetworkClient.h">
-      <Filter>Project\Qing</Filter>
+      <Filter>Qing</Filter>
     </ClInclude>
     <ClInclude Include="Qing\NetworkServer.h">
-      <Filter>Project\Qing</Filter>
+      <Filter>Qing</Filter>
     </ClInclude>
     <ClInclude Include="Qing\QNetworkBase.h">
-      <Filter>Project\Qing</Filter>
+      <Filter>Qing</Filter>
     </ClInclude>
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>UNIX</Filter>
@@ -418,13 +187,5 @@
     <ClInclude Include="UNIX\Chapter5\04_memory_stream.h">
       <Filter>UNIX\Chapter5</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Open\composite\message\project.proto">
-      <Filter>Project\Open\composite\message</Filter>
-    </None>
-    <None Include="Open\composite\project.ini">
-      <Filter>Project\Open\composite</Filter>
-    </None>
   </ItemGroup>
 </Project>

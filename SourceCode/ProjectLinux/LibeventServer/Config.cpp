@@ -46,7 +46,7 @@ void CallBack_LibEventLog(int Severity, const char *LogMsg)
 
 
 
-Config::Config() : JPC_WATCHDOG("Qwatchdog"), JPC_SERVER("Qserver"), JPC_SMIB("Qclient"), m_IsLoadDBSucceed(false), m_ConfigFileName("project.ini")
+Config::Config() : JPC_WATCHDOG("Qwatchdog"), JPC_SERVER("Qserver"), JPC_SMIB("Qclient"), m_IsLoadDBSucceed(false), m_ConfigFileName("config.ini")
 {
     event_set_log_callback(CallBack_LibEventLog);
 

@@ -40,6 +40,33 @@
     <Filter Include="PaiGowGame\HouseWay\TrumpPlaza">
       <UniqueIdentifier>{8975f3d7-2417-44e7-b9f2-9b48b3af8c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LibeventServer\controller">
+      <UniqueIdentifier>{936f4957-8f9b-4bd8-85c5-87d25c788175}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\core">
+      <UniqueIdentifier>{7b18e1c9-ed81-4471-ae5a-b9ab6f6513ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\handler">
+      <UniqueIdentifier>{f4f43ee4-ade0-4165-a009-57d3868af8c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\message">
+      <UniqueIdentifier>{6ccf43b4-0c55-433c-baf3-4404b7837920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\model">
+      <UniqueIdentifier>{60bb76ca-ab11-4323-9c98-fc9dad089625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\handler\httphandler">
+      <UniqueIdentifier>{e3ecd4d0-6652-4d1c-aafa-b49f759cbd77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\handler\tcphandler">
+      <UniqueIdentifier>{7712c201-33af-4191-9992-bffb6c4fadbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\core\network">
+      <UniqueIdentifier>{12a5f16b-eea2-4859-81f3-7a39b2e529ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\core\tools">
+      <UniqueIdentifier>{1dbae2ad-1dcc-4a28-b780-f43ef3c92315}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ProjectLinux\PaiGowGame\CardSuit.cpp">
@@ -84,6 +111,69 @@
     </ClCompile>
     <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarPokerHands.cpp">
       <Filter>PaiGowGame\HouseWay\SantaAnaStar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\Config.cpp">
+      <Filter>LibeventServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\message\project.pb.cc">
+      <Filter>LibeventServer\message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\handler\httphandler\HTTPHandler.cpp">
+      <Filter>LibeventServer\handler\httphandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\handler\tcphandler\TCPHandler.cpp">
+      <Filter>LibeventServer\handler\tcphandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\HTTPBaseServer.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\HTTPSession.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\MultiEventBaseServer.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\NetworkBase.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\ServerNetworkMessageHandler.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\SignalEventMap.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseClient.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseServer.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\ThreadNoticeQueue.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\UDPBroadcast.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\tools\Ethernet.cpp">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\Client.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\HTTPServer.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\MultiServer.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\RestartManager.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\SingleServer.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\WatchDog.cpp">
+      <Filter>LibeventServer\controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,5 +258,94 @@
     <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWay\SantaAnaStar\SantaAnaStarUnitTest.h">
       <Filter>PaiGowGame\HouseWay\SantaAnaStar</Filter>
     </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\Config.h">
+      <Filter>LibeventServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\model\Model.h">
+      <Filter>LibeventServer\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\message\CodedMessage.h">
+      <Filter>LibeventServer\message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\message\project.pb.h">
+      <Filter>LibeventServer\message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\handler\httphandler\HTTPHandler.h">
+      <Filter>LibeventServer\handler\httphandler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\handler\tcphandler\TCPHandler.h">
+      <Filter>LibeventServer\handler\tcphandler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\HTTPBaseServer.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\HTTPSession.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\LibeventInterface.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\MultiEventBaseServer.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\NetworkBase.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\ServerNetworkMessageHandler.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\SignalEventMap.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseClient.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseServer.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\ThreadNoticeQueue.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\UDPBroadcast.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\tools\Ethernet.h">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\tools\OpenSSLAES.h">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\tools\OpenSSLContext.h">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\Client.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\HTTPServer.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\MultiServer.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\RestartManager.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\SingleServer.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\WatchDog.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\libevent_server_main.cpp">
+      <Filter>LibeventServer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ProjectLinux\LibeventServer\message\project.proto">
+      <Filter>LibeventServer\message</Filter>
+    </None>
+    <None Include="..\ProjectLinux\LibeventServer\config.ini">
+      <Filter>LibeventServer</Filter>
+    </None>
   </ItemGroup>
 </Project>

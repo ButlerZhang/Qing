@@ -73,74 +73,13 @@
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp" />
-    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp" />
-    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp" />
-    <ClCompile Include="..\DatabaseLinux\src\Database.cpp" />
-    <ClCompile Include="..\DatabaseLinux\src\MySQLDatabase.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Open\composite\Config.cpp" />
-    <ClCompile Include="Open\composite\controller\Client.cpp" />
-    <ClCompile Include="Open\composite\controller\HTTPServer.cpp" />
-    <ClCompile Include="Open\composite\controller\MultiServer.cpp" />
-    <ClCompile Include="Open\composite\controller\RestartManager.cpp" />
-    <ClCompile Include="Open\composite\controller\SingleServer.cpp" />
-    <ClCompile Include="Open\composite\controller\WatchDog.cpp" />
-    <ClCompile Include="Open\composite\core\network\HTTPBaseServer.cpp" />
-    <ClCompile Include="Open\composite\core\network\HTTPSession.cpp" />
-    <ClCompile Include="Open\composite\core\network\MultiEventBaseServer.cpp" />
-    <ClCompile Include="Open\composite\core\network\NetworkBase.cpp" />
-    <ClCompile Include="Open\composite\core\network\ServerNetworkMessageHandler.cpp" />
-    <ClCompile Include="Open\composite\core\network\SignalEventMap.cpp" />
-    <ClCompile Include="Open\composite\core\network\SingleEventBaseClient.cpp" />
-    <ClCompile Include="Open\composite\core\network\SingleEventBaseServer.cpp" />
-    <ClCompile Include="Open\composite\core\network\ThreadNoticeQueue.cpp" />
-    <ClCompile Include="Open\composite\core\network\UDPBroadcast.cpp" />
-    <ClCompile Include="Open\composite\core\tools\Ethernet.cpp" />
-    <ClCompile Include="Open\composite\handler\httphandler\HTTPHandler.cpp" />
-    <ClCompile Include="Open\composite\handler\tcphandler\TCPHandler.cpp" />
-    <ClCompile Include="Open\composite\message\project.pb.cc" />
     <ClCompile Include="Qing\NetworkClient.cpp" />
     <ClCompile Include="Qing\NetworkServer.cpp" />
     <ClCompile Include="Qing\QNetworkBase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostFormat.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostLog.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostTime.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostTools.h" />
-    <ClInclude Include="..\DatabaseLinux\src\Database.h" />
-    <ClInclude Include="..\DatabaseLinux\src\MySQLDatabase.h" />
-    <ClInclude Include="..\StandardLinux\src\HexString.h" />
     <ClInclude Include="LinuxTools.h" />
-    <ClInclude Include="Open\composite\Config.h" />
-    <ClInclude Include="Open\composite\controller\Client.h" />
-    <ClInclude Include="Open\composite\controller\HTTPServer.h" />
-    <ClInclude Include="Open\composite\controller\MultiServer.h" />
-    <ClInclude Include="Open\composite\controller\RestartManager.h" />
-    <ClInclude Include="Open\composite\controller\SingleServer.h" />
-    <ClInclude Include="Open\composite\controller\WatchDog.h" />
-    <ClInclude Include="Open\composite\core\network\HTTPBaseServer.h" />
-    <ClInclude Include="Open\composite\core\network\HTTPSession.h" />
-    <ClInclude Include="Open\composite\core\network\LibeventInterface.h" />
-    <ClInclude Include="Open\composite\core\network\MultiEventBaseServer.h" />
-    <ClInclude Include="Open\composite\core\network\NetworkBase.h" />
-    <ClInclude Include="Open\composite\core\network\ServerNetworkMessageHandler.h" />
-    <ClInclude Include="Open\composite\core\network\SignalEventMap.h" />
-    <ClInclude Include="Open\composite\core\network\SingleEventBaseClient.h" />
-    <ClInclude Include="Open\composite\core\network\SingleEventBaseServer.h" />
-    <ClInclude Include="Open\composite\core\network\ThreadNoticeQueue.h" />
-    <ClInclude Include="Open\composite\core\network\UDPBroadcast.h" />
-    <ClInclude Include="Open\composite\core\tools\Ethernet.h" />
-    <ClInclude Include="Open\composite\core\tools\OpenSSLAES.h" />
-    <ClInclude Include="Open\composite\core\tools\OpenSSLContext.h" />
-    <ClInclude Include="Open\composite\handler\httphandler\HTTPHandler.h" />
-    <ClInclude Include="Open\composite\handler\tcphandler\TCPHandler.h" />
-    <ClInclude Include="Open\composite\message\CodedMessage.h" />
-    <ClInclude Include="Open\composite\message\project.pb.h" />
-    <ClInclude Include="Open\composite\model\Model.h" />
-    <ClInclude Include="Open\composite\Project.h" />
     <ClInclude Include="Qing\NetworkClient.h" />
     <ClInclude Include="Qing\NetworkServer.h" />
     <ClInclude Include="Qing\QNetworkBase.h" />
@@ -186,10 +125,6 @@
     <ClInclude Include="YouShuang\Chapter9\select_client.h" />
     <ClInclude Include="YouShuang\Chapter9\select_demo.h" />
     <ClInclude Include="YouShuang\Chapter9\select_server.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Open\composite\message\project.proto" />
-    <None Include="Open\composite\project.ini" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

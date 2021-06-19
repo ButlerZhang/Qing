@@ -100,7 +100,7 @@ int LaunchWatchDog(const std::string &ServerIP, int Port, int Heartbeat, long Se
 
 
 
-int project(int argc, char *argv[])
+int libevent_server_main(int argc, char *argv[])
 {
     switch (argc)
     {

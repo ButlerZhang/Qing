@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0\;..\..\OpenSource\openssl-1.1.1b\include;..\..\OpenSource\libevent-2.1.8-stable\include\;..\..\OpenSource\protobuf-3.8.0\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +142,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ProjectLinux\LibeventServer\Config.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\Client.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\HTTPServer.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\MultiServer.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\RestartManager.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\SingleServer.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\controller\WatchDog.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\HTTPBaseServer.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\HTTPSession.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\MultiEventBaseServer.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\NetworkBase.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\ServerNetworkMessageHandler.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\SignalEventMap.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseClient.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseServer.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\ThreadNoticeQueue.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\network\UDPBroadcast.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\core\tools\Ethernet.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\handler\httphandler\HTTPHandler.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\handler\tcphandler\TCPHandler.cpp" />
+    <ClCompile Include="..\ProjectLinux\LibeventServer\message\project.pb.cc" />
     <ClCompile Include="..\ProjectLinux\main.cpp" />
     <ClCompile Include="..\ProjectLinux\PaiGowGame\CardSuit.cpp" />
     <ClCompile Include="..\ProjectLinux\PaiGowGame\CardValue.cpp" />
@@ -158,6 +180,33 @@
     <ClCompile Include="..\ProjectLinux\PaiGowGame\PokerHandsType.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\Config.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\Client.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\HTTPServer.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\MultiServer.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\RestartManager.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\SingleServer.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\controller\WatchDog.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\HTTPBaseServer.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\HTTPSession.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\LibeventInterface.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\MultiEventBaseServer.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\NetworkBase.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\ServerNetworkMessageHandler.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\SignalEventMap.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseClient.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\SingleEventBaseServer.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\ThreadNoticeQueue.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\network\UDPBroadcast.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\tools\Ethernet.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\tools\OpenSSLAES.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\core\tools\OpenSSLContext.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\handler\httphandler\HTTPHandler.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\handler\tcphandler\TCPHandler.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\message\CodedMessage.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\message\project.pb.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\model\Model.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\libevent_server_main.cpp" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\CardSuit.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\CardValue.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWayFactory.h" />
@@ -185,6 +234,10 @@
     <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHands.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHandsType.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHandsUnitTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ProjectLinux\LibeventServer\message\project.proto" />
+    <None Include="..\ProjectLinux\LibeventServer\config.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

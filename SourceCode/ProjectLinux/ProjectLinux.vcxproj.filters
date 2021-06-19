@@ -40,6 +40,33 @@
     <Filter Include="PaiGowGame\HouseWay\TrumpPlaza">
       <UniqueIdentifier>{1d682873-a760-42bb-a693-0524658c4ea0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LibeventServer\controller">
+      <UniqueIdentifier>{bd7ffa80-dc00-4af7-9ea2-c7fecba54d49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\core">
+      <UniqueIdentifier>{b82b4251-d470-4342-aea2-8fb7651e058c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\handler">
+      <UniqueIdentifier>{113e5a4e-8b11-4627-bcc0-00737c66dc12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\message">
+      <UniqueIdentifier>{b3098a7b-dc32-43f2-9f91-9e0ef42a984c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\model">
+      <UniqueIdentifier>{746a2f84-3bff-41e1-8d1a-09e2ffb880aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\core\network">
+      <UniqueIdentifier>{4c4dd0d5-11f1-47d6-8498-4f38dcc69576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\core\tools">
+      <UniqueIdentifier>{78e2db06-2a5a-47f5-b76d-98560eef1f92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\handler\tcphandler">
+      <UniqueIdentifier>{6de14d59-4027-436e-af9a-2c2785ba02d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibeventServer\handler\httphandler">
+      <UniqueIdentifier>{62618412-7b00-4d5b-a573-cd56f9791ce3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PaiGowGame\HouseWay\Bally\BallyPokerHands.cpp">
@@ -85,6 +112,69 @@
       <Filter>PaiGowGame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="LibeventServer\Config.cpp">
+      <Filter>LibeventServer</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\controller\Client.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\controller\HTTPServer.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\controller\MultiServer.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\controller\RestartManager.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\controller\SingleServer.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\controller\WatchDog.cpp">
+      <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\HTTPBaseServer.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\HTTPSession.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\MultiEventBaseServer.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\NetworkBase.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\ServerNetworkMessageHandler.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\SignalEventMap.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\SingleEventBaseClient.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\SingleEventBaseServer.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\ThreadNoticeQueue.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\network\UDPBroadcast.cpp">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\core\tools\Ethernet.cpp">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\handler\httphandler\HTTPHandler.cpp">
+      <Filter>LibeventServer\handler\httphandler</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\handler\tcphandler\TCPHandler.cpp">
+      <Filter>LibeventServer\handler\tcphandler</Filter>
+    </ClCompile>
+    <ClCompile Include="LibeventServer\message\project.pb.cc">
+      <Filter>LibeventServer\message</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PaiGowGame\HouseWay\Bally\BallyPokerHands.h">
@@ -168,5 +258,94 @@
     <ClInclude Include="PaiGowGame\PokerHandsUnitTest.h">
       <Filter>PaiGowGame</Filter>
     </ClInclude>
+    <ClInclude Include="LibeventServer\Config.h">
+      <Filter>LibeventServer</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\Project.h">
+      <Filter>LibeventServer</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\controller\Client.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\controller\HTTPServer.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\controller\MultiServer.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\controller\RestartManager.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\controller\SingleServer.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\controller\WatchDog.h">
+      <Filter>LibeventServer\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\HTTPBaseServer.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\HTTPSession.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\LibeventInterface.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\MultiEventBaseServer.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\NetworkBase.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\ServerNetworkMessageHandler.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\SignalEventMap.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\SingleEventBaseClient.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\SingleEventBaseServer.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\ThreadNoticeQueue.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\network\UDPBroadcast.h">
+      <Filter>LibeventServer\core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\tools\Ethernet.h">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\tools\OpenSSLAES.h">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\core\tools\OpenSSLContext.h">
+      <Filter>LibeventServer\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\handler\httphandler\HTTPHandler.h">
+      <Filter>LibeventServer\handler\httphandler</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\handler\tcphandler\TCPHandler.h">
+      <Filter>LibeventServer\handler\tcphandler</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\message\CodedMessage.h">
+      <Filter>LibeventServer\message</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\message\project.pb.h">
+      <Filter>LibeventServer\message</Filter>
+    </ClInclude>
+    <ClInclude Include="LibeventServer\model\Model.h">
+      <Filter>LibeventServer\model</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LibeventServer\project.ini">
+      <Filter>LibeventServer</Filter>
+    </None>
+    <None Include="LibeventServer\message\project.proto">
+      <Filter>LibeventServer\message</Filter>
+    </None>
   </ItemGroup>
 </Project>
