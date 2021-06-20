@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{7fc11232-18f1-433f-80f6-a0ec80d767d3}</UniqueIdentifier>
     </Filter>
@@ -22,8 +18,8 @@
     <Filter Include="Reference">
       <UniqueIdentifier>{da998396-6123-415a-aed0-c6a5b455dd99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\boost">
-      <UniqueIdentifier>{d526a3f6-6d68-4c9c-b47e-84aaf376a648}</UniqueIdentifier>
+    <Filter Include="Reference\Boost">
+      <UniqueIdentifier>{e26d68fa-670a-46ef-9547-2b6203c82bcd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,14 +68,14 @@
     <ClCompile Include="System\SimpleEncrypt.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
-      <Filter>Reference\boost</Filter>
+    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
+      <Filter>Reference\Boost</Filter>
     </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
-      <Filter>Reference\boost</Filter>
+    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
+      <Filter>Reference\Boost</Filter>
     </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostTime.cpp">
-      <Filter>Reference\boost</Filter>
+    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
+      <Filter>Reference\Boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,20 +127,20 @@
     <ClInclude Include="WindowsCoreProgramming.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
-      <Filter>Reference\boost</Filter>
+    <ClInclude Include="..\Share\Boost\BoostFileSystem.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
-      <Filter>Reference\boost</Filter>
+    <ClInclude Include="..\Share\Boost\BoostFormat.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
-      <Filter>Reference\boost</Filter>
+    <ClInclude Include="..\Share\Boost\BoostLog.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostTime.h">
-      <Filter>Reference\boost</Filter>
+    <ClInclude Include="..\Share\Boost\BoostTime.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostTools.h">
-      <Filter>Reference\boost</Filter>
+    <ClInclude Include="..\Share\Boost\BoostTools.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

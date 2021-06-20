@@ -67,6 +67,12 @@
     <Filter Include="LibeventServer\core\tools">
       <UniqueIdentifier>{1dbae2ad-1dcc-4a28-b780-f43ef3c92315}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{18f39db1-7c8d-4713-a83c-927caa0e8186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Boost">
+      <UniqueIdentifier>{66d7f39e-bc22-4978-9720-5febc208d82f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ProjectLinux\PaiGowGame\CardSuit.cpp">
@@ -174,6 +180,15 @@
     </ClCompile>
     <ClCompile Include="..\ProjectLinux\LibeventServer\controller\WatchDog.cpp">
       <Filter>LibeventServer\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
+      <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
+      <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
+      <Filter>Reference\Boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +353,21 @@
     </ClInclude>
     <ClInclude Include="..\ProjectLinux\LibeventServer\libevent_server_main.cpp">
       <Filter>LibeventServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostFileSystem.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostFormat.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostLog.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostTime.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostTools.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

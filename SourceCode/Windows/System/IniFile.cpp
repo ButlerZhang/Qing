@@ -1,5 +1,5 @@
 #include "IniFile.h"
-#include "../../BoostLinux/src/BoostLog.h"
+#include "../../Share/Boost/BoostLog.h"
 #include "../System/SystemShare.h"
 
 

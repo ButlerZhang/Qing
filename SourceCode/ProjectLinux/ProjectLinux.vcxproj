@@ -81,6 +81,9 @@
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp" />
+    <ClCompile Include="..\Share\Boost\BoostLog.cpp" />
+    <ClCompile Include="..\Share\Boost\BoostTime.cpp" />
     <ClCompile Include="LibeventServer\Config.cpp" />
     <ClCompile Include="LibeventServer\controller\Client.cpp" />
     <ClCompile Include="LibeventServer\controller\HTTPServer.cpp" />
@@ -119,6 +122,11 @@
     <ClCompile Include="PaiGowGame\PokerHandsType.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Share\Boost\BoostFileSystem.h" />
+    <ClInclude Include="..\Share\Boost\BoostFormat.h" />
+    <ClInclude Include="..\Share\Boost\BoostLog.h" />
+    <ClInclude Include="..\Share\Boost\BoostTime.h" />
+    <ClInclude Include="..\Share\Boost\BoostTools.h" />
     <ClInclude Include="LibeventServer\Config.h" />
     <ClInclude Include="LibeventServer\controller\Client.h" />
     <ClInclude Include="LibeventServer\controller\HTTPServer.h" />

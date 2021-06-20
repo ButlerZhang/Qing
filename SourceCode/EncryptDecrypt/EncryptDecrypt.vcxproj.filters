@@ -54,18 +54,6 @@
     <ClInclude Include="FileRecoveryDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostTools.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostLog.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BoostLinux\src\BoostFormat.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
     <ClInclude Include="..\Windows\System\SystemShare.h">
       <Filter>Reference\System</Filter>
     </ClInclude>
@@ -74,6 +62,21 @@
     </ClInclude>
     <ClInclude Include="..\Windows\System\FileManager.h">
       <Filter>Reference\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostFileSystem.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostFormat.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostLog.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostTime.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostTools.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,12 +101,6 @@
     <ClCompile Include="FileRecoveryDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
-      <Filter>Reference\Boost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
-      <Filter>Reference\Boost</Filter>
-    </ClCompile>
     <ClCompile Include="..\Windows\System\SystemShare.cpp">
       <Filter>Reference\System</Filter>
     </ClCompile>
@@ -112,6 +109,15 @@
     </ClCompile>
     <ClCompile Include="..\Windows\System\FileManager.cpp">
       <Filter>Reference\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
+      <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
+      <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
+      <Filter>Reference\Boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

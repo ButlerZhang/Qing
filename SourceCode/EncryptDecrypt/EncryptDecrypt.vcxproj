@@ -201,10 +201,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\BoostLinux\src\BoostFileSystem.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostFormat.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostLog.h" />
-    <ClInclude Include="..\BoostLinux\src\BoostTools.h" />
+    <ClInclude Include="..\Share\Boost\BoostFileSystem.h" />
+    <ClInclude Include="..\Share\Boost\BoostFormat.h" />
+    <ClInclude Include="..\Share\Boost\BoostLog.h" />
+    <ClInclude Include="..\Share\Boost\BoostTime.h" />
+    <ClInclude Include="..\Share\Boost\BoostTools.h" />
     <ClInclude Include="..\Windows\System\FileManager.h" />
     <ClInclude Include="..\Windows\System\SimpleEncrypt.h" />
     <ClInclude Include="..\Windows\System\SystemShare.h" />
@@ -219,11 +220,15 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\BoostLinux\src\BoostFileSystem.cpp">
+    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\BoostLinux\src\BoostLog.cpp">
+    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

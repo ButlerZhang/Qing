@@ -178,6 +178,9 @@
     <ClCompile Include="..\ProjectLinux\PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaPokerHands.cpp" />
     <ClCompile Include="..\ProjectLinux\PaiGowGame\PokerHands.cpp" />
     <ClCompile Include="..\ProjectLinux\PaiGowGame\PokerHandsType.cpp" />
+    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp" />
+    <ClCompile Include="..\Share\Boost\BoostLog.cpp" />
+    <ClCompile Include="..\Share\Boost\BoostTime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ProjectLinux\LibeventServer\Config.h" />
@@ -234,6 +237,11 @@
     <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHands.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHandsType.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\PokerHandsUnitTest.h" />
+    <ClInclude Include="..\Share\Boost\BoostFileSystem.h" />
+    <ClInclude Include="..\Share\Boost\BoostFormat.h" />
+    <ClInclude Include="..\Share\Boost\BoostLog.h" />
+    <ClInclude Include="..\Share\Boost\BoostTime.h" />
+    <ClInclude Include="..\Share\Boost\BoostTools.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ProjectLinux\LibeventServer\message\project.proto" />

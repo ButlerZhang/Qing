@@ -7,7 +7,7 @@
 #include "FileRecoveryDlg.h"
 #include "afxdialogex.h"
 
-#include "../BoostLinux/src/BoostLog.h"
+#include "../Share/Boost/BoostLog.h"
 #include "../Windows/System/FileManager.h"
 #include "../Windows/System/SystemShare.h"
 

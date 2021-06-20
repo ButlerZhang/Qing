@@ -67,6 +67,12 @@
     <Filter Include="LibeventServer\handler\httphandler">
       <UniqueIdentifier>{62618412-7b00-4d5b-a573-cd56f9791ce3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference">
+      <UniqueIdentifier>{f53d7506-1ca6-40c4-abee-c48804e2c8fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reference\Boost">
+      <UniqueIdentifier>{0f4e05ae-0256-4482-84a4-ae2409d02f8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PaiGowGame\HouseWay\Bally\BallyPokerHands.cpp">
@@ -174,6 +180,15 @@
     </ClCompile>
     <ClCompile Include="LibeventServer\message\project.pb.cc">
       <Filter>LibeventServer\message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
+      <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
+      <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
+      <Filter>Reference\Boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +353,21 @@
     </ClInclude>
     <ClInclude Include="LibeventServer\model\Model.h">
       <Filter>LibeventServer\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostFileSystem.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostFormat.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostLog.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostTime.h">
+      <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Boost\BoostTools.h">
+      <Filter>Reference\Boost</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

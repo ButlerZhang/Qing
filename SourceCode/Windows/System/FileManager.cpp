@@ -1,5 +1,5 @@
 #include "FileManager.h"
-#include "../../BoostLinux/src/BoostLog.h"
+#include "../../Share/Boost/BoostLog.h"
 #include <io.h>
 #include <list>
 #include <Windows.h>
