@@ -16,9 +16,6 @@
     <Filter Include="UNIX\Chapter5">
       <UniqueIdentifier>{97ac5bf7-c044-4847-9406-cce867738e71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Qing">
-      <UniqueIdentifier>{580ae79a-21dc-4c95-996d-440c89fafa12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="YouShuang">
       <UniqueIdentifier>{6fb40273-8ed2-4d5f-ba67-ef3f4d1d83a6}</UniqueIdentifier>
     </Filter>
@@ -40,15 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Qing\NetworkClient.cpp">
-      <Filter>Qing</Filter>
-    </ClCompile>
-    <ClCompile Include="Qing\NetworkServer.cpp">
-      <Filter>Qing</Filter>
-    </ClCompile>
-    <ClCompile Include="Qing\QNetworkBase.cpp">
-      <Filter>Qing</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="YouShuang\Chapter5\accept_exception.h">
@@ -109,15 +97,6 @@
       <Filter>YouShuang</Filter>
     </ClInclude>
     <ClInclude Include="LinuxTools.h" />
-    <ClInclude Include="Qing\NetworkClient.h">
-      <Filter>Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="Qing\NetworkServer.h">
-      <Filter>Qing</Filter>
-    </ClInclude>
-    <ClInclude Include="Qing\QNetworkBase.h">
-      <Filter>Qing</Filter>
-    </ClInclude>
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>UNIX</Filter>
     </ClInclude>

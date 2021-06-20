@@ -74,15 +74,9 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Qing\NetworkClient.cpp" />
-    <ClCompile Include="Qing\NetworkServer.cpp" />
-    <ClCompile Include="Qing\QNetworkBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LinuxTools.h" />
-    <ClInclude Include="Qing\NetworkClient.h" />
-    <ClInclude Include="Qing\NetworkServer.h" />
-    <ClInclude Include="Qing\QNetworkBase.h" />
     <ClInclude Include="UNIX\Chapter1\01_list_file_name.h" />
     <ClInclude Include="UNIX\Chapter1\02_copy_stdin_stdout_nobuffer.h" />
     <ClInclude Include="UNIX\Chapter1\03_copy_stdin_stdout_standard.h" />
