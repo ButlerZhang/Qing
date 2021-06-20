@@ -73,6 +73,9 @@
     <Filter Include="Reference\Boost">
       <UniqueIdentifier>{66d7f39e-bc22-4978-9720-5febc208d82f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference\Database">
+      <UniqueIdentifier>{89a3e257-550d-4628-8f38-acc6ed1afb37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ProjectLinux\PaiGowGame\CardSuit.cpp">
@@ -189,6 +192,12 @@
     </ClCompile>
     <ClCompile Include="..\Share\Boost\BoostTime.cpp">
       <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Database\Database.cpp">
+      <Filter>Reference\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Database\MySQLDatabase.cpp">
+      <Filter>Reference\Database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,9 +360,6 @@
     <ClInclude Include="..\ProjectLinux\LibeventServer\controller\WatchDog.h">
       <Filter>LibeventServer\controller</Filter>
     </ClInclude>
-    <ClInclude Include="..\ProjectLinux\LibeventServer\libevent_server_main.cpp">
-      <Filter>LibeventServer</Filter>
-    </ClInclude>
     <ClInclude Include="..\Share\Boost\BoostFileSystem.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
@@ -368,6 +374,15 @@
     </ClInclude>
     <ClInclude Include="..\Share\Boost\BoostTools.h">
       <Filter>Reference\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ProjectLinux\LibeventServer\libevent_server_main.h">
+      <Filter>LibeventServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Database\Database.h">
+      <Filter>Reference\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Database\MySQLDatabase.h">
+      <Filter>Reference\Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

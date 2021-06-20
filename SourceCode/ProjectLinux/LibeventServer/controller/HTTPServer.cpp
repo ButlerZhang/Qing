@@ -1,6 +1,6 @@
 #include "HTTPServer.h"
-#include "../../../../BoostLinux/src/BoostLog.h"
-#include "../../../LinuxTools.h"
+#include "../../../Share/Boost/BoostLog.h"
+#include "../../../../../Linux/LinuxTools.h"
 #include "../Config.h"
 #include <thread>
 

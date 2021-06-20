@@ -1,6 +1,6 @@
 #include "SingleServer.h"
-#include "../../../../BoostLinux/src/BoostLog.h"
-#include "../../../LinuxTools.h"
+#include "../../../Share/Boost/BoostLog.h"
+#include "../../../../../Linux/LinuxTools.h"
 #include "../core/network/ThreadNoticeQueue.h"
 #include "../handler/tcphandler/TCPHandler.h"
 #include "../message/CodedMessage.h"

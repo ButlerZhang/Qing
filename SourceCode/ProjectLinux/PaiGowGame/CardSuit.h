@@ -1,15 +1,15 @@
-#pragma once
+Ôªø#pragma once
 #include "CardValue.h"
 
 PAI_GOW_NS_BEGIN
 
 enum CardSuit {
 
-    CS_SPADE,                      //∫⁄Ã“
-    CS_HEART,                      //∫ÏÃ“
-    CS_CLUB,                       //√∑ª®
-    CS_DIAMOND,                    //∑ΩøÈ
-    CS_COUNT,                      //Àƒ÷÷ª®…´
+    CS_SPADE,                      //ÈªëÊ°É
+    CS_HEART,                      //Á∫¢Ê°É
+    CS_CLUB,                       //Ê¢ÖËä±
+    CS_DIAMOND,                    //ÊñπÂùó
+    CS_COUNT,                      //ÂõõÁßçËä±Ëâ≤
 };
 
 CardSuit getSuit(int cardValue);

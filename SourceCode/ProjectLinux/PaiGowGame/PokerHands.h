@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <vector>
 #include "CardSuit.h"
 #include "CardValue.h"
@@ -85,12 +85,12 @@ protected:
 
 protected:
 
-    PokerHandsType twoCardsType;                                           //Á½ÕÅÅÆÅÆĞÍ
-    PokerHandsType fiveCardsType;                                          //ÎåÕÅÅÆÅÆĞÍ
-    PokerHandsType sevenCardsType;                                         //ÆßÕÅÅÆÅÆĞÍ
-    std::vector<int> resultCardArray;                                      //±£´æ½á¹ûµÄÅÆÊı×é
-    std::vector<int> sevenCardsArray;                                      //±£´æÆßÕÅÅÆ×î¸ßÅÆĞÍ½á¹û
-    std::vector<std::vector<int>> divideCardArray;                         //½«Ô­Ê¼µÄÅÆ»®·Ö³ÉÓÃÓÚ·ÖÎöµÄ¶şÎ¬Êı×é
+    PokerHandsType twoCardsType;                                           //ä¸¤å¼ ç‰Œç‰Œå‹
+    PokerHandsType fiveCardsType;                                          //äº”å¼ ç‰Œç‰Œå‹
+    PokerHandsType sevenCardsType;                                         //ä¸ƒå¼ ç‰Œç‰Œå‹
+    std::vector<int> resultCardArray;                                      //ä¿å­˜ç»“æœçš„ç‰Œæ•°ç»„
+    std::vector<int> sevenCardsArray;                                      //ä¿å­˜ä¸ƒå¼ ç‰Œæœ€é«˜ç‰Œå‹ç»“æœ
+    std::vector<std::vector<int>> divideCardArray;                         //å°†åŸå§‹çš„ç‰Œåˆ’åˆ†æˆç”¨äºåˆ†æçš„äºŒç»´æ•°ç»„
 };
 
 PAI_GOW_NS_END

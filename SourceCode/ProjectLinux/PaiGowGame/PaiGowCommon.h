@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 //namespace indication
 #ifndef PAI_GOW_NS_BEGIN
@@ -9,6 +9,6 @@
 #define PAI_GOW_NS_END }
 #endif
 
-static const int DEALING_CARD_COUNT_EACH = 7;                              //Ã¿¸öÍæ¼Ò×î¶à·¢ÆßÕÅÅÆ
-static const int HIGH_HAND_CARD_COUNT = 5;                                 //HighÓĞÎåÕÅÅÆ
-static const int LOW_HAND_CARD_COUNT = 2;                                  //LowÓĞÁ½ÕÅÅÆ
+static const int DEALING_CARD_COUNT_EACH = 7;                              //æ¯ä¸ªç©å®¶æœ€å¤šå‘ä¸ƒå¼ ç‰Œ
+static const int HIGH_HAND_CARD_COUNT = 5;                                 //Highæœ‰äº”å¼ ç‰Œ
+static const int LOW_HAND_CARD_COUNT = 2;                                  //Lowæœ‰ä¸¤å¼ ç‰Œ

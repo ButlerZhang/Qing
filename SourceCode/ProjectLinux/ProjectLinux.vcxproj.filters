@@ -73,6 +73,9 @@
     <Filter Include="Reference\Boost">
       <UniqueIdentifier>{0f4e05ae-0256-4482-84a4-ae2409d02f8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference\Database">
+      <UniqueIdentifier>{5e0c3f22-315c-4a66-ac49-d181cafbeacd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PaiGowGame\HouseWay\Bally\BallyPokerHands.cpp">
@@ -190,6 +193,12 @@
     <ClCompile Include="..\Share\Boost\BoostTime.cpp">
       <Filter>Reference\Boost</Filter>
     </ClCompile>
+    <ClCompile Include="..\Share\Database\Database.cpp">
+      <Filter>Reference\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Share\Database\MySQLDatabase.cpp">
+      <Filter>Reference\Database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PaiGowGame\HouseWay\Bally\BallyPokerHands.h">
@@ -274,9 +283,6 @@
       <Filter>PaiGowGame</Filter>
     </ClInclude>
     <ClInclude Include="LibeventServer\Config.h">
-      <Filter>LibeventServer</Filter>
-    </ClInclude>
-    <ClInclude Include="LibeventServer\Project.h">
       <Filter>LibeventServer</Filter>
     </ClInclude>
     <ClInclude Include="LibeventServer\controller\Client.h">
@@ -369,13 +375,22 @@
     <ClInclude Include="..\Share\Boost\BoostTools.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
+    <ClInclude Include="LibeventServer\libevent_server_main.h">
+      <Filter>LibeventServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Database\Database.h">
+      <Filter>Reference\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Share\Database\MySQLDatabase.h">
+      <Filter>Reference\Database</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="LibeventServer\project.ini">
-      <Filter>LibeventServer</Filter>
-    </None>
     <None Include="LibeventServer\message\project.proto">
       <Filter>LibeventServer\message</Filter>
+    </None>
+    <None Include="LibeventServer\config.ini">
+      <Filter>LibeventServer</Filter>
     </None>
   </ItemGroup>
 </Project>

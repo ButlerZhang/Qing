@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <openssl/aes.h>
-#include "../../../../../BoostLinux/src/BoostLog.h"
-#include "../../../../../StandardLinux/src/HexString.h"
+#include "../../../../Share/Boost/BoostLog.h"
+#include "../../../../../../StandardLinux/src/HexString.h"
 
 const int KEY_BIT_SIZE = 128;
 const std::string MY_AES_KEY("CJSZHCHCSZCJSZCJ");

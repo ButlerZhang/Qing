@@ -1,13 +1,13 @@
-#include "PokerHands.h"
+ï»¿#include "PokerHands.h"
 
 PAI_GOW_NS_BEGIN
 
 PokerHands::PokerHands() {
-    //£¨1£©ĞĞ×ø±ê±íÊ¾È¥³ı»¨É«ºóµÄÅÆÖµ£¬AceÏÂ±êÊÇ14£¬JokerÏÂ±êÊÇ15¡£
-    //     ÏÂ±ê0´æ´¢¶ÔÓ¦»¨É«µÄÅÆÓĞ¼¸ÕÅ£¬ÓÃCARD_BACKGROUND»ñÈ¡ÏÂ±ê0¡£
-    //     ÏÂ±ê1´æ´¢µÄÒ²ÊÇAce£¬µ«²»¼ÆÈëÍ³¼Æ£¬Ö»ÓÃÓÚË³×Ó¡£
-    //     ¿ÉÒÔÊ¹ÓÃCARD_VALUE_COUNT»ñÈ¡ÏÂ±êµÄ×î´óÖµ£¬Ò²¿ÉÒÔÖ±½ÓÊ¹ÓÃÊı×é³¤¶È¡£
-    //£¨2£©ÁĞ×ø±êµÄÇ°ËÄÁĞ°´ÕÕ»¨É«´æ´¢ÅÆµÄÖµ£¬×îºóÒ»ÁĞ±íÊ¾ÕâÕÅÅÆÖµÓĞ¼¸ÕÅ¡£
+    //ï¼ˆ1ï¼‰è¡Œåæ ‡è¡¨ç¤ºå»é™¤èŠ±è‰²åçš„ç‰Œå€¼ï¼ŒAceä¸‹æ ‡æ˜¯14ï¼ŒJokerä¸‹æ ‡æ˜¯15ã€‚
+    //     ä¸‹æ ‡0å­˜å‚¨å¯¹åº”èŠ±è‰²çš„ç‰Œæœ‰å‡ å¼ ï¼Œç”¨CARD_BACKGROUNDè·å–ä¸‹æ ‡0ã€‚
+    //     ä¸‹æ ‡1å­˜å‚¨çš„ä¹Ÿæ˜¯Aceï¼Œä½†ä¸è®¡å…¥ç»Ÿè®¡ï¼Œåªç”¨äºé¡ºå­ã€‚
+    //     å¯ä»¥ä½¿ç”¨CARD_VALUE_COUNTè·å–ä¸‹æ ‡çš„æœ€å¤§å€¼ï¼Œä¹Ÿå¯ä»¥ç›´æ¥ä½¿ç”¨æ•°ç»„é•¿åº¦ã€‚
+    //ï¼ˆ2ï¼‰åˆ—åæ ‡çš„å‰å››åˆ—æŒ‰ç…§èŠ±è‰²å­˜å‚¨ç‰Œçš„å€¼ï¼Œæœ€åä¸€åˆ—è¡¨ç¤ºè¿™å¼ ç‰Œå€¼æœ‰å‡ å¼ ã€‚
     int row = getCardValueWithoutSuit(CARD_VALUE_COUNT);
     int column = CS_COUNT + 1;
     divideCardArray.resize(row, std::vector<int>(column, 0));
@@ -283,20 +283,20 @@ void PokerHands::divideCardsArray(const std::vector<int> &cardsArray) {
         CardSuit cardSuit = getSuit(arrayCardValue);
         int cardIndex = getCardValueWithoutSuit(cardValue);
 
-        //Í³¼ÆÕâÕÅÅÆÈ¥³ı»¨É«ºóµÄÅÆÖµ³öÏÖµÄ´ÎÊı
+        //ç»Ÿè®¡è¿™å¼ ç‰Œå»é™¤èŠ±è‰²åçš„ç‰Œå€¼å‡ºç°çš„æ¬¡æ•°
         divideCardArray[cardIndex][CS_COUNT]++;
 
         if (cardSuit != CS_COUNT) {
-            //½«ÕâÕÅÅÆ±£´æµ½¶ÔÓ¦»¨É«µÄÎ»ÖÃ
+            //å°†è¿™å¼ ç‰Œä¿å­˜åˆ°å¯¹åº”èŠ±è‰²çš„ä½ç½®
             divideCardArray[cardIndex][cardSuit] = arrayCardValue;
 
-            //ÕâÖÖ»¨É«µÄÅÆÊı¼Ó1
+            //è¿™ç§èŠ±è‰²çš„ç‰Œæ•°åŠ 1
             divideCardArray[0][cardSuit]++;
 
         }
         else if (cardValue == CARD_VALUE_JOKER) {
 
-            //¹íÅÆµÄÃ¿ÖÖ»¨É«Î»ÖÃ¶¼ÉèÖÃÎª¹íÅÆÖµ£¬¶ÔÓ¦µÄ»¨É«ÕÅÊıÒ²¼Ó1
+            //é¬¼ç‰Œçš„æ¯ç§èŠ±è‰²ä½ç½®éƒ½è®¾ç½®ä¸ºé¬¼ç‰Œå€¼ï¼Œå¯¹åº”çš„èŠ±è‰²å¼ æ•°ä¹ŸåŠ 1
             for (int suitIndex = 0; suitIndex < CS_COUNT; suitIndex++) {
                 divideCardArray[cardIndex][suitIndex] = arrayCardValue;
                 divideCardArray[0][suitIndex]++;
@@ -304,23 +304,23 @@ void PokerHands::divideCardsArray(const std::vector<int> &cardsArray) {
         }
     }
 
-    //°ÑÏÂ±êÎª14µÄAceÅÆ£¬¿½±´Ò»·İµ½ÏÂ±ê1£¬ÓÃÓÚ5/4/3/2/1Ë³×ÓµÄÅĞ¶Ï£¬²»ÄÜÔö¼Ó»¨É«µÄÍ³¼ÆÊı
+    //æŠŠä¸‹æ ‡ä¸º14çš„Aceç‰Œï¼Œæ‹·è´ä¸€ä»½åˆ°ä¸‹æ ‡1ï¼Œç”¨äº5/4/3/2/1é¡ºå­çš„åˆ¤æ–­ï¼Œä¸èƒ½å¢åŠ èŠ±è‰²çš„ç»Ÿè®¡æ•°
     int aceIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     divideCardArray[1] = divideCardArray[aceIndex];
 
-    //±£´æÅÆµÄÕÅÊı
+    //ä¿å­˜ç‰Œçš„å¼ æ•°
     divideCardArray[0][CS_COUNT] = static_cast<int>(cardsArray.size());
 }
 
 bool PokerHands::checkCardsArray(const std::vector<int> &cardsArray) {
-    //ÅĞ¶ÏÅÆÖµÊÇ·ñºÏ·¨
+    //åˆ¤æ–­ç‰Œå€¼æ˜¯å¦åˆæ³•
     for (int arrayCardValue : cardsArray) {
         if (arrayCardValue <= CARD_BACKGROUND || arrayCardValue >= CARD_VALUE_COUNT) {
             return false;
         }
     }
 
-    //ÅĞ¶ÏÊÇ·ñÓĞÁ½ÕÅÍêÈ«Ò»ÑùµÄÅÆ
+    //åˆ¤æ–­æ˜¯å¦æœ‰ä¸¤å¼ å®Œå…¨ä¸€æ ·çš„ç‰Œ
     for (std::vector<int>::size_type firstIndex = 0; firstIndex < cardsArray.size(); firstIndex++) {
         for (std::vector<int>::size_type secondIndex = 0; secondIndex < cardsArray.size(); secondIndex++) {
             if (firstIndex != secondIndex) {
@@ -381,13 +381,13 @@ bool PokerHands::isFlush(const std::vector<int> &flushArray, int stopIndex) {
 }
 
 bool PokerHands::isStraight(const std::vector<int> &straightArray, int stopIndex) {
-    //±ÜÃâ³öÏÖ4-3-2-1-KµÄÇé¿ö
+    //é¿å…å‡ºç°4-3-2-1-Kçš„æƒ…å†µ
     int realStopIndex = stopIndex - 1;
     if (getCardValueWithoutSuit(straightArray[0]) <= getCardValueWithoutJoker(straightArray[realStopIndex])) {
         return false;
     }
 
-    //Öğ¸öÅĞ¶ÏÏàÁÚÅÆÖµ
+    //é€ä¸ªåˆ¤æ–­ç›¸é‚»ç‰Œå€¼
     int joker = CARD_VALUE_JOKER;
     for (int cardIndex = 0; cardIndex < realStopIndex; cardIndex++) {
         if (straightArray[cardIndex] == joker || straightArray[cardIndex + 1] == joker) {
@@ -433,12 +433,12 @@ bool PokerHands::isRoyalFlushWhenResultCardArrayIsStraightFlush() {
 }
 
 bool PokerHands::isUseOnPairInStraightOrFlush(std::vector<int> onePairRuleResultCardArray, std::vector<int> &resultCardsBackupArray) {
-    //°Ñ¶Ô×Ó·Åµ½ÓÒÊÖ
+    //æŠŠå¯¹å­æ”¾åˆ°å³æ‰‹
     cleanResultCardArray();
     resultCardArray[5] = onePairRuleResultCardArray[0];
     resultCardArray[6] = onePairRuleResultCardArray[1];
 
-    //°ÑÆäËûÅÆ°´ÕÕÔ­Ë³ĞòÒÆµ½×óÊÖ
+    //æŠŠå…¶ä»–ç‰ŒæŒ‰ç…§åŸé¡ºåºç§»åˆ°å·¦æ‰‹
     int resultIndex = 0;
     int pairCard = getCardValueWithoutJoker(onePairRuleResultCardArray[0]);
     for (int card : resultCardsBackupArray) {
@@ -447,7 +447,7 @@ bool PokerHands::isUseOnPairInStraightOrFlush(std::vector<int> onePairRuleResult
         }
     }
 
-    //ÅĞ¶ÏÇ°ÎåÕÅÅÆµÄÅÆĞÍ
+    //åˆ¤æ–­å‰äº”å¼ ç‰Œçš„ç‰Œå‹
     return isFiveCardsFlushOrStraightInResultCardArray();
 }
 
@@ -494,19 +494,19 @@ int PokerHands::getLongestStraight(int suitIndex) {
 
 int PokerHands::getStraightIndex(int startCardIndex, int stopCardIndex, int suit, int straightCardCount, int jokerCount) {
     for (int straightIndex = startCardIndex; straightIndex > stopCardIndex; straightIndex--) {
-        //´«ÈëµÄÅÆ¼ä¸ôµÄÕÅÊı£¬ÒªÂú×ãË³×ÓÕÅÊıµÄÒªÇó
+        //ä¼ å…¥çš„ç‰Œé—´éš”çš„å¼ æ•°ï¼Œè¦æ»¡è¶³é¡ºå­å¼ æ•°çš„è¦æ±‚
         int straightStopIndex = straightIndex - straightCardCount;
         if (straightStopIndex < 0) {
             return -1;
         }
 
-        //Í³¼ÆË³×ÓÅÆÓĞ¼¸ÕÅ
+        //ç»Ÿè®¡é¡ºå­ç‰Œæœ‰å‡ å¼ 
         int cardCount = 0;
         for (int cardIndex = straightIndex; cardIndex > straightStopIndex; cardIndex--) {
             cardCount += divideCardArray[cardIndex][suit] > 0 ? 1 : 0;
         }
 
-        //ÅĞ¶ÏÊÇ·ñÂú×ãË³×ÓµÄÕÅÊı
+        //åˆ¤æ–­æ˜¯å¦æ»¡è¶³é¡ºå­çš„å¼ æ•°
         if ((cardCount + jokerCount) >= straightCardCount) {
             return straightIndex;
         }
@@ -584,7 +584,7 @@ void PokerHands::addStraightCardsToResultCardArray(int startCardIndex, int stopC
                 }
             }
 
-            //¼´Ê¹ËÄÖÖ»¨É«¶¼Ã»ÓĞÖµ£¬Ò²ÒªÒÆ¶¯µ½ÏÂÒ»¸öÎ»ÖÃ£¬µ±Ç°Î»ÖÃÁô¸ø¹íÅÆ
+            //å³ä½¿å››ç§èŠ±è‰²éƒ½æ²¡æœ‰å€¼ï¼Œä¹Ÿè¦ç§»åŠ¨åˆ°ä¸‹ä¸€ä¸ªä½ç½®ï¼Œå½“å‰ä½ç½®ç•™ç»™é¬¼ç‰Œ
             ++resultStartIndex;
         }
     }
@@ -630,21 +630,21 @@ void PokerHands::vectorCopy(std::vector<int>& src, int srcPos, std::vector<int>&
 }
 
 bool PokerHands::hasSevenCardStraightFlush() {
-    //²»ÄÜ°üº¬Joker
+    //ä¸èƒ½åŒ…å«Joker
     if (getCardCount(CARD_VALUE_JOKER) > 0) {
         return false;
     }
 
-    //±ØĞëÊÇÆßÕÅÅÆ
+    //å¿…é¡»æ˜¯ä¸ƒå¼ ç‰Œ
     int sevenCardCount = 7;
 
-    //±ØĞëÊÇÏàÍ¬ÑÕÉ«
+    //å¿…é¡»æ˜¯ç›¸åŒé¢œè‰²
     int flushIndex = getFlushIndex(sevenCardCount);
     if (flushIndex < 0) {
         return false;
     }
 
-    //±ØĞëÊÇÍ¬»¨É«µÄË³×Ó
+    //å¿…é¡»æ˜¯åŒèŠ±è‰²çš„é¡ºå­
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_4);
     int straightIndex = getStraightIndex(startIndex, stopIndex, flushIndex, sevenCardCount, 0);
@@ -652,21 +652,21 @@ bool PokerHands::hasSevenCardStraightFlush() {
         return false;
     }
 
-    //×é×°½á¹ûÅÆ
+    //ç»„è£…ç»“æœç‰Œ
     addDifferentCardsToResultCardArray(straightIndex, straightIndex - sevenCardCount, flushIndex);
     sevenCardsType = PHT_SEVEN_CARD_STRAIGHT_FLUSH;
     return true;
 }
 
 bool PokerHands::hasRoyalFlushWithSuitedRoyals() {
-    //±ØĞëÂú×ãÍ¬»¨É«
+    //å¿…é¡»æ»¡è¶³åŒèŠ±è‰²
     int royalFlushCardCount = 5;
     int flushIndex = getFlushIndex(royalFlushCardCount);
     if (flushIndex < 0) {
         return false;
     }
 
-    //ÄÜ·ñ´Õ³ÉË³×Ó
+    //èƒ½å¦å‡‘æˆé¡ºå­
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_9);
     int jokerCount = getCardCount(CARD_VALUE_JOKER);
@@ -679,19 +679,19 @@ bool PokerHands::hasRoyalFlushWithSuitedRoyals() {
     if (jokerCount > 0) addJokerToResultCardArray(royalFlushCardCount);
     addRestCardsToResultCardArray(2);
 
-    //ÓÒÊÖÅÆµÚÒ»ÕÅÅÆ±ØĞëÊÇK
+    //å³æ‰‹ç‰Œç¬¬ä¸€å¼ ç‰Œå¿…é¡»æ˜¯K
     if (getCardValueWithoutSuit(resultCardArray[5]) != getCardValueWithoutSuit(CARD_SPADE_KING)) {
         cleanResultCardArray();
         return false;
     }
 
-    //ÓÒÊÖÅÆµÚ¶şÕÅÅÆ±ØĞëÊÇQ
+    //å³æ‰‹ç‰Œç¬¬äºŒå¼ ç‰Œå¿…é¡»æ˜¯Q
     if (getCardValueWithoutSuit(resultCardArray[6]) != getCardValueWithoutSuit(CARD_SPADE_QUEEN)) {
         cleanResultCardArray();
         return false;
     }
 
-    //Ê£ÓàÁ½ÕÅÅÆ»¨É«±ØĞëÏàÍ¬
+    //å‰©ä½™ä¸¤å¼ ç‰ŒèŠ±è‰²å¿…é¡»ç›¸åŒ
     if (getSuit(resultCardArray[5]) != getSuit(resultCardArray[6])) {
         cleanResultCardArray();
         return false;
@@ -702,21 +702,21 @@ bool PokerHands::hasRoyalFlushWithSuitedRoyals() {
 }
 
 bool PokerHands::hasSevenCardStraightFlushWithJoker() {
-    //±ØĞë°üº¬Joker
+    //å¿…é¡»åŒ…å«Joker
     if (getCardCount(CARD_VALUE_JOKER) <= 0) {
         return false;
     }
 
-    //±ØĞëÊÇÆßÕÅÅÆ
+    //å¿…é¡»æ˜¯ä¸ƒå¼ ç‰Œ
     int sevenCardCount = 7;
 
-    //±ØĞëÊÇÏàÍ¬ÑÕÉ«
+    //å¿…é¡»æ˜¯ç›¸åŒé¢œè‰²
     int flushIndex = getFlushIndex(sevenCardCount);
     if (flushIndex < 0) {
         return false;
     }
 
-    //±ØĞëÊÇÍ¬»¨É«µÄË³×Ó
+    //å¿…é¡»æ˜¯åŒèŠ±è‰²çš„é¡ºå­
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_4);
     int straightIndex = getStraightIndex(startIndex, stopIndex, flushIndex, sevenCardCount, 1);
@@ -724,7 +724,7 @@ bool PokerHands::hasSevenCardStraightFlushWithJoker() {
         return false;
     }
 
-    //×é×°½á¹ûÅÆ
+    //ç»„è£…ç»“æœç‰Œ
     addStraightCardsToResultCardArray(straightIndex, straightIndex - sevenCardCount, flushIndex);
     addJokerToResultCardArray(sevenCardCount);
     sevenCardsType = PHT_SEVEN_CARD_STRAIGHT_FLUSH_WITH_JOKER;
@@ -732,28 +732,28 @@ bool PokerHands::hasSevenCardStraightFlushWithJoker() {
 }
 
 bool PokerHands::hasFiveAces() {
-    //±ØĞëÒªÓĞ¹íÅÆ£¬ÇÒAce±ØĞëÓĞËÄÕÅ
+    //å¿…é¡»è¦æœ‰é¬¼ç‰Œï¼Œä¸”Aceå¿…é¡»æœ‰å››å¼ 
     if (getCardCount(CARD_VALUE_JOKER) != 1 || getCardCount(CARD_SPADE_ACE) != 4) {
         return false;
     }
 
-    //ÏÈ×é×°½á¹û
+    //å…ˆç»„è£…ç»“æœ
     resultCardArray[0] = CARD_SPADE_ACE;
     resultCardArray[1] = CARD_HEART_ACE;
     resultCardArray[2] = CARD_CLUB_ACE;
     resultCardArray[3] = CARD_DIAMOND_ACE;
     resultCardArray[4] = CARD_VALUE_JOKER;
 
-    //Èç¹ûÖ»ÅĞ¶ÏÎåÕÅÅÆ£¬ÄÇÃ´Ö±½Ó·µ»Ø½á¹û
+    //å¦‚æœåªåˆ¤æ–­äº”å¼ ç‰Œï¼Œé‚£ä¹ˆç›´æ¥è¿”å›ç»“æœ
     if (getCardCount(CARD_VALUE_COUNT) == HIGH_HAND_CARD_COUNT) {
         fiveCardsType = PHT_FIVE_ACES;
         return true;
     }
 
-    //±£´æ×î¸ßÅÆĞÍ
+    //ä¿å­˜æœ€é«˜ç‰Œå‹
     sevenCardsArray = resultCardArray;
 
-    //Èç¹û´æÔÚÒ»¶ÔK£¬ÄÇÃ´°ÑK·Åµ½ÓÒÊÖÅÆ
+    //å¦‚æœå­˜åœ¨ä¸€å¯¹Kï¼Œé‚£ä¹ˆæŠŠKæ”¾åˆ°å³æ‰‹ç‰Œ
     int kingIndex = getCardValueWithoutSuit(CARD_SPADE_KING);
     if (divideCardArray[kingIndex][CS_COUNT] == 2) {
         addSameCardsToResultCardArray(kingIndex, HIGH_HAND_CARD_COUNT);
@@ -761,14 +761,14 @@ bool PokerHands::hasFiveAces() {
         return true;
     }
 
-    //Èç¹û²»´æÔÚ¶ÔK£¬ÔòÈıÌõA·ÅÔÚ×óÊÖÅÆ£¬Ò»¶ÔA·ÅÔÚÓÒÊÖÅÆ
+    //å¦‚æœä¸å­˜åœ¨å¯¹Kï¼Œåˆ™ä¸‰æ¡Aæ”¾åœ¨å·¦æ‰‹ç‰Œï¼Œä¸€å¯¹Aæ”¾åœ¨å³æ‰‹ç‰Œ
     resultCardArray[2] = CARD_VALUE_JOKER;
     resultCardArray[5] = CARD_CLUB_ACE;
     resultCardArray[6] = CARD_DIAMOND_ACE;
     resultCardArray[3] = resultCardArray[4] = 0;
     addRestCardsToResultCardArray(2);
 
-    //ĞèÒªÅĞ¶Ï×óÊÖÅÆÊÇ·ñ´æÔÚ¶Ô×Ó
+    //éœ€è¦åˆ¤æ–­å·¦æ‰‹ç‰Œæ˜¯å¦å­˜åœ¨å¯¹å­
     PokerHandsType fiveType = isPair(resultCardArray[3], resultCardArray[4]) ? PHT_FULL_HOUSE : PHT_THREE_OF_A_KIND;
     setType(PHT_FIVE_ACES, fiveType, PHT_ONE_PAIR);
     return true;
@@ -779,11 +779,11 @@ bool PokerHands::hasStraightFlush() {
 }
 
 bool PokerHands::hasFourOfAKind() {
-    //ËÄÌõÓĞËÄÕÅÅÆ
+    //å››æ¡æœ‰å››å¼ ç‰Œ
     int fourOfAKindCardCount = 4;
     bool isNeedJoker = false;
 
-    //Ñ°ÕÒÆÕÍ¨Çé¿öµÄËÄÕÅÅÆ£¬´Ó´óµ½Ğ¡·½ÏòÑ°ÕÒ
+    //å¯»æ‰¾æ™®é€šæƒ…å†µçš„å››å¼ ç‰Œï¼Œä»å¤§åˆ°å°æ–¹å‘å¯»æ‰¾
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_2) - 1;
     int fourOfAKindIndex = getSpecialCardCountIndex(startIndex, stopIndex, fourOfAKindCardCount);
@@ -792,7 +792,7 @@ bool PokerHands::hasFourOfAKind() {
             return false;
         }
 
-        //ÓĞJokerµÄÇé¿öÏÂ£¬ÈıÕÅAÒ²Âú×ãÌõ¼ş
+        //æœ‰Jokerçš„æƒ…å†µä¸‹ï¼Œä¸‰å¼ Aä¹Ÿæ»¡è¶³æ¡ä»¶
         isNeedJoker = true;
         fourOfAKindIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
         if (divideCardArray[fourOfAKindIndex][CS_COUNT] != 3) {
@@ -800,21 +800,21 @@ bool PokerHands::hasFourOfAKind() {
         }
     }
 
-    //±£´æËÄÌõ
+    //ä¿å­˜å››æ¡
     addSameCardsToResultCardArray(fourOfAKindIndex, 0);
     if (isNeedJoker) addJokerToResultCardArray(fourOfAKindCardCount);
 
-    //±£´æ×î¸ßÅÆĞÍ
+    //ä¿å­˜æœ€é«˜ç‰Œå‹
     sevenCardsArray = resultCardArray;
 
-    //Èç¹ûÖ»ÅĞ¶ÏÎåÕÅÅÆ£¬¿ÉÒÔÖ±½Ó·µ»Ø½á¹ûÁË
+    //å¦‚æœåªåˆ¤æ–­äº”å¼ ç‰Œï¼Œå¯ä»¥ç›´æ¥è¿”å›ç»“æœäº†
     if (getCardCount(CARD_VALUE_COUNT) == HIGH_HAND_CARD_COUNT) {
         addRestCardsToResultCardArray(1);
         fiveCardsType = PHT_FOUR_OF_A_KIND;
         return true;
     }
 
-    //4+3ÅÆĞÍ£¬ÕâÀï²»ĞèÒª¿¼ÂÇAA+Joker£¬ÒòÎªËü¿ÉÒÔµ±×ö4+2+1ÅÆĞÍ
+    //4+3ç‰Œå‹ï¼Œè¿™é‡Œä¸éœ€è¦è€ƒè™‘AA+Jokerï¼Œå› ä¸ºå®ƒå¯ä»¥å½“åš4+2+1ç‰Œå‹
     int threeOfAKindCardCount = 3;
     int tempStartIndex = isNeedJoker ? (startIndex - 1) : startIndex;
     int threeOfAKindIndex = getSpecialCardCountIndex(tempStartIndex, stopIndex, threeOfAKindCardCount);
@@ -834,7 +834,7 @@ bool PokerHands::hasFourOfAKind() {
         return true;
     }
 
-    //4+2+1ÅÆĞÍ£¬ÕâÀï²»ÒªĞèÒª¿¼ÂÇ¶Ô×ÓA+Joker
+    //4+2+1ç‰Œå‹ï¼Œè¿™é‡Œä¸è¦éœ€è¦è€ƒè™‘å¯¹å­A+Joker
     int twoOfAKindCardCount = 2;
     int twoOfAKindIndex = getSpecialCardCountIndex(tempStartIndex, stopIndex, twoOfAKindCardCount);
     if (twoOfAKindIndex > 0) {
@@ -844,7 +844,7 @@ bool PokerHands::hasFourOfAKind() {
         return true;
     }
 
-    //4+A+joker+1ÅÆĞÍ
+    //4+A+joker+1ç‰Œå‹
     if (!isNeedJoker && getCardCount(CARD_SPADE_ACE) == 1 && getCardCount(CARD_VALUE_JOKER) == 1) {
         addSpecialCardToResultCardArraySpecialIndex(stopIndex + 1, startIndex + 1, fourOfAKindCardCount);
         addRestCardsToResultCardArray(2);
@@ -852,7 +852,7 @@ bool PokerHands::hasFourOfAKind() {
         return true;
     }
 
-    //¸ù¾İ¾ßÌåµÄ²ğ·Ö¹æÔò²ğ·ÖËÄÌõ
+    //æ ¹æ®å…·ä½“çš„æ‹†åˆ†è§„åˆ™æ‹†åˆ†å››æ¡
     if (isSplitFourOfAKind(fourOfAKindIndex, threeOfAKindIndex)) {
         resultCardArray[5] = resultCardArray[2];
         resultCardArray[6] = resultCardArray[3];
@@ -870,11 +870,11 @@ bool PokerHands::hasFourOfAKind() {
 }
 
 bool PokerHands::hasFullHouse() {
-    //Èı´ø¶ş
+    //ä¸‰å¸¦äºŒ
     int threeCardCount = 3;
     bool isNeedJoker = false;
 
-    //Ñ°ÕÒÆÕÍ¨µÄÏàÍ¬µÄÈıÕÅÅÆ
+    //å¯»æ‰¾æ™®é€šçš„ç›¸åŒçš„ä¸‰å¼ ç‰Œ
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_2) - 1;
     int threeCardIndex = getSpecialCardCountIndex(startIndex, stopIndex, threeCardCount);
@@ -883,7 +883,7 @@ bool PokerHands::hasFullHouse() {
             return false;
         }
 
-        //ÓĞJokerµÄÇé¿öÏÂ£¬Á½ÕÅAÒ²Âú×ãÌõ¼ş
+        //æœ‰Jokerçš„æƒ…å†µä¸‹ï¼Œä¸¤å¼ Aä¹Ÿæ»¡è¶³æ¡ä»¶
         isNeedJoker = true;
         threeCardIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
         if (divideCardArray[threeCardIndex][CS_COUNT] != 2) {
@@ -891,7 +891,7 @@ bool PokerHands::hasFullHouse() {
         }
     }
 
-    //Èç¹ûÖ»ÅĞ¶ÏÎåÕÅÅÆ
+    //å¦‚æœåªåˆ¤æ–­äº”å¼ ç‰Œ
     if (getCardCount(CARD_VALUE_COUNT) == HIGH_HAND_CARD_COUNT) {
         addSameCardsToResultCardArray(threeCardIndex, 0);
         if (isNeedJoker) addJokerToResultCardArray(threeCardCount);
@@ -900,7 +900,7 @@ bool PokerHands::hasFullHouse() {
         return true;
     }
 
-    //3+3+1£¬Ê¼ÖÕ°Ñ½Ï´óµÄÈıÌõ³é³ö¶Ô×Ó·Åµ½ÓÒÊÖÅÆ
+    //3+3+1ï¼Œå§‹ç»ˆæŠŠè¾ƒå¤§çš„ä¸‰æ¡æŠ½å‡ºå¯¹å­æ”¾åˆ°å³æ‰‹ç‰Œ
     if (!isNeedJoker) {
         int secondThreeCardIndex = getSpecialCardCountIndex(threeCardIndex - 1, stopIndex, threeCardCount);
         if (secondThreeCardIndex > 0) {
@@ -918,17 +918,17 @@ bool PokerHands::hasFullHouse() {
         }
     }
 
-    //3+2+2»ò3+2+1+1
+    //3+2+2æˆ–3+2+1+1
     int twoCardCount = 2;
     int tempStartIndex = isNeedJoker ? (startIndex - 1) : startIndex;
     int firstPairCardIndex = getSpecialCardCountIndex(tempStartIndex, stopIndex, twoCardCount);
     if (firstPairCardIndex > 0) {
 
-        //ÏÈ°ÑÈıÌõ±£´æºÃ
+        //å…ˆæŠŠä¸‰æ¡ä¿å­˜å¥½
         addSameCardsToResultCardArray(threeCardIndex, 0);
         if (isNeedJoker) addJokerToResultCardArray(threeCardCount);
 
-        //3+2+2£¬°Ñ×î´óµÄ¶Ô×Ó·Åµ½ÓÒÊÖÅÆ
+        //3+2+2ï¼ŒæŠŠæœ€å¤§çš„å¯¹å­æ”¾åˆ°å³æ‰‹ç‰Œ
         int secondPairCardIndex = getSpecialCardCountIndex(firstPairCardIndex - 1, stopIndex, twoCardCount);
         if (secondPairCardIndex > 0) {
             sevenCardsArray = resultCardArray;
@@ -949,7 +949,7 @@ bool PokerHands::hasFullHouse() {
             return true;
         }
 
-        //3+2+1+1£¬Èç¹û¶Ô×ÓÊÇ2¶øÇÒÓĞÒ»ÕÅ(Ace»òJoker)ºÍÒ»ÕÅKing£¬Ôò²»ĞèÒª°Ñ¶Ô×Ó·ÅÔÚÓÒÊÖÅÆ
+        //3+2+1+1ï¼Œå¦‚æœå¯¹å­æ˜¯2è€Œä¸”æœ‰ä¸€å¼ (Aceæˆ–Joker)å’Œä¸€å¼ Kingï¼Œåˆ™ä¸éœ€è¦æŠŠå¯¹å­æ”¾åœ¨å³æ‰‹ç‰Œ
         if (isSplitFullHouse()) {
             if (firstPairCardIndex == getCardValueWithoutSuit(CARD_SPADE_2) && hasSingleAce() && getCardCount(CARD_SPADE_KING) == 1) {
                 addSameCardsToResultCardArray(firstPairCardIndex, threeCardCount);
@@ -960,7 +960,7 @@ bool PokerHands::hasFullHouse() {
             }
         }
 
-        //3+2+1+1£¬ÆäËüËùÓĞÇé¿ö¶¼ĞèÒª°Ñ¶Ô×Ó·Öµ½ÓÒÊÖÅÆ
+        //3+2+1+1ï¼Œå…¶å®ƒæ‰€æœ‰æƒ…å†µéƒ½éœ€è¦æŠŠå¯¹å­åˆ†åˆ°å³æ‰‹ç‰Œ
         sevenCardsArray = resultCardArray;
         addSameCardsToResultCardArray(firstPairCardIndex, HIGH_HAND_CARD_COUNT);
         addRestCardsToResultCardArray(2);
@@ -995,11 +995,11 @@ bool PokerHands::hasStraight() {
 }
 
 bool PokerHands::hasThreeOfAKind() {
-    //ÈıÌõÓĞÈıÕÅÅÆ
+    //ä¸‰æ¡æœ‰ä¸‰å¼ ç‰Œ
     int threeOfAKindCardCount = 3;
     int aceIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
 
-    //Ñ°ÕÒÆÕÍ¨Çé¿öµÄÈıÕÅÅÆ
+    //å¯»æ‰¾æ™®é€šæƒ…å†µçš„ä¸‰å¼ ç‰Œ
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_KING);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_2) - 1;
     int threeOfAKindIndex = getSpecialCardCountIndex(startIndex, stopIndex, threeOfAKindCardCount);
@@ -1007,7 +1007,7 @@ bool PokerHands::hasThreeOfAKind() {
         addSameCardsToResultCardArray(threeOfAKindIndex, 0);
     }
     else {
-        //Èç¹ûÓĞÈıÌõA£¬°ÑÆäÖĞÒ»ÌõA·Åµ½ÓÒÊÖÅÆ£¬»òÕß°Ñ¹íÅÆ·Åµ½ÓÒÊÖÅÆ
+        //å¦‚æœæœ‰ä¸‰æ¡Aï¼ŒæŠŠå…¶ä¸­ä¸€æ¡Aæ”¾åˆ°å³æ‰‹ç‰Œï¼Œæˆ–è€…æŠŠé¬¼ç‰Œæ”¾åˆ°å³æ‰‹ç‰Œ
         int aceCount = divideCardArray[aceIndex][CS_COUNT];
         if (aceCount == threeOfAKindCardCount) {
             addSameCardsToResultCardArray(aceIndex, 0);
@@ -1020,14 +1020,14 @@ bool PokerHands::hasThreeOfAKind() {
         }
     }
 
-    //ÎŞ·¨´Õ³ÉÈıÌõ
+    //æ— æ³•å‡‘æˆä¸‰æ¡
     if (resultCardArray[0] <= 0) {
         return false;
     }
 
-    //Èç¹ûÖ»ÅĞ¶ÏÎåÕÅÅÆ
+    //å¦‚æœåªåˆ¤æ–­äº”å¼ ç‰Œ
     if (getCardCount(CARD_VALUE_COUNT) == HIGH_HAND_CARD_COUNT) {
-        //°ÑÓÒÊÖÅÆµÄA»òJoker·Å»Ø×óÊÖÅÆ
+        //æŠŠå³æ‰‹ç‰Œçš„Aæˆ–Jokeræ”¾å›å·¦æ‰‹ç‰Œ
         if (aceIndex <= getCardValueWithoutSuit(resultCardArray[5])) {
             resultCardArray[2] = resultCardArray[5];
             resultCardArray[5] = 0;
@@ -1038,10 +1038,10 @@ bool PokerHands::hasThreeOfAKind() {
         return true;
     }
 
-    //±£´æ×î¸ßÅÆĞÍ
+    //ä¿å­˜æœ€é«˜ç‰Œå‹
     sevenCardsArray = resultCardArray;
 
-    //°Ñ×î´óµÄºÍµÚ¶ş´óµÄµ¥ÅÆ·Åµ½ÓÒÊÖÅÆ
+    //æŠŠæœ€å¤§çš„å’Œç¬¬äºŒå¤§çš„å•ç‰Œæ”¾åˆ°å³æ‰‹ç‰Œ
     startIndex = getCardValueWithoutSuit(CARD_VALUE_JOKER);
     if (threeOfAKindIndex < 0) {
         addSpecialCardToResultCardArraySpecialIndex(startIndex, stopIndex, 6);
@@ -1060,11 +1060,11 @@ bool PokerHands::hasThreeOfAKind() {
 }
 
 bool PokerHands::hasTwoPair() {
-    //¶Ô×ÓÁ½ÕÅÅÆ
+    //å¯¹å­ä¸¤å¼ ç‰Œ
     int onePairCardCount = 2;
     int cardTotalCount = getCardCount(CARD_VALUE_COUNT);
 
-    //ÖÁÉÙÒªÓĞÒ»¸ö¶Ô×Ó£¬µÚÒ»¸ö¶Ô×Ó²»ÄÜÊÇA+Joker
+    //è‡³å°‘è¦æœ‰ä¸€ä¸ªå¯¹å­ï¼Œç¬¬ä¸€ä¸ªå¯¹å­ä¸èƒ½æ˜¯A+Joker
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_2) - 1;
     int firstPairIndex = getSpecialCardCountIndex(startIndex, stopIndex, onePairCardCount);
@@ -1072,12 +1072,12 @@ bool PokerHands::hasTwoPair() {
         return false;
     }
 
-    //2+A+Joker+1+1+1£¬×óÓÒÁ½±ß¸÷Ò»¸ö¶Ô×Ó
+    //2+A+Joker+1+1+1ï¼Œå·¦å³ä¸¤è¾¹å„ä¸€ä¸ªå¯¹å­
     int secondPairIndex = getSpecialCardCountIndex(firstPairIndex - 1, stopIndex, onePairCardCount);
     if (secondPairIndex < 0) {
         if (getCardCount(CARD_VALUE_JOKER) == 1 && getCardCount(CARD_SPADE_ACE) == 1) {
 
-            //°ÑAce+Joker·Åµ½×óÊÖÅÆ
+            //æŠŠAce+Jokeræ”¾åˆ°å·¦æ‰‹ç‰Œ
             addSameCardsToResultCardArray(startIndex, 0);
             resultCardArray[1] = CARD_VALUE_JOKER;
 
@@ -1093,11 +1093,11 @@ bool PokerHands::hasTwoPair() {
             }
         }
 
-        //ÓĞÅÆÖµ¾ÍÓĞ¶Ô×Ó£¬·ñÔòÃ»ÓĞ¶Ô×Ó
+        //æœ‰ç‰Œå€¼å°±æœ‰å¯¹å­ï¼Œå¦åˆ™æ²¡æœ‰å¯¹å­
         return resultCardArray[0] > 0;
     }
 
-    //Èç¹ûÖ»ÊÇÅĞ¶ÏÎåÕÅÅÆ
+    //å¦‚æœåªæ˜¯åˆ¤æ–­äº”å¼ ç‰Œ
     if (cardTotalCount == HIGH_HAND_CARD_COUNT) {
         addSameCardsToResultCardArray(firstPairIndex, 0);
         addSameCardsToResultCardArray(secondPairIndex, onePairCardCount);
@@ -1106,7 +1106,7 @@ bool PokerHands::hasTwoPair() {
         return true;
     }
 
-    //2+2+2+1£º°Ñ×î´óµÄ¶Ô×Ó·Åµ½ÓÒÊÖÅÆ
+    //2+2+2+1ï¼šæŠŠæœ€å¤§çš„å¯¹å­æ”¾åˆ°å³æ‰‹ç‰Œ
     int thirdPairIndex = getSpecialCardCountIndex(secondPairIndex - 1, stopIndex, onePairCardCount);
     if (thirdPairIndex > 0) {
         addSameCardsToResultCardArray(secondPairIndex, 0);
@@ -1117,7 +1117,7 @@ bool PokerHands::hasTwoPair() {
         return true;
     }
 
-    //2+2+A+Joker+1£¬°ÑA+Joker·Åµ½ÓÒÊÖÅÆ
+    //2+2+A+Joker+1ï¼ŒæŠŠA+Jokeræ”¾åˆ°å³æ‰‹ç‰Œ
     if (getCardCount(CARD_VALUE_JOKER) == 1 && getCardCount(CARD_SPADE_ACE) == 1) {
         addSameCardsToResultCardArray(firstPairIndex, 0);
         addSameCardsToResultCardArray(secondPairIndex, onePairCardCount);
@@ -1128,7 +1128,7 @@ bool PokerHands::hasTwoPair() {
         return true;
     }
 
-    //¸ù¾İ¾ßÌåµÄ²ğ·Ö¹æÔò¾ö¶¨ÊÇ·ñ²ğ·Ö¶Ô×Ó
+    //æ ¹æ®å…·ä½“çš„æ‹†åˆ†è§„åˆ™å†³å®šæ˜¯å¦æ‹†åˆ†å¯¹å­
     if (isSplitTwoPairs(firstPairIndex, secondPairIndex)) {
         addSameCardsToResultCardArray(firstPairIndex, 0);
         addSameCardsToResultCardArray(secondPairIndex, HIGH_HAND_CARD_COUNT);
@@ -1147,10 +1147,10 @@ bool PokerHands::hasTwoPair() {
 }
 
 bool PokerHands::hasOnePair() {
-    //¶Ô×ÓÁ½ÕÅÅÆ
+    //å¯¹å­ä¸¤å¼ ç‰Œ
     int onePairCardCount = 2;
 
-    //Ñ°ÕÒÆÕÍ¨Çé¿öµÄ¶Ô×Ó
+    //å¯»æ‰¾æ™®é€šæƒ…å†µçš„å¯¹å­
     int startIndex = getCardValueWithoutSuit(CARD_SPADE_ACE);
     int stopIndex = getCardValueWithoutSuit(CARD_SPADE_2) - 1;
     int onePairIndex = getSpecialCardCountIndex(startIndex, stopIndex, onePairCardCount);
@@ -1164,19 +1164,19 @@ bool PokerHands::hasOnePair() {
         }
     }
 
-    //ÕÒ²»µ½¶Ô×Ó
+    //æ‰¾ä¸åˆ°å¯¹å­
     if (resultCardArray[0] <= 0) {
         return false;
     }
 
-    //Èç¹ûÖ»ÅĞ¶ÏÎåÕÅÅÆ
+    //å¦‚æœåªåˆ¤æ–­äº”å¼ ç‰Œ
     if (getCardCount(CARD_VALUE_COUNT) == HIGH_HAND_CARD_COUNT) {
         addRestCardsToResultCardArray(3);
         fiveCardsType = PHT_ONE_PAIR;
         return true;
     }
 
-    //°Ñ×î´óµÄºÍµÚ¶ş´óµÄµ¥ÅÆ·Åµ½ÓÒÊÖÅÆ
+    //æŠŠæœ€å¤§çš„å’Œç¬¬äºŒå¤§çš„å•ç‰Œæ”¾åˆ°å³æ‰‹ç‰Œ
     startIndex = getCardValueWithoutSuit(CARD_VALUE_JOKER);
     addSpecialCardToResultCardArraySpecialIndex(startIndex, stopIndex, 5);
 

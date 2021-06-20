@@ -1,4 +1,4 @@
-#include "PokerHandsType.h"
+ï»¿#include "PokerHandsType.h"
 
 PAI_GOW_NS_BEGIN
 
@@ -40,33 +40,33 @@ std::string getEnglishName(PokerHandsType type) {
 std::string getChineseName(PokerHandsType type) {
     switch (type) {
     case PHT_HIGH_CARD:
-        return "¸ßÅÆ";
+        return "é«˜ç‰Œ";
     case PHT_ONE_PAIR:
-        return "Ò»¶Ô";
+        return "ä¸€å¯¹";
     case PHT_TWO_PAIR:
-        return "¶ş¶Ô";
+        return "äºŒå¯¹";
     case PHT_THREE_OF_A_KIND:
-        return "ÈıÌõ";
+        return "ä¸‰æ¡";
     case PHT_STRAIGHT:
-        return "Ë³×Ó";
+        return "é¡ºå­";
     case PHT_FLUSH:
-        return "Í¬»¨";
+        return "åŒèŠ±";
     case PHT_FULL_HOUSE:
-        return "ÂúÌÃºì";
+        return "æ»¡å ‚çº¢";
     case PHT_FOUR_OF_A_KIND:
-        return "ËÄÌõ";
+        return "å››æ¡";
     case PHT_STRAIGHT_FLUSH:
-        return "Í¬»¨Ë³";
+        return "åŒèŠ±é¡º";
     case PHT_ROYAL_FLUSH:
-        return "»Ê¼ÒÍ¬»¨Ë³";
+        return "çš‡å®¶åŒèŠ±é¡º";
     case PHT_FIVE_ACES:
-        return "ÎåÌõA";
+        return "äº”æ¡A";
     case PHT_SEVEN_CARD_STRAIGHT_FLUSH_WITH_JOKER:
-        return "ÆßÕÅÅÆÍ¬»¨Ë³°üº¬ÍõÅÆ";
+        return "ä¸ƒå¼ ç‰ŒåŒèŠ±é¡ºåŒ…å«ç‹ç‰Œ";
     case PHT_ROYAL_FLUSH_WITH_SUITED_ROYALS:
-        return "»Ê¼ÒÍ¬»¨Ë³°üº¬»Ê¼ÒÍ¬»¨";
+        return "çš‡å®¶åŒèŠ±é¡ºåŒ…å«çš‡å®¶åŒèŠ±";
     case PHT_SEVEN_CARD_STRAIGHT_FLUSH:
-        return "ÆßÕÅÅÆÍ¬»¨Ë³²»º¬ÍõÅÆ";
+        return "ä¸ƒå¼ ç‰ŒåŒèŠ±é¡ºä¸å«ç‹ç‰Œ";
     default:
         return "";
     }

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "HouseWay/Bally/BallyUnitTest.h"
 #include "HouseWay/Barona/BaronaUnitTest.h"
 #include "HouseWay/BritishColumbia/BritishColumbiaUnitTest.h"

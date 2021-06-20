@@ -1,4 +1,4 @@
-#include "CardSuit.h"
+ï»¿#include "CardSuit.h"
 
 PAI_GOW_NS_BEGIN
 
@@ -26,13 +26,13 @@ CardSuit getSuit(int cardValue) {
 std::string getSuitName(CardSuit suit, bool isEnglish) {
     switch (suit) {
     case CS_SPADE:
-        return isEnglish ? "Spade" : "ºÚÌÒ";
+        return isEnglish ? "Spade" : "é»‘æ¡ƒ";
     case CS_HEART:
-        return isEnglish ? "Heart" : "ºìĞÄ";
+        return isEnglish ? "Heart" : "çº¢å¿ƒ";
     case CS_CLUB:
-        return isEnglish ? "Club" : "Ã·»¨";
+        return isEnglish ? "Club" : "æ¢…èŠ±";
     case CS_DIAMOND:
-        return isEnglish ? "Diamond" : "·½¿é";
+        return isEnglish ? "Diamond" : "æ–¹å—";
     default:
         return "";
     }

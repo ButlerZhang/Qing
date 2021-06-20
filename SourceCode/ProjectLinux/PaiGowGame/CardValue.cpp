@@ -1,4 +1,4 @@
-#include "CardValue.h"
+﻿#include "CardValue.h"
 
 PAI_GOW_NS_BEGIN
 

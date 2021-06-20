@@ -59,6 +59,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>~/Butler/Code/</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -84,6 +85,8 @@
     <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp" />
     <ClCompile Include="..\Share\Boost\BoostLog.cpp" />
     <ClCompile Include="..\Share\Boost\BoostTime.cpp" />
+    <ClCompile Include="..\Share\Database\Database.cpp" />
+    <ClCompile Include="..\Share\Database\MySQLDatabase.cpp" />
     <ClCompile Include="LibeventServer\Config.cpp" />
     <ClCompile Include="LibeventServer\controller\Client.cpp" />
     <ClCompile Include="LibeventServer\controller\HTTPServer.cpp" />
@@ -127,6 +130,8 @@
     <ClInclude Include="..\Share\Boost\BoostLog.h" />
     <ClInclude Include="..\Share\Boost\BoostTime.h" />
     <ClInclude Include="..\Share\Boost\BoostTools.h" />
+    <ClInclude Include="..\Share\Database\Database.h" />
+    <ClInclude Include="..\Share\Database\MySQLDatabase.h" />
     <ClInclude Include="LibeventServer\Config.h" />
     <ClInclude Include="LibeventServer\controller\Client.h" />
     <ClInclude Include="LibeventServer\controller\HTTPServer.h" />
@@ -150,10 +155,10 @@
     <ClInclude Include="LibeventServer\core\tools\OpenSSLContext.h" />
     <ClInclude Include="LibeventServer\handler\httphandler\HTTPHandler.h" />
     <ClInclude Include="LibeventServer\handler\tcphandler\TCPHandler.h" />
+    <ClInclude Include="LibeventServer\libevent_server_main.h" />
     <ClInclude Include="LibeventServer\message\CodedMessage.h" />
     <ClInclude Include="LibeventServer\message\project.pb.h" />
     <ClInclude Include="LibeventServer\model\Model.h" />
-    <ClInclude Include="LibeventServer\Project.h" />
     <ClInclude Include="PaiGowGame\CardSuit.h" />
     <ClInclude Include="PaiGowGame\CardValue.h" />
     <ClInclude Include="PaiGowGame\HouseWayFactory.h" />
@@ -183,8 +188,8 @@
     <ClInclude Include="PaiGowGame\PokerHandsUnitTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LibeventServer\config.ini" />
     <None Include="LibeventServer\message\project.proto" />
-    <None Include="LibeventServer\project.ini" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

@@ -1,6 +1,6 @@
 #include "Config.h"
-#include "../../LinuxTools.h"
-#include "../../../BoostLinux/src/BoostLog.h"
+//#include "../../Linux/LinuxTools.h"
+//#include "../../Share/Boost/BoostLog.h"
 #include "controller/SingleServer.h"
 #include "core/tools/OpenSSLAES.h"
 #include <boost/property_tree/ptree.hpp>

@@ -181,6 +181,8 @@
     <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp" />
     <ClCompile Include="..\Share\Boost\BoostLog.cpp" />
     <ClCompile Include="..\Share\Boost\BoostTime.cpp" />
+    <ClCompile Include="..\Share\Database\Database.cpp" />
+    <ClCompile Include="..\Share\Database\MySQLDatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ProjectLinux\LibeventServer\Config.h" />
@@ -206,10 +208,10 @@
     <ClInclude Include="..\ProjectLinux\LibeventServer\core\tools\OpenSSLContext.h" />
     <ClInclude Include="..\ProjectLinux\LibeventServer\handler\httphandler\HTTPHandler.h" />
     <ClInclude Include="..\ProjectLinux\LibeventServer\handler\tcphandler\TCPHandler.h" />
+    <ClInclude Include="..\ProjectLinux\LibeventServer\libevent_server_main.h" />
     <ClInclude Include="..\ProjectLinux\LibeventServer\message\CodedMessage.h" />
     <ClInclude Include="..\ProjectLinux\LibeventServer\message\project.pb.h" />
     <ClInclude Include="..\ProjectLinux\LibeventServer\model\Model.h" />
-    <ClInclude Include="..\ProjectLinux\LibeventServer\libevent_server_main.cpp" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\CardSuit.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\CardValue.h" />
     <ClInclude Include="..\ProjectLinux\PaiGowGame\HouseWayFactory.h" />
@@ -242,6 +244,8 @@
     <ClInclude Include="..\Share\Boost\BoostLog.h" />
     <ClInclude Include="..\Share\Boost\BoostTime.h" />
     <ClInclude Include="..\Share\Boost\BoostTools.h" />
+    <ClInclude Include="..\Share\Database\Database.h" />
+    <ClInclude Include="..\Share\Database\MySQLDatabase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ProjectLinux\LibeventServer\message\project.proto" />

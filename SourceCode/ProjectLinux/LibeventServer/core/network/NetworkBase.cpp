@@ -1,5 +1,5 @@
 #include "NetworkBase.h"
-#include "../../../../../BoostLinux/src/BoostLog.h"
+#include "../../../../Share/Boost/BoostLog.h"
 #include <arpa/inet.h>
 #include <signal.h>
 

@@ -1,5 +1,5 @@
 #include "Database.h"
-#include "../../BoostLinux/src/BoostLog.h"
+#include "../Boost/BoostLog.h"
 #include <stdlib.h>
 
 

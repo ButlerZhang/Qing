@@ -1,5 +1,6 @@
-#include "PaiGowGame/HouseWayFactory.h"
-#include "LibeventServer/libevent_server_main.cpp"
+//#include "PaiGowGame/HouseWayFactory.h"
+#include "LibeventServer/libevent_server_main.h"
+
 
 
 int main(int argc, char *argv[])
