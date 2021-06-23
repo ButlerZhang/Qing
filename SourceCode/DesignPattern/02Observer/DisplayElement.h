@@ -2,6 +2,7 @@
 #include <iostream>
 #include "WeatherData.h"
 
+//显示基类
 class DisplayElement {
 public:
 
@@ -9,6 +10,7 @@ public:
     virtual void display() = 0;
 };
 
+//目前状况布告板：显示当前观测值
 class CurrentConfitionDisplay : public Observer, public DisplayElement {
 public:
 
@@ -37,6 +39,7 @@ private:
     Subject* m_Subject;
 };
 
+//统计布告板：显示最小、平均和最大的观测值
 class StatisticsDisplay : public Observer, public DisplayElement {
 public:
 
@@ -80,6 +83,7 @@ private:
     Subject* m_Subject;
 };
 
+//预测布告板：显示天气预报
 class ForecastDisplay : public Observer, public DisplayElement {
 public:
 

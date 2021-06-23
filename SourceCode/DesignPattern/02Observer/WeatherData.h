@@ -12,12 +12,12 @@ public:
         m_pressure = 0;
     }
 
-    virtual void registerObserver(Observer* pO) {
+    virtual void registerObserver(Observer *pO) {
         m_observers.push_back(pO);
     }
 
-    virtual void removeObserver(Observer* pO) {
-        std::list<Observer*>::iterator it;
+    virtual void removeObserver(Observer *pO) {
+        std::list<Observer *>::iterator it;
         it = std::find(m_observers.begin(), m_observers.end(), pO);
         if (it != m_observers.end()) {
             m_observers.erase(it);
@@ -28,6 +28,11 @@ public:
         for (auto it = m_observers.cbegin(); it != m_observers.cend(); it++) {
             (*it)->update(m_temperature, m_humidity, m_pressure);
         }
+    }
+
+    virtual void setChange() {
+        //例如当温度变化超过一度时才通知观察者
+        //m_isChange = newTemperature - oldTemperature >= 1.0
     }
 
     float getTemperature() {
@@ -55,7 +60,7 @@ public:
 
 private:
 
-    std::list<Observer*> m_observers;
+    std::list<Observer *> m_observers;
     float m_temperature;
     float m_humidity;
     float m_pressure;
