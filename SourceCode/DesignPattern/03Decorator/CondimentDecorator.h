@@ -2,6 +2,7 @@
 #include <string>
 #include "Beverage.h"
 
+//调料装饰者基类，必须继承自饮料抽象基类
 class CondimentDecorator : public Beverage {
 public:
 
@@ -13,6 +14,7 @@ protected:
     Beverage* m_beverage;
 };
 
+//奶泡是一个装饰者
 class Milk : public CondimentDecorator {
 public:
 
@@ -28,6 +30,7 @@ public:
     }
 };
 
+//摩卡是一个装饰者
 class Mocha : public CondimentDecorator {
 public:
 
@@ -43,6 +46,7 @@ public:
     }
 };
 
+//豆浆是一个装饰者
 class Soy : public CondimentDecorator {
 public:
 

@@ -12,9 +12,6 @@
     <Filter Include="HeadFirst">
       <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\Decorator">
-      <UniqueIdentifier>{6cdc9dfe-4807-41cf-9881-4b23e07748e6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\FactoryMethod">
       <UniqueIdentifier>{ce145291-0539-485d-895f-9b3380a2d91d}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,9 @@
     <Filter Include="02Observer">
       <UniqueIdentifier>{fab2111d-9065-40fd-84c3-9984bfedcb05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03Decorator">
+      <UniqueIdentifier>{d4390eb4-b6fc-48fa-9ca7-d5edbdaa165e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -88,15 +88,6 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
       <Filter>HeadFirst</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Decorator\Beverage.h">
-      <Filter>HeadFirst\Decorator</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Decorator\CondimentDecorator.h">
-      <Filter>HeadFirst\Decorator</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Decorator\CoffeeComponent.h">
-      <Filter>HeadFirst\Decorator</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\FactoryMethod\Pizza.h">
       <Filter>HeadFirst\FactoryMethod</Filter>
@@ -184,6 +175,15 @@
     </ClInclude>
     <ClInclude Include="02Observer\WeatherData.h">
       <Filter>02Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="03Decorator\Beverage.h">
+      <Filter>03Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="03Decorator\CoffeeComponent.h">
+      <Filter>03Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="03Decorator\CondimentDecorator.h">
+      <Filter>03Decorator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

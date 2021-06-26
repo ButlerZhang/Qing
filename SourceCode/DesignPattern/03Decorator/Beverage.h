@@ -8,11 +8,16 @@ enum CupSize {
     CP_COUNT
 };
 
+//饮料抽象基类
 class Beverage {
 public:
 
-    Beverage() : m_cupSize(CP_TALL) {}
-    virtual ~Beverage() {}
+    Beverage() : m_cupSize(CP_TALL), m_description("Unknown Beverage") {
+    }
+
+    virtual ~Beverage() {
+    }
+
     virtual double cost() = 0;
 
     void setSize(CupSize size) {
@@ -29,6 +34,6 @@ public:
 
 protected:
 
-    CupSize m_cupSize;
+    CupSize     m_cupSize;
     std::string m_description;
 };

@@ -122,6 +122,9 @@
     <ClInclude Include="02Observer\Observer.h" />
     <ClInclude Include="02Observer\Subject.h" />
     <ClInclude Include="02Observer\WeatherData.h" />
+    <ClInclude Include="03Decorator\Beverage.h" />
+    <ClInclude Include="03Decorator\CoffeeComponent.h" />
+    <ClInclude Include="03Decorator\CondimentDecorator.h" />
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
@@ -133,9 +136,6 @@
     <ClInclude Include="HeadFirst\Command\Command.h" />
     <ClInclude Include="HeadFirst\Command\Control.h" />
     <ClInclude Include="HeadFirst\Command\Tools.h" />
-    <ClInclude Include="HeadFirst\Decorator\Beverage.h" />
-    <ClInclude Include="HeadFirst\Decorator\CoffeeComponent.h" />
-    <ClInclude Include="HeadFirst\Decorator\CondimentDecorator.h" />
     <ClInclude Include="HeadFirst\FactoryMethod\Pizza.h" />
     <ClInclude Include="HeadFirst\FactoryMethod\PizzaStore.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
