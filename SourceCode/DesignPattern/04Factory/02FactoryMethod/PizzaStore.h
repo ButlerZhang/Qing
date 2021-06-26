@@ -1,11 +1,15 @@
 #pragma once
 #include "Pizza.h"
 
+//披萨商店
 class PizzaStore {
 public:
 
     Pizza* orderPizza(std::string type) {
+        //披萨的类型由顾客决定
         Pizza* pizza = createPizza(type);
+
+        //制作披萨的步骤是固定的
         pizza->prepare();
         pizza->bake();
         pizza->cut();
@@ -18,6 +22,7 @@ public:
 
 class NYStylePizzaStore : public PizzaStore {
 public:
+
     virtual Pizza* createPizza(std::string type) {
         if (type == "cheese") {
             return new NYStyleChessePizza();
@@ -38,6 +43,7 @@ public:
 
 class ChicagoPizzaStore : public PizzaStore {
 public:
+
     virtual Pizza* createPizza(std::string type) {
         if (type == "cheese") {
             return new ChicagoStyleCheesePizza();
@@ -55,3 +61,16 @@ public:
         return nullptr;
     }
 };
+
+
+
+void TestFactoryMethod() {
+    PizzaStore *nyStore = new NYStylePizzaStore();
+    PizzaStore *chicagoStore = new ChicagoPizzaStore();
+
+    Pizza *pizza = nyStore->orderPizza("cheese");
+    std::cout << "Ethan ordered a " << pizza->getName() << std::endl << std::endl;
+
+    pizza = chicagoStore->orderPizza("cheese");
+    std::cout << "Joel ordered a " << pizza->getName() << std::endl << std::endl;
+}

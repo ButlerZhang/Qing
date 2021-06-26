@@ -12,9 +12,6 @@
     <Filter Include="HeadFirst">
       <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\FactoryMethod">
-      <UniqueIdentifier>{ce145291-0539-485d-895f-9b3380a2d91d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\AbstractFactory">
       <UniqueIdentifier>{cb5eab9f-b539-43d4-a104-ec20093446f3}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,18 @@
     <Filter Include="03Decorator">
       <UniqueIdentifier>{d4390eb4-b6fc-48fa-9ca7-d5edbdaa165e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04Factory">
+      <UniqueIdentifier>{fa4dab1c-8d31-412f-8094-665f22507c3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04Factory\02FactoryMethod">
+      <UniqueIdentifier>{528f8860-7310-41c4-8cb7-c8cb9e9612ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04Factory\01StaticMember">
+      <UniqueIdentifier>{e355b6c7-4ed7-49d0-b954-029f17d209cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04Factory\03AbstractFactory">
+      <UniqueIdentifier>{7d4def8f-ce4a-4a28-9b6e-0721fcc7efd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFactory.h">
@@ -88,12 +97,6 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
       <Filter>HeadFirst</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\FactoryMethod\Pizza.h">
-      <Filter>HeadFirst\FactoryMethod</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\FactoryMethod\PizzaStore.h">
-      <Filter>HeadFirst\FactoryMethod</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\AbstractFactory\AFPizza.h">
       <Filter>HeadFirst\AbstractFactory</Filter>
@@ -184,6 +187,21 @@
     </ClInclude>
     <ClInclude Include="03Decorator\CondimentDecorator.h">
       <Filter>03Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="04Factory\02FactoryMethod\Pizza.h">
+      <Filter>04Factory\02FactoryMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="04Factory\02FactoryMethod\PizzaStore.h">
+      <Filter>04Factory\02FactoryMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="04Factory\01SimpleFactory\SimplePizzaFactory.h">
+      <Filter>04Factory\01StaticMember</Filter>
+    </ClInclude>
+    <ClInclude Include="04Factory\01SimpleFactory\SimplePizza.h">
+      <Filter>04Factory\01StaticMember</Filter>
+    </ClInclude>
+    <ClInclude Include="04Factory\01SimpleFactory\SimplePizzaStore.h">
+      <Filter>04Factory\01StaticMember</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

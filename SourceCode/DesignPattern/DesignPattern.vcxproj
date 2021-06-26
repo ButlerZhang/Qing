@@ -125,6 +125,11 @@
     <ClInclude Include="03Decorator\Beverage.h" />
     <ClInclude Include="03Decorator\CoffeeComponent.h" />
     <ClInclude Include="03Decorator\CondimentDecorator.h" />
+    <ClInclude Include="04Factory\01SimpleFactory\SimplePizza.h" />
+    <ClInclude Include="04Factory\01SimpleFactory\SimplePizzaFactory.h" />
+    <ClInclude Include="04Factory\01SimpleFactory\SimplePizzaStore.h" />
+    <ClInclude Include="04Factory\02FactoryMethod\Pizza.h" />
+    <ClInclude Include="04Factory\02FactoryMethod\PizzaStore.h" />
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
@@ -136,8 +141,6 @@
     <ClInclude Include="HeadFirst\Command\Command.h" />
     <ClInclude Include="HeadFirst\Command\Control.h" />
     <ClInclude Include="HeadFirst\Command\Tools.h" />
-    <ClInclude Include="HeadFirst\FactoryMethod\Pizza.h" />
-    <ClInclude Include="HeadFirst\FactoryMethod\PizzaStore.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
     <ClInclude Include="HeadFirst\Iterator\DinerMenu.h" />
     <ClInclude Include="HeadFirst\Iterator\Iterator.h" />

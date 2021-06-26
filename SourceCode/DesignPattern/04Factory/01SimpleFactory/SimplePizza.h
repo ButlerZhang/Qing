@@ -3,11 +3,12 @@
 #include <string>
 #include <iostream>
 
-class Pizza {
+//简单披萨基类
+class SimplePizza {
 public:
 
-    Pizza() {}
-    virtual ~Pizza() {}
+    SimplePizza() {}
+    virtual ~SimplePizza() {}
 
     std::string getName() { return m_name; }
 
@@ -41,26 +42,30 @@ protected:
     std::vector<std::string> m_toppings;    //佐料
 };
 
-class NYStyleChessePizza : public Pizza {
+class CheesePizza : public SimplePizza {
 public:
-    NYStyleChessePizza() {
-        m_name = "NY style Sauce and Cheese Pizza";
-        m_dough = "Thin Crust Dough";
-        m_sauce = "Marinara Sauce";
-        m_toppings.push_back("Grated Reggiano Cheese");
+    CheesePizza() {
+        m_name = "cheese";
     }
 };
 
-class ChicagoStyleCheesePizza : public Pizza {
+class PepperoniPizza : public SimplePizza {
 public:
-    ChicagoStyleCheesePizza() {
-        m_name = "Chicago Style Deep Dish Cheese Pizza";
-        m_dough = "Extra Thick Crust Dough";
-        m_sauce = "Plum Tomato Sauce";
-        m_toppings.push_back("Sharedded Mozzarella Cheese");
+    PepperoniPizza() {
+        m_name = "pepperoni";
     }
+};
 
-    virtual void cut() {
-        std::cout << "Cutting the pizza into square slices" << std::endl;
+class ClamPizza : public SimplePizza {
+public:
+    ClamPizza() {
+        m_name = "ClamPizza";
+    }
+};
+
+class VeggiePizza : public SimplePizza {
+public:
+    VeggiePizza() {
+        m_name = "veggie";
     }
 };

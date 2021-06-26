@@ -1,5 +1,4 @@
 #pragma once
-#include "FactoryMethod/PizzaStore.h"
 #include "Command/Control.h"
 #include "Command/Tools.h"
 #include "Iterator/PancakeHouseMenu.h"
@@ -9,16 +8,7 @@
 
 
 
-void TestFactoryMethod() {
-    PizzaStore *nyStore = new NYStylePizzaStore();
-    PizzaStore *chicagoStore = new ChicagoPizzaStore();
 
-    Pizza *pizza = nyStore->orderPizza("cheese");
-    std::cout << "Ethan ordered a " << pizza->getName() << std::endl << std::endl;
-
-    pizza = chicagoStore->orderPizza("cheese");
-    std::cout << "Joel ordered a " << pizza->getName() << std::endl << std::endl;
-}
 
 void TestCommand() {
     SimpleRemoteControl *remote = new SimpleRemoteControl();
