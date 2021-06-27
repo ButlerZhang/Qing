@@ -1,5 +1,6 @@
 #pragma once
 #include "Tools.h"
+#include <vector>
 
 class Command {
 public:
@@ -23,7 +24,7 @@ public:
 class LightOnCommand : public Command {
 public:
 
-    LightOnCommand(Light* light) {
+    LightOnCommand(Light *light) {
         m_light = light;
     }
 
@@ -37,13 +38,13 @@ public:
 
 private:
 
-    Light* m_light;
+    Light *m_light;
 };
 
 class LightOffCommand : public Command {
 public:
 
-    LightOffCommand(Light* light) {
+    LightOffCommand(Light *light) {
         m_light = light;
     }
 
@@ -57,13 +58,13 @@ public:
 
 private:
 
-    Light* m_light;
+    Light *m_light;
 };
 
 class GargeDoorOpenCommand : public Command {
 public:
 
-    GargeDoorOpenCommand(GarageDoor* gargeDoor) {
+    GargeDoorOpenCommand(GarageDoor *gargeDoor) {
         m_garageDoor = gargeDoor;
     }
 
@@ -77,13 +78,13 @@ public:
 
 private:
 
-    GarageDoor* m_garageDoor;
+    GarageDoor *m_garageDoor;
 };
 
 class GargeDoorCloseCommand : public Command {
 public:
 
-    GargeDoorCloseCommand(GarageDoor* gargeDoor) {
+    GargeDoorCloseCommand(GarageDoor *gargeDoor) {
         m_garageDoor = gargeDoor;
     }
 
@@ -97,5 +98,30 @@ public:
 
 private:
 
-    GarageDoor* m_garageDoor;
+    GarageDoor *m_garageDoor;
+};
+
+class MacroCommand : public Command {
+public:
+
+    MacroCommand(const std::vector<Command *> &commands) {
+        m_commands = commands;
+    }
+
+    virtual void execute() {
+        //ø…“‘≤Ÿ◊›“ª∂—√¸¡Ó
+        for (std::vector<Command*>::size_type index = 0; index < m_commands.size(); index++) {
+            m_commands[index]->execute();
+        }
+    }
+
+    virtual void undo() {
+        for (std::vector<Command*>::size_type index = 0; index < m_commands.size(); index++) {
+            m_commands[index]->undo();
+        }
+    }
+
+private:
+
+    std::vector<Command*> m_commands;
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "Command.h"
+#include <vector>
 
 class SimpleRemoteControl {
 public:
@@ -59,3 +60,22 @@ private:
     std::vector<Command*> m_OffCommand;
 };
 
+
+
+void TestCommand() {
+    SimpleRemoteControl *remote = new SimpleRemoteControl();
+    Light *light = new Light();
+    GarageDoor *garageDoor = new GarageDoor();
+
+    LightOnCommand *lightOn = new LightOnCommand(light);
+    GargeDoorOpenCommand *garageOpen = new GargeDoorOpenCommand(garageDoor);
+
+    remote->setCommand(lightOn);
+    remote->buttonWasPressed();
+
+    remote->setCommand(garageOpen);
+    remote->buttonWasPressed();
+
+    //因为SimpleRemoteControl已经足够说明命令模式了，
+    //所以这里省略了RemoteControl的测试代码。
+}

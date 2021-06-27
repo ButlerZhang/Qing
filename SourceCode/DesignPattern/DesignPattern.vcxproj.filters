@@ -12,12 +12,6 @@
     <Filter Include="HeadFirst">
       <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\Singleton">
-      <UniqueIdentifier>{53446c9a-f0cf-4762-9b5f-39af1343d2cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeadFirst\Command">
-      <UniqueIdentifier>{b4128de3-297d-4694-ac2a-98aee008bfa7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\Adapter">
       <UniqueIdentifier>{e287fd00-c066-470e-852e-b51174a34359}</UniqueIdentifier>
     </Filter>
@@ -72,6 +66,12 @@
     <Filter Include="04Factory\01SimpleFactory">
       <UniqueIdentifier>{e355b6c7-4ed7-49d0-b954-029f17d209cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05Singleton">
+      <UniqueIdentifier>{787de98e-d74a-4591-9b30-774f3d8a85c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06Command">
+      <UniqueIdentifier>{3cff70c0-c249-44c4-bf53-b8694290847f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bridge.h">
@@ -85,30 +85,6 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
       <Filter>HeadFirst</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Singleton\SimpleSingleton.h">
-      <Filter>HeadFirst\Singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Singleton\ThreadSafeSingleton.h">
-      <Filter>HeadFirst\Singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Singleton\UnlockSafeSingleton.h">
-      <Filter>HeadFirst\Singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Singleton\NormalSingleton.h">
-      <Filter>HeadFirst\Singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Singleton\TemplateSingleton.h">
-      <Filter>HeadFirst\Singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Command\Command.h">
-      <Filter>HeadFirst\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Command\Control.h">
-      <Filter>HeadFirst\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Command\Tools.h">
-      <Filter>HeadFirst\Command</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\Adapter\Adapter.h">
       <Filter>HeadFirst\Adapter</Filter>
@@ -190,6 +166,30 @@
     </ClInclude>
     <ClInclude Include="04Factory\03AbstractFactory\PizzaIngredientFactory.h">
       <Filter>04Factory\03AbstractFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="05Singleton\NormalSingleton.h">
+      <Filter>05Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="05Singleton\SimpleSingleton.h">
+      <Filter>05Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="05Singleton\TemplateSingleton.h">
+      <Filter>05Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="05Singleton\ThreadSafeSingleton.h">
+      <Filter>05Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="05Singleton\UnlockSafeSingleton.h">
+      <Filter>05Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="06Command\Command.h">
+      <Filter>06Command</Filter>
+    </ClInclude>
+    <ClInclude Include="06Command\Control.h">
+      <Filter>06Command</Filter>
+    </ClInclude>
+    <ClInclude Include="06Command\Tools.h">
+      <Filter>06Command</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
