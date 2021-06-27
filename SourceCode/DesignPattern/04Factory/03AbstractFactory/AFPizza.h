@@ -14,11 +14,18 @@ class Clams;
 class AFPizza {
 public:
 
-    AFPizza() {}
+    AFPizza() {
+        m_dough = nullptr;
+        m_sauce = nullptr;
+        m_cheese = nullptr;
+        m_pepperoni = nullptr;
+        m_clam = nullptr;
+    }
+
     virtual ~AFPizza() {}
 
     std::string getName() { return m_name; }
-    void setName(const std::string& name) { m_name = name; }
+    void setName(const std::string &name) { m_name = name; }
 
     virtual void prepare() = 0;
 
@@ -37,20 +44,20 @@ public:
 protected:
 
     std::string m_name;                     //名称
-    Dough* m_dough;                         //面团
-    Sauce* m_sauce;                         //酱料
-    std::vector<Veggies*> m_veggies;        //蔬菜
-    Cheese* m_cheese;
-    Pepperoni* m_pepperoni;
-    Clams* m_clam;
+    Dough *m_dough;                         //面团
+    Sauce *m_sauce;                         //酱料
+    Clams *m_clam;                          //哈喇
+    Cheese *m_cheese;                       //芝士
+    Pepperoni *m_pepperoni;                 //香肠
+    std::vector<Veggies *> m_veggies;       //蔬菜
 };
 
-class ChessePizza : public AFPizza {
+class AFChessePizza : public AFPizza {
 public:
 
-    PizzaIngredientFactory* m_ingredientFactory;
+    PizzaIngredientFactory *m_ingredientFactory;
 
-    ChessePizza(PizzaIngredientFactory* ingredientFactory) {
+    AFChessePizza(PizzaIngredientFactory *ingredientFactory) {
         m_ingredientFactory = ingredientFactory;
     }
 
@@ -62,12 +69,12 @@ public:
     }
 };
 
-class ClamPizza : public AFPizza {
+class AFClamPizza : public AFPizza {
 public:
 
-    PizzaIngredientFactory* m_ingredientFactory;
+    PizzaIngredientFactory *m_ingredientFactory;
 
-    ClamPizza(PizzaIngredientFactory* ingredientFactory) {
+    AFClamPizza(PizzaIngredientFactory *ingredientFactory) {
         m_ingredientFactory = ingredientFactory;
     }
 

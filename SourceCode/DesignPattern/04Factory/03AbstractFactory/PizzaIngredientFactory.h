@@ -8,6 +8,7 @@ class Veggies;
 class Pepperoni;
 class Clams;
 
+//ÅûÈøÅäÁÏ¹¤³§
 class PizzaIngredientFactory {
 public:
 

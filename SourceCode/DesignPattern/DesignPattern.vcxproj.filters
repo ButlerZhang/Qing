@@ -74,22 +74,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Bridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Builder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FactoryMethod.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Prototype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
@@ -202,22 +193,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Bridge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Builder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FactoryMethod.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Prototype.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
