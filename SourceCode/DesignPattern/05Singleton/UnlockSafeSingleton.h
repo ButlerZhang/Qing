@@ -1,13 +1,12 @@
 #pragma once
 #include<iostream>
 
-class UnlockSafeSingleton
-{
+class UnlockSafeSingleton {
 public:
 
     //需要类型转换，性能欠缺
-    static UnlockSafeSingleton* GetInstance() {
-        return const_cast<UnlockSafeSingleton*>(m_Instance);
+    static UnlockSafeSingleton *GetInstance() {
+        return const_cast<UnlockSafeSingleton *>(m_Instance);
     }
 
 private:
@@ -22,7 +21,7 @@ private:
 
 private:
 
-    static const UnlockSafeSingleton* m_Instance;
+    static const UnlockSafeSingleton *m_Instance;
 };
 
-const UnlockSafeSingleton* UnlockSafeSingleton::m_Instance = new UnlockSafeSingleton();
+const UnlockSafeSingleton *UnlockSafeSingleton::m_Instance = new UnlockSafeSingleton();

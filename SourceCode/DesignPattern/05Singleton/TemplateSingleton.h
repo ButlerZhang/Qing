@@ -2,11 +2,10 @@
 #include <iostream>
 
 template<typename T>
-class TemplateSingleton
-{
+class TemplateSingleton {
 public:
 
-    static T* GetInstance() {
+    static T *GetInstance() {
         static T m_Instance;
         return &m_Instance;
     }

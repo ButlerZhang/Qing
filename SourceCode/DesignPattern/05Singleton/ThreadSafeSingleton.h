@@ -4,13 +4,12 @@
 
 std::mutex g_Lock;
 
-class ThreadSafeSingleton
-{
+class ThreadSafeSingleton {
 public:
 
     //虽然能保证线程安全，但是多了加锁
     //锁的实现可以改为使用RAII方式，这里只是示例
-    static ThreadSafeSingleton* GetInstance() {
+    static ThreadSafeSingleton *GetInstance() {
         if (m_Instance == NULL) {
             g_Lock.lock();
             if (m_Instance == NULL) { //double check
@@ -34,7 +33,7 @@ private:
 
 private:
 
-    static ThreadSafeSingleton* m_Instance;
+    static ThreadSafeSingleton *m_Instance;
 };
 
-ThreadSafeSingleton* ThreadSafeSingleton::m_Instance = nullptr;
+ThreadSafeSingleton *ThreadSafeSingleton::m_Instance = nullptr;

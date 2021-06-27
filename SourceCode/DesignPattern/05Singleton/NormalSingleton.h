@@ -1,12 +1,11 @@
 #pragma once
 #include <iostream>
 
-class NormalSingleton
-{
+class NormalSingleton {
 public:
 
     //常见的实现方式，大部分情况下够用了
-    static NormalSingleton* GetInstance() {
+    static NormalSingleton *GetInstance() {
         static NormalSingleton m_Instance;
         return &m_Instance;
     }
