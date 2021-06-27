@@ -5,7 +5,8 @@ class SimplePizzaFactory {
 public:
 
     //这个函数通常被声明为静态，可以避免创建工厂对象
-    static SimplePizza *createPizza(std::string type) {
+    //但这里没有使用静态函数来做示例
+    SimplePizza *createPizza(std::string type) {
         if (type == "cheese") {
             return new CheesePizza();
         }

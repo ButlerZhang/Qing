@@ -1,7 +1,7 @@
 #pragma once
 #include "Pizza.h"
 
-//披萨商店
+//披萨商店，定义成抽象基类
 class PizzaStore {
 public:
 
@@ -17,6 +17,8 @@ public:
         return pizza;
     }
 
+    //这里是工厂方法模式的关键点，由不同的派生类具体实现
+    //这个函数，这个方法，就是工厂函数，或称为工厂方法
     virtual Pizza* createPizza(std::string type) = 0;
 };
 

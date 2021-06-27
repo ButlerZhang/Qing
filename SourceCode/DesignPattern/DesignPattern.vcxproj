@@ -130,13 +130,13 @@
     <ClInclude Include="04Factory\01SimpleFactory\SimplePizzaStore.h" />
     <ClInclude Include="04Factory\02FactoryMethod\Pizza.h" />
     <ClInclude Include="04Factory\02FactoryMethod\PizzaStore.h" />
+    <ClInclude Include="04Factory\03AbstractFactory\AFPizza.h" />
+    <ClInclude Include="04Factory\03AbstractFactory\AFPizzaStore.h" />
+    <ClInclude Include="04Factory\03AbstractFactory\PizzaIngredientFactory.h" />
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="FactoryMethod.h" />
-    <ClInclude Include="HeadFirst\AbstractFactory\AFPizza.h" />
-    <ClInclude Include="HeadFirst\AbstractFactory\AFPizzaStore.h" />
-    <ClInclude Include="HeadFirst\AbstractFactory\PizzaIngredientFactory.h" />
     <ClInclude Include="HeadFirst\Adapter\Adapter.h" />
     <ClInclude Include="HeadFirst\Command\Command.h" />
     <ClInclude Include="HeadFirst\Command\Control.h" />
