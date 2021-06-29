@@ -12,9 +12,6 @@
     <Filter Include="HeadFirst">
       <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\Adapter">
-      <UniqueIdentifier>{e287fd00-c066-470e-852e-b51174a34359}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\Facade">
       <UniqueIdentifier>{db480994-3c5d-4421-a6d6-a0c74c6aa909}</UniqueIdentifier>
     </Filter>
@@ -72,6 +69,15 @@
     <Filter Include="06Command">
       <UniqueIdentifier>{3cff70c0-c249-44c4-bf53-b8694290847f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07Adapter">
+      <UniqueIdentifier>{871d4392-ea0e-47cc-8c99-d9108a327005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07Adapter\01ClassAdapter">
+      <UniqueIdentifier>{6bb4866a-e67a-4115-a9ac-31c1f3c895ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07Adapter\02ObjectAdapter">
+      <UniqueIdentifier>{bc1b5336-73f5-40c4-9d99-140dd86f0043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bridge.h">
@@ -85,9 +91,6 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
       <Filter>HeadFirst</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Adapter\Adapter.h">
-      <Filter>HeadFirst\Adapter</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\TemplateMethod\CaffeineBeverage.h">
       <Filter>HeadFirst\TemplateMethod</Filter>
@@ -190,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="06Command\Tools.h">
       <Filter>06Command</Filter>
+    </ClInclude>
+    <ClInclude Include="07Adapter\AdapterClient.h">
+      <Filter>07Adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="07Adapter\ClassAdapter.h">
+      <Filter>07Adapter\01ClassAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="07Adapter\ObjectAdapter.h">
+      <Filter>07Adapter\02ObjectAdapter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

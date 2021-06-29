@@ -141,9 +141,11 @@
     <ClInclude Include="06Command\Command.h" />
     <ClInclude Include="06Command\Control.h" />
     <ClInclude Include="06Command\Tools.h" />
+    <ClInclude Include="07Adapter\AdapterClient.h" />
+    <ClInclude Include="07Adapter\ClassAdapter.h" />
+    <ClInclude Include="07Adapter\ObjectAdapter.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
-    <ClInclude Include="HeadFirst\Adapter\Adapter.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
     <ClInclude Include="HeadFirst\Iterator\DinerMenu.h" />
     <ClInclude Include="HeadFirst\Iterator\Iterator.h" />
