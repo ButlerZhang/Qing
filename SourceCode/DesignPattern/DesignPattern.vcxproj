@@ -144,6 +144,7 @@
     <ClInclude Include="07Adapter\AdapterClient.h" />
     <ClInclude Include="07Adapter\ClassAdapter.h" />
     <ClInclude Include="07Adapter\ObjectAdapter.h" />
+    <ClInclude Include="09TemplateMethod\CaffeineBeverage.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
@@ -154,7 +155,6 @@
     <ClInclude Include="HeadFirst\Iterator\Waitress.h" />
     <ClInclude Include="HeadFirst\State\GumballMachine.h" />
     <ClInclude Include="HeadFirst\State\State.h" />
-    <ClInclude Include="HeadFirst\TemplateMethod\CaffeineBeverage.h" />
     <ClInclude Include="Prototype.h" />
   </ItemGroup>
   <ItemGroup>

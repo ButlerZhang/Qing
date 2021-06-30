@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 
+//咖啡因饮料
 class CaffeineBeverage {
 public:
 
@@ -16,13 +17,18 @@ public:
         }
     }
 
+    //酿造
     virtual void brew() = 0;
+
+    //添加调味品
     virtual void addCondiments() = 0;
 
+    //把水煮沸
     void boilWater() {
         std::cout << "Boiling water" << std::endl;
     }
 
+    //倒进杯子
     void pourInCup() {
         std::cout << "Pouring into cup" << std::endl;
     }
@@ -34,6 +40,7 @@ public:
     }
 };
 
+//茶
 class Tea : public CaffeineBeverage {
 public:
 
@@ -46,6 +53,7 @@ public:
     }
 };
 
+//咖啡
 class Coffee : public CaffeineBeverage {
 public:
 
@@ -58,6 +66,7 @@ public:
     }
 };
 
+//根据Hook判断是否添加饮料
 class CoffeeWithHook : public CaffeineBeverage {
 public:
 
@@ -69,9 +78,20 @@ public:
         std::cout << "Adding Sugar and Milk" << std::endl;
     }
 
+    //由客户决定是否添加调料
     virtual bool customerWantsCondiments() {
         std::string answer;
         std::cin >> answer;
         return (answer == "Y" || answer == "y");
     }
 };
+
+
+
+void TestTemplateMethod() {
+    Tea tea;
+    tea.prepareRecipe();
+
+    Coffee coffee;
+    coffee.prepareRecipe();
+}
