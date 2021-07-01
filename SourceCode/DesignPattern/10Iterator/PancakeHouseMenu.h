@@ -3,6 +3,7 @@
 #include "MenuItem.h"
 #include "Iterator.h"
 
+//煎饼屋菜单
 class PancakeHouseMenu :public Menu {
 public:
 
@@ -28,6 +29,7 @@ public:
                               3.59));
     }
 
+    //这个函数不再需要
     std::list<MenuItem> &getMenuItems() {
         return m_menuItems;
     }

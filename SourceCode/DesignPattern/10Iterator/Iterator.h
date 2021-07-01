@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include <list>
 #include <vector>
 #include "MenuItem.h"
@@ -16,6 +17,7 @@ public:
     virtual Iterator *createIterator() = 0;
 };
 
+//²ÍÌü²Ëµ¥µü´úÆ÷
 class DinerMenuIterator : public Iterator {
 public:
 
@@ -39,6 +41,7 @@ private:
     int m_position;
 };
 
+//¼å±ýÎÝµü´úÆ÷
 class PancakeHouseIterator : public Iterator {
 public:
 
@@ -65,5 +68,28 @@ public:
 private:
 
     std::list<MenuItem> &m_items;
+    int m_position;
+};
+
+//¿§·Èµü´úÆ÷
+class CafeIterator : public Iterator {
+public:
+
+    CafeIterator(std::map<int, MenuItem> &items) : m_items(items) {
+        m_position = 0;
+    }
+
+    virtual bool hasNext() {
+        return m_position < m_items.size();
+    }
+
+    virtual MenuItem *next() {
+        std::map<int, MenuItem>::iterator it = m_items.find(m_position++);
+        return it != m_items.end() ? &(it->second) : nullptr;
+    }
+
+private:
+
+    std::map<int, MenuItem> &m_items;
     int m_position;
 };

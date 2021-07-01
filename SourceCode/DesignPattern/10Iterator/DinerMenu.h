@@ -3,6 +3,7 @@
 #include "MenuItem.h"
 #include "Iterator.h"
 
+//餐厅菜单
 class DinerMenu : public Menu {
 public:
 
@@ -28,6 +29,7 @@ public:
                               3.05));
     }
 
+    //这个函数不再需要
     std::vector<MenuItem> &getMenuItems() {
         return m_menuItems;
     }

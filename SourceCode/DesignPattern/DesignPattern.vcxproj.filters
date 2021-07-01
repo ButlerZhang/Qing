@@ -12,9 +12,6 @@
     <Filter Include="HeadFirst">
       <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\Iterator">
-      <UniqueIdentifier>{deb42dd3-24b9-4888-9997-9066d83f6fc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\State">
       <UniqueIdentifier>{03ed4b98-cc5e-46d0-955f-ff697446f8ee}</UniqueIdentifier>
     </Filter>
@@ -78,6 +75,9 @@
     <Filter Include="09TemplateMethod">
       <UniqueIdentifier>{8a0aa4ed-b6c8-483f-a529-5decefdf1c0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="10Iterator">
+      <UniqueIdentifier>{af43eb6f-3b58-4085-ad72-9377cb105e86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bridge.h">
@@ -91,21 +91,6 @@
     </ClInclude>
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
       <Filter>HeadFirst</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Iterator\DinerMenu.h">
-      <Filter>HeadFirst\Iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Iterator\Iterator.h">
-      <Filter>HeadFirst\Iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Iterator\MenuItem.h">
-      <Filter>HeadFirst\Iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Iterator\PancakeHouseMenu.h">
-      <Filter>HeadFirst\Iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\Iterator\Waitress.h">
-      <Filter>HeadFirst\Iterator</Filter>
     </ClInclude>
     <ClInclude Include="HeadFirst\State\State.h">
       <Filter>HeadFirst\State</Filter>
@@ -202,6 +187,24 @@
     </ClInclude>
     <ClInclude Include="09TemplateMethod\CaffeineBeverage.h">
       <Filter>09TemplateMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="10Iterator\DinerMenu.h">
+      <Filter>10Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="10Iterator\Iterator.h">
+      <Filter>10Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="10Iterator\MenuItem.h">
+      <Filter>10Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="10Iterator\PancakeHouseMenu.h">
+      <Filter>10Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="10Iterator\Waitress.h">
+      <Filter>10Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="10Iterator\CafeMenu.h">
+      <Filter>10Iterator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

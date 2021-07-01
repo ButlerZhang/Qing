@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+//菜单项
 class MenuItem {
 public:
     MenuItem(const std::string &name,
@@ -31,8 +32,8 @@ public:
 
 private:
 
-    bool m_vegetarian;
-    double m_price;
-    std::string m_name;
-    std::string m_description;
+    bool m_vegetarian;              //是否是素食主义者
+    double m_price;                 //价格
+    std::string m_name;             //菜名
+    std::string m_description;      //描述
 };
