@@ -78,6 +78,9 @@
     <Filter Include="10Iterator">
       <UniqueIdentifier>{af43eb6f-3b58-4085-ad72-9377cb105e86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="11Composite">
+      <UniqueIdentifier>{56a65c2c-8342-4f14-a6db-9217d6556868}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bridge.h">
@@ -205,6 +208,18 @@
     </ClInclude>
     <ClInclude Include="10Iterator\CafeMenu.h">
       <Filter>10Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="11Composite\MenuComponent.h">
+      <Filter>11Composite</Filter>
+    </ClInclude>
+    <ClInclude Include="11Composite\CMenuItem.h">
+      <Filter>11Composite</Filter>
+    </ClInclude>
+    <ClInclude Include="11Composite\CMenu.h">
+      <Filter>11Composite</Filter>
+    </ClInclude>
+    <ClInclude Include="11Composite\CWaitress.h">
+      <Filter>11Composite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

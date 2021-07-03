@@ -151,6 +151,10 @@
     <ClInclude Include="10Iterator\MenuItem.h" />
     <ClInclude Include="10Iterator\PancakeHouseMenu.h" />
     <ClInclude Include="10Iterator\Waitress.h" />
+    <ClInclude Include="11Composite\CMenu.h" />
+    <ClInclude Include="11Composite\CMenuItem.h" />
+    <ClInclude Include="11Composite\MenuComponent.h" />
+    <ClInclude Include="11Composite\CWaitress.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />

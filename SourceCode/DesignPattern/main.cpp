@@ -4,6 +4,7 @@
 #include "04Factory/02FactoryMethod/PizzaStore.h"
 #include "09TemplateMethod/CaffeineBeverage.h"
 #include "10Iterator/Waitress.h"
+#include "11Composite/CWaitress.h"
 #include <Windows.h>
 
 
@@ -16,7 +17,8 @@ int main()
     //TestDecorator();
     //TestFactoryMethod();
     //TestTemplateMethod();
-    TestIterator();
+    //TestIterator();
+    TestComposite();
     system("pause");
     return 0;
 }
