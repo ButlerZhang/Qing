@@ -81,6 +81,12 @@
     <Filter Include="12State">
       <UniqueIdentifier>{d2a63a42-8812-424d-ad72-b0a26bd95735}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13Proxy">
+      <UniqueIdentifier>{ee8a76f5-ea09-4008-a58c-0b9f7416e66d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99Compound">
+      <UniqueIdentifier>{9473da38-c8a4-4444-9ac3-d2223b88bc51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bridge.h">
@@ -217,6 +223,24 @@
     </ClInclude>
     <ClInclude Include="12State\State.h">
       <Filter>12State</Filter>
+    </ClInclude>
+    <ClInclude Include="99Compound\CDuck.h">
+      <Filter>99Compound</Filter>
+    </ClInclude>
+    <ClInclude Include="99Compound\CFactory.h">
+      <Filter>99Compound</Filter>
+    </ClInclude>
+    <ClInclude Include="99Compound\CGoose.h">
+      <Filter>99Compound</Filter>
+    </ClInclude>
+    <ClInclude Include="99Compound\DuckSimulator.h">
+      <Filter>99Compound</Filter>
+    </ClInclude>
+    <ClInclude Include="99Compound\Quackable.h">
+      <Filter>99Compound</Filter>
+    </ClInclude>
+    <ClInclude Include="99Compound\QuackObservable.h">
+      <Filter>99Compound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

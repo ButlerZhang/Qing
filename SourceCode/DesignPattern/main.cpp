@@ -6,6 +6,7 @@
 #include "10Iterator/Waitress.h"
 #include "11Composite/CWaitress.h"
 #include "12State/GumballMachine.h"
+#include "99Compound/DuckSimulator.h"
 #include <Windows.h>
 
 
@@ -20,7 +21,8 @@ int main()
     //TestTemplateMethod();
     //TestIterator();
     //TestComposite();
-    TestState();
+    //TestState();
+    DuckSimulator::test();
     system("pause");
     return 0;
 }
