@@ -2,8 +2,6 @@
 #include "GumballMachine.h"
 #include "State.h"
 
-
-
 GumballMachine::GumballMachine(int numberGumballs) {
     m_soldOutState = new SoldOutState(this);
     m_noQuarterState = new NoQuarterState(this);
@@ -41,4 +39,15 @@ void GumballMachine::releaseBall() {
 void GumballMachine::refill(int numberGumballs) {
     m_Count = numberGumballs;
     setState(m_noQuarterState);
+}
+
+void TestState() {
+    GumballMachine gumballMachine(5);
+    gumballMachine.insertQuarter();
+    gumballMachine.turnCrank();
+
+    gumballMachine.insertQuarter();
+    gumballMachine.turnCrank();
+    gumballMachine.insertQuarter();
+    gumballMachine.turnCrank();
 }

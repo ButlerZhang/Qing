@@ -2,6 +2,7 @@
 #include <iostream>
 #include "GumballMachine.h"
 
+//状态抽象基类
 class State {
 public:
 
@@ -15,6 +16,7 @@ protected:
     GumballMachine *m_machine;
 };
 
+//可售状态
 class SoldState : public State {
 public:
 
@@ -46,6 +48,7 @@ public:
     }
 };
 
+//售罄状态
 class SoldOutState : public State {
 public:
 
@@ -70,6 +73,7 @@ public:
     }
 };
 
+//没有25美分钱状态
 class NoQuarterState : public State {
 public:
 
@@ -95,6 +99,7 @@ public:
     }
 };
 
+//有25美分状态
 class HasQuarterState : public State {
 public:
 
@@ -127,6 +132,7 @@ public:
     }
 };
 
+//赢状态
 class WinnerState : public State {
 public:
 

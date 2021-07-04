@@ -5,6 +5,7 @@
 #include "09TemplateMethod/CaffeineBeverage.h"
 #include "10Iterator/Waitress.h"
 #include "11Composite/CWaitress.h"
+#include "12State/GumballMachine.h"
 #include <Windows.h>
 
 
@@ -18,7 +19,8 @@ int main()
     //TestFactoryMethod();
     //TestTemplateMethod();
     //TestIterator();
-    TestComposite();
+    //TestComposite();
+    TestState();
     system("pause");
     return 0;
 }

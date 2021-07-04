@@ -12,9 +12,6 @@
     <Filter Include="HeadFirst">
       <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeadFirst\State">
-      <UniqueIdentifier>{03ed4b98-cc5e-46d0-955f-ff697446f8ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeadFirst\Bridge">
       <UniqueIdentifier>{796ca652-da75-44b0-b23d-c10f60f83660}</UniqueIdentifier>
     </Filter>
@@ -81,6 +78,9 @@
     <Filter Include="11Composite">
       <UniqueIdentifier>{56a65c2c-8342-4f14-a6db-9217d6556868}</UniqueIdentifier>
     </Filter>
+    <Filter Include="12State">
+      <UniqueIdentifier>{d2a63a42-8812-424d-ad72-b0a26bd95735}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bridge.h">
@@ -91,15 +91,6 @@
     </ClInclude>
     <ClInclude Include="Prototype.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\HeadFirstTestMain.h">
-      <Filter>HeadFirst</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\State\State.h">
-      <Filter>HeadFirst\State</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFirst\State\GumballMachine.h">
-      <Filter>HeadFirst\State</Filter>
     </ClInclude>
     <ClInclude Include="01Strategy\Duck.h">
       <Filter>01Strategy</Filter>
@@ -221,6 +212,12 @@
     <ClInclude Include="11Composite\CWaitress.h">
       <Filter>11Composite</Filter>
     </ClInclude>
+    <ClInclude Include="12State\GumballMachine.h">
+      <Filter>12State</Filter>
+    </ClInclude>
+    <ClInclude Include="12State\State.h">
+      <Filter>12State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bridge.cpp">
@@ -235,8 +232,8 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HeadFirst\State\GumballMachine.cpp">
-      <Filter>HeadFirst\State</Filter>
+    <ClCompile Include="12State\GumballMachine.cpp">
+      <Filter>12State</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

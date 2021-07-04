@@ -2,6 +2,7 @@
 
 class State;
 
+//糖果机
 class GumballMachine {
 public:
 
@@ -30,6 +31,10 @@ private:
     State *m_soldState;
     State *m_winnerState;
 
-    int m_Count;
-    State *m_State;
+    int m_Count;                //糖果数目
+    State *m_State;             //当前状态
 };
+
+
+
+void TestState();

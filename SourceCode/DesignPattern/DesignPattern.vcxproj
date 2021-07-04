@@ -155,17 +155,16 @@
     <ClInclude Include="11Composite\CMenuItem.h" />
     <ClInclude Include="11Composite\MenuComponent.h" />
     <ClInclude Include="11Composite\CWaitress.h" />
+    <ClInclude Include="12State\GumballMachine.h" />
+    <ClInclude Include="12State\State.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Builder.h" />
-    <ClInclude Include="HeadFirst\HeadFirstTestMain.h" />
-    <ClInclude Include="HeadFirst\State\GumballMachine.h" />
-    <ClInclude Include="HeadFirst\State\State.h" />
     <ClInclude Include="Prototype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="12State\GumballMachine.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Builder.cpp" />
-    <ClCompile Include="HeadFirst\State\GumballMachine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Prototype.cpp" />
   </ItemGroup>
