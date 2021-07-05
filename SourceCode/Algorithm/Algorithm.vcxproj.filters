@@ -51,29 +51,17 @@
     <ClInclude Include="ITA\004_VectorLite.h">
       <Filter>ITA</Filter>
     </ClInclude>
-    <ClInclude Include="ITA\AlgorithmTest.h">
-      <Filter>ITA</Filter>
-    </ClInclude>
     <ClInclude Include="LeetCode\0009_PalindromeNumber.h">
       <Filter>LeetCode</Filter>
     </ClInclude>
+    <ClInclude Include="ITA\ITATest.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
+    <ClInclude Include="ITA\ITACommon.h">
+      <Filter>ITA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ITA\001_MaxSubSum.cpp">
-      <Filter>ITA</Filter>
-    </ClCompile>
-    <ClCompile Include="ITA\002_BinarySearch.cpp">
-      <Filter>ITA</Filter>
-    </ClCompile>
-    <ClCompile Include="ITA\003_CommonMath.cpp">
-      <Filter>ITA</Filter>
-    </ClCompile>
-    <ClCompile Include="ITA\004_VectorLite.cpp">
-      <Filter>ITA</Filter>
-    </ClCompile>
-    <ClCompile Include="ITA\AlgorithmTest.cpp">
-      <Filter>ITA</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>

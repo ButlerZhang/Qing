@@ -1,12 +1,10 @@
-#include "ITA/AlgorithmTest.h"
+#include "ITA/ITATest.h"
 #include "LeetCode/LeetCodeTest.h"
-
-
 
 int main(int argc, char *argv[])
 {
-    //TestITA();
-    LeetCode::Test();
+    ITA::Test();
+    //LeetCode::Test();
     system("pause");
     return 0;
 }
