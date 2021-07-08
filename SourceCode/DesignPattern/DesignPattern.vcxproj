@@ -157,22 +157,22 @@
     <ClInclude Include="11Composite\CWaitress.h" />
     <ClInclude Include="12State\GumballMachine.h" />
     <ClInclude Include="12State\State.h" />
+    <ClInclude Include="14Bridge\Bridge.h" />
+    <ClInclude Include="15Builder\Builder.h" />
+    <ClInclude Include="21Prototype\Prototype.h" />
     <ClInclude Include="99Compound\CDuck.h" />
     <ClInclude Include="99Compound\CFactory.h" />
     <ClInclude Include="99Compound\CGoose.h" />
     <ClInclude Include="99Compound\DuckSimulator.h" />
     <ClInclude Include="99Compound\Quackable.h" />
     <ClInclude Include="99Compound\QuackObservable.h" />
-    <ClInclude Include="Bridge.h" />
-    <ClInclude Include="Builder.h" />
-    <ClInclude Include="Prototype.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="12State\GumballMachine.cpp" />
-    <ClCompile Include="Bridge.cpp" />
-    <ClCompile Include="Builder.cpp" />
+    <ClCompile Include="14Bridge\Bridge.cpp" />
+    <ClCompile Include="15Builder\Builder.cpp" />
+    <ClCompile Include="21Prototype\Prototype.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Prototype.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

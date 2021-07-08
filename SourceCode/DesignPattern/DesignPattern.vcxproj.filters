@@ -1,35 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="HeadFirst">
-      <UniqueIdentifier>{d9e3861e-0c43-4af8-8363-d5e8b482c6ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeadFirst\Bridge">
-      <UniqueIdentifier>{796ca652-da75-44b0-b23d-c10f60f83660}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeadFirst\Builder">
-      <UniqueIdentifier>{a45b64d4-adb1-4dfd-b8d5-d20fa5ec8872}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeadFirst\Flyweight">
-      <UniqueIdentifier>{22530787-3644-4ab0-914b-73cdfc73e239}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeadFirst\Mediator">
-      <UniqueIdentifier>{16a2bbc0-a048-4a14-8362-45b0626fd464}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeadFirst\Prototype">
-      <UniqueIdentifier>{2a38e394-2e47-41bc-8ea0-f3234b53f828}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeadFirst\Visitor">
-      <UniqueIdentifier>{d508481a-3133-4b40-b629-479a88809bc6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01Strategy">
       <UniqueIdentifier>{f45d0e94-b38a-4afd-aae7-f5646c13e77b}</UniqueIdentifier>
     </Filter>
@@ -87,17 +58,38 @@
     <Filter Include="99Compound">
       <UniqueIdentifier>{9473da38-c8a4-4444-9ac3-d2223b88bc51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="100MVC">
+      <UniqueIdentifier>{4c732aea-d7ff-4acd-b4dd-b6f14e94b1c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="14Bridge">
+      <UniqueIdentifier>{32f75d9d-20ca-4b68-8116-20974ad3631d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="15Builder">
+      <UniqueIdentifier>{06a415f8-e252-4c74-9d36-5d5c1a50dd9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="16ChainOfResponsibility">
+      <UniqueIdentifier>{678d4fad-7442-427b-a4ef-d4042775c268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="17Flyweight">
+      <UniqueIdentifier>{91f8ff83-bd90-4cac-84df-4964209ebfa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="18Interpreter">
+      <UniqueIdentifier>{8c845744-4b06-4535-a442-ef64978bd9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="19Mediator">
+      <UniqueIdentifier>{1f82099b-107e-4a4d-9172-394434f18b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="20Memento">
+      <UniqueIdentifier>{6a509b1d-4289-4b14-a3ab-8d5fb6cf7a8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="21Prototype">
+      <UniqueIdentifier>{429dd795-39c2-42d5-b861-b31483e64b6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="22Visitor">
+      <UniqueIdentifier>{a81f4f5e-6e35-48f6-b7e3-e69f1e07408b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bridge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Builder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Prototype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="01Strategy\Duck.h">
       <Filter>01Strategy</Filter>
     </ClInclude>
@@ -242,22 +234,29 @@
     <ClInclude Include="99Compound\QuackObservable.h">
       <Filter>99Compound</Filter>
     </ClInclude>
+    <ClInclude Include="14Bridge\Bridge.h">
+      <Filter>14Bridge</Filter>
+    </ClInclude>
+    <ClInclude Include="15Builder\Builder.h">
+      <Filter>15Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="21Prototype\Prototype.h">
+      <Filter>21Prototype</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bridge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Builder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Prototype.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="12State\GumballMachine.cpp">
       <Filter>12State</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="14Bridge\Bridge.cpp">
+      <Filter>14Bridge</Filter>
+    </ClCompile>
+    <ClCompile Include="15Builder\Builder.cpp">
+      <Filter>15Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="21Prototype\Prototype.cpp">
+      <Filter>21Prototype</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
