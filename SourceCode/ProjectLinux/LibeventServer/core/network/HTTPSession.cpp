@@ -1,6 +1,6 @@
 #include "HTTPSession.h"
-#include "../../../../../../Linux/LinuxTools.h"
-#include "../../../../Share/Boost/BoostLog.h"
+#include "../../../LinuxTools.h"
+#include "../../../Share/Boost/BoostLog.h"
 #include<boost/date_time/posix_time/posix_time.hpp>
 
 

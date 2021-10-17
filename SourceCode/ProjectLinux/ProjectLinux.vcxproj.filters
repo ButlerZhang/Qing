@@ -67,14 +67,14 @@
     <Filter Include="LibeventServer\handler\httphandler">
       <UniqueIdentifier>{62618412-7b00-4d5b-a573-cd56f9791ce3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference">
-      <UniqueIdentifier>{f53d7506-1ca6-40c4-abee-c48804e2c8fa}</UniqueIdentifier>
+    <Filter Include="Share">
+      <UniqueIdentifier>{5eb9d2cd-f988-4429-baa5-b9e35a5ca727}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Boost">
-      <UniqueIdentifier>{0f4e05ae-0256-4482-84a4-ae2409d02f8e}</UniqueIdentifier>
+    <Filter Include="Share\Boost">
+      <UniqueIdentifier>{9a42e268-b9e8-476a-a2ec-017365ac4aed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Reference\Database">
-      <UniqueIdentifier>{5e0c3f22-315c-4a66-ac49-d181cafbeacd}</UniqueIdentifier>
+    <Filter Include="Share\Database">
+      <UniqueIdentifier>{561ed547-6659-4e7f-9332-40f448f5b8ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -184,20 +184,20 @@
     <ClCompile Include="LibeventServer\message\project.pb.cc">
       <Filter>LibeventServer\message</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
-      <Filter>Reference\Boost</Filter>
+    <ClCompile Include="Share\Database\Database.cpp">
+      <Filter>Share\Database</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
-      <Filter>Reference\Boost</Filter>
+    <ClCompile Include="Share\Database\MySQLDatabase.cpp">
+      <Filter>Share\Database</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
-      <Filter>Reference\Boost</Filter>
+    <ClCompile Include="Share\Boost\BoostFileSystem.cpp">
+      <Filter>Share\Boost</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Database\Database.cpp">
-      <Filter>Reference\Database</Filter>
+    <ClCompile Include="Share\Boost\BoostLog.cpp">
+      <Filter>Share\Boost</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Database\MySQLDatabase.cpp">
-      <Filter>Reference\Database</Filter>
+    <ClCompile Include="Share\Boost\BoostTime.cpp">
+      <Filter>Share\Boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -360,29 +360,33 @@
     <ClInclude Include="LibeventServer\model\Model.h">
       <Filter>LibeventServer\model</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostFileSystem.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostFormat.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostLog.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostTime.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostTools.h">
-      <Filter>Reference\Boost</Filter>
-    </ClInclude>
     <ClInclude Include="LibeventServer\libevent_server_main.h">
       <Filter>LibeventServer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Database\Database.h">
-      <Filter>Reference\Database</Filter>
+    <ClInclude Include="Share\Database\Database.h">
+      <Filter>Share\Database</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Database\MySQLDatabase.h">
-      <Filter>Reference\Database</Filter>
+    <ClInclude Include="Share\Database\MySQLDatabase.h">
+      <Filter>Share\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Share\Boost\BoostFileSystem.h">
+      <Filter>Share\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="Share\Boost\BoostFormat.h">
+      <Filter>Share\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="Share\Boost\BoostLog.h">
+      <Filter>Share\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="Share\Boost\BoostTime.h">
+      <Filter>Share\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="Share\Boost\BoostTools.h">
+      <Filter>Share\Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="LinuxTools.h" />
+    <ClInclude Include="Share\HexString.h">
+      <Filter>Share</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

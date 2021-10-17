@@ -1,5 +1,5 @@
 #include "SingleEventBaseServer.h"
-#include "../../../../Share/Boost/BoostLog.h"
+#include "../../../Share/Boost/BoostLog.h"
 #include "ThreadNoticeQueue.h"
 
 

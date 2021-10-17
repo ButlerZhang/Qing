@@ -1,6 +1,6 @@
 #include "ServerNetworkMessageHandler.h"
 #include "SingleEventBaseServer.h"
-#include "../../../../Share/Boost/BoostLog.h"
+#include "../../../Share/Boost/BoostLog.h"
 #include <thread>
 #include <unistd.h>
 #include <sstream>

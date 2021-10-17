@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../../Share/Boost/BoostLog.h"
+#include "../../../Share/Boost/BoostLog.h"
 #include <openssl/ssl.h>
 
 

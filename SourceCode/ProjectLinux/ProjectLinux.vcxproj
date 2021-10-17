@@ -59,7 +59,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/Butler/Code/</RemoteRootDir>
+    <RemoteRootDir>~/Code/</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -82,11 +82,6 @@
     <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp" />
-    <ClCompile Include="..\Share\Boost\BoostLog.cpp" />
-    <ClCompile Include="..\Share\Boost\BoostTime.cpp" />
-    <ClCompile Include="..\Share\Database\Database.cpp" />
-    <ClCompile Include="..\Share\Database\MySQLDatabase.cpp" />
     <ClCompile Include="LibeventServer\Config.cpp" />
     <ClCompile Include="LibeventServer\controller\Client.cpp" />
     <ClCompile Include="LibeventServer\controller\HTTPServer.cpp" />
@@ -123,15 +118,13 @@
     <ClCompile Include="PaiGowGame\HouseWay\TrumpPlaza\TrumpPlazaPokerHands.cpp" />
     <ClCompile Include="PaiGowGame\PokerHands.cpp" />
     <ClCompile Include="PaiGowGame\PokerHandsType.cpp" />
+    <ClCompile Include="Share\Boost\BoostFileSystem.cpp" />
+    <ClCompile Include="Share\Boost\BoostLog.cpp" />
+    <ClCompile Include="Share\Boost\BoostTime.cpp" />
+    <ClCompile Include="Share\Database\Database.cpp" />
+    <ClCompile Include="Share\Database\MySQLDatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Share\Boost\BoostFileSystem.h" />
-    <ClInclude Include="..\Share\Boost\BoostFormat.h" />
-    <ClInclude Include="..\Share\Boost\BoostLog.h" />
-    <ClInclude Include="..\Share\Boost\BoostTime.h" />
-    <ClInclude Include="..\Share\Boost\BoostTools.h" />
-    <ClInclude Include="..\Share\Database\Database.h" />
-    <ClInclude Include="..\Share\Database\MySQLDatabase.h" />
     <ClInclude Include="LibeventServer\Config.h" />
     <ClInclude Include="LibeventServer\controller\Client.h" />
     <ClInclude Include="LibeventServer\controller\HTTPServer.h" />
@@ -159,6 +152,7 @@
     <ClInclude Include="LibeventServer\message\CodedMessage.h" />
     <ClInclude Include="LibeventServer\message\project.pb.h" />
     <ClInclude Include="LibeventServer\model\Model.h" />
+    <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="PaiGowGame\CardSuit.h" />
     <ClInclude Include="PaiGowGame\CardValue.h" />
     <ClInclude Include="PaiGowGame\HouseWayFactory.h" />
@@ -186,6 +180,14 @@
     <ClInclude Include="PaiGowGame\PokerHands.h" />
     <ClInclude Include="PaiGowGame\PokerHandsType.h" />
     <ClInclude Include="PaiGowGame\PokerHandsUnitTest.h" />
+    <ClInclude Include="Share\Boost\BoostFileSystem.h" />
+    <ClInclude Include="Share\Boost\BoostFormat.h" />
+    <ClInclude Include="Share\Boost\BoostLog.h" />
+    <ClInclude Include="Share\Boost\BoostTime.h" />
+    <ClInclude Include="Share\Boost\BoostTools.h" />
+    <ClInclude Include="Share\Database\Database.h" />
+    <ClInclude Include="Share\Database\MySQLDatabase.h" />
+    <ClInclude Include="Share\HexString.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LibeventServer\config.ini" />
@@ -193,7 +195,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0\;D:\9.Code\Qing\OpenSource\protobuf-3.18.1\src;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

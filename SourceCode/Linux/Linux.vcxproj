@@ -52,7 +52,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/Butler/Code/</RemoteRootDir>
+    <RemoteRootDir>~/Code/</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -65,8 +65,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>a</TargetName>
-    <IncludePath>/usr/local/mysql/include/;/usr/include/mysql/;$(IncludePath)</IncludePath>
-    <LibraryPath>/usr/local/lib/;/usr/lib/;/usr/bin/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>/usr/local/mysql/include/;/usr/include/mysql/;$(IncludePath)</IncludePath>
@@ -122,13 +122,13 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0\;..\..\OpenSource\protobuf-3.8.0\src\;..\..\OpenSource\openssl-1.1.1b\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_LOG_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>event;pthread;uuid;crypto;ssl;event_openssl;protobuf;z;boost_log_setup;boost_log;boost_date_time;boost_thread;boost_system;boost_filesystem;mysqlclient;%(LibraryDependencies)</LibraryDependencies>
+      <LibraryDependencies>uuid;%(LibraryDependencies)</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

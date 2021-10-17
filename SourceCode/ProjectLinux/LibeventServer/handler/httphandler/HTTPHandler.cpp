@@ -1,6 +1,6 @@
 #include "HTTPHandler.h"
-#include "../../../../Share/Database/MySQLDatabase.h"
-#include "../../../../Share/Boost/BoostLog.h"
+#include "../../../Share/Database/MySQLDatabase.h"
+#include "../../../Share/Boost/BoostLog.h"
 #include "../../core/network/ThreadNoticeQueue.h"
 #include "../../controller/HTTPServer.h"
 #include <event.h>

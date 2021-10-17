@@ -1,7 +1,7 @@
 ﻿#include "WatchDog.h"
 #include "../Config.h"
-#include "../../../Share/Boost/BoostLog.h"
-#include "../../../../../Linux/LinuxTools.h"
+#include "../../Share/Boost/BoostLog.h"
+#include "../../LinuxTools.h"
 #include "../message/CodedMessage.h"
 #include "../message/project.pb.h"
 #include <sys/vfs.h>
