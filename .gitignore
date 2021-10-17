@@ -244,13 +244,13 @@ ModelManifest.xml
 
 # user define
 
-OpenSource/boost_1_72_0/bin.v2/*
-OpenSource/boost_1_72_0/stage/*
-OpenSource/boost_1_72_0/boost/chrono/stopwatches
-OpenSource/boost_1_72_0/b2.exe
-OpenSource/boost_1_72_0/bjam.exe
-OpenSource/boost_1_72_0/project-config.jam
-OpenSource/boost_1_72_0/boost/chrono/stopwatches.hpp
+OpenSource/boost_1_77_0/bin.v2/*
+OpenSource/boost_1_77_0/stage/*
+OpenSource/boost_1_77_0/boost/chrono/stopwatches
+OpenSource/boost_1_77_0/b2.exe
+OpenSource/boost_1_77_0/bjam.exe
+OpenSource/boost_1_77_0/project-config.jam
+OpenSource/boost_1_77_0/boost/chrono/stopwatches.hpp
 OpenSource/openssl-1.1.1b/ms/*
 OpenSource/openssl-1.1.1b/ssl/*
 OpenSource/openssl-1.1.1b/apps/*
@@ -273,33 +273,20 @@ OpenSource/openssl-1.1.1b/libssl.exp
 OpenSource/openssl-1.1.1b/libssl.lib
 OpenSource/openssl-1.1.1b/libssl.rc
 OpenSource/openssl-1.1.1b/libssl.res
-OpenSource/protobuf-3.8.0/windows/CMakeFiles
-OpenSource/protobuf-3.8.0/windows/libprotobuf.dir
-OpenSource/protobuf-3.8.0/windows/libprotoc.dir
-OpenSource/protobuf-3.8.0/windows/protoc.dir
-OpenSource/protobuf-3.8.0/windows/x64
-OpenSource/protobuf-3.8.0/windows/Debug
-OpenSource/protobuf-3.8.0/windows/Release
+OpenSource/protobuf-3.18.1/windows/CMakeFiles
+OpenSource/protobuf-3.18.1/windows/libprotobuf.dir
+OpenSource/protobuf-3.18.1/windows/libprotoc.dir
+OpenSource/protobuf-3.18.1/windows/protoc.dir
+OpenSource/protobuf-3.18.1/windows/x64
+OpenSource/protobuf-3.18.1/windows/Debug
+OpenSource/protobuf-3.18.1/windows/Release
 OpenSource/libevent-2.1.8-stable/test/*
 
 
 SourceCode/Algorithm/x64/*
-SourceCode/BoostLinux/bin/*
-SourceCode/BoostLinux/obj/*
-SourceCode/BoostWindows/x64/*
-SourceCode/DatabaseLinux/bin/*
-SourceCode/DatabaseLinux/obj/*
-SourceCode/DatabaseWindows/x64/*
 SourceCode/DesignPattern/x64/*
-SourceCode/LibeventLinux/bin/*
-SourceCode/LibeventLinux/obj/*
-SourceCode/LibeventWindows/x64/*
-SourceCode/OpenSSLLinux/bin/*
-SourceCode/OpenSSLLinux/obj/*
-SourceCode/OpenSSLWindows/x64/*
-SourceCode/ProtobufLinux/bin/*
-SourceCode/ProtobufLinux/obj/*
-SourceCode/ProtobufWindows/x64/*
+SourceCode/Linux/bin/*
+SourceCode/Linux/obj/*
 SourceCode/ProjectLinux/bin/*
 SourceCode/ProjectLinux/obj/*
 SourceCode/ProjectWindows/x64/*
@@ -307,8 +294,6 @@ SourceCode/StandardLinux/bin/*
 SourceCode/StandardLinux/obj/*
 SourceCode/StandardWindows/x64/*
 SourceCode/Windows/x64/*
-SourceCode/Linux/bin/*
-SourceCode/Linux/obj/*
 SourceCode/x64/*
 
 Deployment/Debug/*

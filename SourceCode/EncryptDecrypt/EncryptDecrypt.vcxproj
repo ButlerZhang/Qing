@@ -122,11 +122,11 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_77_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_72_0\stage\lib_shared</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_77_0\stage\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>ws2_32.lib;dbghelp.lib</AdditionalDependencies>
     </Link>
     <Midl>
@@ -177,13 +177,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_77_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_72_0\stage\lib_shared</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_77_0\stage\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>ws2_32.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
@@ -201,11 +201,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Share\Boost\BoostFileSystem.h" />
-    <ClInclude Include="..\Share\Boost\BoostFormat.h" />
-    <ClInclude Include="..\Share\Boost\BoostLog.h" />
-    <ClInclude Include="..\Share\Boost\BoostTime.h" />
-    <ClInclude Include="..\Share\Boost\BoostTools.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostFileSystem.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostFormat.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostLog.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTime.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTools.h" />
     <ClInclude Include="..\Windows\System\FileManager.h" />
     <ClInclude Include="..\Windows\System\SimpleEncrypt.h" />
     <ClInclude Include="..\Windows\System\SystemShare.h" />
@@ -220,21 +220,21 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostFileSystem.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostLog.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostTime.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Windows\System\FileManager.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Windows\System\SimpleEncrypt.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

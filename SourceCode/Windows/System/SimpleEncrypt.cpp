@@ -1,7 +1,7 @@
 #include "SimpleEncrypt.h"
 #include "../System/SystemShare.h"
-#include "../../Share/Boost/BoostLog.h"
-#include "../../Share/Boost/BoostTools.h"
+#include "../../ProjectLinux/Share/Boost/BoostLog.h"
+#include "../../ProjectLinux/Share/Boost/BoostTools.h"
 #include "../../StandardLinux/src/StandardShare.h"
 
 #include <Shlwapi.h>

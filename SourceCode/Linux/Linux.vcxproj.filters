@@ -96,7 +96,6 @@
     <ClInclude Include="YouShuang\api_note.h">
       <Filter>YouShuang</Filter>
     </ClInclude>
-    <ClInclude Include="LinuxTools.h" />
     <ClInclude Include="UNIX\unix_main.h">
       <Filter>UNIX</Filter>
     </ClInclude>
