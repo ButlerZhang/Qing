@@ -3,7 +3,9 @@
 //
 
 #pragma once
-
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/foreach.hpp>
 
 // CmaServerConfigDlg 对话框
 class CmaServerConfigDlg : public CDialogEx
@@ -17,9 +19,8 @@ public:
 	enum { IDD = IDD_MASERVERCONFIG_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
-
 
 // 实现
 protected:
@@ -31,6 +32,20 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnBnClickedOk();
+
+private:
+
+    afx_msg void OnBnClickedOk();
+    afx_msg void OnCbnSelchangeCombo1_ChangeNode();
+
+private:
+
+    bool UpdateConfigTree();
+    bool LoadConfigFile(const std::string& XMLFile);
+
+private:
+
+    CComboBox                           m_maItem;             //配置项
+    CTreeCtrl                           m_ConfigTree;         //每个配置项对应的配置内容
+    boost::property_tree::wptree        m_XMLTree;            //XML根节点
 };

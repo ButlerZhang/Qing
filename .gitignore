@@ -288,6 +288,7 @@ SourceCode/DesignPattern/x64/*
 SourceCode/Linux/bin/*
 SourceCode/Linux/obj/*
 SourceCode/maServerConfig/x64/*
+SourceCode/maServerConfig/*.xml
 SourceCode/ProjectLinux/bin/*
 SourceCode/ProjectLinux/obj/*
 SourceCode/ProjectWindows/x64/*

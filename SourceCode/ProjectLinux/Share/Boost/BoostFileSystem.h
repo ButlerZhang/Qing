@@ -25,4 +25,5 @@ public:
 
     static std::string GetWorkDirectory();
     static std::string GetFileName(const std::string &FileFullPath);
+    static std::string GetFileExtension(const std::string& FileFullPath);
 };

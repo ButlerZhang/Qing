@@ -54,6 +54,12 @@ std::string BoostFileSystem::GetFileName(const std::string &FileFullPath)
     return FullPath.filename().string();
 }
 
+std::string BoostFileSystem::GetFileExtension(const std::string& FileFullPath)
+{
+    boost::filesystem::path FullPath(FileFullPath);
+    return FullPath.extension().string();
+}
+
 bool BoostFileSystem::RemoveFile(const std::string &File)
 {
     return boost::filesystem::remove(boost::filesystem::path(File));

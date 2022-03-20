@@ -19,6 +19,9 @@
     <Filter Include="Reference\Boost">
       <UniqueIdentifier>{2eb8e757-429d-4bb7-9b5c-9846765a3510}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reference\System">
+      <UniqueIdentifier>{e27f3358-bf8d-45fd-89c2-8af08d769b37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="maServerConfig.h">
@@ -54,6 +57,9 @@
     <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTools.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
+    <ClInclude Include="..\Windows\System\SystemShare.h">
+      <Filter>Reference\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="maServerConfig.cpp">
@@ -73,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="..\ProjectLinux\Share\Boost\BoostTime.cpp">
       <Filter>Reference\Boost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Windows\System\SystemShare.cpp">
+      <Filter>Reference\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
