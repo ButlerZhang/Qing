@@ -37,16 +37,27 @@ private:
 
     afx_msg void OnBnClickedOk();
     afx_msg void OnCbnSelchangeCombo1_ChangeNode();
+    afx_msg void OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult);
 
 private:
 
+    CString GetRootNodeName();
     void CalculateSize();
+    void ResetControl();
     bool UpdateConfigTree();
     bool LoadConfigFile(const std::string& XMLFile);
 
 private:
 
+    void UpdateMsgqueue(boost::property_tree::wptree::value_type& MsgQueue);
+    void UpdateRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable);
+    void UpdateXa(boost::property_tree::wptree::value_type& Xa);
+
+private:
+
     CComboBox                           m_maItem;             //配置项
     CTreeCtrl                           m_ConfigTree;         //每个配置项对应的配置内容
+    std::vector<CEdit*>                  m_vecEditText;        //存储参数值
+    std::vector<CStatic*>                m_vecStaticText;      //存储参数名称
     boost::property_tree::wptree        m_XMLTree;            //XML根节点
 };

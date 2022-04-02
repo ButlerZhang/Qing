@@ -16,6 +16,8 @@
 #define new DEBUG_NEW
 #endif
 
+const CString DOT(L".");   //以点号分隔
+
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -73,6 +75,7 @@ BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDOK, &CmaServerConfigDlg::OnBnClickedOk)
     ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnCbnSelchangeCombo1_ChangeNode)
+    ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTvnSelchangedTreeItem)
 END_MESSAGE_MAP()
 
 
@@ -184,6 +187,115 @@ void CmaServerConfigDlg::OnCbnSelchangeCombo1_ChangeNode()
     UpdateConfigTree();
 }
 
+void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult)
+{
+    LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+    // TODO: 在此添加控件通知处理程序代码
+    *pResult = 0;
+
+    //非叶子节点不处理
+    HTREEITEM hSelectTreeItem = m_ConfigTree.GetSelectedItem();
+    if(m_ConfigTree.ItemHasChildren(hSelectTreeItem))
+    {
+        return;
+    }
+
+    //获取叶子结点的ID
+    CString CurrentText = m_ConfigTree.GetItemText(hSelectTreeItem);
+    int StartPos = CurrentText.Find(L"_");
+    int StopPos = CurrentText.Find(L"_", StartPos + 1);
+    const std::wstring &CurrentID = CurrentText.Mid(StartPos + 1, StopPos - StartPos - 1).GetString();
+    const CString& CurrentType = CurrentText.Left(StartPos);
+
+    //获取从根节点到当前节点的信息
+    std::vector<CString> vecString;
+    HTREEITEM hParent = NULL, hCurrent = hSelectTreeItem;
+    while((hParent = m_ConfigTree.GetParentItem(hCurrent)) && hParent != NULL)
+    {
+        vecString.push_back(m_ConfigTree.GetItemText(hParent));
+        hCurrent = hParent;
+    }
+
+    //组装成要搜索的节点
+    CString SearchNodeText = GetRootNodeName();
+    for(std::vector<CString>::reverse_iterator it = vecString.rbegin(); it != vecString.rend(); it++)
+    {
+        SearchNodeText.Append(DOT);
+        SearchNodeText.Append(*it);
+    }
+
+    //遍历找到对应的节点
+    BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, m_XMLTree.get_child(SearchNodeText.GetString()))
+    {
+        //忽略属性
+        if (v1.first.find(L"<") != std::wstring::npos)
+        {
+            continue;
+        }
+
+        //ID不会是空的
+        const std::wstring& ID = v1.second.get<std::wstring>(L"<xmlattr>.id", L"");
+        if (ID.empty() || ID != CurrentID)
+        {
+            continue;
+        }
+
+        if(CurrentType.Compare(L"msgqueue") == 0)
+        {
+            UpdateMsgqueue(v1);
+        }
+        else if(CurrentType.Compare(L"runtimetable") == 0)
+        {
+            UpdateRuntimeTable(v1);
+        }
+        else if(CurrentType.Compare(L"xa") == 0)
+        {
+            UpdateXa(v1);
+        }
+        else
+        {
+            MessageBox(SearchNodeText + CurrentType);
+        }
+
+        break;
+    }
+}
+
+CString CmaServerConfigDlg::GetRootNodeName()
+{
+    //获取当前文本框里的节点名称
+    CString CurrentText;
+    m_maItem.GetWindowTextW(CurrentText);
+    if (CurrentText.IsEmpty())
+    {
+        return CString();
+    }
+
+    //返回的名称要去掉中文
+    int pos = CurrentText.Find(L":");
+    if (pos <= 0 || pos > CurrentText.GetLength())
+    {
+        return CString();
+    }
+
+    //获取英文描述
+    CurrentText = CurrentText.Left(pos);
+
+    //判断选中的是否是ma
+    CString Node(L"ma");       //根节点名称
+    
+
+    //如果不是ma，则以ma开头
+    if (CurrentText.Compare(Node) != 0)
+    {
+        Node.Append(DOT);
+        Node.Append(CurrentText);
+    }
+
+    //返回ma/ma.kernel/ma.construction/ma.deployment
+    return Node;
+}
+
 void CmaServerConfigDlg::CalculateSize()
 {
     //先设置对话框最大化
@@ -283,32 +395,43 @@ void CmaServerConfigDlg::CalculateSize()
     }
 }
 
+void CmaServerConfigDlg::ResetControl()
+{
+    if(m_vecEditText.empty() || m_vecStaticText.empty())
+    {
+        const int MAX_COUNT = 50;
+        UINT StartID = 10000;
+        CRect Rect(0, 0, 0, 0);
+        for(int count = 0; count < MAX_COUNT; count++)
+        {
+            m_vecEditText.push_back(new CEdit());
+            m_vecEditText[m_vecEditText.size() - 1]->Create(WS_CHILD | WS_VISIBLE | ES_LEFT, Rect, this, StartID++);
+
+            m_vecStaticText.push_back(new CStatic());
+            m_vecStaticText[m_vecEditText.size() - 1]->Create(NULL, WS_CHILD | WS_VISIBLE | SS_LEFT, Rect, this, StartID++);
+        }
+    }
+
+    for(std::vector<CEdit>::size_type index =0; index != m_vecEditText.size(); index++)
+    {
+        m_vecEditText[index]->MoveWindow(0, 0, 0, 0);
+        m_vecEditText[index]->ShowWindow(SW_HIDE);
+    }
+
+    for (std::vector<CStatic>::size_type index = 0; index != m_vecStaticText.size(); index++)
+    {
+        m_vecStaticText[index]->MoveWindow(0, 0, 0, 0);
+        m_vecStaticText[index]->ShowWindow(SW_HIDE);
+    }
+}
+
 bool CmaServerConfigDlg::UpdateConfigTree()
 {
-    //获取当前文本框里的节点名称
-    CString CurrentText;
-    m_maItem.GetWindowTextW(CurrentText);
-    if (CurrentText.IsEmpty())
-    {
-        return false;
-    }
-
-    int pos = CurrentText.Find(L":");
-    if(pos <= 0 || pos > CurrentText.GetLength())
-    {
-        return false;
-    }
-
-    //获取英文描述
-    CurrentText = CurrentText.Left(pos);
-
     //确定要搜索的节点
-    std::wstring Node(L"ma");
-    const std::wstring DOT(L".");
-    if (CurrentText.Compare(Node.c_str()) != 0)
+    std::wstring Node = GetRootNodeName().GetString();
+    if(Node.empty())
     {
-        Node.append(DOT);
-        Node.append(CurrentText.GetString());
+        return false;
     }
 
     //需要遍历各个子节点，所以需要保存子节点
@@ -403,4 +526,117 @@ bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
     std::locale::global(std::locale(""));
     boost::property_tree::read_xml(XMLFile, m_XMLTree);
     return true;
+}
+
+void CmaServerConfigDlg::UpdateMsgqueue(boost::property_tree::wptree::value_type& MsgQueue)
+{
+    std::vector<CString> vecParams;
+    vecParams.push_back(L"id");
+    vecParams.push_back(L"name");
+    vecParams.push_back(L"gid");
+    vecParams.push_back(L"direction");
+    vecParams.push_back(L"type");
+    vecParams.push_back(L"protocol");
+    vecParams.push_back(L"init");
+    vecParams.push_back(L"max_size");
+    vecParams.push_back(L"timeout");
+    vecParams.push_back(L"clsid");
+    vecParams.push_back(L"connstr");
+
+    CRect ParamsArea;
+    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
+
+    ResetControl();
+
+    int ControlIndex = 0;
+    int CurrentY = ParamsArea.top;
+    CString FormatString;
+    for(std::vector<CString>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].GetString());
+        const std::wstring &Text = MsgQueue.second.get<std::wstring>(FormatString.GetString(), L"");
+
+        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index]);
+        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
+        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
+        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        CurrentY += 50;
+        ++ControlIndex;
+    }
+}
+
+void CmaServerConfigDlg::UpdateRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable)
+{
+    std::vector<CString> vecParams;
+    vecParams.push_back(L"id");
+    vecParams.push_back(L"name");
+    vecParams.push_back(L"clsid");
+    vecParams.push_back(L"import_file");
+
+    CRect ParamsArea;
+    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
+
+    ResetControl();
+
+    int ControlIndex = 0;
+    int CurrentY = ParamsArea.top;
+    CString FormatString;
+    for (std::vector<CString>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].GetString());
+        const std::wstring& Text = RuntimeTable.second.get<std::wstring>(FormatString.GetString(), L"");
+
+        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index]);
+        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
+        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
+        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        CurrentY += 50;
+        ++ControlIndex;
+    }
+}
+
+void CmaServerConfigDlg::UpdateXa(boost::property_tree::wptree::value_type& Xa)
+{
+    std::vector<CString> vecParams;
+    vecParams.push_back(L"id");
+    vecParams.push_back(L"name");
+    vecParams.push_back(L"clsid");
+    vecParams.push_back(L"xaclose");
+    vecParams.push_back(L"xaoption");
+    vecParams.push_back(L"daopath");
+    vecParams.push_back(L"xaserial");
+    vecParams.push_back(L"xaopen");
+
+    CRect ParamsArea;
+    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
+
+    ResetControl();
+
+    int ControlIndex = 0;
+    int CurrentY = ParamsArea.top;
+    CString FormatString;
+    for (std::vector<CString>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].GetString());
+        const std::wstring& Text = Xa.second.get<std::wstring>(FormatString.GetString(), L"");
+
+        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index]);
+        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
+        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
+        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        CurrentY += 50;
+        ++ControlIndex;
+    }
 }
