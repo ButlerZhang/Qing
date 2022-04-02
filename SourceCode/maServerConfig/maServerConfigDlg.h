@@ -40,6 +40,7 @@ private:
 
 private:
 
+    void CalculateSize();
     bool UpdateConfigTree();
     bool LoadConfigFile(const std::string& XMLFile);
 
