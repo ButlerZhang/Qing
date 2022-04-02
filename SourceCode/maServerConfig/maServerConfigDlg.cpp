@@ -108,10 +108,10 @@ BOOL CmaServerConfigDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-    m_maItem.AddString(_T("construction"));
-    m_maItem.AddString(_T("deployment"));
-    m_maItem.AddString(_T("kernel"));
-    m_maItem.AddString(_T("ma"));
+    m_maItem.AddString(_T("construction: 构件"));
+    m_maItem.AddString(_T("deployment: 部署"));
+    m_maItem.AddString(_T("kernel: 内核"));
+    m_maItem.AddString(_T("ma: 架构"));
     m_maItem.SetCurSel(0);
 
     if (LoadConfigFile("maServer.xml"))
@@ -293,6 +293,15 @@ bool CmaServerConfigDlg::UpdateConfigTree()
         return false;
     }
 
+    int pos = CurrentText.Find(L":");
+    if(pos <= 0 || pos > CurrentText.GetLength())
+    {
+        return false;
+    }
+
+    //获取英文描述
+    CurrentText = CurrentText.Left(pos);
+
     //确定要搜索的节点
     std::wstring Node(L"ma");
     const std::wstring DOT(L".");
@@ -342,7 +351,8 @@ bool CmaServerConfigDlg::UpdateConfigTree()
             else
             {
                 //对于叶子节点，不需要保存上一层的指针了
-                std::wstring TreeName = v1.first + L"_" + ID;
+                const std::wstring& Name = v1.second.get<std::wstring>(L"<xmlattr>.name", L"");
+                std::wstring TreeName = v1.first + L"_" + ID + L"_" + Name;
                 m_ConfigTree.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
             }
         }
@@ -390,6 +400,7 @@ bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
         return false;
     }
 
-    boost::property_tree::read_xml(XMLFile.c_str(), m_XMLTree);
+    std::locale::global(std::locale(""));
+    boost::property_tree::read_xml(XMLFile, m_XMLTree);
     return true;
 }
