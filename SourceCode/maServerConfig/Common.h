@@ -4,6 +4,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 
+const std::string g_XMLFile("maServer.xml");
 
 const std::wstring g_RuntimeTable(L"runtimetable");
 const std::wstring g_Service(L"service");

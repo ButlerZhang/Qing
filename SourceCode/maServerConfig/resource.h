@@ -2,8 +2,8 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 maServerConfig.rc 使用
 //
-#define ID_BUTTON_GENERATE              2
-#define ID_BUTTON_OPEN_FILE             3
+#define ID_OK                           2
+#define ID_CANCEL                       3
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
@@ -16,6 +16,8 @@
 #define IDC_STATIC_BUTTON_AREA          1014
 #define ID_BUTTON_LOAD                  1015
 #define IDC_EDIT2                       1017
+#define ID_BUTTON_GENERATE              1018
+#define ID_BUTTON_OPEN_FILE             1019
 
 // Next default values for new objects
 // 

@@ -3,9 +3,7 @@
 //
 
 #pragma once
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/foreach.hpp>
+
 
 // CmaServerConfigDlg 对话框
 class CmaServerConfigDlg : public CDialogEx
@@ -48,8 +46,6 @@ private:  //初始化相关
 private:
 
     CString GetRootNodeName();
-    CString GetLeafID(const CString& Text);
-    CString GetLeftType(const CString& Text);
 
     void ResetControl();
     void SaveLastChange();
@@ -75,5 +71,4 @@ private:
     CTreeCtrl                                m_ConfigTree;         //每个配置项对应的配置内容
     std::vector<CEdit*>                      m_vecEditText;        //存储参数值
     std::vector<CStatic*>                    m_vecStaticText;      //存储参数名称
-    boost::property_tree::wptree             m_XMLTree;            //XML根节点
 };

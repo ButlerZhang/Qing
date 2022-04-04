@@ -11,6 +11,9 @@
 #include "../Windows/System/SystemShare.h"
 #include <list>
 #include <map>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/foreach.hpp>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -77,6 +80,7 @@ BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
     ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnCbnSelchangeCombo1_ChangeNode)
     ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTvnSelchangedTreeItem)
     ON_BN_CLICKED(ID_BUTTON_GENERATE, &CmaServerConfigDlg::OnBnClickedButtonGenerate)
+    ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -118,7 +122,7 @@ BOOL CmaServerConfigDlg::OnInitDialog()
     m_maItem.AddString(_T("ma: 架构"));
     m_maItem.SetCurSel(0);
 
-    if (LoadConfigFile("maServer.xml"))
+    if (LoadConfigFile(g_XMLFile))
     {
         UpdateConfigTree();
     }
@@ -207,8 +211,8 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
 
     //获取叶子结点的类型和ID
     CString CurrentLeafNode = m_ConfigTree.GetItemText(hSelectTreeItem);
-    CString CurrentLeafType = GetLeftType(CurrentLeafNode);
-    CString CurrentLeafID = GetLeafID(CurrentLeafNode);
+    CString CurrentLeafType = theApp.GetLeftType(CurrentLeafNode);
+    CString CurrentLeafID = theApp.GetLeafID(CurrentLeafNode);
 
     //获取从根节点到当前节点的信息
     std::vector<CString> vecString;
@@ -228,7 +232,7 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
     }
 
     //遍历找到对应的节点
-    BOOST_FOREACH(boost::property_tree::wptree::value_type &v1, m_XMLTree.get_child(SearchNode.GetString()))
+    BOOST_FOREACH(boost::property_tree::wptree::value_type &v1, theApp.g_XMLTree.get_child(SearchNode.GetString()))
     {
         //忽略属性
         if (v1.first.find(L"<") != std::wstring::npos)
@@ -262,10 +266,7 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
 void CmaServerConfigDlg::OnBnClickedButtonGenerate()
 {
     SaveLastChange();
-
-    boost::property_tree::xml_writer_settings<std::wstring> settings;
-    settings = boost::property_tree::xml_writer_make_settings<std::wstring>(L'\t', 1);
-    boost::property_tree::write_xml("maServer_test.xml", m_XMLTree, std::locale(), settings);
+    theApp.WriteXMLFile(g_XMLFile);
 }
 
 CString CmaServerConfigDlg::GetRootNodeName()
@@ -301,41 +302,6 @@ CString CmaServerConfigDlg::GetRootNodeName()
 
     //返回ma/ma.kernel/ma.construction/ma.deployment
     return Node;
-}
-
-CString CmaServerConfigDlg::GetLeafID(const CString& Text)
-{
-    if (Text.IsEmpty())
-    {
-        return CString();
-    }
-
-    int StartPos = Text.Find(L"_");
-    if (StartPos <= 0 || StartPos > Text.GetLength())
-    {
-        return CString();
-    }
-
-    int StopPos = Text.Find(L"_", StartPos + 1);
-    const CString& LeafID = Text.Mid(StartPos + 1, StopPos - StartPos - 1).GetString();
-    return LeafID;
-}
-
-CString CmaServerConfigDlg::GetLeftType(const CString& Text)
-{
-    if (Text.IsEmpty())
-    {
-        return CString();
-    }
-
-    int StartPos = Text.Find(L"_");
-    if (StartPos <= 0 || StartPos > Text.GetLength())
-    {
-        return CString();
-    }
-
-    const CString& CurrentType = Text.Left(StartPos);
-    return CurrentType;
 }
 
 void CmaServerConfigDlg::InitControlSize()
@@ -487,7 +453,7 @@ void CmaServerConfigDlg::SaveLastChange()
     if (!m_LastSearchNode.IsEmpty() && !m_LastLeafNode.IsEmpty() && !m_LastLeafID.IsEmpty())
     {
         //遍历找到对应的节点
-        BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, m_XMLTree.get_child(m_LastSearchNode.GetString()))
+        BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, theApp.g_XMLTree.get_child(m_LastSearchNode.GetString()))
         {
             //忽略属性
             if (v1.first.find(L"<") != std::wstring::npos)
@@ -502,7 +468,7 @@ void CmaServerConfigDlg::SaveLastChange()
                 continue;
             }
 
-            CString LeafType = GetLeftType(m_LastLeafNode);
+            CString LeafType = theApp.GetLeftType(m_LastLeafNode);
             if (theApp.g_mapLeaf.find(LeafType.GetString()) != theApp.g_mapLeaf.end())
             {
                 theApp.g_mapLeaf[LeafType.GetString()].m_FUpdate(LeafType.GetString(), v1);
@@ -532,7 +498,7 @@ bool CmaServerConfigDlg::UpdateConfigTree()
     {
         std::wstring::size_type pos = it->find_last_of(DOT);
         std::wstring Key = it->substr(pos + 1, it->size() - pos + 1);
-        BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, m_XMLTree.get_child(*it))
+        BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, theApp.g_XMLTree.get_child(*it))
         {
             //忽略属性
             if (v1.first.find(L"<") != std::wstring::npos)
@@ -631,9 +597,7 @@ bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
         return false;
     }
 
-    std::locale::global(std::locale(""));
-    boost::property_tree::read_xml(XMLFile, m_XMLTree, boost::property_tree::xml_parser::trim_whitespace);
-    return true;
+    return theApp.ReadXMLFile(XMLFile);
 }
 
 void CmaServerConfigDlg::DisplayXa(boost::property_tree::wptree::value_type& Xa)

@@ -6,6 +6,11 @@
 #include "framework.h"
 #include "maServerConfig.h"
 #include "maServerConfigDlg.h"
+#include "../Windows/System/SystemShare.h"
+
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/foreach.hpp>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -103,6 +108,83 @@ BOOL CmaServerConfigApp::InitInstance()
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
 	return FALSE;
+}
+
+bool CmaServerConfigApp::ReadXMLFile(const std::string& XMLFile)
+{
+    try
+    {
+        std::locale::global(std::locale(""));                       //不设置时读取中文会乱码
+        boost::property_tree::read_xml(XMLFile,                     //要读取的XML文件
+            theApp.g_XMLTree,                                       //读取出来的XML树
+            boost::property_tree::xml_parser::trim_whitespace);     //去除空行
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        const std::wstring& ErrorMsg = L"读XML文件出错：" + StringToWString(e.what());
+        MessageBox(NULL, ErrorMsg.c_str(), L"提示", 0);
+        return false;
+    }
+}
+
+bool CmaServerConfigApp::WriteXMLFile(const std::string& XMLFile)
+{
+    try
+    {
+        //设置写XML文件的格式，不设置时XML是乱的，没有层次
+        boost::property_tree::xml_writer_settings<std::wstring> settings;
+        settings = boost::property_tree::xml_writer_make_settings<std::wstring>(L'\t', 1);
+
+        boost::property_tree::write_xml(
+            XMLFile.c_str(),            //写到哪个文件
+            theApp.g_XMLTree,           //使用读取时的XML树
+            std::locale(),              //本地化
+            settings);                  //XML配置格式
+
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        const std::wstring& ErrorMsg = L"写XML文件出错：" + StringToWString(e.what());
+        MessageBox(NULL, ErrorMsg.c_str(), L"提示", 0);
+        return false;
+    }
+}
+
+CString CmaServerConfigApp::GetLeafID(const CString& Text)
+{
+    if (Text.IsEmpty())
+    {
+        return CString();
+    }
+
+    int StartPos = Text.Find(L"_");
+    if (StartPos <= 0 || StartPos > Text.GetLength())
+    {
+        return CString();
+    }
+
+    int StopPos = Text.Find(L"_", StartPos + 1);
+    const CString& LeafID = Text.Mid(StartPos + 1, StopPos - StartPos - 1).GetString();
+    return LeafID;
+}
+
+CString CmaServerConfigApp::GetLeftType(const CString& Text)
+{
+    if (Text.IsEmpty())
+    {
+        return CString();
+    }
+
+    int StartPos = Text.Find(L"_");
+    if (StartPos <= 0 || StartPos > Text.GetLength())
+    {
+        return CString();
+    }
+
+    const CString& CurrentType = Text.Left(StartPos);
+    return CurrentType;
 }
 
 void CmaServerConfigApp::InitLeafNode()
