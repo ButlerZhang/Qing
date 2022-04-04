@@ -9,11 +9,14 @@
 #endif
 
 #include "resource.h"		// 主符号
-
+#include "Common.h"
+#include <map>
 
 // CmaServerConfigApp:
 // 有关此类的实现，请参阅 maServerConfig.cpp
 //
+
+
 
 class CmaServerConfigApp : public CWinApp
 {
@@ -27,6 +30,14 @@ public:
 // 实现
 
 	DECLARE_MESSAGE_MAP()
+
+private:
+
+    void InitLeafNode();
+
+public:
+
+    std::map<std::wstring, LeafNode> g_mapLeaf; //叶子结点
 };
 
 extern CmaServerConfigApp theApp;

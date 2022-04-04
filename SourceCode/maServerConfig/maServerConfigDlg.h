@@ -39,19 +39,25 @@ private:
     afx_msg void OnCbnSelchangeCombo1_ChangeNode();
     afx_msg void OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult);
 
+private:  //初始化相关
+
+    void InitControlSize();
+    void InitCallbackFunction();
+
 private:
 
     CString GetRootNodeName();
-    void CalculateSize();
+    
     void ResetControl();
     bool UpdateConfigTree();
     bool LoadConfigFile(const std::string& XMLFile);
 
 private:
 
-    void UpdateMsgqueue(boost::property_tree::wptree::value_type& MsgQueue);
-    void UpdateRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable);
-    void UpdateXa(boost::property_tree::wptree::value_type& Xa);
+    void DisplayXa(boost::property_tree::wptree::value_type& Xa);
+    void DisplayService(boost::property_tree::wptree::value_type& Service);
+    void DisplayMsgqueue(boost::property_tree::wptree::value_type& MsgQueue);
+    void DisplayRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable);
 
 private:
 

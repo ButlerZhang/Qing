@@ -51,7 +51,7 @@ BOOL CmaServerConfigApp::InitInstance()
 	InitCommonControlsEx(&InitCtrls);
 
 	CWinApp::InitInstance();
-
+    InitLeafNode();
 
 	AfxEnableControlContainer();
 
@@ -105,3 +105,47 @@ BOOL CmaServerConfigApp::InitInstance()
 	return FALSE;
 }
 
+void CmaServerConfigApp::InitLeafNode()
+{
+    //RuntimeTable节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_RuntimeTable, LeafNode()));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"import_file"));
+
+    //Service节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Service, LeafNode()));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"gid"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"runas"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"workthread"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"use"));
+
+    //msgqueue节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_MsgQueue, LeafNode()));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"gid"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"direction"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"type"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"protocol"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"init"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"max_size"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"timeout"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"connstr"));
+
+    //xa节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Xa, LeafNode()));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaclose"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaoption"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"daopath"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaserial"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaopen"));
+}

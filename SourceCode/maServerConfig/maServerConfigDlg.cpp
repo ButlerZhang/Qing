@@ -122,7 +122,8 @@ BOOL CmaServerConfigDlg::OnInitDialog()
         UpdateConfigTree();
     }
 
-    CalculateSize();
+    InitControlSize();
+    InitCallbackFunction();
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -240,17 +241,9 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
             continue;
         }
 
-        if(CurrentType.Compare(L"msgqueue") == 0)
+        if(theApp.g_mapLeaf.find(CurrentType.GetString()) != theApp.g_mapLeaf.end())
         {
-            UpdateMsgqueue(v1);
-        }
-        else if(CurrentType.Compare(L"runtimetable") == 0)
-        {
-            UpdateRuntimeTable(v1);
-        }
-        else if(CurrentType.Compare(L"xa") == 0)
-        {
-            UpdateXa(v1);
+            theApp.g_mapLeaf[CurrentType.GetString()].m_FDisplay(v1);
         }
         else
         {
@@ -296,7 +289,7 @@ CString CmaServerConfigDlg::GetRootNodeName()
     return Node;
 }
 
-void CmaServerConfigDlg::CalculateSize()
+void CmaServerConfigDlg::InitControlSize()
 {
     //先设置对话框最大化
     ShowWindow(SW_MAXIMIZE);
@@ -393,6 +386,14 @@ void CmaServerConfigDlg::CalculateSize()
             LastButtonX = ButtonRect.right + ButtonInterval;
         }
     }
+}
+
+void CmaServerConfigDlg::InitCallbackFunction()
+{
+    theApp.g_mapLeaf[g_Xa].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayXa, this, std::placeholders::_1);
+    theApp.g_mapLeaf[g_Service].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayService, this, std::placeholders::_1);
+    theApp.g_mapLeaf[g_MsgQueue].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayMsgqueue, this, std::placeholders::_1);
+    theApp.g_mapLeaf[g_RuntimeTable].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayRuntimeTable, this, std::placeholders::_1);
 }
 
 void CmaServerConfigDlg::ResetControl()
@@ -528,108 +529,111 @@ bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
     return true;
 }
 
-void CmaServerConfigDlg::UpdateMsgqueue(boost::property_tree::wptree::value_type& MsgQueue)
+void CmaServerConfigDlg::DisplayXa(boost::property_tree::wptree::value_type& Xa)
 {
-    std::vector<CString> vecParams;
-    vecParams.push_back(L"id");
-    vecParams.push_back(L"name");
-    vecParams.push_back(L"gid");
-    vecParams.push_back(L"direction");
-    vecParams.push_back(L"type");
-    vecParams.push_back(L"protocol");
-    vecParams.push_back(L"init");
-    vecParams.push_back(L"max_size");
-    vecParams.push_back(L"timeout");
-    vecParams.push_back(L"clsid");
-    vecParams.push_back(L"connstr");
-
     CRect ParamsArea;
     GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
 
     ResetControl();
 
+    CString FormatString;
     int ControlIndex = 0;
     int CurrentY = ParamsArea.top;
-    CString FormatString;
-    for(std::vector<CString>::size_type index = 0; index < vecParams.size(); index++)
+    const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[g_Xa].m_vecParams;
+    for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
     {
-        FormatString.Format(L"<xmlattr>.%s", vecParams[index].GetString());
-        const std::wstring &Text = MsgQueue.second.get<std::wstring>(FormatString.GetString(), L"");
-
-        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
-        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index]);
-        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
-
-        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
-        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
-        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
-
-        CurrentY += 50;
-        ++ControlIndex;
-    }
-}
-
-void CmaServerConfigDlg::UpdateRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable)
-{
-    std::vector<CString> vecParams;
-    vecParams.push_back(L"id");
-    vecParams.push_back(L"name");
-    vecParams.push_back(L"clsid");
-    vecParams.push_back(L"import_file");
-
-    CRect ParamsArea;
-    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
-
-    ResetControl();
-
-    int ControlIndex = 0;
-    int CurrentY = ParamsArea.top;
-    CString FormatString;
-    for (std::vector<CString>::size_type index = 0; index < vecParams.size(); index++)
-    {
-        FormatString.Format(L"<xmlattr>.%s", vecParams[index].GetString());
-        const std::wstring& Text = RuntimeTable.second.get<std::wstring>(FormatString.GetString(), L"");
-
-        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
-        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index]);
-        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
-
-        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
-        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
-        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
-
-        CurrentY += 50;
-        ++ControlIndex;
-    }
-}
-
-void CmaServerConfigDlg::UpdateXa(boost::property_tree::wptree::value_type& Xa)
-{
-    std::vector<CString> vecParams;
-    vecParams.push_back(L"id");
-    vecParams.push_back(L"name");
-    vecParams.push_back(L"clsid");
-    vecParams.push_back(L"xaclose");
-    vecParams.push_back(L"xaoption");
-    vecParams.push_back(L"daopath");
-    vecParams.push_back(L"xaserial");
-    vecParams.push_back(L"xaopen");
-
-    CRect ParamsArea;
-    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
-
-    ResetControl();
-
-    int ControlIndex = 0;
-    int CurrentY = ParamsArea.top;
-    CString FormatString;
-    for (std::vector<CString>::size_type index = 0; index < vecParams.size(); index++)
-    {
-        FormatString.Format(L"<xmlattr>.%s", vecParams[index].GetString());
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
         const std::wstring& Text = Xa.second.get<std::wstring>(FormatString.GetString(), L"");
 
         m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
-        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index]);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index].m_ParamName.c_str());
+        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
+        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
+        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        CurrentY += 50;
+        ++ControlIndex;
+    }
+}
+
+void CmaServerConfigDlg::DisplayService(boost::property_tree::wptree::value_type& Service)
+{
+    CRect ParamsArea;
+    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
+
+    ResetControl();
+
+    CString FormatString;
+    int ControlIndex = 0;
+    int CurrentY = ParamsArea.top;
+    const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[g_Service].m_vecParams;
+    for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
+        const std::wstring& Text = Service.second.get<std::wstring>(FormatString.GetString(), L"");
+
+        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index].m_ParamName.c_str());
+        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
+        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
+        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        CurrentY += 50;
+        ++ControlIndex;
+    }
+}
+
+void CmaServerConfigDlg::DisplayMsgqueue(boost::property_tree::wptree::value_type& MsgQueue)
+{
+    CRect ParamsArea;
+    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
+
+    ResetControl();
+
+    CString FormatString;
+    int ControlIndex = 0;
+    int CurrentY = ParamsArea.top;
+    const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[g_MsgQueue].m_vecParams;
+    for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
+        const std::wstring& Text = MsgQueue.second.get<std::wstring>(FormatString.GetString(), L"");
+
+        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index].m_ParamName.c_str());
+        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
+        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
+        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        CurrentY += 50;
+        ++ControlIndex;
+    }
+}
+
+void CmaServerConfigDlg::DisplayRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable)
+{
+    CRect ParamsArea;
+    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
+
+    ResetControl();
+
+    CString FormatString;
+    int ControlIndex = 0;
+    int CurrentY = ParamsArea.top;
+    const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[g_RuntimeTable].m_vecParams;
+    for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
+        const std::wstring& Text = RuntimeTable.second.get<std::wstring>(FormatString.GetString(), L"");
+
+        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index].m_ParamName.c_str());
         m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
 
         m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
