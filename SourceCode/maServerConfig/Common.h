@@ -12,17 +12,19 @@ const std::wstring g_MsgQueue(L"msgqueue");
 const std::wstring g_Xa(L"xa");
 const std::wstring g_Node(L"node");
 
+
 enum ControlType                            //控件类型
 {
     CT_DEFAULT,
+    CT_STATIC_TEXT,                         //静态文本
     CT_COUNT
 };
 
 struct ParamNode                            //参数节点
 {
-    ControlType  m_ControlType;             //控件类型
     std::wstring m_ParamName;               //参数名称
     std::wstring m_ParamValue;              //参数值
+    ControlType  m_ControlType;             //参数值的控件类型
 
     ParamNode(const std::wstring& ParamName) :
         m_ParamName(ParamName),
@@ -32,10 +34,4 @@ struct ParamNode                            //参数节点
 struct LeafNode                             //叶子节点
 {
     std::vector<ParamNode> m_vecParams;     //此叶子结点对应的参数列表
-
-    //显示叶子结点配置
-    std::function<void(boost::property_tree::wptree::value_type&)> m_FDisplay;
-
-    //更新叶子节点参数
-    std::function<void(const std::wstring&, boost::property_tree::wptree::value_type&)> m_FUpdate;
 };

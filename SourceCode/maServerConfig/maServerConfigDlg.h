@@ -38,13 +38,9 @@ private:
     afx_msg void OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnBnClickedButtonGenerate();
 
-private:  //初始化相关
-
-    void InitControlSize();
-    void InitCallbackFunction();
-
 private:
 
+    void InitControlSize();
     CString GetRootNodeName();
 
     void ResetControl();
@@ -55,12 +51,7 @@ private:
 
     bool UpdateConfigTree();
     void UpdateParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
-
-    void DisplayXa(boost::property_tree::wptree::value_type& Xa);
-    void DisplayNode(boost::property_tree::wptree::value_type& Node);
-    void DisplayService(boost::property_tree::wptree::value_type& Service);
-    void DisplayMsgqueue(boost::property_tree::wptree::value_type& MsgQueue);
-    void DisplayRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable);
+    void DisplayParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
 
 private:
 
@@ -69,6 +60,6 @@ private:
     CString                                  m_LastLeafID;         //上一次显示的叶子ID
     CComboBox                                m_maItem;             //配置项
     CTreeCtrl                                m_ConfigTree;         //每个配置项对应的配置内容
-    std::vector<CEdit*>                      m_vecEditText;        //存储参数值
-    std::vector<CStatic*>                    m_vecStaticText;      //存储参数名称
+    std::vector<std::shared_ptr<CEdit>>      m_vecEditText;        //存储参数值
+    std::vector<std::shared_ptr<CStatic>>    m_vecStaticText;      //存储参数名称
 };
