@@ -38,6 +38,7 @@ private:
     afx_msg void OnBnClickedOk();
     afx_msg void OnCbnSelchangeCombo1_ChangeNode();
     afx_msg void OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnBnClickedButtonGenerate();
 
 private:  //初始化相关
 
@@ -47,23 +48,32 @@ private:  //初始化相关
 private:
 
     CString GetRootNodeName();
-    
+    CString GetLeafID(const CString& Text);
+    CString GetLeftType(const CString& Text);
+
     void ResetControl();
-    bool UpdateConfigTree();
+    void SaveLastChange();
     bool LoadConfigFile(const std::string& XMLFile);
 
 private:
 
+    bool UpdateConfigTree();
+    void UpdateParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
+
     void DisplayXa(boost::property_tree::wptree::value_type& Xa);
+    void DisplayNode(boost::property_tree::wptree::value_type& Node);
     void DisplayService(boost::property_tree::wptree::value_type& Service);
     void DisplayMsgqueue(boost::property_tree::wptree::value_type& MsgQueue);
     void DisplayRuntimeTable(boost::property_tree::wptree::value_type& RuntimeTable);
 
 private:
 
-    CComboBox                           m_maItem;             //配置项
-    CTreeCtrl                           m_ConfigTree;         //每个配置项对应的配置内容
-    std::vector<CEdit*>                  m_vecEditText;        //存储参数值
-    std::vector<CStatic*>                m_vecStaticText;      //存储参数名称
-    boost::property_tree::wptree        m_XMLTree;            //XML根节点
+    CString                                  m_LastSearchNode;     //上一次搜索的节点
+    CString                                  m_LastLeafNode;       //上一次显示的叶子节点
+    CString                                  m_LastLeafID;         //上一次显示的叶子ID
+    CComboBox                                m_maItem;             //配置项
+    CTreeCtrl                                m_ConfigTree;         //每个配置项对应的配置内容
+    std::vector<CEdit*>                      m_vecEditText;        //存储参数值
+    std::vector<CStatic*>                    m_vecStaticText;      //存储参数名称
+    boost::property_tree::wptree             m_XMLTree;            //XML根节点
 };

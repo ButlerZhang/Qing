@@ -24,19 +24,19 @@ const CString DOT(L".");   //以点号分隔
 class CAboutDlg : public CDialogEx
 {
 public:
-	CAboutDlg();
+    CAboutDlg();
 
-// 对话框数据
+    // 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_ABOUTBOX };
+    enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 // 实现
 protected:
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -45,7 +45,7 @@ CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+    CDialogEx::DoDataExchange(pDX);
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
@@ -57,9 +57,9 @@ END_MESSAGE_MAP()
 
 
 CmaServerConfigDlg::CmaServerConfigDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MASERVERCONFIG_DIALOG, pParent)
+    : CDialogEx(IDD_MASERVERCONFIG_DIALOG, pParent)
 {
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+    m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CmaServerConfigDlg::DoDataExchange(CDataExchange* pDX)
@@ -70,12 +70,13 @@ void CmaServerConfigDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
-	ON_WM_SYSCOMMAND()
-	ON_WM_PAINT()
-	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDOK, &CmaServerConfigDlg::OnBnClickedOk)
+    ON_WM_SYSCOMMAND()
+    ON_WM_PAINT()
+    ON_WM_QUERYDRAGICON()
+    ON_BN_CLICKED(IDOK, &CmaServerConfigDlg::OnBnClickedOk)
     ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnCbnSelchangeCombo1_ChangeNode)
     ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTvnSelchangedTreeItem)
+    ON_BN_CLICKED(ID_BUTTON_GENERATE, &CmaServerConfigDlg::OnBnClickedButtonGenerate)
 END_MESSAGE_MAP()
 
 
@@ -83,34 +84,34 @@ END_MESSAGE_MAP()
 
 BOOL CmaServerConfigDlg::OnInitDialog()
 {
-	CDialogEx::OnInitDialog();
+    CDialogEx::OnInitDialog();
 
-	// 将“关于...”菜单项添加到系统菜单中。
+    // 将“关于...”菜单项添加到系统菜单中。
 
-	// IDM_ABOUTBOX 必须在系统命令范围内。
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
+    // IDM_ABOUTBOX 必须在系统命令范围内。
+    ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+    ASSERT(IDM_ABOUTBOX < 0xF000);
 
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != nullptr)
-	{
-		BOOL bNameValid;
-		CString strAboutMenu;
-		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
-		ASSERT(bNameValid);
-		if (!strAboutMenu.IsEmpty())
-		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
-		}
-	}
+    CMenu* pSysMenu = GetSystemMenu(FALSE);
+    if (pSysMenu != nullptr)
+    {
+        BOOL bNameValid;
+        CString strAboutMenu;
+        bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
+        ASSERT(bNameValid);
+        if (!strAboutMenu.IsEmpty())
+        {
+            pSysMenu->AppendMenu(MF_SEPARATOR);
+            pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+        }
+    }
 
-	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
-	//  执行此操作
-	SetIcon(m_hIcon, TRUE);			// 设置大图标
-	SetIcon(m_hIcon, FALSE);		// 设置小图标
+    // 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
+    //  执行此操作
+    SetIcon(m_hIcon, TRUE);			// 设置大图标
+    SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	// TODO: 在此添加额外的初始化代码
+    // TODO: 在此添加额外的初始化代码
     m_maItem.AddString(_T("construction: 构件"));
     m_maItem.AddString(_T("deployment: 部署"));
     m_maItem.AddString(_T("kernel: 内核"));
@@ -129,15 +130,15 @@ BOOL CmaServerConfigDlg::OnInitDialog()
 
 void CmaServerConfigDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
-	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
-	{
-		CAboutDlg dlgAbout;
-		dlgAbout.DoModal();
-	}
-	else
-	{
-		CDialogEx::OnSysCommand(nID, lParam);
-	}
+    if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+    {
+        CAboutDlg dlgAbout;
+        dlgAbout.DoModal();
+    }
+    else
+    {
+        CDialogEx::OnSysCommand(nID, lParam);
+    }
 }
 
 // 如果向对话框添加最小化按钮，则需要下面的代码
@@ -146,34 +147,34 @@ void CmaServerConfigDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CmaServerConfigDlg::OnPaint()
 {
-	if (IsIconic())
-	{
-		CPaintDC dc(this); // 用于绘制的设备上下文
+    if (IsIconic())
+    {
+        CPaintDC dc(this); // 用于绘制的设备上下文
 
-		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+        SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// 使图标在工作区矩形中居中
-		int cxIcon = GetSystemMetrics(SM_CXICON);
-		int cyIcon = GetSystemMetrics(SM_CYICON);
-		CRect rect;
-		GetClientRect(&rect);
-		int x = (rect.Width() - cxIcon + 1) / 2;
-		int y = (rect.Height() - cyIcon + 1) / 2;
+        // 使图标在工作区矩形中居中
+        int cxIcon = GetSystemMetrics(SM_CXICON);
+        int cyIcon = GetSystemMetrics(SM_CYICON);
+        CRect rect;
+        GetClientRect(&rect);
+        int x = (rect.Width() - cxIcon + 1) / 2;
+        int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// 绘制图标
-		dc.DrawIcon(x, y, m_hIcon);
-	}
-	else
-	{
-		CDialogEx::OnPaint();
-	}
+        // 绘制图标
+        dc.DrawIcon(x, y, m_hIcon);
+    }
+    else
+    {
+        CDialogEx::OnPaint();
+    }
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
 HCURSOR CmaServerConfigDlg::OnQueryDragIcon()
 {
-	return static_cast<HCURSOR>(m_hIcon);
+    return static_cast<HCURSOR>(m_hIcon);
 }
 
 void CmaServerConfigDlg::OnBnClickedOk()
@@ -196,37 +197,38 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
 
     //非叶子节点不处理
     HTREEITEM hSelectTreeItem = m_ConfigTree.GetSelectedItem();
-    if(m_ConfigTree.ItemHasChildren(hSelectTreeItem))
+    if (m_ConfigTree.ItemHasChildren(hSelectTreeItem))
     {
         return;
     }
 
-    //获取叶子结点的ID
-    CString CurrentText = m_ConfigTree.GetItemText(hSelectTreeItem);
-    int StartPos = CurrentText.Find(L"_");
-    int StopPos = CurrentText.Find(L"_", StartPos + 1);
-    const std::wstring &CurrentID = CurrentText.Mid(StartPos + 1, StopPos - StartPos - 1).GetString();
-    const CString& CurrentType = CurrentText.Left(StartPos);
+    //保存上一次界面的修改
+    SaveLastChange();
+
+    //获取叶子结点的类型和ID
+    CString CurrentLeafNode = m_ConfigTree.GetItemText(hSelectTreeItem);
+    CString CurrentLeafType = GetLeftType(CurrentLeafNode);
+    CString CurrentLeafID = GetLeafID(CurrentLeafNode);
 
     //获取从根节点到当前节点的信息
     std::vector<CString> vecString;
     HTREEITEM hParent = NULL, hCurrent = hSelectTreeItem;
-    while((hParent = m_ConfigTree.GetParentItem(hCurrent)) && hParent != NULL)
+    while ((hParent = m_ConfigTree.GetParentItem(hCurrent)) && hParent != NULL)
     {
         vecString.push_back(m_ConfigTree.GetItemText(hParent));
         hCurrent = hParent;
     }
 
     //组装成要搜索的节点
-    CString SearchNodeText = GetRootNodeName();
-    for(std::vector<CString>::reverse_iterator it = vecString.rbegin(); it != vecString.rend(); it++)
+    CString SearchNode = GetRootNodeName();
+    for (std::vector<CString>::reverse_iterator it = vecString.rbegin(); it != vecString.rend(); it++)
     {
-        SearchNodeText.Append(DOT);
-        SearchNodeText.Append(*it);
+        SearchNode.Append(DOT);
+        SearchNode.Append(*it);
     }
 
     //遍历找到对应的节点
-    BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, m_XMLTree.get_child(SearchNodeText.GetString()))
+    BOOST_FOREACH(boost::property_tree::wptree::value_type &v1, m_XMLTree.get_child(SearchNode.GetString()))
     {
         //忽略属性
         if (v1.first.find(L"<") != std::wstring::npos)
@@ -236,22 +238,34 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
 
         //ID不会是空的
         const std::wstring& ID = v1.second.get<std::wstring>(L"<xmlattr>.id", L"");
-        if (ID.empty() || ID != CurrentID)
+        if (ID.empty() || CurrentLeafID.Compare(ID.c_str()) != 0)
         {
             continue;
         }
 
-        if(theApp.g_mapLeaf.find(CurrentType.GetString()) != theApp.g_mapLeaf.end())
+        if (theApp.g_mapLeaf.find(CurrentLeafType.GetString()) != theApp.g_mapLeaf.end())
         {
-            theApp.g_mapLeaf[CurrentType.GetString()].m_FDisplay(v1);
+            theApp.g_mapLeaf[CurrentLeafType.GetString()].m_FDisplay(v1);
         }
         else
         {
-            MessageBox(SearchNodeText + CurrentType);
+            MessageBox(SearchNode + CurrentLeafType);
         }
 
+        m_LastSearchNode = SearchNode;
+        m_LastLeafNode = CurrentLeafNode;
+        m_LastLeafID = CurrentLeafID;
         break;
     }
+}
+
+void CmaServerConfigDlg::OnBnClickedButtonGenerate()
+{
+    SaveLastChange();
+
+    boost::property_tree::xml_writer_settings<std::wstring> settings;
+    settings = boost::property_tree::xml_writer_make_settings<std::wstring>(L'\t', 1);
+    boost::property_tree::write_xml("maServer_test.xml", m_XMLTree, std::locale(), settings);
 }
 
 CString CmaServerConfigDlg::GetRootNodeName()
@@ -276,7 +290,7 @@ CString CmaServerConfigDlg::GetRootNodeName()
 
     //判断选中的是否是ma
     CString Node(L"ma");       //根节点名称
-    
+
 
     //如果不是ma，则以ma开头
     if (CurrentText.Compare(Node) != 0)
@@ -287,6 +301,41 @@ CString CmaServerConfigDlg::GetRootNodeName()
 
     //返回ma/ma.kernel/ma.construction/ma.deployment
     return Node;
+}
+
+CString CmaServerConfigDlg::GetLeafID(const CString& Text)
+{
+    if (Text.IsEmpty())
+    {
+        return CString();
+    }
+
+    int StartPos = Text.Find(L"_");
+    if (StartPos <= 0 || StartPos > Text.GetLength())
+    {
+        return CString();
+    }
+
+    int StopPos = Text.Find(L"_", StartPos + 1);
+    const CString& LeafID = Text.Mid(StartPos + 1, StopPos - StartPos - 1).GetString();
+    return LeafID;
+}
+
+CString CmaServerConfigDlg::GetLeftType(const CString& Text)
+{
+    if (Text.IsEmpty())
+    {
+        return CString();
+    }
+
+    int StartPos = Text.Find(L"_");
+    if (StartPos <= 0 || StartPos > Text.GetLength())
+    {
+        return CString();
+    }
+
+    const CString& CurrentType = Text.Left(StartPos);
+    return CurrentType;
 }
 
 void CmaServerConfigDlg::InitControlSize()
@@ -391,19 +440,26 @@ void CmaServerConfigDlg::InitControlSize()
 void CmaServerConfigDlg::InitCallbackFunction()
 {
     theApp.g_mapLeaf[g_Xa].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayXa, this, std::placeholders::_1);
+    theApp.g_mapLeaf[g_Node].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayNode, this, std::placeholders::_1);
     theApp.g_mapLeaf[g_Service].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayService, this, std::placeholders::_1);
     theApp.g_mapLeaf[g_MsgQueue].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayMsgqueue, this, std::placeholders::_1);
     theApp.g_mapLeaf[g_RuntimeTable].m_FDisplay = std::bind(&CmaServerConfigDlg::DisplayRuntimeTable, this, std::placeholders::_1);
+
+    theApp.g_mapLeaf[g_Xa].m_FUpdate = std::bind(&CmaServerConfigDlg::UpdateParams, this, std::placeholders::_1, std::placeholders::_2);
+    theApp.g_mapLeaf[g_Node].m_FUpdate = std::bind(&CmaServerConfigDlg::UpdateParams, this, std::placeholders::_1, std::placeholders::_2);
+    theApp.g_mapLeaf[g_Service].m_FUpdate = std::bind(&CmaServerConfigDlg::UpdateParams, this, std::placeholders::_1, std::placeholders::_2);
+    theApp.g_mapLeaf[g_MsgQueue].m_FUpdate = std::bind(&CmaServerConfigDlg::UpdateParams, this, std::placeholders::_1, std::placeholders::_2);
+    theApp.g_mapLeaf[g_RuntimeTable].m_FUpdate = std::bind(&CmaServerConfigDlg::UpdateParams, this, std::placeholders::_1, std::placeholders::_2);
 }
 
 void CmaServerConfigDlg::ResetControl()
 {
-    if(m_vecEditText.empty() || m_vecStaticText.empty())
+    if (m_vecEditText.empty() || m_vecStaticText.empty())
     {
         const int MAX_COUNT = 50;
         UINT StartID = 10000;
         CRect Rect(0, 0, 0, 0);
-        for(int count = 0; count < MAX_COUNT; count++)
+        for (int count = 0; count < MAX_COUNT; count++)
         {
             m_vecEditText.push_back(new CEdit());
             m_vecEditText[m_vecEditText.size() - 1]->Create(WS_CHILD | WS_VISIBLE | ES_LEFT, Rect, this, StartID++);
@@ -413,7 +469,7 @@ void CmaServerConfigDlg::ResetControl()
         }
     }
 
-    for(std::vector<CEdit>::size_type index =0; index != m_vecEditText.size(); index++)
+    for (std::vector<CEdit>::size_type index = 0; index != m_vecEditText.size(); index++)
     {
         m_vecEditText[index]->MoveWindow(0, 0, 0, 0);
         m_vecEditText[index]->ShowWindow(SW_HIDE);
@@ -426,11 +482,42 @@ void CmaServerConfigDlg::ResetControl()
     }
 }
 
+void CmaServerConfigDlg::SaveLastChange()
+{
+    if (!m_LastSearchNode.IsEmpty() && !m_LastLeafNode.IsEmpty() && !m_LastLeafID.IsEmpty())
+    {
+        //遍历找到对应的节点
+        BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, m_XMLTree.get_child(m_LastSearchNode.GetString()))
+        {
+            //忽略属性
+            if (v1.first.find(L"<") != std::wstring::npos)
+            {
+                continue;
+            }
+
+            //ID不会是空的
+            const std::wstring& ID = v1.second.get<std::wstring>(L"<xmlattr>.id", L"");
+            if (ID.empty() || m_LastLeafID.Compare(ID.c_str()))
+            {
+                continue;
+            }
+
+            CString LeafType = GetLeftType(m_LastLeafNode);
+            if (theApp.g_mapLeaf.find(LeafType.GetString()) != theApp.g_mapLeaf.end())
+            {
+                theApp.g_mapLeaf[LeafType.GetString()].m_FUpdate(LeafType.GetString(), v1);
+            }
+
+            break;
+        }
+    }
+}
+
 bool CmaServerConfigDlg::UpdateConfigTree()
 {
     //确定要搜索的节点
     std::wstring Node = GetRootNodeName().GetString();
-    if(Node.empty())
+    if (Node.empty())
     {
         return false;
     }
@@ -485,11 +572,31 @@ bool CmaServerConfigDlg::UpdateConfigTree()
         int counter = static_cast<int>(std::count(it->begin(), it->end(), DOT[0]));
         if (counter <= 2 && TreeMap.find(Key) != TreeMap.end())
         {
-            m_ConfigTree.Expand(TreeMap[Key], TVE_EXPAND);    
+            m_ConfigTree.Expand(TreeMap[Key], TVE_EXPAND);
         }
     }
 
     return true;
+}
+
+void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode)
+{
+    CString ControlName, ControlValue, FormatString;
+    const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;
+    for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        for (int ControlIndex = 0; ControlIndex < m_vecEditText.size(); ControlIndex++)
+        {
+            m_vecStaticText[ControlIndex]->GetWindowTextW(ControlName);
+            if (ControlName.Compare(vecParams[index].m_ParamName.c_str()) == 0)
+            {
+                m_vecEditText[ControlIndex]->GetWindowTextW(ControlValue);
+                FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
+                LeafNode.second.put<std::wstring>(FormatString.GetString(), ControlValue.GetString());
+                break;
+            }
+        }
+    }
 }
 
 bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
@@ -525,7 +632,7 @@ bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
     }
 
     std::locale::global(std::locale(""));
-    boost::property_tree::read_xml(XMLFile, m_XMLTree);
+    boost::property_tree::read_xml(XMLFile, m_XMLTree, boost::property_tree::xml_parser::trim_whitespace);
     return true;
 }
 
@@ -544,6 +651,35 @@ void CmaServerConfigDlg::DisplayXa(boost::property_tree::wptree::value_type& Xa)
     {
         FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
         const std::wstring& Text = Xa.second.get<std::wstring>(FormatString.GetString(), L"");
+
+        m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
+        m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index].m_ParamName.c_str());
+        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        m_vecEditText[ControlIndex]->MoveWindow(ParamsArea.left + 200, CurrentY, 500, 30);
+        m_vecEditText[ControlIndex]->SetWindowTextW(Text.c_str());
+        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+
+        CurrentY += 50;
+        ++ControlIndex;
+    }
+}
+
+void CmaServerConfigDlg::DisplayNode(boost::property_tree::wptree::value_type& Node)
+{
+    CRect ParamsArea;
+    GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
+
+    ResetControl();
+
+    CString FormatString;
+    int ControlIndex = 0;
+    int CurrentY = ParamsArea.top;
+    const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[g_Node].m_vecParams;
+    for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+    {
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
+        const std::wstring& Text = Node.second.get<std::wstring>(FormatString.GetString(), L"");
 
         m_vecStaticText[ControlIndex]->MoveWindow(ParamsArea.left + 20, CurrentY, 100, 30);
         m_vecStaticText[ControlIndex]->SetWindowTextW(vecParams[index].m_ParamName.c_str());

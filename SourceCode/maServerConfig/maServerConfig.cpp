@@ -148,4 +148,16 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"daopath"));
     g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaserial"));
     g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaopen"));
+
+    //node节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Node, LeafNode()));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"type"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"gid"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"ipv4"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"path"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"use"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"defaultxa"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"backupxa"));
 }
