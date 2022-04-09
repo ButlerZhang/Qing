@@ -56,6 +56,8 @@ BOOL CmaServerConfigApp::InitInstance()
 	InitCommonControlsEx(&InitCtrls);
 
 	CWinApp::InitInstance();
+
+    m_NextControlID = 10000;
     InitLeafNode();
 
 	AfxEnableControlContainer();
@@ -108,6 +110,63 @@ BOOL CmaServerConfigApp::InitInstance()
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
 	return FALSE;
+}
+
+void CmaServerConfigApp::InitLeafNode()
+{
+    //RuntimeTable节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_RuntimeTable, LeafNode()));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"import_file"));
+
+    //Service节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Service, LeafNode()));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"gid"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"runas"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"workthread"));
+    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"use"));
+
+    //msgqueue节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_MsgQueue, LeafNode()));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"gid"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"direction"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"type"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"protocol"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"init"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"max_size"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"timeout"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"connstr"));
+
+    //xa节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Xa, LeafNode()));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"clsid"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaclose"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaoption"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"daopath"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaserial"));
+    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaopen"));
+
+    //node节点
+    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Node, LeafNode()));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"id"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"name"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"type"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"gid"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"ipv4"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"path"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"use"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"defaultxa"));
+    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"backupxa"));
 }
 
 bool CmaServerConfigApp::ReadXMLFile(const std::string& XMLFile)
@@ -187,59 +246,91 @@ CString CmaServerConfigApp::GetLeftType(const CString& Text)
     return CurrentType;
 }
 
-void CmaServerConfigApp::InitLeafNode()
+void CmaServerConfigApp::ResetControl()
 {
-    //RuntimeTable节点
-    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_RuntimeTable, LeafNode()));
-    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"id"));
-    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"name"));
-    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"clsid"));
-    g_mapLeaf[g_RuntimeTable].m_vecParams.push_back(ParamNode(L"import_file"));
+    for (std::vector<CEdit>::size_type index = 0; index != m_vecEditText.size(); index++)
+    {
+        m_vecEditText[index]->MoveWindow(0, 0, 0, 0);
+        m_vecEditText[index]->ShowWindow(SW_HIDE);
+    }
 
-    //Service节点
-    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Service, LeafNode()));
-    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"id"));
-    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"name"));
-    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"clsid"));
-    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"gid"));
-    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"runas"));
-    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"workthread"));
-    g_mapLeaf[g_Service].m_vecParams.push_back(ParamNode(L"use"));
+    for (std::vector<CStatic>::size_type index = 0; index != m_vecStaticText.size(); index++)
+    {
+        m_vecStaticText[index]->MoveWindow(0, 0, 0, 0);
+        m_vecStaticText[index]->ShowWindow(SW_HIDE);
+    }
+}
 
-    //msgqueue节点
-    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_MsgQueue, LeafNode()));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"id"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"name"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"gid"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"direction"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"type"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"protocol"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"init"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"max_size"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"timeout"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"clsid"));
-    g_mapLeaf[g_MsgQueue].m_vecParams.push_back(ParamNode(L"connstr"));
+std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(CWnd* wnd, int &TargetIndex)
+{
+    CRect Rect;
 
-    //xa节点
-    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Xa, LeafNode()));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"id"));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"name"));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"clsid"));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaclose"));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaoption"));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"daopath"));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaserial"));
-    g_mapLeaf[g_Xa].m_vecParams.push_back(ParamNode(L"xaopen"));
+    //先查找已经创建但还未使用的控件
+    for (std::vector<std::shared_ptr<CEdit>>::size_type index = 0; index < m_vecEditText.size(); index++)
+    {
+        m_vecEditText[index]->GetClientRect(Rect);
+        if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
+        {
+            TargetIndex = index;
+            return m_vecEditText[index];
+        }
+    }
 
-    //node节点
-    g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(g_Node, LeafNode()));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"id"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"name"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"type"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"gid"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"ipv4"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"path"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"use"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"defaultxa"));
-    g_mapLeaf[g_Node].m_vecParams.push_back(ParamNode(L"backupxa"));
+    //找不到时创建一个新的控件
+    m_vecEditText.push_back(std::make_shared<CEdit>());
+    TargetIndex = m_vecEditText.size() - 1;
+
+    //设置新控件的属性
+    DWORD Style = WS_CHILD | WS_VISIBLE | SS_LEFT;
+    Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
+    m_vecEditText[TargetIndex]->Create(Style, Rect, wnd, m_NextControlID++);
+
+    return m_vecEditText[TargetIndex];
+}
+
+std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(int index)
+{
+    if(index >= 0 && index < m_vecEditText.size())
+    {
+        return m_vecEditText[index];
+    }
+
+    return std::shared_ptr<CEdit>();
+}
+
+std::shared_ptr<CStatic> CmaServerConfigApp::GetStaticText(CWnd* wnd, int &TargetIndex)
+{
+    CRect Rect;
+
+    //先查找已经创建但还未使用的控件
+    for (std::vector<std::shared_ptr<CStatic>>::size_type index = 0; index < m_vecStaticText.size(); index++)
+    {
+        m_vecStaticText[index]->GetClientRect(Rect);
+        if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
+        {
+            TargetIndex = index;
+            return m_vecStaticText[index];
+        }
+    }
+
+    //找不到时创建一个新的控件
+    m_vecStaticText.push_back(std::make_shared<CStatic>());
+    TargetIndex = m_vecStaticText.size() - 1;
+
+    //设置新控件的属性
+    DWORD Style = WS_CHILD | WS_VISIBLE | SS_LEFT | SS_CENTERIMAGE;
+    Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
+    m_vecStaticText[TargetIndex]->Create(NULL, Style, Rect, wnd, m_NextControlID++);
+
+    return m_vecStaticText[TargetIndex];
+}
+
+std::shared_ptr<CStatic> CmaServerConfigApp::GetStaticText(int index)
+{
+    if(index >= 0 && index < m_vecStaticText.size())
+    {
+        return m_vecStaticText[index];
+    }
+
+    return std::shared_ptr<CStatic>();
 }

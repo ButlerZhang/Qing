@@ -22,13 +22,19 @@ enum ControlType                            //控件类型
 
 struct ParamNode                            //参数节点
 {
+    int          m_ParamNameIndex;          //参数名下标
+    int          m_ParamValueIndex;         //参数值下标
+
     std::wstring m_ParamName;               //参数名称
     std::wstring m_ParamValue;              //参数值
-    ControlType  m_ControlType;             //参数值的控件类型
+
+    ControlType  m_ParamValueType;          //参数值的控件类型
 
     ParamNode(const std::wstring& ParamName) :
         m_ParamName(ParamName),
-        m_ControlType(CT_DEFAULT) {}
+        m_ParamNameIndex(0),
+        m_ParamValueIndex(0),
+        m_ParamValueType(CT_DEFAULT) {}
 };
 
 struct LeafNode                             //叶子节点

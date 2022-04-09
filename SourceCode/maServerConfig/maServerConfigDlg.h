@@ -43,7 +43,6 @@ private:
     void InitControlSize();
     CString GetRootNodeName();
 
-    void ResetControl();
     void SaveLastChange();
     bool LoadConfigFile(const std::string& XMLFile);
 
@@ -60,6 +59,4 @@ private:
     CString                                  m_LastLeafID;         //上一次显示的叶子ID
     CComboBox                                m_maItem;             //配置项
     CTreeCtrl                                m_ConfigTree;         //每个配置项对应的配置内容
-    std::vector<std::shared_ptr<CEdit>>      m_vecEditText;        //存储参数值
-    std::vector<std::shared_ptr<CStatic>>    m_vecStaticText;      //存储参数名称
 };

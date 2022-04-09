@@ -249,7 +249,7 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
 
         if (theApp.g_mapLeaf.find(CurrentLeafType.GetString()) != theApp.g_mapLeaf.end())
         {
-            ResetControl();
+            theApp.ResetControl();
             DisplayParams(CurrentLeafType.GetString(), v1);
         }
         else
@@ -406,38 +406,6 @@ void CmaServerConfigDlg::InitControlSize()
     }
 }
 
-void CmaServerConfigDlg::ResetControl()
-{
-    if (m_vecEditText.empty() || m_vecStaticText.empty())
-    {
-        const int MAX_COUNT = 50;
-        UINT StartID = 10000;
-        CRect Rect(0, 0, 0, 0);
-        DWORD EditStyle = WS_CHILD | WS_VISIBLE | SS_LEFT;
-        DWORD StaticTextStyle = WS_CHILD | WS_VISIBLE | SS_LEFT | SS_CENTERIMAGE;
-        for (int count = 0; count < MAX_COUNT; count++)
-        {
-            m_vecEditText.push_back(std::make_shared<CEdit>());
-            m_vecEditText[m_vecEditText.size() - 1]->Create(EditStyle, Rect, this, StartID++);
-
-            m_vecStaticText.push_back(std::make_shared<CStatic>());
-            m_vecStaticText[m_vecEditText.size() - 1]->Create(NULL, StaticTextStyle, Rect, this, StartID++);
-        }
-    }
-
-    for (std::vector<CEdit>::size_type index = 0; index != m_vecEditText.size(); index++)
-    {
-        m_vecEditText[index]->MoveWindow(0, 0, 0, 0);
-        m_vecEditText[index]->ShowWindow(SW_HIDE);
-    }
-
-    for (std::vector<CStatic>::size_type index = 0; index != m_vecStaticText.size(); index++)
-    {
-        m_vecStaticText[index]->MoveWindow(0, 0, 0, 0);
-        m_vecStaticText[index]->ShowWindow(SW_HIDE);
-    }
-}
-
 void CmaServerConfigDlg::SaveLastChange()
 {
     if (!m_LastSearchNode.IsEmpty() && !m_LastLeafNode.IsEmpty() && !m_LastLeafID.IsEmpty())
@@ -541,17 +509,22 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
     const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;
     for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
     {
-        for (int ControlIndex = 0; ControlIndex < m_vecEditText.size(); ControlIndex++)
+        const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(vecParams[index].m_ParamNameIndex);
+        if (StaticText == nullptr)
         {
-            m_vecStaticText[ControlIndex]->GetWindowTextW(ControlName);
-            if (ControlName.Compare(vecParams[index].m_ParamName.c_str()) == 0)
-            {
-                m_vecEditText[ControlIndex]->GetWindowTextW(ControlValue);
-                FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
-                LeafNode.second.put<std::wstring>(FormatString.GetString(), ControlValue.GetString());
-                break;
-            }
+            continue;
         }
+
+        StaticText->GetWindowTextW(ControlName);
+        if (ControlName.Compare(vecParams[index].m_ParamName.c_str()) != 0)
+        {
+            continue;
+        }
+
+        theApp.GetEditText(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
+        LeafNode.second.put<std::wstring>(FormatString.GetString(), ControlValue.GetString());
+        break;
     }
 }
 
@@ -581,20 +554,22 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
     int ControlIndex = 0;
 
     CString FormatString;
-    const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;
+    std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;
     for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
     {
         FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
         const std::wstring& Text = vecParams[index].m_ParamName + COLON.GetString();
         const std::wstring& Value = LeafNode.second.get<std::wstring>(FormatString.GetString(), L"");
 
-        m_vecStaticText[ControlIndex]->MoveWindow(StartX, CurrentY, StaticWidth, ControlHeight);
-        m_vecStaticText[ControlIndex]->SetWindowTextW(Text.c_str());
-        m_vecStaticText[ControlIndex]->ShowWindow(SW_SHOW);
+        const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(this, vecParams[index].m_ParamNameIndex);
+        StaticText->MoveWindow(StartX, CurrentY, StaticWidth, ControlHeight);
+        StaticText->SetWindowTextW(Text.c_str());
+        StaticText->ShowWindow(SW_SHOW);
 
-        m_vecEditText[ControlIndex]->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY, ControlWidth, ControlHeight);
-        m_vecEditText[ControlIndex]->SetWindowTextW(Value.c_str());
-        m_vecEditText[ControlIndex]->ShowWindow(SW_SHOW);
+        const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, vecParams[index].m_ParamValueIndex);
+        EditText->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY, ControlWidth, ControlHeight);
+        EditText->SetWindowTextW(Value.c_str());
+        EditText->ShowWindow(SW_SHOW);
 
         CurrentY += ControlHeight + OFFSET;
         ++ControlIndex;

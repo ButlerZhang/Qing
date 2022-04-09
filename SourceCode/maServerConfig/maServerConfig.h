@@ -5,7 +5,7 @@
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "在包含此文件之前包含 'pch.h' 以生成 PCH"
+#error "在包含此文件之前包含 'pch.h' 以生成 PCH"
 #endif
 
 #include "resource.h"		// 主符号
@@ -13,22 +13,15 @@
 #include <map>
 #include <boost/property_tree/ptree.hpp>
 
-// CmaServerConfigApp:
-// 有关此类的实现，请参阅 maServerConfig.cpp
-//
-
 
 
 class CmaServerConfigApp : public CWinApp
 {
 public:
-	CmaServerConfigApp();
+    CmaServerConfigApp();
+    virtual BOOL InitInstance();
 
-// 重写
 public:
-	virtual BOOL InitInstance();
-
-public: //与控件没关系的函数
 
     bool ReadXMLFile(const std::string& XMLFile);
     bool WriteXMLFile(const std::string& XMLFile);
@@ -36,18 +29,31 @@ public: //与控件没关系的函数
     CString GetLeafID(const CString& Text);
     CString GetLeftType(const CString& Text);
 
-// 实现
+    void ResetControl();
 
-	DECLARE_MESSAGE_MAP()
+    std::shared_ptr<CEdit> GetEditText(CWnd* wnd, int &TargetIndex);
+    std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, int &TargetIndex);
+
+    std::shared_ptr<CEdit> GetEditText(int index);
+    std::shared_ptr<CStatic> GetStaticText(int index);
+
+    // 实现
+    DECLARE_MESSAGE_MAP()
 
 private:
 
     void InitLeafNode();
 
+private:
+
+    UINT                                     m_NextControlID;       //下一个可用的控件ID
+    std::vector<std::shared_ptr<CEdit>>      m_vecEditText;         //存储参数值
+    std::vector<std::shared_ptr<CStatic>>    m_vecStaticText;       //存储参数名称
+
 public:
 
-    std::map<std::wstring, LeafNode>        g_mapLeaf;              //叶子结点
-    boost::property_tree::wptree            g_XMLTree;              //XML根节点
+    std::map<std::wstring, LeafNode>         g_mapLeaf;              //叶子结点
+    boost::property_tree::wptree             g_XMLTree;              //XML根节点
 };
 
 extern CmaServerConfigApp theApp;
