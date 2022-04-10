@@ -33,11 +33,13 @@ public:
 
     std::shared_ptr<CEdit> GetEditText(CWnd* wnd, int &TargetIndex);
     std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, int &TargetIndex);
-    std::shared_ptr<CComboBox> GetComboBox(CWnd* wnd, int& TargetIndex);
+    std::shared_ptr<CComboBox> GetComboBoxEdit(CWnd* wnd, int& TargetIndex);
+    std::shared_ptr<CComboBox> GetComboBoxList(CWnd* wnd, int& TargetIndex);
 
     std::shared_ptr<CEdit> GetEditText(int index);
     std::shared_ptr<CStatic> GetStaticText(int index);
-    std::shared_ptr<CComboBox> GetComboBox(int index);
+    std::shared_ptr<CComboBox> GetComboBoxEdit(int index);
+    std::shared_ptr<CComboBox> GetComboBoxList(int index);
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring &LeafType, const ParamNode &Node);
@@ -55,7 +57,8 @@ private:
     UINT                                     m_NextControlID;       //下一个可用的控件ID
     std::vector<std::shared_ptr<CStatic>>    m_vecStaticText;       //存储参数名称
     std::vector<std::shared_ptr<CEdit>>      m_vecEditText;         //存储参数值
-    std::vector<std::shared_ptr<CComboBox>>  m_vecComboBox;         //下拉单选框
+    std::vector<std::shared_ptr<CComboBox>>  m_vecComboBoxEdit;     //下拉可编辑单选框
+    std::vector<std::shared_ptr<CComboBox>>  m_vecComboBoxList;     //下拉不可编辑列表
 
 public:
 

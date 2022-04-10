@@ -19,9 +19,6 @@
 #define new DEBUG_NEW
 #endif
 
-const CString DOT(L".");   //以点号分隔
-const CString COLON(L":"); //以冒号分隔
-
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -121,7 +118,7 @@ BOOL CmaServerConfigDlg::OnInitDialog()
     m_maItem.AddString(_T("deployment: 部署"));
     m_maItem.AddString(_T("kernel: 内核"));
     m_maItem.AddString(_T("ma: 架构"));
-    m_maItem.SetCurSel(0);
+    m_maItem.SetCurSel(3);
 
     if (LoadConfigFile(g_XMLFile))
     {
@@ -227,7 +224,7 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
     CString SearchNode = GetRootNodeName();
     for (std::vector<CString>::reverse_iterator it = vecString.rbegin(); it != vecString.rend(); it++)
     {
-        SearchNode.Append(DOT);
+        SearchNode.Append(DOT.c_str());
         SearchNode.Append(*it);
     }
 
@@ -297,7 +294,7 @@ CString CmaServerConfigDlg::GetRootNodeName()
     //如果不是ma，则以ma开头
     if (CurrentText.Compare(Node) != 0)
     {
-        Node.Append(DOT);
+        Node.Append(DOT.c_str());
         Node.Append(CurrentText);
     }
 
@@ -516,7 +513,7 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
         }
 
         StaticText->GetWindowTextW(ControlName);
-        int pos = ControlName.Find(COLON);
+        int pos = ControlName.Find(COLON.c_str());
         ControlName.Delete(pos, 1);
         if (ControlName.Compare(vecParams[index].m_ParamName.c_str()) != 0)
         {
@@ -527,7 +524,12 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
         {
         case CT_COMBO_BOX_EDIT:
         {
-            theApp.GetComboBox(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            theApp.GetComboBoxEdit(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            break;
+        }
+        case CT_COMBO_BOX_LIST:
+        {
+            theApp.GetComboBoxList(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
             break;
         }
         default:
@@ -539,7 +541,6 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
 
         FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
         LeafNode.second.put<std::wstring>(FormatString.GetString(), ControlValue.GetString());
-        //break;
     }
 }
 
@@ -573,7 +574,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
     for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
     {
         FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
-        const std::wstring& Text = vecParams[index].m_ParamName + COLON.GetString();
+        const std::wstring& Text = vecParams[index].m_ParamName + COLON;
         const std::wstring& Value = LeafNode.second.get<std::wstring>(FormatString.GetString(), L"");
 
         const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(this, vecParams[index].m_ParamNameIndex);
@@ -585,7 +586,17 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         {
         case CT_COMBO_BOX_EDIT:
         {
-            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBox(this, vecParams[index].m_ParamValueIndex);
+            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxEdit(this, vecParams[index].m_ParamValueIndex);
+            ComboBox->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            ComboBox->ShowWindow(SW_SHOW);
+
+            vecParams[index].m_ParamValue = Value;
+            theApp.UpdateComboBox(ComboBox, LeafType, vecParams[index]);
+            break;
+        }
+        case CT_COMBO_BOX_LIST:
+        {
+            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxList(this, vecParams[index].m_ParamValueIndex);
             ComboBox->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
             ComboBox->ShowWindow(SW_SHOW);
 
