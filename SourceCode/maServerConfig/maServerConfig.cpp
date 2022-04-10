@@ -120,7 +120,7 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT_DISABLE));
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Name, CT_STATIC_TEXT_ENABLE));
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ImportFile));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ImportFile, CT_LIST_BOX));
 
     //Service节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Service, LeafNode()));
@@ -188,13 +188,19 @@ void CmaServerConfigApp::InitSelectItem()
 
     //runtime table import file
     const std::wstring& ImportFile = gl_RuntimeTable + DOT + gp_ImportFile;
-    g_mapSelect[ImportFile].push_back(std::wstring());  //可以不导入文件
     g_mapSelect[ImportFile].push_back(L"maServer.xml");
     g_mapSelect[ImportFile].push_back(L"maOem.xml");
+    g_mapSelect[ImportFile].push_back(L"maSpd.xml");
+    g_mapSelect[ImportFile].push_back(L"maSpdAcct.xml");
+    g_mapSelect[ImportFile].push_back(L"maAdapterGsen.xml");
+    g_mapSelect[ImportFile].push_back(L"maAdapterKBSS.xml");
+    g_mapSelect[ImportFile].push_back(L"maAdapterKDSPB.xml");
+    g_mapSelect[ImportFile].push_back(L"maAdapterKDSTG.xml");
+    g_mapSelect[ImportFile].push_back(L"maAdapterKGOB.xml");
+    g_mapSelect[ImportFile].push_back(L"maAdapterAcct.xml");
 
     //service clsid
     const std::wstring& ServiceClsid = gl_Service + DOT + gp_Clsid;
-    g_mapSelect[ServiceClsid].push_back(std::wstring());
     g_mapSelect[ServiceClsid].push_back(L"CService");
 
     //service runas
@@ -348,6 +354,13 @@ void CmaServerConfigApp::ResetControl()
         m_vecComboBoxList[index]->ShowWindow(SW_HIDE);
         m_vecComboBoxList[index]->ResetContent();
     }
+
+    for (std::vector<CButton>::size_type index = 0; index != m_vecButton.size(); index++)
+    {
+        m_vecButton[index]->MoveWindow(0, 0, 0, 0);
+        m_vecButton[index]->ShowWindow(SW_HIDE);
+        m_vecButton[index]->SetWindowTextW(L"");
+    }
 }
 
 std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(CWnd* wnd, int& TargetIndex)
@@ -498,6 +511,43 @@ std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(int index)
     return std::shared_ptr<CComboBox>();
 }
 
+std::shared_ptr<CButton> CmaServerConfigApp::GetButton(CWnd* wnd, int& TargetIndex)
+{
+    CRect Rect;
+
+    //查找已经创建但还未使用的控件
+    for (std::vector<std::shared_ptr<CButton>>::size_type index = 0; index < m_vecButton.size(); index++)
+    {
+        m_vecButton[index]->GetClientRect(Rect);
+        if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
+        {
+            TargetIndex = static_cast<int>(index);
+            return m_vecButton[index];
+        }
+    }
+
+    //找不到时创建一个新的控件
+    m_vecButton.push_back(std::make_shared<CButton>());
+    TargetIndex = static_cast<int>(m_vecButton.size() - 1);
+
+    //设置新控件的属性
+    Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
+    DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT;
+    m_vecButton[TargetIndex]->Create(NULL, Style, Rect, wnd, m_NextControlID++);
+
+    return m_vecButton[TargetIndex];
+}
+
+std::shared_ptr<CButton> CmaServerConfigApp::GetButton(int index)
+{
+    if (index >= 0 && index < m_vecButton.size())
+    {
+        return m_vecButton[index];
+    }
+
+    return std::shared_ptr<CButton>();
+}
+
 void CmaServerConfigApp::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type)
 {
     //文本垂直居中显示，但这样会覆盖掉边框的下划线
@@ -525,13 +575,13 @@ void CmaServerConfigApp::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, Contr
 
     //设置控件是否可编辑
     {
-        if(Type == ControlType::CT_STATIC_TEXT_DISABLE)
+        if(Type == ControlType::CT_STATIC_TEXT_ENABLE)
         {
-            ptrEdit->EnableWindow(FALSE);
+            ptrEdit->EnableWindow(TRUE);
         }
         else
         {
-            ptrEdit->EnableWindow(TRUE);
+            ptrEdit->EnableWindow(FALSE);
         }
     }
 }
@@ -557,5 +607,32 @@ void CmaServerConfigApp::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrCom
             ptrComboBox->SetCurSel(static_cast<int>(index));
             break;
         }
+    }
+}
+
+void CmaServerConfigApp::UpdateListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox& ListBox, const std::wstring& LeafType, const ParamNode& Node)
+{
+    const std::wstring& Key = LeafType + L"." + Node.m_ParamName;
+    if (g_mapSelect.find(Key) == g_mapSelect.end())
+    {
+        return;
+    }
+
+    CRect ButtonRect;
+    ptrButton->GetWindowRect(ButtonRect);
+
+    CRect ListBoxRect;
+    ListBoxRect.left = ButtonRect.left;
+    ListBoxRect.right = ButtonRect.right - 4;
+    ListBoxRect.top = ButtonRect.top;
+    ListBoxRect.bottom = ListBoxRect.top + 300;
+    ListBox.MoveWindow(&ListBoxRect);
+    ListBox.ShowWindow(SW_SHOW);
+
+    ListBox.ResetContent();
+    std::vector<std::wstring>& vecSelect = g_mapSelect[Key];
+    for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+    {
+        ListBox.AddString(vecSelect[index].c_str());
     }
 }

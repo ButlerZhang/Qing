@@ -7,8 +7,9 @@
 const std::string g_XMLFile("maServer.xml");
 
 //使用的两种分隔符
-const std::wstring DOT(L".");   //以点号分隔
-const std::wstring COLON(L":"); //以冒号分隔
+const std::wstring DOT(L".");           //以点号分隔
+const std::wstring COLON(L":");         //以冒号分隔
+const std::wstring SEMICOLON(L";");     //以分号分隔
 
 //叶子结点名称（g:global，l:leaf）
 const std::wstring gl_RuntimeTable(L"runtimetable");
@@ -51,6 +52,7 @@ enum ControlType
     CT_STATIC_TEXT_DISABLE,                         //不可编辑静态文本
     CT_COMBO_BOX_EDIT,                              //下拉可编辑单选框
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
+    CT_LIST_BOX,                                    //下拉列表框
     CT_COUNT                                        //支持的控件种类
 };
 

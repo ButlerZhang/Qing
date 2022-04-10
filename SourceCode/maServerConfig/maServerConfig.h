@@ -35,14 +35,17 @@ public:
     std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, int &TargetIndex);
     std::shared_ptr<CComboBox> GetComboBoxEdit(CWnd* wnd, int& TargetIndex);
     std::shared_ptr<CComboBox> GetComboBoxList(CWnd* wnd, int& TargetIndex);
+    std::shared_ptr<CButton> GetButton(CWnd* wnd, int& TargetIndex);
 
     std::shared_ptr<CEdit> GetEditText(int index);
     std::shared_ptr<CStatic> GetStaticText(int index);
     std::shared_ptr<CComboBox> GetComboBoxEdit(int index);
     std::shared_ptr<CComboBox> GetComboBoxList(int index);
+    std::shared_ptr<CButton> GetButton(int index);
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring &LeafType, const ParamNode &Node);
+    void UpdateListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox &ListBox, const std::wstring& LeafType, const ParamNode& Node);
 
     // 实现
     DECLARE_MESSAGE_MAP()
@@ -59,6 +62,7 @@ private:
     std::vector<std::shared_ptr<CEdit>>      m_vecEditText;         //存储参数值
     std::vector<std::shared_ptr<CComboBox>>  m_vecComboBoxEdit;     //下拉可编辑单选框
     std::vector<std::shared_ptr<CComboBox>>  m_vecComboBoxList;     //下拉不可编辑列表
+    std::vector<std::shared_ptr<CButton>>    m_vecButton;           //点击显示下拉列表框
 
 public:
 

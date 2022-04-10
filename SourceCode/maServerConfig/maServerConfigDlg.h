@@ -37,6 +37,7 @@ private:
     afx_msg void OnCbnSelchangeCombo1_ChangeNode();
     afx_msg void OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnBnClickedButtonGenerate();
+    afx_msg void OnLbnSelchangeList();
 
 private:
 
@@ -59,4 +60,6 @@ private:
     CString                                  m_LastLeafID;         //上一次显示的叶子ID
     CComboBox                                m_maItem;             //配置项
     CTreeCtrl                                m_ConfigTree;         //每个配置项对应的配置内容
+    CCheckListBox                            m_ListBox;            //下拉多选框
+    std::shared_ptr<CButton>                 m_CurrentButton;      //当前点击的按钮
 };

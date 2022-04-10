@@ -68,6 +68,7 @@ void CmaServerConfigDlg::DoDataExchange(CDataExchange* pDX)
     CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_COMBO1, m_maItem);
     DDX_Control(pDX, IDC_TREE1, m_ConfigTree);
+    DDX_Control(pDX, IDC_LIST1, m_ListBox);
 }
 
 BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
@@ -79,6 +80,7 @@ BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
     ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTvnSelchangedTreeItem)
     ON_BN_CLICKED(ID_BUTTON_GENERATE, &CmaServerConfigDlg::OnBnClickedButtonGenerate)
     ON_WM_CLOSE()
+    ON_LBN_SELCHANGE(IDC_LIST1, &CmaServerConfigDlg::OnLbnSelchangeList)
 END_MESSAGE_MAP()
 
 
@@ -125,6 +127,8 @@ BOOL CmaServerConfigDlg::OnInitDialog()
         UpdateConfigTree();
     }
 
+    //m_ListBox.ModifyStyle(0, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | LBS_EXTENDEDSEL);
+    m_ListBox.ShowWindow(SW_HIDE);
     InitControlSize();
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -247,6 +251,7 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
         if (theApp.g_mapLeaf.find(CurrentLeafType.GetString()) != theApp.g_mapLeaf.end())
         {
             theApp.ResetControl();
+            m_ListBox.ShowWindow(SW_HIDE);
             DisplayParams(CurrentLeafType.GetString(), v1);
         }
         else
@@ -265,6 +270,30 @@ void CmaServerConfigDlg::OnBnClickedButtonGenerate()
 {
     SaveLastChange();
     theApp.WriteXMLFile(g_XMLFile);
+}
+
+void CmaServerConfigDlg::OnLbnSelchangeList()
+{
+    CString SingleText, TotalText;
+    for(int index = 0; index < m_ListBox.GetCount(); index++)
+    {
+        if(m_ListBox.GetCheck(index))
+        {
+            m_ListBox.GetText(index, SingleText);
+            if(!SingleText.IsEmpty())
+            {
+                if(!TotalText.IsEmpty())
+                {
+                    TotalText.Append(SEMICOLON.c_str());
+                }
+
+                TotalText.Append(SingleText);
+            }
+        }
+    }
+
+    m_CurrentButton = theApp.GetButton(0);
+    m_CurrentButton->SetWindowTextW(TotalText);
 }
 
 CString CmaServerConfigDlg::GetRootNodeName()
@@ -532,6 +561,11 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
             theApp.GetComboBoxList(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
             break;
         }
+        case CT_LIST_BOX:
+        {
+            theApp.GetButton(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            break;
+        }
         default:
         {
             theApp.GetEditText(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
@@ -604,6 +638,15 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
             theApp.UpdateComboBox(ComboBox, LeafType, vecParams[index]);
             break;
         }
+        case CT_LIST_BOX:
+        {
+            const std::shared_ptr<CButton>& Button = theApp.GetButton(this, vecParams[index].m_ParamValueIndex);
+            Button->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            Button->SetWindowTextW(Value.c_str());
+            Button->ShowWindow(SW_SHOW);
+            theApp.UpdateListBox(Button, m_ListBox, LeafType, vecParams[index]);
+            break;
+        }
         default:
         {
             const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, vecParams[index].m_ParamValueIndex);
@@ -654,3 +697,5 @@ bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
 
     return theApp.ReadXMLFile(XMLFile);
 }
+
+
