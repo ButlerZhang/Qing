@@ -16,7 +16,9 @@ const std::wstring g_Node(L"node");
 enum ControlType                            //控件类型
 {
     CT_DEFAULT,
-    CT_STATIC_TEXT,                         //静态文本
+    CT_STATIC_TEXT_ENABLE,                  //可编辑静态文本
+    CT_STATIC_TEXT_DISABLE,                 //不可编辑静态文本
+    CT_COMBO_BOX_EDIT,                      //下拉可编辑单选框
     CT_COUNT
 };
 
@@ -30,11 +32,11 @@ struct ParamNode                            //参数节点
 
     ControlType  m_ParamValueType;          //参数值的控件类型
 
-    ParamNode(const std::wstring& ParamName) :
+    ParamNode(const std::wstring& ParamName, ControlType Type = CT_DEFAULT) :
         m_ParamName(ParamName),
         m_ParamNameIndex(0),
         m_ParamValueIndex(0),
-        m_ParamValueType(CT_DEFAULT) {}
+        m_ParamValueType(Type) {}
 };
 
 struct LeafNode                             //叶子节点

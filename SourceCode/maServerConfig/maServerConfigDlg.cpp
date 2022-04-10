@@ -232,7 +232,7 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
     }
 
     //遍历找到对应的节点
-    BOOST_FOREACH(boost::property_tree::wptree::value_type &v1, theApp.g_XMLTree.get_child(SearchNode.GetString()))
+    BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, theApp.g_XMLTree.get_child(SearchNode.GetString()))
     {
         //忽略属性
         if (v1.first.find(L"<") != std::wstring::npos)
@@ -516,15 +516,30 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
         }
 
         StaticText->GetWindowTextW(ControlName);
+        int pos = ControlName.Find(COLON);
+        ControlName.Delete(pos, 1);
         if (ControlName.Compare(vecParams[index].m_ParamName.c_str()) != 0)
         {
             continue;
         }
 
-        theApp.GetEditText(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+        switch (vecParams[index].m_ParamValueType)
+        {
+        case CT_COMBO_BOX_EDIT:
+        {
+            theApp.GetComboBox(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            break;
+        }
+        default:
+        {
+            theApp.GetEditText(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            break;
+        }
+        }
+
         FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_ParamName.c_str());
         LeafNode.second.put<std::wstring>(FormatString.GetString(), ControlValue.GetString());
-        break;
+        //break;
     }
 }
 
@@ -539,13 +554,13 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
     int CONTROL_SPLIT = 1 + 5;                      //参数名和参数值按1:5划分
 
     int StaticWidth = ParamsArea.Width() / CONTROL_SPLIT;
-    if(StaticWidth > 100)
+    if (StaticWidth > 100)
     {
         StaticWidth = 100;                  //太长不好看
     }
 
     int ControlWidth = ParamsArea.Width() - StaticWidth - 4 * OFFSET;
-    if(ControlWidth > 1000)
+    if (ControlWidth > 1000)
     {
         ControlWidth = 1000;
     }
@@ -566,11 +581,28 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         StaticText->SetWindowTextW(Text.c_str());
         StaticText->ShowWindow(SW_SHOW);
 
-        const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, vecParams[index].m_ParamValueIndex);
-        EditText->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY, ControlWidth, ControlHeight);
-        EditText->SetWindowTextW(Value.c_str());
-        EditText->ShowWindow(SW_SHOW);
-        theApp.AdjustEditTextHeight(EditText);
+        switch (vecParams[index].m_ParamValueType)
+        {
+        case CT_COMBO_BOX_EDIT:
+        {
+            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBox(this, vecParams[index].m_ParamValueIndex);
+            ComboBox->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            ComboBox->ShowWindow(SW_SHOW);
+
+            vecParams[index].m_ParamValue = Value;
+            theApp.UpdateComboBox(ComboBox, LeafType, vecParams[index]);
+            break;
+        }
+        default:
+        {
+            const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, vecParams[index].m_ParamValueIndex);
+            EditText->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            EditText->SetWindowTextW(Value.c_str());
+            EditText->ShowWindow(SW_SHOW);
+            theApp.UpdateEdit(EditText, vecParams[index].m_ParamValueType);
+            break;
+        }
+        }
 
         CurrentY += ControlHeight + OFFSET;
         ++ControlIndex;
