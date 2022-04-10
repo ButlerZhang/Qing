@@ -37,6 +37,8 @@ public:
     std::shared_ptr<CEdit> GetEditText(int index);
     std::shared_ptr<CStatic> GetStaticText(int index);
 
+    void AdjustEditTextHeight(const std::shared_ptr<CEdit>& ptrEdit);
+
     // 实现
     DECLARE_MESSAGE_MAP()
 

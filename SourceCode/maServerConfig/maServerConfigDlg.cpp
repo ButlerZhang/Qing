@@ -570,6 +570,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         EditText->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY, ControlWidth, ControlHeight);
         EditText->SetWindowTextW(Value.c_str());
         EditText->ShowWindow(SW_SHOW);
+        theApp.AdjustEditTextHeight(EditText);
 
         CurrentY += ControlHeight + OFFSET;
         ++ControlIndex;
