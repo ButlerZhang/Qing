@@ -198,6 +198,7 @@
     <ClInclude Include="..\ProjectLinux\Share\Boost\BoostLog.h" />
     <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTime.h" />
     <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTools.h" />
+    <ClInclude Include="..\StandardLinux\src\StandardShare.h" />
     <ClInclude Include="..\Windows\System\SystemShare.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="framework.h" />

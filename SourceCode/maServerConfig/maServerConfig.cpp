@@ -7,6 +7,7 @@
 #include "maServerConfig.h"
 #include "maServerConfigDlg.h"
 #include "../Windows/System/SystemShare.h"
+#include "../StandardLinux/src/StandardShare.h"
 
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -618,21 +619,69 @@ void CmaServerConfigApp::UpdateListBox(const std::shared_ptr<CButton>& ptrButton
         return;
     }
 
-    CRect ButtonRect;
-    ptrButton->GetWindowRect(ButtonRect);
-
-    CRect ListBoxRect;
-    ListBoxRect.left = ButtonRect.left;
-    ListBoxRect.right = ButtonRect.right - 4;
-    ListBoxRect.top = ButtonRect.top;
-    ListBoxRect.bottom = ListBoxRect.top + 300;
-    ListBox.MoveWindow(&ListBoxRect);
-    ListBox.ShowWindow(SW_SHOW);
-
-    ListBox.ResetContent();
-    std::vector<std::wstring>& vecSelect = g_mapSelect[Key];
-    for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+    //设置显示的区域
     {
+      CRect ButtonRect;
+      ptrButton->GetWindowRect(ButtonRect);
+
+      CRect ListBoxRect;
+      ListBoxRect.left = ButtonRect.left;
+      ListBoxRect.right = ButtonRect.right - 4;
+      ListBoxRect.top = ButtonRect.top;
+      ListBoxRect.bottom = ListBoxRect.top + 300;
+      ListBox.MoveWindow(&ListBoxRect);
+      ListBox.ShowWindow(SW_SHOW);
+    }
+
+    //添加可以选择的值
+    {
+      ListBox.ResetContent();
+      std::vector<std::wstring>& vecSelect = g_mapSelect[Key];
+      for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+      {
         ListBox.AddString(vecSelect[index].c_str());
+      }
+    }
+
+    //勾选已经有的值
+    {
+      CString TempText;
+      ptrButton->GetWindowTextW(TempText);
+      if(TempText.IsEmpty())
+      {
+        return;
+      }
+
+      std::vector<std::wstring> SelectItem;
+      SplitString(TempText.GetBuffer(), SelectItem, SEMICOLON);
+      if(SelectItem.empty())
+      {
+        return;
+      }
+
+      for(std::vector<std::wstring>::size_type index = 0; index < SelectItem.size(); index++)
+      {
+        if(SelectItem[index].empty())
+        {
+          continue;
+        }
+
+        bool IsFind = false;
+        for(int BoxIndex = 0; BoxIndex < ListBox.GetCount(); BoxIndex++)
+        {
+          ListBox.GetText(BoxIndex, TempText);
+          if(TempText.Compare(SelectItem[index].c_str()) == 0)
+          {
+            ListBox.SetCheck(BoxIndex, 1);
+            IsFind = true;
+            break;
+          }
+        }
+
+        if(!IsFind)
+        {
+          ListBox.AddString(SelectItem[index].c_str());
+        }
+      }
     }
 }

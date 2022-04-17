@@ -9,6 +9,8 @@
 #include "afxdialogex.h"
 #include "../ProjectLinux/Share/Boost/BoostFileSystem.h"
 #include "../Windows/System/SystemShare.h"
+#include "../StandardLinux/src/StandardShare.h"
+
 #include <list>
 #include <map>
 #include <boost/property_tree/xml_parser.hpp>
@@ -274,26 +276,66 @@ void CmaServerConfigDlg::OnBnClickedButtonGenerate()
 
 void CmaServerConfigDlg::OnLbnSelchangeList()
 {
-    CString SingleText, TotalText;
-    for(int index = 0; index < m_ListBox.GetCount(); index++)
-    {
-        if(m_ListBox.GetCheck(index))
-        {
-            m_ListBox.GetText(index, SingleText);
-            if(!SingleText.IsEmpty())
-            {
-                if(!TotalText.IsEmpty())
-                {
-                    TotalText.Append(SEMICOLON.c_str());
-                }
+  //获取选中的项
+  CString CurrentText;
+  int CurrentIndex = m_ListBox.GetCurSel();
+  m_ListBox.GetText(CurrentIndex, CurrentText);
+  if(CurrentText.IsEmpty())
+  {
+    return;
+  }
 
-                TotalText.Append(SingleText);
-            }
-        }
+  //获取按钮的文本
+  CString ButtonText;
+  m_CurrentButton = theApp.GetButton(0);
+  m_CurrentButton->GetWindowTextW(ButtonText);
+
+  //先拆分已有的文本
+  std::vector<std::wstring> SelectItem;
+  SplitString(ButtonText.GetBuffer(), SelectItem, SEMICOLON);
+
+  //分类讨论
+  if(m_ListBox.GetCheck(CurrentIndex))  //如果是选中状态
+  {
+    //已经存在就不要再添加了
+    for (std::vector<std::wstring>::size_type index = 0; index < SelectItem.size(); index++)
+    {
+      if (CurrentText.Compare(SelectItem[index].c_str()) == 0)
+      {
+        return;
+      }
     }
 
-    m_CurrentButton = theApp.GetButton(0);
-    m_CurrentButton->SetWindowTextW(TotalText);
+    //要以分号分割
+    if(!ButtonText.IsEmpty())
+    {
+      ButtonText.Append(SEMICOLON.c_str());
+    }
+
+    //直接在已有的文本后面添加
+    ButtonText.Append(CurrentText);
+  }
+  else                                  //取消选中状态
+  {
+    //清空按钮上的文本，然后重新组装
+    ButtonText.Empty();
+    for(std::vector<std::wstring>::size_type index =0; index < SelectItem.size(); index++)
+    {
+      if(CurrentText.Compare(SelectItem[index].c_str())  == 0)
+      {
+        continue;
+      }
+
+      if (!ButtonText.IsEmpty())
+      {
+        ButtonText.Append(SEMICOLON.c_str());
+      }
+
+      ButtonText.Append(SelectItem[index].c_str());
+    }
+  }
+
+  m_CurrentButton->SetWindowTextW(ButtonText);
 }
 
 CString CmaServerConfigDlg::GetRootNodeName()
