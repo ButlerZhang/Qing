@@ -544,7 +544,7 @@ std::shared_ptr<CButton> CmaServerConfigApp::GetButton(CWnd* wnd, UINT& TargetID
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
-    DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT;
+    DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT/* | BS_MULTILINE*/;
     m_vecButton[m_vecButton.size() - 1]->Create(NULL, Style, Rect, wnd, ButtonID);
     TargetID = m_vecButton[m_vecButton.size() - 1]->GetDlgCtrlID();
 
@@ -626,7 +626,7 @@ void CmaServerConfigApp::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrCom
     }
 }
 
-void CmaServerConfigApp::UpdateListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox& CheckListBox, const std::wstring& LeafType, const ParamNode& Node)
+void CmaServerConfigApp::UpdateCheckListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox& CheckListBox, const std::wstring& LeafType, const ParamNode& Node)
 {
     const std::wstring& Key = LeafType + L"." + Node.m_ParamName;
     if (g_mapSelect.find(Key) == g_mapSelect.end())

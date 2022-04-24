@@ -43,7 +43,7 @@ public:
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring &LeafType, const ParamNode &Node);
-    void UpdateListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox &ListBox, const std::wstring& LeafType, const ParamNode& Node);
+    void UpdateCheckListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox &ListBox, const std::wstring& LeafType, const ParamNode& Node);
 
     // 实现
     DECLARE_MESSAGE_MAP()
