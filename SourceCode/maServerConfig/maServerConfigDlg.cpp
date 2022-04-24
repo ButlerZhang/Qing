@@ -68,21 +68,22 @@ CmaServerConfigDlg::CmaServerConfigDlg(CWnd* pParent /*=nullptr*/)
 void CmaServerConfigDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_COMBO1, m_maItem);
-    DDX_Control(pDX, IDC_TREE1, m_ConfigTree);
-    DDX_Control(pDX, IDC_LIST1, m_ListBox);
+    DDX_Control(pDX, IDC_COMBO1, m_ComboBoxConfig);
+    DDX_Control(pDX, IDC_TREE1, m_TreeConfig);
+    DDX_Control(pDX, IDC_LIST1, m_CheckListBox);
 }
 
 BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
     ON_WM_SYSCOMMAND()
+    ON_WM_CLOSE()
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_BN_CLICKED(IDOK, &CmaServerConfigDlg::OnBnClickedOk)
-    ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnCbnSelchangeCombo1_ChangeNode)
-    ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTvnSelchangedTreeItem)
-    ON_BN_CLICKED(ID_BUTTON_GENERATE, &CmaServerConfigDlg::OnBnClickedButtonGenerate)
-    ON_WM_CLOSE()
-    ON_LBN_SELCHANGE(IDC_LIST1, &CmaServerConfigDlg::OnLbnSelchangeList)
+    ON_LBN_SELCHANGE(IDC_LIST1, &CmaServerConfigDlg::OnCheckListBoxChange)
+    ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnComboBoxConfigChange)
+    ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTreeConfigChange)
+    ON_BN_CLICKED(ID_BUTTON_GENERATE, &CmaServerConfigDlg::OnButtonClickedGenerateConfig)
+    ON_COMMAND_RANGE(IDC_BUTTON_START, IDC_BUTTON_STOP, &CmaServerConfigDlg::OnBnClicked)
 END_MESSAGE_MAP()
 
 
@@ -118,11 +119,11 @@ BOOL CmaServerConfigDlg::OnInitDialog()
     SetIcon(m_hIcon, FALSE);		// 设置小图标
 
     // TODO: 在此添加额外的初始化代码
-    m_maItem.AddString(_T("construction: 构件"));
-    m_maItem.AddString(_T("deployment: 部署"));
-    m_maItem.AddString(_T("kernel: 内核"));
-    m_maItem.AddString(_T("ma: 架构"));
-    m_maItem.SetCurSel(3);
+    m_ComboBoxConfig.AddString(_T("construction: 构件"));
+    m_ComboBoxConfig.AddString(_T("deployment: 部署"));
+    m_ComboBoxConfig.AddString(_T("kernel: 内核"));
+    m_ComboBoxConfig.AddString(_T("ma: 架构"));
+    m_ComboBoxConfig.SetCurSel(3);
 
     if (LoadConfigFile(g_XMLFile))
     {
@@ -130,7 +131,7 @@ BOOL CmaServerConfigDlg::OnInitDialog()
     }
 
     //m_ListBox.ModifyStyle(0, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | LBS_EXTENDEDSEL);
-    m_ListBox.ShowWindow(SW_HIDE);
+    m_CheckListBox.ShowWindow(SW_HIDE);
     InitControlSize();
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -186,25 +187,32 @@ HCURSOR CmaServerConfigDlg::OnQueryDragIcon()
 
 void CmaServerConfigDlg::OnBnClickedOk()
 {
+    //还未使用
+
     // TODO: 在此添加控件通知处理程序代码
     CDialogEx::OnOK();
 }
 
-void CmaServerConfigDlg::OnCbnSelchangeCombo1_ChangeNode()
+void CmaServerConfigDlg::OnBnClicked(UINT uID)
 {
-    m_ConfigTree.DeleteAllItems();
+
+}
+
+void CmaServerConfigDlg::OnComboBoxConfigChange()
+{
+    m_TreeConfig.DeleteAllItems();
     UpdateConfigTree();
 }
 
-void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult)
+void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
     // TODO: 在此添加控件通知处理程序代码
     *pResult = 0;
 
     //非叶子节点不处理
-    HTREEITEM hSelectTreeItem = m_ConfigTree.GetSelectedItem();
-    if (m_ConfigTree.ItemHasChildren(hSelectTreeItem))
+    HTREEITEM hSelectTreeItem = m_TreeConfig.GetSelectedItem();
+    if (m_TreeConfig.ItemHasChildren(hSelectTreeItem))
     {
         return;
     }
@@ -213,16 +221,16 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
     SaveLastChange();
 
     //获取叶子结点的类型和ID
-    CString CurrentLeafNode = m_ConfigTree.GetItemText(hSelectTreeItem);
+    CString CurrentLeafNode = m_TreeConfig.GetItemText(hSelectTreeItem);
     CString CurrentLeafType = theApp.GetLeftType(CurrentLeafNode);
     CString CurrentLeafID = theApp.GetLeafID(CurrentLeafNode);
 
     //获取从根节点到当前节点的信息
     std::vector<CString> vecString;
     HTREEITEM hParent = NULL, hCurrent = hSelectTreeItem;
-    while ((hParent = m_ConfigTree.GetParentItem(hCurrent)) && hParent != NULL)
+    while ((hParent = m_TreeConfig.GetParentItem(hCurrent)) && hParent != NULL)
     {
-        vecString.push_back(m_ConfigTree.GetItemText(hParent));
+        vecString.push_back(m_TreeConfig.GetItemText(hParent));
         hCurrent = hParent;
     }
 
@@ -253,7 +261,7 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
         if (theApp.g_mapLeaf.find(CurrentLeafType.GetString()) != theApp.g_mapLeaf.end())
         {
             theApp.ResetControl();
-            m_ListBox.ShowWindow(SW_HIDE);
+            m_CheckListBox.ShowWindow(SW_HIDE);
             DisplayParams(CurrentLeafType.GetString(), v1);
         }
         else
@@ -268,81 +276,82 @@ void CmaServerConfigDlg::OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult
     }
 }
 
-void CmaServerConfigDlg::OnBnClickedButtonGenerate()
+void CmaServerConfigDlg::OnButtonClickedGenerateConfig()
 {
     SaveLastChange();
     theApp.WriteXMLFile(g_XMLFile);
 }
 
-void CmaServerConfigDlg::OnLbnSelchangeList()
+void CmaServerConfigDlg::OnCheckListBoxChange()
 {
-  //获取选中的项
-  CString CurrentText;
-  int CurrentIndex = m_ListBox.GetCurSel();
-  m_ListBox.GetText(CurrentIndex, CurrentText);
-  if(CurrentText.IsEmpty())
-  {
-    return;
-  }
-
-  //获取按钮的文本
-  CString ButtonText;
-  m_CurrentButton = theApp.GetButton(0);
-  m_CurrentButton->GetWindowTextW(ButtonText);
-
-  //先拆分已有的文本
-  std::vector<std::wstring> SelectItem;
-  SplitString(ButtonText.GetBuffer(), SelectItem, SEMICOLON);
-
-  //分类讨论
-  if(m_ListBox.GetCheck(CurrentIndex))  //如果是选中状态
-  {
-    //已经存在就不要再添加了
-    for (std::vector<std::wstring>::size_type index = 0; index < SelectItem.size(); index++)
+    //获取选中的项
+    CString CurrentText;
+    int CurrentIndex = m_CheckListBox.GetCurSel();
+    m_CheckListBox.GetText(CurrentIndex, CurrentText);
+    if (CurrentText.IsEmpty())
     {
-      if (CurrentText.Compare(SelectItem[index].c_str()) == 0)
-      {
         return;
-      }
     }
 
-    //要以分号分割
-    if(!ButtonText.IsEmpty())
+    //获取按钮的文本
+    CString ButtonText;
+    int TargetButtonIndex = 0;
+    std::shared_ptr<CButton> CurrentButton = theApp.GetButton(0);
+    CurrentButton->GetWindowTextW(ButtonText);
+
+    //先拆分已有的文本
+    std::vector<std::wstring> SelectItem;
+    SplitString(ButtonText.GetBuffer(), SelectItem, SEMICOLON);
+
+    //分类讨论
+    if (m_CheckListBox.GetCheck(CurrentIndex))  //如果是选中状态
     {
-      ButtonText.Append(SEMICOLON.c_str());
-    }
+        //已经存在就不要再添加了
+        for (std::vector<std::wstring>::size_type index = 0; index < SelectItem.size(); index++)
+        {
+            if (CurrentText.Compare(SelectItem[index].c_str()) == 0)
+            {
+                return;
+            }
+        }
 
-    //直接在已有的文本后面添加
-    ButtonText.Append(CurrentText);
-  }
-  else                                  //取消选中状态
-  {
-    //清空按钮上的文本，然后重新组装
-    ButtonText.Empty();
-    for(std::vector<std::wstring>::size_type index =0; index < SelectItem.size(); index++)
+        //要以分号分割
+        if (!ButtonText.IsEmpty())
+        {
+            ButtonText.Append(SEMICOLON.c_str());
+        }
+
+        //直接在已有的文本后面添加
+        ButtonText.Append(CurrentText);
+    }
+    else                                  //取消选中状态
     {
-      if(CurrentText.Compare(SelectItem[index].c_str())  == 0)
-      {
-        continue;
-      }
+        //清空按钮上的文本，然后重新组装
+        ButtonText.Empty();
+        for (std::vector<std::wstring>::size_type index = 0; index < SelectItem.size(); index++)
+        {
+            if (CurrentText.Compare(SelectItem[index].c_str()) == 0)
+            {
+                continue;
+            }
 
-      if (!ButtonText.IsEmpty())
-      {
-        ButtonText.Append(SEMICOLON.c_str());
-      }
+            if (!ButtonText.IsEmpty())
+            {
+                ButtonText.Append(SEMICOLON.c_str());
+            }
 
-      ButtonText.Append(SelectItem[index].c_str());
+            ButtonText.Append(SelectItem[index].c_str());
+        }
     }
-  }
 
-  m_CurrentButton->SetWindowTextW(ButtonText);
+    CurrentButton->SetWindowTextW(ButtonText);
 }
 
 CString CmaServerConfigDlg::GetRootNodeName()
 {
     //获取当前文本框里的节点名称
     CString CurrentText;
-    m_maItem.GetWindowTextW(CurrentText);
+    m_ComboBoxConfig.GetWindowTextW(CurrentText);
     if (CurrentText.IsEmpty())
     {
         return CString();
@@ -535,7 +544,7 @@ bool CmaServerConfigDlg::UpdateConfigTree()
             //可以作为树形里的根节点
             if (Key.empty() || TreeMap.find(Key) == TreeMap.end())
             {
-                TreeMap[v1.first] = m_ConfigTree.InsertItem(v1.first.c_str());
+                TreeMap[v1.first] = m_TreeConfig.InsertItem(v1.first.c_str());
                 std::wstring NewNode = *it + L".";
                 NewNode.append(v1.first);
                 NodeList.push_back(NewNode);
@@ -546,7 +555,7 @@ bool CmaServerConfigDlg::UpdateConfigTree()
             const std::wstring& ID = v1.second.get<std::wstring>(L"<xmlattr>.id", L"");
             if (ID.empty())
             {
-                TreeMap[v1.first] = m_ConfigTree.InsertItem(v1.first.c_str(), 0, 0, TreeMap[Key]);
+                TreeMap[v1.first] = m_TreeConfig.InsertItem(v1.first.c_str(), 0, 0, TreeMap[Key]);
                 std::wstring NewNode = *it + L".";
                 NewNode.append(v1.first);
                 NodeList.push_back(NewNode);
@@ -556,7 +565,7 @@ bool CmaServerConfigDlg::UpdateConfigTree()
                 //对于叶子节点，不需要保存上一层的指针了
                 const std::wstring& Name = v1.second.get<std::wstring>(L"<xmlattr>.name", L"");
                 std::wstring TreeName = v1.first + L"_" + ID + L"_" + Name;
-                m_ConfigTree.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
+                m_TreeConfig.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
             }
         }
 
@@ -564,7 +573,7 @@ bool CmaServerConfigDlg::UpdateConfigTree()
         int counter = static_cast<int>(std::count(it->begin(), it->end(), DOT[0]));
         if (counter <= 2 && TreeMap.find(Key) != TreeMap.end())
         {
-            m_ConfigTree.Expand(TreeMap[Key], TVE_EXPAND);
+            m_TreeConfig.Expand(TreeMap[Key], TVE_EXPAND);
         }
     }
 
@@ -577,7 +586,7 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
     const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;
     for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
     {
-        const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(vecParams[index].m_ParamNameIndex);
+        const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(vecParams[index].m_ParamNameID);
         if (StaticText == nullptr)
         {
             continue;
@@ -595,22 +604,22 @@ void CmaServerConfigDlg::UpdateParams(const std::wstring& LeafType, boost::prope
         {
         case CT_COMBO_BOX_EDIT:
         {
-            theApp.GetComboBoxEdit(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            theApp.GetComboBoxEdit(vecParams[index].m_ParamValueID)->GetWindowTextW(ControlValue);
             break;
         }
         case CT_COMBO_BOX_LIST:
         {
-            theApp.GetComboBoxList(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            theApp.GetComboBoxList(vecParams[index].m_ParamValueID)->GetWindowTextW(ControlValue);
             break;
         }
-        case CT_LIST_BOX:
+        case CT_CHECK_LIST_BOX:
         {
-            theApp.GetButton(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            theApp.GetButton(vecParams[index].m_ParamValueID)->GetWindowTextW(ControlValue);
             break;
         }
         default:
         {
-            theApp.GetEditText(vecParams[index].m_ParamValueIndex)->GetWindowTextW(ControlValue);
+            theApp.GetEditText(vecParams[index].m_ParamValueID)->GetWindowTextW(ControlValue);
             break;
         }
         }
@@ -653,7 +662,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         const std::wstring& Text = vecParams[index].m_ParamName + COLON;
         const std::wstring& Value = LeafNode.second.get<std::wstring>(FormatString.GetString(), L"");
 
-        const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(this, vecParams[index].m_ParamNameIndex);
+        const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(this, vecParams[index].m_ParamNameID);
         StaticText->MoveWindow(StartX, CurrentY, StaticWidth, ControlHeight);
         StaticText->SetWindowTextW(Text.c_str());
         StaticText->ShowWindow(SW_SHOW);
@@ -662,7 +671,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         {
         case CT_COMBO_BOX_EDIT:
         {
-            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxEdit(this, vecParams[index].m_ParamValueIndex);
+            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxEdit(this, vecParams[index].m_ParamValueID);
             ComboBox->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
             ComboBox->ShowWindow(SW_SHOW);
 
@@ -672,7 +681,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         }
         case CT_COMBO_BOX_LIST:
         {
-            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxList(this, vecParams[index].m_ParamValueIndex);
+            const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxList(this, vecParams[index].m_ParamValueID);
             ComboBox->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
             ComboBox->ShowWindow(SW_SHOW);
 
@@ -680,18 +689,18 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
             theApp.UpdateComboBox(ComboBox, LeafType, vecParams[index]);
             break;
         }
-        case CT_LIST_BOX:
+        case CT_CHECK_LIST_BOX:
         {
-            const std::shared_ptr<CButton>& Button = theApp.GetButton(this, vecParams[index].m_ParamValueIndex);
+            const std::shared_ptr<CButton>& Button = theApp.GetButton(this, vecParams[index].m_ParamValueID);
             Button->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
             Button->SetWindowTextW(Value.c_str());
             Button->ShowWindow(SW_SHOW);
-            theApp.UpdateListBox(Button, m_ListBox, LeafType, vecParams[index]);
+            theApp.UpdateListBox(Button, m_CheckListBox, LeafType, vecParams[index]);
             break;
         }
         default:
         {
-            const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, vecParams[index].m_ParamValueIndex);
+            const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, vecParams[index].m_ParamValueID);
             EditText->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
             EditText->SetWindowTextW(Value.c_str());
             EditText->ShowWindow(SW_SHOW);

@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 // CmaServerConfigDlg 对话框
 class CmaServerConfigDlg : public CDialogEx
 {
@@ -34,10 +33,11 @@ protected:
 private:
 
     afx_msg void OnBnClickedOk();
-    afx_msg void OnCbnSelchangeCombo1_ChangeNode();
-    afx_msg void OnTvnSelchangedTreeItem(NMHDR* pNMHDR, LRESULT* pResult);
-    afx_msg void OnBnClickedButtonGenerate();
-    afx_msg void OnLbnSelchangeList();
+    afx_msg void OnBnClicked(UINT uID);
+    afx_msg void OnCheckListBoxChange();
+    afx_msg void OnComboBoxConfigChange();
+    afx_msg void OnButtonClickedGenerateConfig();
+    afx_msg void OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult);
 
 private:
 
@@ -55,11 +55,10 @@ private:
 
 private:
 
-    CString                                  m_LastSearchNode;     //上一次搜索的节点
-    CString                                  m_LastLeafNode;       //上一次显示的叶子节点
-    CString                                  m_LastLeafID;         //上一次显示的叶子ID
-    CComboBox                                m_maItem;             //配置项
-    CTreeCtrl                                m_ConfigTree;         //每个配置项对应的配置内容
-    CCheckListBox                            m_ListBox;            //下拉多选框
-    std::shared_ptr<CButton>                 m_CurrentButton;      //当前点击的按钮
+    CString                                  m_LastSearchNode;     //上一次搜索的节点，例如[ma.kernel.rtdb]
+    CString                                  m_LastLeafNode;       //上一次显示的叶子节点，例如[runtimetable_01_sysma_st_node]
+    CString                                  m_LastLeafID;         //上一次显示的叶子ID，例如[01]
+    CComboBox                                m_ComboBoxConfig;     //配置项
+    CTreeCtrl                                m_TreeConfig;         //每个配置项对应的配置内容
+    CCheckListBox                            m_CheckListBox;       //下拉多选框
 };

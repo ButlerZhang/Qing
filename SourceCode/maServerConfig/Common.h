@@ -52,15 +52,15 @@ enum ControlType
     CT_STATIC_TEXT_DISABLE,                         //不可编辑静态文本
     CT_COMBO_BOX_EDIT,                              //下拉可编辑单选框
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
-    CT_LIST_BOX,                                    //下拉列表框
+    CT_CHECK_LIST_BOX,                              //下拉复选列表框
     CT_COUNT                                        //支持的控件种类
 };
 
 //参数节点
 struct ParamNode
 {
-    int                     m_ParamNameIndex;       //参数名下标
-    int                     m_ParamValueIndex;      //参数值下标
+    UINT                    m_ParamNameID;          //参数名使用的控件ID
+    UINT                    m_ParamValueID;         //参数值使用的控件ID
     std::wstring            m_ParamValue;           //参数值
 
     const std::wstring      m_ParamName;            //参数名称
@@ -68,8 +68,8 @@ struct ParamNode
 
     ParamNode(const std::wstring& ParamName, ControlType Type = CT_DEFAULT) :
         m_ParamName(ParamName),
-        m_ParamNameIndex(0),
-        m_ParamValueIndex(0),
+        m_ParamNameID(0),
+        m_ParamValueID(0),
         m_ParamValueType(Type) {}
 };
 

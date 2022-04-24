@@ -19,6 +19,9 @@
 #define ID_BUTTON_GENERATE              1018
 #define ID_BUTTON_OPEN_FILE             1019
 #define IDC_LIST1                       1020
+#define IDC_BUTTON_START                2000
+#define IDC_BUTTON_STOP                 2100
+#define IDC_MY_CONTROL                  5000
 
 // Next default values for new objects
 // 

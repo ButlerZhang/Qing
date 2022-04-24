@@ -13,8 +13,6 @@
 #include <map>
 #include <boost/property_tree/ptree.hpp>
 
-
-
 class CmaServerConfigApp : public CWinApp
 {
 public:
@@ -31,17 +29,17 @@ public:
 
     void ResetControl();
 
-    std::shared_ptr<CEdit> GetEditText(CWnd* wnd, int &TargetIndex);
-    std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, int &TargetIndex);
-    std::shared_ptr<CComboBox> GetComboBoxEdit(CWnd* wnd, int& TargetIndex);
-    std::shared_ptr<CComboBox> GetComboBoxList(CWnd* wnd, int& TargetIndex);
-    std::shared_ptr<CButton> GetButton(CWnd* wnd, int& TargetIndex);
+    std::shared_ptr<CEdit> GetEditText(CWnd* wnd, UINT& TargetID);
+    std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, UINT& TargetID);
+    std::shared_ptr<CComboBox> GetComboBoxEdit(CWnd* wnd, UINT& TargetID);
+    std::shared_ptr<CComboBox> GetComboBoxList(CWnd* wnd, UINT& TargetID);
+    std::shared_ptr<CButton> GetButton(CWnd* wnd, UINT& TargetID);
 
-    std::shared_ptr<CEdit> GetEditText(int index);
-    std::shared_ptr<CStatic> GetStaticText(int index);
-    std::shared_ptr<CComboBox> GetComboBoxEdit(int index);
-    std::shared_ptr<CComboBox> GetComboBoxList(int index);
-    std::shared_ptr<CButton> GetButton(int index);
+    std::shared_ptr<CEdit> GetEditText(UINT TargetID);
+    std::shared_ptr<CStatic> GetStaticText(UINT TargetID);
+    std::shared_ptr<CComboBox> GetComboBoxEdit(UINT TargetID);
+    std::shared_ptr<CComboBox> GetComboBoxList(UINT TargetID);
+    std::shared_ptr<CButton> GetButton(UINT TargetID);
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring &LeafType, const ParamNode &Node);

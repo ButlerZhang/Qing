@@ -17,9 +17,6 @@
 #define new DEBUG_NEW
 #endif
 
-
-// CmaServerConfigApp
-
 BEGIN_MESSAGE_MAP(CmaServerConfigApp, CWinApp)
     ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
@@ -36,14 +33,11 @@ CmaServerConfigApp::CmaServerConfigApp()
     // 将所有重要的初始化放置在 InitInstance 中
 }
 
-
 // 唯一的 CmaServerConfigApp 对象
-
 CmaServerConfigApp theApp;
 
 
 // CmaServerConfigApp 初始化
-
 BOOL CmaServerConfigApp::InitInstance()
 {
     // 如果一个运行在 Windows XP 上的应用程序清单指定要
@@ -58,7 +52,7 @@ BOOL CmaServerConfigApp::InitInstance()
 
     CWinApp::InitInstance();
 
-    m_NextControlID = 10000;
+    m_NextControlID = IDC_MY_CONTROL;
     InitLeafNode();
     InitSelectItem();
 
@@ -121,7 +115,7 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT_DISABLE));
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Name, CT_STATIC_TEXT_ENABLE));
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ImportFile, CT_LIST_BOX));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ImportFile, CT_CHECK_LIST_BOX));
 
     //Service节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Service, LeafNode()));
@@ -174,7 +168,7 @@ void CmaServerConfigApp::InitLeafNode()
 void CmaServerConfigApp::InitSelectItem()
 {
     //runtime table clsid
-    const std::wstring &RuntimeTableClsid = gl_RuntimeTable + DOT + gp_Clsid;
+    const std::wstring& RuntimeTableClsid = gl_RuntimeTable + DOT + gp_Clsid;
     g_mapSelect[RuntimeTableClsid].push_back(L"CRttSysmaStNode");
     g_mapSelect[RuntimeTableClsid].push_back(L"CRttSysmaStParam");
     g_mapSelect[RuntimeTableClsid].push_back(L"CRttSysmaStMsgQueue");
@@ -364,7 +358,7 @@ void CmaServerConfigApp::ResetControl()
     }
 }
 
-std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(CWnd* wnd, int& TargetIndex)
+std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(CWnd* wnd, UINT& TargetID)
 {
     CRect Rect;
 
@@ -374,34 +368,37 @@ std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(CWnd* wnd, int& TargetInd
         m_vecEditText[index]->GetClientRect(Rect);
         if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
         {
-            TargetIndex = static_cast<int>(index);
+            TargetID = m_vecEditText[index]->GetDlgCtrlID();
             return m_vecEditText[index];
         }
     }
 
     //找不到时创建一个新的控件
     m_vecEditText.push_back(std::make_shared<CEdit>());
-    TargetIndex = static_cast<int>(m_vecEditText.size() - 1);
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
     DWORD Style = WS_VISIBLE | SS_LEFT | ES_AUTOHSCROLL | WS_BORDER;
-    m_vecEditText[TargetIndex]->Create(Style, Rect, wnd, m_NextControlID++);
+    m_vecEditText[m_vecEditText.size() - 1]->Create(Style, Rect, wnd, m_NextControlID++);
 
-    return m_vecEditText[TargetIndex];
+    TargetID = m_vecEditText[m_vecEditText.size() - 1]->GetDlgCtrlID();
+    return m_vecEditText[m_vecEditText.size() - 1];
 }
 
-std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(int index)
+std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(UINT TargetID)
 {
-    if (index >= 0 && index < m_vecEditText.size())
+    for (std::vector<CEdit>::size_type index = 0; index < m_vecEditText.size(); index++)
     {
-        return m_vecEditText[index];
+        if (m_vecEditText[index]->GetDlgCtrlID() == TargetID)
+        {
+            return m_vecEditText[index];
+        }
     }
 
     return std::shared_ptr<CEdit>();
 }
 
-std::shared_ptr<CStatic> CmaServerConfigApp::GetStaticText(CWnd* wnd, int& TargetIndex)
+std::shared_ptr<CStatic> CmaServerConfigApp::GetStaticText(CWnd* wnd, UINT& TargetID)
 {
     CRect Rect;
 
@@ -411,34 +408,37 @@ std::shared_ptr<CStatic> CmaServerConfigApp::GetStaticText(CWnd* wnd, int& Targe
         m_vecStaticText[index]->GetClientRect(Rect);
         if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
         {
-            TargetIndex = static_cast<int>(index);
+            TargetID = m_vecStaticText[index]->GetDlgCtrlID();
             return m_vecStaticText[index];
         }
     }
 
     //找不到时创建一个新的控件
     m_vecStaticText.push_back(std::make_shared<CStatic>());
-    TargetIndex = static_cast<int>(m_vecStaticText.size() - 1);
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
     DWORD Style = WS_CHILD | WS_VISIBLE | SS_LEFT | SS_CENTERIMAGE;
-    m_vecStaticText[TargetIndex]->Create(NULL, Style, Rect, wnd, m_NextControlID++);
+    m_vecStaticText[m_vecStaticText.size() - 1]->Create(NULL, Style, Rect, wnd, m_NextControlID++);
 
-    return m_vecStaticText[TargetIndex];
+    TargetID = m_vecStaticText[m_vecStaticText.size() - 1]->GetDlgCtrlID();
+    return m_vecStaticText[m_vecStaticText.size() - 1];
 }
 
-std::shared_ptr<CStatic> CmaServerConfigApp::GetStaticText(int index)
+std::shared_ptr<CStatic> CmaServerConfigApp::GetStaticText(UINT TargetID)
 {
-    if (index >= 0 && index < m_vecStaticText.size())
+    for (std::vector<CStatic>::size_type index = 0; index < m_vecStaticText.size(); index++)
     {
-        return m_vecStaticText[index];
+        if (m_vecStaticText[index]->GetDlgCtrlID() == TargetID)
+        {
+            return m_vecStaticText[index];
+        }
     }
 
     return std::shared_ptr<CStatic>();
 }
 
-std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxEdit(CWnd* wnd, int& TargetIndex)
+std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxEdit(CWnd* wnd, UINT& TargetID)
 {
     CRect Rect;
 
@@ -448,34 +448,37 @@ std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxEdit(CWnd* wnd, int& T
         m_vecComboBoxEdit[index]->GetClientRect(Rect);
         if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
         {
-            TargetIndex = static_cast<int>(index);
+            TargetID = m_vecComboBoxEdit[index]->GetDlgCtrlID();
             return m_vecComboBoxEdit[index];
         }
     }
 
     //找不到时创建一个新的控件
     m_vecComboBoxEdit.push_back(std::make_shared<CComboBox>());
-    TargetIndex = static_cast<int>(m_vecComboBoxEdit.size() - 1);
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
     DWORD Style = WS_CHILD | WS_VISIBLE | CBS_DROPDOWN | CBS_OEMCONVERT;
-    m_vecComboBoxEdit[TargetIndex]->Create(Style, Rect, wnd, m_NextControlID++);
+    m_vecComboBoxEdit[m_vecComboBoxEdit.size() - 1]->Create(Style, Rect, wnd, m_NextControlID++);
 
-    return m_vecComboBoxEdit[TargetIndex];
+    TargetID = m_vecComboBoxEdit[m_vecComboBoxEdit.size() - 1]->GetDlgCtrlID();
+    return m_vecComboBoxEdit[m_vecComboBoxEdit.size() - 1];
 }
 
-std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxEdit(int index)
+std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxEdit(UINT TargetID)
 {
-    if (index >= 0 && index < m_vecComboBoxEdit.size())
+    for (std::vector<CComboBox>::size_type index = 0; index < m_vecComboBoxEdit.size(); index++)
     {
-        return m_vecComboBoxEdit[index];
+        if (m_vecComboBoxEdit[index]->GetDlgCtrlID() == TargetID)
+        {
+            return m_vecComboBoxEdit[index];
+        }
     }
 
     return std::shared_ptr<CComboBox>();
 }
 
-std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(CWnd* wnd, int& TargetIndex)
+std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(CWnd* wnd, UINT& TargetID)
 {
     CRect Rect;
 
@@ -485,34 +488,37 @@ std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(CWnd* wnd, int& T
         m_vecComboBoxList[index]->GetClientRect(Rect);
         if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
         {
-            TargetIndex = static_cast<int>(index);
+            TargetID = m_vecComboBoxList[index]->GetDlgCtrlID();
             return m_vecComboBoxList[index];
         }
     }
 
     //找不到时创建一个新的控件
     m_vecComboBoxList.push_back(std::make_shared<CComboBox>());
-    TargetIndex = static_cast<int>(m_vecComboBoxList.size() - 1);
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
     DWORD Style = WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | CBS_OEMCONVERT;
-    m_vecComboBoxList[TargetIndex]->Create(Style, Rect, wnd, m_NextControlID++);
+    m_vecComboBoxList[m_vecComboBoxList.size() - 1]->Create(Style, Rect, wnd, m_NextControlID++);
+    TargetID = m_vecComboBoxList[m_vecComboBoxList.size() - 1]->GetDlgCtrlID();
 
-    return m_vecComboBoxList[TargetIndex];
+    return m_vecComboBoxList[m_vecComboBoxList.size() - 1];
 }
 
-std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(int index)
+std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(UINT TargetID)
 {
-    if (index >= 0 && index < m_vecComboBoxList.size())
+    for (std::vector<CComboBox>::size_type index = 0; index < m_vecComboBoxList.size(); index++)
     {
-        return m_vecComboBoxList[index];
+        if (m_vecComboBoxList[index]->GetDlgCtrlID() == TargetID)
+        {
+            return m_vecComboBoxList[index];
+        }
     }
 
     return std::shared_ptr<CComboBox>();
 }
 
-std::shared_ptr<CButton> CmaServerConfigApp::GetButton(CWnd* wnd, int& TargetIndex)
+std::shared_ptr<CButton> CmaServerConfigApp::GetButton(CWnd* wnd, UINT& TargetID)
 {
     CRect Rect;
 
@@ -522,28 +528,37 @@ std::shared_ptr<CButton> CmaServerConfigApp::GetButton(CWnd* wnd, int& TargetInd
         m_vecButton[index]->GetClientRect(Rect);
         if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
         {
-            TargetIndex = static_cast<int>(index);
+            TargetID = m_vecButton[index]->GetDlgCtrlID();
             return m_vecButton[index];
         }
     }
 
+    UINT ButtonID = IDC_BUTTON_START;
+    if (!m_vecButton.empty())
+    {
+        ButtonID = m_vecButton[m_vecButton.size() - 1]->GetDlgCtrlID() + 1;
+    }
+
     //找不到时创建一个新的控件
     m_vecButton.push_back(std::make_shared<CButton>());
-    TargetIndex = static_cast<int>(m_vecButton.size() - 1);
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
     DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT;
-    m_vecButton[TargetIndex]->Create(NULL, Style, Rect, wnd, m_NextControlID++);
+    m_vecButton[m_vecButton.size() - 1]->Create(NULL, Style, Rect, wnd, ButtonID);
+    TargetID = m_vecButton[m_vecButton.size() - 1]->GetDlgCtrlID();
 
-    return m_vecButton[TargetIndex];
+    return m_vecButton[m_vecButton.size() - 1];
 }
 
-std::shared_ptr<CButton> CmaServerConfigApp::GetButton(int index)
+std::shared_ptr<CButton> CmaServerConfigApp::GetButton(UINT TargetID)
 {
-    if (index >= 0 && index < m_vecButton.size())
+    for (std::vector<CButton>::size_type index = 0; index < m_vecButton.size(); index++)
     {
-        return m_vecButton[index];
+        if (m_vecButton[index]->GetDlgCtrlID() == TargetID)
+        {
+            return m_vecButton[index];
+        }
     }
 
     return std::shared_ptr<CButton>();
@@ -576,7 +591,7 @@ void CmaServerConfigApp::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, Contr
 
     //设置控件是否可编辑
     {
-        if(Type == ControlType::CT_STATIC_TEXT_ENABLE)
+        if (Type == ControlType::CT_STATIC_TEXT_ENABLE)
         {
             ptrEdit->EnableWindow(TRUE);
         }
@@ -590,20 +605,20 @@ void CmaServerConfigApp::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, Contr
 void CmaServerConfigApp::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node)
 {
     const std::wstring& Key = LeafType + L"." + Node.m_ParamName;
-    if(g_mapSelect.find(Key) == g_mapSelect.end())
+    if (g_mapSelect.find(Key) == g_mapSelect.end())
     {
         return;
     }
 
     std::vector<std::wstring>& vecSelect = g_mapSelect[Key];
-    for(std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+    for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
     {
         ptrComboBox->AddString(vecSelect[index].c_str());
     }
 
     for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
     {
-        if(vecSelect[index] == Node.m_ParamValue)
+        if (vecSelect[index] == Node.m_ParamValue)
         {
             ptrComboBox->SetCurSel(static_cast<int>(index));
             break;
@@ -611,7 +626,7 @@ void CmaServerConfigApp::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrCom
     }
 }
 
-void CmaServerConfigApp::UpdateListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox& ListBox, const std::wstring& LeafType, const ParamNode& Node)
+void CmaServerConfigApp::UpdateListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox& CheckListBox, const std::wstring& LeafType, const ParamNode& Node)
 {
     const std::wstring& Key = LeafType + L"." + Node.m_ParamName;
     if (g_mapSelect.find(Key) == g_mapSelect.end())
@@ -621,67 +636,67 @@ void CmaServerConfigApp::UpdateListBox(const std::shared_ptr<CButton>& ptrButton
 
     //设置显示的区域
     {
-      CRect ButtonRect;
-      ptrButton->GetWindowRect(ButtonRect);
+        CRect ButtonRect;
+        ptrButton->GetWindowRect(ButtonRect);
 
-      CRect ListBoxRect;
-      ListBoxRect.left = ButtonRect.left;
-      ListBoxRect.right = ButtonRect.right - 4;
-      ListBoxRect.top = ButtonRect.top;
-      ListBoxRect.bottom = ListBoxRect.top + 300;
-      ListBox.MoveWindow(&ListBoxRect);
-      ListBox.ShowWindow(SW_SHOW);
+        CRect ListBoxRect;
+        ListBoxRect.left = ButtonRect.left;
+        ListBoxRect.right = ButtonRect.right - 4;
+        ListBoxRect.top = ButtonRect.top;
+        ListBoxRect.bottom = ListBoxRect.top + 300;
+        CheckListBox.MoveWindow(&ListBoxRect);
+        CheckListBox.ShowWindow(SW_SHOW);
     }
 
     //添加可以选择的值
     {
-      ListBox.ResetContent();
-      std::vector<std::wstring>& vecSelect = g_mapSelect[Key];
-      for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
-      {
-        ListBox.AddString(vecSelect[index].c_str());
-      }
+        CheckListBox.ResetContent();
+        std::vector<std::wstring>& vecSelect = g_mapSelect[Key];
+        for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+        {
+            CheckListBox.AddString(vecSelect[index].c_str());
+        }
     }
 
     //勾选已经有的值
     {
-      CString TempText;
-      ptrButton->GetWindowTextW(TempText);
-      if(TempText.IsEmpty())
-      {
-        return;
-      }
-
-      std::vector<std::wstring> SelectItem;
-      SplitString(TempText.GetBuffer(), SelectItem, SEMICOLON);
-      if(SelectItem.empty())
-      {
-        return;
-      }
-
-      for(std::vector<std::wstring>::size_type index = 0; index < SelectItem.size(); index++)
-      {
-        if(SelectItem[index].empty())
+        CString TempText;
+        ptrButton->GetWindowTextW(TempText);
+        if (TempText.IsEmpty())
         {
-          continue;
+            return;
         }
 
-        bool IsFind = false;
-        for(int BoxIndex = 0; BoxIndex < ListBox.GetCount(); BoxIndex++)
+        std::vector<std::wstring> SelectItem;
+        SplitString(TempText.GetBuffer(), SelectItem, SEMICOLON);
+        if (SelectItem.empty())
         {
-          ListBox.GetText(BoxIndex, TempText);
-          if(TempText.Compare(SelectItem[index].c_str()) == 0)
-          {
-            ListBox.SetCheck(BoxIndex, 1);
-            IsFind = true;
-            break;
-          }
+            return;
         }
 
-        if(!IsFind)
+        for (std::vector<std::wstring>::size_type index = 0; index < SelectItem.size(); index++)
         {
-          ListBox.AddString(SelectItem[index].c_str());
+            if (SelectItem[index].empty())
+            {
+                continue;
+            }
+
+            bool IsFind = false;
+            for (int BoxIndex = 0; BoxIndex < CheckListBox.GetCount(); BoxIndex++)
+            {
+                CheckListBox.GetText(BoxIndex, TempText);
+                if (TempText.Compare(SelectItem[index].c_str()) == 0)
+                {
+                    CheckListBox.SetCheck(BoxIndex, 1);
+                    IsFind = true;
+                    break;
+                }
+            }
+
+            if (!IsFind)
+            {
+                CheckListBox.AddString(SelectItem[index].c_str());
+            }
         }
-      }
     }
 }
