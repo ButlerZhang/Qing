@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include <string>
 #include <vector>
 #include <boost/property_tree/ptree.hpp>
@@ -58,6 +59,12 @@ const std::wstring gp_Use(L"use");
 const std::wstring gp_DefaultXa(L"defaultxa");
 const std::wstring gp_BackupXa(L"backupxa");
 
+//某些配置项存在子配置项（g:global，s:subparam）
+const std::wstring gs_NodeUse_n(L"n");
+const std::wstring gs_NodeUse_s(L"s");
+const std::wstring gs_NodeUse_a(L"a");
+const std::wstring gs_NodeUse_q(L"q");
+
 //控件类型
 enum ControlType
 {
@@ -67,7 +74,7 @@ enum ControlType
     CT_COMBO_BOX_EDIT,                              //下拉可编辑单选框
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
     CT_CHECK_LIST_BOX,                              //下拉复选列表框
-    CT_RADIO_CHECK_BOX,                             //单选和复选同时支持
+    CT_CHECK_BOX,                                   //单选和复选同时支持
     CT_COUNT                                        //支持的控件种类
 };
 
@@ -91,5 +98,32 @@ struct ParamNode
 //叶子节点
 struct LeafNode
 {
-    std::vector<ParamNode> m_vecParams;     //此叶子结点对应的参数列表
+    std::vector<ParamNode> m_vecParams;                     //此叶子结点对应的参数列表
+    std::map<UINT, std::vector<ParamNode>> m_subParams;     //某个参数的子配置项
+
+    UINT GetParamNameID(const std::wstring& Name)
+    {
+        for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
+        {
+            if (m_vecParams[index].m_ParamName == Name)
+            {
+                return m_vecParams[index].m_ParamNameID;
+            }
+        }
+
+        return 0;
+    }
+
+    UINT GetParamValueID(const std::wstring& Name)
+    {
+        for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
+        {
+            if (m_vecParams[index].m_ParamName == Name)
+            {
+                return m_vecParams[index].m_ParamValueID;
+            }
+        }
+
+        return 0;
+    }
 };

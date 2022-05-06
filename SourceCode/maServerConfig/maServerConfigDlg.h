@@ -34,6 +34,9 @@ private: //添加的响应函数
     //按钮点击事件，可以弹出CheckListBox
     afx_msg void OnBnClicked(UINT uID);
 
+    //勾选框点击事件
+    afx_msg void OnCheckBoxClicked(UINT uID);
+
     //CheckListBox选择响应事件
     afx_msg void OnCheckListBoxChange();
 

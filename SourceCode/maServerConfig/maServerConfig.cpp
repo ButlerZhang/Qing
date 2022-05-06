@@ -156,7 +156,7 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Gid, CT_STATIC_TEXT_DISABLE));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Ipv4, CT_STATIC_TEXT_ENABLE));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Path, CT_STATIC_TEXT_ENABLE));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use, CT_CHECK_LIST_BOX));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use, CT_CHECK_BOX));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_DefaultXa, CT_COMBO_BOX_LIST));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_BackupXa, CT_COMBO_BOX_LIST));
 }
@@ -351,6 +351,18 @@ void CmaServerConfigApp::ResetControl()
         m_vecButton[index]->MoveWindow(0, 0, 0, 0);
         m_vecButton[index]->ShowWindow(SW_HIDE);
         m_vecButton[index]->SetWindowTextW(L"");
+    }
+
+    ResetCheckBox();
+}
+
+void CmaServerConfigApp::ResetCheckBox()
+{
+    for (std::vector<CButton>::size_type index = 0; index != m_vecCheckBox.size(); index++)
+    {
+        m_vecCheckBox[index]->MoveWindow(0, 0, 0, 0);
+        m_vecCheckBox[index]->ShowWindow(SW_HIDE);
+        m_vecCheckBox[index]->SetWindowTextW(L"");
     }
 }
 
@@ -566,6 +578,52 @@ std::shared_ptr<CButton> CmaServerConfigApp::GetButton(UINT TargetID)
     return std::shared_ptr<CButton>();
 }
 
+std::shared_ptr<CButton> CmaServerConfigApp::GetCheckBox(CWnd* wnd, UINT& TargetID)
+{
+    CRect Rect;
+
+    //查找已经创建但还未使用的控件
+    for (std::vector<std::shared_ptr<CButton>>::size_type index = 0; index < m_vecCheckBox.size(); index++)
+    {
+        m_vecCheckBox[index]->GetClientRect(Rect);
+        if (Rect.left == 0 && Rect.right == 0 && Rect.top == 0 && Rect.bottom == 0)
+        {
+            TargetID = m_vecCheckBox[index]->GetDlgCtrlID();
+            return m_vecCheckBox[index];
+        }
+    }
+
+    UINT NewID = IDC_CHECK_BOX_START;
+    if (!m_vecCheckBox.empty())
+    {
+        NewID = m_vecCheckBox[m_vecCheckBox.size() - 1]->GetDlgCtrlID() + 1;
+    }
+
+    //找不到时创建一个新的控件
+    m_vecCheckBox.push_back(std::make_shared<CButton>());
+
+    //设置新控件的属性
+    Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
+    DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT | BS_AUTOCHECKBOX;
+    m_vecCheckBox[m_vecCheckBox.size() - 1]->Create(NULL, Style, Rect, wnd, NewID);
+    TargetID = m_vecCheckBox[m_vecCheckBox.size() - 1]->GetDlgCtrlID();
+
+    return m_vecCheckBox[m_vecCheckBox.size() - 1];
+}
+
+std::shared_ptr<CButton> CmaServerConfigApp::GetCheckBox(UINT TargetID)
+{
+    for (std::vector<CButton>::size_type index = 0; index < m_vecCheckBox.size(); index++)
+    {
+        if (m_vecCheckBox[index]->GetDlgCtrlID() == TargetID)
+        {
+            return m_vecCheckBox[index];
+        }
+    }
+
+    return std::shared_ptr<CButton>();
+}
+
 void CmaServerConfigApp::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type)
 {
     //文本垂直居中显示，但这样会覆盖掉边框的下划线
@@ -624,6 +682,82 @@ void CmaServerConfigApp::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrCom
         {
             ptrComboBox->SetCurSel(static_cast<int>(index));
             break;
+        }
+    }
+}
+
+void CmaServerConfigApp::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, CStatic& Complex, const std::wstring& LeafType, bool IsShow)
+{
+    //只有BPU类型的use才需要配置子项，其它类型直接禁用
+    if (!IsShow)
+    {
+        Complex.ShowWindow(SW_HIDE);
+        pButton->SetWindowTextW(L"");
+        pButton->EnableWindow(FALSE);
+        ResetCheckBox();
+        return;
+    }
+
+    //按钮要激活
+    pButton->EnableWindow(TRUE);
+
+    //设置Group Static的区域
+    CRect ButtonRect;
+    CRect ComplexRect;
+    {
+        pButton->GetWindowRect(ButtonRect);
+        ComplexRect.left = ButtonRect.left;
+        ComplexRect.right = ButtonRect.right - 2;
+        ComplexRect.top = ButtonRect.top + 10;
+        ComplexRect.bottom = ComplexRect.top + 300;
+        Complex.MoveWindow(ComplexRect);
+        Complex.ShowWindow(SW_SHOW);
+        Complex.SetWindowTextW((gp_Use + L"子配置项").c_str());
+    }
+
+    //设置各个子配置项的显示区域
+    UINT ButtonID = pButton->GetDlgCtrlID();
+    std::vector<ParamNode>& vecSubParams = g_mapLeaf[LeafType].m_subParams[ButtonID];
+    {
+        vecSubParams.clear();
+        vecSubParams.push_back(ParamNode(gs_NodeUse_n, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_s, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_a, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_q, CT_CHECK_BOX));
+
+        CRect TempRect;
+        const LONG OFFSET_X = 10;
+        const LONG OFFSET_Y = OFFSET_X * 3;
+        TempRect.left = ComplexRect.left + OFFSET_X;
+        TempRect.right = ComplexRect.right - OFFSET_X;
+        for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
+        {
+            TempRect.top = ComplexRect.top + OFFSET_Y + (int)index * ButtonRect.Height();
+            TempRect.bottom = TempRect.top + ButtonRect.Height();
+
+            const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(m_pMainWnd, vecSubParams[index].m_ParamNameID);
+            Button->SetWindowTextW(vecSubParams[index].m_ParamName.c_str());
+            Button->MoveWindow(&TempRect);
+            Button->ShowWindow(SW_SHOW);
+        }
+    }
+
+    //如果没有值，就提供一个默认值
+    CString ButtonText;
+    pButton->GetWindowTextW(ButtonText);
+    if (ButtonText.IsEmpty())
+    {
+        pButton->SetWindowTextW(gs_NodeUse_n.c_str());
+        pButton->GetWindowTextW(ButtonText);
+    }
+
+    //设置已选中的值
+    for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
+    {
+        const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(vecSubParams[index].m_ParamNameID);
+        if(Button != nullptr)
+        {
+            Button->SetCheck(ButtonText.Find(vecSubParams[index].m_ParamName[0]) >= 0 ? 1 : 0);
         }
     }
 }
