@@ -63,6 +63,7 @@ void CmaServerConfigDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_COMBO1, m_ComboBoxConfig);
     DDX_Control(pDX, IDC_TREE1, m_TreeConfig);
     DDX_Control(pDX, IDC_LIST1, m_CheckListBox);
+    DDX_Control(pDX, IDC_STATIC_COMPLEX, m_ComplexParams);
 }
 
 BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
@@ -132,7 +133,7 @@ BOOL CmaServerConfigDlg::OnInitDialog()
         UpdateTreeConfig();
     }
 
-    //m_ListBox.ModifyStyle(0, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | LBS_EXTENDEDSEL);
+    m_ComplexParams.ShowWindow(SW_HIDE);
     m_CheckListBox.ShowWindow(SW_HIDE);
     InitControlSize();
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -217,7 +218,14 @@ void CmaServerConfigDlg::OnBnClicked(UINT uID)
     {
         if (vecParams[index].m_ParamValueID == uID)
         {
-            theApp.UpdateCheckListBox(ClickButton, m_CheckListBox, LeafType.GetBuffer(), vecParams[index]);
+            if(vecParams[index].m_ParamValueType == CT_CHECK_LIST_BOX)
+            {
+                theApp.UpdateCheckListBox(ClickButton, m_CheckListBox, LeafType.GetBuffer(), vecParams[index]);
+            }
+            else if(vecParams[index].m_ParamValueType == CT_RADIO_CHECK_BOX)
+            {
+
+            }
             break;
         }
     }
@@ -798,54 +806,61 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
     }
 
     //调整node节点中use和defaultxa/backupxa的位置
-    //if(LeafType == gl_Node)
-    //{
-    //    CRect pUseRect, pDefaultRect, pBackupRect, vUseRect, vDefaultRect, vBackupRect;
-    //    std::shared_ptr<CStatic> pUse, pDefault, pBackup;
-    //    std::shared_ptr<CComboBox> vDefault, vBackup;
-    //    std::shared_ptr<CButton> vUse;
-    //    for(std::vector<ParamNode>::size_type index =0 ; index < vecParams.size(); index++)
-    //    {
-    //        if(vecParams[index].m_ParamName == gp_Use)
-    //        {
-    //            pUse = theApp.GetStaticText(vecParams[index].m_ParamNameID);
-    //            vUse = theApp.GetButton(vecParams[index].m_ParamValueID);
-    //            pUse->GetWindowRect(pUseRect);
-    //            vUse->GetWindowRect(vUseRect);
-    //            continue;
-    //        }
+    if (LeafType == gl_Node)
+    {
+        CRect pUseRect, pDefaultRect, pBackupRect, vUseRect, vDefaultRect, vBackupRect;
+        std::shared_ptr<CStatic> pUse, pDefault, pBackup;
+        std::shared_ptr<CComboBox> vDefault, vBackup;
+        std::shared_ptr<CButton> vUse;
+        for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+        {
+            if (vecParams[index].m_ParamName == gp_Use)
+            {
+                pUse = theApp.GetStaticText(vecParams[index].m_ParamNameID);
+                vUse = theApp.GetButton(vecParams[index].m_ParamValueID);
+                pUse->GetWindowRect(pUseRect);
+                vUse->GetWindowRect(vUseRect);
+                continue;
+            }
 
-    //        if (vecParams[index].m_ParamName == gp_DefaultXa)
-    //        {
-    //            pDefault = theApp.GetStaticText(vecParams[index].m_ParamNameID);
-    //            vDefault = theApp.GetComboBoxList(vecParams[index].m_ParamValueID);
-    //            pDefault->GetWindowRect(pDefaultRect);
-    //            vDefault->GetWindowRect(vDefaultRect);
-    //            continue;
-    //        }
+            if (vecParams[index].m_ParamName == gp_DefaultXa)
+            {
+                pDefault = theApp.GetStaticText(vecParams[index].m_ParamNameID);
+                vDefault = theApp.GetComboBoxList(vecParams[index].m_ParamValueID);
+                pDefault->GetWindowRect(pDefaultRect);
+                vDefault->GetWindowRect(vDefaultRect);
+                continue;
+            }
 
-    //        if (vecParams[index].m_ParamName == gp_BackupXa)
-    //        {
-    //            pBackup = theApp.GetStaticText(vecParams[index].m_ParamNameID);
-    //            vBackup = theApp.GetComboBoxList(vecParams[index].m_ParamValueID);
-    //            pBackup->GetWindowRect(pBackupRect);
-    //            vBackup->GetWindowRect(vBackupRect);
-    //            continue;
-    //        }
-    //    }
+            if (vecParams[index].m_ParamName == gp_BackupXa)
+            {
+                pBackup = theApp.GetStaticText(vecParams[index].m_ParamNameID);
+                vBackup = theApp.GetComboBoxList(vecParams[index].m_ParamValueID);
+                pBackup->GetWindowRect(pBackupRect);
+                vBackup->GetWindowRect(vBackupRect);
+                continue;
+            }
+        }
 
-    //    if(pUseRect.top < pDefaultRect.top && pDefaultRect.top < pBackupRect.top)
-    //    {
-    //        pDefault->MoveWindow(pUseRect);
-    //        vDefault->MoveWindow(vUseRect);
+        if (pUseRect.top < pDefaultRect.top && pDefaultRect.top < pBackupRect.top)
+        {
+            //GetWindowRect获取的是屏幕坐标，要转换成对话框坐标
+            ScreenToClient(&pUseRect);
+            ScreenToClient(&vUseRect);
+            pDefault->MoveWindow(&pUseRect);
+            vDefault->MoveWindow(&vUseRect);
 
-    //        pBackup->MoveWindow(pDefaultRect);
-    //        vBackup->MoveWindow(vDefaultRect);
+            ScreenToClient(&pDefaultRect);
+            ScreenToClient(&vDefaultRect);
+            pBackup->MoveWindow(&pDefaultRect);
+            vBackup->MoveWindow(&vDefaultRect);
 
-    //        pUse->MoveWindow(pBackupRect);
-    //        vUse->MoveWindow(vBackupRect);
-    //    }
-    //}
+            ScreenToClient(&pBackupRect);
+            ScreenToClient(&vBackupRect);
+            pUse->MoveWindow(&pBackupRect);
+            vUse->MoveWindow(&vBackupRect);
+        }
+    }
 }
 
 bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)

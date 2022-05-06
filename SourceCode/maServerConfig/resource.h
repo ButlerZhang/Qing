@@ -19,6 +19,8 @@
 #define ID_BUTTON_GENERATE              1018
 #define ID_BUTTON_OPEN_FILE             1019
 #define IDC_LIST1                       1020
+#define IDC_GRID_COMPLEX                1023
+#define IDC_STATIC_COMPLEX              1023
 #define IDC_BUTTON_START                2000
 #define IDC_BUTTON_STOP                 2100
 #define IDC_COMBOX_LIST_1               2101
@@ -40,7 +42,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1023
+#define _APS_NEXT_CONTROL_VALUE         1024
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

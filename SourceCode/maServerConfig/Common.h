@@ -67,6 +67,7 @@ enum ControlType
     CT_COMBO_BOX_EDIT,                              //下拉可编辑单选框
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
     CT_CHECK_LIST_BOX,                              //下拉复选列表框
+    CT_RADIO_CHECK_BOX,                             //单选和复选同时支持
     CT_COUNT                                        //支持的控件种类
 };
 

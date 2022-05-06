@@ -34,9 +34,6 @@ private: //添加的响应函数
     //按钮点击事件，可以弹出CheckListBox
     afx_msg void OnBnClicked(UINT uID);
 
-    //ComBoxList下拉选择变化事件
-    afx_msg void OnComBoxClistChange(UINT uID);
-
     //CheckListBox选择响应事件
     afx_msg void OnCheckListBoxChange();
 
@@ -81,6 +78,7 @@ private:
     CString             m_LastSearchNode;     //上一次搜索的节点，例如[ma.kernel.rtdb]
     CString             m_LastLeafNode;       //上一次显示的叶子节点，例如[runtimetable_01_sysma_st_node]
     CString             m_LastLeafID;         //上一次显示的叶子ID，例如[01]
+    CStatic             m_ComplexParams;      //复合参数区域
     CComboBox           m_ComboBoxConfig;     //配置项
     CTreeCtrl           m_TreeConfig;         //每个配置项对应的配置内容
     CCheckListBox       m_CheckListBox;       //下拉多选框
