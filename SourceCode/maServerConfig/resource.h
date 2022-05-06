@@ -21,6 +21,17 @@
 #define IDC_LIST1                       1020
 #define IDC_BUTTON_START                2000
 #define IDC_BUTTON_STOP                 2100
+#define IDC_COMBOX_LIST_1               2101
+#define IDC_COMBOX_LIST_2               2102
+#define IDC_COMBOX_LIST_3               2103
+#define IDC_COMBOX_LIST_4               2104
+#define IDC_COMBOX_LIST_5               2105
+#define IDC_COMBOX_LIST_6               2106
+#define IDC_COMBOX_LIST_7               2107
+#define IDC_COMBOX_LIST_8               2108
+#define IDC_COMBOX_LIST_9               2109
+#define IDC_COMBOX_LIST_10              2110
+#define IDC_COMBOX_LIST_STOP            2200
 #define IDC_MY_CONTROL                  5000
 
 // Next default values for new objects

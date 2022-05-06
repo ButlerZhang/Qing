@@ -1,8 +1,4 @@
-﻿
-// maServerConfig.cpp: 定义应用程序的类行为。
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "maServerConfig.h"
 #include "maServerConfigDlg.h"
@@ -157,12 +153,12 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT_DISABLE));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Name, CT_STATIC_TEXT_ENABLE));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Type, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Gid));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Ipv4));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Path));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_DefaultXa));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_BackupXa));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Gid, CT_STATIC_TEXT_DISABLE));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Ipv4, CT_STATIC_TEXT_ENABLE));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Path, CT_STATIC_TEXT_ENABLE));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use, CT_CHECK_LIST_BOX));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_DefaultXa, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_BackupXa, CT_COMBO_BOX_LIST));
 }
 
 void CmaServerConfigApp::InitSelectItem()
@@ -493,13 +489,19 @@ std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(CWnd* wnd, UINT& 
         }
     }
 
+    UINT NewID = IDC_COMBOX_LIST_1;
+    if (!m_vecComboBoxList.empty())
+    {
+        NewID = m_vecComboBoxList[m_vecComboBoxList.size() - 1]->GetDlgCtrlID() + 1;
+    }
+
     //找不到时创建一个新的控件
     m_vecComboBoxList.push_back(std::make_shared<CComboBox>());
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
     DWORD Style = WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | CBS_OEMCONVERT;
-    m_vecComboBoxList[m_vecComboBoxList.size() - 1]->Create(Style, Rect, wnd, m_NextControlID++);
+    m_vecComboBoxList[m_vecComboBoxList.size() - 1]->Create(Style, Rect, wnd, NewID);
     TargetID = m_vecComboBoxList[m_vecComboBoxList.size() - 1]->GetDlgCtrlID();
 
     return m_vecComboBoxList[m_vecComboBoxList.size() - 1];
@@ -533,10 +535,10 @@ std::shared_ptr<CButton> CmaServerConfigApp::GetButton(CWnd* wnd, UINT& TargetID
         }
     }
 
-    UINT ButtonID = IDC_BUTTON_START;
+    UINT NewID = IDC_BUTTON_START;
     if (!m_vecButton.empty())
     {
-        ButtonID = m_vecButton[m_vecButton.size() - 1]->GetDlgCtrlID() + 1;
+        NewID = m_vecButton[m_vecButton.size() - 1]->GetDlgCtrlID() + 1;
     }
 
     //找不到时创建一个新的控件
@@ -545,7 +547,7 @@ std::shared_ptr<CButton> CmaServerConfigApp::GetButton(CWnd* wnd, UINT& TargetID
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
     DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT/* | BS_MULTILINE*/;
-    m_vecButton[m_vecButton.size() - 1]->Create(NULL, Style, Rect, wnd, ButtonID);
+    m_vecButton[m_vecButton.size() - 1]->Create(NULL, Style, Rect, wnd, NewID);
     TargetID = m_vecButton[m_vecButton.size() - 1]->GetDlgCtrlID();
 
     return m_vecButton[m_vecButton.size() - 1];

@@ -1,8 +1,4 @@
-﻿
-// maServerConfigDlg.h: 头文件
-//
-
-#pragma once
+﻿#pragma once
 
 // CmaServerConfigDlg 对话框
 class CmaServerConfigDlg : public CDialogEx
@@ -32,11 +28,38 @@ protected:
 
 private: //添加的响应函数
 
+    //OK按钮响应事件，暂未启用
     afx_msg void OnBnClickedOk();
+
+    //按钮点击事件，可以弹出CheckListBox
     afx_msg void OnBnClicked(UINT uID);
+
+    //ComBoxList下拉选择变化事件
+    afx_msg void OnComBoxClistChange(UINT uID);
+
+    //CheckListBox选择响应事件
     afx_msg void OnCheckListBoxChange();
+
+    //配置项选择事件，比如选择ma架构还是kernel
     afx_msg void OnComboBoxConfigChange();
+
+    //ComBox List选择响应事件，预定10个
+    afx_msg void OnComboBoxListSelectChange(UINT uID);
+    afx_msg void OnComboBoxListSelectChange1() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_1); }
+    afx_msg void OnComboBoxListSelectChange2() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_2); }
+    afx_msg void OnComboBoxListSelectChange3() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_3); }
+    afx_msg void OnComboBoxListSelectChange4() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_4); }
+    afx_msg void OnComboBoxListSelectChange5() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_5); }
+    afx_msg void OnComboBoxListSelectChange6() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_6); }
+    afx_msg void OnComboBoxListSelectChange7() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_7); }
+    afx_msg void OnComboBoxListSelectChange8() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_8); }
+    afx_msg void OnComboBoxListSelectChange9() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_9); }
+    afx_msg void OnComboBoxListSelectChange10() { OnComboBoxListSelectChange(IDC_COMBOX_LIST_10); }
+
+    //生成配置文件事件
     afx_msg void OnButtonClickedGenerateConfig();
+
+    //响应配置项构成的树的点击事件
     afx_msg void OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult);
 
 private:

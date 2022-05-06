@@ -11,7 +11,21 @@ const std::wstring DOT(L".");           //以点号分隔
 const std::wstring COLON(L":");         //以冒号分隔
 const std::wstring SEMICOLON(L";");     //以分号分隔
 
-//叶子结点名称（g:global，l:leaf）
+//架构名称（g:global，m:ma）
+const std::wstring gm_MA(L"ma");
+const std::wstring gm_Kernel(L"kernel");
+const std::wstring gm_Deployment(L"deployment");
+const std::wstring gm_Construction(L"construction");
+
+//树干名称（g:global，t:trunk）
+const std::wstring gt_Rtdb(L"rtdb");
+const std::wstring gt_Services(L"services");
+const std::wstring gt_Bbu(L"bpu");
+const std::wstring gt_Queues(L"queues");
+const std::wstring gt_Xas(L"xas");
+const std::wstring gt_Nodes(L"nodes");
+
+//叶子名称（g:global，l:leaf）
 const std::wstring gl_RuntimeTable(L"runtimetable");
 const std::wstring gl_Service(L"service");
 const std::wstring gl_MsgQueue(L"msgqueue");

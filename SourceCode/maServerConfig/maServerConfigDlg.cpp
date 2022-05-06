@@ -1,8 +1,4 @@
-﻿
-// maServerConfigDlg.cpp: 实现文件
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "maServerConfig.h"
 #include "maServerConfigDlg.h"
@@ -77,6 +73,16 @@ BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
     ON_BN_CLICKED(IDOK, &CmaServerConfigDlg::OnBnClickedOk)
     ON_CLBN_CHKCHANGE(IDC_LIST1, &CmaServerConfigDlg::OnCheckListBoxChange)
     ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnComboBoxConfigChange)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_1, &CmaServerConfigDlg::OnComboBoxListSelectChange1)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_2, &CmaServerConfigDlg::OnComboBoxListSelectChange2)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_3, &CmaServerConfigDlg::OnComboBoxListSelectChange3)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_4, &CmaServerConfigDlg::OnComboBoxListSelectChange4)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_5, &CmaServerConfigDlg::OnComboBoxListSelectChange5)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_6, &CmaServerConfigDlg::OnComboBoxListSelectChange6)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_7, &CmaServerConfigDlg::OnComboBoxListSelectChange7)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_8, &CmaServerConfigDlg::OnComboBoxListSelectChange8)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_9, &CmaServerConfigDlg::OnComboBoxListSelectChange9)
+    ON_CBN_SELCHANGE(IDC_COMBOX_LIST_10, &CmaServerConfigDlg::OnComboBoxListSelectChange10)
     ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTreeConfigChange)
     ON_BN_CLICKED(ID_BUTTON_GENERATE, &CmaServerConfigDlg::OnButtonClickedGenerateConfig)
     ON_COMMAND_RANGE(IDC_BUTTON_START, IDC_BUTTON_STOP, &CmaServerConfigDlg::OnBnClicked)
@@ -115,10 +121,10 @@ BOOL CmaServerConfigDlg::OnInitDialog()
     SetIcon(m_hIcon, FALSE);		// 设置小图标
 
     // TODO: 在此添加额外的初始化代码
-    m_ComboBoxConfig.AddString(_T("construction: 构件"));
-    m_ComboBoxConfig.AddString(_T("deployment: 部署"));
-    m_ComboBoxConfig.AddString(_T("kernel: 内核"));
-    m_ComboBoxConfig.AddString(_T("ma: 架构"));
+    m_ComboBoxConfig.AddString((gm_Construction + COLON + L"构件").c_str());
+    m_ComboBoxConfig.AddString((gm_Deployment + COLON + L"部署").c_str());
+    m_ComboBoxConfig.AddString((gm_Kernel + COLON + L"内核").c_str());
+    m_ComboBoxConfig.AddString((gm_MA + COLON + L"架构").c_str());
     m_ComboBoxConfig.SetCurSel(3);
 
     if (LoadConfigFile(g_XMLFile))
@@ -181,6 +187,7 @@ HCURSOR CmaServerConfigDlg::OnQueryDragIcon()
     return static_cast<HCURSOR>(m_hIcon);
 }
 
+//OK按钮响应事件，暂未启用
 void CmaServerConfigDlg::OnBnClickedOk()
 {
     //还未使用
@@ -189,6 +196,7 @@ void CmaServerConfigDlg::OnBnClickedOk()
     CDialogEx::OnOK();
 }
 
+//按钮点击事件，可以弹出CheckListBox
 void CmaServerConfigDlg::OnBnClicked(UINT uID)
 {
     const std::shared_ptr<CButton>& ClickButton = theApp.GetButton(uID);
@@ -215,12 +223,64 @@ void CmaServerConfigDlg::OnBnClicked(UINT uID)
     }
 }
 
+//配置项选择事件，比如选择ma架构还是kernel
 void CmaServerConfigDlg::OnComboBoxConfigChange()
 {
     m_TreeConfig.DeleteAllItems();
     UpdateTreeConfig();
 }
 
+//ComBox List选择响应事件，预定10个
+void CmaServerConfigDlg::OnComboBoxListSelectChange(UINT uID)
+{
+    //获取当前文本框里的节点名称
+    std::shared_ptr<CComboBox> ComboxList = theApp.GetComboBoxList(uID);
+    if(ComboxList == nullptr)
+    {
+        return;
+    }
+
+    CString CurrentText;
+    ComboxList->GetWindowTextW(CurrentText);
+    if (CurrentText.IsEmpty())
+    {
+        return;
+    }
+
+    //deployment.nodes节点
+    {
+        const std::wstring &NODES = gm_MA + DOT + gm_Deployment + DOT + gt_Nodes;
+        if(m_LastSearchNode.Compare(NODES.c_str()) == 0)
+        {
+            CString LeafType = theApp.GetLeftType(m_LastLeafNode);
+            if (theApp.g_mapLeaf.find(LeafType.GetString()) != theApp.g_mapLeaf.end())
+            {
+                const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType.GetBuffer()].m_vecParams;
+                for(std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+                {
+                    if(vecParams[index].m_ParamName == gp_Use)
+                    {
+                        const std::shared_ptr<CButton>& Button = theApp.GetButton(vecParams[index].m_ParamValueID);
+                        if (CurrentText.Find(gt_Bbu.c_str()) >= 0)
+                        {
+                            Button->SetWindowTextW(L"n"); //给一个默认值
+                            Button->EnableWindow(TRUE);
+                        }
+                        else
+                        {
+                            Button->SetWindowTextW(L"");
+                            Button->EnableWindow(FALSE);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//响应配置项构成的树的点击事件
 void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
@@ -293,12 +353,14 @@ void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
+//生成配置文件事件
 void CmaServerConfigDlg::OnButtonClickedGenerateConfig()
 {
     SaveLastChange();
     theApp.WriteXMLFile(g_XMLFile);
 }
 
+//CheckListBox选择响应事件
 void CmaServerConfigDlg::OnCheckListBoxChange()
 {
     //找到按钮ID
@@ -734,6 +796,56 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         CurrentY += ControlHeight + OFFSET;
         ++ControlIndex;
     }
+
+    //调整node节点中use和defaultxa/backupxa的位置
+    //if(LeafType == gl_Node)
+    //{
+    //    CRect pUseRect, pDefaultRect, pBackupRect, vUseRect, vDefaultRect, vBackupRect;
+    //    std::shared_ptr<CStatic> pUse, pDefault, pBackup;
+    //    std::shared_ptr<CComboBox> vDefault, vBackup;
+    //    std::shared_ptr<CButton> vUse;
+    //    for(std::vector<ParamNode>::size_type index =0 ; index < vecParams.size(); index++)
+    //    {
+    //        if(vecParams[index].m_ParamName == gp_Use)
+    //        {
+    //            pUse = theApp.GetStaticText(vecParams[index].m_ParamNameID);
+    //            vUse = theApp.GetButton(vecParams[index].m_ParamValueID);
+    //            pUse->GetWindowRect(pUseRect);
+    //            vUse->GetWindowRect(vUseRect);
+    //            continue;
+    //        }
+
+    //        if (vecParams[index].m_ParamName == gp_DefaultXa)
+    //        {
+    //            pDefault = theApp.GetStaticText(vecParams[index].m_ParamNameID);
+    //            vDefault = theApp.GetComboBoxList(vecParams[index].m_ParamValueID);
+    //            pDefault->GetWindowRect(pDefaultRect);
+    //            vDefault->GetWindowRect(vDefaultRect);
+    //            continue;
+    //        }
+
+    //        if (vecParams[index].m_ParamName == gp_BackupXa)
+    //        {
+    //            pBackup = theApp.GetStaticText(vecParams[index].m_ParamNameID);
+    //            vBackup = theApp.GetComboBoxList(vecParams[index].m_ParamValueID);
+    //            pBackup->GetWindowRect(pBackupRect);
+    //            vBackup->GetWindowRect(vBackupRect);
+    //            continue;
+    //        }
+    //    }
+
+    //    if(pUseRect.top < pDefaultRect.top && pDefaultRect.top < pBackupRect.top)
+    //    {
+    //        pDefault->MoveWindow(pUseRect);
+    //        vDefault->MoveWindow(vUseRect);
+
+    //        pBackup->MoveWindow(pDefaultRect);
+    //        vBackup->MoveWindow(vDefaultRect);
+
+    //        pUse->MoveWindow(pBackupRect);
+    //        vUse->MoveWindow(vBackupRect);
+    //    }
+    //}
 }
 
 bool CmaServerConfigDlg::LoadConfigFile(const std::string& XMLFile)
