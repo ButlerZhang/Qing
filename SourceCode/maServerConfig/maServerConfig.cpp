@@ -318,6 +318,23 @@ CString CmaServerConfigApp::GetLeftType(const CString& Text)
     return CurrentType;
 }
 
+std::wstring CmaServerConfigApp::GetSelectItemMapKey(const std::wstring& OldKey)
+{
+    int pos = OldKey.find(gl_Xa);
+    if (pos != std::wstring::npos)
+    {
+        return gt_Xas;
+    }
+
+    pos = OldKey.find(gl_MsgQueue);
+    if (pos != std::wstring::npos)
+    {
+        return gt_Queues;
+    }
+
+    return std::wstring();
+}
+
 void CmaServerConfigApp::ResetControl()
 {
     for (std::vector<CEdit>::size_type index = 0; index != m_vecEditText.size(); index++)
@@ -363,6 +380,18 @@ void CmaServerConfigApp::ResetCheckBox()
         m_vecCheckBox[index]->MoveWindow(0, 0, 0, 0);
         m_vecCheckBox[index]->ShowWindow(SW_HIDE);
         m_vecCheckBox[index]->SetWindowTextW(L"");
+    }
+}
+
+void CmaServerConfigApp::UpdateSelectItem(const std::wstring& Key, const std::wstring& Value)
+{
+    if (Key == gt_Xas || Key == gt_Queues)
+    {
+        std::vector<std::wstring>& vecItems = g_mapSelect[Key];
+        if(std::find(vecItems.begin(), vecItems.end(), Value) == vecItems.end())
+        {
+            g_mapSelect[Key].push_back(Value);
+        }
     }
 }
 
@@ -512,7 +541,7 @@ std::shared_ptr<CComboBox> CmaServerConfigApp::GetComboBoxList(CWnd* wnd, UINT& 
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
-    DWORD Style = WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | CBS_OEMCONVERT;
+    DWORD Style = WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | CBS_OEMCONVERT | WS_VSCROLL;
     m_vecComboBoxList[m_vecComboBoxList.size() - 1]->Create(Style, Rect, wnd, NewID);
     TargetID = m_vecComboBoxList[m_vecComboBoxList.size() - 1]->GetDlgCtrlID();
 
@@ -664,10 +693,14 @@ void CmaServerConfigApp::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, Contr
 
 void CmaServerConfigApp::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node)
 {
-    const std::wstring& Key = LeafType + L"." + Node.m_ParamName;
+    std::wstring Key = LeafType + L"." + Node.m_ParamName;
     if (g_mapSelect.find(Key) == g_mapSelect.end())
     {
-        return;
+        Key = GetSelectItemMapKey(Key);
+        if (Key.empty())
+        {
+            return;
+        }
     }
 
     std::vector<std::wstring>& vecSelect = g_mapSelect[Key];
@@ -676,24 +709,35 @@ void CmaServerConfigApp::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrCom
         ptrComboBox->AddString(vecSelect[index].c_str());
     }
 
-    for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+    if (!Node.m_ParamValue.empty())
     {
-        if (vecSelect[index] == Node.m_ParamValue)
+        for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
         {
-            ptrComboBox->SetCurSel(static_cast<int>(index));
-            break;
+            if (vecSelect[index] == Node.m_ParamValue)
+            {
+                ptrComboBox->SetCurSel(static_cast<int>(index));
+                break;
+            }
         }
     }
 }
 
-void CmaServerConfigApp::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, CStatic& Complex, const std::wstring& LeafType, bool IsShow)
+void CmaServerConfigApp::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, CStatic& Complex, const std::wstring& LeafType, const std::wstring& Type)
 {
     //只有BPU类型的use才需要配置子项，其它类型直接禁用
-    if (!IsShow)
+    if (Type.find(gt_Bbu) == std::wstring::npos)
     {
         Complex.ShowWindow(SW_HIDE);
-        pButton->SetWindowTextW(L"");
         pButton->EnableWindow(FALSE);
+        pButton->SetWindowTextW(L"");
+        ResetCheckBox();
+        return;
+    }
+
+    //如果当前可见，点击按钮就隐藏
+    if (Complex.IsWindowVisible())
+    {
+        Complex.ShowWindow(SW_HIDE);
         ResetCheckBox();
         return;
     }

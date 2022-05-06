@@ -22,9 +22,11 @@ public:
 
     CString GetLeafID(const CString& Text);
     CString GetLeftType(const CString& Text);
+    std::wstring GetSelectItemMapKey(const std::wstring& OldKey);
 
     void ResetControl();
     void ResetCheckBox();
+    void UpdateSelectItem(const std::wstring& Key, const std::wstring& Value);
 
     std::shared_ptr<CEdit> GetEditText(CWnd* wnd, UINT& TargetID);
     std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, UINT& TargetID);
@@ -42,7 +44,7 @@ public:
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring &LeafType, const ParamNode &Node);
-    void UpdateNodeUse(const std::shared_ptr<CButton>& pButton, CStatic& Complex, const std::wstring& LeafType, bool IsShow);
+    void UpdateNodeUse(const std::shared_ptr<CButton>& pButton, CStatic& Complex, const std::wstring& LeafType, const std::wstring &Type);
     void UpdateCheckListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox &ListBox, const std::wstring& LeafType, const ParamNode& Node);
 
     // 实现

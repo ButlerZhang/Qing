@@ -226,7 +226,8 @@ void CmaServerConfigDlg::OnBnClicked(UINT uID)
             else if(vecParams[index].m_ParamValueType == CT_CHECK_BOX)
             {
                 const std::shared_ptr<CButton>& pButton = theApp.GetButton(uID);
-                theApp.UpdateNodeUse(pButton, m_ComplexParams, LeafType.GetBuffer(), true);
+                const std::wstring &ParamValue = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValue(gp_Type);
+                theApp.UpdateNodeUse(pButton, m_ComplexParams, LeafType.GetBuffer(), ParamValue);
             }
             break;
         }
@@ -348,10 +349,11 @@ void CmaServerConfigDlg::OnComboBoxListSelectChange(UINT uID)
                 const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType.GetBuffer()].m_vecParams;
                 for(std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
                 {
-                    if(vecParams[index].m_ParamName == gp_Use)
+                    if(vecParams[index].m_ParamValueID == uID && vecParams[index].m_ParamName == gp_Type)
                     {
-                        const std::shared_ptr<CButton>& Button = theApp.GetButton(vecParams[index].m_ParamValueID);
-                        theApp.UpdateNodeUse(Button, m_ComplexParams, LeafType.GetBuffer(), CurrentText.Find(gt_Bbu.c_str()) >= 0);
+                        UINT UseID = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValueID(gp_Use);
+                        const std::shared_ptr<CButton>& Button = theApp.GetButton(UseID);
+                        theApp.UpdateNodeUse(Button, m_ComplexParams, LeafType.GetBuffer(), CurrentText.GetBuffer());
                         break;
                     }
                 }
@@ -732,6 +734,7 @@ bool CmaServerConfigDlg::UpdateTreeConfig()
                 const std::wstring& Name = v1.second.get<std::wstring>(L"<xmlattr>.name", L"");
                 std::wstring TreeName = v1.first + L"_" + ID + L"_" + Name;
                 m_TreeConfig.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
+                theApp.UpdateSelectItem(Key, ID);
             }
         }
 
