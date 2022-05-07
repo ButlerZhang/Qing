@@ -7,6 +7,7 @@
 #include "resource.h"     // 主符号
 #include "Common.h"
 #include <map>
+#include <set>
 #include <boost/property_tree/ptree.hpp>
 
 class CmaServerConfigApp : public CWinApp
@@ -17,6 +18,7 @@ public:
 
 public:
 
+    void WriteSelectItemToLog();
     bool ReadXMLFile(const std::string& XMLFile);
     bool WriteXMLFile(const std::string& XMLFile);
 
@@ -27,7 +29,7 @@ public:
     void AddSelectItem(const std::wstring& Key, const std::wstring& Value);
 
     void ResetAllControl();
-    void ResetCheckBox();
+    void ResetSubParamsControl();
 
     std::shared_ptr<CEdit> GetEditText(CWnd* wnd, UINT& TargetID);
     std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, UINT& TargetID);
@@ -64,6 +66,7 @@ private:
 public:
 
     boost::property_tree::wptree                        g_XMLTree;              //XML根节点
+    std::set<UINT>                                      g_setSubParams;         //子配置项的控件ID
     std::map<std::wstring, LeafNode>                    g_mapLeaf;              //叶子结点
     std::map<std::wstring, std::wstring>                g_mapQueueClsid;        //queue节点的type对应的clsid
     std::map<std::wstring, std::wstring>                g_mapQueueConnstr;      //queue节点的type对应的connstr

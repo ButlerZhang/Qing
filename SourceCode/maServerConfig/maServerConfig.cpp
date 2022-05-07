@@ -9,6 +9,9 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/foreach.hpp>
 
+#include <fstream>
+#include <iostream>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -241,6 +244,23 @@ void CmaServerConfigApp::InitSelectItem()
         g_mapQueueMaxSize[gs_QueueType_mem] = L"10000";
         g_mapQueueMaxSize[gs_QueueType_kdh] = L"10000";
 
+        //socket mode
+        const std::wstring& MsgqueueSocketMode = gl_MsgQueue + DOT + gs_QueueType_socket + DOT + gs_QueueTypeSocket_Mode;
+        g_mapSelect[MsgqueueSocketMode].push_back(L"SERVER");
+        g_mapSelect[MsgqueueSocketMode].push_back(L"CLIENT");
+
+        //zmq mode
+        const std::wstring& MsgqueueZmqMode = gl_MsgQueue + DOT + gs_QueueType_zmq + DOT + gs_QueueTypeZmq_Mode;
+        g_mapSelect[MsgqueueZmqMode].push_back(L"SUB");
+        g_mapSelect[MsgqueueZmqMode].push_back(L"PUB");
+        g_mapSelect[MsgqueueZmqMode].push_back(L"REQ");
+        g_mapSelect[MsgqueueZmqMode].push_back(L"REP");
+
+        //zmq protocol
+        const std::wstring& MsgqueueZmqProtocol = gl_MsgQueue + DOT + gs_QueueType_zmq + DOT + gs_QueueTypeZmq_Protocol;
+        g_mapSelect[MsgqueueZmqProtocol].push_back(L"EPGM");
+        g_mapSelect[MsgqueueZmqProtocol].push_back(L"TCP");
+
         //protocol
         const std::wstring& MsgQueueProtoclo = gl_MsgQueue + DOT + gp_Protocol;
         g_mapSelect[MsgQueueProtoclo].push_back(L"kmap");
@@ -284,6 +304,28 @@ void CmaServerConfigApp::InitSelectItem()
         g_mapSelect[Node].push_back(L"gtu");
         g_mapSelect[Node].push_back(L"kxp");
         g_mapSelect[Node].push_back(L"stg");
+    }
+}
+
+void CmaServerConfigApp::WriteSelectItemToLog()
+{
+    std::wfstream output(L"maServerConfig.log", std::ios::out);
+    if (!output)
+    {
+        return;
+    }
+
+    std::map<std::wstring, std::vector<std::wstring>>::const_iterator it = g_mapSelect.begin();
+    while (it != g_mapSelect.end())
+    {
+        output << it->first << COLON << std::endl;
+        for (std::vector<std::wstring>::size_type index = 0; index < it->second.size(); index++)
+        {
+            output << L"-----" << it->second[index] << std::endl;
+        }
+
+        output << std::endl << std::endl;
+        it++;
     }
 }
 
@@ -429,18 +471,28 @@ void CmaServerConfigApp::ResetAllControl()
         m_vecButton[index]->SetWindowTextW(L"");
     }
 
-    ResetCheckBox();
-}
-
-void CmaServerConfigApp::ResetCheckBox()
-{
-    CRect Zero(0, 0, 0, 0);
     for (std::vector<CButton>::size_type index = 0; index != m_vecCheckBox.size(); index++)
     {
         m_vecCheckBox[index]->MoveWindow(&Zero);
         m_vecCheckBox[index]->ShowWindow(SW_HIDE);
         m_vecCheckBox[index]->SetWindowTextW(L"");
     }
+}
+
+void CmaServerConfigApp::ResetSubParamsControl()
+{
+    CRect Zero(0, 0, 0, 0);
+    for (std::set<UINT>::const_iterator it = g_setSubParams.begin(); it != g_setSubParams.end(); it++)
+    {
+        CWnd* Control = m_pMainWnd->GetDlgItem(*it);
+        if (Control != NULL)
+        {
+            Control->MoveWindow(&Zero);
+            Control->ShowWindow(SW_HIDE);
+        }
+    }
+
+    g_setSubParams.clear();
 }
 
 std::shared_ptr<CEdit> CmaServerConfigApp::GetEditText(CWnd* wnd, UINT& TargetID)

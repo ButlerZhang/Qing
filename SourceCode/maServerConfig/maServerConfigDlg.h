@@ -62,6 +62,9 @@ private: //添加的响应函数
     //生成配置文件事件
     afx_msg void OnBnGenerateConfigFile();
 
+    //打开生成的配置文件
+    afx_msg void OnBnOpenConfigFile();
+
 private:
 
     void InitControlSize();

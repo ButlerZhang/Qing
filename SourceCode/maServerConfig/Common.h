@@ -152,4 +152,17 @@ struct LeafNode
 
         return std::wstring();
     }
+
+    std::vector<ParamNode>::size_type GetIndex(const std::wstring& ParamName)
+    {
+        for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
+        {
+            if (m_vecParams[index].m_ParamName == ParamName)
+            {
+                return index;
+            }
+        }
+
+        return m_vecParams.size();
+    }
 };
