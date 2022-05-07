@@ -9,6 +9,7 @@ const std::string g_XMLFile("maServer.xml");
 
 //使用的两种分隔符
 const std::wstring DOT(L".");           //以点号分隔（用于XML搜索）
+const std::wstring EQUAL(L"=");         //以等号分隔（用于xaopen）
 const std::wstring COLON(L":");         //以冒号分隔（用于注释）
 const std::wstring COMMA(L",");         //以逗号分割（用于某些子配置项）
 const std::wstring SLASH(L"/");         //以斜线分隔（用于connstr）
@@ -99,7 +100,8 @@ enum ControlType
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
     CT_CHECK_LIST_BOX,                              //下拉复选列表框
     CT_CHECK_BOX,                                   //勾选框
-    CT_MIXED_BOX,                                   //混合输入框，主要用于constr和xa
+    CT_MIXED_BOX_XA,                                //混合输入框
+    CT_MIXED_BOX_QUEUE,                             //混合输入框
     CT_COUNT                                        //支持的控件种类
 };
 

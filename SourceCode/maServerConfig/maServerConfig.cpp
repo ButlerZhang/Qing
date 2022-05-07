@@ -121,7 +121,7 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Gid));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Gid, CT_COMBO_BOX_EDIT));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Runas, CT_COMBO_BOX_LIST));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_WorkThread));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Use));
@@ -130,7 +130,7 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_MsgQueue, LeafNode()));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Gid, CT_STATIC_TEXT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Gid, CT_COMBO_BOX_EDIT));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Direction, CT_COMBO_BOX_LIST));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Type, CT_COMBO_BOX_LIST));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Protocol, CT_COMBO_BOX_LIST));
@@ -138,18 +138,18 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_MaxSize, CT_EDIT_TEXT));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Timeout, CT_EDIT_TEXT));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Clsid, CT_STATIC_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Connstr, CT_MIXED_BOX));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Connstr, CT_MIXED_BOX_QUEUE));
 
     //xa节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Xa, LeafNode()));
     g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
     g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaClose));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOption));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_DaoPath));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaSerial));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOpen));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaClose, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOption, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_DaoPath, CT_COMBO_BOX_EDIT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaSerial, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOpen, CT_MIXED_BOX_XA));
 
     //node节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Node, LeafNode()));
@@ -293,6 +293,19 @@ void CmaServerConfigApp::InitSelectItem()
         g_mapSelect[XAClsid].push_back(L"CXaQueueSocket");
         g_mapSelect[XAClsid].push_back(L"CXaRpcKcbp");
         g_mapSelect[XAClsid].push_back(L"CXaQueueKV");
+        g_mapSelect[XAClsid].push_back(L"CXaExtremeDB");
+        g_mapSelect[XAClsid].push_back(L"CXaQueueShm");
+        g_mapSelect[XAClsid].push_back(L"CXaQueueTgwShBinary");
+        g_mapSelect[XAClsid].push_back(L"CXaQueueTgw");
+
+        //daopath
+        const std::wstring& XADaoPath = gl_Xa + DOT + gp_DaoPath;
+        g_mapSelect[XADaoPath].push_back(L"./biz/mssql");
+        g_mapSelect[XADaoPath].push_back(L"./biz/oracle");
+        g_mapSelect[XADaoPath].push_back(L"./biz/extremedb");
+        g_mapSelect[XADaoPath].push_back(L"./biz/fastdb");
+        g_mapSelect[XADaoPath].push_back(L"./biz/timesten");
+        g_mapSelect[XADaoPath].push_back(L"./kbss/mssql");
     }
 
     //nodes
