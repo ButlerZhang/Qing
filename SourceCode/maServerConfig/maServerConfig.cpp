@@ -210,36 +210,36 @@ void CmaServerConfigApp::InitSelectItem()
     {
         //type
         const std::wstring& MsgQueueType = gl_MsgQueue + DOT + gp_Type;
-        g_mapSelect[MsgQueueType].push_back(L"kcxp");
-        g_mapSelect[MsgQueueType].push_back(L"zmq");
+        g_mapSelect[MsgQueueType].push_back(gs_QueueType_kcxp);
+        g_mapSelect[MsgQueueType].push_back(gs_QueueType_zmq);
         g_mapSelect[MsgQueueType].push_back(L"socket");
         g_mapSelect[MsgQueueType].push_back(L"shm");
         g_mapSelect[MsgQueueType].push_back(L"mem");
         g_mapSelect[MsgQueueType].push_back(L"kdh");
 
         //clsid
-        g_mapQueueClsid[L"kcxp"] = L"CMsgQueueKcxp";
-        g_mapQueueClsid[L"zmq"] = L"CMsgQueueZmq";
-        g_mapQueueClsid[L"socket"] = L"CMsgQueueSocket";
-        g_mapQueueClsid[L"shm"] = L"CMsgQueueShm";
-        g_mapQueueClsid[L"mem"] = L"CMsgQueueStl";
-        g_mapQueueClsid[L"kdh"] = L"CMsgQueueKdh";
+        g_mapQueueClsid[gs_QueueType_kcxp] = L"CMsgQueueKcxp";
+        g_mapQueueClsid[gs_QueueType_zmq] = L"CMsgQueueZmq";
+        g_mapQueueClsid[gs_QueueType_socket] = L"CMsgQueueSocket";
+        g_mapQueueClsid[gs_QueueType_shm] = L"CMsgQueueShm";
+        g_mapQueueClsid[gs_QueueType_mem] = L"CMsgQueueStl";
+        g_mapQueueClsid[gs_QueueType_kdh] = L"CMsgQueueKdh";
 
         //connstr
-        g_mapQueueConnstr[L"kcxp"] = L"21000/TCP/192.168.0.2/5";
-        g_mapQueueConnstr[L"zmq"] = L"30001/SUB/EPGM/@@IP;192.168.0.2/5/300000/2";
-        g_mapQueueConnstr[L"socket"] = L"41002/SERVER/TCP/192.168.0.2/8";
-        g_mapQueueConnstr[L"shm"] = L"";
-        g_mapQueueConnstr[L"mem"] = L"";
-        g_mapQueueConnstr[L"kdh"] = L"";
+        g_mapQueueConnstr[gs_QueueType_kcxp] = L"21000/TCP/192.168.0.2/5";
+        g_mapQueueConnstr[gs_QueueType_zmq] = L"30001/SUB/EPGM/@@IP;192.168.0.2/5/300000/2";
+        g_mapQueueConnstr[gs_QueueType_socket] = L"41002/SERVER/TCP/192.168.0.2/8";
+        g_mapQueueConnstr[gs_QueueType_shm] = L"";
+        g_mapQueueConnstr[gs_QueueType_mem] = L"";
+        g_mapQueueConnstr[gs_QueueType_kdh] = L"";
 
         //max_size
-        g_mapQueueMaxSize[L"kcxp"] = L"";
-        g_mapQueueMaxSize[L"zmq"] = L"90000";
-        g_mapQueueMaxSize[L"socket"] = L"10000";
-        g_mapQueueMaxSize[L"shm"] = L"10000";
-        g_mapQueueMaxSize[L"mem"] = L"10000";
-        g_mapQueueMaxSize[L"kdh"] = L"10000";
+        g_mapQueueMaxSize[gs_QueueType_kcxp] = L"";
+        g_mapQueueMaxSize[gs_QueueType_zmq] = L"90000";
+        g_mapQueueMaxSize[gs_QueueType_socket] = L"10000";
+        g_mapQueueMaxSize[gs_QueueType_shm] = L"10000";
+        g_mapQueueMaxSize[gs_QueueType_mem] = L"10000";
+        g_mapQueueMaxSize[gs_QueueType_kdh] = L"10000";
 
         //protocol
         const std::wstring& MsgQueueProtoclo = gl_MsgQueue + DOT + gp_Protocol;
@@ -393,37 +393,38 @@ void CmaServerConfigApp::AddSelectItem(const std::wstring& Key, const std::wstri
     }
 }
 
-void CmaServerConfigApp::ResetControl()
+void CmaServerConfigApp::ResetAllControl()
 {
+    CRect Zero(0, 0, 0, 0);
     for (std::vector<CEdit>::size_type index = 0; index != m_vecEditText.size(); index++)
     {
-        m_vecEditText[index]->MoveWindow(0, 0, 0, 0);
+        m_vecEditText[index]->MoveWindow(&Zero);
         m_vecEditText[index]->ShowWindow(SW_HIDE);
     }
 
     for (std::vector<CStatic>::size_type index = 0; index != m_vecStaticText.size(); index++)
     {
-        m_vecStaticText[index]->MoveWindow(0, 0, 0, 0);
+        m_vecStaticText[index]->MoveWindow(&Zero);
         m_vecStaticText[index]->ShowWindow(SW_HIDE);
     }
 
     for (std::vector<CComboBox>::size_type index = 0; index != m_vecComboBoxEdit.size(); index++)
     {
-        m_vecComboBoxEdit[index]->MoveWindow(0, 0, 0, 0);
+        m_vecComboBoxEdit[index]->MoveWindow(&Zero);
         m_vecComboBoxEdit[index]->ShowWindow(SW_HIDE);
         m_vecComboBoxEdit[index]->ResetContent();
     }
 
     for (std::vector<CComboBox>::size_type index = 0; index != m_vecComboBoxList.size(); index++)
     {
-        m_vecComboBoxList[index]->MoveWindow(0, 0, 0, 0);
+        m_vecComboBoxList[index]->MoveWindow(&Zero);
         m_vecComboBoxList[index]->ShowWindow(SW_HIDE);
         m_vecComboBoxList[index]->ResetContent();
     }
 
     for (std::vector<CButton>::size_type index = 0; index != m_vecButton.size(); index++)
     {
-        m_vecButton[index]->MoveWindow(0, 0, 0, 0);
+        m_vecButton[index]->MoveWindow(&Zero);
         m_vecButton[index]->ShowWindow(SW_HIDE);
         m_vecButton[index]->SetWindowTextW(L"");
     }
@@ -433,9 +434,10 @@ void CmaServerConfigApp::ResetControl()
 
 void CmaServerConfigApp::ResetCheckBox()
 {
+    CRect Zero(0, 0, 0, 0);
     for (std::vector<CButton>::size_type index = 0; index != m_vecCheckBox.size(); index++)
     {
-        m_vecCheckBox[index]->MoveWindow(0, 0, 0, 0);
+        m_vecCheckBox[index]->MoveWindow(&Zero);
         m_vecCheckBox[index]->ShowWindow(SW_HIDE);
         m_vecCheckBox[index]->SetWindowTextW(L"");
     }
@@ -680,7 +682,7 @@ std::shared_ptr<CButton> CmaServerConfigApp::GetCheckBox(CWnd* wnd, UINT& Target
 
     //设置新控件的属性
     Rect.left = Rect.right = Rect.top = Rect.bottom = 0;
-    DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT | BS_AUTOCHECKBOX;
+    DWORD Style = WS_CHILD | WS_VISIBLE | BS_LEFT | BS_AUTOCHECKBOX | BS_VCENTER;
     m_vecCheckBox[m_vecCheckBox.size() - 1]->Create(NULL, Style, Rect, wnd, NewID);
     TargetID = m_vecCheckBox[m_vecCheckBox.size() - 1]->GetDlgCtrlID();
 

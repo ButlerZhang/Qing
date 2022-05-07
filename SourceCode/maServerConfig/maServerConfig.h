@@ -26,7 +26,7 @@ public:
     std::wstring GetSelectItemMapKey(const std::wstring& OldKey);
     void AddSelectItem(const std::wstring& Key, const std::wstring& Value);
 
-    void ResetControl();
+    void ResetAllControl();
     void ResetCheckBox();
 
     std::shared_ptr<CEdit> GetEditText(CWnd* wnd, UINT& TargetID);

@@ -8,9 +8,11 @@
 const std::string g_XMLFile("maServer.xml");
 
 //使用的两种分隔符
-const std::wstring DOT(L".");           //以点号分隔
-const std::wstring COLON(L":");         //以冒号分隔
-const std::wstring SEMICOLON(L";");     //以分号分隔
+const std::wstring DOT(L".");           //以点号分隔（用于XML搜索）
+const std::wstring COLON(L":");         //以冒号分隔（用于注释）
+const std::wstring COMMA(L",");         //以逗号分割（用于某些子配置项）
+const std::wstring SLASH(L"/");         //以斜线分隔（用于connstr）
+const std::wstring SEMICOLON(L";");     //以分号分隔（用于importfile，xaopen）
 
 //架构名称（g:global，m:ma）
 const std::wstring gm_MA(L"ma");
@@ -45,7 +47,7 @@ const std::wstring gp_Protocol(L"protocol");
 const std::wstring gp_Init(L"init");
 const std::wstring gp_MaxSize(L"max_size");
 const std::wstring gp_Timeout(L"timeout");
-const std::wstring gp_Connstr(L"constr");
+const std::wstring gp_Connstr(L"connstr");
 const std::wstring gp_XaClose(L"xaclose");
 const std::wstring gp_XaOption(L"xaoption");
 const std::wstring gp_DaoPath(L"daopath");
@@ -64,6 +66,28 @@ const std::wstring gs_NodeUse_n(L"n");
 const std::wstring gs_NodeUse_s(L"s");
 const std::wstring gs_NodeUse_a(L"a");
 const std::wstring gs_NodeUse_q(L"q");
+const std::wstring gs_QueueType_kcxp(L"kcxp");
+const std::wstring gs_QueueType_zmq(L"zmq");
+const std::wstring gs_QueueType_socket(L"socket");
+const std::wstring gs_QueueType_shm(L"shm");
+const std::wstring gs_QueueType_mem(L"mem");
+const std::wstring gs_QueueType_kdh(L"kdh");
+const std::wstring gs_QueueTypeKcxp_IP(L"IP");
+const std::wstring gs_QueueTypeKcxp_Port(L"Port");
+const std::wstring gs_QueueTypeKcxp_Protocol(L"Protocol");
+const std::wstring gs_QueueTypeKcxp_ConnectCount(L"ConnectCount");
+const std::wstring gs_QueueTypeSocket_IP(L"IP");
+const std::wstring gs_QueueTypeSocket_Port(L"Port");
+const std::wstring gs_QueueTypeSocket_Mode(L"Mode");
+const std::wstring gs_QueueTypeSocket_Protocol(L"Protocol");
+const std::wstring gs_QueueTypeSocket_MsgLength(L"MsgLength");
+const std::wstring gs_QueueTypeZmq_IP(L"IP");
+const std::wstring gs_QueueTypeZmq_Port(L"Port");
+const std::wstring gs_QueueTypeZmq_Mode(L"Mode");
+const std::wstring gs_QueueTypeZmq_Protocol(L"Protocol");
+const std::wstring gs_QueueTypeZmq_ThreadCount(L"ThreadCount");
+const std::wstring gs_QueueTypeZmq_CacheTime(L"CacheTime");
+const std::wstring gs_QueueTypeZmq_HopCount(L"HopCount");
 
 //控件类型
 enum ControlType

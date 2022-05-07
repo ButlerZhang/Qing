@@ -2,6 +2,7 @@
 #include "framework.h"
 #include "maServerConfig.h"
 #include "maServerConfigDlg.h"
+#include "CoordinateGenerator.h"
 #include "afxdialogex.h"
 #include "../Windows/System/SystemShare.h"
 #include "../StandardLinux/src/StandardShare.h"
@@ -263,7 +264,7 @@ void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
 
         if (theApp.g_mapLeaf.find(CurrentLeafType.GetString()) != theApp.g_mapLeaf.end())
         {
-            theApp.ResetControl();
+            theApp.ResetAllControl();
             m_CheckListBox.ShowWindow(SW_HIDE);
             DisplayParams(CurrentLeafType.GetString(), v1);
         }
@@ -279,7 +280,7 @@ void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-//点击Button弹出CheckListBox
+//点击Button弹出CheckListBox或由多个控件组成的子配置项
 void CmaServerConfigDlg::OnBnClicked(UINT uID)
 {
     const std::shared_ptr<CButton>& ClickButton = theApp.GetButton(uID);
@@ -306,10 +307,15 @@ void CmaServerConfigDlg::OnBnClicked(UINT uID)
             }
             else if (vecParams[index].m_ParamValueType == CT_CHECK_BOX)
             {
-                const std::shared_ptr<CButton>& pButton = theApp.GetButton(uID);
                 const std::wstring& ParamValue = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValue(gp_Type);
-                UpdateNodeUse(pButton, LeafType.GetBuffer(), ParamValue);
+                UpdateNodeUse(ClickButton, LeafType.GetBuffer(), ParamValue);
             }
+            else if (vecParams[index].m_ParamValueType == CT_MIXED_BOX)
+            {
+                const std::wstring& ParamValue = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValue(gp_Type);
+                UpdateQueueConnstr(ClickButton, LeafType.GetBuffer(), ParamValue);
+            }
+
             break;
         }
     }
@@ -515,12 +521,12 @@ void CmaServerConfigDlg::OnComboBoxListSelectChange(UINT uID)
             CString LeafType = theApp.GetLeftType(m_LastLeafNode);
             if (theApp.g_mapLeaf.find(LeafType.GetString()) != theApp.g_mapLeaf.end())
             {
-                const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType.GetBuffer()].m_vecParams;
+                std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType.GetBuffer()].m_vecParams;
                 for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
                 {
                     if (vecParams[index].m_ParamValueID == uID && vecParams[index].m_ParamName == gp_Type)
                     {
-                        UpdateQueueType(LeafType.GetBuffer());
+                        UpdateQueueType(LeafType.GetBuffer(), vecParams[index]);
                         return;
                     }
                 }
@@ -864,25 +870,8 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
     CRect ParamsArea;
     GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsArea);
 
-    const int OFFSET = 10;                          //最小偏移量
-    int StartX = ParamsArea.left + 2 * OFFSET;      //控件距离Gird左边20像素
-    int CurrentY = ParamsArea.top;                  //控件跟Grid的top保持一致
-    int CONTROL_SPLIT = 1 + 5;                      //参数名和参数值按1:5划分
-
-    int StaticWidth = ParamsArea.Width() / CONTROL_SPLIT;
-    if (StaticWidth > 100)
-    {
-        StaticWidth = 100;                  //太长不好看
-    }
-
-    int ControlWidth = ParamsArea.Width() - StaticWidth - 4 * OFFSET;
-    if (ControlWidth > 1000)
-    {
-        ControlWidth = 1000;
-    }
-
-    int ControlHeight = 30;
-    int ControlIndex = 0;
+    CoordinateGenerator GeneratorRect(ParamsArea);
+    GeneratorRect.Begin(1, 2);
 
     CString FormatString;
     std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;
@@ -893,7 +882,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         const std::wstring& Value = LeafNode.second.get<std::wstring>(FormatString.GetString(), L"");
 
         const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(this, vecParams[index].m_ParamNameID);
-        StaticText->MoveWindow(StartX, CurrentY, StaticWidth, ControlHeight);
+        StaticText->MoveWindow(GeneratorRect.GetNextRect());
         StaticText->SetWindowTextW(Text.c_str());
         StaticText->ShowWindow(SW_SHOW);
 
@@ -903,7 +892,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         case CT_COMBO_BOX_EDIT:
         {
             const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxEdit(this, vecParams[index].m_ParamValueID);
-            ComboBox->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            ComboBox->MoveWindow(GeneratorRect.GetNextRect());
             ComboBox->ShowWindow(SW_SHOW);
             UpdateComboBox(ComboBox, LeafType, vecParams[index]);
             break;
@@ -911,7 +900,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         case CT_COMBO_BOX_LIST:
         {
             const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxList(this, vecParams[index].m_ParamValueID);
-            ComboBox->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            ComboBox->MoveWindow(GeneratorRect.GetNextRect());
             ComboBox->ShowWindow(SW_SHOW);
             UpdateComboBox(ComboBox, LeafType, vecParams[index]);
             break;
@@ -919,7 +908,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         case CT_CHECK_LIST_BOX:
         {
             const std::shared_ptr<CButton>& Button = theApp.GetButton(this, vecParams[index].m_ParamValueID);
-            Button->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            Button->MoveWindow(GeneratorRect.GetNextRect());
             Button->SetWindowTextW(Value.c_str());
             Button->ShowWindow(SW_SHOW);
             Button->EnableWindow(TRUE);
@@ -928,7 +917,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         case CT_CHECK_BOX:
         {
             const std::shared_ptr<CButton>& Button = theApp.GetButton(this, vecParams[index].m_ParamValueID);
-            Button->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            Button->MoveWindow(GeneratorRect.GetNextRect());
             Button->SetWindowTextW(Value.c_str());
             Button->ShowWindow(SW_SHOW);
 
@@ -943,7 +932,7 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         case CT_MIXED_BOX:
         {
             const std::shared_ptr<CButton>& Button = theApp.GetButton(this, vecParams[index].m_ParamValueID);
-            Button->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            Button->MoveWindow(GeneratorRect.GetNextRect());
             Button->SetWindowTextW(Value.c_str());
             Button->ShowWindow(SW_SHOW);
             break;
@@ -951,16 +940,13 @@ void CmaServerConfigDlg::DisplayParams(const std::wstring& LeafType, boost::prop
         default:
         {
             const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, vecParams[index].m_ParamValueID);
-            EditText->MoveWindow(StartX + OFFSET + StaticWidth, CurrentY + 2, ControlWidth, ControlHeight);
+            EditText->MoveWindow(GeneratorRect.GetNextRect());
             EditText->SetWindowTextW(Value.c_str());
             EditText->ShowWindow(SW_SHOW);
             UpdateEdit(EditText, vecParams[index].m_ParamValueType);
             break;
         }
         }
-
-        CurrentY += ControlHeight + OFFSET;
-        ++ControlIndex;
     }
 
     //调整node节点中use和defaultxa/backupxa的位置
@@ -1059,10 +1045,9 @@ void CmaServerConfigDlg::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, Contr
     }
 }
 
-void CmaServerConfigDlg::UpdateQueueType(const std::wstring& LeafType)
+void CmaServerConfigDlg::UpdateQueueType(const std::wstring& LeafType, ParamNode& Node)
 {
-    UINT TypeID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_Type);
-    const std::shared_ptr<CComboBox>& TypeBox = theApp.GetComboBoxList(TypeID);
+    const std::shared_ptr<CComboBox>& TypeBox = theApp.GetComboBoxList(Node.m_ParamValueID);
     if (TypeBox == nullptr)
     {
         return;
@@ -1076,6 +1061,8 @@ void CmaServerConfigDlg::UpdateQueueType(const std::wstring& LeafType)
     }
 
     std::wstring Type(TypeText.GetBuffer());
+    Node.m_ParamValue = Type;
+
     UINT MaxSizeID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_MaxSize);
     const std::shared_ptr<CEdit>& MaxSizeEdit = theApp.GetEditText(MaxSizeID);
     if (MaxSizeEdit != nullptr && theApp.g_mapQueueMaxSize.find(Type) != theApp.g_mapQueueMaxSize.end())
@@ -1096,6 +1083,151 @@ void CmaServerConfigDlg::UpdateQueueType(const std::wstring& LeafType)
     {
         ConnstrButton->SetWindowTextW(theApp.g_mapQueueConnstr[Type].c_str());
         ConnstrButton->EnableWindow(!theApp.g_mapQueueConnstr[Type].empty());
+    }
+}
+
+void CmaServerConfigDlg::UpdateQueueConnstr(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType, const std::wstring& Type)
+{
+    CString ButtonText;
+    pButton->GetWindowTextW(ButtonText);
+    if (ButtonText.IsEmpty())
+    {
+        return;
+    }
+
+    std::vector<std::wstring> SubParamsValue;
+    SplitString(ButtonText.GetBuffer(), SubParamsValue, SLASH);
+    if (SubParamsValue.empty())
+    {
+        return;
+    }
+
+    //准备数据
+    UINT ButtonID = pButton->GetDlgCtrlID();
+    std::vector<ParamNode>& SubParamsNode = theApp.g_mapLeaf[LeafType].m_subParams[ButtonID];
+    SubParamsNode.clear();
+
+    if (Type == gs_QueueType_kcxp)
+    {
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_Port, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_Protocol, CT_STATIC_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_IP, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_ConnectCount, CT_EDIT_TEXT));
+    }
+    else if (Type == gs_QueueType_zmq)
+    {
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Port, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Mode, CT_COMBO_BOX_LIST));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Protocol, CT_COMBO_BOX_LIST));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_IP, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_ThreadCount, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_CacheTime, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_HopCount, CT_EDIT_TEXT));
+    }
+    else if (Type == gs_QueueType_socket)
+    {
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Port, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Mode, CT_COMBO_BOX_LIST));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Protocol, CT_COMBO_BOX_LIST));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_IP, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_MsgLength, CT_EDIT_TEXT));
+    }
+
+    if (SubParamsValue.size() != SubParamsNode.size())
+    {
+        return;
+    }
+
+    //设置Group Static的区域
+    CRect ButtonRect;
+    CRect SubParamGridRect;
+    {
+        pButton->GetWindowRect(ButtonRect);
+        SubParamGridRect.left = ButtonRect.left;
+        SubParamGridRect.right = ButtonRect.right - 2;
+        SubParamGridRect.top = ButtonRect.top + 10;
+        SubParamGridRect.bottom = SubParamGridRect.top + 300;
+        m_GridSubParams.MoveWindow(SubParamGridRect);
+        m_GridSubParams.ShowWindow(SW_SHOW);
+        m_GridSubParams.SetWindowTextW((gp_Connstr + L"子配置项").c_str());
+    }
+
+    //设置各个子配置项的位置
+    {
+        CoordinateGenerator GeneratorRect(SubParamGridRect);
+        GeneratorRect.m_TopGrap = GeneratorRect.OFFSET_Y * 6;
+        GeneratorRect.SetSplitRatio(2, 7, 1);
+        GeneratorRect.Begin(1, 2);
+
+        for (std::vector<ParamNode>::size_type index = 0; index < SubParamsNode.size(); index++)
+        {
+            const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(this, SubParamsNode[index].m_ParamNameID);
+            StaticText->SetWindowTextW((SubParamsNode[index].m_ParamName + COLON).c_str());
+            StaticText->MoveWindow(GeneratorRect.GetNextRect());
+            StaticText->ShowWindow(SW_SHOW);
+
+            SubParamsNode[index].m_ParamValue = SubParamsValue[index];
+            switch (SubParamsNode[index].m_ParamValueType)
+            {
+            case CT_COMBO_BOX_EDIT:
+            {
+                const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxEdit(this, SubParamsNode[index].m_ParamValueID);
+                ComboBox->MoveWindow(GeneratorRect.GetNextRect());
+                ComboBox->ShowWindow(SW_SHOW);
+                UpdateComboBox(ComboBox, LeafType, SubParamsNode[index]);
+                break;
+            }
+            case CT_COMBO_BOX_LIST:
+            {
+                const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxList(this, SubParamsNode[index].m_ParamValueID);
+                ComboBox->MoveWindow(GeneratorRect.GetNextRect());
+                ComboBox->ShowWindow(SW_SHOW);
+                UpdateComboBox(ComboBox, LeafType, SubParamsNode[index]);
+                break;
+            }
+            case CT_CHECK_LIST_BOX:
+            {
+                const std::shared_ptr<CButton>& Button = theApp.GetButton(this, SubParamsNode[index].m_ParamValueID);
+                Button->MoveWindow(GeneratorRect.GetNextRect());
+                Button->SetWindowTextW(SubParamsValue[index].c_str());
+                Button->ShowWindow(SW_SHOW);
+                Button->EnableWindow(TRUE);
+                break;
+            }
+            case CT_CHECK_BOX:
+            {
+                const std::shared_ptr<CButton>& Button = theApp.GetButton(this, SubParamsNode[index].m_ParamValueID);
+                Button->MoveWindow(GeneratorRect.GetNextRect());
+                Button->SetWindowTextW(SubParamsValue[index].c_str());
+                Button->ShowWindow(SW_SHOW);
+
+                UINT TypeID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_Type);
+                std::shared_ptr<CComboBox> ComboxList = theApp.GetComboBoxList(TypeID);
+
+                CString TypeText;
+                ComboxList->GetWindowTextW(TypeText);
+                Button->EnableWindow(TypeText.Find(gt_Bbu.c_str()) >= 0);
+                break;
+            }
+            case CT_MIXED_BOX:
+            {
+                const std::shared_ptr<CButton>& Button = theApp.GetButton(this, SubParamsNode[index].m_ParamValueID);
+                Button->MoveWindow(GeneratorRect.GetNextRect());
+                Button->SetWindowTextW(SubParamsValue[index].c_str());
+                Button->ShowWindow(SW_SHOW);
+                break;
+            }
+            default:
+            {
+                const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, SubParamsNode[index].m_ParamValueID);
+                EditText->MoveWindow(GeneratorRect.GetNextRect());
+                EditText->SetWindowTextW(SubParamsValue[index].c_str());
+                EditText->ShowWindow(SW_SHOW);
+                UpdateEdit(EditText, SubParamsNode[index].m_ParamValueType);
+                break;
+            }
+            }
+        }
     }
 }
 
@@ -1155,14 +1287,14 @@ void CmaServerConfigDlg::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, 
 
     //设置Group Static的区域
     CRect ButtonRect;
-    CRect ComplexRect;
+    CRect SubParamGridRect;
     {
         pButton->GetWindowRect(ButtonRect);
-        ComplexRect.left = ButtonRect.left;
-        ComplexRect.right = ButtonRect.right - 2;
-        ComplexRect.top = ButtonRect.top + 10;
-        ComplexRect.bottom = ComplexRect.top + 300;
-        m_GridSubParams.MoveWindow(ComplexRect);
+        SubParamGridRect.left = ButtonRect.left;
+        SubParamGridRect.right = ButtonRect.right - 2;
+        SubParamGridRect.top = ButtonRect.top + 10;
+        SubParamGridRect.bottom = SubParamGridRect.top + 300;
+        m_GridSubParams.MoveWindow(SubParamGridRect);
         m_GridSubParams.ShowWindow(SW_SHOW);
         m_GridSubParams.SetWindowTextW((gp_Use + L"子配置项").c_str());
     }
@@ -1177,19 +1309,15 @@ void CmaServerConfigDlg::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, 
         vecSubParams.push_back(ParamNode(gs_NodeUse_a, CT_CHECK_BOX));
         vecSubParams.push_back(ParamNode(gs_NodeUse_q, CT_CHECK_BOX));
 
-        CRect TempRect;
-        const LONG OFFSET_X = 10;
-        const LONG OFFSET_Y = OFFSET_X * 3;
-        TempRect.left = ComplexRect.left + OFFSET_X;
-        TempRect.right = ComplexRect.right - OFFSET_X;
+        CoordinateGenerator GeneratorRect(SubParamGridRect);
+        GeneratorRect.m_TopGrap = GeneratorRect.OFFSET_Y * 4;
+        GeneratorRect.Begin(1, 1);
+
         for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
         {
-            TempRect.top = ComplexRect.top + OFFSET_Y + (int)index * ButtonRect.Height();
-            TempRect.bottom = TempRect.top + ButtonRect.Height();
-
             const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(this, vecSubParams[index].m_ParamNameID);
             Button->SetWindowTextW(vecSubParams[index].m_ParamName.c_str());
-            Button->MoveWindow(&TempRect);
+            Button->MoveWindow(GeneratorRect.GetNextRect());
             Button->ShowWindow(SW_SHOW);
         }
     }
@@ -1229,8 +1357,8 @@ void CmaServerConfigDlg::UpdateCheckListBox(const std::shared_ptr<CButton>& ptrB
 
         CRect ListBoxRect;
         ListBoxRect.left = ButtonRect.left;
-        ListBoxRect.right = ButtonRect.right - 4;
-        ListBoxRect.top = ButtonRect.top;
+        ListBoxRect.right = ButtonRect.right - 3;
+        ListBoxRect.top = ButtonRect.top + CoordinateGenerator::OFFSET_Y;
         ListBoxRect.bottom = ListBoxRect.top + 300;
         m_CheckListBox.MoveWindow(&ListBoxRect);
         m_CheckListBox.ShowWindow(SW_SHOW);

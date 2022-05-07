@@ -37,7 +37,7 @@ private: //添加的响应函数
     //响应配置项构成的树的点击事件
     afx_msg void OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult);
 
-    //点击Button弹出CheckListBox
+    //点击Button弹出CheckListBox或由多个控件组成的子配置项
     afx_msg void OnBnClicked(UINT uID);
 
     //CheckListBox选择响应事件
@@ -75,7 +75,8 @@ private:
     void DisplayParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
-    void UpdateQueueType(const std::wstring& LeafType);
+    void UpdateQueueType(const std::wstring& LeafType, ParamNode& Node);
+    void UpdateQueueConnstr(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType, const std::wstring& Type);
     void UpdateNodeUse(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType, const std::wstring& Type);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node);
     void UpdateCheckListBox(const std::shared_ptr<CButton>& ptrButton, const std::wstring& LeafType, const ParamNode& Node);
