@@ -75,6 +75,7 @@ private:
     void DisplayParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
+    void UpdateQueueType(const std::wstring& LeafType);
     void UpdateNodeUse(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType, const std::wstring& Type);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node);
     void UpdateCheckListBox(const std::shared_ptr<CButton>& ptrButton, const std::wstring& LeafType, const ParamNode& Node);

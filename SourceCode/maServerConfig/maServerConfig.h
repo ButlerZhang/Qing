@@ -67,6 +67,7 @@ public:
     std::map<std::wstring, LeafNode>                    g_mapLeaf;              //叶子结点
     std::map<std::wstring, std::wstring>                g_mapQueueClsid;        //queue节点的type对应的clsid
     std::map<std::wstring, std::wstring>                g_mapQueueConnstr;      //queue节点的type对应的connstr
+    std::map<std::wstring, std::wstring>                g_mapQueueMaxSize;      //queue节点的type对应的maxsize
     std::map<std::wstring, std::vector<std::wstring>>   g_mapSelect;            //用于选择框的可选项
 };
 

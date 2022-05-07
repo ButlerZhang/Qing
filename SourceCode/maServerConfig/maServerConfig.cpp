@@ -165,7 +165,7 @@ void CmaServerConfigApp::InitSelectItem()
 {
     //runtime table
     {
-        //runtime table clsid
+        //clsid
         const std::wstring& RuntimeTableClsid = gl_RuntimeTable + DOT + gp_Clsid;
         g_mapSelect[RuntimeTableClsid].push_back(L"CRttSysmaStNode");
         g_mapSelect[RuntimeTableClsid].push_back(L"CRttSysmaStParam");
@@ -179,7 +179,7 @@ void CmaServerConfigApp::InitSelectItem()
         g_mapSelect[RuntimeTableClsid].push_back(L"CRttSysmaRtThread");
         g_mapSelect[RuntimeTableClsid].push_back(L"CRttSysmaOem");
 
-        //runtime table import file
+        //import file
         const std::wstring& ImportFile = gl_RuntimeTable + DOT + gp_ImportFile;
         g_mapSelect[ImportFile].push_back(L"maServer.xml");
         g_mapSelect[ImportFile].push_back(L"maOem.xml");
@@ -195,11 +195,11 @@ void CmaServerConfigApp::InitSelectItem()
 
     //service
     {
-        //service clsid
+        //clsid
         const std::wstring& ServiceClsid = gl_Service + DOT + gp_Clsid;
         g_mapSelect[ServiceClsid].push_back(L"CService");
 
-        //service runas
+        //runas
         const std::wstring& ServiceRunas = gl_Service + DOT + gp_Runas;
         g_mapSelect[ServiceRunas].push_back(L"process");
         g_mapSelect[ServiceRunas].push_back(L"process2");
@@ -233,6 +233,14 @@ void CmaServerConfigApp::InitSelectItem()
         g_mapQueueConnstr[L"mem"] = L"";
         g_mapQueueConnstr[L"kdh"] = L"";
 
+        //max_size
+        g_mapQueueMaxSize[L"kcxp"] = L"";
+        g_mapQueueMaxSize[L"zmq"] = L"90000";
+        g_mapQueueMaxSize[L"socket"] = L"10000";
+        g_mapQueueMaxSize[L"shm"] = L"10000";
+        g_mapQueueMaxSize[L"mem"] = L"10000";
+        g_mapQueueMaxSize[L"kdh"] = L"10000";
+
         //protocol
         const std::wstring& MsgQueueProtoclo = gl_MsgQueue + DOT + gp_Protocol;
         g_mapSelect[MsgQueueProtoclo].push_back(L"kmap");
@@ -254,7 +262,7 @@ void CmaServerConfigApp::InitSelectItem()
 
     //xas
     {
-        //XA clsid
+        //clsid
         const std::wstring& XAClsid = gl_Xa + DOT + gp_Clsid;
         g_mapSelect[XAClsid].push_back(L"CXaFastDB");
         g_mapSelect[XAClsid].push_back(L"CXaOdbc");
@@ -269,7 +277,7 @@ void CmaServerConfigApp::InitSelectItem()
 
     //nodes
     {
-        //node
+        //type
         const std::wstring& Node = gl_Node + DOT + gp_Type;
         g_mapSelect[Node].push_back(L"bpu");
         g_mapSelect[Node].push_back(L"mmu");

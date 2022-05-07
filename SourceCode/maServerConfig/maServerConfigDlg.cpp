@@ -500,7 +500,28 @@ void CmaServerConfigDlg::OnComboBoxListSelectChange(UINT uID)
                         UINT UseID = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValueID(gp_Use);
                         const std::shared_ptr<CButton>& Button = theApp.GetButton(UseID);
                         UpdateNodeUse(Button, LeafType.GetBuffer(), CurrentText.GetBuffer());
-                        break;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    //construction.bpu.queues节点
+    {
+        const std::wstring& Queues = gm_MA + DOT + gm_Construction + DOT + gt_Bbu + DOT + gt_Queues;
+        if (m_LastSearchNode.Compare(Queues.c_str()) == 0)
+        {
+            CString LeafType = theApp.GetLeftType(m_LastLeafNode);
+            if (theApp.g_mapLeaf.find(LeafType.GetString()) != theApp.g_mapLeaf.end())
+            {
+                const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType.GetBuffer()].m_vecParams;
+                for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
+                {
+                    if (vecParams[index].m_ParamValueID == uID && vecParams[index].m_ParamName == gp_Type)
+                    {
+                        UpdateQueueType(LeafType.GetBuffer());
+                        return;
                     }
                 }
             }
@@ -1035,6 +1056,46 @@ void CmaServerConfigDlg::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, Contr
         {
             ptrEdit->EnableWindow(FALSE);
         }
+    }
+}
+
+void CmaServerConfigDlg::UpdateQueueType(const std::wstring& LeafType)
+{
+    UINT TypeID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_Type);
+    const std::shared_ptr<CComboBox>& TypeBox = theApp.GetComboBoxList(TypeID);
+    if (TypeBox == nullptr)
+    {
+        return;
+    }
+
+    CString TypeText;
+    TypeBox->GetWindowTextW(TypeText);
+    if (TypeText.IsEmpty())
+    {
+        return;
+    }
+
+    std::wstring Type(TypeText.GetBuffer());
+    UINT MaxSizeID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_MaxSize);
+    const std::shared_ptr<CEdit>& MaxSizeEdit = theApp.GetEditText(MaxSizeID);
+    if (MaxSizeEdit != nullptr && theApp.g_mapQueueMaxSize.find(Type) != theApp.g_mapQueueMaxSize.end())
+    {
+        MaxSizeEdit->SetWindowTextW(theApp.g_mapQueueMaxSize[Type].c_str());
+    }
+
+    UINT ClsidID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_Clsid);
+    const std::shared_ptr<CEdit>& ClsidStatic = theApp.GetEditText(ClsidID);
+    if (ClsidStatic != nullptr && theApp.g_mapQueueClsid.find(Type) != theApp.g_mapQueueClsid.end())
+    {
+        ClsidStatic->SetWindowTextW(theApp.g_mapQueueClsid[Type].c_str());
+    }
+
+    UINT ConnstrID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_Connstr);
+    const std::shared_ptr<CButton>& ConnstrButton = theApp.GetButton(ConnstrID);
+    if (ConnstrButton != nullptr && theApp.g_mapQueueConnstr.find(Type) != theApp.g_mapQueueConnstr.end())
+    {
+        ConnstrButton->SetWindowTextW(theApp.g_mapQueueConnstr[Type].c_str());
+        ConnstrButton->EnableWindow(!theApp.g_mapQueueConnstr[Type].empty());
     }
 }
 
