@@ -22,11 +22,12 @@ public:
 
     CString GetLeafID(const CString& Text);
     CString GetLeftType(const CString& Text);
+
     std::wstring GetSelectItemMapKey(const std::wstring& OldKey);
+    void AddSelectItem(const std::wstring& Key, const std::wstring& Value);
 
     void ResetControl();
     void ResetCheckBox();
-    void UpdateSelectItem(const std::wstring& Key, const std::wstring& Value);
 
     std::shared_ptr<CEdit> GetEditText(CWnd* wnd, UINT& TargetID);
     std::shared_ptr<CStatic> GetStaticText(CWnd* wnd, UINT& TargetID);
@@ -42,11 +43,6 @@ public:
     std::shared_ptr<CButton> GetButton(UINT TargetID);
     std::shared_ptr<CButton> GetCheckBox(UINT TargetID);
 
-    void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
-    void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring &LeafType, const ParamNode &Node);
-    void UpdateNodeUse(const std::shared_ptr<CButton>& pButton, CStatic& Complex, const std::wstring& LeafType, const std::wstring &Type);
-    void UpdateCheckListBox(const std::shared_ptr<CButton>& ptrButton, CCheckListBox &ListBox, const std::wstring& LeafType, const ParamNode& Node);
-
     // 实现
     DECLARE_MESSAGE_MAP()
 
@@ -57,19 +53,21 @@ private:
 
 private:
 
-    UINT                                     m_NextControlID;       //下一个可用的控件ID
-    std::vector<std::shared_ptr<CStatic>>    m_vecStaticText;       //存储参数名称
-    std::vector<std::shared_ptr<CEdit>>      m_vecEditText;         //存储参数值
-    std::vector<std::shared_ptr<CComboBox>>  m_vecComboBoxEdit;     //下拉可编辑单选框
-    std::vector<std::shared_ptr<CComboBox>>  m_vecComboBoxList;     //下拉不可编辑列表
-    std::vector<std::shared_ptr<CButton>>    m_vecButton;           //点击显示下拉列表框
-    std::vector<std::shared_ptr<CButton>>    m_vecCheckBox;         //勾选框
+    UINT                                                m_NextControlID;        //下一个可用的控件ID
+    std::vector<std::shared_ptr<CStatic>>               m_vecStaticText;        //存储参数名称的静态文本控件
+    std::vector<std::shared_ptr<CEdit>>                 m_vecEditText;          //存储参数值可编辑文本控件
+    std::vector<std::shared_ptr<CComboBox>>             m_vecComboBoxEdit;      //下拉可编辑单选框
+    std::vector<std::shared_ptr<CComboBox>>             m_vecComboBoxList;      //下拉不可编辑列表
+    std::vector<std::shared_ptr<CButton>>               m_vecButton;            //点击显示下拉列表框
+    std::vector<std::shared_ptr<CButton>>               m_vecCheckBox;          //勾选框
 
 public:
 
-    boost::property_tree::wptree             g_XMLTree;              //XML根节点
-    std::map<std::wstring, LeafNode>         g_mapLeaf;              //叶子结点
-    std::map<std::wstring, std::vector<std::wstring>> g_mapSelect;   //用于选择框的可选项
+    boost::property_tree::wptree                        g_XMLTree;              //XML根节点
+    std::map<std::wstring, LeafNode>                    g_mapLeaf;              //叶子结点
+    std::map<std::wstring, std::wstring>                g_mapQueueClsid;        //queue节点的type对应的clsid
+    std::map<std::wstring, std::wstring>                g_mapQueueConnstr;      //queue节点的type对应的connstr
+    std::map<std::wstring, std::vector<std::wstring>>   g_mapSelect;            //用于选择框的可选项
 };
 
 extern CmaServerConfigApp theApp;

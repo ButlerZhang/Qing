@@ -69,12 +69,13 @@ const std::wstring gs_NodeUse_q(L"q");
 enum ControlType
 {
     CT_DEFAULT,                                     //仅用于初始化
-    CT_STATIC_TEXT_ENABLE,                          //可编辑静态文本
-    CT_STATIC_TEXT_DISABLE,                         //不可编辑静态文本
+    CT_EDIT_TEXT,                                   //可编辑文本
+    CT_STATIC_TEXT,                                 //不可编辑文本
     CT_COMBO_BOX_EDIT,                              //下拉可编辑单选框
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
     CT_CHECK_LIST_BOX,                              //下拉复选列表框
-    CT_CHECK_BOX,                                   //单选和复选同时支持
+    CT_CHECK_BOX,                                   //勾选框
+    CT_MIXED_BOX,                                   //混合输入框，主要用于constr和xa
     CT_COUNT                                        //支持的控件种类
 };
 
@@ -83,10 +84,11 @@ struct ParamNode
 {
     UINT                    m_ParamNameID;          //参数名使用的控件ID
     UINT                    m_ParamValueID;         //参数值使用的控件ID
+
+    std::wstring            m_ParamName;            //参数名
     std::wstring            m_ParamValue;           //参数值
 
-    const std::wstring      m_ParamName;            //参数名称
-    const ControlType       m_ParamValueType;       //参数值的控件类型
+    ControlType             m_ParamValueType;       //参数值的控件类型，参数名的控件固定为不可编辑文本
 
     ParamNode(const std::wstring& ParamName, ControlType Type = CT_DEFAULT) :
         m_ParamName(ParamName),
@@ -101,24 +103,11 @@ struct LeafNode
     std::vector<ParamNode> m_vecParams;                     //此叶子结点对应的参数列表
     std::map<UINT, std::vector<ParamNode>> m_subParams;     //某个参数的子配置项
 
-    UINT GetParamNameID(const std::wstring& Name)
+    UINT GetParamValueID(const std::wstring& ParamName)
     {
         for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
         {
-            if (m_vecParams[index].m_ParamName == Name)
-            {
-                return m_vecParams[index].m_ParamNameID;
-            }
-        }
-
-        return 0;
-    }
-
-    UINT GetParamValueID(const std::wstring& Name)
-    {
-        for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
-        {
-            if (m_vecParams[index].m_ParamName == Name)
+            if (m_vecParams[index].m_ParamName == ParamName)
             {
                 return m_vecParams[index].m_ParamValueID;
             }
@@ -127,11 +116,11 @@ struct LeafNode
         return 0;
     }
 
-    std::wstring GetParamValue(const std::wstring& Name)
+    std::wstring GetParamValue(const std::wstring& ParamName)
     {
         for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
         {
-            if (m_vecParams[index].m_ParamName == Name)
+            if (m_vecParams[index].m_ParamName == ParamName)
             {
                 return m_vecParams[index].m_ParamValue;
             }
