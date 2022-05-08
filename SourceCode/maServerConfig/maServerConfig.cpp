@@ -497,7 +497,7 @@ void CmaServerConfigApp::ResetSubParamsControl()
     CRect Zero(0, 0, 0, 0);
     for (std::set<UINT>::const_iterator it = g_setSubParams.begin(); it != g_setSubParams.end(); it++)
     {
-        CWnd* Control = m_pMainWnd->GetDlgItem(*it);
+        CWnd* Control = g_ParamsDlg->GetDlgItem(*it);
         if (Control != NULL)
         {
             Control->MoveWindow(&Zero);
