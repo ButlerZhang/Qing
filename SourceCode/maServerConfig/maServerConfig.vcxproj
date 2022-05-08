@@ -200,6 +200,7 @@
     <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTools.h" />
     <ClInclude Include="..\StandardLinux\src\StandardShare.h" />
     <ClInclude Include="..\Windows\System\SystemShare.h" />
+    <ClInclude Include="CDialogParams.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="CoordinateGenerator.h" />
     <ClInclude Include="framework.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="..\ProjectLinux\Share\Boost\BoostLog.cpp" />
     <ClCompile Include="..\ProjectLinux\Share\Boost\BoostTime.cpp" />
     <ClCompile Include="..\Windows\System\SystemShare.cpp" />
+    <ClCompile Include="CDialogParams.cpp" />
     <ClCompile Include="CoordinateGenerator.cpp" />
     <ClCompile Include="maServerConfig.cpp" />
     <ClCompile Include="maServerConfigDlg.cpp" />

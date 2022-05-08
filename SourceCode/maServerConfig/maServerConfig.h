@@ -9,6 +9,7 @@
 #include <map>
 #include <set>
 #include <boost/property_tree/ptree.hpp>
+#include "CDialogParams.h"
 
 class CmaServerConfigApp : public CWinApp
 {
@@ -72,6 +73,7 @@ public:
     std::map<std::wstring, std::wstring>                g_mapQueueConnstr;      //queue节点的type对应的connstr
     std::map<std::wstring, std::wstring>                g_mapQueueMaxSize;      //queue节点的type对应的maxsize
     std::map<std::wstring, std::vector<std::wstring>>   g_mapSelect;            //用于选择框的可选项
+    std::shared_ptr<CDialogParams>                      g_ParamsDlg;            //参数对话框
 };
 
 extern CmaServerConfigApp theApp;

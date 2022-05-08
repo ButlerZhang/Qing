@@ -125,20 +125,26 @@ BOOL CmaServerConfigDlg::OnInitDialog()
     SetIcon(m_hIcon, FALSE);		// 设置小图标
 
     // TODO: 在此添加额外的初始化代码
-    m_ComboBoxMa.AddString((gm_Construction + COLON + L"构件").c_str());
-    m_ComboBoxMa.AddString((gm_Deployment + COLON + L"部署").c_str());
-    m_ComboBoxMa.AddString((gm_Kernel + COLON + L"内核").c_str());
-    m_ComboBoxMa.AddString((gm_MA + COLON + L"架构").c_str());
-    m_ComboBoxMa.SetCurSel(3);
-
-    if (LoadConfigFile(g_XMLFile))
     {
-        UpdateTreeConfig();
+        theApp.g_ParamsDlg = std::make_shared<CDialogParams>();
+        theApp.g_ParamsDlg->Create(IDD_DIALOG_PARAMS, this);
+
+        m_ComboBoxMa.AddString((gm_Construction + COLON + L"构件").c_str());
+        m_ComboBoxMa.AddString((gm_Deployment + COLON + L"部署").c_str());
+        m_ComboBoxMa.AddString((gm_Kernel + COLON + L"内核").c_str());
+        m_ComboBoxMa.AddString((gm_MA + COLON + L"架构").c_str());
+        m_ComboBoxMa.SetCurSel(3);
+
+        if (LoadConfigFile(g_XMLFile))
+        {
+            UpdateTreeConfig();
+        }
+
+        m_GridSubParams.ShowWindow(SW_HIDE);
+        m_CheckListBox.ShowWindow(SW_HIDE);
+        InitControlSize();
     }
 
-    m_GridSubParams.ShowWindow(SW_HIDE);
-    m_CheckListBox.ShowWindow(SW_HIDE);
-    InitControlSize();
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -571,97 +577,113 @@ void CmaServerConfigDlg::InitControlSize()
     ShowWindow(SW_MAXIMIZE);
 
     //各个控件根据这些常量来划分位置
-    const int GridInterval = 10;    //各个Grid的间隔
-    const int SPLIT_WIDTH = 4;      //宽度拆分成SPLIT_WIDTH份
-    const int SPLIT_HEIGT = 16;     //高度拆分成SPLIT_HEIGT份
+    const int GridInterval = 10;    //各个控件的间隔
+    const int SPLIT_WIDTH = 1 + 3;  //宽度拆分成SPLIT_WIDTH份，配置项占1，配置参数占3
+    const int SPLIT_HEIGT = 15 + 1; //高度拆分成SPLIT_HEIGT份，配置项占15，按钮占1
 
     //获取客户区的大小
     CRect ClientRect;
     GetClientRect(ClientRect);
 
-    //设置配置项的区域
-    GetDlgItem(IDC_STATIC_CONFIG_ITEM)->MoveWindow(
-        ClientRect.left + GridInterval,                               //客户区域左边界往右移动一个Grid间隔
-        ClientRect.top + GridInterval,                                //客户区域上边界往下移动一个Grid间隔
-        (ClientRect.Width() - 2 * GridInterval) / SPLIT_WIDTH,                            //配置项占的宽度份额
-        (ClientRect.Height() - 2 * GridInterval) / SPLIT_HEIGT * (SPLIT_HEIGT - 1));      //配置项占的高度份额
-
-    //获取配置项的区域
+    //配置项
     CRect ConfigItemRect;
-    GetDlgItem(IDC_STATIC_CONFIG_ITEM)->GetWindowRect(ConfigItemRect);
-
-    //设置配置项的ComBox
-    CRect ComBoxRect;
-    GetDlgItem(IDC_COMBO1)->GetWindowRect(ComBoxRect);
-    GetDlgItem(IDC_COMBO1)->MoveWindow(
-        ConfigItemRect.left + GridInterval,                //距离配置项左侧一个Grid间隔
-        ConfigItemRect.top,                                //跟配置项一致
-        ConfigItemRect.Width() - 2 * GridInterval,         //减去左右两边的Grid间隔
-        ComBoxRect.Height());                              //跟原来保持一致；设置了也没效果
-
-    //再次获取ComBox的区域
-    GetDlgItem(IDC_COMBO1)->GetWindowRect(ComBoxRect);
-
-    //设置配置项的树形控件
-    GetDlgItem(IDC_TREE1)->MoveWindow(
-        ConfigItemRect.left + GridInterval,                //距离配置项左侧一个Grid间隔
-        ComBoxRect.top,                                    //跟ComBox一致
-        ConfigItemRect.Width() - 2 * GridInterval,         //减去左右两边的Grid间隔
-        ConfigItemRect.Height() - ComBoxRect.top);         //配置项区域的高度减去ComBox的top
-
-    //设置配置内容的区域
     {
-        GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->MoveWindow(
-            ConfigItemRect.right + GridInterval,                            //配置项区域往右移动一个Grid间隔
-            ClientRect.top + GridInterval,                                  //跟配置项一样的Y轴
-            ClientRect.Width() - ConfigItemRect.right - 2 * GridInterval,   //减去配置项的宽度，也减去与配置项的间隔，再减去最右边的间隔
-            ConfigItemRect.Height());                                       //跟配置项一样的高度
+        //设置配置项的区域
+        ConfigItemRect.left = ClientRect.left + GridInterval;
+        ConfigItemRect.top = ClientRect.top + GridInterval;
+        ConfigItemRect.right = ConfigItemRect.left + (ClientRect.Width() - 2 * GridInterval) / SPLIT_WIDTH;
+        ConfigItemRect.bottom = ConfigItemRect.top + (ClientRect.Height() - 2 * GridInterval) / SPLIT_HEIGT * (SPLIT_HEIGT - 1);
+        GetDlgItem(IDC_STATIC_CONFIG_ITEM)->MoveWindow(&ConfigItemRect);
+
+        //设置配置项的ComboBox
+        CRect ComboBoxRect;
+        GetDlgItem(IDC_COMBO1)->GetWindowRect(ComboBoxRect);
+        long ComboBoxHeight = ComboBoxRect.Height();
+
+        ComboBoxRect.left = ConfigItemRect.left + GridInterval;
+        ComboBoxRect.right = ComboBoxRect.left + (ConfigItemRect.Width() - 2 * GridInterval);
+        ComboBoxRect.top = ConfigItemRect.top + GridInterval * 2;
+        ComboBoxRect.bottom = ComboBoxRect.top + ComboBoxHeight;
+        GetDlgItem(IDC_COMBO1)->MoveWindow(&ComboBoxRect);
+
+        //设置配置项的树形控件
+        CRect TreeRect;
+        TreeRect.left = ComboBoxRect.left;
+        TreeRect.right = ComboBoxRect.right;
+        TreeRect.top = ComboBoxRect.bottom + GridInterval / 2;
+        TreeRect.bottom = ConfigItemRect.bottom - GridInterval;
+        GetDlgItem(IDC_TREE1)->MoveWindow(&TreeRect);
     }
 
-    //设置按钮区域
-    GetDlgItem(IDC_STATIC_BUTTON_AREA)->MoveWindow(
-        ConfigItemRect.left,                                                    //跟配置项一样的X轴
-        ClientRect.top + ConfigItemRect.Height() + GridInterval,                //配置项区域往下移动一个Grid间隔
-        ClientRect.Width() - GridInterval * 2,                                  //只需要减去两边的Grid间隔
-        (ClientRect.Height() - ConfigItemRect.Height() - 2 * GridInterval));    //减去配置项的高度，再减去一个Grid间隔
-
-    //设置按钮的布局
+    //配置参数
     {
-        //先获取按钮的区域
+        CRect ParamsGridRect;
+        ParamsGridRect.left = ConfigItemRect.right + GridInterval;
+        ParamsGridRect.right = ClientRect.right;
+        ParamsGridRect.top = ClientRect.top + GridInterval;
+        ParamsGridRect.bottom = ConfigItemRect.bottom;
+        GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->MoveWindow(&ParamsGridRect);
+
+        CRect ParamsDlgRect;
+        ParamsDlgRect.left = ParamsGridRect.left + 1;
+        ParamsDlgRect.right = ParamsGridRect.right - 1;
+        ParamsDlgRect.top = ParamsGridRect.top + GridInterval * 2;
+        ParamsDlgRect.bottom = ParamsGridRect.bottom - GridInterval;
+        ClientToScreen(&ParamsDlgRect);
+
+        theApp.g_ParamsDlg->MoveWindow(&ParamsDlgRect);
+        theApp.g_ParamsDlg->ShowWindow(SW_SHOW);
+    }
+
+    //按钮区域
+    {
+        //设置按钮区域
         CRect ButtonAreaRect;
-        GetDlgItem(IDC_STATIC_BUTTON_AREA)->GetWindowRect(ButtonAreaRect);
+        ButtonAreaRect.left = ConfigItemRect.left;
+        ButtonAreaRect.right = ClientRect.right - GridInterval;
+        ButtonAreaRect.top = ConfigItemRect.bottom + GridInterval / 2;
+        ButtonAreaRect.bottom = ClientRect.bottom - GridInterval / 2;
+        GetDlgItem(IDC_STATIC_BUTTON_AREA)->MoveWindow(&ButtonAreaRect);
 
-        //需要实现的按钮
-        std::vector<int> vecID = { ID_BUTTON_LOAD, ID_BUTTON_GENERATE, ID_BUTTON_OPEN_FILE };
-        const int BUTTON_COUNT = static_cast<int>(vecID.size());
-
-        //计算按钮的高度
-        const int BUTTON_MIN_HEIGHT = 50;
-        int ButtonHeight = ButtonAreaRect.Height() > BUTTON_MIN_HEIGHT ? BUTTON_MIN_HEIGHT : ButtonAreaRect.Height() - 4; //上下空开两个像素
-        int ButtonY = ButtonAreaRect.top - (ButtonAreaRect.Height() - ButtonHeight);
-
-        //计算按钮的宽度
-        CRect ButtonRect;
-        const int BUTTON_MIN_WIDTH = 200;
-        int ButtonWidth = 0, LastButtonX = 0, ButtonInterval = 0;
-        if (BUTTON_COUNT * BUTTON_MIN_WIDTH < ButtonAreaRect.Width())
+        //设置按钮的布局
         {
-            ButtonWidth = BUTTON_MIN_WIDTH;
-            ButtonInterval = (ButtonAreaRect.Width() - BUTTON_COUNT * ButtonWidth) / BUTTON_COUNT;
-            LastButtonX = ButtonAreaRect.left + ButtonInterval / 2; //几个按钮几个空格，其中一个空格分成两半，作为左右两边与Grid的间隔
-        }
-        else
-        {
-            ButtonInterval = 1;
-            ButtonWidth = (ButtonAreaRect.Width() - BUTTON_COUNT * ButtonInterval) / BUTTON_COUNT; //按钮的宽度
-            LastButtonX = ButtonAreaRect.left + ButtonInterval;
-        }
+            //需要实现的按钮
+            std::vector<int> vecID = { ID_BUTTON_LOAD, ID_BUTTON_GENERATE, ID_BUTTON_OPEN_FILE };
+            const int BUTTON_COUNT = static_cast<int>(vecID.size());
 
-        for (std::vector<int>::size_type index = 0; index < vecID.size(); index++)
-        {
-            GetDlgItem(vecID[index])->MoveWindow(LastButtonX, ButtonY, ButtonWidth, ButtonHeight);
-            GetDlgItem(vecID[index])->GetWindowRect(ButtonRect);
-            LastButtonX = ButtonRect.right + ButtonInterval;
+            //计算按钮的高度
+            const int BUTTON_MIN_HEIGHT = 50;
+            LONG HeightUsable = ButtonAreaRect.Height() - GridInterval; //上下空开一些像素
+            int ButtonHeight = HeightUsable > BUTTON_MIN_HEIGHT ? BUTTON_MIN_HEIGHT : HeightUsable;
+            int ButtonY = ButtonAreaRect.top + (ButtonAreaRect.Height() - ButtonHeight) / 2;
+
+            //计算按钮的宽度
+            const int BUTTON_MIN_WIDTH = 200;
+            int ButtonWidth = 0, LastButtonX = 0, ButtonInterval = 0;
+            if (BUTTON_COUNT * BUTTON_MIN_WIDTH < ButtonAreaRect.Width())
+            {
+                ButtonWidth = BUTTON_MIN_WIDTH;
+                ButtonInterval = (ButtonAreaRect.Width() - BUTTON_COUNT * ButtonWidth) / BUTTON_COUNT;
+                LastButtonX = ButtonAreaRect.left + ButtonInterval / 2; //几个按钮几个空格，其中一个空格分成两半，作为左右两边与Grid的间隔
+            }
+            else
+            {
+                ButtonInterval = 1;
+                ButtonWidth = (ButtonAreaRect.Width() - BUTTON_COUNT * ButtonInterval) / BUTTON_COUNT; //按钮的宽度
+                LastButtonX = ButtonAreaRect.left + ButtonInterval;
+            }
+
+            //设置按钮区域
+            CRect ButtonRect;
+            ButtonRect.top = ButtonY + GridInterval / 2;
+            ButtonRect.bottom = ButtonRect.top + ButtonHeight;
+            for (std::vector<int>::size_type index = 0; index < vecID.size(); index++)
+            {
+                ButtonRect.left = LastButtonX;
+                ButtonRect.right = ButtonRect.left + ButtonWidth;
+                LastButtonX = ButtonRect.right + ButtonInterval;
+                GetDlgItem(vecID[index])->MoveWindow(&ButtonRect);
+            }
         }
     }
 }
@@ -1324,13 +1346,13 @@ void CmaServerConfigDlg::UpdateXaOpen(const std::shared_ptr<CButton>& pButton, c
         for (std::vector<std::wstring>::size_type ParamIndex = 0; ParamIndex < SubParamsValue.size(); ParamIndex++)
         {
             std::wstring::size_type EqualPos = SubParamsValue[ParamIndex].find(EQUAL);
-            if(EqualPos == std::wstring::npos)
+            if (EqualPos == std::wstring::npos)
             {
                 continue;
             }
 
             const std::wstring& ParamName = SubParamsValue[ParamIndex].substr(0, EqualPos);
-            if(ParamName.empty())
+            if (ParamName.empty())
             {
                 continue;
             }

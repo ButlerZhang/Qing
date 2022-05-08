@@ -72,6 +72,9 @@
     <ClInclude Include="CoordinateGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CDialogParams.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="maServerConfig.cpp">
@@ -96,6 +99,9 @@
       <Filter>Reference\System</Filter>
     </ClCompile>
     <ClCompile Include="CoordinateGenerator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CDialogParams.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
