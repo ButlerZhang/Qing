@@ -111,6 +111,7 @@ void CmaServerConfigApp::InitLeafNode()
 {
     //RuntimeTable节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_RuntimeTable, LeafNode()));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
     g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
@@ -118,6 +119,7 @@ void CmaServerConfigApp::InitLeafNode()
 
     //Service节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Service, LeafNode()));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
     g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
@@ -128,6 +130,7 @@ void CmaServerConfigApp::InitLeafNode()
 
     //msgqueue节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_MsgQueue, LeafNode()));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
     g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Gid, CT_COMBO_BOX_EDIT));
@@ -142,6 +145,7 @@ void CmaServerConfigApp::InitLeafNode()
 
     //xa节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Xa, LeafNode()));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
     g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
     g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
@@ -153,6 +157,7 @@ void CmaServerConfigApp::InitLeafNode()
 
     //node节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Node, LeafNode()));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Type, CT_COMBO_BOX_LIST));
@@ -320,26 +325,53 @@ void CmaServerConfigApp::InitSelectItem()
     }
 }
 
-void CmaServerConfigApp::WriteSelectItemToLog()
+void CmaServerConfigApp::WriteLog()
 {
-    std::wfstream output(L"maServerConfig.log", std::ios::out);
+    std::wfstream output(L"maServerConfigDebug.log", std::ios::out);
     if (!output)
     {
         return;
     }
 
-    std::map<std::wstring, std::vector<std::wstring>>::const_iterator it = g_mapSelect.begin();
-    while (it != g_mapSelect.end())
+    //select item
     {
-        output << it->first << COLON << std::endl;
-        for (std::vector<std::wstring>::size_type index = 0; index < it->second.size(); index++)
+        output << L"====================select item begin====================" << std::endl << std::endl;
+        std::map<std::wstring, std::vector<std::wstring>>::const_iterator it = g_mapSelect.begin();
+        while (it != g_mapSelect.end())
         {
-            output << L"-----" << it->second[index] << std::endl;
-        }
+            output << it->first << COLON << std::endl;
+            for (std::vector<std::wstring>::size_type index = 0; index < it->second.size(); index++)
+            {
+                output << L"-----" << it->second[index] << std::endl;
+            }
 
-        output << std::endl << std::endl;
-        it++;
+            output << std::endl;
+            it++;
+        }
+        output << L"====================select item end======================" << std::endl << std::endl;
     }
+
+    //CRect
+    {
+        output << std::endl << L"====================coordinate begin====================" << std::endl;
+        std::map<std::wstring, CRect>::const_iterator it = g_mapRect.begin();
+        while (it != g_mapRect.end())
+        {
+            output << it->first << COLON << std::endl;
+            output << L"LEFT  =" << it->second.left << std::endl;
+            output << L"RIGHT =" << it->second.right << std::endl;
+            output << L"TOP   =" << it->second.top << std::endl;
+            output << L"BOTTOM=" << it->second.bottom << std::endl << std::endl;
+            it++;
+        }
+        output << std::endl << L"====================coordinate end======================" << std::endl;
+    }
+}
+
+void CmaServerConfigApp::AddCRectToLog(const std::wstring& Key, const CRect& TempRect)
+{
+    //const std::wstring& RealKey = std::to_wstring(theApp.g_mapRect.size()) + Key;
+    theApp.g_mapRect.insert(std::pair<std::wstring, CRect>(Key, TempRect));
 }
 
 bool CmaServerConfigApp::ReadXMLFile(const std::string& XMLFile)

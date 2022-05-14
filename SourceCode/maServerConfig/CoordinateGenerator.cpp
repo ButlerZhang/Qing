@@ -129,3 +129,8 @@ CRect CoordinateGenerator::GetNextRect()
     m_vecRect.push_back(NewRect);
     return NewRect;
 }
+
+CRect CoordinateGenerator::GetCurrentRect()
+{
+    return m_vecRect.empty() ? CRect() : m_vecRect[m_vecRect.size() - 1];
+}

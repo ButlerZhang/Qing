@@ -7,10 +7,12 @@ class CoordinateGenerator
 public:
 
     CoordinateGenerator(const CRect& AreaRect);
-    bool SetSplitRatio(int NameRatio, int ValueRatio, int EmptyRatio);
 
     bool Begin(int ParamCountPerLine, int ControlCountPerParm);
+    bool SetSplitRatio(int NameRatio, int ValueRatio, int EmptyRatio);
+
     CRect GetNextRect();
+    CRect GetCurrentRect();
 
 public:
 

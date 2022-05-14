@@ -37,6 +37,7 @@ const std::wstring gl_Xa(L"xa");
 const std::wstring gl_Node(L"node");
 
 //常用的固定的参数名称（g:global，p:param）
+const std::wstring gp_Describe(L"Describe");
 const std::wstring gp_ID(L"id");
 const std::wstring gp_Name(L"name");
 const std::wstring gp_Clsid(L"clsid");

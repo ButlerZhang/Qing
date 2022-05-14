@@ -19,7 +19,9 @@ public:
 
 public:
 
-    void WriteSelectItemToLog();
+    void WriteLog();
+    void AddCRectToLog(const std::wstring& Key, const CRect& TempRect);
+
     bool ReadXMLFile(const std::string& XMLFile);
     bool WriteXMLFile(const std::string& XMLFile);
 
@@ -72,6 +74,7 @@ public:
     std::map<std::wstring, std::wstring>                g_mapQueueClsid;        //queue节点的type对应的clsid
     std::map<std::wstring, std::wstring>                g_mapQueueConnstr;      //queue节点的type对应的connstr
     std::map<std::wstring, std::wstring>                g_mapQueueMaxSize;      //queue节点的type对应的maxsize
+    std::map<std::wstring, CRect>                       g_mapRect;              //输出区域，用于调试
     std::map<std::wstring, std::vector<std::wstring>>   g_mapSelect;            //用于选择框的可选项
     std::shared_ptr<CDialogParams>                      g_ParamsDlg;            //参数对话框
 };

@@ -270,7 +270,7 @@ void CmaServerConfigDlg::OnBnGenerateConfigFile()
 //打开生成的配置文件
 void CmaServerConfigDlg::OnBnOpenConfigFile()
 {
-    theApp.WriteSelectItemToLog();
+    theApp.WriteLog();
 }
 
 void CmaServerConfigDlg::InitControlSize()
