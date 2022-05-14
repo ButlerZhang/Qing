@@ -80,8 +80,8 @@ void CDialogParams::OnBnClicked(UINT uID)
         }
         case CT_CHECK_BOX:
         {
-            const std::wstring& ParamValue = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValue(gp_Type);
-            UpdateNodeUse(ClickButton, LeafType.GetBuffer(), ParamValue);
+            //const std::wstring& ParamValue = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValue(gp_Type);
+            //UpdateNodeUse(ClickButton, LeafType.GetBuffer(), ParamValue);
             break;
         }
         case CT_MIXED_BOX_QUEUE:
@@ -176,7 +176,7 @@ void CDialogParams::OnCheckBoxClicked(UINT uID)
     }
 
     LeafNode& LNode = theApp.g_mapLeaf[LeafType.GetBuffer()];
-    const std::vector<ParamNode>& vecParams = LNode.m_vecParams;
+    std::vector<ParamNode>& vecParams = LNode.m_vecParams;
     for (std::vector<ParamNode>::size_type ParamIndex = 0; ParamIndex < vecParams.size(); ParamIndex++)
     {
         if (vecParams[ParamIndex].m_ParamName != gp_Use)
@@ -236,12 +236,7 @@ void CDialogParams::OnCheckBoxClicked(UINT uID)
             }
         }
 
-        const std::shared_ptr<CButton>& UseButton = theApp.GetButton(vecParams[ParamIndex].m_ParamValueID);
-        if (UseButton != nullptr)
-        {
-            UseButton->SetWindowTextW(NewText);
-        }
-
+        vecParams[ParamIndex].m_ParamValue = NewText.GetBuffer();
         break;
     }
 }
@@ -274,14 +269,18 @@ void CDialogParams::OnComboBoxListSelectChange(UINT uID)
             CString LeafType = theApp.GetLeftType(LastLeafNode);
             if (theApp.g_mapLeaf.find(LeafType.GetString()) != theApp.g_mapLeaf.end())
             {
-                const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType.GetBuffer()].m_vecParams;
+                std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType.GetBuffer()].m_vecParams;
                 for (std::vector<ParamNode>::size_type index = 0; index < vecParams.size(); index++)
                 {
                     if (vecParams[index].m_ParamValueID == uID && vecParams[index].m_ParamName == gp_Type)
                     {
-                        UINT UseID = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValueID(gp_Use);
-                        const std::shared_ptr<CButton>& Button = theApp.GetButton(UseID);
-                        UpdateNodeUse(Button, LeafType.GetBuffer(), CurrentText.GetBuffer());
+                        UINT TypeID = theApp.g_mapLeaf[LeafType.GetBuffer()].GetParamValueID(gp_Type);
+                        CString TypeText;
+                        theApp.GetComboBoxList(TypeID)->GetWindowText(TypeText);
+                        vecParams[index].m_ParamValue = TypeText.GetBuffer();
+
+                        std::vector<ParamNode>::size_type UseIndex = theApp.g_mapLeaf[LeafType.GetBuffer()].GetIndex(gp_Use);
+                        UpdateNodeUse(vecParams[UseIndex], LeafType.GetBuffer(), CRect());
                         return;
                     }
                 }
@@ -349,20 +348,13 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
     }
     case CT_CHECK_BOX:
     {
-        const std::shared_ptr<CButton>& Button = theApp.GetButton(this, Node.m_ParamValueID);
-        Button->MoveWindow(NewRect);
-        Button->SetWindowTextW(Node.m_ParamValue.c_str());
-        Button->ShowWindow(SW_SHOW);
-
-        UINT TypeID = theApp.g_mapLeaf[LeafType].GetParamValueID(gp_Type);
-        std::shared_ptr<CComboBox> ComboxList = theApp.GetComboBoxList(TypeID);
-
-        CString TypeText;
-        ComboxList->GetWindowTextW(TypeText);
-        Button->EnableWindow(TypeText.Find(gt_Bbu.c_str()) >= 0);
+        UpdateNodeUse(Node, LeafType, NewRect);
         break;
     }
     case CT_MIXED_BOX_XA:
+    {
+        break;
+    }
     case CT_MIXED_BOX_QUEUE:
     {
         const std::shared_ptr<CButton>& Button = theApp.GetButton(this, Node.m_ParamValueID);
@@ -427,17 +419,17 @@ void CDialogParams::UpdateParams(const std::wstring& LeafType, boost::property_t
             theApp.GetComboBoxList(vecParams[index].m_ParamValueID)->GetWindowTextW(ControlValue);
             break;
         }
+        case CT_CHECK_BOX:
         case CT_CHECK_LIST_BOX:
         {
             IsForceUpdate = true;
             ControlValue = vecParams[index].m_ParamValue.c_str();
             break;
         }
-        case CT_CHECK_BOX:
         case CT_MIXED_BOX_XA:
         case CT_MIXED_BOX_QUEUE:
         {
-            theApp.GetButton(vecParams[index].m_ParamValueID)->GetWindowTextW(ControlValue);
+            //theApp.GetButton(vecParams[index].m_ParamValueID)->GetWindowTextW(ControlValue);
             break;
         }
         default:
@@ -939,48 +931,11 @@ void CDialogParams::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox
     }
 }
 
-void CDialogParams::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType, const std::wstring& Type)
+void CDialogParams::UpdateNodeUse(const ParamNode& Node, const std::wstring& LeafType, const CRect& TempRect)
 {
-    //只有BPU类型的use才需要配置子项，其它类型直接禁用
-    if (Type.find(gt_Bbu) == std::wstring::npos)
-    {
-        m_GridSubParams.ShowWindow(SW_HIDE);
-        pButton->EnableWindow(FALSE);
-        pButton->SetWindowTextW(L"");
-        theApp.ResetSubParamsControl();
-        return;
-    }
-
-    //如果当前可见，点击按钮就隐藏
-    if (m_GridSubParams.IsWindowVisible())
-    {
-        m_GridSubParams.ShowWindow(SW_HIDE);
-        theApp.ResetSubParamsControl();
-        return;
-    }
-
-    //按钮要激活
-    pButton->EnableWindow(TRUE);
-
-    //设置Group Static的区域
-    CRect ButtonRect;
-    CRect SubParamGridRect;
-    {
-        pButton->GetWindowRect(ButtonRect);
-        ScreenToClient(ButtonRect);
-
-        SubParamGridRect.left = ButtonRect.left;
-        SubParamGridRect.right = ButtonRect.right - 2;
-        SubParamGridRect.top = ButtonRect.bottom + CoordinateGenerator::OFFSET_Y;
-        SubParamGridRect.bottom = SubParamGridRect.top + 300;
-        m_GridSubParams.MoveWindow(SubParamGridRect);
-        m_GridSubParams.ShowWindow(SW_SHOW);
-        m_GridSubParams.SetWindowTextW((gp_Use + L"子配置项").c_str());
-    }
-
     //设置各个子配置项的显示区域
-    UINT ButtonID = pButton->GetDlgCtrlID();
-    std::vector<ParamNode>& vecSubParams = theApp.g_mapLeaf[LeafType].m_subParams[ButtonID];
+    std::vector<ParamNode>& vecSubParams = theApp.g_mapLeaf[LeafType].m_subParams[Node.m_ParamValueID];
+    if (TempRect.left != 0 && TempRect.right != 0)  //等于0表示切换类型
     {
         vecSubParams.clear();
         vecSubParams.push_back(ParamNode(gs_NodeUse_n, CT_CHECK_BOX));
@@ -988,8 +943,13 @@ void CDialogParams::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, const
         vecSubParams.push_back(ParamNode(gs_NodeUse_a, CT_CHECK_BOX));
         vecSubParams.push_back(ParamNode(gs_NodeUse_q, CT_CHECK_BOX));
 
-        CoordinateGenerator GeneratorRect(SubParamGridRect);
-        GeneratorRect.m_TopGrap = CoordinateGenerator::OFFSET_Y * 4;
+        CRect SubParamsRect;
+        m_GridSubParams.GetWindowRect(&SubParamsRect);
+
+        CRect CheckBoxRect = TempRect;
+        CheckBoxRect.bottom = SubParamsRect.bottom;
+
+        CoordinateGenerator GeneratorRect(CheckBoxRect);
         GeneratorRect.Begin(1, 1);
 
         for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
@@ -1003,22 +963,20 @@ void CDialogParams::UpdateNodeUse(const std::shared_ptr<CButton>& pButton, const
         }
     }
 
-    //如果没有值，就提供一个默认值
-    CString ButtonText;
-    pButton->GetWindowTextW(ButtonText);
-    if (ButtonText.IsEmpty())
-    {
-        pButton->SetWindowTextW(gs_NodeUse_n.c_str());
-        pButton->GetWindowTextW(ButtonText);
-    }
+    //只有BPU类型才需要use参数
+    std::vector<ParamNode>::size_type TargetIndex = theApp.g_mapLeaf[LeafType].GetIndex(gp_Type);
+    ParamNode& TypeNode = theApp.g_mapLeaf[LeafType].m_vecParams[TargetIndex];
+    bool IsBPUType = TypeNode.m_ParamValue.find(gt_Bbu) != std::wstring::npos;
 
-    //设置已选中的值
+    //设置参数是否可用以及当前值
     for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
     {
         const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(vecSubParams[index].m_ParamNameID);
         if (Button != nullptr)
         {
-            Button->SetCheck(ButtonText.Find(vecSubParams[index].m_ParamName[0]) >= 0 ? 1 : 0);
+            int Check = IsBPUType && Node.m_ParamValue.find(vecSubParams[index].m_ParamName[0]) != std::wstring::npos;
+            Button->SetCheck(Check);
+            Button->EnableWindow(IsBPUType);
         }
     }
 }

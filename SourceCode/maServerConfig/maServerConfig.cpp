@@ -164,9 +164,9 @@ void CmaServerConfigApp::InitLeafNode()
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Gid, CT_STATIC_TEXT));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Ipv4, CT_EDIT_TEXT));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Path, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use, CT_CHECK_BOX));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_DefaultXa, CT_COMBO_BOX_LIST));
     g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_BackupXa, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use, CT_CHECK_BOX));
 }
 
 void CmaServerConfigApp::InitSelectItem()
