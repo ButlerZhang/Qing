@@ -20,13 +20,13 @@ public:
     void DisplayParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
 
     void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
-    void UpdateQueueType(const std::wstring& LeafType, ParamNode& Node);
-    void UpdateQueueConnstr(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType, const std::wstring& Type);
     void UpdateXaOpen(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType);
     void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node);
 
-    void UpdateNodeUse(const ParamNode& Node, const std::wstring& LeafType, const CRect& TempRect);
-    void UpdateCheckListBox(const ParamNode& Node, const std::wstring& LeafType, const CRect& TempRect);
+    void UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateQueueType(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType);
 
 protected:
 
@@ -60,6 +60,7 @@ private:
 
 private:
 
+    std::wstring GetLeafType() const;
     void SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect, const std::wstring& LeafType);
 
 private:

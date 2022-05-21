@@ -99,68 +99,69 @@ enum ControlType
     CT_STATIC_TEXT,                                 //不可编辑文本
     CT_COMBO_BOX_EDIT,                              //下拉可编辑单选框
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
-    CT_CHECK_LIST_BOX,                              //下拉复选列表框
-    CT_CHECK_BOX,                                   //勾选框
-    CT_MIXED_BOX_XA,                                //混合输入框
-    CT_MIXED_BOX_QUEUE,                             //混合输入框
+    CT_CHECK_LIST_BOX,                              //下拉复选列表框（import_file)
+    CT_CHECK_BOX,                                   //勾选框(node.use)
+    CT_MIXED_BOX_XA,                                //混合输入框()
+    CT_MIXED_BOX_QUEUE,                             //混合输入框(queue)
     CT_COUNT                                        //支持的控件种类
 };
 
 //参数节点
 struct ParamNode
 {
-    UINT                    m_ParamNameID;          //参数名使用的控件ID
-    UINT                    m_ParamValueID;         //参数值使用的控件ID
+    UINT                    m_NameID;               //参数名使用的控件ID
+    UINT                    m_ValueID;              //参数值使用的控件ID
 
-    std::wstring            m_ParamName;            //参数名
-    std::wstring            m_ParamValue;           //参数值
+    std::wstring            m_Name;                 //参数名
+    std::wstring            m_Value;                //参数值
 
-    ControlType             m_ParamValueType;       //参数值的控件类型，参数名的控件固定为不可编辑文本
+    CRect                   m_ValueRect;            //参数值的控件的坐标
+    ControlType             m_ValueType;            //参数值的控件类型，参数名的控件固定为不可编辑文本
 
-    ParamNode(const std::wstring& ParamName, ControlType Type = CT_DEFAULT) :
-        m_ParamName(ParamName),
-        m_ParamNameID(0),
-        m_ParamValueID(0),
-        m_ParamValueType(Type) {}
+    ParamNode(const std::wstring& Name, ControlType Type = CT_DEFAULT) :
+        m_Name(Name),
+        m_NameID(0),
+        m_ValueID(0),
+        m_ValueType(Type) {}
 };
 
 //叶子节点
 struct LeafNode
 {
     std::vector<ParamNode> m_vecParams;                     //此叶子结点对应的参数列表
-    std::map<UINT, std::vector<ParamNode>> m_subParams;     //某个参数的子配置项
+    std::vector<ParamNode> m_subParams;                     //子配置项，目前只有一个参数有子配置项
 
-    UINT GetParamValueID(const std::wstring& ParamName)
+    UINT GetValueID(const std::wstring& Name)
     {
         for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
         {
-            if (m_vecParams[index].m_ParamName == ParamName)
+            if (m_vecParams[index].m_Name == Name)
             {
-                return m_vecParams[index].m_ParamValueID;
+                return m_vecParams[index].m_ValueID;
             }
         }
 
         return 0;
     }
 
-    std::wstring GetParamValue(const std::wstring& ParamName)
+    std::wstring GetValue(const std::wstring& Name)
     {
         for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
         {
-            if (m_vecParams[index].m_ParamName == ParamName)
+            if (m_vecParams[index].m_Name == Name)
             {
-                return m_vecParams[index].m_ParamValue;
+                return m_vecParams[index].m_Value;
             }
         }
 
         return std::wstring();
     }
 
-    std::vector<ParamNode>::size_type GetIndex(const std::wstring& ParamName)
+    std::vector<ParamNode>::size_type GetIndex(const std::wstring& Name)
     {
         for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
         {
-            if (m_vecParams[index].m_ParamName == ParamName)
+            if (m_vecParams[index].m_Name == Name)
             {
                 return index;
             }
