@@ -15,23 +15,12 @@ public:
 #endif
 
     void Hide();
-
     void UpdateParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
     void DisplayParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode);
-
-    void UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type);
-    void UpdateXaOpen(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType);
-    void UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node);
-
-    void UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType);
-    void UpdateQueueType(ParamNode& Node, const std::wstring& LeafType);
-    void UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType);
-    void UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType);
 
 protected:
 
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -63,6 +52,13 @@ private:
     std::wstring GetLeafType() const;
     std::wstring GetKey(const ParamNode& Node, const std::wstring& LeafType);
     void SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect, const std::wstring& LeafType);
+
+    void UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateQueueType(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateComboBox(ParamNode& Node, const std::wstring& LeafType, const std::shared_ptr<CComboBox>& ptrComboBox);
 
 private:
 

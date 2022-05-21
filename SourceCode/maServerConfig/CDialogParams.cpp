@@ -304,7 +304,7 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
         const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxEdit(this, Node.m_ValueID);
         ComboBox->MoveWindow(Node.m_ValueRect);
         ComboBox->ShowWindow(SW_SHOW);
-        UpdateComboBox(ComboBox, LeafType, Node);
+        UpdateComboBox(Node, LeafType, ComboBox);
         break;
     }
     case CT_COMBO_BOX_LIST:
@@ -312,7 +312,7 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
         const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxList(this, Node.m_ValueID);
         ComboBox->MoveWindow(Node.m_ValueRect);
         ComboBox->ShowWindow(SW_SHOW);
-        UpdateComboBox(ComboBox, LeafType, Node);
+        UpdateComboBox(Node, LeafType, ComboBox);
         break;
     }
     case CT_CHECK_LIST_BOX:
@@ -327,6 +327,7 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
     }
     case CT_MIXED_BOX_XA:
     {
+        UpdateXaOpen(Node, LeafType);
         break;
     }
     case CT_MIXED_BOX_QUEUE:
@@ -337,10 +338,10 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
     default:
     {
         const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, Node.m_ValueID);
-        EditText->MoveWindow(Node.m_ValueRect);
+        EditText->EnableWindow(Node.m_ValueType == CT_EDIT_TEXT);
         EditText->SetWindowTextW(Node.m_Value.c_str());
+        EditText->MoveWindow(Node.m_ValueRect);
         EditText->ShowWindow(SW_SHOW);
-        UpdateEdit(EditText, Node.m_ValueType);
         break;
     }
     }
@@ -502,230 +503,64 @@ void CDialogParams::DisplayParams(const std::wstring& LeafType, boost::property_
     }
 }
 
-void CDialogParams::UpdateEdit(const std::shared_ptr<CEdit>& ptrEdit, ControlType Type)
+void CDialogParams::UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType)
 {
-    //文本垂直居中显示，但这样会覆盖掉边框的下划线
-    {
-        ////获取文本信息
-        //TEXTMETRIC tmText;
-        //CClientDC dc(ptrEdit.get());
-        //dc.GetTextMetrics(&tmText);
+    //先清空旧的数据
+    theApp.ResetSubParamsControl();
 
-        ////计算文本的高度
-        //int TextTotalHeight = tmText.tmHeight + tmText.tmExternalLeading;
-
-        ////计算文本距离编辑框顶部的距离
-        //CRect rect;
-        //ptrEdit->GetClientRect(rect);
-        //int OffsetY = (rect.Height() - TextTotalHeight) / 2;
-        //
-
-        ////将工作区域往下偏移
-        //rect.OffsetRect(0, OffsetY);
-
-        ////设置工作区域
-        //ptrEdit->SetRectNP(&rect);
-    }
-
-    //设置控件是否可编辑
-    {
-        if (Type == ControlType::CT_EDIT_TEXT)
-        {
-            ptrEdit->EnableWindow(TRUE);
-        }
-        else
-        {
-            ptrEdit->EnableWindow(FALSE);
-        }
-    }
-}
-
-void CDialogParams::UpdateXaOpen(const std::shared_ptr<CButton>& pButton, const std::wstring& LeafType)
-{
-    //如果当前可见，点击按钮就隐藏
-    if (m_GridSubParams.IsWindowVisible())
-    {
-        m_GridSubParams.ShowWindow(SW_HIDE);
-        theApp.ResetSubParamsControl();
-        return;
-    }
-
-    CString ButtonText;
-    pButton->GetWindowTextW(ButtonText);
-    if (ButtonText.IsEmpty())
-    {
-        return;
-    }
-
+    //拆分参数
     std::vector<std::wstring> SubParamsValue;
-    SplitString(ButtonText.GetBuffer(), SubParamsValue, SEMICOLON);
+    SplitString(Node.m_Value, SubParamsValue, SEMICOLON);
     if (SubParamsValue.empty())
     {
         return;
     }
 
-    //设置Group Static的区域
-    CRect ButtonRect;
-    CRect SubParamGridRect;
+    //获取总的可用区域
+    CRect SubParamsRect;
+    m_GridSubParams.GetWindowRect(&SubParamsRect);
+
+    //调整控件的区域范围，用于生成各个控件的区域
+    CRect NewRect = Node.m_ValueRect;
+    NewRect.bottom = SubParamsRect.bottom;
+    CoordinateGenerator GeneratorRect(NewRect);
+    GeneratorRect.SetSplitRatio(2, 7, 1);
+    GeneratorRect.Begin(1, 2);
+
+    //准备数据
+    std::vector<ParamNode>& SubParamsNode = theApp.g_mapLeaf[LeafType].m_subParams;
+    SubParamsNode.clear();
+
+    //根据有用的参数，逐个显示控件
+    for (std::vector<std::wstring>::size_type ParamIndex = 0; ParamIndex < SubParamsValue.size(); ParamIndex++)
     {
-        pButton->GetWindowRect(ButtonRect);
-        ScreenToClient(ButtonRect);
-
-        SubParamGridRect.left = ButtonRect.left;
-        SubParamGridRect.right = ButtonRect.right - 2;
-        SubParamGridRect.top = ButtonRect.bottom + CoordinateGenerator::OFFSET_Y;
-        SubParamGridRect.bottom = SubParamGridRect.top + 500;
-        m_GridSubParams.MoveWindow(SubParamGridRect);
-        m_GridSubParams.ShowWindow(SW_SHOW);
-        m_GridSubParams.SetWindowTextW((gp_XaOpen + L"子配置项").c_str());
-    }
-
-    //设置各个子配置项的位置
-    {
-        //准备数据
-        UINT ButtonID = pButton->GetDlgCtrlID();
-        std::vector<ParamNode>& SubParamsNode = theApp.g_mapLeaf[LeafType].m_subParams;
-        SubParamsNode.clear();
-
-        CoordinateGenerator GeneratorRect(SubParamGridRect);
-        GeneratorRect.m_TopGrap = CoordinateGenerator::OFFSET_Y * 6;
-        GeneratorRect.SetSplitRatio(2, 7, 1);
-        GeneratorRect.Begin(1, 2);
-
-        for (std::vector<std::wstring>::size_type ParamIndex = 0; ParamIndex < SubParamsValue.size(); ParamIndex++)
+        std::wstring::size_type EqualPos = SubParamsValue[ParamIndex].find(EQUAL);
+        if (EqualPos == std::wstring::npos)
         {
-            std::wstring::size_type EqualPos = SubParamsValue[ParamIndex].find(EQUAL);
-            if (EqualPos == std::wstring::npos)
-            {
-                continue;
-            }
-
-            const std::wstring& ParamName = SubParamsValue[ParamIndex].substr(0, EqualPos);
-            if (ParamName.empty())
-            {
-                continue;
-            }
-
-            SubParamsNode.push_back(ParamNode(ParamName, gl_Xa, CT_EDIT_TEXT));
-            std::vector<ParamNode>::size_type index = SubParamsNode.size() - 1;
-
-            std::wstring::size_type NameStart = EqualPos + 1;
-            std::wstring::size_type NameStop = SubParamsValue[ParamIndex].size();
-            SubParamsNode[index].m_Value = SubParamsValue[ParamIndex].substr(NameStart, NameStop);
-
-            const std::shared_ptr<CStatic>& StaticText = theApp.GetStaticText(this, SubParamsNode[index].m_NameID);
-            StaticText->SetWindowTextW((SubParamsNode[index].m_Name + COLON).c_str());
-            StaticText->MoveWindow(GeneratorRect.GetNextRect());
-            StaticText->ShowWindow(SW_SHOW);
-
-            const CRect& NewRect = GeneratorRect.GetNextRect();
-            switch (SubParamsNode[index].m_ValueType)
-            {
-            case CT_COMBO_BOX_EDIT:
-            {
-                const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxEdit(this, SubParamsNode[index].m_ValueID);
-                ComboBox->MoveWindow(NewRect);
-                ComboBox->ShowWindow(SW_SHOW);
-                UpdateComboBox(ComboBox, LeafType, SubParamsNode[index]);
-                break;
-            }
-            case CT_COMBO_BOX_LIST:
-            {
-                const std::shared_ptr<CComboBox>& ComboBox = theApp.GetComboBoxList(this, SubParamsNode[index].m_ValueID);
-                ComboBox->MoveWindow(NewRect);
-                ComboBox->ShowWindow(SW_SHOW);
-                UpdateComboBox(ComboBox, LeafType, SubParamsNode[index]);
-                break;
-            }
-            case CT_CHECK_LIST_BOX:
-            {
-                const std::shared_ptr<CButton>& Button = theApp.GetButton(this, SubParamsNode[index].m_ValueID);
-                Button->MoveWindow(NewRect);
-                Button->SetWindowTextW(SubParamsNode[index].m_Value.c_str());
-                Button->ShowWindow(SW_SHOW);
-                Button->EnableWindow(TRUE);
-                break;
-            }
-            case CT_CHECK_BOX:
-            {
-                const std::shared_ptr<CButton>& Button = theApp.GetButton(this, SubParamsNode[index].m_ValueID);
-                Button->MoveWindow(NewRect);
-                Button->SetWindowTextW(SubParamsNode[index].m_Value.c_str());
-                Button->ShowWindow(SW_SHOW);
-
-                UINT TypeID = theApp.g_mapLeaf[LeafType].GetValueID(gp_Type);
-                std::shared_ptr<CComboBox> ComboxList = theApp.GetComboBoxList(TypeID);
-
-                CString TypeText;
-                ComboxList->GetWindowTextW(TypeText);
-                Button->EnableWindow(TypeText.Find(gt_Bbu.c_str()) >= 0);
-                break;
-            }
-            default:
-            {
-                const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, SubParamsNode[index].m_ValueID);
-                EditText->MoveWindow(NewRect);
-                EditText->SetWindowTextW(SubParamsNode[index].m_Value.c_str());
-                EditText->ShowWindow(SW_SHOW);
-                UpdateEdit(EditText, SubParamsNode[index].m_ValueType);
-                break;
-            }
-            }
-
-            theApp.g_setSubParams.insert(SubParamsNode[index].m_NameID);
-            theApp.g_setSubParams.insert(SubParamsNode[index].m_ValueID);
+            continue;
         }
+
+        const std::wstring& ParamName = SubParamsValue[ParamIndex].substr(0, EqualPos);
+        if (ParamName.empty())
+        {
+            continue;
+        }
+
+        //参数名
+        SubParamsNode.push_back(ParamNode(ParamName, gl_Xa, CT_EDIT_TEXT));
+        std::vector<ParamNode>::size_type index = SubParamsNode.size() - 1;
+
+        //参数值
+        std::wstring::size_type NameStart = EqualPos + 1;
+        std::wstring::size_type NameStop = SubParamsValue[ParamIndex].size();
+        SubParamsNode[index].m_Value = SubParamsValue[ParamIndex].substr(NameStart, NameStop);
+
+        //设置控件
+        SetParam(SubParamsNode[index], GeneratorRect, LeafType);
+        theApp.g_setSubParams.insert(SubParamsNode[index].m_NameID);
+        theApp.g_setSubParams.insert(SubParamsNode[index].m_ValueID);
     }
 }
-
-void CDialogParams::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node)
-{
-    //查找字典
-    std::wstring Key = GetKey(Node, LeafType);
-    if (theApp.g_mapSelect.find(Key) == theApp.g_mapSelect.end())
-    {
-        std::wstring::size_type pos = Key.find(gl_Xa);
-        if (pos != std::wstring::npos)
-        {
-            Key = gt_Xas;
-        }
-        else
-        {
-            pos = Key.find(gl_MsgQueue);
-            if (pos != std::wstring::npos)
-            {
-                Key = gt_Queues;
-            }
-            else
-            {
-                return;
-            }
-        }
-    }
-
-    //清空旧数据，插入新数据
-    ptrComboBox->ResetContent();
-    std::vector<std::wstring>& vecSelect = theApp.g_mapSelect[Key];
-    for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
-    {
-        ptrComboBox->AddString(vecSelect[index].c_str());
-    }
-
-    //选中匹配的值
-    if (!Node.m_Value.empty())
-    {
-        for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
-        {
-            if (vecSelect[index] == Node.m_Value)
-            {
-                ptrComboBox->SetCurSel(static_cast<int>(index));
-                break;
-            }
-        }
-    }
-}
-
-
 
 void CDialogParams::UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType)
 {
@@ -973,6 +808,53 @@ void CDialogParams::UpdateCheckListBox(ParamNode& Node, const std::wstring& Leaf
             if (!IsFind)
             {
                 m_CheckListBox.AddString(SelectItem[index].c_str());
+            }
+        }
+    }
+}
+
+void CDialogParams::UpdateComboBox(ParamNode& Node, const std::wstring& LeafType, const std::shared_ptr<CComboBox>& ptrComboBox)
+{
+    //查找字典
+    std::wstring Key = GetKey(Node, LeafType);
+    if (theApp.g_mapSelect.find(Key) == theApp.g_mapSelect.end())
+    {
+        std::wstring::size_type pos = Key.find(gl_Xa);
+        if (pos != std::wstring::npos)
+        {
+            Key = gt_Xas;
+        }
+        else
+        {
+            pos = Key.find(gl_MsgQueue);
+            if (pos != std::wstring::npos)
+            {
+                Key = gt_Queues;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    //清空旧数据，插入新数据
+    ptrComboBox->ResetContent();
+    std::vector<std::wstring>& vecSelect = theApp.g_mapSelect[Key];
+    for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+    {
+        ptrComboBox->AddString(vecSelect[index].c_str());
+    }
+
+    //选中匹配的值
+    if (!Node.m_Value.empty())
+    {
+        for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+        {
+            if (vecSelect[index] == Node.m_Value)
+            {
+                ptrComboBox->SetCurSel(static_cast<int>(index));
+                break;
             }
         }
     }
