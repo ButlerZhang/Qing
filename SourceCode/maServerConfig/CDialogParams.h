@@ -61,6 +61,7 @@ private:
 private:
 
     std::wstring GetLeafType() const;
+    std::wstring GetKey(const ParamNode& Node, const std::wstring& LeafType);
     void SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect, const std::wstring& LeafType);
 
 private:

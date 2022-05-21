@@ -114,12 +114,14 @@ struct ParamNode
 
     std::wstring            m_Name;                 //参数名
     std::wstring            m_Value;                //参数值
+    std::wstring            m_Parent;               //父节点
 
     CRect                   m_ValueRect;            //参数值的控件的坐标
     ControlType             m_ValueType;            //参数值的控件类型，参数名的控件固定为不可编辑文本
 
-    ParamNode(const std::wstring& Name, ControlType Type = CT_DEFAULT) :
+    ParamNode(const std::wstring& Name, const std::wstring& Parent, ControlType Type = CT_DEFAULT) :
         m_Name(Name),
+        m_Parent(Parent),
         m_NameID(0),
         m_ValueID(0),
         m_ValueType(Type) {}

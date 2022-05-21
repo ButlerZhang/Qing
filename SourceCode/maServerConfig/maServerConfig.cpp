@@ -111,62 +111,62 @@ void CmaServerConfigApp::InitLeafNode()
 {
     //RuntimeTable节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_RuntimeTable, LeafNode()));
-    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
-    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
-    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
-    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ImportFile, CT_CHECK_LIST_BOX));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Describe, gl_RuntimeTable, CT_EDIT_TEXT));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ID, gl_RuntimeTable, CT_STATIC_TEXT));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Name, gl_RuntimeTable, CT_EDIT_TEXT));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Clsid, gl_RuntimeTable, CT_COMBO_BOX_EDIT));
+    g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ImportFile, gl_RuntimeTable, CT_CHECK_LIST_BOX));
 
     //Service节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Service, LeafNode()));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Gid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Runas, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_WorkThread));
-    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Use));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Describe, gl_Service, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_ID, gl_Service, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Name, gl_Service, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Clsid, gl_Service, CT_COMBO_BOX_EDIT));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Gid, gl_Service, CT_COMBO_BOX_EDIT));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Runas, gl_Service, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_WorkThread, gl_Service, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Use, gl_Service, CT_CHECK_LIST_BOX));
 
     //msgqueue节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_MsgQueue, LeafNode()));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Gid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Direction, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Type, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Protocol, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Init, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_MaxSize, CT_EDIT_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Timeout, CT_EDIT_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Clsid, CT_STATIC_TEXT));
-    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Connstr, CT_MIXED_BOX_QUEUE));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Describe, gl_MsgQueue, CT_EDIT_TEXT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_ID, gl_MsgQueue, CT_STATIC_TEXT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Name, gl_MsgQueue, CT_EDIT_TEXT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Gid, gl_MsgQueue, CT_COMBO_BOX_EDIT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Direction, gl_MsgQueue, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Type, gl_MsgQueue, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Protocol, gl_MsgQueue, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Init, gl_MsgQueue, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_MaxSize, gl_MsgQueue, CT_EDIT_TEXT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Timeout, gl_MsgQueue, CT_EDIT_TEXT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Clsid, gl_MsgQueue, CT_STATIC_TEXT));
+    g_mapLeaf[gl_MsgQueue].m_vecParams.push_back(ParamNode(gp_Connstr, gl_MsgQueue, CT_MIXED_BOX_QUEUE));
 
     //xa节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Xa, LeafNode()));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Clsid, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaClose, CT_STATIC_TEXT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOption, CT_STATIC_TEXT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_DaoPath, CT_COMBO_BOX_EDIT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaSerial, CT_STATIC_TEXT));
-    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOpen, CT_MIXED_BOX_XA));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Describe, gl_Xa, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_ID, gl_Xa, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Name, gl_Xa, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_Clsid, gl_Xa, CT_COMBO_BOX_EDIT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaClose, gl_Xa, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOption, gl_Xa, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_DaoPath, gl_Xa, CT_COMBO_BOX_EDIT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaSerial, gl_Xa, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Xa].m_vecParams.push_back(ParamNode(gp_XaOpen, gl_Xa, CT_MIXED_BOX_XA));
 
     //node节点
     g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Node, LeafNode()));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Describe, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_ID, CT_STATIC_TEXT));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Name, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Type, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Gid, CT_STATIC_TEXT));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Ipv4, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Path, CT_EDIT_TEXT));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_DefaultXa, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_BackupXa, CT_COMBO_BOX_LIST));
-    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use, CT_CHECK_BOX));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Describe, gl_Node, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_ID, gl_Node, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Name, gl_Node, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Type, gl_Node, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Gid, gl_Node, CT_STATIC_TEXT));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Ipv4, gl_Node, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Path, gl_Node, CT_EDIT_TEXT));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_DefaultXa, gl_Node, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_BackupXa, gl_Node, CT_COMBO_BOX_LIST));
+    g_mapLeaf[gl_Node].m_vecParams.push_back(ParamNode(gp_Use, gl_Node, CT_CHECK_BOX));
 }
 
 void CmaServerConfigApp::InitSelectItem()
@@ -449,23 +449,6 @@ CString CmaServerConfigApp::GetLeftType(const CString& Text)
 
     const CString& CurrentType = Text.Left(StartPos);
     return CurrentType;
-}
-
-std::wstring CmaServerConfigApp::GetSelectItemMapKey(const std::wstring& OldKey)
-{
-    std::wstring::size_type pos = OldKey.find(gl_Xa);
-    if (pos != std::wstring::npos)
-    {
-        return gt_Xas;
-    }
-
-    pos = OldKey.find(gl_MsgQueue);
-    if (pos != std::wstring::npos)
-    {
-        return gt_Queues;
-    }
-
-    return std::wstring();
 }
 
 void CmaServerConfigApp::AddSelectItem(const std::wstring& Key, const std::wstring& Value)

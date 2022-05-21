@@ -278,6 +278,16 @@ std::wstring CDialogParams::GetLeafType() const
     return LeafType.GetBuffer();
 }
 
+std::wstring CDialogParams::GetKey(const ParamNode& Node, const std::wstring& LeafType)
+{
+    if (LeafType != Node.m_Parent)
+    {
+        return LeafType + DOT + Node.m_Parent + DOT + Node.m_Name;
+    }
+
+    return Node.m_Parent + DOT + Node.m_Name;
+}
+
 //设置具体的参数控件
 void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect, const std::wstring& LeafType)
 {
@@ -596,7 +606,7 @@ void CDialogParams::UpdateXaOpen(const std::shared_ptr<CButton>& pButton, const 
                 continue;
             }
 
-            SubParamsNode.push_back(ParamNode(ParamName, CT_EDIT_TEXT));
+            SubParamsNode.push_back(ParamNode(ParamName, gl_Xa, CT_EDIT_TEXT));
             std::vector<ParamNode>::size_type index = SubParamsNode.size() - 1;
 
             std::wstring::size_type NameStart = EqualPos + 1;
@@ -670,16 +680,30 @@ void CDialogParams::UpdateXaOpen(const std::shared_ptr<CButton>& pButton, const 
 
 void CDialogParams::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox, const std::wstring& LeafType, const ParamNode& Node)
 {
-    std::wstring Key = LeafType + L"." + Node.m_Name;
+    //查找字典
+    std::wstring Key = GetKey(Node, LeafType);
     if (theApp.g_mapSelect.find(Key) == theApp.g_mapSelect.end())
     {
-        Key = theApp.GetSelectItemMapKey(Key);
-        if (Key.empty())
+        std::wstring::size_type pos = Key.find(gl_Xa);
+        if (pos != std::wstring::npos)
         {
-            return;
+            Key = gt_Xas;
+        }
+        else
+        {
+            pos = Key.find(gl_MsgQueue);
+            if (pos != std::wstring::npos)
+            {
+                Key = gt_Queues;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 
+    //清空旧数据，插入新数据
     ptrComboBox->ResetContent();
     std::vector<std::wstring>& vecSelect = theApp.g_mapSelect[Key];
     for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
@@ -687,6 +711,7 @@ void CDialogParams::UpdateComboBox(const std::shared_ptr<CComboBox>& ptrComboBox
         ptrComboBox->AddString(vecSelect[index].c_str());
     }
 
+    //选中匹配的值
     if (!Node.m_Value.empty())
     {
         for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
@@ -710,10 +735,10 @@ void CDialogParams::UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType)
     {
         //添加Use的子配置项信息
         vecSubParams.clear();
-        vecSubParams.push_back(ParamNode(gs_NodeUse_n, CT_CHECK_BOX));
-        vecSubParams.push_back(ParamNode(gs_NodeUse_s, CT_CHECK_BOX));
-        vecSubParams.push_back(ParamNode(gs_NodeUse_a, CT_CHECK_BOX));
-        vecSubParams.push_back(ParamNode(gs_NodeUse_q, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_n, gp_Type, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_s, gp_Type, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_a, gp_Type, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_q, gp_Type, CT_CHECK_BOX));
 
         //获取总的可用区域
         CRect SubParamsRect;
@@ -833,28 +858,28 @@ void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& Leaf
     SubParamsNode.clear();
     if (TypeNode.m_Value == gs_QueueType_kcxp)
     {
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_Port, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_Protocol, CT_STATIC_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_IP, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_ConnectCount, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_Port, gs_QueueType_kcxp, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_Protocol, gs_QueueType_kcxp, CT_STATIC_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_IP, gs_QueueType_kcxp, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_ConnectCount, gs_QueueType_kcxp, CT_EDIT_TEXT));
     }
     else if (TypeNode.m_Value == gs_QueueType_zmq)
     {
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Port, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Mode, CT_COMBO_BOX_LIST));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Protocol, CT_COMBO_BOX_LIST));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_IP, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_ThreadCount, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_CacheTime, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_HopCount, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Port, gs_QueueType_zmq, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Mode, gs_QueueType_zmq, CT_COMBO_BOX_LIST));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_Protocol, gs_QueueType_zmq, CT_COMBO_BOX_LIST));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_IP, gs_QueueType_zmq, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_ThreadCount, gs_QueueType_zmq, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_CacheTime, gs_QueueType_zmq, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeZmq_HopCount, gs_QueueType_zmq, CT_EDIT_TEXT));
     }
     else if (TypeNode.m_Value == gs_QueueType_socket)
     {
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Port, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Mode, CT_COMBO_BOX_LIST));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Protocol, CT_STATIC_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_IP, CT_EDIT_TEXT));
-        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_MsgLength, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Port, gs_QueueType_socket, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Mode, gs_QueueType_socket, CT_COMBO_BOX_LIST));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_Protocol, gs_QueueType_socket, CT_STATIC_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_IP, gs_QueueType_socket, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(gs_QueueTypeSocket_MsgLength, gs_QueueType_socket, CT_EDIT_TEXT));
     }
 
     //子项的值和控件个数要匹配
@@ -890,7 +915,7 @@ void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& Leaf
 void CDialogParams::UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType)
 {
     //要有可供选择的数据
-    const std::wstring& Key = LeafType + L"." + Node.m_Name;
+    const std::wstring& Key = GetKey(Node, LeafType);
     if (theApp.g_mapSelect.find(Key) == theApp.g_mapSelect.end())
     {
         return;

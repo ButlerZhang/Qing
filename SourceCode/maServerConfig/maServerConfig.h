@@ -28,7 +28,6 @@ public:
     CString GetLeafID(const CString& Text);
     CString GetLeftType(const CString& Text);
 
-    std::wstring GetSelectItemMapKey(const std::wstring& OldKey);
     void AddSelectItem(const std::wstring& Key, const std::wstring& Value);
 
     void ResetAllControl();
