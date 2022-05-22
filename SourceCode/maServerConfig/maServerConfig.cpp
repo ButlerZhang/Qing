@@ -111,6 +111,15 @@ void CmaServerConfigApp::InitLeafNode()
 {
     //RuntimeTable节点
     {
+        //rtdb
+        g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gt_Rtdb, LeafNode()));
+        g_mapLeaf[gt_Rtdb].m_vecParams.push_back(ParamNode(gp_Describe, gm_Kernel, CT_EDIT_TEXT));
+        g_mapLeaf[gt_Rtdb].m_vecParams.push_back(ParamNode(gt_RtdbEngine, gm_Kernel, CT_EDIT_TEXT));
+        g_mapLeaf[gt_Rtdb].m_vecParams.push_back(ParamNode(gt_RtdbName, gm_Kernel, CT_EDIT_TEXT));
+        g_mapLeaf[gt_Rtdb].m_vecParams.push_back(ParamNode(gt_RtdbType, gm_Kernel, CT_EDIT_TEXT));
+        g_mapLeaf[gt_Rtdb].m_vecParams.push_back(ParamNode(gt_RtdbSize, gm_Kernel, CT_EDIT_TEXT));
+
+        //runtime table
         g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_RuntimeTable, LeafNode()));
         g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_Describe, gl_RuntimeTable, CT_EDIT_TEXT));
         g_mapLeaf[gl_RuntimeTable].m_vecParams.push_back(ParamNode(gp_ID, gl_RuntimeTable, CT_STATIC_TEXT));

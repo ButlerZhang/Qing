@@ -530,32 +530,51 @@ void CDialogParams::DisplayParams(const std::wstring& LeafType, boost::property_
         GeneratorRect.Begin(1, 2);
 
         CString FormatString;
-        for (std::vector<ParamNode>::size_type index = 1; index < vecParams.size(); index++)
+        if(LeafType != gt_Rtdb)
         {
-            FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_Name.c_str());
-            vecParams[index].m_Value = LeafNode.second.get<std::wstring>(FormatString.GetString(), L"");
-            SetParam(vecParams[index], GeneratorRect, LeafType);
-
-            if (index == vecParams.size() - 2)
+            for (std::vector<ParamNode>::size_type index = 1; index < vecParams.size(); index++)
             {
-                NormalRect.bottom = GeneratorRect.GetCurrentRect().bottom + BottomY;
-                m_GridNormal.MoveWindow(&NormalRect);
-                m_GridNormal.ShowWindow(SW_SHOW);
+                FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_Name.c_str());
+                vecParams[index].m_Value = LeafNode.second.get<std::wstring>(FormatString.GetString(), L"");
+                SetParam(vecParams[index], GeneratorRect, LeafType);
 
-                ParamsTotalArea.top = NormalRect.bottom + GridYGrid;
-                theApp.AddCRectToLog(L"5NormalRect", NormalRect);
+                if (index == vecParams.size() - 2)
+                {
+                    NormalRect.bottom = GeneratorRect.GetCurrentRect().bottom + BottomY;
+                    m_GridNormal.MoveWindow(&NormalRect);
+                    m_GridNormal.ShowWindow(SW_SHOW);
 
-                //设置SubParams区域
-                CRect SubParamsTotalRect = ParamsTotalArea;
-                m_GridSubParams.MoveWindow(&SubParamsTotalRect);
-                m_GridSubParams.ShowWindow(SW_SHOW);
-                theApp.AddCRectToLog(L"6SubParamsRect", SubParamsTotalRect);
+                    ParamsTotalArea.top = NormalRect.bottom + GridYGrid;
+                    theApp.AddCRectToLog(L"5NormalRect", NormalRect);
 
-                CRect SubParamsUsablRect = SubParamsTotalRect;
-                SubParamsUsablRect.top = SubParamsUsablRect.top + TopY;
-                CoordinateGenerator GeneratorSubParamsRect(SubParamsUsablRect);
-                GeneratorSubParamsRect.Begin(1, 2);
-                GeneratorRect = GeneratorSubParamsRect;
+                    //设置SubParams区域
+                    CRect SubParamsTotalRect = ParamsTotalArea;
+                    m_GridSubParams.MoveWindow(&SubParamsTotalRect);
+                    m_GridSubParams.ShowWindow(SW_SHOW);
+                    theApp.AddCRectToLog(L"6SubParamsRect", SubParamsTotalRect);
+
+                    CRect SubParamsUsablRect = SubParamsTotalRect;
+                    SubParamsUsablRect.top = SubParamsUsablRect.top + TopY;
+                    CoordinateGenerator GeneratorSubParamsRect(SubParamsUsablRect);
+                    GeneratorSubParamsRect.Begin(1, 2);
+                    GeneratorRect = GeneratorSubParamsRect;
+                }
+            }
+        }
+        else
+        {
+            for (std::vector<ParamNode>::size_type index = 1; index < vecParams.size(); index++)
+            {
+                FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_Name.c_str());
+                vecParams[index].m_Value = LeafNode.second.get<std::wstring>(FormatString.GetString(), L"");
+                SetParam(vecParams[index], GeneratorRect, LeafType);
+                if (index == vecParams.size() - 1)
+                {
+                    NormalRect.bottom = GeneratorRect.GetCurrentRect().bottom + BottomY;
+                    m_GridNormal.MoveWindow(&NormalRect);
+                    m_GridNormal.ShowWindow(SW_SHOW);
+                    m_GridSubParams.ShowWindow(SW_HIDE);
+                }
             }
         }
     }

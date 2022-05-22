@@ -194,21 +194,30 @@ void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
     // TODO: 在此添加控件通知处理程序代码
     *pResult = 0;
 
-    //非叶子节点不处理
+    //获取叶子结点的类型和ID
     HTREEITEM hSelectTreeItem = m_TreeConfig.GetSelectedItem();
+    CString CurrentLeafNode = m_TreeConfig.GetItemText(hSelectTreeItem);
+    CString CurrentLeafType = theApp.GetLeftType(CurrentLeafNode);
+    CString CurrentLeafID = theApp.GetLeafID(CurrentLeafNode);
+    bool IsRTDBTrunk = CurrentLeafNode.GetBuffer() == gt_Rtdb;
+
+    //非叶子节点不处理
     if (m_TreeConfig.ItemHasChildren(hSelectTreeItem))
     {
-        return;
+        if (IsRTDBTrunk)
+        {
+            //rtdb比较特殊，虽然不是叶子节点，但也有配置
+            CurrentLeafType = gt_Rtdb.c_str();
+        }
+        else
+        {
+            return;
+        }
     }
 
     //保存上一次界面的修改
     theApp.g_ParamsDlg->Hide();
     SaveLastChange();
-
-    //获取叶子结点的类型和ID
-    CString CurrentLeafNode = m_TreeConfig.GetItemText(hSelectTreeItem);
-    CString CurrentLeafType = theApp.GetLeftType(CurrentLeafNode);
-    CString CurrentLeafID = theApp.GetLeafID(CurrentLeafNode);
 
     //获取从根节点到当前节点的信息
     std::vector<CString> vecString;
@@ -236,11 +245,22 @@ void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
             continue;
         }
 
-        //ID不会是空的
-        const std::wstring& ID = v1.second.get<std::wstring>(L"<xmlattr>.id", L"");
-        if (ID.empty() || CurrentLeafID.Compare(ID.c_str()) != 0)
+        if (!IsRTDBTrunk)
         {
-            continue;
+            //非叶子节点都有ID
+            const std::wstring& ID = v1.second.get<std::wstring>(L"<xmlattr>.id", L"");
+            if (ID.empty() || CurrentLeafID.Compare(ID.c_str()) != 0)
+            {
+                continue;
+            }
+        }
+        else
+        {
+            //如果是树干，则要匹配名称
+            if (CurrentLeafType.Compare(v1.first.c_str()) != 0)
+            {
+                continue;
+            }
         }
 
         if (theApp.g_mapLeaf.find(CurrentLeafType.GetString()) != theApp.g_mapLeaf.end())
@@ -427,32 +447,51 @@ CString CmaServerConfigDlg::GetRootNodeName()
 
 void CmaServerConfigDlg::SaveLastChange()
 {
-    if (!m_LastSearchNode.IsEmpty() && !m_LastLeafNode.IsEmpty() && !m_LastLeafID.IsEmpty())
+    if (m_LastSearchNode.IsEmpty() || m_LastLeafNode.IsEmpty())
     {
-        //遍历找到对应的节点
-        BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, theApp.g_XMLTree.get_child(m_LastSearchNode.GetString()))
-        {
-            //忽略属性
-            if (v1.first.find(L"<") != std::wstring::npos)
-            {
-                continue;
-            }
+        return;
+    }
 
-            //ID不会是空的
+    //遍历找到对应的节点
+    BOOST_FOREACH(boost::property_tree::wptree::value_type & v1, theApp.g_XMLTree.get_child(m_LastSearchNode.GetString()))
+    {
+        //忽略属性
+        if (v1.first.find(L"<") != std::wstring::npos)
+        {
+            continue;
+        }
+
+        //ID不会是空的，除非是rtdb树干
+        std::wstring LeafType;
+        if (!m_LastLeafID.IsEmpty())
+        {
             const std::wstring& ID = v1.second.get<std::wstring>(L"<xmlattr>.id", L"");
             if (ID.empty() || m_LastLeafID.Compare(ID.c_str()))
             {
                 continue;
             }
 
-            CString LeafType = theApp.GetLeftType(m_LastLeafNode);
-            if (theApp.g_mapLeaf.find(LeafType.GetString()) != theApp.g_mapLeaf.end())
+            LeafType = theApp.GetLeftType(m_LastLeafNode);
+        }
+        else
+        {
+            if (m_LastLeafNode.Compare(gt_Rtdb.c_str()) == 0)
             {
-                theApp.g_ParamsDlg->UpdateParams(LeafType.GetString(), v1);
+                LeafType = gt_Rtdb;
             }
 
-            break;
+            if (LeafType != v1.first)
+            {
+                continue;
+            }
         }
+
+        if (theApp.g_mapLeaf.find(LeafType) != theApp.g_mapLeaf.end())
+        {
+            theApp.g_ParamsDlg->UpdateParams(LeafType, v1);
+        }
+
+        break;
     }
 }
 
@@ -541,17 +580,16 @@ bool CmaServerConfigDlg::UpdateTreeConfig()
                 std::wstring NewNode = *it + L".";
                 NewNode.append(v1.first);
                 NodeList.push_back(NewNode);
+                continue;
             }
-            else
-            {
-                //对于叶子节点，不需要保存上一层的指针了
-                const std::wstring& Name = v1.second.get<std::wstring>(L"<xmlattr>.name", L"");
-                std::wstring TreeName = v1.first + L"_" + ID + L"_" + Name;
-                m_TreeConfig.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
 
-                const std::wstring& GID = v1.second.get<std::wstring>(L"<xmlattr>.gid", L"");
-                theApp.AddSelectItem(Key, v1.first, ID, GID, Name);
-            }
+            //对于叶子节点，不需要保存上一层的指针了
+            const std::wstring& Name = v1.second.get<std::wstring>(L"<xmlattr>.name", L"");
+            std::wstring TreeName = v1.first + L"_" + ID + L"_" + Name;
+            m_TreeConfig.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
+
+            const std::wstring& GID = v1.second.get<std::wstring>(L"<xmlattr>.gid", L"");
+            theApp.AddSelectItem(Key, v1.first, ID, GID, Name);
         }
 
         //判断是否要展开这个树形层级

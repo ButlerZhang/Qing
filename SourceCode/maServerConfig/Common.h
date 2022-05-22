@@ -29,6 +29,12 @@ const std::wstring gt_Queues(L"queues");
 const std::wstring gt_Xas(L"xas");
 const std::wstring gt_Nodes(L"nodes");
 
+//Ê÷¸ÉÅäÖÃ£¨g:global£¬t:trunk£©
+const std::wstring gt_RtdbEngine(L"engine");
+const std::wstring gt_RtdbName(L"name");
+const std::wstring gt_RtdbType(L"type");
+const std::wstring gt_RtdbSize(L"size");
+
 //Ò¶×ÓÃû³Æ£¨g:global£¬l:leaf£©
 const std::wstring gl_RuntimeTable(L"runtimetable");
 const std::wstring gl_Service(L"service");
