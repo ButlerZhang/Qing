@@ -51,13 +51,15 @@ private:
 
     std::wstring GetLeafType() const;
     std::wstring GetKey(const ParamNode& Node, const std::wstring& LeafType);
+
+    void GetParam(const ParamNode& Node, CString& ControlValue);
     void SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect, const std::wstring& LeafType);
 
-    void UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType);
-    void UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType);
-    void UpdateQueueType(ParamNode& Node, const std::wstring& LeafType);
-    void UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType);
-    void UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType);
+    void UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
+    void UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
+    void UpdateQueueType(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
+    void UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
+    void UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
     void UpdateComboBox(ParamNode& Node, const std::wstring& LeafType, const std::shared_ptr<CComboBox>& ptrComboBox);
 
 private:

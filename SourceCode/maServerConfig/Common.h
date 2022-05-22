@@ -94,14 +94,13 @@ const std::wstring gs_QueueTypeZmq_HopCount(L"HopCount");
 //控件类型
 enum ControlType
 {
-    CT_DEFAULT,                                     //仅用于初始化
     CT_EDIT_TEXT,                                   //可编辑文本
     CT_STATIC_TEXT,                                 //不可编辑文本
     CT_COMBO_BOX_EDIT,                              //下拉可编辑单选框
     CT_COMBO_BOX_LIST,                              //下拉不可编辑列表
     CT_CHECK_LIST_BOX,                              //下拉复选列表框（import_file)
     CT_CHECK_BOX,                                   //勾选框(node.use)
-    CT_MIXED_BOX_XA,                                //混合输入框()
+    CT_MIXED_BOX_XA,                                //混合输入框(XA)
     CT_MIXED_BOX_QUEUE,                             //混合输入框(queue)
     CT_COUNT                                        //支持的控件种类
 };
@@ -119,7 +118,7 @@ struct ParamNode
     CRect                   m_ValueRect;            //参数值的控件的坐标
     ControlType             m_ValueType;            //参数值的控件类型，参数名的控件固定为不可编辑文本
 
-    ParamNode(const std::wstring& Name, const std::wstring& Parent, ControlType Type = CT_DEFAULT) :
+    ParamNode(const std::wstring& Name, const std::wstring& Parent, ControlType Type) :
         m_Name(Name),
         m_Parent(Parent),
         m_NameID(0),
@@ -132,6 +131,17 @@ struct LeafNode
 {
     std::vector<ParamNode> m_vecParams;                     //此叶子结点对应的参数列表
     std::vector<ParamNode> m_subParams;                     //子配置项，目前只有一个参数有子配置项
+
+    void Clear()
+    {
+        m_subParams.clear();
+        for (std::vector<ParamNode>::size_type index = 0; index < m_vecParams.size(); index++)
+        {
+            m_vecParams[index].m_NameID = 0;
+            m_vecParams[index].m_ValueID = 0;
+            m_vecParams[index].m_Value.clear();
+        }
+    }
 
     UINT GetValueID(const std::wstring& Name)
     {

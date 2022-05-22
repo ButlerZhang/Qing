@@ -242,7 +242,7 @@ void CDialogParams::OnComboBoxListSelectChange(UINT uID)
                         vecParams[index].m_Value = TypeText.GetBuffer();
 
                         std::vector<ParamNode>::size_type UseIndex = theApp.g_mapLeaf[LeafType.GetBuffer()].GetIndex(gp_Use);
-                        UpdateNodeUse(vecParams[UseIndex], LeafType.GetBuffer());
+                        UpdateNodeUse(vecParams[UseIndex], LeafType.GetBuffer(), true);
                         return;
                     }
                 }
@@ -263,7 +263,7 @@ void CDialogParams::OnComboBoxListSelectChange(UINT uID)
                 {
                     if (vecParams[index].m_ValueID == uID && vecParams[index].m_Name == gp_Type)
                     {
-                        UpdateQueueType(vecParams[index], LeafType.GetBuffer());
+                        UpdateQueueType(vecParams[index], LeafType.GetBuffer(), true);
                         return;
                     }
                 }
@@ -286,6 +286,38 @@ std::wstring CDialogParams::GetKey(const ParamNode& Node, const std::wstring& Le
     }
 
     return Node.m_Parent + DOT + Node.m_Name;
+}
+
+void CDialogParams::GetParam(const ParamNode& Node, CString& ControlValue)
+{
+    ControlValue.Empty();
+    switch (Node.m_ValueType)
+    {
+    case CT_COMBO_BOX_EDIT:
+    {
+        theApp.GetComboBoxEdit(Node.m_ValueID)->GetWindowTextW(ControlValue);
+        break;
+    }
+    case CT_COMBO_BOX_LIST:
+    {
+        theApp.GetComboBoxList(Node.m_ValueID)->GetWindowTextW(ControlValue);
+        break;
+    }
+    case CT_CHECK_BOX:
+    case CT_CHECK_LIST_BOX:
+    {
+        ControlValue = Node.m_Value.c_str();
+        break;
+    }
+    case CT_EDIT_TEXT:
+    case CT_STATIC_TEXT:
+    {
+        theApp.GetEditText(Node.m_ValueID)->GetWindowTextW(ControlValue);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 //设置具体的参数控件
@@ -317,22 +349,22 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
     }
     case CT_CHECK_LIST_BOX:
     {
-        UpdateCheckListBox(Node, LeafType);
+        UpdateCheckListBox(Node, LeafType, false);
         break;
     }
     case CT_CHECK_BOX:
     {
-        UpdateNodeUse(Node, LeafType);
+        UpdateNodeUse(Node, LeafType, false);
         break;
     }
     case CT_MIXED_BOX_XA:
     {
-        UpdateXaOpen(Node, LeafType);
+        UpdateXaOpen(Node, LeafType, false);
         break;
     }
     case CT_MIXED_BOX_QUEUE:
     {
-        UpdateQueueConnstr(Node, LeafType);
+        UpdateQueueConnstr(Node, LeafType, false);
         break;
     }
     default:
@@ -357,7 +389,6 @@ void CDialogParams::Hide()
 
 void CDialogParams::UpdateParams(const std::wstring& LeafType, boost::property_tree::wptree::value_type& LeafNode)
 {
-    bool IsForceUpdate = false;
     CString ControlName, ControlValue, FormatString;
     const std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;
     for (std::vector<ParamNode>::size_type index = 1; index < vecParams.size(); index++)
@@ -376,47 +407,72 @@ void CDialogParams::UpdateParams(const std::wstring& LeafType, boost::property_t
             continue;
         }
 
-        ControlValue.Empty();
-        IsForceUpdate = false;
-
         switch (vecParams[index].m_ValueType)
         {
-        case CT_COMBO_BOX_EDIT:
-        {
-            theApp.GetComboBoxEdit(vecParams[index].m_ValueID)->GetWindowTextW(ControlValue);
-            break;
-        }
-        case CT_COMBO_BOX_LIST:
-        {
-            theApp.GetComboBoxList(vecParams[index].m_ValueID)->GetWindowTextW(ControlValue);
-            break;
-        }
-        case CT_CHECK_BOX:
-        case CT_CHECK_LIST_BOX:
-        {
-            IsForceUpdate = true;
-            ControlValue = vecParams[index].m_Value.c_str();
-            break;
-        }
         case CT_MIXED_BOX_XA:
+        {
+            ControlValue.Empty();
+            if (!theApp.g_mapLeaf[LeafType].m_subParams.empty())
+            {
+                CString TempControlValue;
+                const std::vector<ParamNode>& subParams = theApp.g_mapLeaf[LeafType].m_subParams;
+                for (std::vector<ParamNode>::size_type subIndex = 0; subIndex < subParams.size(); subIndex++)
+                {
+                    GetParam(subParams[subIndex], TempControlValue);
+                    if (!TempControlValue.IsEmpty())
+                    {
+                        if (!ControlValue.IsEmpty())
+                        {
+                            ControlValue.Append(SEMICOLON.c_str());
+                        }
+
+                        ControlValue.Append(subParams[subIndex].m_Name.c_str());
+                        ControlValue.Append(EQUAL.c_str());
+                        ControlValue.Append(TempControlValue);
+                    }
+                }
+            }
+            break;
+        }
         case CT_MIXED_BOX_QUEUE:
         {
-            IsForceUpdate = true;
-            ControlValue = vecParams[index].m_Value.c_str();
+            ControlValue.Empty();
+            if (!theApp.g_mapLeaf[LeafType].m_subParams.empty())
+            {
+                CString TempControlValue;
+                const std::vector<ParamNode>& subParams = theApp.g_mapLeaf[LeafType].m_subParams;
+                for (std::vector<ParamNode>::size_type subIndex = 0; subIndex < subParams.size(); subIndex++)
+                {
+                    GetParam(subParams[subIndex], TempControlValue);
+                    if (!TempControlValue.IsEmpty())
+                    {
+                        if (!ControlValue.IsEmpty())
+                        {
+                            ControlValue.Append(SLASH.c_str());
+                        }
+                        ControlValue.Append(TempControlValue);
+                    }
+                }
+            }
+            else
+            {
+                CWnd* Control = theApp.g_ParamsDlg->GetDlgItem(vecParams[index].m_ValueID);
+                if (Control != NULL)
+                {
+                    Control->GetWindowTextW(ControlValue);
+                }
+            }
             break;
         }
         default:
         {
-            theApp.GetEditText(vecParams[index].m_ValueID)->GetWindowTextW(ControlValue);
+            GetParam(vecParams[index], ControlValue);
             break;
         }
         }
 
-        if (IsForceUpdate || ControlValue.Compare(vecParams[index].m_Value.c_str()) != 0)
-        {
-            FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_Name.c_str());
-            LeafNode.second.put<std::wstring>(FormatString.GetString(), ControlValue.GetString());
-        }
+        FormatString.Format(L"<xmlattr>.%s", vecParams[index].m_Name.c_str());
+        LeafNode.second.put<std::wstring>(FormatString.GetString(), ControlValue.GetString());
     }
 }
 
@@ -425,6 +481,8 @@ void CDialogParams::DisplayParams(const std::wstring& LeafType, boost::property_
     const LONG GridYGrid = CoordinateGenerator::OFFSET_Y * 2;                       //两个Grid的Y轴间隔
     const LONG TopY = CoordinateGenerator::OFFSET_Y * 3;                            //控件跟Grid.top的间隔
     const LONG BottomY = CoordinateGenerator::OFFSET_Y * 2;                         //控件跟Grid.bottom的间隔
+
+    theApp.g_mapLeaf[LeafType].Clear();                                             //先清空原有信息
     std::vector<ParamNode>& vecParams = theApp.g_mapLeaf[LeafType].m_vecParams;     //参数信息
 
     //获取可用区域
@@ -503,7 +561,7 @@ void CDialogParams::DisplayParams(const std::wstring& LeafType, boost::property_
     }
 }
 
-void CDialogParams::UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType)
+void CDialogParams::UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
 {
     //先清空旧的数据
     theApp.ResetSubParamsControl();
@@ -527,11 +585,8 @@ void CDialogParams::UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType)
     GeneratorRect.SetSplitRatio(2, 7, 1);
     GeneratorRect.Begin(1, 2);
 
-    //准备数据
-    std::vector<ParamNode>& SubParamsNode = theApp.g_mapLeaf[LeafType].m_subParams;
-    SubParamsNode.clear();
-
     //根据有用的参数，逐个显示控件
+    std::vector<ParamNode>& SubParamsNode = theApp.g_mapLeaf[LeafType].m_subParams;
     for (std::vector<std::wstring>::size_type ParamIndex = 0; ParamIndex < SubParamsValue.size(); ParamIndex++)
     {
         std::wstring::size_type EqualPos = SubParamsValue[ParamIndex].find(EQUAL);
@@ -562,14 +617,13 @@ void CDialogParams::UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType)
     }
 }
 
-void CDialogParams::UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType)
+void CDialogParams::UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
 {
     //设置各个子配置项的显示区域
     std::vector<ParamNode>& vecSubParams = theApp.g_mapLeaf[LeafType].m_subParams;
-    if (vecSubParams.empty())
+    if (!IsChangeType)
     {
         //添加Use的子配置项信息
-        vecSubParams.clear();
         vecSubParams.push_back(ParamNode(gs_NodeUse_n, gp_Type, CT_CHECK_BOX));
         vecSubParams.push_back(ParamNode(gs_NodeUse_s, gp_Type, CT_CHECK_BOX));
         vecSubParams.push_back(ParamNode(gs_NodeUse_a, gp_Type, CT_CHECK_BOX));
@@ -616,7 +670,7 @@ void CDialogParams::UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType)
     }
 }
 
-void CDialogParams::UpdateQueueType(ParamNode& Node, const std::wstring& LeafType)
+void CDialogParams::UpdateQueueType(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
 {
     //获取Type的控件
     const std::shared_ptr<CComboBox>& TypeBox = theApp.GetComboBoxList(Node.m_ValueID);
@@ -654,11 +708,12 @@ void CDialogParams::UpdateQueueType(ParamNode& Node, const std::wstring& LeafTyp
     }
 
     //更新Connstr控件
+    theApp.g_mapLeaf[LeafType].m_subParams.clear();
     std::vector<ParamNode>::size_type ConnstrIndex = theApp.g_mapLeaf[LeafType].GetIndex(gp_Connstr);
-    UpdateQueueConnstr(theApp.g_mapLeaf[LeafType].m_vecParams[ConnstrIndex], LeafType);
+    UpdateQueueConnstr(theApp.g_mapLeaf[LeafType].m_vecParams[ConnstrIndex], LeafType, IsChangeType);
 }
 
-void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType)
+void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
 {
     //先获取Type的值
     std::vector<ParamNode>::size_type TypeIndex = theApp.g_mapLeaf[LeafType].GetIndex(gp_Type);
@@ -667,14 +722,14 @@ void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& Leaf
     //如果是切换类型，要拆分的字符串取默认值
     theApp.ResetSubParamsControl();
     std::vector<ParamNode>& SubParamsNode = theApp.g_mapLeaf[LeafType].m_subParams;
-    std::wstring ParamsValue = SubParamsNode.empty() ? Node.m_Value : theApp.g_mapQueueConnstr[TypeNode.m_Value];
+    std::wstring ParamsValue = IsChangeType ? theApp.g_mapQueueConnstr[TypeNode.m_Value] : Node.m_Value;
 
     //如果值为空，说明不需要配置
     if (ParamsValue.empty())
     {
         const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, Node.m_ValueID);
         EditText->MoveWindow(Node.m_ValueRect);
-        EditText->SetWindowTextW(L"无需配置");
+        EditText->SetWindowTextW(L"");
         EditText->ShowWindow(SW_SHOW);
         EditText->EnableWindow(FALSE);
         theApp.g_setSubParams.insert(Node.m_ValueID);
@@ -690,7 +745,6 @@ void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& Leaf
     }
 
     //准备控件类型
-    SubParamsNode.clear();
     if (TypeNode.m_Value == gs_QueueType_kcxp)
     {
         SubParamsNode.push_back(ParamNode(gs_QueueTypeKcxp_Port, gs_QueueType_kcxp, CT_EDIT_TEXT));
@@ -720,6 +774,13 @@ void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& Leaf
     //子项的值和控件个数要匹配
     if (SubParamsValue.size() != SubParamsNode.size())
     {
+        const std::shared_ptr<CEdit>& EditText = theApp.GetEditText(this, Node.m_ValueID);
+        EditText->MoveWindow(Node.m_ValueRect);
+        EditText->SetWindowTextW(ParamsValue.c_str());
+        EditText->ShowWindow(SW_SHOW);
+        EditText->EnableWindow(FALSE);
+        theApp.g_setSubParams.insert(Node.m_ValueID);
+        SubParamsNode.clear();
         return;
     }
 
@@ -747,7 +808,7 @@ void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& Leaf
     }
 }
 
-void CDialogParams::UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType)
+void CDialogParams::UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
 {
     //要有可供选择的数据
     const std::wstring& Key = GetKey(Node, LeafType);
