@@ -27,8 +27,10 @@ public:
 
     CString GetLeafID(const CString& Text);
     CString GetLeftType(const CString& Text);
+    ControlType GetParamValueType(const std::wstring& Name);
 
-    void AddSelectItem(const std::wstring& Key, const std::wstring& Value);
+    std::wstring GetSelectItemMapKey(const std::wstring& OldKey);
+    void AddSelectItem(const std::wstring& Trunk, const std::wstring& Leaf, const std::wstring& ID, const std::wstring& GID, const std::wstring& Name);
 
     void ResetAllControl();
     void ResetSubParamsControl();
@@ -67,15 +69,16 @@ private:
 
 public:
 
-    boost::property_tree::wptree                        g_XMLTree;              //XML根节点
-    std::set<UINT>                                      g_setSubParams;         //子配置项的控件ID
-    std::map<std::wstring, LeafNode>                    g_mapLeaf;              //叶子结点
-    std::map<std::wstring, std::wstring>                g_mapQueueClsid;        //queue节点的type对应的clsid
-    std::map<std::wstring, std::wstring>                g_mapQueueConnstr;      //queue节点的type对应的connstr
-    std::map<std::wstring, std::wstring>                g_mapQueueMaxSize;      //queue节点的type对应的maxsize
-    std::map<std::wstring, CRect>                       g_mapRect;              //输出区域，用于调试
-    std::map<std::wstring, std::vector<std::wstring>>   g_mapSelect;            //用于选择框的可选项
-    std::shared_ptr<CDialogParams>                      g_ParamsDlg;            //参数对话框
+    std::set<UINT>                                                  g_setSubParams;         //子配置项的控件ID
+    std::shared_ptr<CDialogParams>                                  g_ParamsDlg;            //参数对话框
+
+    boost::property_tree::wptree                                    g_XMLTree;              //XML根节点
+    std::map<std::wstring, LeafNode>                                g_mapLeaf;              //叶子结点
+
+    std::map<std::wstring, CRect>                                   g_mapRect;              //输出区域，用于调试
+    std::map<std::wstring, std::wstring>                            g_mapKeyConvert;        //关键字转换
+    std::map<std::wstring, std::vector<std::wstring>>               g_MultiSelect;          //多选
+    std::map<std::wstring, std::map<std::wstring, std::wstring>>    g_SingleSelect;         //单选
 };
 
 extern CmaServerConfigApp theApp;

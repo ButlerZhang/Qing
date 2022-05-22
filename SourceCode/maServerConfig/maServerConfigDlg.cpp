@@ -548,7 +548,9 @@ bool CmaServerConfigDlg::UpdateTreeConfig()
                 const std::wstring& Name = v1.second.get<std::wstring>(L"<xmlattr>.name", L"");
                 std::wstring TreeName = v1.first + L"_" + ID + L"_" + Name;
                 m_TreeConfig.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
-                theApp.AddSelectItem(Key, ID);
+
+                const std::wstring& GID = v1.second.get<std::wstring>(L"<xmlattr>.gid", L"");
+                theApp.AddSelectItem(Key, v1.first, ID, GID, Name);
             }
         }
 

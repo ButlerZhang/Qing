@@ -602,7 +602,7 @@ void CDialogParams::UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType, 
         }
 
         //参数名
-        SubParamsNode.push_back(ParamNode(ParamName, gl_Xa, CT_EDIT_TEXT));
+        SubParamsNode.push_back(ParamNode(ParamName, gl_Xa, theApp.GetParamValueType(ParamName)));
         std::vector<ParamNode>::size_type index = SubParamsNode.size() - 1;
 
         //参数值
@@ -692,19 +692,21 @@ void CDialogParams::UpdateQueueType(ParamNode& Node, const std::wstring& LeafTyp
     Node.m_Value = Type;
 
     //更新MaxSize控件
+    const std::wstring& MsgMaxSize = gl_MsgQueue + DOT + gp_MaxSize;
     UINT MaxSizeID = theApp.g_mapLeaf[LeafType].GetValueID(gp_MaxSize);
     const std::shared_ptr<CEdit>& MaxSizeEdit = theApp.GetEditText(MaxSizeID);
-    if (MaxSizeEdit != nullptr && theApp.g_mapQueueMaxSize.find(Type) != theApp.g_mapQueueMaxSize.end())
+    if (MaxSizeEdit != nullptr && theApp.g_SingleSelect[MsgMaxSize].find(Type) != theApp.g_SingleSelect[MsgMaxSize].end())
     {
-        MaxSizeEdit->SetWindowTextW(theApp.g_mapQueueMaxSize[Type].c_str());
+        MaxSizeEdit->SetWindowTextW(theApp.g_SingleSelect[MsgMaxSize][Type].c_str());
     }
 
     //更新Clsid控件
+    const std::wstring& MsgClsID = gl_MsgQueue + DOT + gp_Clsid;
     UINT ClsidID = theApp.g_mapLeaf[LeafType].GetValueID(gp_Clsid);
     const std::shared_ptr<CEdit>& ClsidStatic = theApp.GetEditText(ClsidID);
-    if (ClsidStatic != nullptr && theApp.g_mapQueueClsid.find(Type) != theApp.g_mapQueueClsid.end())
+    if (ClsidStatic != nullptr && theApp.g_SingleSelect[MsgClsID].find(Type) != theApp.g_SingleSelect[MsgClsID].end())
     {
-        ClsidStatic->SetWindowTextW(theApp.g_mapQueueClsid[Type].c_str());
+        ClsidStatic->SetWindowTextW(theApp.g_SingleSelect[MsgClsID][Type].c_str());
     }
 
     //更新Connstr控件
@@ -721,8 +723,9 @@ void CDialogParams::UpdateQueueConnstr(ParamNode& Node, const std::wstring& Leaf
 
     //如果是切换类型，要拆分的字符串取默认值
     theApp.ResetSubParamsControl();
+    const std::wstring& MsgConnstr = gl_MsgQueue + DOT + gp_Connstr;
     std::vector<ParamNode>& SubParamsNode = theApp.g_mapLeaf[LeafType].m_subParams;
-    std::wstring ParamsValue = IsChangeType ? theApp.g_mapQueueConnstr[TypeNode.m_Value] : Node.m_Value;
+    std::wstring ParamsValue = IsChangeType ? theApp.g_SingleSelect[MsgConnstr][TypeNode.m_Value] : Node.m_Value;
 
     //如果值为空，说明不需要配置
     if (ParamsValue.empty())
@@ -812,7 +815,7 @@ void CDialogParams::UpdateCheckListBox(ParamNode& Node, const std::wstring& Leaf
 {
     //要有可供选择的数据
     const std::wstring& Key = GetKey(Node, LeafType);
-    if (theApp.g_mapSelect.find(Key) == theApp.g_mapSelect.end())
+    if (theApp.g_MultiSelect.find(Key) == theApp.g_MultiSelect.end())
     {
         return;
     }
@@ -830,7 +833,7 @@ void CDialogParams::UpdateCheckListBox(ParamNode& Node, const std::wstring& Leaf
     //添加可以选择的值
     {
         m_CheckListBox.ResetContent();
-        std::vector<std::wstring>& vecSelect = theApp.g_mapSelect[Key];
+        std::vector<std::wstring>& vecSelect = theApp.g_MultiSelect[Key];
         for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
         {
             m_CheckListBox.AddString(vecSelect[index].c_str());
@@ -878,45 +881,43 @@ void CDialogParams::UpdateComboBox(ParamNode& Node, const std::wstring& LeafType
 {
     //查找字典
     std::wstring Key = GetKey(Node, LeafType);
-    if (theApp.g_mapSelect.find(Key) == theApp.g_mapSelect.end())
+    if (theApp.g_MultiSelect.find(Key) == theApp.g_MultiSelect.end())
     {
-        std::wstring::size_type pos = Key.find(gl_Xa);
-        if (pos != std::wstring::npos)
+        Key = theApp.GetSelectItemMapKey(Key);
+        if (Key.empty())
         {
-            Key = gt_Xas;
-        }
-        else
-        {
-            pos = Key.find(gl_MsgQueue);
-            if (pos != std::wstring::npos)
-            {
-                Key = gt_Queues;
-            }
-            else
-            {
-                return;
-            }
+            return;
         }
     }
 
     //清空旧数据，插入新数据
     ptrComboBox->ResetContent();
-    std::vector<std::wstring>& vecSelect = theApp.g_mapSelect[Key];
+    std::vector<std::wstring>& vecSelect = theApp.g_MultiSelect[Key];
     for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
     {
         ptrComboBox->AddString(vecSelect[index].c_str());
     }
 
-    //选中匹配的值
-    if (!Node.m_Value.empty())
+    //如果原本没有值，就不用设置了
+    if (Node.m_Value.empty())
     {
-        for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+        return;
+    }
+
+    //如果在可选集合里没有找到这个值，则添加进去，因为可能是新创建的值
+    if (std::find(vecSelect.begin(), vecSelect.end(), Node.m_Value) == vecSelect.end())
+    {
+        ptrComboBox->AddString(Node.m_Value.c_str());
+        theApp.g_MultiSelect[Key].push_back(Node.m_Value);
+    }
+
+    //更新ComboBox的当前选中的值
+    for (std::vector<std::wstring>::size_type index = 0; index < vecSelect.size(); index++)
+    {
+        if (vecSelect[index] == Node.m_Value)
         {
-            if (vecSelect[index] == Node.m_Value)
-            {
-                ptrComboBox->SetCurSel(static_cast<int>(index));
-                break;
-            }
+            ptrComboBox->SetCurSel(static_cast<int>(index));
+            break;
         }
     }
 }

@@ -90,6 +90,19 @@ const std::wstring gs_QueueTypeZmq_Protocol(L"Protocol");
 const std::wstring gs_QueueTypeZmq_ThreadCount(L"ThreadCount");
 const std::wstring gs_QueueTypeZmq_CacheTime(L"CacheTime");
 const std::wstring gs_QueueTypeZmq_HopCount(L"HopCount");
+const std::wstring gs_XADatabase(L"database");
+const std::wstring gs_XADsn(L"dsn");
+const std::wstring gs_XADbms(L"dbms");
+const std::wstring gs_XAQueName(L"quename");
+const std::wstring gs_XAReqName(L"reqname");
+const std::wstring gs_XAAnsName(L"ansname");
+const std::wstring gs_XAQueID(L"queid");
+const std::wstring gs_XAMaxDepth(L"maxdepth");
+const std::wstring gs_XAMsgQueueID(L"msg_queue_id");
+const std::wstring gs_XALogToFile(L"log_to_file");
+const std::wstring gs_XAServID(L"servid");
+const std::wstring gs_XAUser(L"user");
+const std::wstring gs_XAPassword(L"pwd");
 
 //¿Ø¼þÀàÐÍ
 enum ControlType
