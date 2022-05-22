@@ -24,6 +24,7 @@ const std::wstring gm_Construction(L"construction");
 //树干名称（g:global，t:trunk）
 const std::wstring gt_Rtdb(L"rtdb");
 const std::wstring gt_Services(L"services");
+const std::wstring gt_Service(L"service");
 const std::wstring gt_Bbu(L"bpu");
 const std::wstring gt_Queues(L"queues");
 const std::wstring gt_Xas(L"xas");
@@ -37,7 +38,7 @@ const std::wstring gt_RtdbSize(L"size");
 
 //叶子名称（g:global，l:leaf）
 const std::wstring gl_RuntimeTable(L"runtimetable");
-const std::wstring gl_Service(L"service");
+const std::wstring gl_Svcfunc(L"svcfunc");
 const std::wstring gl_MsgQueue(L"msgqueue");
 const std::wstring gl_Xa(L"xa");
 const std::wstring gl_Node(L"node");
@@ -68,6 +69,8 @@ const std::wstring gp_Path(L"path");
 const std::wstring gp_Use(L"use");
 const std::wstring gp_DefaultXa(L"defaultxa");
 const std::wstring gp_BackupXa(L"backupxa");
+const std::wstring gp_Inqueue(L"inqueue");
+const std::wstring gp_Outqueue(L"outqueue");
 
 //某些配置项存在子配置项（g:global，s:subparam）
 const std::wstring gs_NodeUse_n(L"n");
@@ -121,6 +124,7 @@ enum ControlType
     CT_CHECK_BOX,                                   //勾选框(node.use)
     CT_MIXED_BOX_XA,                                //混合输入框(XA)
     CT_MIXED_BOX_QUEUE,                             //混合输入框(queue)
+    CT_MIXED_BOX_SVCFUNC,                           //混合输入框(svcfunc)
     CT_COUNT                                        //支持的控件种类
 };
 

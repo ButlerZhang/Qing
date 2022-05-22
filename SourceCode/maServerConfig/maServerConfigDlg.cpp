@@ -562,13 +562,11 @@ bool CmaServerConfigDlg::UpdateTreeConfig()
                 continue;
             }
 
-            //可以作为树形里的根节点
+            //可以作为树干
             if (Key.empty() || TreeMap.find(Key) == TreeMap.end())
             {
                 TreeMap[v1.first] = m_TreeConfig.InsertItem(v1.first.c_str());
-                std::wstring NewNode = *it + L".";
-                NewNode.append(v1.first);
-                NodeList.push_back(NewNode);
+                NodeList.push_back(*it + DOT + v1.first);
                 continue;
             }
 
@@ -577,26 +575,28 @@ bool CmaServerConfigDlg::UpdateTreeConfig()
             if (ID.empty())
             {
                 TreeMap[v1.first] = m_TreeConfig.InsertItem(v1.first.c_str(), 0, 0, TreeMap[Key]);
-                std::wstring NewNode = *it + L".";
-                NewNode.append(v1.first);
-                NodeList.push_back(NewNode);
+                NodeList.push_back(*it + DOT + v1.first);
                 continue;
             }
 
             //对于叶子节点，不需要保存上一层的指针了
             const std::wstring& Name = v1.second.get<std::wstring>(L"<xmlattr>.name", L"");
-            std::wstring TreeName = v1.first + L"_" + ID + L"_" + Name;
+            const std::wstring& TreeName = v1.first + L"_" + ID + L"_" + Name;
             m_TreeConfig.InsertItem(TreeName.c_str(), 0, 0, TreeMap[Key]);
 
+            //保存可选项
             const std::wstring& GID = v1.second.get<std::wstring>(L"<xmlattr>.gid", L"");
             theApp.AddSelectItem(Key, v1.first, ID, GID, Name);
         }
+    }
 
-        //判断是否要展开这个树形层级
-        int counter = static_cast<int>(std::count(it->begin(), it->end(), DOT[0]));
-        if (counter <= 2 && TreeMap.find(Key) != TreeMap.end())
+    //展开部分节点
+    std::vector<std::wstring> vecExpand = { gm_Kernel ,gm_Deployment ,gm_Construction ,gt_Bbu ,gt_Nodes };
+    for (std::map<std::wstring, HTREEITEM>::const_iterator it = TreeMap.begin(); it != TreeMap.end(); it++)
+    {
+        if (std::find(vecExpand.begin(), vecExpand.end(), it->first) != vecExpand.end())
         {
-            m_TreeConfig.Expand(TreeMap[Key], TVE_EXPAND);
+            m_TreeConfig.Expand(it->second, TVE_EXPAND);
         }
     }
 

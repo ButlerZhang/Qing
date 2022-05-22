@@ -130,15 +130,16 @@ void CmaServerConfigApp::InitLeafNode()
 
     //Service节点
     {
-        g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gl_Service, LeafNode()));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Describe, gl_Service, CT_EDIT_TEXT));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_ID, gl_Service, CT_STATIC_TEXT));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Name, gl_Service, CT_EDIT_TEXT));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Clsid, gl_Service, CT_COMBO_BOX_EDIT));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Gid, gl_Service, CT_COMBO_BOX_EDIT));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Runas, gl_Service, CT_COMBO_BOX_LIST));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_WorkThread, gl_Service, CT_EDIT_TEXT));
-        g_mapLeaf[gl_Service].m_vecParams.push_back(ParamNode(gp_Use, gl_Service, CT_CHECK_LIST_BOX));
+        g_mapLeaf.insert(std::pair<std::wstring, LeafNode>(gt_Service, LeafNode()));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_Describe, gt_Services, CT_EDIT_TEXT));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_ID, gt_Services, CT_STATIC_TEXT));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_Name, gt_Services, CT_COMBO_BOX_EDIT));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_Clsid, gt_Services, CT_COMBO_BOX_EDIT));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_Gid, gt_Services, CT_COMBO_BOX_EDIT));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_Runas, gt_Services, CT_COMBO_BOX_LIST));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_WorkThread, gt_Services, CT_EDIT_TEXT));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gp_Use, gt_Services, CT_CHECK_BOX));
+        g_mapLeaf[gt_Service].m_vecParams.push_back(ParamNode(gl_Svcfunc, gt_Services, CT_MIXED_BOX_SVCFUNC));
     }
 
     //msgqueue节点
@@ -223,11 +224,11 @@ void CmaServerConfigApp::InitSelectItem()
     //service
     {
         //clsid
-        const std::wstring& ServiceClsid = gl_Service + DOT + gp_Clsid;
+        const std::wstring& ServiceClsid = gt_Services + DOT + gt_Service + DOT + gp_Clsid;
         g_MultiSelect[ServiceClsid].push_back(L"CService");
 
         //runas
-        const std::wstring& ServiceRunas = gl_Service + DOT + gp_Runas;
+        const std::wstring& ServiceRunas = gt_Services + DOT + gt_Service + DOT + gp_Runas;
         g_MultiSelect[ServiceRunas].push_back(L"process");
         g_MultiSelect[ServiceRunas].push_back(L"process2");
         g_MultiSelect[ServiceRunas].push_back(L"thread");
@@ -602,11 +603,20 @@ std::wstring CmaServerConfigApp::GetSelectItemMapKey(const std::wstring& Key)
     }
 
     //模糊匹配
-    for(std::map<std::wstring, std::wstring>::const_iterator it = g_mapKeyConvert.begin(); it != g_mapKeyConvert.end(); it++)
+    for (std::map<std::wstring, std::wstring>::const_iterator it = g_mapKeyConvert.begin(); it != g_mapKeyConvert.end(); it++)
     {
-        if(Key.find(it->first) != std::wstring::npos)
+        if (Key.find(it->first) != std::wstring::npos || it->first.find(Key) != std::wstring::npos)
         {
             return it->second;
+        }
+    }
+
+    //模糊匹配
+    for (std::map<std::wstring, std::vector<std::wstring>>::const_iterator it = g_MultiSelect.begin(); it != g_MultiSelect.end(); it++)
+    {
+        if (Key.find(it->first) != std::wstring::npos || it->first.find(Key) != std::wstring::npos)
+        {
+            return it->first;
         }
     }
 
@@ -628,7 +638,7 @@ void CmaServerConfigApp::AddSelectItem(const std::wstring& Trunk, const std::wst
 
     //GID
     {
-        if(!GID.empty())
+        if (!GID.empty())
         {
             const std::wstring& GIDKey = Leaf + DOT + gp_Gid;
             std::vector<std::wstring>& GIDItems = g_MultiSelect[GIDKey];

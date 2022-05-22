@@ -242,7 +242,7 @@ void CDialogParams::OnComboBoxListSelectChange(UINT uID)
                         vecParams[index].m_Value = TypeText.GetBuffer();
 
                         std::vector<ParamNode>::size_type UseIndex = theApp.g_mapLeaf[LeafType.GetBuffer()].GetIndex(gp_Use);
-                        UpdateNodeUse(vecParams[UseIndex], LeafType.GetBuffer(), true);
+                        UpdateUse(vecParams[UseIndex], LeafType.GetBuffer(), true);
                         return;
                     }
                 }
@@ -282,7 +282,7 @@ std::wstring CDialogParams::GetKey(const ParamNode& Node, const std::wstring& Le
 {
     if (LeafType != Node.m_Parent)
     {
-        return LeafType + DOT + Node.m_Parent + DOT + Node.m_Name;
+        return Node.m_Parent + DOT + LeafType + DOT + Node.m_Name;
     }
 
     return Node.m_Parent + DOT + Node.m_Name;
@@ -354,7 +354,7 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
     }
     case CT_CHECK_BOX:
     {
-        UpdateNodeUse(Node, LeafType, false);
+        UpdateUse(Node, LeafType, false);
         break;
     }
     case CT_MIXED_BOX_XA:
@@ -365,6 +365,11 @@ void CDialogParams::SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect
     case CT_MIXED_BOX_QUEUE:
     {
         UpdateQueueConnstr(Node, LeafType, false);
+        break;
+    }
+    case CT_MIXED_BOX_SVCFUNC:
+    {
+        UpdateSvcfunc(Node, LeafType, false);
         break;
     }
     default:
@@ -530,7 +535,7 @@ void CDialogParams::DisplayParams(const std::wstring& LeafType, boost::property_
         GeneratorRect.Begin(1, 2);
 
         CString FormatString;
-        if(LeafType != gt_Rtdb)
+        if(LeafType != gt_Rtdb && LeafType != gl_Node)
         {
             for (std::vector<ParamNode>::size_type index = 1; index < vecParams.size(); index++)
             {
@@ -576,6 +581,59 @@ void CDialogParams::DisplayParams(const std::wstring& LeafType, boost::property_
                     m_GridSubParams.ShowWindow(SW_HIDE);
                 }
             }
+        }
+    }
+}
+
+void CDialogParams::UpdateUse(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
+{
+    //设置各个子配置项的显示区域
+    std::vector<ParamNode>& vecSubParams = theApp.g_mapLeaf[LeafType].m_subParams;
+    if (!IsChangeType)
+    {
+        //添加Use的子配置项信息
+        vecSubParams.push_back(ParamNode(gs_NodeUse_n, gp_Type, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_s, gp_Type, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_a, gp_Type, CT_CHECK_BOX));
+        vecSubParams.push_back(ParamNode(gs_NodeUse_q, gp_Type, CT_CHECK_BOX));
+
+        //调整控件的区域范围，用于生成各个控件的区域
+        CRect NewRect = Node.m_ValueRect;
+        LONG EachWidth = Node.m_ValueRect.Width() / vecSubParams.size();
+
+        //遍历显示每个控件
+        for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
+        {
+            const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(this, vecSubParams[index].m_NameID);
+            Button->SetWindowTextW(vecSubParams[index].m_Name.c_str());
+            NewRect.left = Node.m_ValueRect.left + index * EachWidth;
+            NewRect.right = NewRect.left + EachWidth;
+            Button->MoveWindow(NewRect);
+            Button->ShowWindow(SW_SHOW);
+
+            //这里保存子控件的ID，用于快速重置
+            theApp.g_setSubParams.insert(vecSubParams[index].m_NameID);
+        }
+    }
+
+    bool IsEnableWindow = true;
+    if (LeafType == gl_Node)
+    {
+        //只有BPU类型才需要use参数
+        std::vector<ParamNode>::size_type TargetIndex = theApp.g_mapLeaf[LeafType].GetIndex(gp_Type);
+        ParamNode& TypeNode = theApp.g_mapLeaf[LeafType].m_vecParams[TargetIndex];
+        IsEnableWindow = TypeNode.m_Value.find(gt_Bbu) != std::wstring::npos;
+    }
+
+    //设置参数是否可用以及当前值
+    for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
+    {
+        const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(vecSubParams[index].m_NameID);
+        if (Button != nullptr)
+        {
+            int Check = IsEnableWindow && Node.m_Value.find(vecSubParams[index].m_Name[0]) != std::wstring::npos;
+            Button->SetCheck(Check);
+            Button->EnableWindow(IsEnableWindow);
         }
     }
 }
@@ -636,57 +694,9 @@ void CDialogParams::UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType, 
     }
 }
 
-void CDialogParams::UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
+void CDialogParams::UpdateSvcfunc(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)
 {
-    //设置各个子配置项的显示区域
-    std::vector<ParamNode>& vecSubParams = theApp.g_mapLeaf[LeafType].m_subParams;
-    if (!IsChangeType)
-    {
-        //添加Use的子配置项信息
-        vecSubParams.push_back(ParamNode(gs_NodeUse_n, gp_Type, CT_CHECK_BOX));
-        vecSubParams.push_back(ParamNode(gs_NodeUse_s, gp_Type, CT_CHECK_BOX));
-        vecSubParams.push_back(ParamNode(gs_NodeUse_a, gp_Type, CT_CHECK_BOX));
-        vecSubParams.push_back(ParamNode(gs_NodeUse_q, gp_Type, CT_CHECK_BOX));
 
-        //获取总的可用区域
-        CRect SubParamsRect;
-        m_GridSubParams.GetWindowRect(&SubParamsRect);
-
-        //调整控件的区域范围，用于生成各个控件的区域
-        CRect NewRect = Node.m_ValueRect;
-        NewRect.bottom = SubParamsRect.bottom;
-        CoordinateGenerator GeneratorRect(NewRect);
-        GeneratorRect.Begin(1, 1);
-
-        //遍历显示每个控件
-        for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
-        {
-            const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(this, vecSubParams[index].m_NameID);
-            Button->SetWindowTextW(vecSubParams[index].m_Name.c_str());
-            Button->MoveWindow(GeneratorRect.GetNextRect());
-            Button->ShowWindow(SW_SHOW);
-
-            //这里保存子控件的ID，用于快速重置
-            theApp.g_setSubParams.insert(vecSubParams[index].m_NameID);
-        }
-    }
-
-    //只有BPU类型才需要use参数
-    std::vector<ParamNode>::size_type TargetIndex = theApp.g_mapLeaf[LeafType].GetIndex(gp_Type);
-    ParamNode& TypeNode = theApp.g_mapLeaf[LeafType].m_vecParams[TargetIndex];
-    bool IsBPUType = TypeNode.m_Value.find(gt_Bbu) != std::wstring::npos;
-
-    //设置参数是否可用以及当前值
-    for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
-    {
-        const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(vecSubParams[index].m_NameID);
-        if (Button != nullptr)
-        {
-            int Check = IsBPUType && Node.m_Value.find(vecSubParams[index].m_Name[0]) != std::wstring::npos;
-            Button->SetCheck(Check);
-            Button->EnableWindow(IsBPUType);
-        }
-    }
 }
 
 void CDialogParams::UpdateQueueType(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType)

@@ -55,8 +55,9 @@ private:
     void GetParam(const ParamNode& Node, CString& ControlValue);
     void SetParam(ParamNode& Node, CoordinateGenerator& GeneratorRect, const std::wstring& LeafType);
 
+    void UpdateUse(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
     void UpdateXaOpen(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
-    void UpdateNodeUse(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
+    void UpdateSvcfunc(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
     void UpdateQueueType(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
     void UpdateQueueConnstr(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
     void UpdateCheckListBox(ParamNode& Node, const std::wstring& LeafType, bool IsChangeType);
