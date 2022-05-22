@@ -72,8 +72,10 @@ BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
     ON_WM_QUERYDRAGICON()
     ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnComboBoxConfigChange)
     ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTreeConfigChange)
-    ON_BN_CLICKED(ID_BUTTON_GENERATE, &CmaServerConfigDlg::OnBnGenerateConfigFile)
-    ON_BN_CLICKED(ID_BUTTON_OPEN_FILE, &CmaServerConfigDlg::OnBnOpenConfigFile)
+    ON_COMMAND(ID_32771, &CmaServerConfigDlg::OnMenuOpenFile)
+    ON_COMMAND(ID_32772, &CmaServerConfigDlg::OnMenuSaveFile)
+    ON_COMMAND(ID_32773, &CmaServerConfigDlg::OnMenuDebugInfo)
+    ON_COMMAND(ID_32774, &CmaServerConfigDlg::OnMenuAbout)
 END_MESSAGE_MAP()
 
 
@@ -280,17 +282,25 @@ void CmaServerConfigDlg::OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-//生成配置文件事件
-void CmaServerConfigDlg::OnBnGenerateConfigFile()
+void CmaServerConfigDlg::OnMenuOpenFile()
+{
+    // TODO: 在此添加命令处理程序代码
+}
+
+void CmaServerConfigDlg::OnMenuSaveFile()
 {
     SaveLastChange();
     theApp.WriteXMLFile(g_XMLFile);
 }
 
-//打开生成的配置文件
-void CmaServerConfigDlg::OnBnOpenConfigFile()
+void CmaServerConfigDlg::OnMenuDebugInfo()
 {
     theApp.WriteLog();
+}
+
+void CmaServerConfigDlg::OnMenuAbout()
+{
+    // TODO: 在此添加命令处理程序代码
 }
 
 void CmaServerConfigDlg::InitControlSize()
@@ -314,7 +324,7 @@ void CmaServerConfigDlg::InitControlSize()
         ConfigItemRect.left = ClientRect.left + GridInterval;
         ConfigItemRect.top = ClientRect.top + GridInterval;
         ConfigItemRect.right = ConfigItemRect.left + (ClientRect.Width() - 2 * GridInterval) / SPLIT_WIDTH;
-        ConfigItemRect.bottom = ConfigItemRect.top + (ClientRect.Height() - 2 * GridInterval) / SPLIT_HEIGT * (SPLIT_HEIGT - 1);
+        ConfigItemRect.bottom = ClientRect.bottom - GridInterval;
         GetDlgItem(IDC_STATIC_CONFIG_ITEM)->MoveWindow(&ConfigItemRect);
 
         //设置配置项的ComboBox
@@ -355,58 +365,6 @@ void CmaServerConfigDlg::InitControlSize()
 
         theApp.g_ParamsDlg->MoveWindow(&ParamsDlgRect);
         theApp.g_ParamsDlg->ShowWindow(SW_SHOW);
-    }
-
-    //按钮区域
-    {
-        //设置按钮区域
-        CRect ButtonAreaRect;
-        ButtonAreaRect.left = ConfigItemRect.left;
-        ButtonAreaRect.right = ClientRect.right - GridInterval;
-        ButtonAreaRect.top = ConfigItemRect.bottom + GridInterval / 2;
-        ButtonAreaRect.bottom = ClientRect.bottom - GridInterval / 2;
-        GetDlgItem(IDC_STATIC_BUTTON_AREA)->MoveWindow(&ButtonAreaRect);
-
-        //设置按钮的布局
-        {
-            //需要实现的按钮
-            std::vector<int> vecID = { ID_BUTTON_LOAD, ID_BUTTON_GENERATE, ID_BUTTON_OPEN_FILE };
-            const int BUTTON_COUNT = static_cast<int>(vecID.size());
-
-            //计算按钮的高度
-            const int BUTTON_MIN_HEIGHT = 50;
-            LONG HeightUsable = ButtonAreaRect.Height() - GridInterval; //上下空开一些像素
-            int ButtonHeight = HeightUsable > BUTTON_MIN_HEIGHT ? BUTTON_MIN_HEIGHT : HeightUsable;
-            int ButtonY = ButtonAreaRect.top + (ButtonAreaRect.Height() - ButtonHeight) / 2;
-
-            //计算按钮的宽度
-            const int BUTTON_MIN_WIDTH = 200;
-            int ButtonWidth = 0, LastButtonX = 0, ButtonInterval = 0;
-            if (BUTTON_COUNT * BUTTON_MIN_WIDTH < ButtonAreaRect.Width())
-            {
-                ButtonWidth = BUTTON_MIN_WIDTH;
-                ButtonInterval = (ButtonAreaRect.Width() - BUTTON_COUNT * ButtonWidth) / BUTTON_COUNT;
-                LastButtonX = ButtonAreaRect.left + ButtonInterval / 2; //几个按钮几个空格，其中一个空格分成两半，作为左右两边与Grid的间隔
-            }
-            else
-            {
-                ButtonInterval = 1;
-                ButtonWidth = (ButtonAreaRect.Width() - BUTTON_COUNT * ButtonInterval) / BUTTON_COUNT; //按钮的宽度
-                LastButtonX = ButtonAreaRect.left + ButtonInterval;
-            }
-
-            //设置按钮区域
-            CRect ButtonRect;
-            ButtonRect.top = ButtonY + GridInterval / 2;
-            ButtonRect.bottom = ButtonRect.top + ButtonHeight;
-            for (std::vector<int>::size_type index = 0; index < vecID.size(); index++)
-            {
-                ButtonRect.left = LastButtonX;
-                ButtonRect.right = ButtonRect.left + ButtonWidth;
-                LastButtonX = ButtonRect.right + ButtonInterval;
-                GetDlgItem(vecID[index])->MoveWindow(&ButtonRect);
-            }
-        }
     }
 }
 

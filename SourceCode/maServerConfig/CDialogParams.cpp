@@ -599,14 +599,14 @@ void CDialogParams::UpdateUse(ParamNode& Node, const std::wstring& LeafType, boo
 
         //调整控件的区域范围，用于生成各个控件的区域
         CRect NewRect = Node.m_ValueRect;
-        LONG EachWidth = Node.m_ValueRect.Width() / vecSubParams.size();
+        int EachWidth = Node.m_ValueRect.Width() / (int)vecSubParams.size();
 
         //遍历显示每个控件
         for (std::vector<ParamNode>::size_type index = 0; index < vecSubParams.size(); index++)
         {
             const std::shared_ptr<CButton>& Button = theApp.GetCheckBox(this, vecSubParams[index].m_NameID);
             Button->SetWindowTextW(vecSubParams[index].m_Name.c_str());
-            NewRect.left = Node.m_ValueRect.left + index * EachWidth;
+            NewRect.left = Node.m_ValueRect.left + (int)index * EachWidth;
             NewRect.right = NewRect.left + EachWidth;
             Button->MoveWindow(NewRect);
             Button->ShowWindow(SW_SHOW);

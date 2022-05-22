@@ -45,11 +45,10 @@ private: //添加的响应函数
     //响应配置项构成的树的点击事件
     afx_msg void OnTreeConfigChange(NMHDR* pNMHDR, LRESULT* pResult);
 
-    //生成配置文件事件
-    afx_msg void OnBnGenerateConfigFile();
-
-    //打开生成的配置文件
-    afx_msg void OnBnOpenConfigFile();
+    afx_msg void OnMenuOpenFile();
+    afx_msg void OnMenuSaveFile();
+    afx_msg void OnMenuDebugInfo();
+    afx_msg void OnMenuAbout();
 
 private:
 
