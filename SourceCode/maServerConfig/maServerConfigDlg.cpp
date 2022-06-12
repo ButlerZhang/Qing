@@ -69,6 +69,7 @@ BEGIN_MESSAGE_MAP(CmaServerConfigDlg, CDialogEx)
     ON_WM_SYSCOMMAND()
     ON_WM_CLOSE()
     ON_WM_PAINT()
+    ON_WM_MOVE()
     ON_WM_QUERYDRAGICON()
     ON_CBN_SELCHANGE(IDC_COMBO1, &CmaServerConfigDlg::OnComboBoxConfigChange)
     ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CmaServerConfigDlg::OnTreeConfigChange)
@@ -112,6 +113,9 @@ BOOL CmaServerConfigDlg::OnInitDialog()
 
     // TODO: 在此添加额外的初始化代码
     {
+        m_StatusBar.Create(this);
+        m_StatusBar.SetBarStyle(m_StatusBar.GetBarStyle() | CBRS_TOOLTIPS);
+
         theApp.g_ParamsDlg = std::make_shared<CDialogParams>();
         theApp.g_ParamsDlg->Create(IDD_DIALOG_PARAMS, this);
         theApp.g_ParamsDlg->Hide();
@@ -172,6 +176,23 @@ void CmaServerConfigDlg::OnPaint()
     else
     {
         CDialogEx::OnPaint();
+    }
+}
+
+void CmaServerConfigDlg::OnMove(int x, int y)
+{
+    //主窗口移动时，也移动子窗口
+    if (theApp.g_ParamsDlg != nullptr && ::IsWindow(theApp.g_ParamsDlg->GetSafeHwnd()))
+    {
+        CRect ParamsGridRect;
+        GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->GetWindowRect(ParamsGridRect);
+
+        CRect ParamsDlgRect;
+        ParamsDlgRect.left = ParamsGridRect.left + 1;
+        ParamsDlgRect.right = ParamsGridRect.right - 1;
+        ParamsDlgRect.top = ParamsGridRect.top + 2 * CoordinateGenerator::GRID_INTERVAL;
+        ParamsDlgRect.bottom = ParamsGridRect.bottom - CoordinateGenerator::GRID_INTERVAL;
+        theApp.g_ParamsDlg->MoveWindow(&ParamsDlgRect);
     }
 }
 
@@ -306,62 +327,99 @@ void CmaServerConfigDlg::OnMenuAbout()
 void CmaServerConfigDlg::InitControlSize()
 {
     //先设置对话框最大化
-    ShowWindow(SW_MAXIMIZE);
+    {
+        //方案一：直接最大化，但是会覆盖任务栏
+        //ShowWindow(SW_MAXIMIZE);
 
-    //各个控件根据这些常量来划分位置
-    const int GridInterval = 10;    //各个控件的间隔
-    const int SPLIT_WIDTH = 1 + 3;  //宽度拆分成SPLIT_WIDTH份，配置项占1，配置参数占3
-    const int SPLIT_HEIGT = 15 + 1; //高度拆分成SPLIT_HEIGT份，配置项占15，按钮占1
+        //方案二：获取工作区，虽然不会覆盖任务栏，但有空隙
+        //CRect WrokRect;
+        //SystemParametersInfo(SPI_GETWORKAREA, 0, &WrokRect, 0);
+        //MoveWindow(&WrokRect);
+
+        //方案三：获取屏幕分辨率
+        int cx = GetSystemMetrics(SM_CXFULLSCREEN);
+        int cy = GetSystemMetrics(SM_CYFULLSCREEN);
+
+        CRect WorkRect;
+        SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkRect, 0);
+
+        cy = WorkRect.bottom;
+        this->MoveWindow(0, 0, cx, cy);
+    }
 
     //获取客户区的大小
     CRect ClientRect;
     GetClientRect(ClientRect);
 
+    //状态栏
+    CRect StatusBarRect;
+    {
+        UINT nID[] = { theApp.GetNextControlID() };
+        m_StatusBar.SetIndicators(nID, 1);
+        m_StatusBar.SetPaneInfo(0, nID[0], SBPS_NOBORDERS, ClientRect.Width());
+        //m_StatusBar.SetPaneInfo(1, nID[1], SBPS_STRETCH, StatusBarRect.Width() - TimeWidth);
+        m_StatusBar.GetStatusBarCtrl().SetMinHeight(25);
+        m_StatusBar.ShowWindow(SW_SHOW);
+
+        RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, nID[0]);
+        //RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, nID[1]);
+
+        m_StatusBar.SetPaneText(0, L"Tips: 能看见这一行很小的文字吗？");
+        //m_StatusBar.SetPaneText(1, L"Test");
+
+        m_StatusBar.GetWindowRect(StatusBarRect);
+    }
+
     //配置项
     CRect ConfigItemRect;
     {
+        //配置项的宽度只占可用区域的一份，而且要先减去左右两边的间隔
+        LONG ConfigItemWidth = (ClientRect.Width() - 2 * CoordinateGenerator::GRID_INTERVAL) / CoordinateGenerator::SPLIT_WIDTH;
+
         //设置配置项的区域
-        ConfigItemRect.left = ClientRect.left + GridInterval;
-        ConfigItemRect.top = ClientRect.top + GridInterval;
-        ConfigItemRect.right = ConfigItemRect.left + (ClientRect.Width() - 2 * GridInterval) / SPLIT_WIDTH;
-        ConfigItemRect.bottom = ClientRect.bottom - GridInterval;
+        ConfigItemRect.left = ClientRect.left + CoordinateGenerator::GRID_INTERVAL;         //距离左边的间隔
+        ConfigItemRect.top = ClientRect.top + CoordinateGenerator::GRID_INTERVAL;           //距离顶部的间隔
+        ConfigItemRect.right = ConfigItemRect.left + ConfigItemWidth;                       //配置项的宽度
+        ConfigItemRect.bottom = ClientRect.bottom - StatusBarRect.Height()                  //减去状态来的高度
+            - CoordinateGenerator::GRID_INTERVAL / 2;                                       //还要剔除间隔，除以2效果好一点
         GetDlgItem(IDC_STATIC_CONFIG_ITEM)->MoveWindow(&ConfigItemRect);
 
         //设置配置项的ComboBox
         CRect ComboBoxRect;
         GetDlgItem(IDC_COMBO1)->GetWindowRect(ComboBoxRect);
-        long ComboBoxHeight = ComboBoxRect.Height();
+        LONG ComboBoxHeight = ComboBoxRect.Height();
+        LONG ComboBoxWidth = ConfigItemRect.Width() - 2 * CoordinateGenerator::GRID_INTERVAL;
 
-        ComboBoxRect.left = ConfigItemRect.left + GridInterval;
-        ComboBoxRect.right = ComboBoxRect.left + (ConfigItemRect.Width() - 2 * GridInterval);
-        ComboBoxRect.top = ConfigItemRect.top + GridInterval * 2;
-        ComboBoxRect.bottom = ComboBoxRect.top + ComboBoxHeight;
+        ComboBoxRect.left = ConfigItemRect.left + CoordinateGenerator::GRID_INTERVAL;       //控件与Grid也有同样的间隔
+        ComboBoxRect.right = ComboBoxRect.left + ComboBoxWidth;                             //也要考虑左右两边的间隔
+        ComboBoxRect.top = ConfigItemRect.top + 2 * CoordinateGenerator::GRID_INTERVAL;     //这里要两倍的间隔，因为有文字遮挡
+        ComboBoxRect.bottom = ComboBoxRect.top + ComboBoxHeight;                            //用原本的高度
         GetDlgItem(IDC_COMBO1)->MoveWindow(&ComboBoxRect);
 
         //设置配置项的树形控件
         CRect TreeRect;
-        TreeRect.left = ComboBoxRect.left;
-        TreeRect.right = ComboBoxRect.right;
-        TreeRect.top = ComboBoxRect.bottom + GridInterval / 2;
-        TreeRect.bottom = ConfigItemRect.bottom - GridInterval;
+        TreeRect.left = ComboBoxRect.left;                                                  //跟随ComboBox
+        TreeRect.right = ComboBoxRect.right;                                                //跟随ComboBox
+        TreeRect.top = ComboBoxRect.bottom + CoordinateGenerator::GRID_INTERVAL;            //与ComboBox的间隔
+        TreeRect.bottom = ConfigItemRect.bottom - CoordinateGenerator::GRID_INTERVAL;       //跟底部的间隔
         GetDlgItem(IDC_TREE1)->MoveWindow(&TreeRect);
     }
 
     //配置参数
     {
         CRect ParamsGridRect;
-        ParamsGridRect.left = ConfigItemRect.right + GridInterval;
-        ParamsGridRect.right = ClientRect.right;
-        ParamsGridRect.top = ClientRect.top + GridInterval;
-        ParamsGridRect.bottom = ConfigItemRect.bottom;
+        ParamsGridRect.left = ConfigItemRect.right + CoordinateGenerator::GRID_INTERVAL;    //配置项和配置参数的间隔
+        ParamsGridRect.right = ClientRect.right;                                            //直接占用剩余的区域
+        ParamsGridRect.top = ConfigItemRect.top;                                            //跟随配置项
+        ParamsGridRect.bottom = ConfigItemRect.bottom;                                      //跟随配置项
         GetDlgItem(IDC_STATIC_CONFIG_CONTEXT)->MoveWindow(&ParamsGridRect);
 
         CRect ParamsDlgRect;
-        ParamsDlgRect.left = ParamsGridRect.left + 1;
-        ParamsDlgRect.right = ParamsGridRect.right - 1;
-        ParamsDlgRect.top = ParamsGridRect.top + GridInterval * 2;
-        ParamsDlgRect.bottom = ParamsGridRect.bottom - GridInterval;
-        ClientToScreen(&ParamsDlgRect);
+        ParamsDlgRect.left = ParamsGridRect.left + 1;                                      //预留一个像素避免遮挡线条
+        ParamsDlgRect.right = ParamsGridRect.right - 1;                                    //预留一个像素避免遮挡线条
+        ParamsDlgRect.top = ParamsGridRect.top + 2 * CoordinateGenerator::GRID_INTERVAL;   //这里要两倍的间隔，因为有文字遮挡
+        ParamsDlgRect.bottom = ParamsGridRect.bottom - CoordinateGenerator::GRID_INTERVAL; //底部预留一个间隔
+        ClientToScreen(&ParamsDlgRect);                                                    //因为是子对话框，因此要转换坐标
 
         theApp.g_ParamsDlg->MoveWindow(&ParamsDlgRect);
         theApp.g_ParamsDlg->ShowWindow(SW_SHOW);

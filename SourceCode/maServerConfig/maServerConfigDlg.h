@@ -34,6 +34,7 @@ protected:
     virtual BOOL OnInitDialog();
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
+    afx_msg void OnMove(int x, int y);
     afx_msg HCURSOR OnQueryDragIcon();
     DECLARE_MESSAGE_MAP()
 
@@ -58,4 +59,5 @@ private:
 
     CComboBox               m_ComboBoxMa;         //MA架构配置项
     CTreeCtrl               m_TreeConfig;         //每个配置项对应的树形列表
+    CStatusBar              m_StatusBar;          //底部状态栏
 };

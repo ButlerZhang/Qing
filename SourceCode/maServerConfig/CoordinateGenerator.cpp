@@ -1,5 +1,9 @@
 #include "CoordinateGenerator.h"
 
+const int CoordinateGenerator::GRID_INTERVAL = 10;          //两个控件之间的间隔
+const int CoordinateGenerator::SPLIT_WIDTH = 1+ 3;          //配置项和配置参数
+const int CoordinateGenerator::SPLIT_HEIGHT = 26 + 1;       //配置项和状态栏（暂时无用）
+
 const int CoordinateGenerator::CONTROL_HEIGHT = 30;
 const int CoordinateGenerator::OFFSET_X = 10;
 const int CoordinateGenerator::OFFSET_Y = 5;

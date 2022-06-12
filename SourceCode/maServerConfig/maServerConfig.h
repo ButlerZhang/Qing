@@ -27,6 +27,7 @@ public:
 
     CString GetLeafID(const CString& Text);
     CString GetLeftType(const CString& Text);
+    UINT GetNextControlID() { return m_NextControlID++; }
     ControlType GetParamValueType(const std::wstring& Name);
 
     std::wstring GetSelectItemMapKey(const std::wstring& OldKey);

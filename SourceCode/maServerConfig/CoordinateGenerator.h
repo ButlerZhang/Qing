@@ -16,6 +16,10 @@ public:
 
 public:
 
+    static const int        GRID_INTERVAL;                          //控件之间的间隔
+    static const int        SPLIT_WIDTH;                            //客户区宽度拆分成几份
+    static const int        SPLIT_HEIGHT;                           //客户区高度拆分成几份
+
     static const int        CONTROL_HEIGHT;                         //控件的高度
     static const int        OFFSET_X;                               //X轴偏移量
     static const int        OFFSET_Y;                               //Y轴偏移量
