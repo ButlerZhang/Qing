@@ -31,5 +31,5 @@ protected:
 
 private:
 
-    CEdit                   m_EditSourcePath;
+    CEdit             m_EditSourcePath;               //ÎÄ¼þÂ·¾¶
 };

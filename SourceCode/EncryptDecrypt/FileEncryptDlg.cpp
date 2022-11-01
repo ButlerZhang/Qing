@@ -19,14 +19,11 @@ FileEncryptDlg::~FileEncryptDlg()
 
 BOOL FileEncryptDlg::ShowChildWindowMiddle()
 {
-    m_CheckEncryptFileName.SetCheck(BST_CHECKED);
     m_CheckDeleteFile.SetCheck(BST_CHECKED);
-
-    m_CheckInputPassword.SetCheck(BST_UNCHECKED);
-    m_CheckDefaultPassword.SetCheck(BST_CHECKED);
+    m_CheckEncryptFileName.SetCheck(BST_CHECKED);
 
     m_EditInputPassword.SetWindowTextW(L"");
-    m_EditDefaultPassword.SetWindowTextW(L"************");
+    m_EditRepeatPassword.SetWindowTextW(L"");
 
     return BaseDialog::ShowChildWindowMiddle();
 }
@@ -62,11 +59,7 @@ std::wstring FileEncryptDlg::GetSourcePath() const
 std::wstring FileEncryptDlg::GetTargetPath() const
 {
     CString TargetPath;
-    if (m_CheckTargetPath.GetState() == BST_CHECKED)
-    {
-        m_EditTargetPath.GetWindowTextW(TargetPath);
-    }
-
+    m_EditTargetPath.GetWindowTextW(TargetPath);
     return TargetPath.GetString();
 }
 
@@ -77,17 +70,14 @@ bool FileEncryptDlg::Validate()
         return false;
     }
 
-    if (m_CheckTargetPath.GetState() == BST_CHECKED)
+    CString TargetPath;
+    m_EditTargetPath.GetWindowTextW(TargetPath);
+    if (!TargetPath.IsEmpty())
     {
-        CString TargetPath;
-        m_EditTargetPath.GetWindowTextW(TargetPath);
-        if (!TargetPath.IsEmpty())
+        if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
         {
-            if (!PathIsDirectory(TargetPath.GetString()) && SHCreateDirectoryEx(NULL, TargetPath.GetString(), NULL) != ERROR_SUCCESS)
-            {
-                MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
-                return false;
-            }
+            MessageBox(_T("Target path can not created!"), _T("Error Tip"), MB_OK);
+            return false;
         }
     }
 
@@ -103,11 +93,17 @@ bool FileEncryptDlg::SetOption()
 
     CString InputPassword;
     m_EditInputPassword.GetWindowTextW(InputPassword);
-    if (!InputPassword.IsEmpty())
+
+    CString RepeatPassword;
+    m_EditRepeatPassword.GetWindowText(RepeatPassword);
+
+    if (InputPassword != RepeatPassword)
     {
-        ParentDlg->GetSimpleEncrypt()->SetPassword(InputPassword.GetString());
+        MessageBox(_T("The passwords entered twice are different!"), _T("Error Tip"), MB_OK);
+        return false;
     }
 
+    ParentDlg->GetSimpleEncrypt()->SetPassword(InputPassword.GetString());
     return true;
 }
 
@@ -135,13 +131,10 @@ void FileEncryptDlg::DoDataExchange(CDataExchange* pDX)
     CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_EDIT_SOURCE_PATH, m_EditSourcePath);
     DDX_Control(pDX, IDC_EDIT_TARGET_PATH, m_EditTargetPath);
-    DDX_Control(pDX, IDC_CHECK_TARGET_PATH, m_CheckTargetPath);
+    DDX_Control(pDX, IDC_EDIT_INPUT_PASSWORD, m_EditInputPassword);
+    DDX_Control(pDX, IDC_EDIT_REPEAT_PASSWORD, m_EditRepeatPassword);
     DDX_Control(pDX, IDC_CHECK_ENCRYPT_FILE_NAME, m_CheckEncryptFileName);
     DDX_Control(pDX, IDC_CHECK_DELETE_FILE, m_CheckDeleteFile);
-    DDX_Control(pDX, IDC_CHECK_DEFAULT_PASSWORD, m_CheckDefaultPassword);
-    DDX_Control(pDX, IDC_CHECK_INPUT_PASSWORD, m_CheckInputPassword);
-    DDX_Control(pDX, IDC_EDIT_DEFAULT_PASSWORD, m_EditDefaultPassword);
-    DDX_Control(pDX, IDC_EDIT_INPUT_PASSWORD, m_EditInputPassword);
 }
 
 BEGIN_MESSAGE_MAP(FileEncryptDlg, CDialogEx)
@@ -149,23 +142,9 @@ BEGIN_MESSAGE_MAP(FileEncryptDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_TARGET_PATH, &FileEncryptDlg::OnBnClickedButtonTargetPath)
     ON_BN_CLICKED(IDOK, &FileEncryptDlg::OnBnClickedOk)
     ON_BN_CLICKED(IDCANCEL, &FileEncryptDlg::OnBnClickedCancel)
-    ON_BN_CLICKED(IDC_CHECK_TARGET_PATH, &FileEncryptDlg::OnBnClickedCheckTargetPath)
-    ON_BN_CLICKED(IDC_CHECK_DEFAULT_PASSWORD, &FileEncryptDlg::OnBnClickedCheckDefaultPassword)
-    ON_BN_CLICKED(IDC_CHECK_INPUT_PASSWORD, &FileEncryptDlg::OnBnClickedCheckInputPassword)
 END_MESSAGE_MAP()
 
 // FileEncrypt message handlers
-void FileEncryptDlg::OnBnClickedCheckDefaultPassword()
-{
-    m_CheckInputPassword.SetCheck(BST_UNCHECKED);
-    m_CheckDefaultPassword.SetCheck(BST_CHECKED);
-}
-
-void FileEncryptDlg::OnBnClickedCheckInputPassword()
-{
-    m_CheckInputPassword.SetCheck(BST_CHECKED);
-    m_CheckDefaultPassword.SetCheck(BST_UNCHECKED);
-}
 
 void FileEncryptDlg::OnBnClickedButtonSourcePath()
 {
@@ -177,7 +156,7 @@ void FileEncryptDlg::OnBnClickedButtonSourcePath()
     }
 
     m_EditSourcePath.SetWindowTextW(SelectPath.c_str());
-    if (m_CheckTargetPath.GetState() == BST_CHECKED)
+    if(GetTargetPath().empty())
     {
         UpdateTargetPath();
     }
@@ -187,16 +166,6 @@ void FileEncryptDlg::OnBnClickedButtonTargetPath()
 {
     const std::wstring SelectPath = theApp.GetSelectPath();
     m_EditTargetPath.SetWindowTextW(SelectPath.c_str());
-}
-
-void FileEncryptDlg::OnBnClickedCheckTargetPath()
-{
-    CString TargetPath;
-    m_EditTargetPath.GetWindowTextW(TargetPath);
-    if (TargetPath.IsEmpty())
-    {
-        UpdateTargetPath();
-    }
 }
 
 void FileEncryptDlg::OnBnClickedCancel()

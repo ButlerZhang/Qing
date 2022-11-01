@@ -27,11 +27,8 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     DECLARE_MESSAGE_MAP()
 
-    afx_msg void OnBnClickedCheckDefaultPassword();
-    afx_msg void OnBnClickedCheckInputPassword();
     afx_msg void OnBnClickedButtonSourcePath();
     afx_msg void OnBnClickedButtonTargetPath();
-    afx_msg void OnBnClickedCheckTargetPath();
     afx_msg void OnBnClickedCancel();
     afx_msg void OnBnClickedOk();
 
@@ -41,13 +38,10 @@ protected:
 
 private:
 
-    CEdit                           m_EditSourcePath;
-    CEdit                           m_EditTargetPath;
-    CEdit                           m_EditDefaultPassword;
-    CEdit                           m_EditInputPassword;
-    CButton                         m_CheckTargetPath;
-    CButton                         m_CheckEncryptFileName;
-    CButton                         m_CheckDeleteFile;
-    CButton                         m_CheckDefaultPassword;
-    CButton                         m_CheckInputPassword;
+    CEdit             m_EditSourcePath;               //文件路径
+    CEdit             m_EditTargetPath;               //保存路径
+    CEdit             m_EditInputPassword;            //输入密码
+    CEdit             m_EditRepeatPassword;           //确认密码
+    CButton           m_CheckEncryptFileName;         //加密文件名
+    CButton           m_CheckDeleteFile;              //删除源文件
 };

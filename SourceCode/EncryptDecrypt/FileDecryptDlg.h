@@ -27,8 +27,6 @@ protected:
     DECLARE_MESSAGE_MAP()
 
     afx_msg void OnBnClickedButtonSelectSourcePath();
-    afx_msg void OnBnClickedCheckDefaultPassword();
-    afx_msg void OnBnClickedCheckInputPassword();
     afx_msg void OnBnClickedCancel();
     afx_msg void OnBnClickedOk();
 
@@ -37,9 +35,6 @@ protected:
 
 private:
 
-    CEdit                   m_EditSourcePath;
-    CEdit                   m_EditDefaultPassword;
-    CEdit                   m_EditInputPassword;
-    CButton                 m_CheckDefaultPassword;
-    CButton                 m_CheckInputPassword;
+    CEdit             m_EditSourcePath;               //文件路径
+    CEdit             m_EditInputPassword;            //解密密码
 };

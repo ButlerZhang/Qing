@@ -211,7 +211,8 @@ void CEncryptDecryptDlg::OnBnClickedExit()
     if (m_WorkerThread != INVALID_HANDLE_VALUE)
     {
         m_ButtonExit.EnableWindow(FALSE);
-        OnBnClickedStop();
+        m_ButtonStop.EnableWindow(FALSE);
+        m_SimpleCrypt->SetIsForceStop(true);
     }
 
     OnCancel();
@@ -297,8 +298,8 @@ void CEncryptDecryptDlg::CreateResultList()
 
     m_ResultList.InsertColumn(0, _T("ÐòºÅ"), LVCFMT_CENTER,  50);
     m_ResultList.InsertColumn(1, _T("²Ù×÷"), LVCFMT_CENTER,  80);
-    m_ResultList.InsertColumn(2, _T("Â·¾¶"), LVCFMT_LEFT,    400);
-    m_ResultList.InsertColumn(3, _T("×´Ì¬"), LVCFMT_LEFT,    170);
+    m_ResultList.InsertColumn(2, _T("Â·¾¶"), LVCFMT_LEFT,    600);
+    m_ResultList.InsertColumn(3, _T("×´Ì¬"), LVCFMT_LEFT,    100);
 }
 
 void CEncryptDecryptDlg::CreateWorkThread()
