@@ -19,7 +19,7 @@ FileEncryptDlg::~FileEncryptDlg()
 
 BOOL FileEncryptDlg::ShowChildWindowMiddle()
 {
-    m_CheckDeleteFile.SetCheck(BST_CHECKED);
+    m_CheckDeleteFile.SetCheck(BST_UNCHECKED);
     m_CheckEncryptFileName.SetCheck(BST_CHECKED);
 
     m_EditInputPassword.SetWindowTextW(L"");

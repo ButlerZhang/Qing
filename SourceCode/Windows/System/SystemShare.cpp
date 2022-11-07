@@ -43,56 +43,55 @@ std::wstring GetLastErrorString(DWORD LastErrorCode)
 std::wstring StringToWString(const std::string &String, int Codepage)
 {
     int nLen = MultiByteToWideChar(
-        Codepage,               //标识了与多字节字符串关联的一个代码页值
-        0,                      //允许进行额外的控制，会影响变音符号
-        (LPCSTR)String.c_str(), //要转换的字符串
-        -1,                     //要转换的字符串长度，如果传-1，函数可自行判断
-        NULL,                   //转换的结果的缓冲区
-        0);                     //缓冲区的大小，如果为零，函数不执行转换，返回字符数
+        Codepage,                                //标识了与多字节字符串关联的一个代码页值
+        0,                                       //允许进行额外的控制，会影响变音符号
+        (LPCSTR)String.c_str(),                  //要转换的字符串
+        -1,                                      //要转换的字符串长度，如果传-1，函数可自行判断
+        NULL,                                    //转换的结果的缓冲区
+        0);                                      //缓冲区的大小，如果为零，函数不执行转换，返回字符数
 
-    std::wstring ResultWString;
-    ResultWString.resize(nLen, L'\0');
+    std::wstring ResultWString;                  //结果值
+    ResultWString.resize(nLen, L'\0');           //初始化结果值，注意nLen包含了用于结束的空字符
 
     int nResult = MultiByteToWideChar(
-        Codepage,               //一般默认为CP_UTF8
-        0,                      //一般不用
-        (LPCSTR)String.c_str(), //源字符串
-        static_cast<int>(String.length()), //源字符串长度
-        (LPWSTR)ResultWString.c_str(),     //结果缓冲区
-        nLen);                  //由第一次调用获得的缓冲区大小
+        Codepage,                                //一般默认为CP_UTF8
+        0,                                       //一般不用
+        (LPCSTR)String.c_str(),                  //源字符串
+        static_cast<int>(String.length()),       //源字符串长度
+        (LPWSTR)ResultWString.c_str(),           //结果缓冲区
+        nLen);                                   //由第一次调用获得的缓冲区大小
 
-    return ResultWString;
+    return ResultWString.substr(0, nResult);     //只需要返回需要的字符数，用于结尾的空字符不需要
 }
 
 std::string  WStringToString(const std::wstring &WString, int Codepage)
 {
     int nLen = WideCharToMultiByte(
-        Codepage,               //标识了要与新转换的字符串关联的代码页
-        0,                      //指定额外的转换控制，例如变音符号
-        (LPCWSTR)WString.c_str(),//要转换的字符串的内存地址
-        -1,                     //字符串长度，传-1自行判断
-        NULL,                   //结果缓冲区
-        0,                      //结果缓冲区大小
-        NULL,                   //遇到不能转换的字符时会使用这个参数指向的字符
-        NULL);                  //指向一个布尔变量，如果在宽字符字符串中，如果
-                                //至少有一个字符不能转换为对应的多字节形式，函数
-                                //就会把这个变量设置为TRUE，否则为FALSE
+        Codepage,                                //标识了要与新转换的字符串关联的代码页
+        0,                                       //指定额外的转换控制，例如变音符号
+        (LPCWSTR)WString.c_str(),                //要转换的字符串的内存地址
+        -1,                                      //字符串长度，传-1自行判断
+        NULL,                                    //结果缓冲区
+        0,                                       //结果缓冲区大小
+        NULL,                                    //遇到不能转换的字符时会使用这个参数指向的字符
+        NULL);                                   //指向一个布尔变量，如果在宽字符字符串中，如果
+                                                 //至少有一个字符不能转换为对应的多字节形式，函数
+                                                 //就会把这个变量设置为TRUE，否则为FALSE
 
-    std::string ResultString;
-    ResultString.resize(nLen + 1, '\0');
-    int WStringLength = static_cast<int>(WString.length()) + 1;
+    std::string ResultString;                    //结果值
+    ResultString.resize(nLen + 1, '\0');         //包含了空字符作为结尾
 
     int nResult = WideCharToMultiByte(
-        Codepage,                   //一般默认为CP_UTF8
-        0,                          //一般不用
-        (LPCWSTR)WString.c_str(),   //源字符串
-        WStringLength,              //源字符串长度
-        (LPSTR)ResultString.c_str(),//结果缓冲区
-        nLen + 1,                   //结果缓冲区大小
-        NULL,                       //系统默认为问号
-        NULL);                      //通常传入NULL
+        Codepage,                                //一般默认为CP_UTF8
+        0,                                       //一般不用
+        (LPCWSTR)WString.c_str(),                //源字符串
+        static_cast<int>(WString.length()) + 1,  //源字符串长度
+        (LPSTR)ResultString.c_str(),             //结果缓冲区
+        nLen + 1,                                //结果缓冲区大小
+        NULL,                                    //系统默认为问号
+        NULL);                                   //通常传入NULL
 
-    return ResultString;
+    return ResultString.substr(0, nResult);      //返回成功的字符数
 }
 
 void SplitCommandLine(std::vector<std::wstring> &CommandLineVector)

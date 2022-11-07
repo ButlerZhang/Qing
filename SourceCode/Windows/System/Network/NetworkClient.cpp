@@ -1,6 +1,6 @@
 #include "NetworkClient.h"
 #include "NetworkEnvironment.h"
-#include "../../../Share/Boost/BoostLog.h"
+#include "../../../ProjectLinux/Share/Boost/BoostLog.h"
 #include "../LocalComputer.h"
 
 

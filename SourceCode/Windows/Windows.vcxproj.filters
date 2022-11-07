@@ -68,13 +68,13 @@
     <ClCompile Include="System\SimpleEncrypt.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp">
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostFileSystem.cpp">
       <Filter>Reference\Boost</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostLog.cpp">
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostLog.cpp">
       <Filter>Reference\Boost</Filter>
     </ClCompile>
-    <ClCompile Include="..\Share\Boost\BoostTime.cpp">
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostTime.cpp">
       <Filter>Reference\Boost</Filter>
     </ClCompile>
   </ItemGroup>
@@ -127,19 +127,19 @@
     <ClInclude Include="WindowsCoreProgramming.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostFileSystem.h">
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostFileSystem.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostFormat.h">
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostFormat.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostLog.h">
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostLog.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostTime.h">
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTime.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
-    <ClInclude Include="..\Share\Boost\BoostTools.h">
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTools.h">
       <Filter>Reference\Boost</Filter>
     </ClInclude>
   </ItemGroup>

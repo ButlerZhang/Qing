@@ -39,7 +39,7 @@ void FileDecryptDlg::ProcessWork(void *Parent)
         }
 
         ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING);
-        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->DeCrypt(FileNameVector[Index], TargetPath);
+        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->Decrypt(FileNameVector[Index], TargetPath);
         ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
     }
 }

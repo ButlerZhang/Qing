@@ -87,11 +87,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_72_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenSource\boost_1_77_0\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_72_0\stage\lib_shared\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\OpenSource\boost_1_77_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;dbghelp.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -126,9 +126,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Share\Boost\BoostFileSystem.cpp" />
-    <ClCompile Include="..\Share\Boost\BoostLog.cpp" />
-    <ClCompile Include="..\Share\Boost\BoostTime.cpp" />
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostFileSystem.cpp" />
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostLog.cpp" />
+    <ClCompile Include="..\ProjectLinux\Share\Boost\BoostTime.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="System\FileManager.cpp" />
     <ClCompile Include="System\IniFile.cpp" />
@@ -146,11 +146,11 @@
     <ClCompile Include="System\SystemTime.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Share\Boost\BoostFileSystem.h" />
-    <ClInclude Include="..\Share\Boost\BoostFormat.h" />
-    <ClInclude Include="..\Share\Boost\BoostLog.h" />
-    <ClInclude Include="..\Share\Boost\BoostTime.h" />
-    <ClInclude Include="..\Share\Boost\BoostTools.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostFileSystem.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostFormat.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostLog.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTime.h" />
+    <ClInclude Include="..\ProjectLinux\Share\Boost\BoostTools.h" />
     <ClInclude Include="System\FileManager.h" />
     <ClInclude Include="System\IniFile.h" />
     <ClInclude Include="System\LocalComputer.h" />

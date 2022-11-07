@@ -40,12 +40,12 @@ inline bool Base64Decode(const std::wstring &Input, std::wstring &Output)
 
 inline std::string GetSHA1(const std::string &DataString, bool IsUpper)
 {
-    //boost::uuids::detail::sha1 sha;
-    //sha.process_bytes(DataString.c_str(), DataString.size());
+    boost::uuids::detail::sha1 sha;
+    sha.process_bytes(DataString.c_str(), DataString.size());
 
     const int DigestArraySize = 5;
     unsigned int DigestArray[DigestArraySize];
-    //sha.get_digest(DigestArray);
+    sha.get_digest(DigestArray);
 
     std::ostringstream ConvertBuffer;
     for (int Index = 0; Index < DigestArraySize; ++Index)
@@ -62,33 +62,6 @@ inline std::string GetSHA1(const std::string &DataString, bool IsUpper)
 
     return std::string(ConvertBuffer.str());
 }
-
-inline std::wstring GetSHA1(const std::wstring & DataString, bool IsUpper)
-{
-    //boost::uuids::detail::sha1 sha;
-    //sha.process_bytes(DataString.c_str(), DataString.size());
-
-    const int DigestArraySize = 5;
-    unsigned int DigestArray[DigestArraySize];
-    //sha.get_digest(DigestArray);
-
-    std::wostringstream ConvertBuffer;
-    for (int Index = 0; Index < DigestArraySize; ++Index)
-    {
-        ConvertBuffer << std::hex << std::setfill(L'0') << std::setw(8) << DigestArray[Index];
-    }
-
-    if (IsUpper)
-    {
-        std::wstring ResultString(ConvertBuffer.str());
-        std::transform(ResultString.begin(), ResultString.end(), ResultString.begin(), ::toupper);
-        return ResultString;
-    }
-
-    return std::wstring(ConvertBuffer.str());
-}
-
-
 
 inline bool IsIPValid(const std::string &IP)
 {
@@ -141,8 +114,8 @@ inline std::string GetJsonString(boost::property_tree::ptree &JsonTree)
     return JsonString;
 }
 
-//inline std::string GetUUID()
-//{
-//    boost::uuids::uuid NewUUID = boost::uuids::random_generator()();
-//    return boost::uuids::to_string(NewUUID);
-//}
+inline std::string GetUUID()
+{
+    boost::uuids::uuid NewUUID = boost::uuids::random_generator()();
+    return boost::uuids::to_string(NewUUID);
+}

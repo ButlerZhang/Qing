@@ -18,7 +18,7 @@ public:
     void SetIsDeleteOriginalFile(bool IsDeleteOriginalFile) { m_IsDeleteOriginalFile = IsDeleteOriginalFile; }
 
     bool Encrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
-    bool DeCrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
+    bool Decrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
 
     bool Disguise(const std::wstring &SourceFile);
     bool Recovery(const std::wstring &SourceFile);
@@ -33,7 +33,7 @@ private:
 
     bool IsEncrypt(const std::wstring &SourceFile) const;
     bool IsDisguise(const std::wstring &SourceFile) const;
-    bool IsSpaceEnough(unsigned long FileSize, std::wstring SourceFile);
+    bool IsDiskSpaceEnough(unsigned long FileSize, std::wstring SourceFile);
 
     void EncryptDecryptBuffer(wchar_t *DataBuffer, int DataSize) const;
     bool EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE TargetFileHandle, DWORD FileOffset);

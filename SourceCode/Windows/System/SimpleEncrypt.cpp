@@ -55,7 +55,9 @@ void SimpleEncrypt::SetPassword(const std::wstring &Password)
 {
     if (!Password.empty())
     {
-        m_Password = GetSHA1(Password, true);
+        const std::string& wPassword = WStringToString(Password);
+        const std::string& PasswordSHA1 = GetSHA1(wPassword, true);
+        m_Password = StringToWString(PasswordSHA1);
     }
 }
 
@@ -122,7 +124,7 @@ bool SimpleEncrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &
     return true;
 }
 
-bool SimpleEncrypt::DeCrypt(const std::wstring & SourceFile, const std::wstring & TargetPath)
+bool SimpleEncrypt::Decrypt(const std::wstring & SourceFile, const std::wstring & TargetPath)
 {
     if (!IsEncrypt(SourceFile))
     {
@@ -259,7 +261,7 @@ bool SimpleEncrypt::Prepare(HANDLE SourceFileHandle, const std::wstring &SourceF
         return false;
     }
 
-    if (!IsSpaceEnough(m_FileSize, SourceFile))
+    if (!IsDiskSpaceEnough(m_FileSize, SourceFile))
     {
         return false;
     }
@@ -279,6 +281,7 @@ bool SimpleEncrypt::Prepare(HANDLE SourceFileHandle, const std::wstring &SourceF
 
     delete m_FileDataBuffer;
     m_FileDataBuffer = new wchar_t[m_DataBufferSize];
+    memset(m_FileDataBuffer, 0, sizeof(m_FileDataBuffer));
 
     std::wstring LogString(L"Recreate buffer, old size = " + std::to_wstring(OldBufferSize));
     LogString.append(L", new size = " + std::to_wstring(m_DataBufferSize));
@@ -298,7 +301,7 @@ bool SimpleEncrypt::IsDisguise(const std::wstring & SourceFile) const
     return Extension == m_FileDisguiseExtension;
 }
 
-bool SimpleEncrypt::IsSpaceEnough(unsigned long FileSize, std::wstring SourceFile)
+bool SimpleEncrypt::IsDiskSpaceEnough(unsigned long FileSize, std::wstring SourceFile)
 {
     PathStripToRoot((LPWSTR)SourceFile.c_str());
     if (SourceFile.empty())
@@ -461,18 +464,19 @@ std::wstring SimpleEncrypt::GetEncryptFileName(const std::wstring &SourceFile, c
     if (m_IsEncryptFileName)
     {
         const std::wstring &FileName = PathFindFileName(SourceFile.c_str());
-        const std::wstring &FileNameSHA1 = GetSHA1(FileName, true) + m_FileEncryptExtension;
+        const std::string& FileNameSHA = GetSHA1(WStringToString(FileName), true);
+        const std::wstring& FileNameNew = StringToWString(FileNameSHA) + m_FileEncryptExtension;
 
         if (TargetPath.empty())
         {
             std::wstring NewFilePath(SourceFile);
-            NewFilePath.replace(SourceFile.find(FileName.c_str()), FileName.size(), FileNameSHA1.c_str());
+            NewFilePath.replace(SourceFile.find(FileName.c_str()), FileName.size(), FileNameNew.c_str());
 
             TargetName = NewFilePath;
         }
         else
         {
-            TargetName = TargetPath + FileNameSHA1;
+            TargetName = TargetPath + FileNameNew;
         }
     }
     else
