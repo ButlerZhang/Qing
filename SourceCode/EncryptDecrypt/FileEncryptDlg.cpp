@@ -60,6 +60,13 @@ std::wstring FileEncryptDlg::GetTargetPath() const
 {
     CString TargetPath;
     m_EditTargetPath.GetWindowTextW(TargetPath);
+
+    wchar_t Path[MAX_PATH] = { 0 };
+    wmemcpy(Path, TargetPath.GetString(), TargetPath.GetLength());
+
+    PathAddBackslash(Path);
+    TargetPath = Path;
+
     return TargetPath.GetString();
 }
 
@@ -107,25 +114,6 @@ bool FileEncryptDlg::SetOption()
     return true;
 }
 
-void FileEncryptDlg::UpdateTargetPath()
-{
-    m_EditTargetPath.SetWindowTextW(L"");
-
-    CString SourcePath;
-    m_EditSourcePath.GetWindowTextW(SourcePath);
-
-    if (!SourcePath.IsEmpty())
-    {
-        if (!PathIsDirectory(SourcePath.GetString()))
-        {
-            PathRemoveFileSpec((LPWSTR)SourcePath.GetString());
-        }
-
-        std::wstring TargetPath = SourcePath.GetString() + std::wstring(L"\\EncryptDecrypt\\");
-        m_EditTargetPath.SetWindowTextW(TargetPath.c_str());
-    }
-}
-
 void FileEncryptDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
@@ -156,10 +144,6 @@ void FileEncryptDlg::OnBnClickedButtonSourcePath()
     }
 
     m_EditSourcePath.SetWindowTextW(SelectPath.c_str());
-    if(GetTargetPath().empty())
-    {
-        UpdateTargetPath();
-    }
 }
 
 void FileEncryptDlg::OnBnClickedButtonTargetPath()

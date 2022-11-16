@@ -88,7 +88,7 @@ bool SimpleEncrypt::Encrypt(const std::wstring &SourceFile, const std::wstring &
     if (TargetFileHandle == INVALID_HANDLE_VALUE)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
-        WriteError(L"Encrypt failed, target file = " + TargetFile + L", error = " + m_ErrorMessage);
+        WriteError(L"Encrypt failed, source file = " + SourceFile + L",target file = " + TargetFile + L", error = " + m_ErrorMessage);
         CloseHandle(SourceFileHandle);
         return false;
     }
@@ -471,7 +471,6 @@ std::wstring SimpleEncrypt::GetEncryptFileName(const std::wstring &SourceFile, c
         {
             std::wstring NewFilePath(SourceFile);
             NewFilePath.replace(SourceFile.find(FileName.c_str()), FileName.size(), FileNameNew.c_str());
-
             TargetName = NewFilePath;
         }
         else

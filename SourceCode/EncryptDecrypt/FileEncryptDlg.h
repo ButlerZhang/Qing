@@ -34,7 +34,6 @@ protected:
 
     bool Validate();
     bool SetOption();
-    void UpdateTargetPath();
 
 private:
 
