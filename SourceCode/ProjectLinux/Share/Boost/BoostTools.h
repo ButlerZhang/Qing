@@ -14,28 +14,21 @@
 #include <functional>
 
 
-inline bool Base64Encode(const std::string &Input, std::string &Output)
+inline bool Base64Encode(const std::string& Input, std::string& Output)
 {
-    //TODO
-    //Output = boost::beast::detail::base64_encode(Input);
+    std::size_t InputSize = Input.size();
+    Output.resize(boost::beast::detail::base64::encoded_size(InputSize));
+    Output.resize(boost::beast::detail::base64::encode(&Output[0], Input.c_str(), InputSize));
     return !Output.empty();
 }
 
 inline bool Base64Decode(const std::string &Input, std::string &Output)
 {
-    //TODO
-    //Output = boost::beast::detail::base64_decode(Input);
+    std::size_t InputSize = Input.size();
+    Output.resize(boost::beast::detail::base64::decoded_size(InputSize));
+    std::pair<std::size_t, std::size_t> Result = boost::beast::detail::base64::decode(&Output[0], Input.c_str(), InputSize);
+    Output.resize(Result.first);
     return !Output.empty();
-}
-
-inline bool Base64Encode(const std::wstring &Input, std::wstring &Output)
-{
-    return false;
-}
-
-inline bool Base64Decode(const std::wstring &Input, std::wstring &Output)
-{
-    return false;
 }
 
 inline std::string GetSHA1(const std::string &DataString, bool IsUpper)

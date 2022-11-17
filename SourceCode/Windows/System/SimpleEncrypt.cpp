@@ -181,17 +181,17 @@ bool SimpleEncrypt::Disguise(const std::wstring &SourceFile)
         return true;
     }
 
-    std::wstring RecoveryName;
-    const std::wstring &SourceName = PathFindFileName(SourceFile.c_str());
-    if (!Base64Encode(SourceName, RecoveryName))
+    std::string DisguiseNameTemp;
+    const std::wstring& SourceName = PathFindFileName(SourceFile.c_str());
+    if (!Base64Encode(WStringToString(SourceName), DisguiseNameTemp))
     {
-        m_ErrorMessage = L"Base 64 encode failed.";
+        m_ErrorMessage = L"Base 64 encode failed: " + SourceName + L".";
         WriteError(m_ErrorMessage);
         return false;
     }
 
-    RecoveryName += m_FileDisguiseExtension;
     std::wstring TargetFile(SourceFile);
+    const std::wstring& RecoveryName = StringToWString(DisguiseNameTemp) + m_FileDisguiseExtension;
     TargetFile.replace(SourceFile.find(SourceName.c_str()), SourceName.size(), RecoveryName.c_str());
 
     if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
@@ -211,20 +211,32 @@ bool SimpleEncrypt::Recovery(const std::wstring &SourceFile)
         return true;
     }
 
+    //先去掉后缀
+    wchar_t Path[MAX_PATH] = { 0 };
     std::wstring SourceName = PathFindFileName(SourceFile.c_str());
-    PathRemoveExtension((LPWSTR)SourceName.c_str());
+    wmemcpy(Path, SourceName.c_str(), SourceName.size());
+    PathRemoveExtension(Path);
+    SourceName = Path;
 
-    std::wstring RecoveryName;
-    if(!Base64Decode(SourceName, RecoveryName))
+    //修改文件名
+    std::string RecoveryNameTemp;
+    if (!Base64Decode(WStringToString(SourceName), RecoveryNameTemp))
     {
-        m_ErrorMessage = L"Base 64 decode failed.";
+        m_ErrorMessage = L"Base 64 decode failed: " + SourceName + L".";
         WriteError(m_ErrorMessage);
         return false;
     }
 
-    std::wstring TargetFile(SourceFile);
+    //也需要去掉后缀
+    wmemcpy(Path, SourceFile.c_str(), SourceFile.size());
+    PathRemoveExtension(Path);
+    std::wstring TargetFile = Path;
+
+    //替换回正确的文件名
+    const std::wstring& RecoveryName = StringToWString(RecoveryNameTemp);
     TargetFile.replace(SourceFile.find(SourceName.c_str()), SourceName.size(), RecoveryName.c_str());
 
+    //重命名文件
     if (_wrename(SourceFile.c_str(), TargetFile.c_str()) != 0)
     {
         m_ErrorMessage = GetLastErrorString(GetLastError());
