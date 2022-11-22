@@ -143,6 +143,10 @@ BOOL CEncryptDecryptDlg::OnInitDialog()
     m_DialogVector.push_back(new FileRecoveryDlg(this->GetParent()));
     m_DialogVector[OT_RECOVERY]->Create(IDD_DIALOG_RECOVERY, this->GetParent());
 
+    //Create work thread
+    DWORD nThreadID;
+    m_WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
+
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -199,7 +203,7 @@ HCURSOR CEncryptDecryptDlg::OnQueryDragIcon()
 
 void CEncryptDecryptDlg::OnBnClickedStop()
 {
-    if (m_WorkerThread != INVALID_HANDLE_VALUE)
+    if (m_OperationType != OT_UNKNOW)
     {
         m_ButtonStop.EnableWindow(FALSE);
         m_SimpleCrypt->SetIsForceStop(true);
@@ -208,7 +212,7 @@ void CEncryptDecryptDlg::OnBnClickedStop()
 
 void CEncryptDecryptDlg::OnBnClickedExit()
 {
-    if (m_WorkerThread != INVALID_HANDLE_VALUE)
+    if (m_OperationType != OT_UNKNOW)
     {
         m_ButtonExit.EnableWindow(FALSE);
         m_ButtonStop.EnableWindow(FALSE);
@@ -256,16 +260,20 @@ void CEncryptDecryptDlg::SetOptionButtonEnable(bool Enable)
     m_ButtonRecovery.EnableWindow(Enable);
 }
 
-void CEncryptDecryptDlg::ResetControlAfterWorkerThreadStop()
+void CEncryptDecryptDlg::Stop()
 {
-    ReleaseThreadHandle();
     SetOptionButtonEnable(true);
     m_ButtonStop.EnableWindow(TRUE);
     m_LastOperationType = m_OperationType;
+    m_OperationType = OT_UNKNOW;
+}
 
-    if (!m_ButtonExit.IsWindowEnabled())
+void CEncryptDecryptDlg::Start()
+{
+    SetOptionButtonEnable(false);
+    if (m_LastOperationType != m_OperationType)
     {
-        OnCancel();
+        m_ResultList.DeleteAllItems();
     }
 }
 
@@ -302,19 +310,6 @@ void CEncryptDecryptDlg::CreateResultList()
     m_ResultList.InsertColumn(3, _T("״̬"), LVCFMT_LEFT,    100);
 }
 
-void CEncryptDecryptDlg::CreateWorkThread()
-{
-    ReleaseThreadHandle();
-    SetOptionButtonEnable(false);
-    if (m_LastOperationType != m_OperationType)
-    {
-        m_ResultList.DeleteAllItems();
-    }
-
-    DWORD nThreadID;
-    m_WorkerThread = ::CreateThread(0, 0, CallBack_WorkerThread, this, 0, &nThreadID);
-}
-
 void CEncryptDecryptDlg::UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type)
 {
     bool Found = false;
@@ -348,17 +343,27 @@ void CEncryptDecryptDlg::UpdateResultList(size_t Index, std::wstring &FilePath, 
 
 DWORD CEncryptDecryptDlg::CallBack_WorkerThread(LPVOID lpParam)
 {
-    CEncryptDecryptDlg *EDDlg = (CEncryptDecryptDlg*)lpParam;
+    CEncryptDecryptDlg* EDDlg = (CEncryptDecryptDlg*)lpParam;
 
     try
     {
-        EDDlg->m_DialogVector[EDDlg->m_OperationType]->ProcessWork(EDDlg);
+        while (true)
+        {
+            if (EDDlg->m_OperationType == OT_UNKNOW)
+            {
+                Sleep(500);
+            }
+            else
+            {
+                EDDlg->m_DialogVector[EDDlg->m_OperationType]->ProcessWork(EDDlg);
+                EDDlg->Stop();
+            }
+        }
     }
     catch (std::exception e)
     {
         g_Log.WriteError(e.what());
     }
 
-    EDDlg->ResetControlAfterWorkerThreadStop();
     return 0;
 }

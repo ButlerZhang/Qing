@@ -112,7 +112,7 @@ void FileDecryptDlg::OnBnClickedOk()
     {
         CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
         ParentDlg->SetOperationType(OT_DECRYPT);
-        ParentDlg->CreateWorkThread();
+        ParentDlg->Start();
         CDialogEx::OnOK();
     }
 }

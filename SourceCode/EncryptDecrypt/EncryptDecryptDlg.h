@@ -19,7 +19,7 @@ public:
     enum { IDD = IDD_ENCRYPTDECRYPT_DIALOG };
 #endif
 
-    void CreateWorkThread();
+    void Start();
     void GetFiles(std::vector<std::wstring> &FileVector);
     void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
 
@@ -48,10 +48,10 @@ private:
 
 private:
 
+    void Stop();
     void CreateResultList();
     void ReleaseThreadHandle();
     void SetOptionButtonEnable(bool Enable);
-    void ResetControlAfterWorkerThreadStop();
     static DWORD WINAPI CallBack_WorkerThread(LPVOID lpParam);
 
 private:

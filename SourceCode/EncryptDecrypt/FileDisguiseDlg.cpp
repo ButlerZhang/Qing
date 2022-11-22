@@ -62,7 +62,7 @@ void FileDisguiseDlg::OnBnClickedOk()
     {
         CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
         ParentDlg->SetOperationType(OT_DISGUISE);
-        ParentDlg->CreateWorkThread();
+        ParentDlg->Start();
         CDialogEx::OnOK();
     }
 }

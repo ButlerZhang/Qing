@@ -62,7 +62,7 @@ void FileRecoveryDlg::OnBnClickedOk()
     {
         CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
         ParentDlg->SetOperationType(OT_RECOVERY);
-        ParentDlg->CreateWorkThread();
+        ParentDlg->Start();
         CDialogEx::OnOK();
     }
 }
