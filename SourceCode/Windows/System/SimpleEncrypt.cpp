@@ -354,9 +354,12 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
     DWORD RealWriteLength = 0;
     DWORD RealReadLength = m_DataBufferSize;
 
+    LARGE_INTEGER CurrentOffset = { 0 };
+    CurrentOffset.QuadPart = FileOffset;
+
     while (RealReadLength == m_DataBufferSize)
     {
-        if (::SetFilePointer(SourceFileHandle, FileOffset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
+        if (::SetFilePointer(SourceFileHandle, CurrentOffset.LowPart, &CurrentOffset.HighPart, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
         {
             m_ErrorMessage = GetLastErrorString(GetLastError());
             WriteError(L"EncryptDecryptFileData::SetFilePointer, error = " + m_ErrorMessage);
@@ -395,7 +398,7 @@ bool SimpleEncrypt::EncryptDecryptFileData(HANDLE SourceFileHandle, HANDLE Targe
             return false;
         }
 
-        FileOffset += m_DataBufferSize;
+        CurrentOffset.QuadPart += m_DataBufferSize;
     }
 
     if (m_IsForceStop)
