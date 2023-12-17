@@ -29,13 +29,15 @@ class BaseDialog : public CDialogEx
 {
 public:
 
-    BaseDialog(UINT nIDTemplate, CWnd *pParent = NULL) : CDialogEx(nIDTemplate, pParent) {}
+    BaseDialog(UINT nIDTemplate, CWnd* pParent = NULL) : CDialogEx(nIDTemplate, pParent) {}
     virtual ~BaseDialog() {}
 
     virtual BOOL ShowChildWindowMiddle();
-    virtual void ProcessWork(void *Parent) = 0;
     virtual std::wstring GetSourcePath() const { return std::wstring(); }
     virtual std::wstring GetTargetPath() const { return std::wstring(); }
+
+    virtual void Stop() = 0;
+    virtual void ProcessWork(void* Parent) = 0;
 };
 
 
@@ -46,7 +48,7 @@ public:
 
     CEncryptDecryptApp();
 
-    bool Validate(CEdit &EditControl);
+    bool Validate(CEdit& EditControl);
     std::wstring GetSelectPath() const;
     std::wstring GetProcessString(ProcessType Type) const;
     std::wstring GetOperationString(OperationType Type) const;

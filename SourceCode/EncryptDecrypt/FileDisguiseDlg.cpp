@@ -11,28 +11,29 @@ IMPLEMENT_DYNAMIC(FileDisguiseDlg, CDialogEx)
 FileDisguiseDlg::FileDisguiseDlg(CWnd* pParent /*=NULL*/)
     : BaseDialog(IDD_DIALOG_DISGUISE, pParent)
 {
+    m_SimpleCrypt = std::make_shared<SimpleEncrypt>();
 }
 
 FileDisguiseDlg::~FileDisguiseDlg()
 {
 }
 
-void FileDisguiseDlg::ProcessWork(void *Parent)
+void FileDisguiseDlg::ProcessWork(void* Parent)
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)Parent;
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)Parent;
     std::vector<std::wstring> FileNameVector;
     ParentDlg->GetFiles(FileNameVector);
 
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
-        if (ParentDlg->GetSimpleEncrypt()->IsForceStop())
+        if (m_SimpleCrypt->IsForceStop())
         {
             break;
         }
 
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING);
-        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->Disguise(FileNameVector[Index]);
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING, std::wstring());
+        bool ProcessResult = m_SimpleCrypt->Disguise(FileNameVector[Index]);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED, m_SimpleCrypt->GetErrorMessage());
     }
 }
 
@@ -60,7 +61,7 @@ void FileDisguiseDlg::OnBnClickedOk()
 {
     if (theApp.Validate(m_EditSourcePath))
     {
-        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
         ParentDlg->SetOperationType(OT_DISGUISE);
         ParentDlg->Start();
         CDialogEx::OnOK();
@@ -69,14 +70,14 @@ void FileDisguiseDlg::OnBnClickedOk()
 
 void FileDisguiseDlg::OnBnClickedCancel()
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
     ParentDlg->ResetOperationType();
     CDialogEx::OnCancel();
 }
 
 void FileDisguiseDlg::OnBnClickedButtonSelectSourcePath()
 {
-    const std::wstring &SelectPath = theApp.GetSelectPath();
+    const std::wstring& SelectPath = theApp.GetSelectPath();
     if (SelectPath.empty())
     {
         //Add log

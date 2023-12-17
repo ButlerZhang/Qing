@@ -11,6 +11,7 @@ IMPLEMENT_DYNAMIC(FileEncryptDlg, CDialogEx)
 FileEncryptDlg::FileEncryptDlg(CWnd* pParent /*=NULL*/)
     : BaseDialog(IDD_DIALOG_ENCRYPT, pParent)
 {
+    m_SimpleCrypt = std::make_shared<SimpleEncrypt>();
 }
 
 FileEncryptDlg::~FileEncryptDlg()
@@ -26,27 +27,6 @@ BOOL FileEncryptDlg::ShowChildWindowMiddle()
     m_EditRepeatPassword.SetWindowTextW(L"");
 
     return BaseDialog::ShowChildWindowMiddle();
-}
-
-void FileEncryptDlg::ProcessWork(void *Parent)
-{
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)Parent;
-    const std::wstring &TargetPath = GetTargetPath();
-
-    std::vector<std::wstring> FileNameVector;
-    ParentDlg->GetFiles(FileNameVector);
-
-    for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
-    {
-        if (ParentDlg->GetSimpleEncrypt()->IsForceStop())
-        {
-            break;
-        }
-
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING);
-        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->Encrypt(FileNameVector[Index], TargetPath);
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
-    }
 }
 
 std::wstring FileEncryptDlg::GetSourcePath() const
@@ -68,6 +48,27 @@ std::wstring FileEncryptDlg::GetTargetPath() const
     TargetPath = Path;
 
     return TargetPath.GetString();
+}
+
+void FileEncryptDlg::ProcessWork(void* Parent)
+{
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)Parent;
+    const std::wstring& TargetPath = GetTargetPath();
+
+    std::vector<std::wstring> FileNameVector;
+    ParentDlg->GetFiles(FileNameVector);
+
+    for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
+    {
+        if (m_SimpleCrypt->IsForceStop())
+        {
+            break;
+        }
+
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING, std::wstring());
+        bool ProcessResult = m_SimpleCrypt->Encrypt(FileNameVector[Index], TargetPath);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED, m_SimpleCrypt->GetErrorMessage());
+    }
 }
 
 bool FileEncryptDlg::Validate()
@@ -93,10 +94,10 @@ bool FileEncryptDlg::Validate()
 
 bool FileEncryptDlg::SetOption()
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->GetSimpleEncrypt()->SetIsEncryptFileName(m_CheckEncryptFileName.GetState() == BST_CHECKED);
-    ParentDlg->GetSimpleEncrypt()->SetIsDeleteOriginalFile(m_CheckDeleteFile.GetState() == BST_CHECKED);
-    ParentDlg->GetSimpleEncrypt()->SetIsForceStop(false);
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
+    m_SimpleCrypt->SetIsEncryptFileName(m_CheckEncryptFileName.GetState() == BST_CHECKED);
+    m_SimpleCrypt->SetIsDeleteOriginalFile(m_CheckDeleteFile.GetState() == BST_CHECKED);
+    m_SimpleCrypt->SetIsForceStop(false);
 
     CString InputPassword;
     m_EditInputPassword.GetWindowTextW(InputPassword);
@@ -110,7 +111,7 @@ bool FileEncryptDlg::SetOption()
         return false;
     }
 
-    ParentDlg->GetSimpleEncrypt()->SetPassword(InputPassword.GetString());
+    m_SimpleCrypt->SetPassword(InputPassword.GetString());
     return true;
 }
 
@@ -136,7 +137,7 @@ END_MESSAGE_MAP()
 
 void FileEncryptDlg::OnBnClickedButtonSourcePath()
 {
-    const std::wstring &SelectPath = theApp.GetSelectPath();
+    const std::wstring& SelectPath = theApp.GetSelectPath();
     if (SelectPath.empty())
     {
         //Add log
@@ -154,7 +155,7 @@ void FileEncryptDlg::OnBnClickedButtonTargetPath()
 
 void FileEncryptDlg::OnBnClickedCancel()
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
     ParentDlg->ResetOperationType();
     CDialogEx::OnCancel();
 }
@@ -163,7 +164,7 @@ void FileEncryptDlg::OnBnClickedOk()
 {
     if (Validate() && SetOption())
     {
-        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
         ParentDlg->SetOperationType(OT_ENCRYPT);
         ParentDlg->Start();
         CDialogEx::OnOK();

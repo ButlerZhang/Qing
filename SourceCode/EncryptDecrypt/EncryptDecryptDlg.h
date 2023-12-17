@@ -4,7 +4,6 @@
 #include <memory>
 #include "afxwin.h"
 #include "afxcmn.h"
-#include "../Windows/System/SimpleEncrypt.h"
 
 
 
@@ -20,12 +19,11 @@ public:
 #endif
 
     void Start();
-    void GetFiles(std::vector<std::wstring> &FileVector);
-    void UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type);
+    void GetFiles(std::vector<std::wstring>& FileVector);
+    void UpdateResultList(size_t Index, std::wstring& FilePath, ProcessType Type, const std::wstring& ErrorMsg);
 
     inline void ResetOperationType() { m_OperationType = m_LastOperationType; }
     inline void SetOperationType(OperationType Type) { m_OperationType = Type; }
-    inline const std::shared_ptr<SimpleEncrypt>& GetSimpleEncrypt() const { return m_SimpleCrypt; }
 
 protected:
     HICON m_hIcon;
@@ -67,5 +65,4 @@ private:
     OperationType                                   m_LastOperationType;
     HANDLE                                          m_WorkerThread;
     std::vector<BaseDialog*>                        m_DialogVector;
-    std::shared_ptr<SimpleEncrypt>                  m_SimpleCrypt;
 };

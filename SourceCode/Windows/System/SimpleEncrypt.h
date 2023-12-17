@@ -13,9 +13,9 @@ public:
     ~SimpleEncrypt();
 
     void SetPassword(const std::wstring &Password);
-    void SetIsForceStop(bool IsForceStop) { m_IsForceStop = IsForceStop; }
-    void SetIsEncryptFileName(bool IsEncryptFileName) { m_IsEncryptFileName = IsEncryptFileName; }
-    void SetIsDeleteOriginalFile(bool IsDeleteOriginalFile) { m_IsDeleteOriginalFile = IsDeleteOriginalFile; }
+    inline void SetIsForceStop(bool IsForceStop) { m_IsForceStop = IsForceStop; }
+    inline void SetIsEncryptFileName(bool IsEncryptFileName) { m_IsEncryptFileName = IsEncryptFileName; }
+    inline void SetIsDeleteOriginalFile(bool IsDeleteOriginalFile) { m_IsDeleteOriginalFile = IsDeleteOriginalFile; }
 
     bool Encrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
     bool Decrypt(const std::wstring &SourceFile, const std::wstring &TargetPath);
@@ -52,13 +52,11 @@ private:
 
     unsigned long                            m_FileSize;
     unsigned long                            m_DataBufferSize;
+    wchar_t*                                 m_FileDataBuffer;
 
     std::wstring                             m_Password;
     std::wstring                             m_ErrorMessage;
-    std::wstring                             m_FileEncryptExtension;
-    std::wstring                             m_FileDisguiseExtension;
+    const std::wstring                       m_FileEncryptExtension;
+    const std::wstring                       m_FileDisguiseExtension;
     std::vector<std::wstring>                m_HeaderVector;
-
-    wchar_t                                 *m_FileDataBuffer;
 };
-

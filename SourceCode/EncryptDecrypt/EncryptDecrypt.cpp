@@ -10,7 +10,7 @@
 // CEncryptDecryptApp
 
 BEGIN_MESSAGE_MAP(CEncryptDecryptApp, CWinApp)
-	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+    ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
@@ -18,11 +18,11 @@ END_MESSAGE_MAP()
 
 CEncryptDecryptApp::CEncryptDecryptApp()
 {
-	// support Restart Manager
-	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
+    // support Restart Manager
+    m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+    // TODO: add construction code here,
+    // Place all significant initialization in InitInstance
 }
 
 
@@ -35,72 +35,72 @@ CEncryptDecryptApp theApp;
 
 BOOL CEncryptDecryptApp::InitInstance()
 {
-	// InitCommonControlsEx() is required on Windows XP if an application
-	// manifest specifies use of ComCtl32.dll version 6 or later to enable
-	// visual styles.  Otherwise, any window creation will fail.
-	INITCOMMONCONTROLSEX InitCtrls;
-	InitCtrls.dwSize = sizeof(InitCtrls);
-	// Set this to include all the common control classes you want to use
-	// in your application.
-	InitCtrls.dwICC = ICC_WIN95_CLASSES;
-	InitCommonControlsEx(&InitCtrls);
+    // InitCommonControlsEx() is required on Windows XP if an application
+    // manifest specifies use of ComCtl32.dll version 6 or later to enable
+    // visual styles.  Otherwise, any window creation will fail.
+    INITCOMMONCONTROLSEX InitCtrls;
+    InitCtrls.dwSize = sizeof(InitCtrls);
+    // Set this to include all the common control classes you want to use
+    // in your application.
+    InitCtrls.dwICC = ICC_WIN95_CLASSES;
+    InitCommonControlsEx(&InitCtrls);
 
-	CWinApp::InitInstance();
+    CWinApp::InitInstance();
 
 
-	AfxEnableControlContainer();
+    AfxEnableControlContainer();
 
-	// Create the shell manager, in case the dialog contains
-	// any shell tree view or shell list view controls.
-	CShellManager *pShellManager = new CShellManager;
+    // Create the shell manager, in case the dialog contains
+    // any shell tree view or shell list view controls.
+    CShellManager* pShellManager = new CShellManager;
 
-	// Activate "Windows Native" visual manager for enabling themes in MFC controls
-	CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
+    // Activate "Windows Native" visual manager for enabling themes in MFC controls
+    CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	// of your final executable, you should remove from the following
-	// the specific initialization routines you do not need
-	// Change the registry key under which our settings are stored
-	// TODO: You should modify this string to be something appropriate
-	// such as the name of your company or organization
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+    // Standard initialization
+    // If you are not using these features and wish to reduce the size
+    // of your final executable, you should remove from the following
+    // the specific initialization routines you do not need
+    // Change the registry key under which our settings are stored
+    // TODO: You should modify this string to be something appropriate
+    // such as the name of your company or organization
+    SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-	CEncryptDecryptDlg dlg;
-	m_pMainWnd = &dlg;
-	INT_PTR nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
-	}
-	else if (nResponse == -1)
-	{
-		TRACE(traceAppMsg, 0, "Warning: dialog creation failed, so application is terminating unexpectedly.\n");
-		TRACE(traceAppMsg, 0, "Warning: if you are using MFC controls on the dialog, you cannot #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS.\n");
-	}
+    CEncryptDecryptDlg dlg;
+    m_pMainWnd = &dlg;
+    INT_PTR nResponse = dlg.DoModal();
+    if (nResponse == IDOK)
+    {
+        // TODO: Place code here to handle when the dialog is
+        //  dismissed with OK
+    }
+    else if (nResponse == IDCANCEL)
+    {
+        // TODO: Place code here to handle when the dialog is
+        //  dismissed with Cancel
+    }
+    else if (nResponse == -1)
+    {
+        TRACE(traceAppMsg, 0, "Warning: dialog creation failed, so application is terminating unexpectedly.\n");
+        TRACE(traceAppMsg, 0, "Warning: if you are using MFC controls on the dialog, you cannot #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS.\n");
+    }
 
-	// Delete the shell manager created above.
-	if (pShellManager != NULL)
-	{
-		delete pShellManager;
-	}
+    // Delete the shell manager created above.
+    if (pShellManager != NULL)
+    {
+        delete pShellManager;
+    }
 
 #ifndef _AFXDLL
-	ControlBarCleanUp();
+    ControlBarCleanUp();
 #endif
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
-	return FALSE;
+    // Since the dialog has been closed, return FALSE so that we exit the
+    //  application, rather than start the application's message pump.
+    return FALSE;
 }
 
-bool CEncryptDecryptApp::Validate(CEdit &EditControl)
+bool CEncryptDecryptApp::Validate(CEdit& EditControl)
 {
     CString SourcePath;
     EditControl.GetWindowTextW(SourcePath);
@@ -150,10 +150,10 @@ std::wstring CEncryptDecryptApp::GetProcessString(ProcessType Type) const
 {
     switch (Type)
     {
-    case PT_PROCEING:           return L"正在处理";
-    case PT_SUCCEEDED:          return L"执行成功";
-    case PT_FAILED:             return L"执行失败";
-    default:                    return L"未知错误";
+    case ProcessType::PT_PROCEING:           return L"正在处理";
+    case ProcessType::PT_SUCCEEDED:          return L"执行成功";
+    case ProcessType::PT_FAILED:             return L"执行失败";
+    default:                                 return L"未知错误";
     }
 }
 
@@ -161,12 +161,12 @@ std::wstring CEncryptDecryptApp::GetOperationString(OperationType Type) const
 {
     switch (Type)
     {
-    case OT_ENCRYPT:            return L"文件加密";
-    case OT_DECRYPT:            return L"文件解密";
-    case OT_DISGUISE:           return L"文件伪装";
-    case OT_RECOVERY:           return L"解除伪装";
-    case OT_UNKNOW:             return L"未知错误";
-    default:                    return L"未知错误";
+    case OperationType::OT_ENCRYPT:            return L"文件加密";
+    case OperationType::OT_DECRYPT:            return L"文件解密";
+    case OperationType::OT_DISGUISE:           return L"文件伪装";
+    case OperationType::OT_RECOVERY:           return L"解除伪装";
+    case OperationType::OT_UNKNOW:             return L"未知错误";
+    default:                                   return L"未知错误";
     }
 }
 
@@ -174,7 +174,7 @@ std::wstring CEncryptDecryptApp::GetOperationString(OperationType Type) const
 
 BOOL BaseDialog::ShowChildWindowMiddle()
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
     if (ParentDlg != NULL)
     {
         CRect ParentRect;

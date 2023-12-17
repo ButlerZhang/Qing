@@ -11,28 +11,29 @@ IMPLEMENT_DYNAMIC(FileRecoveryDlg, CDialogEx)
 FileRecoveryDlg::FileRecoveryDlg(CWnd* pParent /*=NULL*/)
     : BaseDialog(IDD_DIALOG_RECOVERY, pParent)
 {
+    m_SimpleCrypt = std::make_shared<SimpleEncrypt>();
 }
 
 FileRecoveryDlg::~FileRecoveryDlg()
 {
 }
 
-void FileRecoveryDlg::ProcessWork(void *Parent)
+void FileRecoveryDlg::ProcessWork(void* Parent)
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)Parent;
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)Parent;
     std::vector<std::wstring> FileNameVector;
     ParentDlg->GetFiles(FileNameVector);
 
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
-        if (ParentDlg->GetSimpleEncrypt()->IsForceStop())
+        if (m_SimpleCrypt->IsForceStop())
         {
             break;
         }
 
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING);
-        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->Recovery(FileNameVector[Index]);
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING, std::wstring());
+        bool ProcessResult = m_SimpleCrypt->Recovery(FileNameVector[Index]);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED, m_SimpleCrypt->GetErrorMessage());
     }
 }
 
@@ -60,7 +61,7 @@ void FileRecoveryDlg::OnBnClickedOk()
 {
     if (theApp.Validate(m_EditSourcePath))
     {
-        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
         ParentDlg->SetOperationType(OT_RECOVERY);
         ParentDlg->Start();
         CDialogEx::OnOK();
@@ -69,14 +70,14 @@ void FileRecoveryDlg::OnBnClickedOk()
 
 void FileRecoveryDlg::OnBnClickedCancel()
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
     ParentDlg->ResetOperationType();
     CDialogEx::OnCancel();
 }
 
 void FileRecoveryDlg::OnBnClickedButtonSourcePath()
 {
-    const std::wstring &SelectPath = theApp.GetSelectPath();
+    const std::wstring& SelectPath = theApp.GetSelectPath();
     if (SelectPath.empty())
     {
         //Add log

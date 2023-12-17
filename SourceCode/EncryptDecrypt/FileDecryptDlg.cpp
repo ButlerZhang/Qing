@@ -11,6 +11,7 @@ IMPLEMENT_DYNAMIC(FileDecryptDlg, CDialogEx)
 FileDecryptDlg::FileDecryptDlg(CWnd* pParent /*=NULL*/)
     : BaseDialog(IDD_DIALOG_DECRYPT, pParent)
 {
+    m_SimpleCrypt = std::make_shared<SimpleEncrypt>();
 }
 
 FileDecryptDlg::~FileDecryptDlg()
@@ -23,32 +24,32 @@ BOOL FileDecryptDlg::ShowChildWindowMiddle()
     return BaseDialog::ShowChildWindowMiddle();
 }
 
-void FileDecryptDlg::ProcessWork(void *Parent)
+std::wstring FileDecryptDlg::GetSourcePath() const
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)Parent;
-    const std::wstring &TargetPath = GetTargetPath();
+    CString SourcePath;
+    m_EditSourcePath.GetWindowTextW(SourcePath);
+    return SourcePath.GetString();
+}
+
+void FileDecryptDlg::ProcessWork(void* Parent)
+{
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)Parent;
+    const std::wstring& TargetPath = GetTargetPath();
 
     std::vector<std::wstring> FileNameVector;
     ParentDlg->GetFiles(FileNameVector);
 
     for (std::vector<std::wstring>::size_type Index = 0; Index < FileNameVector.size(); Index++)
     {
-        if (ParentDlg->GetSimpleEncrypt()->IsForceStop())
+        if (m_SimpleCrypt->IsForceStop())
         {
             break;
         }
 
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING);
-        bool ProcessResult = ParentDlg->GetSimpleEncrypt()->Decrypt(FileNameVector[Index], TargetPath);
-        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], PT_PROCEING, std::wstring());
+        bool ProcessResult = m_SimpleCrypt->Decrypt(FileNameVector[Index], TargetPath);
+        ParentDlg->UpdateResultList(Index + 1, FileNameVector[Index], ProcessResult ? PT_SUCCEEDED : PT_FAILED, m_SimpleCrypt->GetErrorMessage());
     }
-}
-
-std::wstring FileDecryptDlg::GetSourcePath() const
-{
-    CString SourcePath;
-    m_EditSourcePath.GetWindowTextW(SourcePath);
-    return SourcePath.GetString();
 }
 
 bool FileDecryptDlg::Validate()
@@ -58,15 +59,15 @@ bool FileDecryptDlg::Validate()
 
 bool FileDecryptDlg::SetOption()
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
-    ParentDlg->GetSimpleEncrypt()->SetIsForceStop(false);
-    ParentDlg->GetSimpleEncrypt()->SetIsDeleteOriginalFile(true);
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
+    m_SimpleCrypt->SetIsForceStop(false);
+    m_SimpleCrypt->SetIsDeleteOriginalFile(true);
 
     CString InputPassword;
     m_EditInputPassword.GetWindowTextW(InputPassword);
     if (!InputPassword.IsEmpty())
     {
-        ParentDlg->GetSimpleEncrypt()->SetPassword(InputPassword.GetString());
+        m_SimpleCrypt->SetPassword(InputPassword.GetString());
     }
 
     return true;
@@ -89,7 +90,7 @@ END_MESSAGE_MAP()
 // FileDecryptDlg message handlers
 void FileDecryptDlg::OnBnClickedButtonSelectSourcePath()
 {
-    const std::wstring &SelectPath = theApp.GetSelectPath();
+    const std::wstring& SelectPath = theApp.GetSelectPath();
     if (SelectPath.empty())
     {
         //Add log
@@ -101,7 +102,7 @@ void FileDecryptDlg::OnBnClickedButtonSelectSourcePath()
 
 void FileDecryptDlg::OnBnClickedCancel()
 {
-    CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+    CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
     ParentDlg->ResetOperationType();
     CDialogEx::OnCancel();
 }
@@ -110,7 +111,7 @@ void FileDecryptDlg::OnBnClickedOk()
 {
     if (Validate() && SetOption())
     {
-        CEncryptDecryptDlg *ParentDlg = (CEncryptDecryptDlg *)GetParent();
+        CEncryptDecryptDlg* ParentDlg = (CEncryptDecryptDlg*)GetParent();
         ParentDlg->SetOperationType(OT_DECRYPT);
         ParentDlg->Start();
         CDialogEx::OnOK();

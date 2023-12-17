@@ -63,7 +63,6 @@ CEncryptDecryptDlg::CEncryptDecryptDlg(CWnd* pParent /*=NULL*/)
     m_OperationType = OT_UNKNOW;
     m_LastOperationType = OT_UNKNOW;
     m_WorkerThread = INVALID_HANDLE_VALUE;
-    m_SimpleCrypt = std::make_shared<SimpleEncrypt>();
 }
 
 CEncryptDecryptDlg::~CEncryptDecryptDlg()
@@ -206,7 +205,7 @@ void CEncryptDecryptDlg::OnBnClickedStop()
     if (m_OperationType != OT_UNKNOW)
     {
         m_ButtonStop.EnableWindow(FALSE);
-        m_SimpleCrypt->SetIsForceStop(true);
+        m_DialogVector[m_OperationType]->Stop();
     }
 }
 
@@ -216,7 +215,7 @@ void CEncryptDecryptDlg::OnBnClickedExit()
     {
         m_ButtonExit.EnableWindow(FALSE);
         m_ButtonStop.EnableWindow(FALSE);
-        m_SimpleCrypt->SetIsForceStop(true);
+        m_DialogVector[m_OperationType]->Stop();
     }
 
     OnCancel();
@@ -279,7 +278,7 @@ void CEncryptDecryptDlg::Start()
 
 void CEncryptDecryptDlg::GetFiles(std::vector<std::wstring>& FileVector)
 {
-    const std::wstring &SourcePath = m_DialogVector[m_OperationType]->GetSourcePath();
+    const std::wstring& SourcePath = m_DialogVector[m_OperationType]->GetSourcePath();
     if (!SourcePath.empty())
     {
         if (PathIsDirectory(SourcePath.c_str()))
@@ -304,16 +303,16 @@ void CEncryptDecryptDlg::CreateResultList()
     StylesEx |= LVS_EX_GRIDLINES;
     m_ResultList.SetExtendedStyle(StylesEx);
 
-    m_ResultList.InsertColumn(0, _T("ÐòºÅ"), LVCFMT_CENTER,  50);
-    m_ResultList.InsertColumn(1, _T("²Ù×÷"), LVCFMT_CENTER,  80);
-    m_ResultList.InsertColumn(2, _T("Â·¾¶"), LVCFMT_LEFT,    600);
-    m_ResultList.InsertColumn(3, _T("×´Ì¬"), LVCFMT_LEFT,    100);
+    m_ResultList.InsertColumn(0, _T("ÐòºÅ"), LVCFMT_CENTER, 50);
+    m_ResultList.InsertColumn(1, _T("²Ù×÷"), LVCFMT_CENTER, 80);
+    m_ResultList.InsertColumn(2, _T("Â·¾¶"), LVCFMT_LEFT, 600);
+    m_ResultList.InsertColumn(3, _T("×´Ì¬"), LVCFMT_LEFT, 100);
 }
 
-void CEncryptDecryptDlg::UpdateResultList(size_t Index, std::wstring &FilePath, ProcessType Type)
+void CEncryptDecryptDlg::UpdateResultList(size_t Index, std::wstring& FilePath, ProcessType Type, const std::wstring& ErrorMsg)
 {
     bool Found = false;
-    const std::wstring &IDString = std::to_wstring(Index);
+    const std::wstring& IDString = std::to_wstring(Index);
     std::wstring OptionString(theApp.GetOperationString(m_OperationType));
 
     for (int Index = 0; Index < m_ResultList.GetItemCount(); ++Index)
@@ -321,9 +320,9 @@ void CEncryptDecryptDlg::UpdateResultList(size_t Index, std::wstring &FilePath, 
         if (m_ResultList.GetItemText(Index, 0).CompareNoCase(IDString.c_str()) == 0)
         {
             std::wstring StatusString = theApp.GetProcessString(Type);
-            if (Type == PT_FAILED && !m_SimpleCrypt->GetErrorMessage().empty())
+            if (Type == PT_FAILED && !ErrorMsg.empty())
             {
-                StatusString = m_SimpleCrypt->GetErrorMessage();
+                StatusString = ErrorMsg;
             }
 
             m_ResultList.SetItemText(Index, 3, StatusString.c_str());

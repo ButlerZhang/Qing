@@ -26,7 +26,7 @@ void WriteError(const std::wstring &Log) { g_Log.WriteError(WStringToString(Log)
 
 
 
-SimpleEncrypt::SimpleEncrypt()
+SimpleEncrypt::SimpleEncrypt() : m_FileEncryptExtension(L".qing"), m_FileDisguiseExtension(L".ling")
 {
     m_IsForceStop = false;
     m_IsEncryptFileName = false;
@@ -35,9 +35,6 @@ SimpleEncrypt::SimpleEncrypt()
     m_FileSize = 0;
     m_DataBufferSize = 0;
     m_FileDataBuffer = NULL;
-
-    m_FileEncryptExtension = L".qing";
-    m_FileDisguiseExtension = L".ling";
     m_Password = L"89ec5b3a9bc86ec1005c8d230e29db98d7a4a240";
 
     m_HeaderVector.push_back(L"FileName=");

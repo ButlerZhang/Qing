@@ -1,5 +1,7 @@
 #pragma once
 #include "afxwin.h"
+#include <memory>
+#include "../Windows/System/SimpleEncrypt.h"
 
 
 
@@ -18,8 +20,10 @@ public:
     virtual ~FileDecryptDlg();
 
     virtual BOOL ShowChildWindowMiddle();
-    virtual void ProcessWork(void *Parent);
     virtual std::wstring GetSourcePath() const;
+
+    virtual void ProcessWork(void* Parent);
+    virtual void Stop() { m_SimpleCrypt->SetIsForceStop(true); }
 
 protected:
 
@@ -35,6 +39,7 @@ protected:
 
 private:
 
-    CEdit             m_EditSourcePath;               //文件路径
-    CEdit             m_EditInputPassword;            //解密密码
+    CEdit                                 m_EditSourcePath;               //文件路径
+    CEdit                                 m_EditInputPassword;            //解密密码
+    std::shared_ptr<SimpleEncrypt>        m_SimpleCrypt;                  //加解密对象
 };
