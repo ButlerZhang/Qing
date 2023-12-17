@@ -25,6 +25,17 @@ enum ProcessType
     PT_FAILED
 };
 
+struct TaskNode
+{
+    int                 m_FileIndex;
+    ProcessType         m_ProcessType;
+    std::wstring        m_FileName;
+    std::wstring        m_Error;
+
+    TaskNode() : m_FileIndex(0), m_ProcessType(PT_PROCEING) {}
+    TaskNode(const std::wstring& FileName, int FileIndex) : m_FileName(FileName), m_FileIndex(FileIndex), m_ProcessType(PT_PROCEING) {}
+};
+
 class BaseDialog : public CDialogEx
 {
 public:
@@ -38,6 +49,8 @@ public:
 
     virtual void Stop() = 0;
     virtual void ProcessWork(void* Parent) = 0;
+
+    int GetThreadCount(int FileCount) const;
 };
 
 

@@ -24,6 +24,8 @@ public:
     bool Recovery(const std::wstring &SourceFile);
 
     inline bool IsForceStop() const { return m_IsForceStop; }
+    inline bool IsEncryptFileName() const { return m_IsEncryptFileName; }
+    inline bool IsDeleteOriginalFile() const { return m_IsDeleteOriginalFile; }
     inline std::wstring GetErrorMessage() const { return m_ErrorMessage; }
 
 private:

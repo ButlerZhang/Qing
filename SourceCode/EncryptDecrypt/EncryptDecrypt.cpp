@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "EncryptDecrypt.h"
 #include "EncryptDecryptDlg.h"
+#include <thread>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -197,4 +198,26 @@ BOOL BaseDialog::ShowChildWindowMiddle()
     }
 
     return ShowWindow(SW_SHOW);
+}
+
+int BaseDialog::GetThreadCount(int FileCount) const
+{
+    if (FileCount <= 1)
+    {
+        return 1;
+    }
+
+    const unsigned int CPU_COUNT = std::thread::hardware_concurrency();
+    if (CPU_COUNT <= 1)
+    {
+        return 1;
+    }
+
+    int ThreadCount = static_cast<int>(CPU_COUNT / 2);
+    if (ThreadCount < FileCount)
+    {
+        return ThreadCount;
+    }
+
+    return FileCount;
 }
